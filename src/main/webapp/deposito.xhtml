@@ -13,14 +13,12 @@
                     <div class="Container100">
                         <div class="ContainerIndent">      
                             <p:panel id="panelDT" visible="#{!depositoView.panel}" style="border: none">
+                                
+                                <p:commandButton icon="fa fa-plus Fs16 White" value="#{l.Novo}" action="#{depositoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
                                 <p:dataTable id="depositoDT" var="deposito" value="#{depositoView.depositoLista}" selectionMode="single" selection="#{depositoView.depositoSelecionada}" rowKey="#{deposito.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15" filteredValue="#{depositoView.depositosFiltradas}" emptyMessage="No hay registros.">
-                                    <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{depositoView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        Tabela de Depósitos
-                                    </f:facet>
-
+                                   
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{depositoView.abrirEdicaoComDados()}" />
 
                                     <p:column headerText="Id" sortBy="#{deposito.id}" filterBy="#{deposito.id}" footerText="Id" >                                        
