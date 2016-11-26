@@ -31,6 +31,7 @@ public class Teste {
         //fadfaddsfsaf
         //Adicionado pois faltava
         
+        //Testando
 //        lista =  fsasfdfdsafasd baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
 //                .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).orderByMoeda().listaDeResultados();
     }
