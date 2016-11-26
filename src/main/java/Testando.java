@@ -10,8 +10,6 @@
  */
 public class Testando {
     
-    //Classe nova
-    
-    // Alterando para testar
+    //Classe alterada para testar
     
 }
