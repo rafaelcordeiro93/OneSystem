@@ -1,0 +1,222 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect">
+                    <div class="Container100">
+                        <div class="ContainerIndent"> 
+
+                            <p:panel visible="#{!baixaView.panel}" style="border: none">
+                                <p:dataTable id="baixaDT" var="baixa" value="#{baixaView.baixaLista}" selectionMode="single" selection="#{baixaView.baixaSelecionada}" rowKey="#{baixa.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" filteredValue="#{baixaView.baixasFiltradas}"
+                                             rowStyleClass="#{baixa.cancelada eq true ? 'linhaVermelha' : null}">
+                                    <f:facet name="header">
+                                        Tabela de Baixas
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{baixaView.abrirEdicaoComDados()}"/>
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{baixa.id}" footerText="#{l.Id}" filterBy="#{baixa.id}">                                        
+                                        <h:outputText value="#{baixa.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Pessoa}" sortBy="#{baixa.pessoa.nome}" footerText="#{l.Pessoa}" filterBy="#{baixa.pessoa.nome}">
+                                        <h:outputText value="#{baixa.pessoa.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Emissao}" sortBy="#{baixa.emissaoFormatada}" footerText="#{l.Emissao}" filterBy="#{baixa.emissaoFormatada}">
+                                        <h:outputText value="#{baixa.emissaoFormatada}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Total}" sortBy="#{baixa.totalFormatado}" footerText="#{l.Total}" filterBy="#{baixa.totalFormatado}">                                        
+                                        <h:outputText value="#{baixa.totalFormatado}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Conta}" sortBy="#{baixa.conta.nome}" footerText="#{l.Conta}" filterBy="#{baixa.conta.nome}">
+                                        <h:outputText value="#{baixa.conta.nome}" />
+                                    </p:column>                                    
+                                    <p:column headerText="#{l.Unidade_Financeira}" sortBy="#{baixa.unidadeFinanceira.tipoUnidade}" footerText="#{l.Unidade_Financeira}" filterBy="#{baixa.unidadeFinanceira.tipoUnidade}">
+                                        <h:outputText value="#{baixa.unidadeFinanceira.tipoUnidade}" />
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:panel>
+
+                            <p:panel visible="#{baixaView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container50 Responsive100">
+                                    <div class="ContainerIndent">
+                                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+
+                                            <p:inputText value="#{baixaView.baixa.id}" placeholder="ID" disabled="true"/>
+                                            <p:inputText value="#{baixaView.baixa.emissaoFormatada}" placeholder="#{l.Emissao}" readonly="true" maxlength="60"/>                            
+                                            <h:panelGrid columns="2" style="margin-left: -2%;">
+                                                <p:inputText id="baixaPessoa" readonly="true" placeholder="#{l.Pessoa}" size="51" value="#{baixaView.baixa.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this" disabled="true"
+                                                                 update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaPessoa}"
+                                                            process="@this" update="baixaPessoa" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:outputText/>
+                                            <p:inputText id="baixaUnidadeFinanceira" readonly="true" placeholder="#{l.Unidade_Financeira}" value="#{baixaView.baixa.unidadeFinanciera.tipoUnidade}"/>
+
+                                            <p:selectBooleanCheckbox disabled="true" itemLabel="#{l.Cancelada}"                                                                 
+                                                                     value="#{baixaView.baixa.cancelada}"/>
+
+
+                                        </p:panelGrid>
+
+                                    </div>
+                                </div>
+
+                                <div class="Container50 Responsive100">
+                                    <div class="ContainerIndent">
+                                        <p:inputTextarea autoResize="true" placeholder="#{l.Historico}"
+                                                         rows="4" cols="68" maxlength="150" readonly="true" >
+                                        </p:inputTextarea>
+                                    </div>
+                                </div>
+
+                                <div class="Container100 Responsive100">                                
+                                    <div class="ContainerIndent">
+                                        <p:separator/>
+                                    </div>
+                                </div>                                
+
+                                <div class="Container50 Responsive100">                                
+                                    <div class="ContainerIndent" style="border-right: solid 1px #eaeaea">
+                                        <h2 class="BigTopic">#{l.Tipos}</h2>
+                                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaDespesa" readonly="true" placeholder="#{l.Despesa}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaDespesa}"
+                                                            process="@this" update="baixaDespesa" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaReceita" readonly="true" placeholder="#{l.Receita}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaReceita}"
+                                                            process="@this" update="baixaReceita" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaCambio" readonly="true" placeholder="#{l.Cambio}" styleClass="Wid95"/>    
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCambioView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaCambio}"
+                                                            process="@this" update="baixaCambio" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaDespesaProvisionada" readonly="true" placeholder="#{l.Despesa_Provisionada}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaProvisionadaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaDespesaProvisionada}"
+                                                            process="@this" update="baixaDespesaProvisionada" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaReceitaProvisionada" readonly="true" placeholder="#{l.Receita_Provisionada}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaReceitaProvisionada}"
+                                                            process="@this" update="baixaReceitaProvisionada" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaTitulo" readonly="true" placeholder="#{l.Titulo}" styleClass="Wid95"/>            
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaTitulo}"
+                                                            process="@this" update="baixaTitulo" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaRecepcao" readonly="true" placeholder="#{l.Recepcao}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaRecepcao}"
+                                                            process="@this" update="baixaRecepcao" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" styleClass="Wid100">
+                                                <p:inputText id="baixaTransferencia" readonly="true" placeholder="#{l.Transferencia}" styleClass="Wid95"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaTransferencia}"
+                                                            process="@this" update="baixaTransferencia" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                            <p:outputLabel/>
+
+                                        </p:panelGrid>
+                                    </div>
+                                </div>                            
+
+                                <div class="Container50 Responsive100">
+                                    <div class="ContainerIndent">
+                                        <h2 class="BigTopic">#{l.Forma_De_Pagamento}</h2>
+
+                                        <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+
+                                            <h:panelGrid columns="2" style="margin-left: -2%;">
+                                                <p:inputText id="baixaConta" readonly="true" placeholder="#{l.Conta}" size="38" value="#{recepcaoView.recepcao.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 disabled="true" update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaConta}"
+                                                            process="@this" update="baixaConta" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                            <h:outputText/>
+                                            <p:inputText readonly="true" placeholder="#{l.Moeda}" value="#{baixaView.baixa.conta.moeda.nome}"/>
+
+                                            <p:inputText readonly="true" placeholder="#{l.Numero_Parcela}" value="#{baixaView.baixa.numeroParcela}"/>
+                                            <p:inputText readonly="true" placeholder="#{l.Valor}" value="#{baixaView.baixa.valor}"/>
+                                            <p:inputText readonly="true" placeholder="#{l.Desconto}" value="#{baixaView.baixa.desconto}"/>                                            
+
+                                            <p:inputText readonly="true" placeholder="#{l.Multas}" value="#{baixaView.baixa.multas}"/>
+                                            <p:inputText readonly="true" placeholder="#{l.Total}" value="#{baixaView.baixa.total}"/>
+                                            <h:outputText/>
+
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Atualizar}" action="#{baixaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Cancelar}" action="#{baixaView.cancelar()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Voltar}" action="#{baixaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

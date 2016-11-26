@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+                            <p:panel id="panelDT" visible="#{!usuarioView.panel}" style="border: none">
+                                <p:dataTable id="usuarioDT" var="usuario" value="#{usuarioView.usuarioLista}" selectionMode="single" selection="#{usuarioView.usuarioSelecionada}" rowKey="#{usuario.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{usuarioView.usuariosFiltradas}" emptyMessage="No cars found with given criteria">
+                                    <f:facet name="header">      
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{usuarioView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                        #{l.Tabela_de_Usuarios}
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{usuarioView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{usuario.id}" filterBy="#{usuario.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{usuario.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Nome}" sortBy="#{usuario.pessoa.nome}" filterBy="#{usuario.pessoa.nome}" footerText="#{l.Nome}" >
+                                        <h:outputText value="#{usuario.pessoa.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Email}" sortBy="#{usuario.email}" filterBy="#{usuario.email}" footerText="#{l.Email}">
+                                        <h:outputText value="#{usuario.email}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Grupo_De_Privilegio}" sortBy="#{usuario.grupoDePrivilegio.nome}" filterBy="#{usuario.grupoDePrivilegio.nome}" footerText="#{l.Grupo_De_Privilegio}">
+                                        <h:outputText value="#{usuario.grupoDePrivilegio.nome}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{usuarioView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <div class="Container50 Responsive50">
+                                        <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                            <p:inputText value="#{usuarioView.usuario.id}" placeholder="#{l.Id}" disabled="true"/>
+                                            <h:panelGrid columns="2" style="margin-top: -2%;">
+                                                <p:inputText id="usuarioPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{usuarioView.usuario.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{usuarioView.selecionaUsuario}"
+                                                            process="@this" update="usuarioPessoa" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                            <h:panelGrid columns="2" style="margin-top: -2%;">
+                                                <p:inputText id="usuarioGrupoPrivilegio" readonly="true" placeholder="#{l.Grupo_De_Privilegio}" value="#{usuarioView.usuario.grupoPrivilegio.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoDePrivilegioView.abrirDialogo()}" process="@this"
+                                                                 update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{usuarioView.selecionaGrupoPrivilegio}"
+                                                            process="@this" update="usuarioGrupoPrivilegio" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                            <p:inputText value="#{usuarioView.usuario.email}" placeholder="#{l.Email}"/>
+                                            <p:password value="#{usuarioView.usuario.senha}" placeholder="#{l.Senha}" />                                            
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{usuarioView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{usuarioView.update()}" update=":conteudo" icon="fa fa-exchange Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{usuarioView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{usuarioView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Voltar}" action="#{usuarioView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

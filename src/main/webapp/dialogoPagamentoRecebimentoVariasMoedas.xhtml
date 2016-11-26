@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pe="http://primefaces.org/ui/extensions"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>Mais Moedas</title>
+        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
+        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
+        <h:outputScript name="js/layout.js" library="modena-layout" />
+        <h:outputScript name="js/personalizado.js" library="modena-layout" />
+
+    </h:head>
+
+    <h:body>
+        <f:loadBundle basename="label_messages" var="l"/>
+        <h:form id="data">
+            <p:panelGrid columns="2" layout="grid" styleClass="FormContent" style="border: none">
+
+                <p:outputLabel value="#{l.Moeda}:"/> 
+                <h:outputText/>
+                <p:selectOneMenu id="contratoOrigem" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.conta}" converter="contaConverter">
+                    <f:selectItems value="#{dialogoPagamentoRecebimentoVariasMoedasView.contaLista}" var="conta" itemLabel="#{conta.moeda.sigla}" itemValue="#{conta}"/>
+                    <p:ajax update="dlgValor dlgVlConvertido"/>
+                </p:selectOneMenu>
+
+                <h:outputText/>                
+                <p:outputLabel value="#{l.Valor_Pago}:"/>
+                <p:outputLabel value="#{l.Valor_Convertido}:"/>
+
+                <pe:inputNumber id="dlgValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                symbol="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.conta.moeda.sigla} " decimalPlaces="2" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.valor}">
+                </pe:inputNumber>       
+                <pe:inputNumber id="dlgVlConvertido" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                symbol="#{dialogoPagamentoRecebimentoVariasMoedasView.contaDeOrigem.moeda.sigla} " decimalPlaces="2" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.valorConvertido}">
+                </pe:inputNumber>     
+
+            </p:panelGrid>
+
+            <p:commandButton value="#{l.Adicionar}" action="#{dialogoPagamentoRecebimentoVariasMoedasView.add()}" update="data" icon="fa fa-plus Fs16 White"/>
+
+            <p:dataTable id="dlgDT" var="dialogoPagamentoRecebimentoVariasMoedasBuilder" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlgLista}" selectionMode="single" selection="#{dialogoPagamentoRecebimentoVariasMoedasView.dlgSelecionado}" rowKey="#{dialogoPagamentoRecebimentoVariasMoedasBuilder.id}"
+                         emptyMessage="No hay registros.">
+
+                <p:ajax event="rowSelect" process="@this" listener="#{dialogoPagamentoRecebimentoVariasMoedasView.selecionar()}" update="data"/>
+
+                <p:column>
+                    <h:outputText value="#{dialogoPagamentoRecebimentoVariasMoedasBuilder.valor}" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{dialogoPagamentoRecebimentoVariasMoedasBuilder.valor}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+
+</html>

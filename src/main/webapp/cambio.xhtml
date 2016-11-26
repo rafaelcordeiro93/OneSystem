@@ -1,0 +1,196 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">                
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">
+
+                            <p:panel visible="#{!cambioView.panel}" style="border: none">
+                                <p:dataTable id="cambioDT" var="cambio" value="#{cambioView.cambioLista}" selectionMode="single" selection="#{cambioView.cambioSelecionado}" rowKey="#{cambio.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" filteredValue="#{cambioView.cambiosFiltrados}">
+                                    <f:facet name="header">
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cambioView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
+                                        Tabela de Cambios
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{cambioView.abrirEdicaoComDados()}"/>
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{cambio.id}" footerText="#{l.Id}" filterBy="#{cambio.id}">                                        
+                                        <h:outputText value="#{cambio.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Processo}" sortBy="#{cambio.processo}" footerText="#{l.Processo}" filterBy="#{cambio.processo}">
+                                        <h:outputText value="#{cambio.processo}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Contrato}" sortBy="#{cambio.contrato.id}" footerText="#{l.Contrato}" filterBy="#{cambio.contrato.id}">
+                                        <h:outputText value="#{cambio.contrato.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Emissao}" sortBy="#{cambio.emissaoFormatada}" footerText="#{l.Emissao}" filterBy="#{cambio.emissaoFormatada}">                                        
+                                        <h:outputText value="#{cambio.emissaoFormatada}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Pessoa}" sortBy="#{cambio.contrato.pessoa.nome}" footerText="#{l.Pessoa}" filterBy="#{cambio.contrato.pessoa.nome}">
+                                        <h:outputText value="#{cambio.contrato.pessoa.nome}" />
+                                    </p:column>                                    
+                                    <p:column headerText="#{l.Valor_Liquido}" sortBy="#{cambio.valorLiquido}" footerText="#{l.Valor_Liquido}" filterBy="#{cambio.valorLiquido}">
+                                        <h:outputText value="#{cambio.valorLiquido}" />
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:panel>
+
+                            <p:panel visible="#{cambioView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container100 Responsive100" style="margin-left: -1%;">
+
+                                    <p:panelGrid columns="5" layout="grid" style="border: none" styleClass="FormContent">
+                                        <h:panelGrid columns="2" style="margin-top: -2%">
+                                            <p:inputText id="cambioContrato" readonly="true" placeholder="#{l.Contrato}" value="#{cambioView.cambio.contrato.id}"/>
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContratoDeCambioFechadoView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{cambioView.selecionaContrato}"
+                                                        process="@this" update="conteudo" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <p:inputText readonly="true" placeholder="#{l.Pessoa}" value="#{cambioView.cambio.contrato.pessoa.nome}" />
+                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.destino.sigla} " value="#{cambioView.cambio.contrato.valorNegociado}" decimalPlaces="2" disabled="true">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor_Negociado}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.taxaNegociada}" decimalPlaces="2" disabled="true">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Negociada}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.valorCalculado}" decimalPlaces="2" disabled="true">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor_Calculado}"/>
+                                        </pe:inputNumber>
+
+                                        <h:panelGrid columns="2" style="margin-top: -2%">
+                                            <p:inputText id="cambioConta" readonly="true" placeholder="#{l.Conta}" value="#{cambioView.cambio.conta.nome}"/>
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{cambioView.selecionaConta}"
+                                                        process="@this" update="cambioConta growl" />
+                                            </p:commandButton>
+                                        </h:panelGrid> 
+                                        <p:inputText placeholder="#{l.Processo}" value="#{cambioView.cambio.processo}"/>
+                                        <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" disabled="true" value="#{cambioView.cambio.emissao}"/> 
+                                        <pe:inputNumber id="taxaEfetivada" value="#{cambioView.cambio.taxaEfetivada}" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="3">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Efetivada}"/>
+                                            <p:ajax event="blur" listener="#{cambioView.calculaLucroDeTaxa}" update="conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada conteudo:porcentagemComissao conteudo:lucroTaxa"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="valorBruto" value="#{cambioView.cambio.valorBruto}" decimalPlaces="2" disabled="true">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor_Bruto}"/>
+                                        </pe:inputNumber>
+
+                                        <h:panelGrid columns="2" style="margin-top: -2%">
+                                            <p:inputText id="cambioPessoaComissionada" readonly="true" placeholder="#{l.Pessoa_Comissionada}" value="#{cambioView.cambio.pessoaComissionada.nome}"/>
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{cambioView.selecionaPessoaComissionada}"
+                                                        process="@this" update="cambioPessoaComissionada" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <pe:inputNumber id="porcentagemComissao" value="#{cambioView.cambio.porcentagemDeComissao}" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Porcentagem_Comissao}"/>
+                                            <p:ajax event="blur" listener="#{cambioView.calculaValor}" update="conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="comissaoCalculada" value="#{cambioView.cambio.comissaoCalculada}" decimalPlaces="2" disabled="true" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Comissao_Calculada}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber id="lucroTaxa" value="#{cambioView.cambio.porcentualLucroTaxa}" minValue="-999999.99" maxValue="100.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Lucro_Taxa}"/>
+                                            <p:ajax event="blur" listener="#{cambioView.calculaLucroDeTaxaEmPorcentagem}" update="conteudo:taxaEfetivada conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada conteudo:porcentagemComissao conteudo:lucroTaxa"/>
+                                        </pe:inputNumber>
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+
+                                </div>
+
+                                <div class="Container30 Responsive100" >
+                                    <div class="ContainerIndent">
+                                        <p:outputLabel value="#{l.Despesas_de_Cambio}" styleClass="Red"/>
+                                        <p:dataTable var="baixa" value="#{cambioView.baixaLista}" selectionMode="single" selection="#{cambioView.baixaSelecionado}" rowKey="#{baixa.id}"
+                                                     emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" style="border: none; margin-left: -3%">
+
+                                            <p:ajax event="rowSelect" update=":conteudo" listener="#{cambioView.abrirBaixaEdicaoComDados()}"/>                                            
+                                            <p:column>                                        
+                                                <h:outputText value="#{baixa.despesa.nome}" />
+                                            </p:column>
+                                            <p:column>
+                                                <h:outputText value="#{baixa.valorFormatado}" />
+                                            </p:column>
+                                        </p:dataTable>                                        
+                                    </div>  
+                                </div>
+
+                                <div class="Container20 Responsive100">
+                                    <div class="ContainerIndent">
+                                        <div class="EmptyBox30"/>
+                                        <h:panelGrid columns="2" style="margin-left: -1%">
+                                            <p:inputText id="cambioDespesa" value="#{cambioView.baixa.despesa.nome}" readonly="true" placeholder="#{l.Despesa}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                                                             update="@none" styleClass="MarLeft5">
+                                                <p:ajax event="dialogReturn" listener="#{cambioView.selecionaDespesa}"
+                                                        process="@this" update="cambioDespesa" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <pe:inputNumber value="#{cambioView.baixa.valor}" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="2">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                        </pe:inputNumber>
+                                        <div class="EmptyBox5"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" styleClass="GreenButton" action="#{cambioView.addBaixa()}" update="conteudo"/>
+                                        <p:commandButton icon="fa fa-exchange Fs16 White" styleClass="OrangeButton" action="#{cambioView.updateBaixa()}" update="conteudo"/>
+                                        <p:commandButton icon="fa fa-trash-o Fs16 White" styleClass="RedButton" action="#{cambioView.deleteBaixa()}" update="conteudo"/>
+                                        <div class="EmptyBox5"/>
+                                    </div>
+                                </div>                                
+
+                                <div class="Container30 Responsive100">
+                                    <div class="ContainerIndent">
+
+                                        <div class="Container50 Responsive100">
+                                            <div class="ContainerIndent">
+                                                <div id="cambioCard" class="Card BlueBack TexAlCenter ShadowEffect">
+                                                    <i class="icon-attach_money Fs50 DispBlock White"></i>
+                                                    <div class="EmptyBox5"></div>
+                                                    <p:outputLabel id="liquido" styleClass="FontRobotoLight Fs18 White">Líquido<br/>#{cambioView.cambio.contrato.origem.sigla} #{cambioView.cambio.valorLiquidoFormatado}</p:outputLabel>
+                                                    <div class="EmptyBox10"></div>
+                                                    <p:commandButton id="cambioButton" value="#{l.Realizar_Cambio}" styleClass="#{cambioView.cambio.valorLiquido ge 0 ? 'GreenButton' : 'RedButton'}" action="#{cambioView.add()}" update="conteudo"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>                            
+                                </div>
+
+                                <div class="Container20 Responsive100" >
+                                    <div class="ContainerIndent">                                                
+                                    </div>
+                                </div>
+
+                                <div class="Container100 Responsive100">
+                                    <div class="ContainerIndent">                                        
+                                        <p:separator/>
+                                        <p:commandButton value="#{l.Limpar}" action="#{cambioView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                        <p:commandButton value="#{l.Voltar}" action="#{cambioView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                         immediate="true" styleClass="BrownButton" />
+                                    </div>
+                                </div>
+                            </p:panel>
+                        </div>
+                    </div>                    
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

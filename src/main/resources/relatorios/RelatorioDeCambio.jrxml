@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_de_Cambio" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f856bea6-d443-4127-aa67-e08f8faa8f28">
+	<property name="ireport.zoom" value="3.138428376721022"/>
+	<property name="ireport.x" value="48"/>
+	<property name="ireport.y" value="1100"/>
+	<field name="contrato.pessoa.nome" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="emissao" class="java.util.Date"/>
+	<field name="contrato.taxaNegociada" class="java.math.BigDecimal"/>
+	<field name="taxaEfetivada" class="java.math.BigDecimal"/>
+	<field name="porcentagemDeLucroEmTaxa" class="java.math.BigDecimal"/>
+	<field name="valorLiquido" class="java.math.BigDecimal"/>
+	<variable name="liquido_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_2" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_3" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_4" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="porcentagemDeLucroEmTaxa_1" class="java.math.BigDecimal" calculation="Average">
+		<variableExpression><![CDATA[$F{porcentagemDeLucroEmTaxa}]]></variableExpression>
+	</variable>
+	<background>
+		<band height="802">
+			<image scaleImage="FillFrame" vAlign="Top">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="74" width="555" height="707" uuid="b09af65e-facd-4260-9c46-9eaa2652d43c"/>
+				<imageExpression><![CDATA["E:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem\\OneSystem-war\\src\\main\\webapp\\resources\\relatorios\\triangle-blue.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#0277BD" uuid="72becc9c-efb9-48df-83fa-16cf506e42b1"/>
+				<staticText>
+					<reportElement x="20" y="20" width="350" height="43" forecolor="#FFFFFF" uuid="24ed6ccc-5dd7-471c-90f0-6adc865be292"/>
+					<textElement>
+						<font fontName="Roboto Lt" size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Relatório de Câmbio]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="62" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="a362551d-1207-49fb-ae5d-c9d5f2e33a8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-20" y="22" width="595" height="1" forecolor="#666666" uuid="977b1ab7-78b8-4c85-aa61-104fdb45a215"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="63" y="1" width="156" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="3ee76fbd-57f4-486f-b72a-472b7f38c077"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pessoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="220" y="1" width="61" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="1bd91397-5b86-4b84-b647-f4d84be63eb0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="282" y="1" width="68" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="88fe916c-7084-418e-8eea-3520e4bc71d8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Taxa Negoc.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="351" y="1" width="67" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="63523295-38da-4eb4-a6a8-b1734f935b23"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Taxa Efetiv.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="419" y="1" width="58" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="af2fea1a-a023-4057-8a43-64f4cbfb7e40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Lucro (%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="478" y="1" width="77" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="f2cf8f03-fc12-4a8b-bce5-a869e990beac"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Líquido]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="61" height="20" uuid="8c85bc97-cc2c-4ef8-afdb-e6d01526d268"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="d796b25a-09b7-4170-93fd-d7d353b8a042"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="62" y="0" width="157" height="20" uuid="abea539b-3f13-417a-93ca-be4822e3e1cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.pessoa.nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.000" isBlankWhenNull="true">
+				<reportElement x="282" y="0" width="68" height="20" uuid="c4b7b8f1-bb8e-4b3a-a27d-c120ab305839"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.taxaNegociada}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="220" y="0" width="61" height="20" uuid="50d64d05-ad7f-4c3d-966e-32a3c2089d3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emissao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.000" isBlankWhenNull="true">
+				<reportElement x="351" y="0" width="67" height="20" uuid="91a98606-355a-46d1-92fc-2328506bf149"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{taxaEfetivada}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="419" y="0" width="59" height="20" uuid="e29c0711-576e-49a1-b4f6-3b1e02233800"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{porcentagemDeLucroEmTaxa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="478" y="0" width="77" height="20" uuid="19f4bdbc-470f-49d5-b05c-acdc0caec7c5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valorLiquido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="0ec944b4-d7c1-445a-b4a4-71fad0801ddf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="b39dfae2-7953-46cc-89ef-67ce38856ce0"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="219" height="13" uuid="0a2585be-b055-4214-a248-728c1685c965"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="41">
+			<staticText>
+				<reportElement x="193" y="0" width="158" height="20" uuid="d27398c9-02e5-498e-a4b1-95d1c763374e"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0">
+					<pen lineWidth="2.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<text><![CDATA[Média de Porcentagem de Lucro:]]></text>
+			</staticText>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement x="351" y="0" width="192" height="20" uuid="9eb31553-f5ae-4c3e-a31f-1b6ef421f0a6"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{porcentagemDeLucroEmTaxa_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="282" y="20" width="69" height="20" uuid="ee2fa4c7-7aca-4b39-80fb-9505be5de45f"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0">
+					<pen lineWidth="2.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<text><![CDATA[Total Líquido:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="351" y="20" width="204" height="20" uuid="4c279b0e-23ad-4624-b250-c7cdad717410"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valorLiquido_4}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="543" y="0" width="11" height="20" uuid="9733225d-ec23-4605-8560-0ba92703afb1"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0">
+					<pen lineWidth="2.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

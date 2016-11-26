@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_de_Cambio" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f856bea6-d443-4127-aa67-e08f8faa8f28">
+	<property name="ireport.zoom" value="1.2100000000000124"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="24"/>
+	<style name="format_column" backcolor="#FFFFFF">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[new Boolean(($V{COLUMN_COUNT}.intValue() % 2) == 0)]]></conditionExpression>
+			<style mode="Opaque" forecolor="#000000" backcolor="#A3DDFD"/>
+		</conditionalStyle>
+	</style>
+	<field name="contrato.pessoa.nome" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="emissao" class="java.util.Date"/>
+	<field name="valorLiquido" class="java.math.BigDecimal"/>
+	<field name="contrato.origem.id" class="java.lang.Long"/>
+	<field name="contrato.origem.nome" class="java.lang.String"/>
+	<field name="contrato.id" class="java.lang.Long"/>
+	<field name="contrato.valorCalculado" class="java.math.BigDecimal"/>
+	<field name="contrato.origem.sigla" class="java.lang.String"/>
+	<field name="valorBruto" class="java.math.BigDecimal"/>
+	<variable name="liquido_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_1" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_2" class="java.lang.Integer" resetType="Column" calculation="Count">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_3" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="porcentagemDeLucroEmTaxa_1" class="java.math.BigDecimal" calculation="Average">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorLiquido_4" class="java.math.BigDecimal" resetType="Group" resetGroup="Origem" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorLiquido}]]></variableExpression>
+	</variable>
+	<variable name="contrato.valorCalculado_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Origem" calculation="Sum">
+		<variableExpression><![CDATA[$F{contrato.valorCalculado}]]></variableExpression>
+	</variable>
+	<variable name="valorBruto_1" class="java.math.BigDecimal" resetType="Group" resetGroup="Origem" calculation="Sum">
+		<variableExpression><![CDATA[$F{valorBruto}]]></variableExpression>
+	</variable>
+	<group name="Origem">
+		<groupExpression><![CDATA[$F{contrato.origem.id}]]></groupExpression>
+		<groupFooter>
+			<band height="95">
+				<textField isBlankWhenNull="true">
+					<reportElement x="412" y="63" width="143" height="20" uuid="e3b3af53-02c9-41af-a383-e236ee3e741a"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $V{valorLiquido_4}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="412" y="0" width="143" height="20" uuid="b783e6ad-54a0-4165-be69-b26b28590260"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $V{contrato.valorCalculado_1}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="412" y="21" width="143" height="20" uuid="bb08e291-61f1-4242-9dee-c4e09229f6d3"/>
+					<box>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $V{valorBruto_1}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement x="412" y="42" width="143" height="20" uuid="7169720e-f6de-4fcf-86e8-446b15c3b8ef"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + ($V{contrato.valorCalculado_1}.subtract($V{valorBruto_1}).subtract($V{valorLiquido_4}))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="332" y="0" width="80" height="20" uuid="3647ee25-9f18-4fe3-af80-7c1a811010f1"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<text><![CDATA[Total Valor Calculado:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="332" y="21" width="80" height="20" uuid="e95886a8-ff1f-4d8c-a7f8-6971d08d5904"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<text><![CDATA[Total Valor Bruto:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="332" y="42" width="80" height="20" uuid="8a921fc9-dfcf-4103-ace1-cb05f8b444e1"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<text><![CDATA[Total Descontos:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="332" y="63" width="80" height="20" uuid="1bf49610-6d53-416e-806e-a6915d2814c5"/>
+					<box>
+						<pen lineStyle="Dotted"/>
+						<topPen lineStyle="Dotted"/>
+						<leftPen lineStyle="Dotted"/>
+						<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+						<rightPen lineStyle="Dotted"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Bottom">
+						<font fontName="Roboto Lt" size="8"/>
+					</textElement>
+					<text><![CDATA[Total Valor Líquido:]]></text>
+				</staticText>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="802">
+			<image scaleImage="FillFrame" vAlign="Top">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="74" width="555" height="707" uuid="b09af65e-facd-4260-9c46-9eaa2652d43c"/>
+				<imageExpression><![CDATA["E:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem-war\\src\\main\\webapp\\resources\\relatorios\\triangle-blue.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#0277BD" uuid="72becc9c-efb9-48df-83fa-16cf506e42b1"/>
+				<staticText>
+					<reportElement x="20" y="20" width="350" height="43" forecolor="#FFFFFF" uuid="24ed6ccc-5dd7-471c-90f0-6adc865be292"/>
+					<textElement>
+						<font fontName="Roboto Lt" size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Relatório de Câmbio]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="55" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="a362551d-1207-49fb-ae5d-c9d5f2e33a8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-20" y="22" width="595" height="1" forecolor="#666666" uuid="977b1ab7-78b8-4c85-aa61-104fdb45a215"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="56" y="1" width="100" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="3ee76fbd-57f4-486f-b72a-472b7f38c077"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pessoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="213" y="1" width="61" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="1bd91397-5b86-4b84-b647-f4d84be63eb0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="275" y="1" width="68" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="88fe916c-7084-418e-8eea-3520e4bc71d8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl. Calcul.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="344" y="1" width="67" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="63523295-38da-4eb4-a6a8-b1734f935b23"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vl. Bruto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="412" y="1" width="65" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="af2fea1a-a023-4057-8a43-64f4cbfb7e40"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Descontos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="478" y="1" width="77" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="f2cf8f03-fc12-4a8b-bce5-a869e990beac"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Líquido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="157" y="1" width="55" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="b20d4ce9-9ca8-4c44-8ee2-87b78f57aa99"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contrato]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField isBlankWhenNull="true">
+				<reportElement style="format_column" x="1" y="0" width="55" height="18" uuid="8c85bc97-cc2c-4ef8-afdb-e6d01526d268"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="d796b25a-09b7-4170-93fd-d7d353b8a042"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement style="format_column" x="56" y="0" width="101" height="18" uuid="abea539b-3f13-417a-93ca-be4822e3e1cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.pessoa.nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.000" isBlankWhenNull="true">
+				<reportElement style="format_column" x="274" y="0" width="69" height="18" uuid="c4b7b8f1-bb8e-4b3a-a27d-c120ab305839"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $F{contrato.valorCalculado}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement style="format_column" x="213" y="0" width="61" height="18" uuid="50d64d05-ad7f-4c3d-966e-32a3c2089d3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emissao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.000" isBlankWhenNull="true">
+				<reportElement style="format_column" x="344" y="0" width="67" height="18" uuid="91a98606-355a-46d1-92fc-2328506bf149"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $F{valorBruto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement style="format_column" x="478" y="0" width="77" height="18" uuid="19f4bdbc-470f-49d5-b05c-acdc0caec7c5"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + $F{valorLiquido}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="format_column" x="157" y="0" width="56" height="18" uuid="416f38e1-f283-4b57-b89f-6753fb3689f1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.id}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement style="format_column" x="412" y="0" width="65" height="18" uuid="a26d3d74-87cf-4a41-be51-08063a1a0f57"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contrato.origem.sigla} + " " + ($F{contrato.valorCalculado}.subtract($F{valorBruto}).subtract($F{valorLiquido}))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="0ec944b4-d7c1-445a-b4a4-71fad0801ddf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="b39dfae2-7953-46cc-89ef-67ce38856ce0"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="219" height="13" uuid="0a2585be-b055-4214-a248-728c1685c965"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic">#{l.Recepcao}</h2>
+
+                            <p:panel id="panelDT" visible="#{!recepcaoView.panel}" style="border: none">
+                                <p:dataTable id="recepcaoDT" var="recepcao" value="#{recepcaoView.recepcaoLista}" selectionMode="single" selection="#{recepcaoView.recepcaoSelecionada}" rowKey="#{recepcao.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{recepcaoView.recepcoesFiltradas}" emptyMessage="No hay registros.">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{recepcaoView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        Tabela de Recepcoes
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{recepcaoView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{recepcao.id}" filterBy="#{recepcao.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{recepcao.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Pessoa}" sortBy="#{recepcao.pessoa.nome}" filterBy="#{recepcao.pessoa.nome}" footerText="#{l.Pessoa}" >
+                                        <h:outputText value="#{recepcao.pessoa.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Valor}" sortBy="#{recepcao.moeda.sigla} #{recepcao.valorFormatado}" filterBy="#{recepcao.moeda.sigla} #{recepcao.valorFormatado}" footerText="#{l.Valor}" >
+                                        <h:outputText value="#{recepcao.moeda.sigla} #{recepcao.valorFormatado}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Conta}" sortBy="#{recepcao.conta.nome}" filterBy="#{recepcao.conta.nome}" footerText="#{l.Banco}" >
+                                        <h:outputText value="#{recepcao.conta.nome}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{recepcaoView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                        <p:inputText value="#{recepcaoView.recepcao.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
+                                        <h:panelGrid columns="2">
+                                            <p:inputText id="recepcaoConta" readonly="true" placeholder="#{l.Conta}" style="margin-top: -3%" value="#{recepcaoView.recepcao.conta.nome}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{recepcaoView.selecionaConta}"
+                                                        process="@this" update="recepcaoConta recepcaoValor" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2" style="margin-top: -2%;">
+                                            <p:inputText id="recepcaoPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{recepcaoView.recepcao.pessoa.nome}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{recepcaoView.selecionaPessoa}"
+                                                        process="@this" update="recepcaoPessoa" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <pe:inputNumber id="recepcaoValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{recepcaoView.recepcao.conta eq null ? true : false}"
+                                                        symbol="#{recepcaoView.recepcao.conta.moeda.sigla} " decimalPlaces="2" title="Valor que está sendo recebido." value="#{recepcaoView.recepcao.valor}" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                        </pe:inputNumber> 
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{recepcaoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{recepcaoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{recepcaoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{recepcaoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{recepcaoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="#{l.Voltar}" action="#{recepcaoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

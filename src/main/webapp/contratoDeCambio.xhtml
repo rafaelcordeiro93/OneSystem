@@ -1,0 +1,138 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">  
+
+                            <p:panel id="panelDT" visible="#{!contratoDeCambioView.panel}" style="border: none">
+                                <p:dataTable id="contratoDeCambioDT" var="contratoDeCambio" value="#{contratoDeCambioView.contratoDeCambioLista}" selectionMode="single" selection="#{contratoDeCambioView.contratoDeCambioSelecionado}" rowKey="#{contratoDeCambio.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{contratoDeCambioView.contratosDeCambioFiltrados}" emptyMessage="No hay registros." rowStyleClass="#{contratoDeCambio.status eq false ? 'linhaVermelha' : null}">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{contratoDeCambioView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        Tabela de Contratos
+                                    </f:facet>
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{contratoDeCambioView.abrirEdicaoComDados()}" />
+                                    <p:column headerText="#{l.Id}" sortBy="#{contratoDeCambio.id}" filterBy="#{contratoDeCambio.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{contratoDeCambio.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Pessoa}" sortBy="#{contratoDeCambio.pessoa.nome}" filterBy="#{contratoDeCambio.pessoa.nome}" footerText="#{l.Pessoa}" >
+                                        <h:outputText value="#{contratoDeCambio.pessoa.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Valor_Negociado}" sortBy="#{contratoDeCambio.valorNegociado}" filterBy="#{contratoDeCambio.valorNegociado}" footerText="#{l.Valor_Negociado}" >
+                                        <h:outputText value="#{contratoDeCambio.valorNegociado}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Taxa_Negociada}" sortBy="#{contratoDeCambio.taxaNegociada}" filterBy="#{contratoDeCambio.taxaNegociada}" footerText="#{l.Taxa_Negociada}" >
+                                        <h:outputText value="#{contratoDeCambio.taxaNegociada}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Valor_Calculado}" sortBy="#{contratoDeCambio.valorCalculado}" filterBy="#{contratoDeCambio.valorCalculado}" footerText="#{l.Valor_Calculado}" >
+                                        <h:outputText value="#{contratoDeCambio.valorCalculado}" />
+                                    </p:column> 
+                                    <p:column headerText="#{l.Status}" sortBy="#{contratoDeCambio.status eq false ? l.Aberto : l.Fechado}" filterBy="#{contratoDeCambio.status eq false ? l.Aberto : l.Fechado}" footerText="#{l.Status}">
+                                        <h:outputText value="#{contratoDeCambio.status eq false ? l.Aberto : l.Fechado}" />
+                                    </p:column> 
+                                    <p:column headerText="#{l.Emissao}" sortBy="#{contratoDeCambio.emissaoFormatada}" filterBy="#{contratoDeCambio.emissaoFormatada}" footerText="#{l.Emissao}" >
+                                        <h:outputText value="#{contratoDeCambio.emissaoFormatada}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{contratoDeCambioView.panel}" style="border: none">
+                                <div class="Container100 Responsive100">
+                                    <div class="Container30 Responsive100">
+                                        <div class="ContainerIndent">
+                                            <div class="Container100 Fs22 BoldGray FontRobotoRegular br">#{l.Saldo_Disponivel_Em_Conta}</div>
+                                            <div class="Container100">
+                                                <p:dataList id="saldo" emptyMessage="" value="#{contratoDeCambioView.listaDeSoma}" var="somaSaldoDeTituloPorMoedaReportTemplate" type="definition">
+                                                    <h:outputText styleClass="DispBlock Fs30 FontRobotoLight Orange BorderBottom" value="#{somaSaldoDeTituloPorMoedaReportTemplate.moeda.sigla}: #{somaSaldoDeTituloPorMoedaReportTemplate.valor}"/>
+                                                </p:dataList>
+                                                <h:outputText styleClass="Gray Fs12 FontRobotoLight DispBlock" value="#{l.Data_do_Ultimo_Recebimento}"/>
+                                                <h:outputText id="data" styleClass="Gray Fs12 FontRobotoLight DispBlock" value="#{contratoDeCambioView.dataUltimoRecebimento}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="Container65 Responsive100">
+                                        <div class="Container65 Responsive100">
+                                            <p:panelGrid columns="2" layout="grid" style="margin-left: 1%;border:0px !important; background:none;" styleClass="FormContent">
+                                                <p:outputLabel value="De:"/>
+                                                <p:outputLabel value="Para:"/>
+                                                <p:selectOneMenu id="contratoOrigem" value="#{contratoDeCambioView.contratoDeCambio.origem}" converter="moedaConverter">
+                                                    <f:selectItems value="#{contratoDeCambioView.moedaLista}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}"/>
+                                                    <p:ajax update="contratoDeCambioTaxaNegociada contratoDeCambioValorCalculado"/>
+                                                </p:selectOneMenu>
+                                                <p:selectOneMenu id="contratoDestino" value="#{contratoDeCambioView.contratoDeCambio.destino}" converter="moedaConverter">
+                                                    <f:selectItems value="#{contratoDeCambioView.moedaLista}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}"/>
+                                                    <p:ajax update="contratoDeCambioValorNegociado"/>
+                                                </p:selectOneMenu>    
+                                            </p:panelGrid>
+                                        </div>
+                                        <div class="Container100 Responsive100">
+                                            <p:separator/>
+                                        </div>                                        
+                                        <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                                <p:inputText id="contratoPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{contratoDeCambioView.contratoDeCambio.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                                 update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{contratoDeCambioView.selecionaPessoa}"
+                                                            process="@this" update="contratoPessoa data saldo" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+                                            <pe:inputNumber id="contratoDeCambioValorNegociado" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                            symbol="#{contratoDeCambioView.contratoDeCambio.destino.sigla} " decimalPlaces="2" value="#{contratoDeCambioView.contratoDeCambio.valorNegociado}">
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Valor_Negociado}"/>
+                                                <p:ajax event="blur" listener="#{contratoDeCambioView.calculaValor}" update="conteudo:contratoDeCambioValorCalculado"/>
+                                            </pe:inputNumber> 
+                                            <pe:inputNumber id="contratoDeCambioTaxaNegociada" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="."
+                                                            symbol="#{contratoDeCambioView.contratoDeCambio.origem.sigla} " decimalPlaces="3" value="#{contratoDeCambioView.contratoDeCambio.taxaNegociada}">
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Negociada}"/>
+                                                <p:ajax event="blur" listener="#{contratoDeCambioView.calculaValor}" update="conteudo:contratoDeCambioValorCalculado"/>
+                                            </pe:inputNumber> 
+                                            <pe:inputNumber readOnly="true" disabled="true" id="contratoDeCambioValorCalculado" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                            symbol="#{contratoDeCambioView.contratoDeCambio.origem.sigla} " decimalPlaces="2" value="#{contratoDeCambioView.contratoDeCambio.valorCalculado}">
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Valor_Calculado}"/>
+                                            </pe:inputNumber> 
+                                            <p:selectBooleanButton id="statusButton" value="#{contratoDeCambioView.contratoDeCambio.status}" onLabel="#{l.Fechado}" styleClass="#{contratoDeCambioView.statusButton}"
+                                                                   offLabel="#{l.Aberto}" onIcon="fa fa-check Fs16 White" offIcon="fa fa-close Fs16 White">
+                                                <p:ajax listener="#{contratoDeCambioView.atuStatusButton}" update="statusButton"/>
+                                            </p:selectBooleanButton>
+                                            <p:outputLabel/>
+                                        </p:panelGrid>
+
+                                        <div class="EmptyBox5"/>
+
+                                        <p:separator/>
+
+                                        <p:commandButton value="#{l.Adicionar}" action="#{contratoDeCambioView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                        <p:commandButton value="#{l.Atualizar}" action="#{contratoDeCambioView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                        <p:commandButton value="#{l.Remover}" action="#{contratoDeCambioView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                        <p:commandButton value="#{l.Limpar}" action="#{contratoDeCambioView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                        <p:commandButton value="#{l.Desfazer}" action="#{contratoDeCambioView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                         styleClass="OrangeButton" />
+                                        <p:commandButton value="#{l.Voltar}" action="#{contratoDeCambioView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                         immediate="true" styleClass="BrownButton" />
+                                    </div>   
+                                </div>
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

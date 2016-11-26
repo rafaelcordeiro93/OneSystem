@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+                            <p:panel id="panelDT" visible="#{!iVAView.panel}" style="border: none">
+                                <p:dataTable id="ivaDT" var="iva" value="#{iVAView.IVALista}" selectionMode="single" selection="#{iVAView.IVASelecionada}" rowKey="#{iva.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{iVAView.IVAsFiltradas}" emptyMessage="No hay registros.">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{iVAView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        Tabela de IVA
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{iVAView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="Id" sortBy="#{iva.id}" filterBy="#{iva.id}" footerText="Id" >                                        
+                                        <h:outputText value="#{iva.id}" />
+                                    </p:column>
+                                    <p:column headerText="Nome" sortBy="#{iva.nome}" filterBy="#{iva.nome}" footerText="Nome" >
+                                        <h:outputText value="#{iva.nome}" />
+                                    </p:column>
+                                    <p:column headerText="IVA" sortBy="#{iva.iva}" filterBy="#{iva.iva}" footerText="IVA">
+                                        <h:outputText value="#{iva.iva}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{iVAView.panel}" style="border: none">
+                                <h2 class="BigTopic">Edición Del Registro</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <div class="Container50 Responsive50">
+                                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                            <p:inputText value="#{iVAView.IVA.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{iVAView.IVA.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
+                                            <p:inputText value="#{iVAView.IVA.iva}" placeholder="IVA" maxlength="2" styleClass="Wid90"/>
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="Añadir" action="#{iVAView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="Cambiar" action="#{iVAView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="Eliminar" action="#{iVAView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="Limpiar" action="#{iVAView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="Deshacer" action="#{iVAView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="Regreso" action="#{iVAView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

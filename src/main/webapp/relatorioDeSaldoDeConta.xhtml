@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100 Responsive100">
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic">#{l.Relatorio_de_Saldo_de_Conta}</h2>
+                            <p:panelGrid columns="5" layout="grid" style="border: none">
+                                <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeSaldoDeContaView.relatorio.dataInicial}" placeholder="#{l.Data_Inicial}"/> 
+                                <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeSaldoDeContaView.relatorio.dataFinal}" placeholder="#{l.Data_Final}"/> 
+                                <p:outputLabel/>
+                                <p:outputLabel/>
+                                <p:outputLabel/>
+                            </p:panelGrid>
+                            <div class="Container50 Responsive100">
+                                <p:commandButton value="#{l.Imprimir}" action="#{relatorioDeSaldoDeContaView.imprimir()}" icon="fa fa-print Fs16 White" update=":conteudo" 
+                                                 ajax="false"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

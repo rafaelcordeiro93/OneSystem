@@ -1,0 +1,293 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100"> 
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic Red">#{l.Pagar_Valores}</h2>
+                            <div class="Container33">
+                                <div class="ContainerIndent">
+                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                        <p:outputLabel value="Data:"/>
+                                        <p:outputLabel/>
+                                        <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90" navigator="true" value="#{pagamentoView.data}"/>   
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+
+                            <div class="Container100">
+                                <div class="ContainerIndent">
+                                    <p:separator/>
+
+                                    <h:outputText styleClass="Red" value="Tipos de Pagamento" />
+                                    <p:dataTable id="pagamentoBaixa" var="baixa" value="#{pagamentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+                                                 selection="#{pagamentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+
+                                        <p:ajax event="rowSelect" process="@this" listener="#{pagamentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                                        <p:column headerText="Documento" >
+                                            <h:outputText value="#{baixa.titulo.id}"/>
+                                        </p:column>
+                                        <p:column headerText="Histórico" colspan="3">
+                                            <h:outputText value="#{baixa.historico}"/>
+                                        </p:column>
+                                        <p:column headerText="Conta" >
+                                            <h:outputText value="#{baixa.conta.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="Vencimento" >
+                                            <h:outputText value="#{baixa.titulo.vencimento}"/>
+                                        </p:column>
+                                        <p:column headerText="Nome" >
+                                            <h:outputText value="#{baixa.pessoa.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="Origem" >
+                                            <h:outputText value="#{baixa.documentoOriginal}"/>
+                                        </p:column>
+                                        <p:column headerText="Valor">
+                                            <h:outputText value="#{baixa.valorFormatadoSemNegativos}"/>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="8" style="text-align:right" footerText="" />
+                                                <p:column footerText="" style="color: #E53935"/>
+                                            </p:row>                                    
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                    <p:separator/>
+                                    <p:commandButton value="#{l.Titulo}" action="#{pagamentoView.abrirTitulo}" styleClass="RedButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Despesa_Provisionada}" action="#{pagamentoView.abrirDespesaProvisionada}" styleClass="RedButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Despesa_Eventual}" action="#{pagamentoView.abrirDespesaEventual}" styleClass="RedButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Remover}" action="#{pagamentoView.delete()}" styleClass="RedButton" update="conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                    <!-- <p:commandButton value="Show" onclick="PF('pagarDP').show()"/> -->                                    
+                                    <p:separator/>
+                                    <p:commandButton value="#{l.Pagar_Valores}" action="#{pagamentoView.pagar()}" styleClass="RedButton" update="conteudo" icon="fa fa-dollar Fs16 White" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p:dialog header="#{l.Pagar_Titulo}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarTitulo" draggable="false">
+
+            <p:panelGrid id="dados" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Título" action="#{selecaoTituloPagarView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="RedButton">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaTitulo}"
+                            process="@this" update="dados :conteudo:valorPagoDP :conteudo:contaTitulo"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.baixa.titulo.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{pagamentoView.baixa.titulo.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.baixa.titulo.emissaoFormatadaSemHoras}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.baixa.titulo.vencimentoFormatadoSemHoras}"/>                
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.baixa.titulo.valorFormatado}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Saldo}: #{pagamentoView.baixa.titulo.saldoFormatado}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Origem}: #{pagamentoView.baixa.titulo.recepcao.id}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.baixa.titulo.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+            <div class="Container65 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid id="valores" columns="3" layout="grid" styleClass="FormContent" style="border: none">
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Red" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" style="margin-left: 20%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Red" style="padding-left: 50%"/>
+
+
+                        <p:selectOneMenu style="width: 85%" id="contaTitulo" value="#{pagamentoView.baixa.conta}" converter="contaConverter">
+                            <f:selectItems value="#{pagamentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="valorPagoDP"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber style="margin-left: 20%" id="valorPagoDP" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{pagamentoView.baixa.conta.moeda.sigla} " decimalPlaces="2" value="#{pagamentoView.baixa.valor}">
+                        </pe:inputNumber>    
+                        <p:inputTextarea style="margin-left: 50%" autoResize="true" placeholder="Escreva um comentário." rows="1" cols="38"
+                                         maxlength="150" value="#{pagamentoView.baixa.historico}">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="RedButton" update=":conteudo" action="#{pagamentoView.confirmar()}"  onclick="PF('pagarTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>       
+
+        <p:dialog header="#{l.Pagar_Despesa_Provisionada}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarDespesaProvisionada" draggable="false">
+
+            <p:panelGrid id="dadosDP" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Despesa Provisionada" action="#{selecaoDespesaProvisionadaView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="RedButton">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaDespesaProvisionada}"
+                            process="@this" update="dadosDP :conteudo:valorRecebido :conteudo:historicoDP contaDP"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.emissaoFormatadaSemHoras}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.vencimentoFormatadoSemHoras}"/>                
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.valorFormatado}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Cambio}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.cambio.id}"/>
+                <p:outputLabel value="#{l.Despesa}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.despesa.nome}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.baixaDespesaProvisionada.despesaProvisionada.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+            <div class="Container65 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid id="valoresDP" columns="3" layout="grid" styleClass="FormContent" style="border: none">
+
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Red" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" style="margin-left: 20%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Red" style="padding-left: 50%"/>
+
+                        <p:selectOneMenu style="width: 85%" id="contaDP" value="#{pagamentoView.baixaDespesaProvisionada.conta}" converter="contaConverter">
+                            <f:selectItems value="#{pagamentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="valorPagoDP"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber id="valorRecebido" style="margin-left: 20%" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{pagamentoView.baixaDespesaProvisionada.conta.moeda.sigla} " decimalPlaces="2" value="#{pagamentoView.baixaDespesaProvisionada.valor}">
+                        </pe:inputNumber>                 
+                        <p:inputTextarea style="margin-left: 50%" id="historicoDP" autoResize="true" placeholder="Escreva um comentário."                                         
+                                         maxlength="150" value="#{pagamentoView.baixaDespesaProvisionada.historico}" rows="1" cols="38">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="RedButton" update=":conteudo" action="#{pagamentoView.confirmar()}"  onclick="PF('pagarTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>
+
+        <p:dialog header="#{l.Pagar_Despesa}" resizable="false" width="650" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="despesaEventual" draggable="false">
+
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid columns="2" layout="grid" styleClass="FormContent" style="border: none">
+                        <p:outputLabel value="#{l.Pessoa}:" styleClass="Red" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Despesa}:" styleClass="Red" style="margin-left: 1%"/>
+
+                        <h:panelGrid columns="2" style="margin-left: -1%">
+                            <p:inputText id="pagamentoDespesaPessoa" readonly="true" placeholder="#{l.Pessoa}" style="margin-top: -3%" value="#{pagamentoView.baixaDespesaEventual.pessoa.nome}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                             update="@none" styleClass="RedButton">
+                                <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaPessoaEventual}"
+                                        process="@this" update="pagamentoDespesaPessoa" />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="margin-left: -1%">
+                            <p:inputText id="pagamentoDespesaDespesa" readonly="true" placeholder="#{l.Despesa}" style="margin-top: -3%" value="#{pagamentoView.baixaDespesaEventual.despesa.nome}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                                             update="@none" styleClass="RedButton">
+                                <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaDespesa}"
+                                        process="@this" update="pagamentoDespesaDespesa" />
+                            </p:commandButton>
+                        </h:panelGrid>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="3" layout="grid" styleClass="FormContent" style="border: none">
+
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Red" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Red" style="margin-left: 1%"/>
+
+
+                        <p:selectOneMenu id="contratoOrigem" style="width: 75%" value="#{pagamentoView.baixaDespesaEventual.conta}" converter="contaConverter">
+                            <f:selectItems value="#{pagamentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="vlDe"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber id="vlDe" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{pagamentoView.baixaDespesaEventual.conta.moeda.sigla} " decimalPlaces="2" value="#{pagamentoView.baixaDespesaEventual.valor}">
+                        </pe:inputNumber>    
+                        <p:inputTextarea autoResize="true" placeholder="Escreva um comentário."
+                                         rows="1" cols="20" maxlength="150" value="#{pagamentoView.baixaDespesaEventual.historico}">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="RedButton" action="#{pagamentoView.confirmar()}" update=":conteudo" onclick="PF('pagarTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>
+
+        <p:dialog header="#{l.Pagar_Despesa_Provisionada}" resizable="false" width="950" maximizable="true" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarDP" draggable="false">
+            <h:panelGrid columns="3">
+                <p:inputText id="relatorioCambioPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{pagamentoView.pessoa.nome}"/>
+                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaPessoa}"
+                            process="@this" update="relatorioCambioPessoa" />
+                </p:commandButton>
+                <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                symbol="R$ " decimalPlaces="2">
+                    <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                </pe:inputNumber>                 
+            </h:panelGrid>
+
+            <p:dataTable id="pagamentoDP" scrollable="true" var="baixa" value="#{pagamentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+                         selection="#{pagamentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+
+                <p:ajax event="rowSelect" process="@this" listener="#{pagamentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                <p:column headerText="Documento" >
+                    <h:outputText />
+                </p:column>  
+                <p:column headerText="Emissão" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Vencimento" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Origem" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Valor">
+                    <h:outputText />
+                </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column />
+                        <p:column />
+                        <p:column />
+                        <p:column colspan="1" style="text-align:right" footerText="Totais:" />
+                        <p:column />
+                    </p:row>                                    
+                </p:columnGroup>
+            </p:dataTable>   
+
+            <div class="EmptyBox5"/>
+
+            <p:commandButton value="Confirmar"/>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

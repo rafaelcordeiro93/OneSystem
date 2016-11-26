@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{l.Selecao_de_Contrato_De_Cambio}</title>
+        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
+        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
+        <h:outputScript name="js/layout.js" library="modena-layout" />
+        <h:outputScript name="js/personalizado.js" library="modena-layout" />
+
+    </h:head>
+
+
+    <h:body>
+        <f:loadBundle basename="label_messages" var="l"/>
+        <h:form>
+            <p:dataTable id="contratoDeCambioDT" var="contratoDeCambio" value="#{selecaoContratoDeCambioView.contratoDeCambioLista}" selectionMode="single" selection="#{selecaoContratoDeCambioView.contratoDeCambioSelecionado}" rowKey="#{contratoDeCambio.id}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{selecaoContratoDeCambioView.contratoDeCambioFiltrados}" emptyMessage="No hay registros.">
+
+                <p:ajax event="rowSelect" process="@this" listener="#{selecaoContratoDeCambioView.selecionar()}" />
+
+                <p:column headerText="#{l.Id}" sortBy="#{contratoDeCambio.id}" filterBy="#{contratoDeCambio.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                    <h:outputText value="#{contratoDeCambio.id}" />
+                </p:column>
+                <p:column headerText="#{l.Pessoa}" sortBy="#{contratoDeCambio.pessoa.nome}" filterBy="#{contratoDeCambio.pessoa.nome}" footerText="#{l.Pessoa}" filterMatchMode="contains">
+                    <h:outputText value="#{contratoDeCambio.pessoa.nome}" />
+                </p:column>
+                <p:column headerText="#{l.Valor_Negociado}" sortBy="#{contratoDeCambio.valorNegociado}" filterBy="#{contratoDeCambio.valorNegociado}" footerText="#{l.Valor_Negociado}" filterMatchMode="contains">
+                    <h:outputText value="#{contratoDeCambio.valorNegociado}" />
+                </p:column>
+                <p:column headerText="#{l.Valor_Calculado}" sortBy="#{contratoDeCambio.valorCalculado}" filterBy="#{contratoDeCambio.valorCalculado}" footerText="#{l.Valor_Calculado}" filterMatchMode="contains">
+                    <h:outputText value="#{contratoDeCambio.valorCalculado}" />
+                </p:column> 
+                <p:column headerText="#{l.Emissao}" sortBy="#{contratoDeCambio.emissaoFormatada}" filterBy="#{contratoDeCambio.emissaoFormatada}" footerText="#{l.Emissao}" filterMatchMode="contains">
+                    <h:outputText value="#{contratoDeCambio.emissaoFormatada}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+
+</html>

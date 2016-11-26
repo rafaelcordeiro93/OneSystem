@@ -1,0 +1,43 @@
+<ui:composition 
+
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+
+    <!-- TOPBAR START -->
+    <div id="layout-topbar">
+        <a id="mobile-menu-button">
+            <span class="ButtonLine" id="ButtonLine1"></span>
+            <span class="ButtonLine" id="ButtonLine2"></span>
+            <span class="ButtonLine" id="ButtonLine3"></span>
+        </a>
+        <a href="/OneSystem-war/dashboard.xhtml" id="logo">
+            <h:graphicImage name="images/rs_azul.png" styleClass="Fleft" library="personalizado" />
+        </a>
+
+        <a id="show-top-menu" class="ShowOnMobile ripplelink"><i class="icon-more_vert" id="active"></i><i class="icon-close DispNone" id="passive"></i> </a>
+
+        <ul id="top-menu">
+            <li>
+                <a class="ripplelink"><i class="icon-cog"></i> <span class="ShowOnMobile">Settings</span></a>
+                <ul>
+                    <li><a href="/OneSystem-war/configuracao.xhtml"><i class="icon-settings"></i> #{l.Configuracoes}</a></li>
+                    <li><a href="/OneSystem-war/usuario.xhtml"><i class="icon-assignment_ind"></i> #{l.Usuarios}</a></li>
+                    <li><a href="/OneSystem-war/grupoPrivilegio.xhtml"><i class="icon-layers2"></i> #{l.Grupos_De_Privilegio}</a></li>
+                    <li><a href="/OneSystem-war/privilegio.xhtml"><i class="icon-unlock"></i> #{l.Privilegios}</a></li>
+                </ul>
+            </li>
+            <li>
+                <a class="ripplelink"><i class="icon-power"></i> <span class="ShowOnMobile">Sistema</span></a>
+                <ul>
+                    <li><a href="/OneSystem-war/login.xhtml"><span class="Red"><i class="icon-vpn_key Fs30 DispBlock"></i> Logout</span></a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <!-- TOPBAR END -->
+
+</ui:composition>

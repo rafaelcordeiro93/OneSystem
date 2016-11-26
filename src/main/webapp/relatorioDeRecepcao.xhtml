@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100 Responsive100">
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic">#{l.Relatorio_de_Recepcao}</h2>
+
+                            <div class="Container50 Responsive100">
+
+                                <p:panelGrid columns="5" layout="grid" style="border: none">
+                                    <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeRecepcaoView.relatorio.dataInicial}" placeholder="#{l.Data_Inicial}"/> 
+                                    <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeRecepcaoView.relatorio.dataFinal}" placeholder="#{l.Data_Final}"/> 
+                                    <h:panelGrid columns="3" style="margin-left: -1%;margin-top: -1.5%">
+                                        <p:inputText id="relatorioRecepcaoPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{relatorioDeRecepcaoView.relatorio.pessoa.nome}"/>
+                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                         update="@none">
+                                            <p:ajax event="dialogReturn" listener="#{relatorioDeRecepcaoView.selecionaPessoa}"
+                                                    process="@this" update="relatorioRecepcaoPessoa" />
+                                        </p:commandButton>
+                                        <p:commandButton action="#{relatorioDeRecepcaoView.removerPessoa()}" icon="fa fa-trash-o Fs16 White" update=":conteudo" styleClass="RedButton"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="3" style="margin-left: -1%;margin-top: -1.5%">
+                                        <p:inputText id="relatorioRecepcaoConta" readonly="true" placeholder="#{l.Conta}" value="#{relatorioDeRecepcaoView.relatorio.conta.nome}"/>
+                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                                         update="@none">
+                                            <p:ajax event="dialogReturn" listener="#{relatorioDeRecepcaoView.selecionaConta}"
+                                                    process="@this" update="relatorioRecepcaoConta" />
+                                        </p:commandButton>
+                                        <p:commandButton action="#{relatorioDeRecepcaoView.removerConta()}" icon="fa fa-trash-o Fs16 White" update=":conteudo" styleClass="RedButton"/>
+                                    </h:panelGrid>
+                                    <p:outputLabel/>
+                                    <p:commandButton value="#{l.Imprimir}" action="#{relatorioDeRecepcaoView.imprimir()}" icon="fa fa-print Fs16 White" update=":conteudo" 
+                                                     ajax="false"/>
+                                </p:panelGrid>                            
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <p:dialog widgetVar="impressao" width="950">
+            
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

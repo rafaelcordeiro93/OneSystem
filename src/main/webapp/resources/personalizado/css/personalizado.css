@@ -1,0 +1,9 @@
+.linhaVermelha{  
+    background-color: #fcb9b9 !important;    
+    color: #ffffff !important;
+}  
+.linhaVerde{  
+    background-color: #9cf2b1 !important;   
+    color: #ffffff !important;
+}  
+.img-circle{border-radius:50%}

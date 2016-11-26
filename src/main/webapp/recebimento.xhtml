@@ -1,0 +1,293 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100"> 
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic Blue">#{l.Receber_Valores}</h2>
+                            <div class="Container33">
+                                <div class="ContainerIndent">
+                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                        <p:outputLabel value="Data:"/>
+                                        <p:outputLabel/>
+                                        <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90" navigator="true" value="#{recebimentoView.data}"/>   
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+
+                            <div class="Container100">
+                                <div class="ContainerIndent">
+                                    <p:separator/>
+
+                                    <h:outputText styleClass="Blue" value="Tipos de Recebimento" />
+                                    <p:dataTable id="recebimentoBaixa" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+                                                 selection="#{recebimentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+
+                                        <p:ajax event="rowSelect" process="@this" listener="#{recebimentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                                        <p:column headerText="Documento" >
+                                            <h:outputText value="#{baixa.titulo.id}"/>
+                                        </p:column>
+                                        <p:column headerText="Histórico" colspan="3">
+                                            <h:outputText value="#{baixa.historico}"/>
+                                        </p:column>
+                                        <p:column headerText="Conta" >
+                                            <h:outputText value="#{baixa.conta.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="Vencimento" >
+                                            <h:outputText value="#{baixa.titulo.vencimento}"/>
+                                        </p:column>
+                                        <p:column headerText="Nome" >
+                                            <h:outputText value="#{baixa.pessoa.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="Origem" >
+                                            <h:outputText value="#{baixa.documentoOriginal}"/>
+                                        </p:column>
+                                        <p:column headerText="Valor">
+                                            <h:outputText value="#{baixa.valorFormatadoSemNegativos}"/>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="8" style="text-align:right" footerText="" />
+                                                <p:column footerText="" style="color: #E53935"/>
+                                            </p:row>                                    
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                    <p:separator/>
+                                    <p:commandButton value="#{l.Titulo}" action="#{recebimentoView.abrirTitulo}" styleClass="BlueButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Receita_Provisionada}" action="#{recebimentoView.abrirReceitaProvisionada}" styleClass="BlueButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Receita_Eventual}" action="#{recebimentoView.abrirReceitaEventual}" styleClass="BlueButton" update="conteudo"/>
+                                    <p:commandButton value="#{l.Remover}" action="#{recebimentoView.delete()}" styleClass="BlueButton" update="conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                    <!-- <p:commandButton value="Show" onclick="PF('receberRP').show()"/> -->                                    
+                                    <p:separator/>
+                                    <p:commandButton value="#{l.Receber_Valores}" action="#{recebimentoView.receber()}" styleClass="BlueButton" update="conteudo" icon="fa fa-dollar Fs16 White" />
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p:dialog header="#{l.Receber_Titulo}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receberTitulo" draggable="false">
+
+            <p:panelGrid id="dados" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Título" action="#{selecaoTituloReceberView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="BlueButton">
+                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaTitulo}"
+                            process="@this" update="dados :conteudo:valorRecebidoRP :conteudo:contaTitulo"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{recebimentoView.baixa.titulo.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{recebimentoView.baixa.titulo.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{recebimentoView.baixa.titulo.emissaoFormatadaSemHoras}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{recebimentoView.baixa.titulo.vencimentoFormatadoSemHoras}"/>                
+                <p:outputLabel value="#{l.Valor}: #{recebimentoView.baixa.titulo.valorFormatado}" styleClass="Blue"/>
+                <p:outputLabel value="#{l.Saldo}: #{recebimentoView.baixa.titulo.saldoFormatado}" styleClass="Blue"/>
+                <p:outputLabel value="#{l.Origem}: #{recebimentoView.baixa.titulo.recepcao.id}"/>
+                <p:outputLabel value="#{l.Historico}: #{recebimentoView.baixa.titulo.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+            <div class="Container65 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid id="valores" columns="3" layout="grid" styleClass="FormContent" style="border: none">
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Blue" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Recebido}:" styleClass="Blue" style="margin-left: 20%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Blue" style="padding-left: 50%"/>
+
+
+                        <p:selectOneMenu style="width: 85%" id="contaTitulo" value="#{recebimentoView.baixa.conta}" converter="contaConverter">
+                            <f:selectItems value="#{recebimentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="valorRecebidoRP"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber style="margin-left: 20%" id="valorRecebidoRP" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{recebimentoView.baixa.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixa.valor}">
+                        </pe:inputNumber>    
+                        <p:inputTextarea style="margin-left: 50%" autoResize="true" placeholder="Escreva um comentário." rows="1" cols="38"
+                                         maxlength="150" value="#{recebimentoView.baixa.historico}">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="BlueButton" update=":conteudo" action="#{recebimentoView.confirmar()}"  onclick="PF('receberTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>       
+
+        <p:dialog header="#{l.Receber_Receita_Provisionada}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receberReceitaProvisionada" draggable="false">
+
+            <p:panelGrid id="dadosRP" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Receita Provisionada" action="#{selecaoReceitaProvisionadaView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="BlueButton">
+                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaReceitaProvisionada}"
+                            process="@this" update="dadosRP :conteudo:valorRecebido :conteudo:historicoRP contaRP"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.emissaoFormatadaSemHoras}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.vencimentoFormatadoSemHoras}"/>                
+                <p:outputLabel value="#{l.Valor}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.valorFormatado}" styleClass="Blue"/>
+                <p:outputLabel />
+                <p:outputLabel value="#{l.Receita}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.receita.nome}"/>
+                <p:outputLabel value="#{l.Historico}: #{recebimentoView.baixaReceitaProvisionada.receitaProvisionada.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+            <div class="Container65 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid id="valoresRP" columns="3" layout="grid" styleClass="FormContent" style="border: none">
+
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Blue" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Recebido}:" styleClass="Blue" style="margin-left: 20%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Blue" style="padding-left: 50%"/>
+
+                        <p:selectOneMenu style="width: 85%" id="contaRP" value="#{recebimentoView.baixaReceitaProvisionada.conta}" converter="contaConverter">
+                            <f:selectItems value="#{recebimentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="valorRecebidoRP"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber id="valorRecebido" style="margin-left: 20%" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{recebimentoView.baixaReceitaProvisionada.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixaReceitaProvisionada.valor}">
+                        </pe:inputNumber>                 
+                        <p:inputTextarea style="margin-left: 50%" id="historicoRP" autoResize="true" placeholder="Escreva um comentário."                                         
+                                         maxlength="150" value="#{recebimentoView.baixaReceitaProvisionada.historico}" rows="1" cols="38">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="BlueButton" update=":conteudo" action="#{recebimentoView.confirmar()}"  onclick="PF('receberTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>
+
+        <p:dialog header="#{l.Receber_Receita}" resizable="false" width="650" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receitaEventual" draggable="false">
+
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:panelGrid columns="2" layout="grid" styleClass="FormContent" style="border: none">
+                        <p:outputLabel value="#{l.Pessoa}:" styleClass="Blue" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Receita}:" styleClass="Blue" style="margin-left: 1%"/>
+
+                        <h:panelGrid columns="2" style="margin-left: -1%">
+                            <p:inputText id="recebimentoReceitaPessoa" readonly="true" placeholder="#{l.Pessoa}" style="margin-top: -3%" value="#{recebimentoView.baixaReceitaEventual.pessoa.nome}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                             update="@none" styleClass="BlueButton">
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaPessoaEventual}"
+                                        process="@this" update="recebimentoReceitaPessoa" />
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="margin-left: -1%">
+                            <p:inputText id="recebimentoReceitaReceita" readonly="true" placeholder="#{l.Receita}" style="margin-top: -3%" value="#{recebimentoView.baixaReceitaEventual.receita.nome}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this"
+                                             update="@none" styleClass="BlueButton">
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaReceita}"
+                                        process="@this" update="recebimentoReceitaReceita" />
+                            </p:commandButton>
+                        </h:panelGrid>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="3" layout="grid" styleClass="FormContent" style="border: none">
+
+                        <p:outputLabel value="#{l.Conta}:" styleClass="Blue" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Valor_Recebido}:" styleClass="Blue" style="margin-left: 1%"/>
+                        <p:outputLabel value="#{l.Historico}:" styleClass="Blue" style="margin-left: 1%"/>
+
+
+                        <p:selectOneMenu id="contratoOrigem" style="width: 75%" value="#{recebimentoView.baixaReceitaEventual.conta}" converter="contaConverter">
+                            <f:selectItems value="#{recebimentoView.contaLista}" var="conta" itemLabel="#{conta.moedaNomeESiglaMoeda}" itemValue="#{conta}"/>
+                            <p:ajax update="vlDe"/>
+                        </p:selectOneMenu>
+                        <pe:inputNumber id="vlDe" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                        symbol="#{recebimentoView.baixaReceitaEventual.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixaReceitaEventual.valor}">
+                        </pe:inputNumber>    
+                        <p:inputTextarea autoResize="true" placeholder="Escreva um comentário."
+                                         rows="1" cols="20" maxlength="150" value="#{recebimentoView.baixaReceitaEventual.historico}">
+                        </p:inputTextarea>
+                    </p:panelGrid>
+                </div>
+            </div>
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:separator/>
+                    <p:commandButton value="#{l.Confirmar}" styleClass="BlueButton" action="#{recebimentoView.confirmar()}" update=":conteudo" onclick="PF('receberTitulo').hide()" />
+                </div>
+            </div>
+        </p:dialog>
+
+        <p:dialog header="#{l.Receber_Receita_Provisionada}" resizable="false" width="950" maximizable="true" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receberRP" draggable="false">
+            <h:panelGrid columns="3">
+                <p:inputText id="relatorioCambioPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{recebimentoView.pessoa.nome}"/>
+                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaPessoa}"
+                            process="@this" update="relatorioCambioPessoa" />
+                </p:commandButton>
+                <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                symbol="R$ " decimalPlaces="2">
+                    <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                </pe:inputNumber>                 
+            </h:panelGrid>
+
+            <p:dataTable id="recebimentoRP" scrollable="true" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+                         selection="#{recebimentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+
+                <p:ajax event="rowSelect" process="@this" listener="#{recebimentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                <p:column headerText="Documento" >
+                    <h:outputText />
+                </p:column>  
+                <p:column headerText="Emissão" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Vencimento" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Origem" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="Valor">
+                    <h:outputText />
+                </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column />
+                        <p:column />
+                        <p:column />
+                        <p:column colspan="1" style="text-align:right" footerText="Totais:" />
+                        <p:column />
+                    </p:row>                                    
+                </p:columnGroup>
+            </p:dataTable>   
+
+            <div class="EmptyBox5"/>
+
+            <p:commandButton value="Confirmar"/>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

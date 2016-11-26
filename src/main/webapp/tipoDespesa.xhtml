@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">  
+                            <p:panel id="panelDT" visible="#{!despesaView.panel}" style="border: none">
+                                <p:dataTable id="despesaDT" var="despesa" value="#{despesaView.despesaLista}" selectionMode="single" selection="#{despesaView.despesaSelecionada}" rowKey="#{despesa.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{despesaView.despesasFiltradas}" emptyMessage="#{l.Nenhum_dado_encontrado}">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{despesaView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        #{l.Tabela_de_Despesas}
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{despesaView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{despesa.id}" filterBy="#{despesa.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{despesa.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Nome}" sortBy="#{despesa.nome}" filterBy="#{despesa.nome}" footerText="#{l.Nome}" >
+                                        <h:outputText value="#{despesa.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Grupo_Financeiro}" sortBy="#{despesa.grupoFinanceiro.nome}" filterBy="#{despesa.grupoFinanceiro.nome}" footerText="#{l.Grupo_Financeiro}" >
+                                        <h:outputText value="#{despesa.grupoFinanceiro.nome}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+                            <p:panel id="panelED" visible="#{despesaView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                        <p:inputText value="#{despesaView.despesa.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
+                                        <p:inputText value="#{despesaView.despesa.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                        <h:panelGrid columns="2" style="margin-top: -1%">
+                                            <p:inputText id="despesaGrupoFinanceiro" value="#{despesaView.despesa.grupoFinanceiro.nome}" disabled="true" placeholder="#{l.Grupo_Financeiro}" maxlength="60" styleClass="Wid90"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoFinanceiroDespesaView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{despesaView.selecionaGrupoFinanceiro}"
+                                                        process="@this" update="despesaGrupoFinanceiro" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+                                        <p:outputLabel/>
+                                        <p:outputLabel/>
+                                    </p:panelGrid>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{despesaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{despesaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{despesaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{despesaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{despesaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="#{l.Voltar}" action="#{despesaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

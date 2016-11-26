@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+                            <p:panel id="panelDT" visible="#{!bancoView.panel}" style="border: none">
+                                <p:dataTable id="bancoDT" var="banco" value="#{bancoView.bancoLista}" selectionMode="single" selection="#{bancoView.bancoSelecionada}" rowKey="#{banco.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{bancoView.bancosFiltradas}" emptyMessage="No hay registros.">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White"
+                                                         action="#{bancoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                        Tabela de Bancos
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{bancoView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{banco.id}" filterBy="#{banco.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{banco.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Codigo}" sortBy="#{banco.codigo}" filterBy="#{banco.codigo}" footerText="#{l.Codigo}" >
+                                        <h:outputText value="#{banco.codigo}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Nome}" sortBy="#{banco.nome}" filterBy="#{banco.nome}" footerText="#{l.Nome}" >
+                                        <h:outputText value="#{banco.nome}" />
+                                    </p:column>                                    
+                                    <p:column headerText="#{l.Site}" sortBy="#{banco.site}" filterBy="#{banco.site}" footerText="#{l.Site}" >
+                                        <h:outputText value="#{banco.site}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{bancoView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <div class="Container100 Responsive50">
+                                        <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                            <p:inputText value="#{bancoView.banco.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{bancoView.banco.codigo}" placeholder="Código" maxlength="80" styleClass="Wid90"/>
+                                            <p:inputText value="#{bancoView.banco.nome}" placeholder="Nome" maxlength="80" styleClass="Wid90"/>
+                                            <p:inputText value="#{bancoView.banco.site}" placeholder="Site" maxlength="80" styleClass="Wid90"/>
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{bancoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{bancoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{bancoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="#{l.Voltar}" action="#{bancoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
