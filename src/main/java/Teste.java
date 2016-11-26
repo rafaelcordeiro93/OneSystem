@@ -30,6 +30,8 @@ public class Teste {
 
         //Adicionado pois faltava
         
+        hggfffhffhffhhff
+        
 //        lista =  fsasfdfdsafasd baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
 //                .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).orderByMoeda().listaDeResultados();
     }
