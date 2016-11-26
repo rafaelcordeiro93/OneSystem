@@ -28,6 +28,7 @@ public class Teste {
         BaixaDAO baixaDAO = new BaixaDAO();
         List<Baixa> lista;
 
+        //fadfaddsfsaf
         //Adicionado pois faltava
         
 //        lista =  fsasfdfdsafasd baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
