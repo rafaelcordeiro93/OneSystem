@@ -77,7 +77,9 @@ public class Item implements Serializable {
     @NotNull(message = "{saldo_not_null}")
     @Column(nullable = false)
     private BigDecimal saldo;
-
+    @OneToMany(mappedBy = "item")
+    private List<AjusteDeEstoque> listaDeAjustes;    
+    
     public Item() {
     }
 
