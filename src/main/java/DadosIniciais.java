@@ -148,7 +148,7 @@ public class DadosIniciais {
             daoPrivilegio.adiciona(p);
         }
 
-        Usuario usuario = new Usuario(null, pessoa, "rrafaelfr2@gmail.com", "e10adc3949ba59abbe56e057f20f883e", grupoDePrivilegio, true);
+        Usuario usuario = new Usuario(null, pessoa, "rafa@gmail.com", "e10adc3949ba59abbe56e057f20f883e", grupoDePrivilegio, true);
         new AdicionaDAO<Usuario>().adiciona(usuario);
 
         // -- Adiciona Grupo Financeiro

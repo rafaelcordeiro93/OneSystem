@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+                            <p:panel id="panelDT" visible="#{!ajusteDeEstoqueView.panel}" style="border: none">
+
+                                <p:commandButton icon="fa fa-plus Fs16 White" value="#{l.Novo}" action="#{ajusteDeEstoqueView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                <p:dataTable id="ajusteDeEstoqueDT" var="ajusteDeEstoque" value="#{ajusteDeEstoqueView.ajusteDeEstoqueLista}" selectionMode="single" selection="#{ajusteDeEstoqueView.ajusteDeEstoqueSelecionada}" rowKey="#{ajusteDeEstoque.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{ajusteDeEstoqueView.ajusteDeEstoquesFiltradas}" emptyMessage="No hay registros.">
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{ajusteDeEstoqueView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{ajusteDeEstoque.id}" filterBy="#{ajusteDeEstoque.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{ajusteDeEstoque.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Item}" sortBy="#{ajusteDeEstoque.item.nome}" filterBy="#{ajusteDeEstoque.item.nome}" footerText="#{l.Item}" >
+                                        <h:outputText value="#{ajusteDeEstoque.item.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Deposito}" sortBy="#{ajusteDeEstoque.deposito.nome}" filterBy="#{ajusteDeEstoque.deposito.nome}" footerText="#{l.Deposito}" >
+                                        <h:outputText value="#{ajusteDeEstoque.deposito.nome}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Quantidade}" sortBy="#{ajusteDeEstoque.quantidade}" filterBy="#{ajusteDeEstoque.quantidade}" footerText="#{l.Quantidade}" >
+                                        <h:outputText value="#{ajusteDeEstoque.quantidade}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{ajusteDeEstoqueView.panel}" style="border: none">
+                                <h2 class="BigTopic">Edición Del Registro</h2>
+
+                                <div class="Container100 Responsive100">
+                                    <div class="Container50 Responsive50">
+                                        <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                            <p:inputText value="#{ajusteDeEstoqueView.ajusteDeEstoque.id}" placeholder="ID" size="20" disabled="true"/>
+                                            <h:panelGrid columns="2" style="margin-top: -2%">
+                                                <p:inputText id="itemAjuste" readonly="true" placeholder="#{l.Item}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item.nome}"/> 
+                                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
+                                                                  update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaItem}"
+                                                            process="@this" update="conteudo" />
+                                                </p:commandButton>
+                                            </h:panelGrid>  
+
+                                            <pe:inputNumber symbol="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.casasDecimais}" >
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Quantidade}"/>
+                                            </pe:inputNumber>
+
+                                            <h:panelGrid columns="2" style="margin-top: -2%">
+                                                <p:inputText id="depositoAjuste" readonly="true" placeholder="#{l.Deposito}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.deposito.nome}"/> 
+                                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDepositoView.abrirDialogo()}" process="@this"
+                                                                  update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaDeposito}"
+                                                            process="@this" update="conteudo" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <p:inputTextarea autoResize="true" placeholder="#{l.Observacao}" rows="2" cols="38"
+                                                             maxlength="200" value="#{ajusteDeEstoqueView.ajusteDeEstoque.observacao}">
+                                            </p:inputTextarea>
+
+                                        </p:panelGrid>
+                                    </div>
+                                </div>
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{ajusteDeEstoqueView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="#{l.Voltar}" action="#{ajusteDeEstoqueView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
