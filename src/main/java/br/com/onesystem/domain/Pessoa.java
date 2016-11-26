@@ -89,7 +89,7 @@ public abstract class Pessoa implements Serializable {
     private String fiador;
     @ManyToOne
     private Cidade cidade;
-    @OneToMany(mappedBy = "pessoa", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "pessoa")
     private List<Titulo> titulos;
     @OneToMany(mappedBy = "pessoa")
     private List<Recepcao> recepcoes;

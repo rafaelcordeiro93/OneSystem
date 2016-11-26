@@ -10,6 +10,7 @@ import br.com.onesystem.war.builder.BancoBV;
 import br.com.onesystem.war.service.BancoService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -43,7 +44,8 @@ public class BancoView implements Serializable {
             Banco novoRegistro = banco.construir();
             new AdicionaDAO<Banco>().adiciona(novoRegistro);
             bancoLista.add(novoRegistro);
-            InfoMessage.print("¡Banco '" + novoRegistro.getNome() + "' agregado con éxito!");
+            InfoMessage.print(new BundleUtil().getMessage("banco_adicionado")
+                    + " " + novoRegistro.getNome());
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
