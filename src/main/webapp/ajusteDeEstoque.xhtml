@@ -37,7 +37,6 @@
                                 </p:dataTable>
                             </p:panel>
 
-
                             <p:panel id="panelED" visible="#{ajusteDeEstoqueView.panel}" style="border: none">
                                 <h2 class="BigTopic">Edición Del Registro</h2>
 
@@ -45,7 +44,7 @@
                                     <div class="Container50 Responsive50">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
                                             <p:inputText value="#{ajusteDeEstoqueView.ajusteDeEstoque.id}" placeholder="ID" size="20" disabled="true"/>
-                                            <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" disabled="true" value="#{ajusteDeEstoqueView.ajusteDeEstoque.data}"/> 
+                                            <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" disabled="true" value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
                                             <h:panelGrid columns="2" style="margin-top: -2%">
                                                 <p:inputText id="itemAjuste" readonly="true" placeholder="#{l.Item}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item.nome}"/> 
                                                 <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
