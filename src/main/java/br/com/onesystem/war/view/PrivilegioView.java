@@ -11,22 +11,16 @@ import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.RelatorioPrivilegioPorModulo;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.PrivilegioBV;
 import br.com.onesystem.war.service.GrupoPrivilegioService;
 import br.com.onesystem.war.service.PrivilegioService;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -124,7 +118,6 @@ public class PrivilegioView implements Serializable {
 
     private void buscarDados() {
         privilegioLista = service.buscarPrivilegioDoGrupo(grupoSelecionado);
-        Collections.sort(privilegioLista, new RelatorioPrivilegioPorModulo());
     }
 
     public void fecharEdicao() {
@@ -180,6 +173,7 @@ public class PrivilegioView implements Serializable {
     }
 
     public List<Privilegio> getPrivilegioLista() {
+        Collections.sort(privilegioLista, new RelatorioPrivilegioPorModulo());
         return privilegioLista;
     }
 

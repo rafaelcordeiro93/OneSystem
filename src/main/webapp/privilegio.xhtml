@@ -54,26 +54,41 @@
                                     </p:column>
                                     <p:column headerText="#{l.Consultar}" style="text-align: center">
                                         <p:cellEditor>
-                                            <f:facet name="output"><h:outputText value="#{privilegioBV.consultar}" styleClass="#{privilegioBV.consultar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
-                                            <f:facet name="input"><p:inputText value="#{privilegioBV.consultar}"/></f:facet>
+                                            <f:facet name="output"><p:selectBooleanCheckbox id="consultar" value="#{privilegioBV.consultar}" styleClass="#{privilegioBV.consultar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox value="#{privilegioBV.consultar}">
+                                                    <p:ajax update="consultar"/>
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="#{l.Adicionar}" style="text-align: center">
                                         <p:cellEditor>
-                                            <f:facet name="output"><h:outputText value="#{privilegioBV.adicionar}" styleClass="#{privilegioBV.adicionar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
-                                            <f:facet name="input"><p:inputText value="#{privilegioBV.adicionar}"/></f:facet>
+                                            <f:facet name="output"><p:selectBooleanCheckbox id="adicionar" value="#{privilegioBV.adicionar}" styleClass="#{privilegioBV.adicionar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
+                                            <f:facet name="input"><p:selectBooleanCheckbox value="#{privilegioBV.adicionar}">
+                                                    <p:ajax update="adicionar"/>
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="#{l.Atualizar}" style="text-align: center">
                                         <p:cellEditor>
-                                            <f:facet name="output"><h:outputText value="#{privilegioBV.alterar}" styleClass="#{privilegioBV.alterar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
-                                            <f:facet name="input"><p:inputText value="#{privilegioBV.alterar}"/></f:facet>
+                                            <f:facet name="output"><p:selectBooleanCheckbox id="alterar" value="#{privilegioBV.alterar}" styleClass="#{privilegioBV.alterar eq false ? 'Red Bold' : 'Green'}"/></f:facet>
+                                            <f:facet name="input"> 
+                                                <p:selectBooleanCheckbox value="#{privilegioBV.alterar}">
+                                                    <p:ajax update="alterar"/>
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                     <p:column headerText="#{l.Remover}" style="text-align: center">
                                         <p:cellEditor>
-                                            <f:facet name="output"><h:outputText value="#{privilegioBV.remover}" styleClass="#{privilegioBV.remover eq false ? 'Red Bold' : 'Green'}"/></f:facet>
-                                            <f:facet name="input"><p:inputText value="#{privilegioBV.remover}"/></f:facet>
+                                            <f:facet name="output"><p:selectBooleanCheckbox id="remover" value="#{privilegioBV.remover}" styleClass="#{privilegioBV.remover eq false ? 'Red Bold' : 'Green'}"/></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox value="#{privilegioBV.remover}">
+                                                    <p:ajax update="remover"/>
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
                                         </p:cellEditor>
                                     </p:column>
                                 </p:dataTable>

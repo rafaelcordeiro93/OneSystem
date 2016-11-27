@@ -17,7 +17,14 @@ public class RelatorioPrivilegioPorModulo implements Comparator<Privilegio> {
 
     @Override
     public int compare(Privilegio o1, Privilegio o2) {
-        return o1.getJanela().getModulo().getNome().compareTo(o2.getJanela().getModulo().getNome());
+        int modulo = o1.getJanela().getModulo().getNome().compareTo(o2.getJanela().getModulo().getNome());
+        //Caso os módulos forem diferentes, ordena pelo nome do módulo.
+        if (modulo != 0) {
+            return modulo;
+        } //Se forem iguais, vamos ordenar pelo nome da janela.
+        else {
+            return o1.getJanela().getNome().compareTo(o2.getJanela().getNome());
+        }
     }
 
 }
