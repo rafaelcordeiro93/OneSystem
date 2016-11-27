@@ -14,9 +14,9 @@ public class AjusteDeEstoqueBV implements Serializable {
     private Long id;
     private String observacao;
     private Deposito deposito;
-    private Item item;
-    private BigDecimal quantidade;
+    private Item item;    
     private Date emissao = new Date();
+    private BigDecimal quantidade;
 
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
         this.id = ajusteDeEstoqueSelecionada.getId();

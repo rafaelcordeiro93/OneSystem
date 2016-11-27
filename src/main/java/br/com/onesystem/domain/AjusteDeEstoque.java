@@ -46,8 +46,7 @@ public class AjusteDeEstoque implements Serializable {
     private Deposito deposito;
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = new Date();
-    
+    private Date emissao = new Date();   
 
     public AjusteDeEstoque() {
     }
@@ -63,7 +62,7 @@ public class AjusteDeEstoque implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item","observacao","quantidade","deposito");
+        List<String> campos = Arrays.asList("item","quantidade","deposito","observacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 

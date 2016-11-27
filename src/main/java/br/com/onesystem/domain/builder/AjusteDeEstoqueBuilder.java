@@ -18,8 +18,8 @@ public class AjusteDeEstoqueBuilder {
     private String observacao;
     private Deposito deposito;
     private Item item;
-    private BigDecimal quantidade;
     private Date emissao;
+    private BigDecimal quantidade;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
