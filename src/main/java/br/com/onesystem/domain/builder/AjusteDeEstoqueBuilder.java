@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -18,6 +19,7 @@ public class AjusteDeEstoqueBuilder {
     private Deposito deposito;
     private Item item;
     private BigDecimal quantidade;
+    private Date data;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -43,9 +45,14 @@ public class AjusteDeEstoqueBuilder {
         this.quantidade = quantidade;
         return this;
     }
+    
+    public AjusteDeEstoqueBuilder comData(Date data){
+        this.data = data;
+        return this;
+    }
   
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,data);
     }
 
 }
