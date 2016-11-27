@@ -4,7 +4,9 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,6 +16,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -40,17 +44,21 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{deposito_not_null}")
     @ManyToOne
     private Deposito deposito;
+    @NotNull(message = "{emissao_not_null}")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date data = new Date();
     
 
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date data) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
+        this.data = data;
         ehValido();
     }
 
@@ -78,7 +86,15 @@ public class AjusteDeEstoque implements Serializable {
     public Deposito getDeposito() {
         return deposito;
     }
+
+    public Date getData() {
+        return data;
+    }
     
+    public String getDataFormatada() {
+        SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return dataFormatada.format(getData().getTime());
+    }
     
 
     @Override
@@ -98,6 +114,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + '}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", data=" + data +'}';
     }
 }

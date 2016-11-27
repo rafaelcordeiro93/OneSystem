@@ -7,6 +7,7 @@ import br.com.onesystem.domain.builder.AjusteDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class AjusteDeEstoqueBV implements Serializable {
 
@@ -15,6 +16,7 @@ public class AjusteDeEstoqueBV implements Serializable {
     private Deposito deposito;
     private Item item;
     private BigDecimal quantidade;
+    private Date data = new Date();
 
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
         this.id = ajusteDeEstoqueSelecionada.getId();
@@ -22,6 +24,7 @@ public class AjusteDeEstoqueBV implements Serializable {
         this.deposito = ajusteDeEstoqueSelecionada.getDeposito();
         this.item = ajusteDeEstoqueSelecionada.getItem();
         this.quantidade = ajusteDeEstoqueSelecionada.getQuantidade();
+        this.data = ajusteDeEstoqueSelecionada.getData();
     }
 
     public AjusteDeEstoqueBV() {
@@ -67,13 +70,21 @@ public class AjusteDeEstoqueBV implements Serializable {
         this.quantidade = quantidade;
     }
 
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+    
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade)
-                .comItem(item).comDeposito(deposito).construir();
+                .comItem(item).comDeposito(deposito).comData(data).construir();
     }
 
     public AjusteDeEstoque construirComID() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comID(id).comObservacao(observacao).comQuantidade(quantidade)
-                .comItem(item).comDeposito(deposito).construir();
+                .comItem(item).comDeposito(deposito).comData(data).construir();
     }
 }
