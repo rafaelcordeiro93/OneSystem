@@ -31,7 +31,7 @@ public class AjusteDeEstoque implements Serializable {
     @GeneratedValue(generator = "SEQ_AJUSTEDEESTOQUE", strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull(message = "{observacao_not_null}")
-    @Length(min = 2, max = 60, message = "{observacao_length}")
+    @Length(min = 2, max = 60, message = "{observacao_lenght}")
     @Column(length = 60, nullable = false)
     private String observacao;
     @NotNull(message = "{item_not_null}")
@@ -46,19 +46,19 @@ public class AjusteDeEstoque implements Serializable {
     private Deposito deposito;
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date data = new Date();
+    private Date emissao = new Date();
     
 
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date data) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date emissao) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
-        this.data = data;
+        this.emissao = emissao;
         ehValido();
     }
 
@@ -87,13 +87,13 @@ public class AjusteDeEstoque implements Serializable {
         return deposito;
     }
 
-    public Date getData() {
-        return data;
+    public Date getEmissao() {
+        return emissao;
     }
     
     public String getDataFormatada() {
-        SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return dataFormatada.format(getData().getTime());
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return emissaoFormatada.format(getEmissao().getTime());
     }
     
 
@@ -114,6 +114,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", data=" + data +'}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +'}';
     }
 }

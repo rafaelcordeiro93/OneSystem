@@ -16,7 +16,7 @@ public class AjusteDeEstoqueBV implements Serializable {
     private Deposito deposito;
     private Item item;
     private BigDecimal quantidade;
-    private Date data = new Date();
+    private Date emissao = new Date();
 
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
         this.id = ajusteDeEstoqueSelecionada.getId();
@@ -24,7 +24,7 @@ public class AjusteDeEstoqueBV implements Serializable {
         this.deposito = ajusteDeEstoqueSelecionada.getDeposito();
         this.item = ajusteDeEstoqueSelecionada.getItem();
         this.quantidade = ajusteDeEstoqueSelecionada.getQuantidade();
-        this.data = ajusteDeEstoqueSelecionada.getData();
+        this.emissao = ajusteDeEstoqueSelecionada.getEmissao();
     }
 
     public AjusteDeEstoqueBV() {
@@ -70,21 +70,21 @@ public class AjusteDeEstoqueBV implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public Date getData() {
-        return data;
+    public Date getEmissao() {
+        return emissao;
     }
 
-    public void setData(Date data) {
-        this.data = data;
+    public void setEmissao(Date emissao) {
+        this.emissao = emissao;
     }
     
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade)
-                .comItem(item).comDeposito(deposito).comData(data).construir();
+                .comItem(item).comDeposito(deposito).comEmissao(emissao).construir();
     }
 
     public AjusteDeEstoque construirComID() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comID(id).comObservacao(observacao).comQuantidade(quantidade)
-                .comItem(item).comDeposito(deposito).comData(data).construir();
+                .comItem(item).comDeposito(deposito).comEmissao(emissao).construir();
     }
 }

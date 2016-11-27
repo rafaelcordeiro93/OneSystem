@@ -19,7 +19,7 @@ public class AjusteDeEstoqueBuilder {
     private Deposito deposito;
     private Item item;
     private BigDecimal quantidade;
-    private Date data;
+    private Date emissao;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -46,13 +46,13 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
     
-    public AjusteDeEstoqueBuilder comData(Date data){
-        this.data = data;
+    public AjusteDeEstoqueBuilder comEmissao(Date emissao){
+        this.emissao = emissao;
         return this;
     }
   
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,data);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,emissao);
     }
 
 }
