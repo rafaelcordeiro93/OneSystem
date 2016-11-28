@@ -30,7 +30,7 @@ public enum TipoOperacao {
     TODOS(26, "Todos"),
     DESPESA_PROVISIONADA(27, "Despesa_Provisionada"),
     RECEITA_PROVISIONADA(28, "Receita_Provisionada");
-
+    
     private Integer id;
     private String nome;
 
