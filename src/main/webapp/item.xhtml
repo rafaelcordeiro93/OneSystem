@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -45,48 +46,50 @@
 
                             <p:panel id="panelED" visible="#{itemView.panel}" style="border: none">
                                 <p:tabView>
+
                                     <p:tab title="Detalhes">
-                                        <h2 class="BigTopic">Edición Del Registro</h2>
+                                        <h:panelGrid >
+                                            <h2 class="BigTopic">Edición Del Registro</h2>
 
-                                        <div class="Container100 Responsive100">
-                                            <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                                <p:inputText value="#{itemView.item.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
-                                                <p:inputText value="#{itemView.item.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
-                                                <p:inputText value="#{itemView.item.barras}" placeholder="Barras" maxlength="60" styleClass="Wid90"/>
-                                                <p:inputText value="#{itemView.item.ncm}" placeholder="NCM" maxlength="60" styleClass="Wid90"/>                                            
+                                            <div class="Container100 Responsive100">
+                                                <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                                    <p:inputText value="#{itemView.item.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
+                                                    <p:inputText value="#{itemView.item.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.barras}" placeholder="Barras" maxlength="60" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.ncm}" placeholder="NCM" maxlength="60" styleClass="Wid90"/>                                            
 
-                                                <p:inputText value="#{itemView.item.estoqueMaximo}" placeholder="Stock Máximo" styleClass="Wid90"/>
-                                                <p:inputText value="#{itemView.item.estoqueMinimo}" placeholder="Stock Mínimo" maxlength="60" styleClass="Wid90"/>
-                                                <p:inputText value="#{itemView.item.idContabil}" placeholder="Id Contable" maxlength="60" styleClass="Wid90"/>
-                                                <p:inputText value="#{itemView.item.idFabricante}" placeholder="Id Fabricante" maxlength="60" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.estoqueMaximo}" placeholder="Stock Máximo" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.estoqueMinimo}" placeholder="Stock Mínimo" maxlength="60" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.idContabil}" placeholder="Id Contable" maxlength="60" styleClass="Wid90"/>
+                                                    <p:inputText value="#{itemView.item.idFabricante}" placeholder="Id Fabricante" maxlength="60" styleClass="Wid90"/>
 
-                                                <h:panelGrid columns="2">
-                                                    <p:inputText id="itemIVA" disabled="true" value="#{itemView.item.iva.nome}" placeholder="IVA"/>
-                                                    <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemIVADlg').show()"/>
-                                                </h:panelGrid>
-                                                <h:panelGrid columns="2">
-                                                    <p:inputText id="itemGrupo" disabled="true" value="#{itemView.item.grupo.nome}" placeholder="Grupo"/>
-                                                    <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemGrupoDlg').show()"/>
-                                                </h:panelGrid>
-                                                <h:panelGrid columns="2">
-                                                    <p:inputText id="itemMarca" disabled="true" value="#{itemView.item.marca.nome}" placeholder="Marca"/>
-                                                    <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemMarcaDlg').show()"/>
-                                                </h:panelGrid>
-                                                <h:panelGrid columns="2">
-                                                    <p:inputText id="itemUnMedida" disabled="true" value="#{itemView.item.unidadeMedida.nome}" placeholder="Un. Medida"/>
-                                                    <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemUnMedidaDlg').show()"/>
-                                                </h:panelGrid>                                            
-                                                <p:inputText value="#{itemView.item.saldo}" disabled="true" placeholder="Saldo" maxlength="60" styleClass="Wid90"/>
+                                                    <h:panelGrid columns="2">
+                                                        <p:inputText id="itemIVA" disabled="true" value="#{itemView.item.iva.nome}" placeholder="IVA"/>
+                                                        <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemIVADlg').show()"/>
+                                                    </h:panelGrid>
+                                                    <h:panelGrid columns="2">
+                                                        <p:inputText id="itemGrupo" disabled="true" value="#{itemView.item.grupo.nome}" placeholder="Grupo"/>
+                                                        <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemGrupoDlg').show()"/>
+                                                    </h:panelGrid>
+                                                    <h:panelGrid columns="2">
+                                                        <p:inputText id="itemMarca" disabled="true" value="#{itemView.item.marca.nome}" placeholder="Marca"/>
+                                                        <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemMarcaDlg').show()"/>
+                                                    </h:panelGrid>
+                                                    <h:panelGrid columns="2">
+                                                        <p:inputText id="itemUnMedida" disabled="true" value="#{itemView.item.unidadeMedida.nome}" placeholder="Un. Medida"/>
+                                                        <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemUnMedidaDlg').show()"/>
+                                                    </h:panelGrid>                                            
+                                                    <p:inputText value="#{itemView.item.saldo}" disabled="true" placeholder="Saldo" maxlength="60" styleClass="Wid90"/>
 
-                                                <p:selectOneMenu value="#{itemView.item.tipoItem}" styleClass="Wid90">
-                                                    <f:selectItems value="#{itemView.tipoItem}" var="TipoItem" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
-                                                </p:selectOneMenu>
-                                                <p:selectBooleanCheckbox itemLabel="Ativo" styleClass="MarTop5" id="itemStatus" value="#{itemView.item.ativo}"/>
-                                            </p:panelGrid>
-                                        </div>
+                                                    <p:selectOneMenu value="#{itemView.item.tipoItem}" styleClass="Wid90">
+                                                        <f:selectItems value="#{itemView.tipoItem}" var="TipoItem" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
+                                                    </p:selectOneMenu>
+                                                    <p:selectBooleanCheckbox itemLabel="Ativo" styleClass="MarTop5" id="itemStatus" value="#{itemView.item.ativo}"/>
+                                                </p:panelGrid>
+                                            </div>
 
-                                        <div class="EmptyBox5"/>
-
+                                            <div class="EmptyBox5"/>
+                                        </h:panelGrid>
                                         <p:separator/>
 
                                         <p:commandButton value="Añadir" action="#{itemView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
@@ -100,8 +103,48 @@
                                     </p:tab>
 
                                     <p:tab title="Estoque">
-                                        
+                                        <h:panelGrid>
+                                            <h2 class="BigTopic">Edición Del Registro</h2>
+
+                                            <div class="Container100 Responsive100">
+
+                                                <p:panel id="panelDT2"  style="border: none">
+                                                    <p:dataTable id="itemDT" var="item" value="#{estoqueView.estoqueLista}" selectionMode="single" selection="#{estoqueView.estoqueSelecionada}" rowKey="#{estoqueView.estoque.id}"
+                                                                 rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                                 rowsPerPageTemplate="5,10,15" filteredValue="#{estoqueView.estoquesFiltradas}" emptyMessage="No hay registros.">
+                                                        <f:facet name="header">    
+                                                            <p:commandButton icon="fa fa-plus Fs16 White" action="#{estoqueView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                                            Tabela de Itens
+                                                        </f:facet>
+
+                                                        <p:ajax event="rowSelect" update=":conteudo" listener="#{estoqueView.abrirEdicaoComDados()}" />
+
+                                                        <p:column headerText="Id" sortBy="#{estoqueView.estoque.id}" filterBy="#{estoqueView.estoque.id}" footerText="Id" >                                        
+                                                            <h:outputText value="#{estoqueView.estoque.id}" />
+                                                        </p:column>
+                                                        
+                                                        <p:column headerText="item" sortBy="#{estoqueView.es}" filterBy="#{estoque.item}" footerText="Id" >                                        
+                                                            <h:outputText value="#{estoque.item}" />
+                                                        </p:column>
+                                                        
+                                                         <p:column headerText="Id" sortBy="#{estoque.id}" filterBy="#{estoque.id}" footerText="Id" >                                        
+                                                            <h:outputText value="#{estoque.id}" />
+                                                        </p:column>
+                                                        
+                                                        
+
+                                                    </p:dataTable>
+                                                </p:panel>
+
+
+                                            </div>
+
+                                        </h:panelGrid>
                                     </p:tab>
+
+
+
+
                                 </p:tabView>
                             </p:panel>   
 
