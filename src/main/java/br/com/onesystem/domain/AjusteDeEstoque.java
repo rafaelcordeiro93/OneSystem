@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -47,17 +48,20 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();   
+       @NotNull(message = "{tipoOperacao_not_null}")
+    private OperacaoFisica tipo;
 
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date emissao) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica tipo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
         this.emissao = emissao;
+        this.tipo = tipo;
         ehValido();
     }
 
@@ -89,6 +93,11 @@ public class AjusteDeEstoque implements Serializable {
     public Date getEmissao() {
         return emissao;
     }
+
+    public OperacaoFisica getTipo() {
+        return tipo;
+    }
+    
     
     public String getDataFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");

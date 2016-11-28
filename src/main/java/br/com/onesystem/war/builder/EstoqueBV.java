@@ -5,9 +5,11 @@ import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class EstoqueBV implements Serializable {
 
@@ -15,7 +17,8 @@ public class EstoqueBV implements Serializable {
     private Deposito deposito;
     private Item item;
     private BigDecimal saldo;
-    private TipoOperacao tipo;
+    private OperacaoFisica tipo;
+    private Date emissao = new Date();
 
     public EstoqueBV(Estoque estoqueSelecionado) {
         this.id = estoqueSelecionado.getId();
@@ -23,6 +26,7 @@ public class EstoqueBV implements Serializable {
         this.item = estoqueSelecionado.getItem();
         this.saldo = estoqueSelecionado.getSaldo();
         this.tipo = estoqueSelecionado.getTipo();
+        this.emissao = estoqueSelecionado.getEmissao();
 
     }
 
@@ -61,21 +65,30 @@ public class EstoqueBV implements Serializable {
         this.saldo = saldo;
     }
 
-    public TipoOperacao getTipo() {
+    public OperacaoFisica getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoOperacao tipo) {
+    public void setTipo(OperacaoFisica tipo) {
         this.tipo = tipo;
     }
 
+    public Date getEmissao() {
+        return emissao;
+    }
+
+    public void setEmissao(Date emissao) {
+        this.emissao = emissao;
+    }
+
+ 
     public Estoque construir() throws DadoInvalidoException {
         return new EstoqueBuilder().comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
+                .comItem(item).comDeposito(deposito).comTipo(tipo).comEmissao(emissao).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
         return new EstoqueBuilder().comID(id).comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
+                .comItem(item).comDeposito(deposito).comTipo(tipo).comEmissao(emissao).construir();
     }
 }

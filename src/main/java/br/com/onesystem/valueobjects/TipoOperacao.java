@@ -29,11 +29,8 @@ public enum TipoOperacao {
     AVULSO(25, "Avulso"),
     TODOS(26, "Todos"),
     DESPESA_PROVISIONADA(27, "Despesa_Provisionada"),
-    RECEITA_PROVISIONADA(28, "Receita_Provisionada"),
-    ENTRADA(29, "Entrada"),
-    SAIDA(30, "Saida"),
-    SEM_ALTERACAO(31, "Sem_Alteracao");
-
+    RECEITA_PROVISIONADA(28, "Receita_Provisionada");
+    
     private Integer id;
     private String nome;
 

@@ -5,8 +5,9 @@ import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoOperacao;
+import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -18,7 +19,8 @@ public class EstoqueBuilder {
     private Deposito deposito;
     private Item item;
     private BigDecimal saldo;
-    private TipoOperacao tipo;
+    private OperacaoFisica tipo;
+    private Date emissao = new Date();
 
     public EstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -39,14 +41,19 @@ public class EstoqueBuilder {
         this.saldo = saldo;
         return this;
     }
-    public EstoqueBuilder comTipo(TipoOperacao tipo) {
+    public EstoqueBuilder comTipo(OperacaoFisica tipo) {
         this.tipo = tipo;
+        return this;
+    }
+    
+     public EstoqueBuilder comEmissao(Date emissao) {
+        this.emissao = emissao;
         return this;
     }
     
 
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, tipo);
+        return new Estoque(id, item, saldo, deposito, tipo, emissao);
     }
 
 }

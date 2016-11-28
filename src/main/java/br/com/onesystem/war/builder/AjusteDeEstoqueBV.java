@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.builder.AjusteDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -17,6 +18,7 @@ public class AjusteDeEstoqueBV implements Serializable {
     private Item item;    
     private Date emissao = new Date();
     private BigDecimal quantidade;
+    private OperacaoFisica tipo;
 
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
         this.id = ajusteDeEstoqueSelecionada.getId();
@@ -25,6 +27,7 @@ public class AjusteDeEstoqueBV implements Serializable {
         this.item = ajusteDeEstoqueSelecionada.getItem();
         this.quantidade = ajusteDeEstoqueSelecionada.getQuantidade();
         this.emissao = ajusteDeEstoqueSelecionada.getEmissao();
+        this.tipo = ajusteDeEstoqueSelecionada.getTipo();
     }
 
     public AjusteDeEstoqueBV() {
@@ -77,6 +80,16 @@ public class AjusteDeEstoqueBV implements Serializable {
     public void setEmissao(Date emissao) {
         this.emissao = emissao;
     }
+
+    public OperacaoFisica getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(OperacaoFisica tipo) {
+        this.tipo = tipo;
+    }
+    
+    
     
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade)
