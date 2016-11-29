@@ -3,7 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.ListaPreco;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ListaPrecoBV;
@@ -24,9 +24,9 @@ public class ListaPrecoView implements Serializable {
 
     private boolean panel;
     private ListaPrecoBV listaPreco;
-    private ListaPreco listaPrecoSelecionada;
-    private List<ListaPreco> listaPrecoLista;
-    private List<ListaPreco> listaPrecosFiltradas;
+    private ListaDePreco listaPrecoSelecionada;
+    private List<ListaDePreco> listaPrecoLista;
+    private List<ListaDePreco> listaPrecosFiltradas;
 
     @ManagedProperty("#{listaPrecoService}")
     private ListaPrecoService service;
@@ -40,9 +40,9 @@ public class ListaPrecoView implements Serializable {
 
     public void add() {
         try {
-            ListaPreco novoRegistro = listaPreco.construir();
+            ListaDePreco novoRegistro = listaPreco.construir();
             if (!validaListaPrecoExistente(novoRegistro)) {
-                new AdicionaDAO<ListaPreco>().adiciona(novoRegistro);
+                new AdicionaDAO<ListaDePreco>().adiciona(novoRegistro);
                 listaPrecoLista.add(novoRegistro);
                 InfoMessage.print("¡ListaPreco '" + novoRegistro.getNome() + "' agregado con éxito!");
                 limparJanela();
@@ -56,10 +56,10 @@ public class ListaPrecoView implements Serializable {
 
     public void update() {
         try {
-            ListaPreco listaPrecoExistente = listaPreco.construirComID();
+            ListaDePreco listaPrecoExistente = listaPreco.construirComID();
             if (listaPrecoExistente.getId() != null) {
                 if (!validaListaPrecoExistente(listaPrecoExistente)) {
-                    new AtualizaDAO<ListaPreco>(ListaPreco.class).atualiza(listaPrecoExistente);
+                    new AtualizaDAO<ListaDePreco>(ListaDePreco.class).atualiza(listaPrecoExistente);
                     listaPrecoLista.set(listaPrecoLista.indexOf(listaPrecoExistente),
                             listaPrecoExistente);
                     if (listaPrecosFiltradas != null && listaPrecosFiltradas.contains(listaPrecoExistente)) {
@@ -81,7 +81,7 @@ public class ListaPrecoView implements Serializable {
     public void delete() {
         try {
             if (listaPrecoLista != null && listaPrecoLista.contains(listaPrecoSelecionada)) {
-                new RemoveDAO<ListaPreco>(ListaPreco.class).remove(listaPrecoSelecionada, listaPrecoSelecionada.getId());
+                new RemoveDAO<ListaDePreco>(ListaDePreco.class).remove(listaPrecoSelecionada, listaPrecoSelecionada.getId());
                 listaPrecoLista.remove(listaPrecoSelecionada);
                 if (listaPrecosFiltradas != null && listaPrecosFiltradas.contains(listaPrecoSelecionada)) {
                     listaPrecosFiltradas.remove(listaPrecoSelecionada);
@@ -96,8 +96,8 @@ public class ListaPrecoView implements Serializable {
         }
     }
 
-    private boolean validaListaPrecoExistente(ListaPreco novoRegistro) {
-        for (ListaPreco novaListaPreco : listaPrecoLista) {
+    private boolean validaListaPrecoExistente(ListaDePreco novoRegistro) {
+        for (ListaDePreco novaListaPreco : listaPrecoLista) {
             if (novoRegistro.getNome().equals(novaListaPreco.getNome())) {
                 return true;
             }
@@ -107,7 +107,7 @@ public class ListaPrecoView implements Serializable {
 
     public void limparJanela() {
         listaPreco = new ListaPrecoBV();
-        listaPrecoSelecionada = new ListaPreco();
+        listaPrecoSelecionada = new ListaDePreco();
     }
 
     public void abrirEdicao() {
@@ -138,27 +138,27 @@ public class ListaPrecoView implements Serializable {
         this.listaPreco = listaPreco;
     }
 
-    public ListaPreco getListaPrecoSelecionada() {
+    public ListaDePreco getListaPrecoSelecionada() {
         return listaPrecoSelecionada;
     }
 
-    public void setListaPrecoSelecionada(ListaPreco listaPrecoSelecionada) {
+    public void setListaPrecoSelecionada(ListaDePreco listaPrecoSelecionada) {
         this.listaPrecoSelecionada = listaPrecoSelecionada;
     }
 
-    public List<ListaPreco> getListaPrecoLista() {
+    public List<ListaDePreco> getListaPrecoLista() {
         return listaPrecoLista;
     }
 
-    public void setListaPrecoLista(List<ListaPreco> listaPrecoLista) {
+    public void setListaPrecoLista(List<ListaDePreco> listaPrecoLista) {
         this.listaPrecoLista = listaPrecoLista;
     }
 
-    public List<ListaPreco> getListaPrecosFiltradas() {
+    public List<ListaDePreco> getListaPrecosFiltradas() {
         return listaPrecosFiltradas;
     }
 
-    public void setListaPrecosFiltradas(List<ListaPreco> listaPrecosFiltradas) {
+    public void setListaPrecosFiltradas(List<ListaDePreco> listaPrecosFiltradas) {
         this.listaPrecosFiltradas = listaPrecosFiltradas;
     }
 

@@ -1,6 +1,6 @@
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.ListaPreco;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.exception.DadoInvalidoException;
 
 /**
@@ -23,8 +23,8 @@ public class ListaPrecoBuilder {
     }
 
   
-    public ListaPreco construir() throws DadoInvalidoException {
-        return new ListaPreco(ID, nome);
+    public ListaDePreco construir() throws DadoInvalidoException {
+        return new ListaDePreco(ID, nome);
     }
 
 }

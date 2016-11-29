@@ -40,6 +40,9 @@ public class ContaDeEstoque implements Serializable {
     @NotNull(message = "{operacao_fisica_not_null}")
     private OperacaoFisica operacaoFisica;
 
+    public ContaDeEstoque() {
+    }
+
     public ContaDeEstoque(Long id, Operacao operacao, OperacaoFisica operacaoFisica) throws DadoInvalidoException {
         this.id = id;
         this.operacao = operacao;

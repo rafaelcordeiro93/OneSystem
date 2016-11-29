@@ -78,8 +78,12 @@ public class Item implements Serializable {
     @Column(nullable = false)
     private BigDecimal saldo;
     @OneToMany(mappedBy = "item")
-    private List<AjusteDeEstoque> listaDeAjustes;    
-    
+    private List<AjusteDeEstoque> listaDeAjustes;
+    @OneToMany(mappedBy = "item")
+    private List<ItemEmitido> itensEmitidos;
+    @OneToMany(mappedBy = "item")
+    private List<PrecoDeItem> precos;
+
     public Item() {
     }
 

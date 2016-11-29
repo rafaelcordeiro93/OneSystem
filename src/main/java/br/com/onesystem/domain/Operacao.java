@@ -79,6 +79,11 @@ public class Operacao implements Serializable {
     private Despesa compraAPrazo;
     @OneToMany(mappedBy = "operacao")
     private List<ContaDeEstoque> contasDeEstoque;
+    @OneToMany(mappedBy = "operacao")
+    private List<NotaEmitida> notasEmitidas;
+
+    public Operacao() {
+    }
 
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoNota tipoNota,
             TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
@@ -180,6 +185,11 @@ public class Operacao implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Operacao{" + "id=" + id + ", nome=" + nome + ", operacaoFinanceira=" + operacaoFinanceira + ", tipoNota=" + tipoNota + ", tipoOperacao=" + tipoOperacao + ", vendaAVista=" + vendaAVista + ", vendaAPrazo=" + vendaAPrazo + ", servicoAVista=" + servicoAVista + ", servicoAPrazo=" + servicoAPrazo + ", receitaFrete=" + receitaFrete + ", despesaCMV=" + despesaCMV + ", contabilizarCMV=" + contabilizarCMV + ", compraAVista=" + compraAVista + ", compraAPrazo=" + compraAPrazo + '}';
     }
 
 }

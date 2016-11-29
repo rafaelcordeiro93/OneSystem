@@ -21,7 +21,6 @@
         <class>br.com.onesystem.domain.IVA</class>
         <class>br.com.onesystem.domain.Marca</class>
         <class>br.com.onesystem.domain.Deposito</class>
-        <class>br.com.onesystem.domain.ListaPreco</class>
         <class>br.com.onesystem.domain.Grupo</class>
         <class>br.com.onesystem.domain.Item</class>
         <class>br.com.onesystem.domain.Banco</class>
@@ -43,6 +42,11 @@
         <class>br.com.onesystem.domain.Modulo</class>
         <class>br.com.onesystem.domain.AjusteDeEstoque</class>
         <class>br.com.onesystem.domain.ContaDeEstoque</class>
+        <class>br.com.onesystem.domain.NotaEmitida</class>
+        <class>br.com.onesystem.domain.ListaDePreco</class>
+        <class>br.com.onesystem.domain.ItemEmitido</class>
+        <class>br.com.onesystem.domain.PrecoDeItem</class>
+        <class>br.com.onesystem.domain.ItemPorDeposito</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
