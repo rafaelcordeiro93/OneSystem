@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.domain.Estoque;
@@ -16,6 +15,10 @@ public class EstoqueService implements Serializable {
 
     public List<Estoque> buscarEstoques() {
        return new ArmazemDeRegistros<Estoque>(Estoque.class).listaTodosOsRegistros();
+    }
+    
+    public List<Estoque> buscaEstoqueAgrupado(){
+        return new EstoqueDAO().buscarEstoques().agrupadoPorDeposito().listaDeResultados();
     }
 
 }
