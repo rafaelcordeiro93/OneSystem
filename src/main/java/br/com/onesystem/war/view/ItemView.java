@@ -3,6 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.domain.Item;
@@ -16,6 +17,7 @@ import br.com.onesystem.war.service.GrupoService;
 import br.com.onesystem.war.service.IVAService;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.MarcaService;
+import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -49,6 +51,10 @@ public class ItemView implements Serializable {
     private UnidadeMedidaItem unidadeMedidaSelecionada;
     private List<UnidadeMedidaItem> unidadeMedidaLista;
     private List<UnidadeMedidaItem> unidadeMedidaFiltradas;
+    private List<Estoque> estoqueLista;
+    private List<Estoque> estoqueFiltrado;
+    
+    
 
     @ManagedProperty("#{itemService}")
     private ItemService service;
@@ -64,6 +70,9 @@ public class ItemView implements Serializable {
 
     @ManagedProperty("#{unidadeMedidaItemService}")
     private UnidadeMedidaItemService serviceUnMedida;
+    
+    @ManagedProperty("#{estoqueService}")
+    private EstoqueService serviceEstoque;
 
     @PostConstruct
     public void init() {
@@ -74,6 +83,7 @@ public class ItemView implements Serializable {
         grupoLista = serviceGrupo.buscarGrupos();
         marcaLista = serviceMarca.buscarMarcas();
         unidadeMedidaLista = serviceUnMedida.buscarUnidadeMedidaItens();
+        estoqueLista = serviceEstoque. buscarEstoques();
     }
 
     public void add() {
@@ -362,5 +372,34 @@ public class ItemView implements Serializable {
 
     public void setServiceUnMedida(UnidadeMedidaItemService serviceUnMedida) {
         this.serviceUnMedida = serviceUnMedida;
+        
     }
+
+    public List<Estoque> getEstoqueLista() {
+        return estoqueLista;
+    }
+
+    public void setEstoqueLista(List<Estoque> estoqueLista) {
+        this.estoqueLista = estoqueLista;
+    }
+
+    public List<Estoque> getEstoqueFiltrado() {
+        return estoqueFiltrado;
+    }
+
+    public void setEstoqueFiltrado(List<Estoque> estoqueFiltrado) {
+        this.estoqueFiltrado = estoqueFiltrado;
+    }
+
+    public EstoqueService getServiceEstoque() {
+        return serviceEstoque;
+    }
+
+    public void setServiceEstoque(EstoqueService serviceEstoque) {
+        this.serviceEstoque = serviceEstoque;
+    }
+
+ 
+    
+    
 }
