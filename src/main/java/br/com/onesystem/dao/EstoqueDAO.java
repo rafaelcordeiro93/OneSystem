@@ -2,9 +2,11 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Moeda;
+
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.UnidadeFinanceira;
@@ -30,30 +32,34 @@ public class EstoqueDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public EstoqueDAO buscarEstoques() {
+    public EstoqueDAO buscarEstoque() {
         consulta += "select e from Estoque e ";
         return this;
     }
-    
-    public EstoqueDAO wDeposito() {
-        consulta += "where e from Estoque e ";
-        return this;
-    }
-    
-    
 
-    public EstoqueDAO agrupadoPorDeposito() {
-        consulta += "group by e.deposito";
+    public EstoqueDAO buscarPorSaldo() {
+        consulta += "select sum(e.saldo) from Estoque e ";
         return this;
     }
+ 
+            public EstoqueDAO agrupadoPorEstoque() {
+        consulta += "group by deposito_id ";
+        return this;
+    }
+
 
     public EstoqueDAO agrupadoPorItem() {
-        consulta += "group by e.item.nome";
+        consulta += "group by e.item.nome ";
         return this;
     }
 
     public EstoqueDAO orderByItem() {
         consulta += "order by e.item.nome ";
+        return this;
+    }
+
+    public EstoqueDAO wbuscarTotalDeEntradas() {
+        consulta += "whre  count (distinct(e.item_id)) QTDITENS,SUM(ALTERACA.QTDVENDEU) QTDVENDIDA";
         return this;
     }
 
@@ -63,32 +69,17 @@ public class EstoqueDAO {
         consulta += "select sum(e.total) from Estoque e where e.saldo >= :psaldo and e.tipo == pOperacao ";
         return this;
     }
-    
-    public EstoqueDAO wbuscarTotalDeEntradas() {
-        parametros.put("pSaldo", BigDecimal.ZERO);
-        parametros.put("pOperacao", OperacaoFisica.ENTRADA);
-        consulta += "select sum(e.total) from Estoque e where e.saldo >= :psaldo and e.tipo == pOperacao ";
-        return this;
-    }
 
     public BigDecimal buscarSaldoFinal() {
 
-       // BigDecimal entradas
-           //     = BigDecimal saidas
-         //       = BigDecimal resultado = entradas.subtract(saidas);
-
-      //  return resultado == null ? BigDecimal.ZERO : resultado;
-            return null;
+        // BigDecimal entradas
+        //     = BigDecimal saidas
+        //       = BigDecimal resultado = entradas.subtract(saidas);
+        //  return resultado == null ? BigDecimal.ZERO : resultado;
+        return null;
     }
 
-    public BigDecimal resultadoSomaTotal() {
-        BigDecimal resultado = new ArmazemDeRegistros<BigDecimal>(BigDecimal.class)
-                .resultadoUnicoDaConsulta(consulta, parametros);
-        limpar();
-        return resultado == null ? BigDecimal.ZERO : resultado;
-    }
-
-    public List<Estoque> listaDeResultados() {
+    public List<Estoque> gerarDados() {
         List<Estoque> resultado = new ArmazemDeRegistros<Estoque>(Estoque.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
