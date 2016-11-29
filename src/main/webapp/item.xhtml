@@ -104,37 +104,21 @@
 
                                     <p:tab title="Estoque">
                                         <h:panelGrid>
-                                            <h2 class="BigTopic">Edición Del Registro</h2>
+                                            <h2 class="BigTopic">Estoque saldo por deposito</h2>
 
                                             <div class="Container100 Responsive100">
 
-                                                <p:panel id="panelDT2"  style="border: none">
-                                                    <p:dataTable id="itemDT" var="item" value="#{estoqueView.estoqueLista}" selectionMode="single" selection="#{estoqueView.estoqueSelecionada}" rowKey="#{estoqueView.estoque.id}"
-                                                                 rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                                 rowsPerPageTemplate="5,10,15" filteredValue="#{estoqueView.estoquesFiltradas}" emptyMessage="No hay registros.">
-                                                        <f:facet name="header">    
-                                                            <p:commandButton icon="fa fa-plus Fs16 White" action="#{estoqueView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                                            Tabela de Itens
-                                                        </f:facet>
+                                                <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}"
+                                                             rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                              emptyMessage="No hay registros.">
 
-                                                        <p:ajax event="rowSelect" update=":conteudo" listener="#{estoqueView.abrirEdicaoComDados()}" />
-
-                                                        <p:column headerText="Id" sortBy="#{estoqueView.estoque.id}" filterBy="#{estoqueView.estoque.id}" footerText="Id" >                                        
-                                                            <h:outputText value="#{estoqueView.estoque.id}" />
-                                                        </p:column>
-                                                        
-                                                        <p:column headerText="item" sortBy="#{estoqueView.es}" filterBy="#{estoque.item}" footerText="Id" >                                        
-                                                            <h:outputText value="#{estoque.item}" />
-                                                        </p:column>
-                                                        
-                                                         <p:column headerText="Id" sortBy="#{estoque.id}" filterBy="#{estoque.id}" footerText="Id" >                                        
-                                                            <h:outputText value="#{estoque.id}" />
-                                                        </p:column>
-                                                        
-                                                        
-
-                                                    </p:dataTable>
-                                                </p:panel>
+                                                    <p:column headerText="deposito" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="Id" >                                        
+                                                        <h:outputText value="#{estoque.deposito.nome}" />
+                                                    </p:column>
+                                                    <p:column headerText="saldo" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="Nome" >
+                                                        <h:outputText value="#{estoque.saldo}" />
+                                                    </p:column>
+                                                </p:dataTable>
 
 
                                             </div>
