@@ -5,7 +5,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -40,13 +40,13 @@ public class TituloDAO {
 
     public TituloDAO wAPagar() {
         consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
-        parametros.put("pUnidadeFinanceira", UnidadeFinanceira.SAIDA);
+        parametros.put("pUnidadeFinanceira", OperacaoFinanceira.SAIDA);
         return this;
     }
 
     public TituloDAO wAReceber() {
         consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
-        parametros.put("pUnidadeFinanceira", UnidadeFinanceira.ENTRADA);
+        parametros.put("pUnidadeFinanceira", OperacaoFinanceira.ENTRADA);
         return this;
     }
 

@@ -18,7 +18,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.WarningMessage;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.CambioBV;
 import br.com.onesystem.war.service.CambioService;
@@ -149,7 +149,7 @@ public class CambioView implements Serializable {
                     throw new EDadoInvalidoException("O valor deve ser maior que zero!");
                 }
                 baixa.setEmissao(new Date());
-                baixa.setUnidadeFinanceira(UnidadeFinanceira.SAIDA);
+                baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
                 baixa.setConta(cambio.getConta());
                 baixa.setId(retornarCodigo());
                 baixa.setDesconto(BigDecimal.ZERO);

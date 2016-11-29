@@ -7,7 +7,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,7 +22,7 @@ public class TituloBV implements Serializable {
     private Date vencimento;
     private Date emissao;
     private Date ultimoPagamento;
-    private UnidadeFinanceira unidadeFinanceira;
+    private OperacaoFinanceira unidadeFinanceira;
     private Recepcao recepcao;
     private Cambio cambio;
     private TipoFormaPagRec tipoFormaPagRec;
@@ -45,7 +45,7 @@ public class TituloBV implements Serializable {
     }
 
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, 
-            Date vencimento, Date emissao, Date ultimoPagamento, UnidadeFinanceira unidadeFinanceira, 
+            Date vencimento, Date emissao, Date ultimoPagamento, OperacaoFinanceira unidadeFinanceira, 
             Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Moeda moeda) {
         this.id = id;
         this.pessoa = pessoa;
@@ -129,11 +129,11 @@ public class TituloBV implements Serializable {
         this.ultimoPagamento = ultimoPagamento;
     }
 
-    public UnidadeFinanceira getUnidadeFinanceira() {
+    public OperacaoFinanceira getUnidadeFinanceira() {
         return unidadeFinanceira;
     }
 
-    public void setUnidadeFinanceira(UnidadeFinanceira unidadeFinanceira) {
+    public void setUnidadeFinanceira(OperacaoFinanceira unidadeFinanceira) {
         this.unidadeFinanceira = unidadeFinanceira;
     }
 

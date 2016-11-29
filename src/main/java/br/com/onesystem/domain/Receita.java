@@ -39,6 +39,16 @@ public class Receita implements Serializable {
     private List<Baixa> receitas;
     @OneToMany(mappedBy = "receita")
     private List<ReceitaProvisionada> receitasProvisionadas;
+    @OneToMany(mappedBy = "vendaAVista")
+    private List<Operacao> vendasAVista;
+    @OneToMany(mappedBy = "vendaAPrazo")
+    private List<Operacao> vendasAPrazo;
+    @OneToMany(mappedBy = "servicoAVista")
+    private List<Operacao> servicosAVista;
+    @OneToMany(mappedBy = "servicoAPrazo")
+    private List<Operacao> servicosAPrazo;
+    @OneToMany(mappedBy = "receitaFrete")
+    private List<Operacao> receitasFretes;
     
     public Receita() {
     }
@@ -65,6 +75,8 @@ public class Receita implements Serializable {
     public GrupoFinanceiro getGrupoFinanceiro() {
         return grupoFinanceiro;
     }
+    
+    
 
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "grupoFinanceiro");

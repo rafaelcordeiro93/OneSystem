@@ -15,7 +15,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import br.com.onesystem.war.service.ContaService;
@@ -199,7 +199,7 @@ public class RecebimentoView implements Serializable {
     private Baixa contruirBaixa(BaixaBV baixa) throws EDadoInvalidoException, DadoInvalidoException {
         baixa.setId(retornarCodigo());
         baixa.setEmissao(data);
-        baixa.setUnidadeFinanceira(UnidadeFinanceira.ENTRADA);
+        baixa.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
         Baixa novaBaixa = baixa.construirComID();
         total = total.add(baixa.getValor());
         return novaBaixa;

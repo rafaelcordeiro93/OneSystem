@@ -13,7 +13,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -29,7 +29,7 @@ public class BaixaBV implements Serializable {
     private BigDecimal valor = BigDecimal.ZERO;
     private int numeroParcela;
     private Despesa despesa;
-    private UnidadeFinanceira unidadeFinanciera;
+    private OperacaoFinanceira unidadeFinanciera;
     private String historico;
     private Date emissao = new Date();
     private BigDecimal desconto = BigDecimal.ZERO;
@@ -148,11 +148,11 @@ public class BaixaBV implements Serializable {
         this.despesa = despesa;
     }
 
-    public UnidadeFinanceira getUnidadeFinanciera() {
+    public OperacaoFinanceira getUnidadeFinanciera() {
         return unidadeFinanciera;
     }
 
-    public void setUnidadeFinanceira(UnidadeFinanceira unidadeFinanciera) {
+    public void setUnidadeFinanceira(OperacaoFinanceira unidadeFinanciera) {
         this.unidadeFinanciera = unidadeFinanciera;
     }
 

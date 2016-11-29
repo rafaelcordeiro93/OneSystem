@@ -4,7 +4,7 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;

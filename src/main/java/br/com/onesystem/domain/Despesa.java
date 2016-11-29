@@ -39,7 +39,13 @@ public class Despesa implements Serializable {
     private List<Baixa> despesas;
     @OneToMany(mappedBy = "despesa")
     private List<DespesaProvisionada> despesasProvisionadas;
-    
+    @OneToMany(mappedBy = "despesaCMV")
+    private List<Operacao> despesasCMV;
+    @OneToMany(mappedBy = "compraAVista")
+    private List<Operacao> comprasAVista;
+    @OneToMany(mappedBy = "compraAPrazo")
+    private List<Operacao> comprasAPrazo;
+
     public Despesa() {
     }
 

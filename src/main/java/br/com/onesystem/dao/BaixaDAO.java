@@ -8,7 +8,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.JPAUtil;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
@@ -169,13 +169,13 @@ public class BaixaDAO {
     }
 
     public BaixaDAO eEntrada() {
-        parametros.put("pUnidadeEntrada", UnidadeFinanceira.ENTRADA);
+        parametros.put("pUnidadeEntrada", OperacaoFinanceira.ENTRADA);
         consulta += "and b.unidadeFinanceira = :pUnidadeEntrada ";
         return this;
     }
 
     public BaixaDAO eSaida() {
-        parametros.put("pUnidadeSaida", UnidadeFinanceira.SAIDA);
+        parametros.put("pUnidadeSaida", OperacaoFinanceira.SAIDA);
         consulta += "and b.unidadeFinanceira = :pUnidadeSaida ";
         return this;
     }

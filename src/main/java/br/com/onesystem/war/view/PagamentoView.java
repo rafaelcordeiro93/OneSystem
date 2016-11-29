@@ -15,7 +15,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import br.com.onesystem.war.service.ContaService;
@@ -121,7 +121,7 @@ public class PagamentoView implements Serializable {
                 && novaBaixa.getDespesaProvisionada().isDivisaoLucroCambioCaixa()) {
             BaixaBV baixaBV = new BaixaBV(novaBaixa);
             baixaBV.setConta(confCambio.getContaCaixa());
-            baixaBV.setUnidadeFinanceira(UnidadeFinanceira.ENTRADA);
+            baixaBV.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(novaBaixa.getEmissao());
             calendar.add(Calendar.MILLISECOND, 1);
@@ -214,7 +214,7 @@ public class PagamentoView implements Serializable {
     private Baixa contruirBaixa(BaixaBV baixa) throws EDadoInvalidoException, DadoInvalidoException {
         baixa.setId(retornarCodigo());
         baixa.setEmissao(data);
-        baixa.setUnidadeFinanceira(UnidadeFinanceira.SAIDA);
+        baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
         Baixa novaBaixa = baixa.construirComID();
         total = total.add(baixa.getValor());
         return novaBaixa;
