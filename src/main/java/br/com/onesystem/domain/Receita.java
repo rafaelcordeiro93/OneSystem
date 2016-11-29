@@ -76,13 +76,26 @@ public class Receita implements Serializable {
         return grupoFinanceiro;
     }
     
-    
-
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "grupoFinanceiro");
         new ValidadorDeCampos<Receita>().valida(this, campos);
     }
 
+    @Override
+    public boolean equals(Object objeto) {
+        if (objeto == null) {
+            return false;
+        }
+        if (!(objeto instanceof Conta)) {
+            return false;
+        }
+        Receita outro = (Receita) objeto;
+        if (this.id == null) {
+            return false;
+        }
+        return this.id.equals(outro.id);
+    }
+    
     @Override
     public String toString() {
         return "Receita{" + "codigo=" + id + ", nome=" + nome + ", grupoFinanceiro=" + grupoFinanceiro + '}';

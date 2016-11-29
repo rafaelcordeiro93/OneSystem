@@ -5,11 +5,15 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoNota;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -72,8 +77,109 @@ public class Operacao implements Serializable {
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
     private Despesa compraAPrazo;
+    @OneToMany(mappedBy = "operacao")
+    private List<ContaDeEstoque> contasDeEstoque;
 
-    public Operacao() {
+    public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoNota tipoNota,
+            TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
+            Receita servicoAPrazo, Receita receitaFrete, Despesa despesaCMV, TipoContabil contabilizarCMV,
+            Despesa compraAVista, Despesa compraAPrazo) throws DadoInvalidoException {
+        this.id = id;
+        this.nome = nome;
+        this.operacaoFinanceira = operacaoFinanceira;
+        this.tipoNota = tipoNota;
+        this.tipoOperacao = tipoOperacao;
+        this.vendaAVista = vendaAVista;
+        this.vendaAPrazo = vendaAPrazo;
+        this.servicoAVista = servicoAVista;
+        this.servicoAPrazo = servicoAPrazo;
+        this.receitaFrete = receitaFrete;
+        this.despesaCMV = despesaCMV;
+        this.contabilizarCMV = contabilizarCMV;
+        this.compraAVista = compraAVista;
+        this.compraAPrazo = compraAPrazo;
+        ehValido();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public TipoNota getTipoNota() {
+        return tipoNota;
+    }
+
+    public TipoOperacao getTipoOperacao() {
+        return tipoOperacao;
+    }
+
+    public Receita getVendaAVista() {
+        return vendaAVista;
+    }
+
+    public Receita getVendaAPrazo() {
+        return vendaAPrazo;
+    }
+
+    public Receita getServicoAVista() {
+        return servicoAVista;
+    }
+
+    public Receita getServicoAPrazo() {
+        return servicoAPrazo;
+    }
+
+    public Receita getReceitaFrete() {
+        return receitaFrete;
+    }
+
+    public Despesa getDespesaCMV() {
+        return despesaCMV;
+    }
+
+    public TipoContabil getContabilizarCMV() {
+        return contabilizarCMV;
+    }
+
+    public Despesa getCompraAVista() {
+        return compraAVista;
+    }
+
+    public Despesa getCompraAPrazo() {
+        return compraAPrazo;
+    }
+
+    public List<ContaDeEstoque> getContasDeEstoque() {
+        return contasDeEstoque;
+    }
+
+    private void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("nome", "operacaoFinanceira", "tipoNota", "tipoOperacao", "vendaAVista", "vendaAPrazo",
+                "servicoAVista", "servicoAPrazo", "receitaFrete", "despesaCMV", "contabilizarCMV", "compraAVista", "compraAPrazo");
+        new ValidadorDeCampos<Operacao>().valida(this, campos);
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (objeto == null) {
+            return false;
+        }
+        if (!(objeto instanceof Conta)) {
+            return false;
+        }
+        Operacao outro = (Operacao) objeto;
+        if (this.id == null) {
+            return false;
+        }
+        return this.id.equals(outro.id);
     }
 
 }
