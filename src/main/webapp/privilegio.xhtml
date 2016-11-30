@@ -16,17 +16,17 @@
                             <p:panel id="panelDT" visible="#{!privilegioView.panel}" style="border: none">
                                 <p:dataTable id="privilegioDT" var="grupoDePrivilegio" value="#{privilegioView.grupoLista}" selectionMode="single" selection="#{privilegioView.grupoSelecionado}" rowKey="#{grupoDePrivilegio.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{privilegioView.gruposFiltrados}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{privilegioView.gruposFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
                                         Tabela de Grupos de Privilégios
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{privilegioView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{grupoDePrivilegio.id}" filterBy="#{grupoDePrivilegio.id}" footerText="Id" >                                        
+                                    <p:column headerText="#{l.Id}" sortBy="#{grupoDePrivilegio.id}" filterBy="#{grupoDePrivilegio.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{grupoDePrivilegio.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{grupoDePrivilegio.nome}" filterBy="#{grupoDePrivilegio.nome}" footerText="Nome" >
+                                    <p:column headerText="#{l.Nome}" sortBy="#{grupoDePrivilegio.nome}" filterBy="#{grupoDePrivilegio.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{grupoDePrivilegio.nome}" />
                                     </p:column>
                                 </p:dataTable>

@@ -15,9 +15,9 @@
                             <p:panel id="panelDT" visible="#{!transferenciaDespesaProvisionadaView.panel}" style="border: none">
                                 <p:dataTable id="transferenciaDespesaProvisionadaDT" var="transferenciaDespesaProvisionada" value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadaLista}" selectionMode="single" selection="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadaSelecionada}" rowKey="#{transferenciaDespesaProvisionada.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadasFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{transferenciaDespesaProvisionadaView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{transferenciaDespesaProvisionadaView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
                                         #{l.Tabela_de_Transferencia_Lucro}
                                     </f:facet>
 
@@ -44,7 +44,7 @@
 
 
                             <p:panel id="panelED" visible="#{transferenciaDespesaProvisionadaView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                     <div class="Container100 Responsive100">
                                         <div class="Container85 Responsive100">

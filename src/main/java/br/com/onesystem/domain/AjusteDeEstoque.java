@@ -48,7 +48,7 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();   
-       @NotNull(message = "{tipoOperacao_not_null}")
+    @NotNull(message = "{tipoOperacao_not_null}")
     private OperacaoFisica tipo;
 
     public AjusteDeEstoque() {

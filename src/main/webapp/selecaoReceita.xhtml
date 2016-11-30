@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>Seleção de Receitas</title>
+        <title>#{l.Selecao_De_Receitas}</title>
         <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
         <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
         <h:outputScript name="js/layout.js" library="modena-layout" />
@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="receitaDT" var="receita" value="#{selecaoReceitaView.receitaLista}" selectionMode="single" selection="#{selecaoReceitaView.receitaSelecionada}" rowKey="#{receita.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoReceitaView.receitasFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoReceitaView.receitasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoReceitaView.selecionar()}" />
 

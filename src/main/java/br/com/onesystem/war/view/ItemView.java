@@ -29,6 +29,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
@@ -53,7 +54,6 @@ public class ItemView implements Serializable {
     private List<UnidadeMedidaItem> unidadeMedidaFiltradas;
     private List<Estoque> estoqueLista;
     private List<Estoque> estoqueFiltrado;
-    
     
 
     @ManagedProperty("#{itemService}")
@@ -197,7 +197,7 @@ public class ItemView implements Serializable {
     public void selecionaUnidadeMedida() {
         item.setUnidadeMedida(unidadeMedidaSelecionada);
     }
-
+    
     public boolean isPanel() {
         return panel;
     }

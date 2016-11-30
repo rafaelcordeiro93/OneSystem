@@ -1,14 +1,9 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Estoque;
-import br.com.onesystem.domain.Moeda;
-
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.UnidadeFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -32,54 +27,89 @@ public class EstoqueDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public EstoqueDAO buscarEstoque() {
-        consulta += "select e from Estoque e ";
+    public EstoqueDAO buscarEstoques() {
+        consulta += "select t from Estoque t ";
         return this;
     }
 
-    public EstoqueDAO buscarPorSaldo() {
-        consulta += "select sum(e.saldo) from Estoque e ";
-        return this;
-    }
- 
-            public EstoqueDAO agrupadoPorEstoque() {
-        consulta += "group by deposito_id ";
+    public EstoqueDAO buscarSaldoPorMoedaDeEstoques() {
+        consulta += "select new br.com.onesystem.reportTemplate.SomaSaldoDeEstoquePorMoedaReportTemplate(t.moeda, sum(t.saldo)) from Estoque t ";
         return this;
     }
 
-
-    public EstoqueDAO agrupadoPorItem() {
-        consulta += "group by e.item.nome ";
+    public EstoqueDAO wAPagar() {
+        consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
+        parametros.put("pUnidadeFinanceira", UnidadeFinanceira.SAIDA);
         return this;
     }
 
-    public EstoqueDAO orderByItem() {
-        consulta += "order by e.item.nome ";
+    public EstoqueDAO wAReceber() {
+        consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
+        parametros.put("pUnidadeFinanceira", UnidadeFinanceira.ENTRADA);
         return this;
     }
 
-    public EstoqueDAO wbuscarTotalDeEntradas() {
-        consulta += "whre  count (distinct(e.item_id)) QTDITENS,SUM(ALTERACA.QTDVENDEU) QTDVENDIDA";
-        return this;
-    }
-
-    public EstoqueDAO wbuscarTotalDeSaidas() {
+    public EstoqueDAO eAbertas() {
+        consulta += "and t.saldo > :pSaldo ";
         parametros.put("pSaldo", BigDecimal.ZERO);
-        parametros.put("pOperacao", OperacaoFisica.SAIDA);
-        consulta += "select sum(e.total) from Estoque e where e.saldo >= :psaldo and e.tipo == pOperacao ";
         return this;
     }
 
-    public BigDecimal buscarSaldoFinal() {
-
-        // BigDecimal entradas
-        //     = BigDecimal saidas
-        //       = BigDecimal resultado = entradas.subtract(saidas);
-        //  return resultado == null ? BigDecimal.ZERO : resultado;
-        return null;
+    public EstoqueDAO ePagasOuRecebidas() {
+        consulta += "and t.saldo < t.valor ";
+        return this;
     }
 
-    public List<Estoque> gerarDados() {
+    public EstoqueDAO ePorPessoa(Pessoa pessoa) {
+        if (pessoa != null) {
+            consulta += "and t.pessoa = :pPessoa ";
+            parametros.put("pPessoa", pessoa);
+        }
+        return this;
+    }
+
+    public EstoqueDAO ePorCambio(Cambio cambio) {
+        if (cambio != null) {
+            consulta += "and t.cambio = :pCambio ";
+            parametros.put("pCambio", cambio);
+        }
+        return this;
+    }
+
+    public EstoqueDAO ePorEmissao(Date dataInicial, Date dataFinal) {
+        if (dataInicial != null || dataFinal != null) {
+            parametros.put("pDataInicial", dataInicial);
+            parametros.put("pDataFinal", dataFinal);
+            consulta += "and t.emissao between :pDataInicial and :pDataFinal ";
+        }
+        return this;
+    }
+
+    public EstoqueDAO ePorVencimento(Date dataInicial, Date dataFinal) {
+        if (dataInicial == null || dataFinal == dataFinal) {
+            parametros.put("pDataInicial", dataInicial);
+            parametros.put("pDataFinal", dataFinal);
+            consulta += "and (t.vencimento between :pDataInicial and :pDataFinal or t.vencimento is null) ";
+        }
+        return this;
+    }
+
+    public EstoqueDAO eComRecepcao() {
+        consulta += "and t.recepcao is not null ";
+        return this;
+    }
+
+    public EstoqueDAO agrupadoPorMoeda() {
+        consulta += "group by t.moeda ";
+        return this;
+    }
+    
+    public EstoqueDAO orderByMoeda(){
+        consulta += "order by t.moeda asc ";
+        return this;
+    }
+
+    public List<Estoque> listaDeResultados() {
         List<Estoque> resultado = new ArmazemDeRegistros<Estoque>(Estoque.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();

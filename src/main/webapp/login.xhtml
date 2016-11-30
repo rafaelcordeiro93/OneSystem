@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>RS One</title>
+        <title>#{l.Nome_Sistema}</title>
         <ui:insert name="head" />
     </h:head>
 
@@ -34,11 +34,11 @@
                         <h:outputText id="label" value="#{loginView.mensagem}"/>
                         <div class="EmptyBox10"></div>
                         <div class="Wid65 Fleft Responsive50">
-                            <p:commandButton update="formLogin" value="Entrar" action="#{loginView.logar()}" icon="fa fa-sign-in" styleClass=" Fs18 White RaisedButton Fright FloatNoneOnMobile"/>
+                            <p:commandButton update="formLogin" value="#{l.Entrar}" action="#{loginView.logar()}" icon="fa fa-sign-in" styleClass=" Fs18 White RaisedButton Fright FloatNoneOnMobile"/>
                         </div>
                     </div>
                     <div class="Wid100 TexAlCenter MarTop20 Fs14 FontRobotoRegular Gray">
-                        RS Software <br/> Todos os direitos reservados.
+                       #{l.Copyright} <br/>#{l.Todos_Direitos_Reservados}
                     </div>
                 </div>
             </div>

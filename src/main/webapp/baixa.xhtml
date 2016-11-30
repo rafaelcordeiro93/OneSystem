@@ -16,10 +16,10 @@
                             <p:panel visible="#{!baixaView.panel}" style="border: none">
                                 <p:dataTable id="baixaDT" var="baixa" value="#{baixaView.baixaLista}" selectionMode="single" selection="#{baixaView.baixaSelecionada}" rowKey="#{baixa.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" filteredValue="#{baixaView.baixasFiltradas}"
+                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" filteredValue="#{baixaView.baixasFiltradas}"
                                              rowStyleClass="#{baixa.cancelada eq true ? 'linhaVermelha' : null}">
                                     <f:facet name="header">
-                                        Tabela de Baixas
+                                       #{l.Tabela_De_Baixas}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{baixaView.abrirEdicaoComDados()}"/>
@@ -53,7 +53,7 @@
                                     <div class="ContainerIndent">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                            <p:inputText value="#{baixaView.baixa.id}" placeholder="ID" disabled="true"/>
+                                            <p:inputText value="#{baixaView.baixa.id}" placeholder="#{l.Id}" disabled="true"/>
                                             <p:inputText value="#{baixaView.baixa.emissaoFormatada}" placeholder="#{l.Emissao}" readonly="true" maxlength="60"/>                            
                                             <h:panelGrid columns="2" style="margin-left: -2%;">
                                                 <p:inputText id="baixaPessoa" readonly="true" placeholder="#{l.Pessoa}" size="51" value="#{baixaView.baixa.pessoa.nome}"/>

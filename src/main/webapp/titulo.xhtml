@@ -15,9 +15,9 @@
                             <p:panel id="panelDT" visible="#{!tituloView.panel}" style="border: none">
                                 <p:dataTable id="tituloDT" var="titulo" value="#{tituloView.tituloLista}" selectionMode="single" selection="#{tituloView.tituloSelecionado}" rowKey="#{titulo.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{tituloView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nenhum_dado_encontrado}">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{tituloView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{tituloView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{tituloView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
                                         #{l.Tabela_Titulo}
                                     </f:facet>
 
@@ -42,12 +42,12 @@
                             </p:panel>
 
                             <p:panel id="panelED" visible="#{tituloView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{Edicao_de_Registro}</h2>
+                                <h2 class="BigTopic">#{Edicao_De_Registros}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container80 Responsive100">
                                         <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{tituloView.titulo.id}" style="width: 96%;" placeholder="ID" disabled="true"/>
+                                            <p:inputText value="#{tituloView.titulo.id}" style="width: 96%;" placeholder="#{l.Id}" disabled="true"/>
                                             <h:panelGrid columns="2" style="margin-top: -2%;">
                                                 <p:inputText readonly="true" id="tituloCambio" placeholder="#{l.Cambio}" value="#{tituloView.titulo.cambio.id}"/>
                                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCambioView.abrirDialogo()}" process="@this"
@@ -76,7 +76,7 @@
                                             <p:calendar pattern="dd/MM/yyyy" value="#{tituloView.titulo.vencimento}" placeholder="#{l.Vencimento}" size="25"/>
                                             <p:inputText value="#{tituloView.titulo.valor}" placeholder="#{l.Valor}" maxlength="60" styleClass="Wid90"/>
                                             <p:inputText value="#{tituloView.titulo.saldo}" readonly="true" placeholder="#{l.Saldo}" maxlength="60" styleClass="Wid90"/>
-                                            <p:inputTextarea autoResize="true" placeholder="Escreva um comentário." counter="display"
+                                            <p:inputTextarea autoResize="true" placeholder="#{l.Escreva_Um_Comentario}" counter="display"
                                                              counterTemplate="{0} caracteres restantes." rows="1" cols="54"
                                                              maxlength="150" value="#{tituloView.titulo.historico}">
                                             </p:inputTextarea>                                            

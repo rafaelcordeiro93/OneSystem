@@ -15,21 +15,21 @@
                             <p:panel id="panelDT" visible="#{!moedaView.panel}" style="border: none">
                                 <p:dataTable id="moedaDT" var="moeda" value="#{moedaView.moedaLista}" selectionMode="single" selection="#{moedaView.moedaSelecionada}" rowKey="#{moeda.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{moedaView.moedasFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{moedaView.moedasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{moedaView.abrirEdicao()}" title="Nuevo" update="conteudo" immediate="true"/>
-                                        Tabela de Monedas
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{moedaView.abrirEdicao()}" title="#{l.Novo}" update="conteudo" immediate="true"/>
+                                        #{l.Tabela_De_Moedas}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{moedaView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{moeda.id}" filterBy="#{moeda.id}" footerText="Id" >                                        
+                                    <p:column headerText="#{l.Id}" sortBy="#{moeda.id}" filterBy="#{moeda.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{moeda.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{moeda.nome}" filterBy="#{moeda.nome}" footerText="Nome" >
+                                    <p:column headerText="#{l.Nome}" sortBy="#{moeda.nome}" filterBy="#{moeda.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{moeda.nome}" />
                                     </p:column>
-                                    <p:column headerText="Sigla" sortBy="#{moeda.sigla}" filterBy="#{moeda.sigla}" footerText="Sigla">
+                                    <p:column headerText="#{l.Sigla}" sortBy="#{moeda.sigla}" filterBy="#{moeda.sigla}" footerText="#{l.Sigla}">
                                         <h:outputText value="#{moeda.sigla}" />
                                     </p:column>
                                 </p:dataTable>
@@ -37,13 +37,13 @@
 
 
                             <p:panel id="panelED" visible="#{moedaView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <p:inputText value="#{moedaView.moeda.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
-                                        <p:inputText value="#{moedaView.moeda.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
-                                        <p:inputText value="#{moedaView.moeda.sigla}" placeholder="Sigla" maxlength="3" styleClass="Wid90"/>
+                                        <p:inputText value="#{moedaView.moeda.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
+                                        <p:inputText value="#{moedaView.moeda.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                        <p:inputText value="#{moedaView.moeda.sigla}" placeholder="#{l.Sigla}" maxlength="3" styleClass="Wid90"/>
                                         <p:outputLabel/>
                                         <p:outputLabel/>
                                     </p:panelGrid>
@@ -53,13 +53,13 @@
 
                                 <p:separator/>
 
-                                <p:commandButton value="Añadir" action="#{moedaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="Cambiar" action="#{moedaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="Eliminar" action="#{moedaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="Limpiar" action="#{moedaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="Deshacer" action="#{moedaView.fecharEdicao()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                <p:commandButton value="#{l.Adicionar}" action="#{moedaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{moedaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{moedaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{moedaView.fecharEdicao()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  immediate="true" styleClass="OrangeButton" />
-                                <p:commandButton value="Regreso" action="#{moedaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                <p:commandButton value="#{l.Voltar}" action="#{moedaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
                                                  immediate="true" styleClass="BrownButton" />
                             </p:panel>   
 

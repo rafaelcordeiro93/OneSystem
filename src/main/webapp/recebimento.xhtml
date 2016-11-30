@@ -19,7 +19,7 @@
                             <div class="Container33">
                                 <div class="ContainerIndent">
                                     <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <p:outputLabel value="Data:"/>
+                                        <p:outputLabel value="#{l.Data}"/>
                                         <p:outputLabel/>
                                         <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90" navigator="true" value="#{recebimentoView.data}"/>   
                                         <p:outputLabel/>
@@ -31,31 +31,31 @@
                                 <div class="ContainerIndent">
                                     <p:separator/>
 
-                                    <h:outputText styleClass="Blue" value="Tipos de Recebimento" />
-                                    <p:dataTable id="recebimentoBaixa" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+                                    <h:outputText styleClass="Blue" value="#{l.Tipos_De_Recebimento}" />
+                                    <p:dataTable id="recebimentoBaixa" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
                                                  selection="#{recebimentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
 
                                         <p:ajax event="rowSelect" process="@this" listener="#{recebimentoView.abrirBaixaComDados}" update=":conteudo"/>
 
-                                        <p:column headerText="Documento" >
+                                        <p:column headerText="#{l.Documento}" >
                                             <h:outputText value="#{baixa.titulo.id}"/>
                                         </p:column>
-                                        <p:column headerText="Histórico" colspan="3">
+                                        <p:column headerText="#{l.Historico}" colspan="3">
                                             <h:outputText value="#{baixa.historico}"/>
                                         </p:column>
-                                        <p:column headerText="Conta" >
+                                        <p:column headerText="#{l.Conta}" >
                                             <h:outputText value="#{baixa.conta.nome}"/>
                                         </p:column>
-                                        <p:column headerText="Vencimento" >
+                                        <p:column headerText="#{l.Vencimento}" >
                                             <h:outputText value="#{baixa.titulo.vencimento}"/>
                                         </p:column>
-                                        <p:column headerText="Nome" >
+                                        <p:column headerText="#{l.Nome}" >
                                             <h:outputText value="#{baixa.pessoa.nome}"/>
                                         </p:column>
-                                        <p:column headerText="Origem" >
+                                        <p:column headerText="#{l.Origem}" >
                                             <h:outputText value="#{baixa.documentoOriginal}"/>
                                         </p:column>
-                                        <p:column headerText="Valor">
+                                        <p:column headerText="#{l.Valor}">
                                             <h:outputText value="#{baixa.valorFormatadoSemNegativos}"/>
                                         </p:column>
 
@@ -86,7 +86,7 @@
         <p:dialog header="#{l.Receber_Titulo}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receberTitulo" draggable="false">
 
             <p:panelGrid id="dados" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Título" action="#{selecaoTituloReceberView.abrirDialogo()}" process="@this"
+                <p:commandButton icon="fa fa-search Fs16 White" value="#{l.Buscar_Titulo}" action="#{selecaoTituloReceberView.abrirDialogo()}" process="@this"
                                  update="@none" styleClass="BlueButton">
                     <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaTitulo}"
                             process="@this" update="dados :conteudo:valorRecebidoRP :conteudo:contaTitulo"/>
@@ -118,7 +118,7 @@
                         <pe:inputNumber style="margin-left: 20%" id="valorRecebidoRP" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                         symbol="#{recebimentoView.baixa.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixa.valor}">
                         </pe:inputNumber>    
-                        <p:inputTextarea style="margin-left: 50%" autoResize="true" placeholder="Escreva um comentário." rows="1" cols="38"
+                        <p:inputTextarea style="margin-left: 50%" autoResize="true" placeholder="#{l.Escreva_Um_Comentario}" rows="1" cols="38"
                                          maxlength="150" value="#{recebimentoView.baixa.historico}">
                         </p:inputTextarea>
                     </p:panelGrid>
@@ -135,7 +135,7 @@
         <p:dialog header="#{l.Receber_Receita_Provisionada}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="receberReceitaProvisionada" draggable="false">
 
             <p:panelGrid id="dadosRP" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                <p:commandButton icon="fa fa-search Fs16 White" value="Buscar Receita Provisionada" action="#{selecaoReceitaProvisionadaView.abrirDialogo()}" process="@this"
+                <p:commandButton icon="fa fa-search Fs16 White" value="#{l.Buscar_Receita_Provisionada}" action="#{selecaoReceitaProvisionadaView.abrirDialogo()}" process="@this"
                                  update="@none" styleClass="BlueButton">
                     <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionaReceitaProvisionada}"
                             process="@this" update="dadosRP :conteudo:valorRecebido :conteudo:historicoRP contaRP"/>
@@ -167,7 +167,7 @@
                         <pe:inputNumber id="valorRecebido" style="margin-left: 20%" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                         symbol="#{recebimentoView.baixaReceitaProvisionada.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixaReceitaProvisionada.valor}">
                         </pe:inputNumber>                 
-                        <p:inputTextarea style="margin-left: 50%" id="historicoRP" autoResize="true" placeholder="Escreva um comentário."                                         
+                        <p:inputTextarea style="margin-left: 50%" id="historicoRP" autoResize="true" placeholder="#{l.Escreva_Um_Comentario}"                                         
                                          maxlength="150" value="#{recebimentoView.baixaReceitaProvisionada.historico}" rows="1" cols="38">
                         </p:inputTextarea>
                     </p:panelGrid>
@@ -222,7 +222,7 @@
                         <pe:inputNumber id="vlDe" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                         symbol="#{recebimentoView.baixaReceitaEventual.conta.moeda.sigla} " decimalPlaces="2" value="#{recebimentoView.baixaReceitaEventual.valor}">
                         </pe:inputNumber>    
-                        <p:inputTextarea autoResize="true" placeholder="Escreva um comentário."
+                        <p:inputTextarea autoResize="true" placeholder="#{l.Escreva_Um_Comentario}"
                                          rows="1" cols="20" maxlength="150" value="#{recebimentoView.baixaReceitaEventual.historico}">
                         </p:inputTextarea>
                     </p:panelGrid>
@@ -250,24 +250,24 @@
                 </pe:inputNumber>                 
             </h:panelGrid>
 
-            <p:dataTable id="recebimentoRP" scrollable="true" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nenhum_dado_encontrado}"
+            <p:dataTable id="recebimentoRP" scrollable="true" var="baixa" value="#{recebimentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
                          selection="#{recebimentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
 
                 <p:ajax event="rowSelect" process="@this" listener="#{recebimentoView.abrirBaixaComDados}" update=":conteudo"/>
 
-                <p:column headerText="Documento" >
+                <p:column headerText="#{l.Documento}" >
                     <h:outputText />
                 </p:column>  
-                <p:column headerText="Emissão" >
+                <p:column headerText="#{l.Emissao}" >
                     <h:outputText />
                 </p:column>
-                <p:column headerText="Vencimento" >
+                <p:column headerText="#{l.Vencimento}" >
                     <h:outputText />
                 </p:column>
-                <p:column headerText="Origem" >
+                <p:column headerText="#{l.Origem}" >
                     <h:outputText />
                 </p:column>
-                <p:column headerText="Valor">
+                <p:column headerText="#{l.Valor}">
                     <h:outputText />
                 </p:column>
 
@@ -276,7 +276,7 @@
                         <p:column />
                         <p:column />
                         <p:column />
-                        <p:column colspan="1" style="text-align:right" footerText="Totais:" />
+                        <p:column colspan="1" style="text-align:right" footerText="#{l.Totais}" />
                         <p:column />
                     </p:row>                                    
                 </p:columnGroup>
@@ -284,7 +284,7 @@
 
             <div class="EmptyBox5"/>
 
-            <p:commandButton value="Confirmar"/>
+            <p:commandButton value="#{l.Confirmar}"/>
 
         </p:dialog>
 

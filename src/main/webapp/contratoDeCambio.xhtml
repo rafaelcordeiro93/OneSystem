@@ -18,10 +18,10 @@
                             <p:panel id="panelDT" visible="#{!contratoDeCambioView.panel}" style="border: none">
                                 <p:dataTable id="contratoDeCambioDT" var="contratoDeCambio" value="#{contratoDeCambioView.contratoDeCambioLista}" selectionMode="single" selection="#{contratoDeCambioView.contratoDeCambioSelecionado}" rowKey="#{contratoDeCambio.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{contratoDeCambioView.contratosDeCambioFiltrados}" emptyMessage="No hay registros." rowStyleClass="#{contratoDeCambio.status eq false ? 'linhaVermelha' : null}">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{contratoDeCambioView.contratosDeCambioFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}" rowStyleClass="#{contratoDeCambio.status eq false ? 'linhaVermelha' : null}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{contratoDeCambioView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        Tabela de Contratos
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{contratoDeCambioView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                        #{l.Tabela_De_Contratos}
                                     </f:facet>
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{contratoDeCambioView.abrirEdicaoComDados()}" />
                                     <p:column headerText="#{l.Id}" sortBy="#{contratoDeCambio.id}" filterBy="#{contratoDeCambio.id}" footerText="#{l.Id}" >                                        
@@ -66,8 +66,8 @@
                                     <div class="Container65 Responsive100">
                                         <div class="Container65 Responsive100">
                                             <p:panelGrid columns="2" layout="grid" style="margin-left: 1%;border:0px !important; background:none;" styleClass="FormContent">
-                                                <p:outputLabel value="De:"/>
-                                                <p:outputLabel value="Para:"/>
+                                                <p:outputLabel value=" #{l.De}"/>
+                                                <p:outputLabel value=" #{l.Para}"/>
                                                 <p:selectOneMenu id="contratoOrigem" value="#{contratoDeCambioView.contratoDeCambio.origem}" converter="moedaConverter">
                                                     <f:selectItems value="#{contratoDeCambioView.moedaLista}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}"/>
                                                     <p:ajax update="contratoDeCambioTaxaNegociada contratoDeCambioValorCalculado"/>

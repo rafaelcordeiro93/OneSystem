@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="grupoFinanceiroDT" var="grupoFinanceiro" value="#{selecaoGrupoFinanceiroDespesaView.grupoFinanceiroLista}" selectionMode="single" selection="#{selecaoGrupoFinanceiroDespesaView.grupoFinanceiroSelecionado}" rowKey="#{grupoFinanceiro.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoGrupoFinanceiroDespesaView.grupoFinanceirosFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoGrupoFinanceiroDespesaView.grupoFinanceirosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoGrupoFinanceiroDespesaView.selecionar()}" />
 

@@ -16,24 +16,24 @@
                             <p:panel id="panelDT" visible="#{!cotacaoView.panel}" style="border: none">
                                 <p:dataTable id="cotacaoDT" var="cotacao" value="#{cotacaoView.cotacaoLista}" selectionMode="single" selection="#{cotacaoView.cotacaoSelecionada}" rowKey="#{cotacao.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{cotacaoView.cotacoesFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{cotacaoView.cotacoesFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cotacaoView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
-                                        Tabela de Citas
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cotacaoView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
+                                         #{l.Tabela_De_Cotacao}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{cotacaoView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{cotacao.id}" filterBy="#{cotacao.id}" footerText="Id" >                                        
+                                    <p:column headerText=" #{l.Id}" sortBy="#{cotacao.id}" filterBy="#{cotacao.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{cotacao.id}" />
                                     </p:column>
-                                    <p:column headerText="Moeda" sortBy="#{cotacao.moeda.nome}" filterBy="#{cotacao.moeda.nome}" footerText="Moeda" >
+                                    <p:column headerText=" #{l.Moeda}" sortBy="#{cotacao.moeda.nome}" filterBy="#{cotacao.moeda.nome}" footerText="#{l.Moeda}" >
                                         <h:outputText value="#{cotacao.moeda.nome}" />
                                     </p:column>
-                                    <p:column headerText="Valor" sortBy="#{cotacao.valor}" filterBy="#{cotacao.valor}" footerText="Valor">
+                                    <p:column headerText=" #{l.Valor}" sortBy="#{cotacao.valor}" filterBy="#{cotacao.valor}" footerText="#{l.Valor}">
                                         <h:outputText value="#{cotacao.valor}" />
                                     </p:column>
-                                    <p:column headerText="Fecha" sortBy="#{cotacao.data}" filterBy="#{cotacao.data}" footerText="Valor">
+                                    <p:column headerText=" #{l.Data}" sortBy="#{cotacao.data}" filterBy="#{cotacao.data}" footerText="#{l.Data}">
                                         <h:outputText value="#{cotacao.data}" />
                                     </p:column>
                                 </p:dataTable>
@@ -41,18 +41,18 @@
 
 
                             <p:panel id="panelED" visible="#{cotacaoView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic"> #{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container50 Responsive50">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{cotacaoView.cotacao.id}" placeholder="ID" disabled="true" styleClass="Wid90"/>
+                                            <p:inputText value="#{cotacaoView.cotacao.id}" placeholder="#{l.Id}" disabled="true" styleClass="Wid90"/>
                                             <h:panelGrid columns="2">
-                                                <p:inputText value="#{cotacaoView.cotacao.moeda.nome}" placeholder="Moeda" maxlength="60" disabled="true" styleClass="Wid90"/>
+                                                <p:inputText value="#{cotacaoView.cotacao.moeda.nome}" placeholder="#{l.Moeda}" maxlength="60" disabled="true" styleClass="Wid90"/>
                                                 <p:commandButton icon="fa fa-search Fs16 White" styleClass="MarLeft5" onclick="PF('cotacaoMoedaDlg').show()"/>
                                             </h:panelGrid>
-                                            <p:inputText value="#{cotacaoView.cotacao.valor}" placeholder="Valor" styleClass="Wid90" converterMessage="¡Debe contener sólo números y apuntar a la separación de decimales!"/>
-                                            <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" placeholder="Fecha" styleClass="Wid90"  />
+                                            <p:inputText value="#{cotacaoView.cotacao.valor}" placeholder=" #{l.Valor}" styleClass="Wid90" converterMessage=" #{l.Conter_Apenas_Numeros} "/>
+                                            <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" placeholder=" #{l.Data}" styleClass="Wid90"  />
                                         </p:panelGrid>
                                     </div>
                                 </div>
@@ -61,13 +61,13 @@
 
                                 <p:separator/>
 
-                                <p:commandButton value="Añadir" action="#{cotacaoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="Cambiar" action="#{cotacaoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="Eliminar" action="#{cotacaoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="Limpiar" action="#{cotacaoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="Deshacer" action="#{cotacaoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                <p:commandButton value="#{l.Adicionar}" action="#{cotacaoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{cotacaoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{cotacaoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{cotacaoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{cotacaoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  styleClass="OrangeButton" />
-                                <p:commandButton value="Regreso" action="#{cotacaoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                <p:commandButton value="#{l.Voltar}" action="#{cotacaoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
                                                  immediate="true" styleClass="BrownButton" />
                             </p:panel>   
 
@@ -77,22 +77,22 @@
             </div>
         </div>
 
-        <p:dialog header="Consulta de Monedas" maximizable="true" width="950" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="cotacaoMoedaDlg" draggable="false">
+        <p:dialog header="#{l.Consulta_De_Moedas}" maximizable="true" width="950" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="cotacaoMoedaDlg" draggable="false">
             <p:dataTable id="moedaDT" var="moeda" value="#{cotacaoView.moedaLista}" selectionMode="single" selection="#{cotacaoView.moedaSelecionada}" rowKey="#{moeda.id}"
                          paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{cotacaoView.moedasFiltradas}" emptyMessage="No hay registros." rows="5">
-                <p:column headerText="Id" sortBy="#{moeda.id}" filterBy="#{moeda.id}" footerText="Id" >                                        
+                         filteredValue="#{cotacaoView.moedasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}" rows="5">
+                <p:column headerText="#{l.Id}" sortBy="#{moeda.id}" filterBy="#{moeda.id}" footerText="#{l.Id}" >                                        
                     <h:outputText value="#{moeda.id}" />
                 </p:column>
-                <p:column headerText="Nome" sortBy="#{moeda.nome}" filterBy="#{moeda.nome}" footerText="Nome" >
+                <p:column headerText="#{l.Nome}" sortBy="#{moeda.nome}" filterBy="#{moeda.nome}" footerText="#{l.Nome}" >
                     <h:outputText value="#{moeda.nome}" />
                 </p:column>
-                <p:column headerText="Sigla" sortBy="#{moeda.sigla}" filterBy="#{moeda.sigla}" footerText="Sigla">
+                <p:column headerText="#{l.Sigla}" sortBy="#{moeda.sigla}" filterBy="#{moeda.sigla}" footerText="#{l.Sigla}">
                     <h:outputText value="#{moeda.sigla}" />
                 </p:column>
             </p:dataTable>
             <p:commandButton action="#{cotacaoView.selecionaMoeda()}" styleClass="Fright" 
-                             onclick="PF('cotacaoMoedaDlg').hide()" value="Concluído"
+                             onclick="PF('cotacaoMoedaDlg').hide()" value="#{l.Concluido}"
                              update="conteudo"/>            
         </p:dialog>
 
