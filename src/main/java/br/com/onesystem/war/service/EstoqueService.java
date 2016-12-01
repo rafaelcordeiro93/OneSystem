@@ -25,7 +25,7 @@ public class EstoqueService implements Serializable {
     }
 
     public List<SaldoDeEstoque> buscaSaldoDeEstoque(Item item) {
-        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().eItem(new Item(new Long(1)))
+        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().eItem(item)
                 .listaDeResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         for (Estoque e : estoque) {

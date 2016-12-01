@@ -87,10 +87,6 @@ public class Item implements Serializable {
     public Item() {
     }
 
-    public Item(Long id) {
-        this.id = id;
-    }    
-    
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, IVA iva, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo) throws DadoInvalidoException {
@@ -195,8 +191,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + '}';
+        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", iva=" + iva + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", saldo=" + saldo + ", precos=" + precos + '}';
     }
-    
-    
+
 }

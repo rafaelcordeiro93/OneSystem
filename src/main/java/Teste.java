@@ -9,10 +9,7 @@ public class Teste {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
-        List<SaldoDeEstoque> listaDeResultados = new EstoqueService().buscaSaldoDeEstoque(new Item(new Long(1)));
-        for (SaldoDeEstoque e : listaDeResultados) {
-            System.out.println("E: " + e);
-        }
+        
 
     }
 }
