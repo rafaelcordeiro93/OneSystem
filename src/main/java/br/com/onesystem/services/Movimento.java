@@ -3,7 +3,7 @@ package br.com.onesystem.services;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import br.com.onesystem.valueobjects.TipoOperacao;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;

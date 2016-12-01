@@ -12,6 +12,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,6 +44,7 @@ public class Estoque implements Serializable {
     @Min(value = 0, message = "{saldo_min}")
     @Column(nullable = false)
     private BigDecimal saldo;
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipoOperacao_not_null}")
     private OperacaoFisica tipo;
      @NotNull(message = "{emissao_not_null}")

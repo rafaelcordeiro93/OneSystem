@@ -12,7 +12,7 @@ import br.com.onesystem.services.BaixaEmissaoComparator;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.ExtratoDeContaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
@@ -142,13 +142,13 @@ public class ExtratoDeContaView implements Serializable {
     private void adicionaBaixas(Transferencia novaTransferencia) throws ConstraintViolationException, DadoInvalidoException {
         BaixaBV origemBV = new BaixaBV();
         origemBV.setValor(transferencia.getValor());
-        origemBV.setUnidadeFinanceira(UnidadeFinanceira.SAIDA);
+        origemBV.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
         origemBV.setConta(novaTransferencia.getOrigem());
         origemBV.setTransferencia(novaTransferencia);
         Baixa origem = origemBV.construir();
         BaixaBV destinoBV = new BaixaBV();
         destinoBV.setValor(transferencia.getOrigem().getMoeda().equals(transferencia.getDestino().getMoeda()) ? transferencia.getValor() : transferencia.getValorConvertido());
-        destinoBV.setUnidadeFinanceira(UnidadeFinanceira.ENTRADA);
+        destinoBV.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
         destinoBV.setConta(novaTransferencia.getDestino());
         destinoBV.setTransferencia(novaTransferencia);
         Baixa destino = destinoBV.construir();
@@ -183,7 +183,7 @@ public class ExtratoDeContaView implements Serializable {
                     throw new EDadoInvalidoException("O valor deve ser maior que zero!");
                 }
                 baixa.setEmissao(new Date());
-                baixa.setUnidadeFinanceira(UnidadeFinanceira.SAIDA);
+                baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
                 baixa.setConta(transferencia.getOrigem());
                 baixa.setId(retornarCodigo());
                 baixa.setDesconto(BigDecimal.ZERO);

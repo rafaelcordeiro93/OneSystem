@@ -22,7 +22,6 @@ public class ArmazemDeRegistros<T> {
         query.select(query.from(classe));
         List<T> lista = entityManager.createQuery(query).getResultList();
 
-        entityManager.close();
         return lista;
     }
 

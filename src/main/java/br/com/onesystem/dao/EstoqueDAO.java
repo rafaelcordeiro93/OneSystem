@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;

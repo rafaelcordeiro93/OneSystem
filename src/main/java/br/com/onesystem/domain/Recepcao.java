@@ -3,7 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -75,7 +75,7 @@ public class Recepcao implements Serializable {
 
     public void gerarTitulo() throws DadoInvalidoException {
         Titulo novoTitulo = new Titulo(null, pessoa, null, valor, valor,
-                emissao, UnidadeFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, this, null, null, moeda);
+                emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, this, null, null, moeda);
         this.titulo = novoTitulo;
     }
 
@@ -84,7 +84,7 @@ public class Recepcao implements Serializable {
             baixa = new ArrayList<Baixa>();
         }
         Baixa novaBaixa = new Baixa(null, 0, false, BigDecimal.ZERO, valor, BigDecimal.ZERO, BigDecimal.ZERO,
-                emissao, null, UnidadeFinanceira.ENTRADA, pessoa, null, conta, null, null, null, null, this, null, null);
+                emissao, null, OperacaoFinanceira.ENTRADA, pessoa, null, conta, null, null, null, null, this, null, null);
         this.baixa.add(novaBaixa);
     }
 

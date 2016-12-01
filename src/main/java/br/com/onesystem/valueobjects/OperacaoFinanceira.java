@@ -8,7 +8,7 @@ package br.com.onesystem.valueobjects;
  *
  * @author Rauber
  */
-public enum UnidadeFinanceira {
+public enum OperacaoFinanceira {
 
     ENTRADA("Entrada", "ENTRADA"),
     SAIDA("Saída", "SAIDA"),
@@ -16,7 +16,7 @@ public enum UnidadeFinanceira {
     private String tipoUnidade;
     private String tipoUnidadeUP;
     
-    private UnidadeFinanceira(String tiponidade, String tipoUnidadeUP) {
+    private OperacaoFinanceira(String tiponidade, String tipoUnidadeUP) {
         this.tipoUnidade = tiponidade;
         this.tipoUnidadeUP = tipoUnidadeUP;
     }

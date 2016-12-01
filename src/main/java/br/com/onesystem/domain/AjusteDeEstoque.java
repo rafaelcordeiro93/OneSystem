@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,14 +49,15 @@ public class AjusteDeEstoque implements Serializable {
     private Deposito deposito;
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = new Date();   
+    private Date emissao = new Date();
     @NotNull(message = "{tipoOperacao_not_null}")
+    @Enumerated(EnumType.STRING)
     private OperacaoFisica tipo;
 
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item,BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica tipo) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica tipo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
@@ -66,7 +69,7 @@ public class AjusteDeEstoque implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item","quantidade","deposito","observacao");
+        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "observacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 
@@ -97,13 +100,11 @@ public class AjusteDeEstoque implements Serializable {
     public OperacaoFisica getTipo() {
         return tipo;
     }
-    
-    
+
     public String getDataFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
     }
-    
 
     @Override
     public boolean equals(Object objeto) {
@@ -122,6 +123,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +'}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao + '}';
     }
 }

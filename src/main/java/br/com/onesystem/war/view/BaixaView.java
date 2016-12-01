@@ -22,7 +22,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.BaixaService;
 import java.io.Serializable;
@@ -108,7 +108,7 @@ public class BaixaView implements Serializable {
     }
 
     public void atuStatusButton() {
-        if (this.baixa.getUnidadeFinanciera().equals(UnidadeFinanceira.ENTRADA)) {
+        if (this.baixa.getUnidadeFinanciera().equals(OperacaoFinanceira.ENTRADA)) {
             statusButton = "GreenButton";
         } else {
             statusButton = "RedButton";

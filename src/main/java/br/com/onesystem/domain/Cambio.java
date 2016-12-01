@@ -4,7 +4,7 @@ import br.com.onesystem.dao.TituloDAO;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -148,7 +148,7 @@ public class Cambio implements Serializable {
     private void pagarBaixa() throws DadoInvalidoException {
         Baixa baixa = new Baixa(null, 0, false, BigDecimal.ZERO, valorBruto,
                 BigDecimal.ZERO, BigDecimal.ZERO, emissao, "Baixa",
-                UnidadeFinanceira.SAIDA, contrato.getPessoa(), null, conta, null, this, null, null, null, null, null);
+                OperacaoFinanceira.SAIDA, contrato.getPessoa(), null, conta, null, this, null, null, null, null, null);
         pagamentos.add(baixa);
     }
 
@@ -169,7 +169,7 @@ public class Cambio implements Serializable {
 
     private void gerarNovoTitulo(BigDecimal valor) throws DadoInvalidoException {
         Titulo novoTitulo = new Titulo(null, contrato.getPessoa(), null, valor, valor,
-                emissao, UnidadeFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
+                emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
         this.titulos.add(novoTitulo);
     }
 
@@ -179,7 +179,7 @@ public class Cambio implements Serializable {
                 titulos = new ArrayList<Titulo>();
             }
             Titulo novoTitulo = new Titulo(null, pessoaComissionada, null, comissaoCalculada, comissaoCalculada,
-                    emissao, UnidadeFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
+                    emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
             this.titulos.add(novoTitulo);
         }
     }

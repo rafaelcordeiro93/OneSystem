@@ -1,7 +1,9 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.CaseType;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -16,35 +18,28 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_DEPOSITO",
-        sequenceName = "SEQ_DEPOSITO")
-public class Deposito implements Serializable {
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_LISTAPRECO",
+        sequenceName = "SEQ_LISTAPRECO")
+public class ListaDePreco implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "SEQ_DEPOSITO", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_LISTAPRECO", strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(nullable = false, length = 80)
     @NotNull(message = "{nome_not_null}")
-    @Length(min = 2, max = 60, message = "{nome_length}")
-    @Column(length = 60, nullable = false)
+    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nome_type_letter_space}")
+    @Length(min = 4, max = 80, message = "{nome_lenght}")
     private String nome;
-    @OneToMany(mappedBy = "deposito")
-    private List<AjusteDeEstoque> listadeAjuste;
-    @OneToMany(mappedBy = "deposito") 
-    private List<ItemPorDeposito> itensPorDeposito;
-    
+    @OneToMany(mappedBy = "listaDePreco")
+    private List<PrecoDeItem> precos;
 
-    public Deposito() {
+    public ListaDePreco() {
     }
 
-    public Deposito(Long id, String deposito) throws DadoInvalidoException {
+    public ListaDePreco(Long id, String nome) throws DadoInvalidoException {
         this.id = id;
-        this.nome = deposito;
+        this.nome = nome;
         ehValido();
-    }
-
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome");
-        new ValidadorDeCampos<Deposito>().valida(this, campos);
     }
 
     public Long getId() {
@@ -55,24 +50,24 @@ public class Deposito implements Serializable {
         return nome;
     }
 
+    private void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("nome");
+        new ValidadorDeCampos<ListaDePreco>().valida(this, campos);
+    }
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Deposito)) {
+        if (!(objeto instanceof ListaDePreco)) {
             return false;
         }
-        Deposito outro = (Deposito) objeto;
+        ListaDePreco outro = (ListaDePreco) objeto;
         if (this.id == null) {
             return false;
         }
         return this.id.equals(outro.id);
-    }
-
-    @Override
-    public String toString() {
-        return "Deposito{" + "id=" + id + ", nome=" + nome + '}';
     }
 
 }

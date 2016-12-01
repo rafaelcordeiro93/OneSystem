@@ -1,7 +1,7 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.domain.ListaPreco;
+import br.com.onesystem.domain.ListaDePreco;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
@@ -11,8 +11,8 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class ListaPrecoService implements Serializable {
 
-    public List<ListaPreco> buscarListaPrecos() {
-        return new ArmazemDeRegistros<ListaPreco>(ListaPreco.class).listaTodosOsRegistros();
+    public List<ListaDePreco> buscarListaPrecos() {
+        return new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class).listaTodosOsRegistros();
     }
 
 }

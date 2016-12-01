@@ -78,11 +78,19 @@ public class Item implements Serializable {
     @Column(nullable = false)
     private BigDecimal saldo;
     @OneToMany(mappedBy = "item")
-    private List<AjusteDeEstoque> listaDeAjustes;    
-    
+    private List<AjusteDeEstoque> listaDeAjustes;
+    @OneToMany(mappedBy = "item")
+    private List<ItemEmitido> itensEmitidos;
+    @OneToMany(mappedBy = "item")
+    private List<PrecoDeItem> precos;
+
     public Item() {
     }
 
+    public Item(Long id) {
+        this.id = id;
+    }    
+    
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, IVA iva, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo) throws DadoInvalidoException {
@@ -184,4 +192,11 @@ public class Item implements Serializable {
     public BigDecimal getSaldo() {
         return saldo;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" + "id=" + id + '}';
+    }
+    
+    
 }

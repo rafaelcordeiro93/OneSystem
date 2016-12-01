@@ -2,7 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
-import br.com.onesystem.valueobjects.UnidadeFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
@@ -70,7 +70,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
 
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
-    private UnidadeFinanceira unidadeFinanceira;
+    private OperacaoFinanceira unidadeFinanceira;
 
     @OneToOne
     private Recepcao recepcao;
@@ -93,7 +93,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
-            UnidadeFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
+            OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
             Cambio cambio, Date ultimoPagamento, Moeda moeda) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
@@ -197,7 +197,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         return emissao;
     }
 
-    public UnidadeFinanceira getUnidadeFinanceira() {
+    public OperacaoFinanceira getUnidadeFinanceira() {
         return unidadeFinanceira;
     }
 
