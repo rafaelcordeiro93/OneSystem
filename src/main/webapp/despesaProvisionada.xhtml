@@ -15,9 +15,9 @@
                             <p:panel id="panelDT" visible="#{!despesaProvisionadaView.panel}" style="border: none">
                                 <p:dataTable id="despesaProvisionadaDT" var="despesaProvisionada" value="#{despesaProvisionadaView.despesaProvisionadaLista}" selectionMode="single" selection="#{despesaProvisionadaView.despesaProvisionadaSelecionado}" rowKey="#{despesaProvisionada.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{despesaProvisionadaView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nenhum_dado_encontrado}">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{despesaProvisionadaView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{despesaProvisionadaView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{despesaProvisionadaView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
                                         #{l.Tabela_de_Despesa_Provisionada}
                                     </f:facet>
 
@@ -50,7 +50,7 @@
                                 <div class="Container100 Responsive100">
                                     <div class="Container80 Responsive100">
                                         <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{despesaProvisionadaView.despesaProvisionada.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{despesaProvisionadaView.despesaProvisionada.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
                                             <p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaView.despesaProvisionada.emissao}" placeholder="#{l.Emissao}" maxlength="60" size="25"/>
                                             <h:panelGrid columns="2" style="margin-top: -2%;">
                                                 <p:inputText id="despesaPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{despesaProvisionadaView.despesaProvisionada.pessoa.nome}"/>
@@ -97,9 +97,9 @@
                                 <div class="Container100 Responsive100">
                                     <div class="Responsive100" style="float: left; width: 50%">
                                         <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText placeholder="N. Parcelas" value="#{despesaProvisionadaView.numeroParcelas}"/>
-                                            <p:inputText placeholder="Intervalo de Dias" value="#{despesaProvisionadaView.intervaloDias}"/> 
-                                            <p:commandButton value="Gerar" action="#{despesaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
+                                            <p:inputText placeholder="#{l.Numero_Parcelas}" value="#{despesaProvisionadaView.numeroParcelas}"/>
+                                            <p:inputText placeholder="#{l.Intervalo_De_Dias}" value="#{despesaProvisionadaView.intervaloDias}"/> 
+                                            <p:commandButton value="#{l.Gerar}" action="#{despesaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
                                         </p:panelGrid>
                                     </div>
                                 </div>
@@ -109,7 +109,7 @@
                                 <div class="Container100 Responsive100">
                                     <div class="Container40 Responsive100">
                                         <p:dataTable id="despesaProvisionadaDTN" var="despesaProvisionadaBV" value="#{despesaProvisionadaView.parcelas}" rowKey="#{despesaProvisionadaBV.id}"
-                                                     emptyMessage="#{l.Nenhum_dado_encontrado}" editMode="cell" editable="true" style="border: none">
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
                                             <p:ajax event="cellEdit" update=":conteudo:despesaProvisionadaDTN" />
 
                                             <p:column headerText="#{l.Vencimento}" sortBy="#{despesaProvisionadaBV.vencimento}" >

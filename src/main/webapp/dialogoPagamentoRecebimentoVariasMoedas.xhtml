@@ -14,7 +14,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>Mais Moedas</title>
+        <title>#{l.Mais_Moedas}</title>
         <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
         <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
         <h:outputScript name="js/layout.js" library="modena-layout" />
@@ -50,7 +50,7 @@
             <p:commandButton value="#{l.Adicionar}" action="#{dialogoPagamentoRecebimentoVariasMoedasView.add()}" update="data" icon="fa fa-plus Fs16 White"/>
 
             <p:dataTable id="dlgDT" var="dialogoPagamentoRecebimentoVariasMoedasBuilder" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlgLista}" selectionMode="single" selection="#{dialogoPagamentoRecebimentoVariasMoedasView.dlgSelecionado}" rowKey="#{dialogoPagamentoRecebimentoVariasMoedasBuilder.id}"
-                         emptyMessage="No hay registros.">
+                         emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{dialogoPagamentoRecebimentoVariasMoedasView.selecionar()}" update="data"/>
 

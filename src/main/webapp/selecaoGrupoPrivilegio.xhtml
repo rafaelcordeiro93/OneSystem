@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="grupoPrivilegioDT" var="grupoDePrivilegio" value="#{selecaoGrupoDePrivilegioView.grupoDePrivilegioLista}" selectionMode="single" selection="#{selecaoGrupoDePrivilegioView.grupoDePrivilegioSelecionado}" rowKey="#{grupoDePrivilegio.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoGrupoDePrivilegioView.grupoPrivilegiosFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoGrupoDePrivilegioView.grupoPrivilegiosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoGrupoDePrivilegioView.selecionar()}" />
 

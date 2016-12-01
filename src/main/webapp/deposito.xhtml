@@ -17,14 +17,16 @@
                                 <p:commandButton icon="fa fa-plus Fs16 White" value="#{l.Novo}" action="#{depositoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
                                 <p:dataTable id="depositoDT" var="deposito" value="#{depositoView.depositoLista}" selectionMode="single" selection="#{depositoView.depositoSelecionada}" rowKey="#{deposito.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{depositoView.depositosFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{depositoView.depositosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                    
+                                      <f:facet name="header">        #{l.Tabela_Deposito} </f:facet>
+                                    
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{depositoView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{deposito.id}" filterBy="#{deposito.id}" footerText="Id" >                                        
+                                    <p:column headerText="#{l.Id}" sortBy="#{deposito.id}" filterBy="#{deposito.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{deposito.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{deposito.nome}" filterBy="#{deposito.nome}" footerText="Nome" >
+                                    <p:column headerText="#{l.Nome}" sortBy="#{deposito.nome}" filterBy="#{deposito.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{deposito.nome}" />
                                     </p:column>
                                 </p:dataTable>
@@ -32,7 +34,7 @@
 
 
                             <p:panel id="panelED" visible="#{depositoView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container50 Responsive50">
@@ -47,13 +49,13 @@
 
                                 <p:separator/>
 
-                                <p:commandButton value="Añadir" action="#{depositoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="Cambiar" action="#{depositoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="Eliminar" action="#{depositoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="Limpiar" action="#{depositoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="Deshacer" action="#{depositoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                <p:commandButton value="#{l.Adicionar}" action="#{depositoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{depositoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{depositoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{depositoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{depositoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  styleClass="OrangeButton" />
-                                <p:commandButton value="Regreso" action="#{depositoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                <p:commandButton value="#{l.Voltar}" action="#{depositoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
                                                  immediate="true" styleClass="BrownButton" />
                             </p:panel>   
 

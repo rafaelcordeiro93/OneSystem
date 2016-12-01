@@ -18,10 +18,10 @@
                             <p:panel visible="#{!cambioView.panel}" style="border: none">
                                 <p:dataTable id="cambioDT" var="cambio" value="#{cambioView.cambioLista}" selectionMode="single" selection="#{cambioView.cambioSelecionado}" rowKey="#{cambio.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" filteredValue="#{cambioView.cambiosFiltrados}">
+                                             rowsPerPageTemplate="5,10,15" emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" filteredValue="#{cambioView.cambiosFiltrados}">
                                     <f:facet name="header">
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cambioView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
-                                        Tabela de Cambios
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cambioView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
+                                        #{l.Tabela_De_Cambio}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{cambioView.abrirEdicaoComDados()}"/>
@@ -49,7 +49,7 @@
                             </p:panel>
 
                             <p:panel visible="#{cambioView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100" style="margin-left: -1%;">
 
@@ -119,7 +119,7 @@
                                     <div class="ContainerIndent">
                                         <p:outputLabel value="#{l.Despesas_de_Cambio}" styleClass="Red"/>
                                         <p:dataTable var="baixa" value="#{cambioView.baixaLista}" selectionMode="single" selection="#{cambioView.baixaSelecionado}" rowKey="#{baixa.id}"
-                                                     emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" style="border: none; margin-left: -3%">
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" style="border: none; margin-left: -3%">
 
                                             <p:ajax event="rowSelect" update=":conteudo" listener="#{cambioView.abrirBaixaEdicaoComDados()}"/>                                            
                                             <p:column>                                        

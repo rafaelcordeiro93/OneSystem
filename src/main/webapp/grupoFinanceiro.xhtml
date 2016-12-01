@@ -15,9 +15,9 @@
                             <p:panel id="panelDT" visible="#{!grupoFinanceiroView.panel}" style="border: none">
                                 <p:dataTable id="grupoFinanceiroDT" var="grupoFinanceiro" value="#{grupoFinanceiroView.grupoFinanceiroLista}" selectionMode="single" selection="#{grupoFinanceiroView.grupoFinanceiroSelecionado}" rowKey="#{grupoFinanceiro.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{grupoFinanceiroView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nenhum_dado_encontrado}">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{grupoFinanceiroView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{grupoFinanceiroView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{grupoFinanceiroView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
                                         #{l.Tabela_de_Grupos_Financeiros}
                                     </f:facet>
 
@@ -40,16 +40,16 @@
 
 
                             <p:panel id="panelED" visible="#{grupoFinanceiroView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{Edicao_de_Registro}</h2>
+                                <h2 class="BigTopic">#{Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container100 Responsive100">
                                         <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{grupoFinanceiroView.grupoFinanceiro.nome}" placeholder="Nome" maxlength="60" styleClass="Wid100"/>
+                                            <p:inputText value="#{grupoFinanceiroView.grupoFinanceiro.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid100"/>
                                             <p:selectOneRadio value="#{grupoFinanceiroView.grupoFinanceiro.naturezaFinanceira}"  layout="grid" columns="3">
                                                 <f:selectItems value="#{grupoFinanceiroView.naturezasFinanceiras}" var="naturezaFinanceira" itemLabel="#{l[naturezaFinanceira.naturezaFinanceira]}" itemValue="#{naturezaFinanceira}"/>
                                             </p:selectOneRadio>
-                                            <p:outputLabel value="Class. Financeira:"/>
+                                            <p:outputLabel value="#{l.Classificacao_Financeira}"/>
                                             <p:selectOneMenu value="#{grupoFinanceiroView.grupoFinanceiro.classificacaoFinanceira}">
                                                 <f:selectItems value="#{grupoFinanceiroView.classificacaoFinanceira}" var="classificacaoFinanceira" itemLabel="#{l[classificacaoFinanceira.nome]}" itemValue="#{classificacaoFinanceira}"/>
                                             </p:selectOneMenu> 

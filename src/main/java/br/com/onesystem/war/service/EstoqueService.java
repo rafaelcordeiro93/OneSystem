@@ -2,6 +2,7 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.EstoqueDAO;
+import br.com.onesystem.dao.TituloDAO;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.reportTemplate.SaldoDeConta;

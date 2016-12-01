@@ -15,24 +15,24 @@
                             <p:panel id="panelDT" visible="#{!cidadeView.panel}" style="border: none">
                                 <p:dataTable id="cidadeDT" var="cidade" value="#{cidadeView.cidadeLista}" selectionMode="single" selection="#{cidadeView.cidadeSelecionada}" rowKey="#{cidade.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{cidadeView.cidadesFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{cidadeView.cidadesFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cidadeView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        Tabela de Ciudades
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{cidadeView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                       #{l.Tabela_De_Cidades}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{cidadeView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{cidade.id}" filterBy="#{cidade.id}" footerText="Id" >                                        
+                                    <p:column headerText=" #{l.Id}" sortBy="#{cidade.id}" filterBy="#{cidade.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{cidade.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{cidade.nome}" filterBy="#{cidade.nome}" footerText="Nome" >
+                                    <p:column headerText=" #{l.Nome}" sortBy="#{cidade.nome}" filterBy="#{cidade.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{cidade.nome}" />
                                     </p:column>
-                                    <p:column headerText="UF" sortBy="#{cidade.uf}" filterBy="#{cidade.uf}" footerText="UF">
+                                    <p:column headerText=" #{l.Uf}" sortBy="#{cidade.uf}" filterBy="#{cidade.uf}" footerText="#{l.Uf}">
                                         <h:outputText value="#{cidade.uf}" />
                                     </p:column>
-                                    <p:column headerText="País" sortBy="#{cidade.pais}" filterBy="#{cidade.pais}" footerText="País">
+                                    <p:column headerText=" #{l.Pais}" sortBy="#{cidade.pais}" filterBy="#{cidade.pais}" footerText="#{l.Pais}">
                                         <h:outputText value="#{cidade.pais}" />
                                     </p:column>
                                 </p:dataTable>
@@ -40,15 +40,15 @@
 
 
                             <p:panel id="panelED" visible="#{cidadeView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic"> #{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container50 Responsive50">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{cidadeView.cidade.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
-                                            <p:inputText value="#{cidadeView.cidade.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
-                                            <p:inputText value="#{cidadeView.cidade.UF}" placeholder="UF" maxlength="2" styleClass="Wid90"/>
-                                            <p:inputText value="#{cidadeView.cidade.pais}" placeholder="País" maxlength="80" styleClass="Wid90"/>
+                                            <p:inputText value="#{cidadeView.cidade.id}" placeholder=" #{l.Id}" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{cidadeView.cidade.nome}" placeholder=" #{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                            <p:inputText value="#{cidadeView.cidade.UF}" placeholder=" #{l.Uf}" maxlength="2" styleClass="Wid90"/>
+                                            <p:inputText value="#{cidadeView.cidade.pais}" placeholder=" #{l.Pais}" maxlength="80" styleClass="Wid90"/>
                                         </p:panelGrid>
                                     </div>
                                 </div>
@@ -57,13 +57,13 @@
 
                                 <p:separator/>
 
-                                <p:commandButton value="Añadir" action="#{cidadeView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="Cambiar" action="#{cidadeView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="Eliminar" action="#{cidadeView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="Limpiar" action="#{cidadeView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="Deshacer" action="#{cidadeView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                <p:commandButton value=" #{l.Adicionar}" action="#{cidadeView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value=" #{l.Atualizar}" action="#{cidadeView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value=" #{l.Remover}" action="#{cidadeView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value=" #{l.Limpar}" action="#{cidadeView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value=" #{l.Desfazer}" action="#{cidadeView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  styleClass="OrangeButton" />
-                                <p:commandButton value="Regreso" action="#{cidadeView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                <p:commandButton value="#{l.Voltar}" action="#{cidadeView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
                                                  immediate="true" styleClass="BrownButton" />
                             </p:panel>   
 

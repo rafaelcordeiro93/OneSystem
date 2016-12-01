@@ -15,9 +15,9 @@
                             <p:panel id="panelDT" visible="#{!receitaProvisionadaView.panel}" style="border: none">
                                 <p:dataTable id="receitaProvisionadaDT" var="receitaProvisionada" value="#{receitaProvisionadaView.receitaProvisionadaLista}" selectionMode="single" selection="#{receitaProvisionadaView.receitaProvisionadaSelecionado}" rowKey="#{receitaProvisionada.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{receitaProvisionadaView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nenhum_dado_encontrado}">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{receitaProvisionadaView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{receitaProvisionadaView.abrirEdicao()}" title="Nuevo" update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{receitaProvisionadaView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
                                         #{l.Tabela_de_Receita_Provisionada}
                                     </f:facet>
 
@@ -45,7 +45,7 @@
                             </p:panel>
 
                             <p:panel id="panelED" visible="#{receitaProvisionadaView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{Edicao_de_Registro}</h2>
+                                <h2 class="BigTopic">#{Edicao_De_Registros}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container80 Responsive100">
@@ -70,7 +70,7 @@
                                             </h:panelGrid>
                                             <p:inputText value="#{receitaProvisionadaView.receitaProvisionada.valor}" placeholder="#{l.Valor}" maxlength="60" styleClass="Wid90"/>
                                             <p:calendar pattern="dd/MM/yyyy" value="#{receitaProvisionadaView.receitaProvisionada.vencimento}" placeholder="#{l.Vencimento}" size="25"/>                                            
-                                            <p:inputTextarea autoResize="true" placeholder="Escreva um comentário." counter="display"
+                                            <p:inputTextarea autoResize="true" placeholder="#{l.Escreva_Um_Comentario}" counter="display"
                                                              counterTemplate="{0} caracteres restantes." rows="1" cols="49"
                                                              maxlength="150" value="#{receitaProvisionadaView.receitaProvisionada.historico}">
                                             </p:inputTextarea>   
@@ -93,9 +93,9 @@
                                 <div class="Container100 Responsive100">
                                     <div class="Responsive100" style="float: left; width: 50%">
                                         <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText placeholder="N. Parcelas" value="#{receitaProvisionadaView.numeroParcelas}"/>
-                                            <p:inputText placeholder="Intervalo de Dias" value="#{receitaProvisionadaView.intervaloDias}"/> 
-                                            <p:commandButton value="Gerar" action="#{receitaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
+                                            <p:inputText placeholder="#{l.Numero_Parcelas}" value="#{receitaProvisionadaView.numeroParcelas}"/>
+                                            <p:inputText placeholder="#{l.Intervalo_De_Dias}" value="#{receitaProvisionadaView.intervaloDias}"/> 
+                                            <p:commandButton value="#{l.Gerar}" action="#{receitaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
                                         </p:panelGrid>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                                 <div class="Container100 Responsive100">
                                     <div class="Container40 Responsive100">
                                         <p:dataTable id="receitaProvisionadaDTN" var="receitaProvisionadaBV" value="#{receitaProvisionadaView.parcelas}" selectionMode="single" selection="#{receitaProvisionadaView.receitaProvisionadaSelecionado}" rowKey="#{receitaProvisionadaBV.id}"
-                                                     emptyMessage="#{l.Nenhum_dado_encontrado}" editMode="cell" editable="true" style="border: none">
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
                                             <p:ajax event="cellEdit" update=":conteudo:receitaProvisionadaDTN" />
 
                                             <p:column headerText="#{l.Vencimento}" sortBy="#{receitaProvisionadaBV.vencimento}" >

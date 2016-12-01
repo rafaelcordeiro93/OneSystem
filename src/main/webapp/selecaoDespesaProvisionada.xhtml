@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="despesaProvisionadaDT" var="despesaProvisionada" value="#{selecaoDespesaProvisionadaView.despesaProvisionadaLista}" selectionMode="single" selection="#{selecaoDespesaProvisionadaView.despesaProvisionadaSelecionada}" rowKey="#{despesaProvisionada.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoDespesaProvisionadaView.despesasProvisionadasFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoDespesaProvisionadaView.despesasProvisionadasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoDespesaProvisionadaView.selecionar()}" />
 

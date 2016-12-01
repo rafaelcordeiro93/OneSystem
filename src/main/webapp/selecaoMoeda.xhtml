@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>Seleção de Moedas</title>
+        <title>#{l.Selecao_De_Moedas}</title>
         <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
         <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
         <h:outputScript name="js/layout.js" library="modena-layout" />
@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="moedaDT" var="moeda" value="#{selecaoMoedaView.moedaLista}" selectionMode="single" selection="#{selecaoMoedaView.moedaSelecionada}" rowKey="#{moeda.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoMoedaView.moedasFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoMoedaView.moedasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoMoedaView.selecionar()}" />
 

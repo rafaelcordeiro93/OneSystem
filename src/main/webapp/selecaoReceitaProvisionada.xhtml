@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="receitaProvisionadaDT" var="receitaProvisionada" value="#{selecaoReceitaProvisionadaView.receitaProvisionadaLista}" selectionMode="single" selection="#{selecaoReceitaProvisionadaView.receitaProvisionadaSelecionada}" rowKey="#{receitaProvisionada.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoReceitaProvisionadaView.receitasProvisionadasFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoReceitaProvisionadaView.receitasProvisionadasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoReceitaProvisionadaView.selecionar()}" />
 

@@ -26,7 +26,7 @@
         <h:form>
             <p:dataTable id="tituloDT" var="titulo" value="#{selecaoTituloReceberView.tituloLista}" selectionMode="single" selection="#{selecaoTituloReceberView.tituloSelecionada}" rowKey="#{titulo.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoTituloReceberView.titulosFiltradas}" emptyMessage="No hay registros.">
+                         filteredValue="#{selecaoTituloReceberView.titulosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoTituloReceberView.selecionar()}" />
 

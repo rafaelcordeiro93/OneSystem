@@ -15,18 +15,18 @@
                             <p:panel id="panelDT" visible="#{!listaPrecoView.panel}" style="border: none">
                                 <p:dataTable id="listaPrecoDT" var="listaPreco" value="#{listaPrecoView.listaPrecoLista}" selectionMode="single" selection="#{listaPrecoView.listaPrecoSelecionada}" rowKey="#{listaPreco.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{listaPrecoView.listaPrecosFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{listaPrecoView.listaPrecosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{listaPrecoView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        Tabela de Lista de Precios
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{listaPrecoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                        #{l.Tabela_De_Precos}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{listaPrecoView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{listaPreco.id}" filterBy="#{listaPreco.id}" footerText="Id" >                                        
+                                    <p:column headerText="#{l.Id}" sortBy="#{listaPreco.id}" filterBy="#{listaPreco.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{listaPreco.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{listaPreco.nome}" filterBy="#{listaPreco.nome}" footerText="Nome" >
+                                    <p:column headerText="#{l.Nome}" sortBy="#{listaPreco.nome}" filterBy="#{listaPreco.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{listaPreco.nome}" />
                                     </p:column>
                                 </p:dataTable>
@@ -34,13 +34,13 @@
 
 
                             <p:panel id="panelED" visible="#{listaPrecoView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container50 Responsive50">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{listaPrecoView.listaPreco.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
-                                            <p:inputText value="#{listaPrecoView.listaPreco.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
+                                            <p:inputText value="#{listaPrecoView.listaPreco.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{listaPrecoView.listaPreco.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
                                         </p:panelGrid>
                                     </div>
                                 </div>
@@ -49,13 +49,13 @@
 
                                 <p:separator/>
 
-                                <p:commandButton value="Añadir" action="#{listaPrecoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="Cambiar" action="#{listaPrecoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="Eliminar" action="#{listaPrecoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="Limpiar" action="#{listaPrecoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="Deshacer" action="#{listaPrecoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                <p:commandButton value="#{l.Adicionar}" action="#{listaPrecoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{listaPrecoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Remover}" action="#{listaPrecoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                                <p:commandButton value="#{l.Limpar}" action="#{listaPrecoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                                <p:commandButton value="#{l.Desfazer}" action="#{listaPrecoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  styleClass="OrangeButton" />
-                                <p:commandButton value="Regreso" action="#{listaPrecoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                <p:commandButton value="#{l.Voltar}" action="#{listaPrecoView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
                                                  immediate="true" styleClass="BrownButton" />
                             </p:panel>   
 

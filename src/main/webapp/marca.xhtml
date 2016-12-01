@@ -13,17 +13,24 @@
                     <div class="Container100">
                         <div class="ContainerIndent">      
                             <p:panel id="panelDT" visible="#{!marcaView.panel}" style="border: none">
-                                <p:commandButton icon="fa fa-plus Fs16 White" value="#{l.Novo}" action="#{marcaView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
+                                
+                                
+                               
+                                <p:commandButton icon="fa fa-plus Fs16 White" value="#{l.Novo}" action="#{marcaView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+            
                                 <p:dataTable id="marcaDT" var="marca" value="#{marcaView.marcaLista}" selectionMode="single" selection="#{marcaView.marcaSelecionada}" rowKey="#{marca.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{marcaView.marcasFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{marcaView.marcasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
+                                        
+                                     <f:facet name="header">        #{l.Tabela_Marca} </f:facet>
+                                    
                                     
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{marcaView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="Id" sortBy="#{marca.id}" filterBy="#{marca.id}" footerText="Id" >                                        
+                                    <p:column headerText="#{l.Id}" sortBy="#{marca.id}" filterBy="#{marca.id}" footerText="#{l.Id}" >                                        
                                         <h:outputText value="#{marca.id}" />
                                     </p:column>
-                                    <p:column headerText="Nome" sortBy="#{marca.nome}" filterBy="#{marca.nome}" footerText="Nome" >
+                                    <p:column headerText="#{l.Nome}" sortBy="#{marca.nome}" filterBy="#{marca.nome}" footerText="#{l.Nome}" >
                                         <h:outputText value="#{marca.nome}" />
                                     </p:column>
                                 </p:dataTable>
@@ -31,13 +38,13 @@
 
 
                             <p:panel id="panelED" visible="#{marcaView.panel}" style="border: none">
-                                <h2 class="BigTopic">Edición Del Registro</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <div class="Container50 Responsive50">
                                         <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{marcaView.marca.id}" placeholder="ID" styleClass="Wid90" disabled="true"/>
-                                            <p:inputText value="#{marcaView.marca.nome}" placeholder="Nome" maxlength="60" styleClass="Wid90"/>
+                                            <p:inputText value="#{marcaView.marca.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
+                                            <p:inputText value="#{marcaView.marca.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
                                         </p:panelGrid>
                                     </div>
                                 </div>

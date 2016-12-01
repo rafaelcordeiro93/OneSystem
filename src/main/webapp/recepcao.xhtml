@@ -20,10 +20,10 @@
                             <p:panel id="panelDT" visible="#{!recepcaoView.panel}" style="border: none">
                                 <p:dataTable id="recepcaoDT" var="recepcao" value="#{recepcaoView.recepcaoLista}" selectionMode="single" selection="#{recepcaoView.recepcaoSelecionada}" rowKey="#{recepcao.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{recepcaoView.recepcoesFiltradas}" emptyMessage="No hay registros.">
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{recepcaoView.recepcoesFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
                                     <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{recepcaoView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        Tabela de Recepcoes
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{recepcaoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                          #{l.Tabela_Recepcao_Cambio}
                                     </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{recepcaoView.abrirEdicaoComDados()}" />
@@ -45,7 +45,7 @@
 
 
                             <p:panel id="panelED" visible="#{recepcaoView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{l.Edicao_de_Registro}</h2>
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
@@ -67,7 +67,7 @@
                                             </p:commandButton>
                                         </h:panelGrid>
                                         <pe:inputNumber id="recepcaoValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{recepcaoView.recepcao.conta eq null ? true : false}"
-                                                        symbol="#{recepcaoView.recepcao.conta.moeda.sigla} " decimalPlaces="2" title="Valor que está sendo recebido." value="#{recepcaoView.recepcao.valor}" >
+                                                        symbol="#{recepcaoView.recepcao.conta.moeda.sigla} " decimalPlaces="2" title="#{l.Valor_Sendo_Recebido}" value="#{recepcaoView.recepcao.valor}" >
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
                                         </pe:inputNumber> 
                                         <p:outputLabel/>
