@@ -37,12 +37,8 @@
                                     <p:column headerText="#{l.Marca}" sortBy="#{item.marca.nome}" filterBy="#{item.marca.nome}" footerText="#{l.Marca}">
                                         <h:outputText value="#{item.marca.nome}" />
                                     </p:column>
-                                    <p:column headerText="#{l.Saldo}" sortBy="#{item.saldo}" filterBy="#{item.saldo}" footerText="#{l.Saldo}">
-                                        <h:outputText value="#{item.saldo}" />
-                                    </p:column>
                                 </p:dataTable>
                             </p:panel>
-
 
                             <p:panel id="panelED" visible="#{itemView.panel}" style="border: none">
                                 <p:tabView>
@@ -79,8 +75,6 @@
                                                         <p:inputText id="itemUnMedida" disabled="true" value="#{itemView.item.unidadeMedida.nome}" placeholder="#{l.Unidade_Medida}"/>
                                                         <p:commandButton icon="fa fa-search Fs16 White" onclick="PF('itemUnMedidaDlg').show()"/>
                                                     </h:panelGrid>                                            
-                                                    <p:inputText value="#{itemView.item.saldo}" disabled="true" placeholder="#{l.Saldo}" maxlength="60" styleClass="Wid90"/>
-
                                                     <p:selectOneMenu value="#{itemView.item.tipoItem}" styleClass="Wid90">
                                                         <f:selectItems value="#{itemView.tipoItem}" var="#{l.Tipo_Item}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
                                                     </p:selectOneMenu>
@@ -110,7 +104,7 @@
 
                                                 <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}"
                                                              rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                              emptyMessage="#{l.Nao_Ha_Registros}">
+                                                             emptyMessage="#{l.Nao_Ha_Registros}">
 
                                                     <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
                                                         <h:outputText value="#{estoque.deposito.nome}" />

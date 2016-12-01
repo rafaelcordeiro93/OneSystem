@@ -41,6 +41,7 @@
         <class>br.com.onesystem.domain.ConfiguracaoFinanceiro</class>
         <class>br.com.onesystem.domain.Modulo</class>
         <class>br.com.onesystem.domain.AjusteDeEstoque</class>
+        <class>br.com.onesystem.domain.Estoque</class>
         <class>br.com.onesystem.domain.ContaDeEstoque</class>
         <class>br.com.onesystem.domain.NotaEmitida</class>
         <class>br.com.onesystem.domain.ListaDePreco</class>
