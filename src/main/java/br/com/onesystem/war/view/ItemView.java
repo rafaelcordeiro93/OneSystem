@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
@@ -21,13 +22,20 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.Application;
+import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIViewRoot;
+import javax.faces.context.FacesContext;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
@@ -52,8 +60,8 @@ public class ItemView implements Serializable {
     private UnidadeMedidaItem unidadeMedidaSelecionada;
     private List<UnidadeMedidaItem> unidadeMedidaLista;
     private List<UnidadeMedidaItem> unidadeMedidaFiltradas;
-    private List<Estoque> estoqueLista;
-    private List<Estoque> estoqueFiltrado;
+    private List<SaldoDeEstoque> estoqueLista;
+    private BigDecimal estoqueTotal;
     
 
     @ManagedProperty("#{itemService}")
@@ -83,7 +91,7 @@ public class ItemView implements Serializable {
         grupoLista = serviceGrupo.buscarGrupos();
         marcaLista = serviceMarca.buscarMarcas();
         unidadeMedidaLista = serviceUnMedida.buscarUnidadeMedidaItens();
-        estoqueLista = serviceEstoque. buscarEstoques();
+     
     }
 
     public void add() {
@@ -142,8 +150,8 @@ public class ItemView implements Serializable {
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
-    }
-
+    } 
+    
     private boolean validaItemExistente(Item novoRegistro) {
         for (Item novaItem : itemLista) {
             if (novoRegistro.getNome().equals(novaItem.getNome())) {
@@ -160,8 +168,9 @@ public class ItemView implements Serializable {
     public void limparJanela() {
         item = new ItemBV();
         itemSelecionada = new Item();
+        estoqueLista = new ArrayList<SaldoDeEstoque>();
     }
-
+    
     public void abrirEdicao() {
         limparJanela();
         panel = true;
@@ -170,13 +179,14 @@ public class ItemView implements Serializable {
     public void abrirEdicaoComDados() {
         panel = true;
         item = new ItemBV(itemSelecionada);
+        estoqueLista = new EstoqueService().buscaSaldoDeEstoque(itemSelecionada);
     }
 
     public void fecharEdicao() {
         panel = false;
     }
-
-    public void desfazer() {
+    
+      public void desfazer() {
         if (itemSelecionada != null) {
             item = new ItemBV(itemSelecionada);
         }
@@ -375,21 +385,22 @@ public class ItemView implements Serializable {
         
     }
 
-    public List<Estoque> getEstoqueLista() {
+    public List<SaldoDeEstoque> getEstoqueLista() {
         return estoqueLista;
     }
 
-    public void setEstoqueLista(List<Estoque> estoqueLista) {
+    public void setEstoqueLista(List<SaldoDeEstoque> estoqueLista) {
         this.estoqueLista = estoqueLista;
     }
 
-    public List<Estoque> getEstoqueFiltrado() {
-        return estoqueFiltrado;
+    public BigDecimal getEstoqueTotal() {
+        return estoqueTotal;
     }
 
-    public void setEstoqueFiltrado(List<Estoque> estoqueFiltrado) {
-        this.estoqueFiltrado = estoqueFiltrado;
+    public void setEstoqueTotal(BigDecimal estoqueTotal) {
+        this.estoqueTotal = estoqueTotal;
     }
+
 
     public EstoqueService getServiceEstoque() {
         return serviceEstoque;

@@ -21,7 +21,7 @@ public class ArmazemDeRegistros<T> {
         CriteriaQuery<T> query = entityManager.getCriteriaBuilder().createQuery(classe);
         query.select(query.from(classe));
         List<T> lista = entityManager.createQuery(query).getResultList();
-
+ 
         return lista;
     }
 
