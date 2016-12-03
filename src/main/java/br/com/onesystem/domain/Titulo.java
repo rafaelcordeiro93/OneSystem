@@ -77,6 +77,9 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
     private Cambio cambio;
+    
+    @ManyToOne
+    private NotaEmitida notaEmitida;
 
     @OneToMany(mappedBy = "titulo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Baixa> baixas = new ArrayList<Baixa>();
@@ -94,7 +97,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Date ultimoPagamento, Moeda moeda) throws DadoInvalidoException {
+            Cambio cambio, Date ultimoPagamento, Moeda moeda, NotaEmitida notaEmitida) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -107,6 +110,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         this.cambio = cambio;
         this.ultimoPagamento = ultimoPagamento;
         this.moeda = moeda;
+        this.notaEmitida = notaEmitida;
         ehValido();
     }
 

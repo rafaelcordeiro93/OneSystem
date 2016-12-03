@@ -1,6 +1,7 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.dao.TituloDAO;
+import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
@@ -168,8 +169,9 @@ public class Cambio implements Serializable {
     }
 
     private void gerarNovoTitulo(BigDecimal valor) throws DadoInvalidoException {
-        Titulo novoTitulo = new Titulo(null, contrato.getPessoa(), null, valor, valor,
-                emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
+        Titulo novoTitulo = new TituloBuilder().comPessoa(contrato.getPessoa()).comValor(valor).
+                comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).
+                comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(conta.getMoeda()).construir();
         this.titulos.add(novoTitulo);
     }
 
@@ -178,8 +180,8 @@ public class Cambio implements Serializable {
             if (titulos == null) {
                 titulos = new ArrayList<Titulo>();
             }
-            Titulo novoTitulo = new Titulo(null, pessoaComissionada, null, comissaoCalculada, comissaoCalculada,
-                    emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, null, this, null, conta.getMoeda());
+            Titulo novoTitulo = new TituloBuilder().comPessoa(pessoaComissionada).comValor(comissaoCalculada).comSaldo(comissaoCalculada).comEmissao(emissao)
+                    .comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(conta.getMoeda()).construir();
             this.titulos.add(novoTitulo);
         }
     }
@@ -239,7 +241,7 @@ public class Cambio implements Serializable {
     public BigDecimal getPorcentagemDeLucroEmTaxa() {
         return porcentagemDeLucroEmTaxa;
     }
-    
+
     public String getEmissaoFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());

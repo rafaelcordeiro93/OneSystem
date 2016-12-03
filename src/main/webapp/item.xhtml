@@ -52,7 +52,7 @@
                                                     <p:inputText value="#{itemView.item.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
                                                     <p:inputText value="#{itemView.item.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
                                                     <p:inputText value="#{itemView.item.barras}" placeholder="#{l.Codigo_De_Barras}" maxlength="60" styleClass="Wid90"/>
-                                                    <p:inputText value="#{itemView.item.ncm}" placeholder="#{l.Ncm}" maxlength="60" styleClass="Wid90"/>                                            
+                                                    <p:inputMask value="#{itemView.item.ncm}" mask="99999999" placeholder="#{l.Ncm}" styleClass="Wid90"/>                                            
 
                                                     <p:inputText value="#{itemView.item.estoqueMaximo}" placeholder="#{l.Estoque_Maximo}" styleClass="Wid90"/>
                                                     <p:inputText value="#{itemView.item.estoqueMinimo}" placeholder="#{l.Estoque_Minimo}" maxlength="60" styleClass="Wid90"/>

@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -27,6 +28,7 @@ public class TituloBV implements Serializable {
     private Cambio cambio;
     private TipoFormaPagRec tipoFormaPagRec;
     private Moeda moeda;
+    private NotaEmitida notaEmitida;
 
     public TituloBV(Titulo tituloSelecionado) {
         this.id = tituloSelecionado.getId();
@@ -167,11 +169,11 @@ public class TituloBV implements Serializable {
     
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(null, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda);
+                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida);
     }
 
     public Titulo construirComID() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda);
+                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida);
     }
 }
