@@ -49,6 +49,8 @@
         <class>br.com.onesystem.domain.PrecoDeItem</class>
         <class>br.com.onesystem.domain.ItemPorDeposito</class>
         <class>br.com.onesystem.domain.Configuracao</class>
+        <class>br.com.onesystem.domain.GrupoDeComissao</class>
+        <class>br.com.onesystem.domain.TabelaDeComissao</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
