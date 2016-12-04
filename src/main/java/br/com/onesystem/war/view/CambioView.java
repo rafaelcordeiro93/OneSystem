@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -64,7 +66,15 @@ public class CambioView implements Serializable {
         limparJanela();
         panel = false;
         cambioLista = service.buscarCambios();
-        configuracaoCambio = serviceConfCambio.buscar();
+        inicializaConfiguracoes();
+    }
+
+    private void inicializaConfiguracoes() {
+        try {
+            configuracaoCambio = serviceConfCambio.buscar();
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void add() {
@@ -307,8 +317,8 @@ public class CambioView implements Serializable {
 
     public void selecionaContrato(SelectEvent event) {
         ContratoDeCambio contratoSelecionado = (ContratoDeCambio) event.getObject();
-        cambio.setContrato(contratoSelecionado);        
-        baixaLista = new ArrayList<Baixa>();  
+        cambio.setContrato(contratoSelecionado);
+        baixaLista = new ArrayList<Baixa>();
         calculaValor();
         try {
             if (!contratoSelecionado.getOrigem().equals(cambio.getConta().getMoeda())) {

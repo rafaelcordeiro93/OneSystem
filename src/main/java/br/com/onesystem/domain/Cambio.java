@@ -1,6 +1,8 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.dao.ConfiguracaoDAO;
 import br.com.onesystem.dao.TituloDAO;
+import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
 import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -74,6 +76,9 @@ public class Cambio implements Serializable {
 
     @OneToMany(mappedBy = "cambio", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Titulo> titulos = new ArrayList<Titulo>();
+
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private DespesaProvisionada comissao;
 
     @OneToMany(mappedBy = "cambio", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<DespesaProvisionada> divisaoLucro = new ArrayList<DespesaProvisionada>();
@@ -177,12 +182,9 @@ public class Cambio implements Serializable {
 
     public void gerarComissao() throws DadoInvalidoException {
         if (comissaoCalculada != null && comissaoCalculada.compareTo(BigDecimal.ZERO) == 1) {
-            if (titulos == null) {
-                titulos = new ArrayList<Titulo>();
-            }
-            Titulo novoTitulo = new TituloBuilder().comPessoa(pessoaComissionada).comValor(comissaoCalculada).comSaldo(comissaoCalculada).comEmissao(emissao)
-                    .comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(conta.getMoeda()).construir();
-            this.titulos.add(novoTitulo);
+            Configuracao c = new ConfiguracaoDAO().buscar();
+            comissao = new DespesaProvisionadaBuilder().comPessoa(pessoaComissionada).comValor(comissaoCalculada)
+                    .comMoeda(conta.getMoeda()).comCambio(this).comDespesa(c.getDespesaDeComissao()).construir();
         }
     }
 

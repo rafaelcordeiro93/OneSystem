@@ -36,13 +36,15 @@ public class ConfiguracaoCambioView implements Serializable {
 
     @PostConstruct
     public void init() {
-        configuracaoCambio = service.buscar();
-        if (configuracaoCambio != null) {
-            for (Pessoa pessoa : configuracaoCambio.getPessoaDivisaoLucro()) {
-                pessoasDivisaoLucro.add(pessoa);
+        try {
+            configuracaoCambio = service.buscar();
+            if (configuracaoCambio != null) {
+                for (Pessoa pessoa : configuracaoCambio.getPessoaDivisaoLucro()) {
+                    pessoasDivisaoLucro.add(pessoa);
+                }
+                configuracaoCambioBV = new ConfiguracaoCambioBV(configuracaoCambio);
             }
-            configuracaoCambioBV = new ConfiguracaoCambioBV(configuracaoCambio);
-        } else {
+        } catch (EDadoInvalidoException ex) {
             configuracaoCambioBV = new ConfiguracaoCambioBV();
         }
     }

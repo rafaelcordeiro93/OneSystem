@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -25,6 +27,7 @@ public class Janela implements Serializable {
     private Long id;
     private String nome;
     private String endereco;
+    @ManyToOne
     private Modulo modulo;
 
     public Janela() {

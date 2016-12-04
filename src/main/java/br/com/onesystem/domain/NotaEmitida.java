@@ -39,4 +39,5 @@ public class NotaEmitida implements Serializable {
     private List<ItemEmitido> itensEmitidos;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Titulo> titulos;
+    
 }

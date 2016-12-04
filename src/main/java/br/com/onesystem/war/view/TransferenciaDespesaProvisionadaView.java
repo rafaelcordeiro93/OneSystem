@@ -16,6 +16,8 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -45,7 +47,15 @@ public class TransferenciaDespesaProvisionadaView implements Serializable {
         limparJanela();
         panel = false;
         transferenciaDespesaProvisionadaLista = service.buscarTransferenciaDespesaProvisionadas();
-        configuracaoCambio = configuracaoCambioService.buscar();
+        inicializaConfiguracoes();
+    }
+
+    private void inicializaConfiguracoes() {
+        try {
+            configuracaoCambio = configuracaoCambioService.buscar();
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void add() {

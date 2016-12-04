@@ -239,15 +239,15 @@ public class Baixa implements Serializable, Movimento {
     public String getHistoricoMovimentacao() {
         BundleUtil msg = new BundleUtil();
         if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
-            if (cambio != null) {
+            if (cambio != null && despesaProvisionada == null) {
                 return geraMovimentacaoSaidaCambio(msg);
             } else if (recepcao != null) {
                 return geraMovimentacaoSaidaRecepcao(msg);
             } else if (transferencia != null && despesa == null) {
                 return geraMovimentacaoSaidaTransferencia(msg);
-            } else if (despesaProvisionada != null){
+            } else if (despesaProvisionada != null) {
                 geraMovimentacaoDespesaProvisionada(msg);
-            }else {
+            } else {
                 return geraMovimentacaoDespesa(msg);
             }
         } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
@@ -293,7 +293,7 @@ public class Baixa implements Serializable, Movimento {
         return msg.getMessage("Recebimento_Recepcao")
                 + " " + pessoa.getNome();
     }
-    
+
     private String geraMovimentacaoDespesaProvisionada(BundleUtil msg) {
         String historicoFormatado = "";
         if (historico != null) {

@@ -169,14 +169,14 @@ public class BaixaDAO {
     }
 
     public BaixaDAO eEntrada() {
-        parametros.put("pUnidadeEntrada", OperacaoFinanceira.ENTRADA);
-        consulta += "and b.unidadeFinanceira = :pUnidadeEntrada ";
+        parametros.put("pNaturezaFinanceira", OperacaoFinanceira.ENTRADA);
+        consulta += "and b.naturezaFinanceira = :pNaturezaFinanceira ";
         return this;
     }
 
     public BaixaDAO eSaida() {
-        parametros.put("pUnidadeSaida", OperacaoFinanceira.SAIDA);
-        consulta += "and b.unidadeFinanceira = :pUnidadeSaida ";
+        parametros.put("pNaturezaSaida", OperacaoFinanceira.SAIDA);
+        consulta += "and b.naturezaFinanceira = :pNaturezaSaida ";
         return this;
     }
 
