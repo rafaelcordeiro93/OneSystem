@@ -33,12 +33,12 @@ public class TabelaDeComissao implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_TABELADECOMISSAO")
     private Long id;
-    @NotNull
-    @Min(value = 0)
+    @NotNull(message = "{porcentagem_desconto_not_null}")
+    @Min(value = 0, message = "{porcentagem_desconto_min}")
     @Column(nullable = false)
     private BigDecimal porcentagemDeDesconto;
-    @NotNull
-    @Min(value = 0)
+    @NotNull(message = "{porcentagem_comissao_not_null}")
+    @Min(value = 0, message = "{porcentagem_comissao_min}")
     @Column(nullable = false)
     private BigDecimal porcentagemDeComissao;
 

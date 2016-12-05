@@ -39,5 +39,15 @@ public class NotaEmitida implements Serializable {
     private List<ItemEmitido> itensEmitidos;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Titulo> titulos;
+
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos, List<Titulo> titulos) {
+        this.id = id;
+        this.pessoa = pessoa;
+        this.operacao = operacao;
+        this.itensEmitidos = itensEmitidos;
+        this.titulos = titulos;
+    }
+    
+    
     
 }
