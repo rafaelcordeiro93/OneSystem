@@ -96,7 +96,10 @@ public class FormaDeRecebimento implements Serializable {
     public FormaDeRecebimento() {
     }
 
-    public FormaDeRecebimento(Long id, String nome, boolean ativo, boolean entrada, BigDecimal porcentagemDeEntrada, TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque, boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas, Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela) throws DadoInvalidoException {
+    public FormaDeRecebimento(Long id, String nome, boolean ativo, boolean entrada, BigDecimal porcentagemDeEntrada, 
+            TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque, 
+            boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas, 
+            Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.ativo = ativo;

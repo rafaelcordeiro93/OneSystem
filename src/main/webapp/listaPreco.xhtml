@@ -13,14 +13,12 @@
                     <div class="Container100">
                         <div class="ContainerIndent">      
                             <p:panel id="panelDT" visible="#{!listaPrecoView.panel}" style="border: none">
+                                <p:commandButton icon="fa fa-plus Fs16 White" action="#{listaPrecoView.abrirEdicao()}" title="#{l.Novo}" value="#{l.Novo}" update="conteudo"/>
+                                       
                                 <p:dataTable id="listaPrecoDT" var="listaPreco" value="#{listaPrecoView.listaPrecoLista}" selectionMode="single" selection="#{listaPrecoView.listaPrecoSelecionada}" rowKey="#{listaPreco.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15" filteredValue="#{listaPrecoView.listaPrecosFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
-                                    <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{listaPrecoView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
-                                        #{l.Tabela_De_Precos}
-                                    </f:facet>
-
+                                
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{listaPrecoView.abrirEdicaoComDados()}" />
 
                                     <p:column headerText="#{l.Id}" sortBy="#{listaPreco.id}" filterBy="#{listaPreco.id}" footerText="#{l.Id}" >                                        

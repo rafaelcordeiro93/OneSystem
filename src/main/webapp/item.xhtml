@@ -15,13 +15,11 @@
                         <div class="ContainerIndent">     
 
                             <p:panel id="panelDT" visible="#{!itemView.panel}" style="border: none">
+                                <p:commandButton icon="fa fa-plus Fs16 White" action="#{itemView.abrirEdicao()}" value="#{l.Novo}" title="#{l.Novo}" update="conteudo"/>
+
                                 <p:dataTable id="itemDT" var="item" value="#{itemView.itemLista}" selectionMode="single" selection="#{itemView.itemSelecionada}" rowKey="#{item.id}"
                                              rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              rowsPerPageTemplate="5,10,15" filteredValue="#{itemView.itemsFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
-                                    <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{itemView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
-                                        #{l.Tabela_De_Itens}
-                                    </f:facet>
 
                                     <p:ajax event="rowSelect" update=":conteudo" listener="#{itemView.abrirEdicaoComDados()}" />
 
@@ -100,22 +98,17 @@
                                         <h:panelGrid>
                                             <h2 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h2>
 
-                                            <div class="Container100 Responsive100">
+                                            <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}"
+                                                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                         emptyMessage="#{l.Nao_Ha_Registros}">
 
-                                                <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}"
-                                                             rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                             emptyMessage="#{l.Nao_Ha_Registros}">
-
-                                                    <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
-                                                        <h:outputText value="#{estoque.deposito.nome}" />
-                                                    </p:column>
-                                                    <p:column headerText="#{l.Saldo}" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="#{l.Saldo}" >
-                                                        <h:outputText value="#{estoque.saldo}" />
-                                                    </p:column>
-                                                </p:dataTable>
-
-
-                                            </div>
+                                                <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
+                                                    <h:outputText value="#{estoque.deposito.nome}" />
+                                                </p:column>
+                                                <p:column headerText="#{l.Saldo}" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="#{l.Saldo}" >
+                                                    <h:outputText value="#{estoque.saldo}" />
+                                                </p:column>
+                                            </p:dataTable>
 
                                         </h:panelGrid>
                                     </p:tab>
