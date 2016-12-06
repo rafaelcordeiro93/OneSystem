@@ -88,8 +88,11 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     @NotNull(message = "moeda_not_null")
     @ManyToOne(optional = false)
     private Moeda moeda;
+    
+        @ManyToOne
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
-    public Titulo() {
+        public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,

@@ -97,6 +97,9 @@ public class Baixa implements Serializable, Movimento {
 
     @ManyToOne
     private Cambio cambio;
+    
+    @ManyToOne
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     private Titulo titulo;
