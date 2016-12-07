@@ -56,9 +56,9 @@ public class Item implements Serializable {
     @NotNull(message = "{ativo_not_null}")
     @Column(nullable = false)
     private boolean ativo;
-    @NotNull(message = "{IVA_not_null}")
+    @NotNull(message = "{grupo_fiscal_not_null}")
     @ManyToOne(optional = false)
-    private IVA iva;
+    private GrupoFiscal grupoFiscal;
     @NotNull(message = "{unidade_medida_not_null}")
     @ManyToOne(optional = false)
     private UnidadeMedidaItem unidadeDeMedida;
@@ -83,13 +83,16 @@ public class Item implements Serializable {
     private List<ItemEmitido> itensEmitidos;
     @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
+    @ManyToOne
+    private GrupoDeMargem margem;
 
     public Item() {
     }
 
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
-            String ncm, String idContabil, boolean ativo, IVA iva, UnidadeMedidaItem unidadeDeMedida,
-            Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo) throws DadoInvalidoException {
+            String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
+            Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo,
+            GrupoDeMargem margem) throws DadoInvalidoException {
         this.id = id;
         this.barras = barras;
         this.nome = nome;
@@ -98,19 +101,20 @@ public class Item implements Serializable {
         this.ncm = ncm;
         this.idContabil = idContabil;
         this.ativo = ativo;
-        this.iva = iva;
+        this.grupoFiscal = grupoFiscal;
         this.unidadeDeMedida = unidadeDeMedida;
         this.marca = marca;
         this.grupo = grupo;
         this.estoqueMinimo = estoqueMinimo;
         this.estoqueMaximo = estoqueMaximo;
         this.saldo = saldo;
+        this.margem = margem;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("barras", "idFabricante", "nome", "unidadeDeMedida", "tipoItem",
-                "marca", "ncm", "idContabil", "grupo", "ativo", "iva", "estoqueMinimo", "estoqueMaximo", "saldo");
+                "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo", "saldo");
         new ValidadorDeCampos<Item>().valida(this, campos);
     }
 
@@ -131,6 +135,10 @@ public class Item implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public GrupoDeMargem getMargem() {
+        return margem;
     }
 
     public String getBarras() {
@@ -161,8 +169,8 @@ public class Item implements Serializable {
         return ativo;
     }
 
-    public IVA getIva() {
-        return iva;
+    public GrupoFiscal getGrupoFiscal() {
+        return grupoFiscal;
     }
 
     public UnidadeMedidaItem getUnidadeDeMedida() {
@@ -191,7 +199,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", iva=" + iva + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", saldo=" + saldo + ", precos=" + precos + '}';
+        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", saldo=" + saldo + ", precos=" + precos + '}';
     }
 
 }

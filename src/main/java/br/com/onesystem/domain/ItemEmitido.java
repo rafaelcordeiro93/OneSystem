@@ -47,10 +47,12 @@ public class ItemEmitido implements Serializable {
     @NotNull(message = "{valor_desconto_not_null}")
     @Max(value = 9999999, message = "{valor_desconto_max}")
     @Min(value = 0, message = "{valorDesconto_min}")
+    @Column(nullable = false)
     private BigDecimal valorDesconto = BigDecimal.ZERO;
     @NotNull(message = "{valor_acrescimo_not_null}")
     @Max(value = 9999999, message = "{valor_acrescimo_max}")
     @Min(value = 0, message = "{valor_acrescimo_min}")
+    @Column(nullable = false)
     private BigDecimal valorAcrescimo = BigDecimal.ZERO;
     @NotNull(message = "{nota_emitida_not_null}")
     @ManyToOne

@@ -19,6 +19,18 @@ public final class InfoMessage {
                 new FacesMessage(FacesMessage.SEVERITY_INFO, "Informação", message));
     }
 
+    public static void adicionado() {
+        print(new BundleUtil().getMessage("registro_adicionado"));
+    }
+
+    public static void atualizado() {
+        print(new BundleUtil().getMessage("registro_atualizado"));
+    }
+
+    public static void removido() {
+        print(new BundleUtil().getMessage("registro_removido"));
+    }
+
     // Exibe a mensagem no console
     public static void printConsole(String message) {
         System.out.println("Message: "

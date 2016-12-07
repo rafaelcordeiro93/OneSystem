@@ -22,32 +22,29 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
 public class PessoaView implements Serializable {
 
-    private boolean panel;
     private Pessoa pessoaSelecionada;
     private Contato contatoSelecionado;
     private PessoaBV pessoa;
     private ContatoBV contato;
     private Cidade cidadeSelecionada;
-    private List<Pessoa> pessoaLista;
     private List<Cidade> cidadeLista;
-    private List<Pessoa> pessoasFiltradas;
     private List<Cidade> cidadesFiltradas;
-
-    @ManagedProperty("#{pessoaService}")
-    private PessoaService servicePessoa;
 
     @ManagedProperty("#{cidadeService}")
     private CidadeService serviceCidade;
 
+    @ManagedProperty("#{pessoaService}")
+    private PessoaService pessoaLista;
+
     @PostConstruct
     public void init() {
         limparJanela();
-        pessoaLista = servicePessoa.buscarPessoas();
         cidadeLista = serviceCidade.buscarCidades();
     }
 
@@ -55,10 +52,8 @@ public class PessoaView implements Serializable {
         try {
             pessoaExiste(false);
             Pessoa novaPessoa = pessoa.construir();
-            System.out.println(novaPessoa);
             new AdicionaDAO<Pessoa>().adiciona(novaPessoa);
-            pessoaLista.add(novaPessoa);
-            InfoMessage.print("¡Persona '" + novaPessoa.getNome() + "' agregada con éxito!");
+            InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
@@ -69,14 +64,11 @@ public class PessoaView implements Serializable {
 
     public void update() {
         try {
-            if (pessoa.getId() != null) {
+            if (pessoaSelecionada != null) {
                 Pessoa personaActualizada = pessoa.construirComID();
-                System.out.println("p: " + personaActualizada);
                 pessoaExiste(true);
                 new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(personaActualizada);
-                pessoaLista.set(pessoaLista.indexOf(pessoaSelecionada),
-                        personaActualizada);
-                InfoMessage.print("¡Persona '" + personaActualizada.getNome() + "' actualizada con éxito!");
+                InfoMessage.atualizado();
                 limparJanela();
             }
         } catch (DadoInvalidoException di) {
@@ -90,8 +82,7 @@ public class PessoaView implements Serializable {
         try {
             if (pessoaSelecionada != null) {
                 new RemoveDAO<Pessoa>(Pessoa.class).remove(pessoaSelecionada, pessoaSelecionada.getId());
-                pessoaLista.remove(pessoaSelecionada);
-                InfoMessage.print("!Persona '" + pessoaSelecionada.getNome() + "' eliminada con éxito!");
+                InfoMessage.removido();
                 limparJanela();
             } else {
                 ErrorMessage.print("!Seleccione un registro para eliminar!");
@@ -154,17 +145,18 @@ public class PessoaView implements Serializable {
 
     public void pessoaExiste(Boolean personaExiste) throws DadoInvalidoException {
         String documento = pessoa.getRuc();
+        List<Pessoa> buscarPessoas = pessoaLista.buscarPessoas();
         try {
             if (documento != null && !documento.trim().equals("")) {
                 if (personaExiste) {
-                    for (Pessoa personaDaLista : pessoaLista) {
+                    for (Pessoa personaDaLista : buscarPessoas) {
                         if (personaDaLista.getDocumento().equals(documento)
                                 && personaDaLista.getId() != pessoa.getId()) {
                             throw new IDadoInvalidoException("¡Persona ya existe!");
                         }
                     }
                 } else {
-                    for (Pessoa personaDaLista : pessoaLista) {
+                    for (Pessoa personaDaLista : buscarPessoas) {
                         if (personaDaLista.getRuc().equals(documento)) {
                             throw new IDadoInvalidoException("¡Persona ya existe!");
                         }
@@ -230,28 +222,15 @@ public class PessoaView implements Serializable {
 
     public void abrirEdicao() {
         limparJanela();
-        panel = true;
     }
 
-    public void abrirEdicaoComDados() {
-        panel = true;
+    public void selecionaPessoa(SelectEvent event) {
+        pessoaSelecionada = (Pessoa) event.getObject();
         pessoa = new PessoaBV(pessoaSelecionada);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
     }
 
     public void selecionaCidade() {
         pessoa.setCidade(cidadeSelecionada);
-    }
-
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
     }
 
     public Pessoa getPessoaSelecionada() {
@@ -294,28 +273,12 @@ public class PessoaView implements Serializable {
         this.cidadeSelecionada = cidadeSelecionada;
     }
 
-    public List<Pessoa> getPessoaLista() {
-        return pessoaLista;
-    }
-
-    public void setPessoaLista(List<Pessoa> pessoaLista) {
-        this.pessoaLista = pessoaLista;
-    }
-
     public List<Cidade> getCidadeLista() {
         return cidadeLista;
     }
 
     public void setCidadeLista(List<Cidade> cidadeLista) {
         this.cidadeLista = cidadeLista;
-    }
-
-    public List<Pessoa> getPessoasFiltradas() {
-        return pessoasFiltradas;
-    }
-
-    public void setPessoasFiltradas(List<Pessoa> pessoasFiltradas) {
-        this.pessoasFiltradas = pessoasFiltradas;
     }
 
     public List<Cidade> getCidadesFiltradas() {
@@ -326,20 +289,20 @@ public class PessoaView implements Serializable {
         this.cidadesFiltradas = cidadesFiltradas;
     }
 
-    public PessoaService getServicePessoa() {
-        return servicePessoa;
-    }
-
-    public void setServicePessoa(PessoaService servicePessoa) {
-        this.servicePessoa = servicePessoa;
-    }
-
     public CidadeService getServiceCidade() {
         return serviceCidade;
     }
 
     public void setServiceCidade(CidadeService serviceCidade) {
         this.serviceCidade = serviceCidade;
+    }
+
+    public PessoaService getPessoaLista() {
+        return pessoaLista;
+    }
+
+    public void setPessoaLista(PessoaService pessoaLista) {
+        this.pessoaLista = pessoaLista;
     }
 
 }

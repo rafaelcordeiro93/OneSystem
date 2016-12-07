@@ -1,7 +1,8 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.GrupoDeMargem;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.UnidadeMedidaItem;
@@ -23,10 +24,11 @@ public class ItemBV implements Serializable {
     private BigDecimal saldo = BigDecimal.ZERO;
     private String ncm;
     private Marca marca;
-    private IVA iva;
+    private GrupoFiscal grupoFiscal;
     private String idFabricante;
     private String idContabil;
     private BigDecimal estoqueMinimo;
+    private GrupoDeMargem margem;
 
     public ItemBV(Item itemSelecionado) {
         this.id = itemSelecionado.getId();
@@ -37,13 +39,14 @@ public class ItemBV implements Serializable {
         this.estoqueMinimo = itemSelecionado.getEstoqueMinimo();
         this.idContabil = itemSelecionado.getIdContabil();
         this.idFabricante = itemSelecionado.getIdFabricante();
-        this.iva = itemSelecionado.getIva();
+        this.grupoFiscal = itemSelecionado.getGrupoFiscal();
         this.marca = itemSelecionado.getMarca();
         this.ncm = itemSelecionado.getNcm();
         this.saldo = itemSelecionado.getSaldo();
         this.tipoItem = itemSelecionado.getTipoItem();
         this.unidadeMedida = itemSelecionado.getUnidadeDeMedida();
         this.ativo = itemSelecionado.isAtivo();
+        this.margem = itemSelecionado.getMargem();
     }
 
     public ItemBV() {
@@ -137,12 +140,12 @@ public class ItemBV implements Serializable {
         this.marca = marca;
     }
 
-    public IVA getIva() {
-        return iva;
+    public GrupoFiscal getGrupoFiscal() {
+        return grupoFiscal;
     }
 
-    public void setIva(IVA iva) {
-        this.iva = iva;
+    public void setGrupoFiscal(GrupoFiscal grupoFiscal) {
+        this.grupoFiscal = grupoFiscal;
     }
 
     public String getIdFabricante() {
@@ -170,10 +173,10 @@ public class ItemBV implements Serializable {
     }
 
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, iva, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo);
+        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo, margem);
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, iva, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo);
+        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo, margem);
     }
 }

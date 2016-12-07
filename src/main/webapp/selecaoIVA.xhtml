@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{l.Selecao_IVA}</title>
+        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
+        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
+        <h:outputScript name="js/layout.js" library="modena-layout" />
+        <h:outputScript name="js/personalizado.js" library="modena-layout" />
+
+    </h:head>
+
+
+    <h:body>
+        <f:loadBundle basename="label_messages" var="l"/>
+        <h:form>
+            <p:dataTable id="iVADT" var="iVA" value="#{selecaoIVAView.IVALista}" selectionMode="single" selection="#{selecaoIVAView.IVASelecionada}" rowKey="#{iVA.id}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{selecaoIVAView.IVAFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
+
+                <p:ajax event="rowSelect" process="@this" listener="#{selecaoIVAView.selecionar()}" />
+
+                <p:column headerText="#{l.Id}" sortBy="#{iVA.id}" filterBy="#{iVA.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                    <h:outputText value="#{iVA.id}" />
+                </p:column>
+                <p:column headerText="#{l.Nome}" sortBy="#{iVA.nome}" filterBy="#{iVA.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                    <h:outputText value="#{iVA.nome}" />
+                </p:column>
+                <p:column headerText="#{l.IVA}" sortBy="#{iVA.iva}" filterBy="#{iVA.iva}" footerText="#{l.IVA}" filterMatchMode="contains">
+                    <h:outputText value="#{iVA.iva}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </h:body>
+
+</html>

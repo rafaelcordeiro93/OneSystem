@@ -40,8 +40,8 @@ public class IVA implements Serializable {
     @Length(max = 60, min = 4, message = "{nome_length}")
     @Column(nullable = false, length = 60)
     private String nome;
-//    @OneToMany(mappedBy = "iva")
-//    private List<Item> listaMercaderias;
+    @OneToMany(mappedBy = "iva")
+    private List<GrupoFiscal> listaGrupos;
 
     public IVA() {
     }

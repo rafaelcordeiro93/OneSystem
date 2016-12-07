@@ -51,6 +51,8 @@
         <class>br.com.onesystem.domain.Configuracao</class>
         <class>br.com.onesystem.domain.GrupoDeComissao</class>
         <class>br.com.onesystem.domain.TabelaDeComissao</class>
+        <class>br.com.onesystem.domain.GrupoDeMargem</class>
+        <class>br.com.onesystem.domain.GrupoFiscal</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

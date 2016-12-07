@@ -2,11 +2,9 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.UnidadeMedidaItem;
@@ -15,7 +13,6 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ItemBV;
 import br.com.onesystem.war.service.GrupoService;
-import br.com.onesystem.war.service.IVAService;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.MarcaService;
 import br.com.onesystem.war.service.EstoqueService;
@@ -29,13 +26,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.Application;
-import javax.faces.application.ViewHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.UIViewRoot;
-import javax.faces.context.FacesContext;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
@@ -43,14 +36,10 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class ItemView implements Serializable {
 
-    private boolean panel;
     private ItemBV item;
     private Item itemSelecionada;
     private List<Item> itemLista;
     private List<Item> itemsFiltradas;
-    private IVA ivaSelecionada;
-    private List<IVA> ivaLista;
-    private List<IVA> ivasFiltradas;
     private Grupo grupoSelecionado;
     private List<Grupo> grupoLista;
     private List<Grupo> gruposFiltrados;
@@ -62,13 +51,9 @@ public class ItemView implements Serializable {
     private List<UnidadeMedidaItem> unidadeMedidaFiltradas;
     private List<SaldoDeEstoque> estoqueLista;
     private BigDecimal estoqueTotal;
-    
 
     @ManagedProperty("#{itemService}")
     private ItemService service;
-
-    @ManagedProperty("#{ivaService}")
-    private IVAService serviceIVA;
 
     @ManagedProperty("#{grupoService}")
     private GrupoService serviceGrupo;
@@ -78,20 +63,18 @@ public class ItemView implements Serializable {
 
     @ManagedProperty("#{unidadeMedidaItemService}")
     private UnidadeMedidaItemService serviceUnMedida;
-    
+
     @ManagedProperty("#{estoqueService}")
     private EstoqueService serviceEstoque;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
         itemLista = service.buscarItems();
-        ivaLista = serviceIVA.buscarIVAs();
         grupoLista = serviceGrupo.buscarGrupos();
         marcaLista = serviceMarca.buscarMarcas();
         unidadeMedidaLista = serviceUnMedida.buscarUnidadeMedidaItens();
-     
+
     }
 
     public void add() {
@@ -150,8 +133,8 @@ public class ItemView implements Serializable {
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
-    } 
-    
+    }
+
     private boolean validaItemExistente(Item novoRegistro) {
         for (Item novaItem : itemLista) {
             if (novoRegistro.getNome().equals(novaItem.getNome())) {
@@ -170,30 +153,25 @@ public class ItemView implements Serializable {
         itemSelecionada = new Item();
         estoqueLista = new ArrayList<SaldoDeEstoque>();
     }
-    
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
+
+    public void selecionaItem(SelectEvent event) {
+        itemSelecionada = (Item) event.getObject();
+        item = new ItemBV(itemSelecionada);
     }
 
-    public void abrirEdicaoComDados() {
-        panel = true;
-        item = new ItemBV(itemSelecionada);
+    private void carregaEstoque() {
         estoqueLista = new EstoqueService().buscaSaldoDeEstoque(itemSelecionada);
     }
 
-    public void fecharEdicao() {
-        panel = false;
-    }
-    
-      public void desfazer() {
+    public void desfazer() {
         if (itemSelecionada != null) {
             item = new ItemBV(itemSelecionada);
         }
     }
 
-    public void selecionaIVA() {
-        item.setIva(ivaSelecionada);
+    public void selecionaGrupoFiscal(SelectEvent event) {
+        GrupoFiscal grupo = (GrupoFiscal) event.getObject();
+        item.setGrupoFiscal(grupo);
     }
 
     public void selecionaGrupo() {
@@ -206,14 +184,6 @@ public class ItemView implements Serializable {
 
     public void selecionaUnidadeMedida() {
         item.setUnidadeMedida(unidadeMedidaSelecionada);
-    }
-    
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
     }
 
     public ItemBV getItem() {
@@ -246,30 +216,6 @@ public class ItemView implements Serializable {
 
     public void setItemsFiltradas(List<Item> itemsFiltradas) {
         this.itemsFiltradas = itemsFiltradas;
-    }
-
-    public IVA getIvaSelecionada() {
-        return ivaSelecionada;
-    }
-
-    public void setIvaSelecionada(IVA ivaSelecionada) {
-        this.ivaSelecionada = ivaSelecionada;
-    }
-
-    public List<IVA> getIvaLista() {
-        return ivaLista;
-    }
-
-    public void setIvaLista(List<IVA> ivaLista) {
-        this.ivaLista = ivaLista;
-    }
-
-    public List<IVA> getIvasFiltradas() {
-        return ivasFiltradas;
-    }
-
-    public void setIvasFiltradas(List<IVA> ivasFiltradas) {
-        this.ivasFiltradas = ivasFiltradas;
     }
 
     public Grupo getGrupoSelecionado() {
@@ -352,14 +298,6 @@ public class ItemView implements Serializable {
         this.service = service;
     }
 
-    public IVAService getServiceIVA() {
-        return serviceIVA;
-    }
-
-    public void setServiceIVA(IVAService serviceIVA) {
-        this.serviceIVA = serviceIVA;
-    }
-
     public GrupoService getServiceGrupo() {
         return serviceGrupo;
     }
@@ -382,7 +320,7 @@ public class ItemView implements Serializable {
 
     public void setServiceUnMedida(UnidadeMedidaItemService serviceUnMedida) {
         this.serviceUnMedida = serviceUnMedida;
-        
+
     }
 
     public List<SaldoDeEstoque> getEstoqueLista() {
@@ -401,7 +339,6 @@ public class ItemView implements Serializable {
         this.estoqueTotal = estoqueTotal;
     }
 
-
     public EstoqueService getServiceEstoque() {
         return serviceEstoque;
     }
@@ -410,7 +347,4 @@ public class ItemView implements Serializable {
         this.serviceEstoque = serviceEstoque;
     }
 
- 
-    
-    
 }
