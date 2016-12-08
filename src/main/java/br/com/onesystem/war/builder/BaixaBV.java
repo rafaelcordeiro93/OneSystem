@@ -59,7 +59,7 @@ public class BaixaBV implements Serializable {
         this.desconto = baixa.getDesconto();
         this.emissao = baixa.getEmissao();
         this.historico = baixa.getHistorico();
-        this.unidadeFinanciera = baixa.getUnidadeFinanceira();
+        this.unidadeFinanciera = baixa.getNaturezaFinanceira();
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();

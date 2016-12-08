@@ -139,8 +139,8 @@ label.ui-state-error {
 ----------------------------------*/
 /* states and images */
 .ui-icon {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
@@ -922,9 +922,9 @@ label {
     background-color: #dae8ef;
     border: solid 1px #c1d5df;
     outline: none;
-    padding: 10px;
+    padding: 5px;
     font-family: 'robotolight';
-    font-size: 16px;
+    font-size: 14px;
 }
 .ui-datatable table thead tr th.ui-state-hover,
 .ui-datatable table thead tr th.ui-state-active,
@@ -1234,7 +1234,7 @@ label {
 .ui-datatable .ui-paginator .ui-paginator-next,
 .ui-paginator .ui-paginator-last,
 .ui-datatable .ui-paginator .ui-paginator-rpp-options {
-    font-size: 20px;
+    font-size: 10px;
     padding: 10px 3px;
     font-weight: bold;
     border: solid 3px transparent;
@@ -1282,14 +1282,14 @@ label {
     color: #ffffff !important;
     background-repeat: no-repeat;
     border-bottom: solid 3px #ffffff;
-    font-size: 20px;
+    font-size: 14px;
     border-radius: 0px !important;
 }
 .ui-paginator .ui-paginator-rpp-options {
     outline: none;
     color: #ffffff !important;
     font-family: 'robotoregular';
-    font-size: 18px !important;
+    font-size: 14px !important;
     background-color: #0277bd;
     border: solid 1px transparent;
 }
@@ -3068,7 +3068,7 @@ hr.ui-widget-header {
     border-bottom: solid 1px #e0e0e0 !important;
     background-color: #ffffff;
     color: #546e7a;
-    font-size: 19px;
+    font-size: 17px;
     border-top-left-radius: 1px;
     border-top-right-radius: 1px;
     font-family: 'robotolight';
@@ -3281,7 +3281,7 @@ hr.ui-widget-header {
 /*Style For UI InputField ------------------------------------------------------------------------------------- */
 .ui-inputfield {
     color: #546e7a;
-    font-size: 16px;
+    font-size: 14px;
     font-family: 'robotoregular' !important;
     padding: 9px 10px !important;
     border: solid 0px #c6d6df;
@@ -3386,10 +3386,10 @@ hr.ui-widget-header {
     font-size: 16px !important;
 }
 .ui-button.ui-button-icon-only .ui-button-text {
-    padding: 10px 0px !important;
-    border-radius: 30px !important;
+    padding: 9px 0px !important;
+/*    border-radius: 30px !important;
     -webkit-border-radius: 30px !important;
-    -moz-border-radius: 30px !important;
+    -moz-border-radius: 30px !important;*/
 }
 @media screen and (min-width: 0\0) {
     .ui-button.ui-button-icon-only .ui-button-text {
@@ -4278,8 +4278,8 @@ hr.ui-widget-header {
     color: #a9a9a9;
     border: solid 2px #546e7a;
     cursor: pointer;
-    width: 16px !important;
-    height: 16px !important;
+    width: 14px !important;
+    height: 14px !important;
     background-color: #ffffff;
 }
 .ui-chkbox .ui-state-active {
@@ -4335,7 +4335,7 @@ hr.ui-widget-header {
 }
 .ui-chkbox .ui-chkbox-label {
     margin: 1px 15px 0px 5px !important;
-    font-size: 16px;
+    font-size: 14px;
     color: #546e7a;
 }
 /*Style For Radio Button --------------------------------------------------------------------------------------*/

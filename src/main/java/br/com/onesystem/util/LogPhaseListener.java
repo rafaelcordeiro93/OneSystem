@@ -37,7 +37,7 @@ public class LogPhaseListener implements PhaseListener {
 
     private void validaAcesso(Object login, String janela, ExternalContext ec) throws IOException {
         if (login == null && !janela.equals("/login.xhtml")) {
-            ec.redirect("/OneSystem-war/login.xhtml");
+            ec.redirect("/OneSystem/login.xhtml");
         } 
 // else if (login == null && janela.equals("/login.xhtml")) {
 //        } else if (janela.equals("/login.xhtml")) {

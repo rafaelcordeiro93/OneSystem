@@ -74,7 +74,7 @@ public class Baixa implements Serializable, Movimento {
     private Date emissao = Calendar.getInstance().getTime();
 
     @Enumerated(EnumType.STRING)
-    private OperacaoFinanceira unidadeFinanceira;
+    private OperacaoFinanceira naturezaFinanceira;
 
     @NotNull(message = "{conta_not_null}")
     @ManyToOne(optional = false)
@@ -132,7 +132,7 @@ public class Baixa implements Serializable, Movimento {
         this.emissao = emissao;
         this.historico = historico;
         this.pessoa = pessoa;
-        this.unidadeFinanceira = tipoMovimentacaoFinanceira;
+        this.naturezaFinanceira = tipoMovimentacaoFinanceira;
         this.despesa = despesa;
         this.conta = conta;
         this.total = valor.add(juros == null ? BigDecimal.ZERO : juros).add(multas == null ? BigDecimal.ZERO : multas)
@@ -220,9 +220,9 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public String getSaldoFormatado(BigDecimal saldoAtual) {
-        if (unidadeFinanceira == OperacaoFinanceira.ENTRADA) {
+        if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             return conta.getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual.add(this.getValor()));
-        } else if (unidadeFinanceira == OperacaoFinanceira.SAIDA) {
+        } else if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
             return conta.getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual.subtract(this.getValor()));
         } else {
             return conta.getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual);
@@ -230,9 +230,9 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public BigDecimal getSaldo(BigDecimal saldoAtual) {
-        if (unidadeFinanceira == OperacaoFinanceira.ENTRADA) {
+        if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             return saldoAtual.add(this.getValor());
-        } else if (unidadeFinanceira == OperacaoFinanceira.SAIDA) {
+        } else if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
             return saldoAtual.subtract(this.getValor());
         } else {
             return saldoAtual;
@@ -241,19 +241,19 @@ public class Baixa implements Serializable, Movimento {
 
     public String getHistoricoMovimentacao() {
         BundleUtil msg = new BundleUtil();
-        if (unidadeFinanceira == OperacaoFinanceira.SAIDA) {
-            if (cambio != null) {
+        if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
+            if (cambio != null && despesaProvisionada == null) {
                 return geraMovimentacaoSaidaCambio(msg);
             } else if (recepcao != null) {
                 return geraMovimentacaoSaidaRecepcao(msg);
             } else if (transferencia != null && despesa == null) {
                 return geraMovimentacaoSaidaTransferencia(msg);
-            } else if (despesaProvisionada != null){
+            } else if (despesaProvisionada != null) {
                 geraMovimentacaoDespesaProvisionada(msg);
-            }else {
+            } else {
                 return geraMovimentacaoDespesa(msg);
             }
-        } else if (unidadeFinanceira == OperacaoFinanceira.ENTRADA) {
+        } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             if (recepcao != null) {
                 return geraMovimentacaoEntradaRecepcao(msg);
             } else if (transferencia != null) {
@@ -296,7 +296,7 @@ public class Baixa implements Serializable, Movimento {
         return msg.getMessage("Recebimento_Recepcao")
                 + " " + pessoa.getNome();
     }
-    
+
     private String geraMovimentacaoDespesaProvisionada(BundleUtil msg) {
         String historicoFormatado = "";
         if (historico != null) {
@@ -359,7 +359,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public String getValorFormatado() {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(unidadeFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
+        return conta.getMoeda().getSigla() + " " + NumberUtils.format(naturezaFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
     }
 
     public String getValorFormatadoSemNegativos() {
@@ -388,8 +388,8 @@ public class Baixa implements Serializable, Movimento {
         return emissaoFormatada.format(getEmissao().getTime());
     }
 
-    public OperacaoFinanceira getUnidadeFinanceira() {
-        return unidadeFinanceira;
+    public OperacaoFinanceira getNaturezaFinanceira() {
+        return naturezaFinanceira;
     }
 
     public Pessoa getPessoa() {

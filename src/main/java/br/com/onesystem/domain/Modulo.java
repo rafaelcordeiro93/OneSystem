@@ -5,10 +5,12 @@
 package br.com.onesystem.domain;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -24,6 +26,8 @@ public class Modulo implements Serializable {
     @GeneratedValue(generator = "SEQ_MODULO", strategy = GenerationType.SEQUENCE)
     private Long id;
     private String nome;
+    @OneToMany(mappedBy = "modulo")
+    private List<Janela> janelas;
 
     public Modulo() {
     }

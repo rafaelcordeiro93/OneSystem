@@ -39,11 +39,15 @@ public class DadosIniciais {
         Modulo m3 = new Modulo(null, "Relatórios");
         Modulo m4 = new Modulo(null, "Preferências");
         Modulo m5 = new Modulo(null, "Login");
+        Modulo m6 = new Modulo(null, "Estoque");
 
         daoModulo.adiciona(m);
         daoModulo.adiciona(m1);
         daoModulo.adiciona(m2);
         daoModulo.adiciona(m3);
+        daoModulo.adiciona(m4);
+        daoModulo.adiciona(m5);
+        daoModulo.adiciona(m6);
 
         // -- Adiciona Módulos
         AdicionaDAO<Janela> daoJanela = new AdicionaDAO<>();
@@ -78,7 +82,8 @@ public class DadosIniciais {
         Janela j27 = new Janela(null, "Privilégio", "privilegio.xhtml", m4);
         Janela j28 = new Janela(null, "Login", "login.xhtml", m5);
         Janela j29 = new Janela(null, "Baixa", "baixa.xhtml", m1);
-        
+        Janela j30 = new Janela(null, "Ajuste de Estoque", "ajusteDeEstoque.xhtml", m6);
+
         daoJanela.adiciona(j);
         daoJanela.adiciona(j1);
         daoJanela.adiciona(j2);
@@ -109,42 +114,44 @@ public class DadosIniciais {
         daoJanela.adiciona(j27);
         daoJanela.adiciona(j28);
         daoJanela.adiciona(j29);
-        
+        daoJanela.adiciona(j30);
+
         // -- Adiciona Privilégios
         AdicionaDAO<Privilegio> daoPrivilegio = new AdicionaDAO<>();
         List<Privilegio> listaPrivilegios = Arrays.asList(
-                new Privilegio(null, j, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j1, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j2, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j3, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j4, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j5, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j6, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j7, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j8, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j9, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j10, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j11, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j12, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j13, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j14, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j15, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j16, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j17, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j18, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j19, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j20, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j21, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j22, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j23, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j24, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j25, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j26, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j27, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j28, true, true, true, true,grupoDePrivilegio),
-                new Privilegio(null, j29, true, true, true, true,grupoDePrivilegio));
-        
-        for(Privilegio p : listaPrivilegios){
+                new Privilegio(null, j, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j1, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j2, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j3, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j4, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j5, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j6, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j7, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j8, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j9, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j10, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j11, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j12, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j13, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j14, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j15, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j16, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j17, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j18, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j19, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j20, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j21, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j22, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j23, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j24, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j25, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j26, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j27, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j28, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j29, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, j30, true, true, true, true, grupoDePrivilegio));
+
+        for (Privilegio p : listaPrivilegios) {
             daoPrivilegio.adiciona(p);
         }
 

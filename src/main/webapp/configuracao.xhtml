@@ -9,7 +9,47 @@
 
         <div class="Container70 Responsive100">
 
-            <!-- Section 1 -->
+            <div class="Container100">
+                <div class="ContainerIndent">
+                    <div class="Card ShadowEffect HeiAutoOnMobile">
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Configuracao}</div>
+                        <div class="EmptyBox10"></div>
+                        <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Moeda_Padrao}</div>
+                        <div class="EmptyBox10"/>
+
+                        <h:panelGrid columns="3" style="margin-top: -1%">
+                            <p:inputText id="moedaPadrao" disabled="true" value="#{configuracaoView.configuracaoBV.moedaPadrao.nome}" placeholder="#{l.Moeda_Padrao}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
+                                             update="@none">
+                                <p:ajax event="dialogReturn" listener="#{configuracaoView.selecionaMoeda}"
+                                        process="@this" update="moedaPadrao" />
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-trash Fs16 White" styleClass="RedButton" action="#{configuracaoView.removeMoeda()}" update=":conteudo"/>
+                        </h:panelGrid>
+
+                        <div class="EmptyBox5"/>
+                        
+                        <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Despesa_Comissao}</div>
+                        <div class="EmptyBox10"/>
+
+                        <h:panelGrid columns="3" style="margin-top: -1%">
+                            <p:inputText id="despesaDeComissao" disabled="true" value="#{configuracaoView.configuracaoBV.despesaDeComissao.nome}" placeholder="#{l.Despesa_Comissao}"/>
+                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaDeComissaoView.abrirDialogo()}" process="@this"
+                                             update="@none">
+                                <p:ajax event="dialogReturn" listener="#{configuracaoView.selecionaDespesaDeComissao}"
+                                        process="@this" update="despesaDeComissao" />
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-trash Fs16 White" styleClass="RedButton" action="#{configuracaoView.removeDespesaDeComissao()}" update=":conteudo"/>
+                        </h:panelGrid>
+
+                        <div class="EmptyBox5"/>
+                        
+                        <p:separator/>
+                        <p:commandButton value="#{l.Salvar}" action="#{configuracaoView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    
+                    </div>
+                </div>
+            </div>
+            
             <div class="Container100">
                 <div class="ContainerIndent">
                     <div class="Card ShadowEffect HeiAutoOnMobile">

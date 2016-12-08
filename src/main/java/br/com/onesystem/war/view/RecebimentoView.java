@@ -28,6 +28,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -60,7 +62,15 @@ public class RecebimentoView implements Serializable {
     @PostConstruct
     public void init() {
         limpar();
-        confCambio = serviceConfCambio.buscar();
+        inicializaConfiguracoes();
+    }
+
+    private void inicializaConfiguracoes() {
+        try {
+            confCambio = serviceConfCambio.buscar();
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void selecionaPessoa(SelectEvent event) {

@@ -1,5 +1,6 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
@@ -74,8 +75,8 @@ public class Recepcao implements Serializable {
     }
 
     public void gerarTitulo() throws DadoInvalidoException {
-        Titulo novoTitulo = new Titulo(null, pessoa, null, valor, valor,
-                emissao, OperacaoFinanceira.SAIDA, TipoFormaPagRec.A_PRAZO, null, this, null, null, moeda);
+        Titulo novoTitulo = new TituloBuilder().comPessoa(pessoa).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(moeda).construir();
         this.titulo = novoTitulo;
     }
 
@@ -108,13 +109,13 @@ public class Recepcao implements Serializable {
         return valor;
     }
 
-     public String getValorFormatado() {
+    public String getValorFormatado() {
         NumberFormat nf = NumberFormat.getInstance();
         nf.setMinimumFractionDigits(2);
         nf.setMaximumFractionDigits(2);
         return nf.format(valor);
     }
-    
+
     public Conta getConta() {
         return conta;
     }
@@ -126,7 +127,7 @@ public class Recepcao implements Serializable {
     public Moeda getMoeda() {
         return moeda;
     }
-    
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "emissao", "moeda");
         new ValidadorDeCampos<Recepcao>().valida(this, campos);
