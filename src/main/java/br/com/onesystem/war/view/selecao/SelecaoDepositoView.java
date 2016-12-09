@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.war.service.DepositoService;
@@ -36,7 +36,7 @@ public class SelecaoDepositoView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoDeposito", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoDeposito", opcoes, null);
     }
 
     public void selecionar() {

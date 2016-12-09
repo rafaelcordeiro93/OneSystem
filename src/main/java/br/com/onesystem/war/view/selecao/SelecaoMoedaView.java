@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.war.service.MoedaService;
@@ -36,7 +36,7 @@ public class SelecaoMoedaView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoMoeda", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoMoeda", opcoes, null);
     }
 
     public void selecionar() {

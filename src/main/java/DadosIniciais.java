@@ -83,6 +83,7 @@ public class DadosIniciais {
         Janela j28 = new Janela(null, "Login", "login.xhtml", m5);
         Janela j29 = new Janela(null, "Baixa", "baixa.xhtml", m1);
         Janela j30 = new Janela(null, "Ajuste de Estoque", "ajusteDeEstoque.xhtml", m6);
+        Janela j31 = new Janela(null, "Conhecimento de Frete", "conhecimentoDeFrete.xhtml", m1);
 
         daoJanela.adiciona(j);
         daoJanela.adiciona(j1);

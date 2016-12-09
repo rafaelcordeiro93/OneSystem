@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.war.service.ReceitaProvisionadaService;
@@ -36,7 +36,7 @@ public class SelecaoReceitaProvisionadaView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoReceitaProvisionada", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoReceitaProvisionada", opcoes, null);
     }
 
     public void selecionar() {

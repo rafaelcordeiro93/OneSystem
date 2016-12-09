@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.war.service.IVAService;
@@ -36,7 +36,7 @@ public class SelecaoIVAView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoIVA", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoIVA", opcoes, null);
     }
 
     public void selecionar() {

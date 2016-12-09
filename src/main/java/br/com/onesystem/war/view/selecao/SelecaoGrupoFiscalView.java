@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.war.service.GrupoFiscalService;
@@ -36,7 +36,7 @@ public class SelecaoGrupoFiscalView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoGrupoFiscal", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoFiscal", opcoes, null);
     }
 
     public void selecionar() {

@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.MoedaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.ErrorMessage;
@@ -11,6 +12,7 @@ import br.com.onesystem.war.builder.MoedaBV;
 import br.com.onesystem.war.service.MoedaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,25 +21,18 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
 public class MoedaView implements Serializable {
 
-    private boolean panel;
     private MoedaBV moeda;
     private Moeda moedaSelecionada;
-    private List<Moeda> moedaLista;
-    private List<Moeda> moedasFiltradas;
-
-    @ManagedProperty("#{moedaService}")
-    private MoedaService service;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        moedaLista = service.buscarMoedas();
     }
 
     public void add() {
@@ -45,11 +40,10 @@ public class MoedaView implements Serializable {
             Moeda novoRegistro = moeda.construir();
             if (!validaMoedaExistente(novoRegistro)) {
                 new AdicionaDAO<Moeda>().adiciona(novoRegistro);
-                moedaLista.add(novoRegistro);
-                InfoMessage.print("¡Moneda '" + novoRegistro.getNome() + "' agregado con éxito!");
+                InfoMessage.adicionado();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException("¡Ya existe la ciudad!");
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_existe"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -59,21 +53,16 @@ public class MoedaView implements Serializable {
     public void update() {
         try {
             Moeda moedaExistente = moeda.construirComID();
-            if (moedaExistente.getId() != null) {
-                if (!validaMoedaExistente(moedaExistente)) {
+            if (moedaSelecionada != null) {
+                if (validaMoedaExistente(moedaExistente)) {
                     new AtualizaDAO<Moeda>(Moeda.class).atualiza(moedaExistente);
-                    moedaLista.set(moedaLista.indexOf(moedaExistente),
-                            moedaExistente);
-                    if (moedasFiltradas != null && moedasFiltradas.contains(moedaExistente)) {
-                        moedasFiltradas.set(moedasFiltradas.indexOf(moedaExistente), moedaExistente);
-                    }
-                    InfoMessage.print("¡Moneda '" + moedaExistente.getNome() + "' cambiado con éxito!");
+                    InfoMessage.atualizado();
                     limparJanela();
                 } else {
-                    throw new EDadoInvalidoException("¡Ya existe la ciudad!");
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_existe"));
                 }
             } else {
-                throw new EDadoInvalidoException("!La ciudad no se encontra registrada!");
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -82,13 +71,9 @@ public class MoedaView implements Serializable {
 
     public void delete() {
         try {
-            if (moedaLista != null && moedaLista.contains(moedaSelecionada)) {
+            if (moedaSelecionada != null) {
                 new RemoveDAO<Moeda>(Moeda.class).remove(moedaSelecionada, moedaSelecionada.getId());
-                moedaLista.remove(moedaSelecionada);
-                if (moedasFiltradas != null && moedasFiltradas.contains(moedaSelecionada)) {
-                    moedasFiltradas.remove(moedaSelecionada);
-                }
-                InfoMessage.print("Moneda '" + this.moeda.getNome() + "' eliminada con éxito!");
+                InfoMessage.removido();
                 limparJanela();
             }
         } catch (DadoInvalidoException di) {
@@ -98,33 +83,25 @@ public class MoedaView implements Serializable {
         }
     }
 
+    public void selecionaMoeda(SelectEvent e) {
+        moedaSelecionada = (Moeda) e.getObject();
+        moeda = new MoedaBV(moedaSelecionada);
+    }
+
     private boolean validaMoedaExistente(Moeda novoRegistro) {
-        for (Moeda novaMoeda : moedaLista) {
-            if (novoRegistro.getNome().equals(novaMoeda.getNome())
-                    && novoRegistro.getSigla().equals(novaMoeda.getSigla())) {
-                return true;
-            }
+        List<Moeda> lista = new MoedaDAO().buscarMoedas().porNome(novoRegistro).porSigla(novoRegistro).listaDeResultados();
+        return lista.isEmpty();
+    }
+
+    public void desfazer() {
+        if (moedaSelecionada != null) {
+            moeda = new MoedaBV(moedaSelecionada);
         }
-        return false;
     }
 
     public void limparJanela() {
         moeda = new MoedaBV();
-        moedaSelecionada = new Moeda();
-    }
-
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        moeda = new MoedaBV(moedaSelecionada);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
+        moedaSelecionada = null;
     }
 
     public MoedaBV getMoeda() {
@@ -141,38 +118,6 @@ public class MoedaView implements Serializable {
 
     public void setMoedaSelecionada(Moeda moedaSelecionada) {
         this.moedaSelecionada = moedaSelecionada;
-    }
-
-    public List<Moeda> getMoedaLista() {
-        return moedaLista;
-    }
-
-    public void setMoedaLista(List<Moeda> moedaLista) {
-        this.moedaLista = moedaLista;
-    }
-
-    public List<Moeda> getMoedasFiltradas() {
-        return moedasFiltradas;
-    }
-
-    public void setMoedasFiltradas(List<Moeda> moedasFiltradas) {
-        this.moedasFiltradas = moedasFiltradas;
-    }
-
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
-    }
-
-    public MoedaService getService() {
-        return service;
-    }
-
-    public void setService(MoedaService service) {
-        this.service = service;
     }
 
 }

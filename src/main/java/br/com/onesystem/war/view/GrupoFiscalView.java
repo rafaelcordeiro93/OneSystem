@@ -34,7 +34,7 @@ public class GrupoFiscalView implements Serializable {
         try {
             GrupoFiscal novoRegistro = grupoFiscal.construir();
             new AdicionaDAO<GrupoFiscal>().adiciona(novoRegistro);
-            InfoMessage.print(new BundleUtil().getMessage("grupo_fiscal_adicionado"));
+            InfoMessage.adicionado();
             limparJanela();
 
         } catch (DadoInvalidoException die) {
@@ -47,10 +47,10 @@ public class GrupoFiscalView implements Serializable {
             if (grupoFiscalSelecionada != null) {
                 GrupoFiscal grupoFiscalExistente = grupoFiscal.construirComID();
                 new AtualizaDAO<GrupoFiscal>(GrupoFiscal.class).atualiza(grupoFiscalExistente);
-                InfoMessage.print(new BundleUtil().getMessage("grupo_fiscal_atualizado"));
+                InfoMessage.atualizado();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("grupo_fiscal_nao_encontrado"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -61,10 +61,10 @@ public class GrupoFiscalView implements Serializable {
         try {
             if (grupoFiscalSelecionada != null) {
                 new RemoveDAO<GrupoFiscal>(GrupoFiscal.class).remove(grupoFiscalSelecionada, grupoFiscalSelecionada.getId());
-                InfoMessage.print(new BundleUtil().getMessage("grupo_fiscal_removido"));
+                InfoMessage.removido();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("grupo_fiscal_nao_encontrado"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException di) {
             di.print();

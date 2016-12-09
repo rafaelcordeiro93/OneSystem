@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.war.service.ContaService;
@@ -36,7 +36,7 @@ public class SelecaoContaView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoConta", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoConta", opcoes, null);
     }
 
     public void selecionar() {

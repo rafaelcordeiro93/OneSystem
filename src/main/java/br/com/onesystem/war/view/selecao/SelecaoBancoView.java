@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.war.service.BancoService;
@@ -36,7 +36,7 @@ public class SelecaoBancoView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoBanco", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoBanco", opcoes, null);
     }
 
     public void selecionar() {

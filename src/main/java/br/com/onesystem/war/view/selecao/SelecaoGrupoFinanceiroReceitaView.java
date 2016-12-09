@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.war.service.GrupoFinanceiroService;
@@ -14,7 +14,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoGrupoFinanceiroDespesaView implements Serializable {
+public class SelecaoGrupoFinanceiroReceitaView implements Serializable {
 
     private GrupoFinanceiro grupoFinanceiroSelecionado;
     private List<GrupoFinanceiro> grupoFinanceiroLista;
@@ -25,7 +25,7 @@ public class SelecaoGrupoFinanceiroDespesaView implements Serializable {
 
     @PostConstruct
     public void init() {
-        grupoFinanceiroLista = service.buscarGruposDeDespesas();
+        grupoFinanceiroLista = service.buscarGruposDeReceitas();
     }
 
     public void abrirDialogo() {
@@ -36,7 +36,7 @@ public class SelecaoGrupoFinanceiroDespesaView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoGrupoFinanceiroDespesa", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoFinanceiroReceita", opcoes, null);
     }
 
     public void selecionar() {

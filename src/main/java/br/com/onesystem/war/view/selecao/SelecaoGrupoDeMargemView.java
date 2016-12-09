@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.GrupoDeMargem;
 import br.com.onesystem.war.service.GrupoDeMargemService;
@@ -36,7 +36,7 @@ public class SelecaoGrupoDeMargemView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoGrupoDeMargem", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoDeMargem", opcoes, null);
     }
 
     public void selecionar() {

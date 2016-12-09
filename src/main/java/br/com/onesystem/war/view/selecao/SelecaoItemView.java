@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.war.service.ItemService;
@@ -36,7 +36,7 @@ public class SelecaoItemView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoItem", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoItem", opcoes, null);
     }
 
     public void selecionar() {

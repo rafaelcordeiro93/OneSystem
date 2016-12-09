@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.war.service.GrupoPrivilegioService;
@@ -36,7 +36,7 @@ public class SelecaoGrupoDePrivilegioView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoGrupoPrivilegio", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoPrivilegio", opcoes, null);
     }
 
     public void selecionar() {

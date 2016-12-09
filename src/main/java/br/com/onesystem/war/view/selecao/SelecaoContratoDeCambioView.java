@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.ContratoDeCambio;
 import br.com.onesystem.war.service.ContratoDeCambioService;
@@ -36,7 +36,7 @@ public class SelecaoContratoDeCambioView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoContratoDeCambio", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoContratoDeCambio", opcoes, null);
     }
 
     public void selecionar() {

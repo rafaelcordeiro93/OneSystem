@@ -1,4 +1,4 @@
-package br.com.onesystem.war.view;
+package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.war.service.DespesaProvisionadaService;
@@ -14,7 +14,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoDespesaProvisionadaCambioView implements Serializable {
+public class SelecaoDespesaProvisionadaView implements Serializable {
 
     private DespesaProvisionada despesaProvisionadaSelecionada;
     private List<DespesaProvisionada> despesaProvisionadaLista;
@@ -25,7 +25,7 @@ public class SelecaoDespesaProvisionadaCambioView implements Serializable {
 
     @PostConstruct
     public void init() {
-        despesaProvisionadaLista = service.buscarDespesaProvisionadasAPagarDivisaoLucro();
+        despesaProvisionadaLista = service.buscarDespesaProvisionadasAPagar();
     }
 
     public void abrirDialogo() {
@@ -36,7 +36,7 @@ public class SelecaoDespesaProvisionadaCambioView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecaoDespesaProvisionadaCambio", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoDespesaProvisionada", opcoes, null);
     }
 
     public void selecionar() {
