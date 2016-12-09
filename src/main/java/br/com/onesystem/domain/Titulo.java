@@ -91,13 +91,16 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     @NotNull(message = "moeda_not_null")
     @ManyToOne(optional = false)
     private Moeda moeda;
+    
+    @ManyToOne
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
-    public Titulo() {
+        public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Date ultimoPagamento, Moeda moeda, NotaEmitida notaEmitida) throws DadoInvalidoException {
+            Cambio cambio, Date ultimoPagamento, Moeda moeda, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -111,6 +114,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         this.ultimoPagamento = ultimoPagamento;
         this.moeda = moeda;
         this.notaEmitida = notaEmitida;
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
         ehValido();
     }
 
@@ -221,6 +225,14 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         return moeda;
     }
 
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
+    }
+    
     public String getSaldoFormatado() {
         NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
         return numeroFormatado.format(getSaldo());

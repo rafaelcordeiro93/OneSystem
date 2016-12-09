@@ -1,6 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
@@ -29,6 +30,7 @@ public class TituloBV implements Serializable {
     private TipoFormaPagRec tipoFormaPagRec;
     private Moeda moeda;
     private NotaEmitida notaEmitida;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
     public TituloBV(Titulo tituloSelecionado) {
         this.id = tituloSelecionado.getId();
@@ -44,11 +46,12 @@ public class TituloBV implements Serializable {
         this.cambio = tituloSelecionado.getCambio();
         this.tipoFormaPagRec = tituloSelecionado.getTipoFormaPagRec();
         this.moeda = tituloSelecionado.getMoeda();
+        
     }
 
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, 
             Date vencimento, Date emissao, Date ultimoPagamento, OperacaoFinanceira unidadeFinanceira, 
-            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Moeda moeda) {
+            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Moeda moeda, ConhecimentoDeFrete conhecimentoDeFrete) {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -62,6 +65,17 @@ public class TituloBV implements Serializable {
         this.cambio = cambio;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.moeda = moeda;
+        this.conhecimentoDeFrete  = conhecimentoDeFrete;
+    }
+    
+      public TituloBV(ConhecimentoDeFrete conhecimento) {
+       
+        this.pessoa = conhecimento.getPessoa();
+        this.valor = conhecimento.getValorFrete();
+        this.conhecimentoDeFrete = conhecimento;
+        this.emissao = conhecimento.getEmissao();
+        this.moeda = conhecimento.getMoeda();
+        
     }
 
     public TituloBV() {
@@ -166,14 +180,32 @@ public class TituloBV implements Serializable {
     public Moeda getMoeda() {
         return moeda;
     }
+
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
+    }
+
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
+    }
+
+    public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+    }
+    
+    
     
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(null, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida);
+                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
     }
 
     public Titulo construirComID() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida);
+                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
     }
 }

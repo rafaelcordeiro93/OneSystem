@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
@@ -38,7 +39,8 @@ public class TituloBuilder {
     private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
     private Moeda moeda;
-
+private ConhecimentoDeFrete conhecimentoDeFrete;
+    
     public TituloBuilder comId(Long id) {
         this.id = id;
         return this;
@@ -111,7 +113,7 @@ public class TituloBuilder {
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida);
+                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
     }
 
 }
