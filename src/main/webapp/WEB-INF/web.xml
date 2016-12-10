@@ -25,7 +25,7 @@
     </context-param>
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
-        <param-value>Development</param-value>
+        <param-value>Product</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>

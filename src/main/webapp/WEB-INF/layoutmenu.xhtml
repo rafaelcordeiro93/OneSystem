@@ -22,6 +22,7 @@
                 <p:submenu label="#{l.Estoque}" icon="fa fa-table">              
                     <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
                     <p:menuitem value="#{l.Moeda}" icon="icon-attach_money" outcome="/moeda" /> 
+                    <p:menuitem value="#{l.Margem}" icon="icon-attach_money" outcome="/estoque/margem" /> 
                     <p:menuitem value="#{l.Cotacoes}" icon="icon-account_balance" outcome="/cotacao" />
                     <p:submenu label="#{l.Cadastros}" icon="icon-library_books">
                         <p:menuitem value="#{l.Unidade_Medida}" icon="icon-dns" outcome="/unidadeMedidaItem" />
@@ -30,9 +31,9 @@
                         <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
                         <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaPreco" />
                         <p:menuitem value="#{l.Grupo}" icon="icon-group_work" outcome="/grupo" />
-                        <p:menuitem value="#{l.Grupo_Fiscal}" icon="icon-group_work" outcome="/grupoFiscal" />
+                        <p:menuitem value="#{l.Grupo_Fiscal}" icon="icon-flip" outcome="/grupoFiscal" />
                     </p:submenu>
-                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="icon-group_work" outcome="/ajusteDeEstoque" />
+                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="icon-edit" outcome="/ajusteDeEstoque" />
                 </p:submenu>
                 
                 <p:submenu label="#{l.Financeiro}" icon="icon-attach_money">                    
