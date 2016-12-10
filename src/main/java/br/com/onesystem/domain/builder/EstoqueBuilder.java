@@ -46,14 +46,9 @@ public class EstoqueBuilder {
         return this;
     }
     
-     public EstoqueBuilder comEmissao(Date emissao) {
-        this.emissao = emissao;
-        return this;
-    }
-    
 
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, tipo, emissao);
+        return new Estoque(id, item, saldo, deposito, tipo);
     }
 
 }

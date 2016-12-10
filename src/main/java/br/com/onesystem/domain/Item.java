@@ -89,6 +89,10 @@ public class Item implements Serializable {
     public Item() {
     }
 
+    public Item(Long id) {
+        this.id = id;
+    }
+    
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo,

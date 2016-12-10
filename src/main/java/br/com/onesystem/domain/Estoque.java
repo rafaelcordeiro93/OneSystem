@@ -47,20 +47,20 @@ public class Estoque implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipoOperacao_not_null}")
     private OperacaoFisica tipo;
-     @NotNull(message = "{emissao_not_null}")
+    @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = new Date();   
+    private Date emissao = new Date();
+    @NotNull(message = "{ajusteDeEstoque_not_null}")
 
     public Estoque() {
     }
 
-    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito, OperacaoFisica tipo, Date emissao) throws DadoInvalidoException {
+    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito, OperacaoFisica tipo) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.saldo = saldo;
         this.deposito = deposito;
         this.tipo = tipo;
-        this.emissao = emissao;
         ehValido();
     }
 
@@ -110,6 +110,6 @@ public class Estoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", item=" + item + ", saldo=" + saldo + ", deposito=" + deposito + ", tipo=" + tipo + ", emissao=" + emissao + '}';
+        return "Estoque{" + "id=" + id + ", item=" + item + ", saldo=" + saldo + ", deposito=" + deposito + ", tipo=" + tipo + ", emissao=" + emissao + '}';
     }
 }

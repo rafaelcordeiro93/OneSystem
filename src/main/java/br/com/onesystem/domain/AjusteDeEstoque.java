@@ -9,15 +9,19 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,21 +54,25 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
-    @NotNull(message = "{tipoOperacao_not_null}")
+    @NotNull(message = "{operacaofisica_not_null}")
     @Enumerated(EnumType.STRING)
-    private OperacaoFisica tipo;
-
+    private OperacaoFisica operacao;
+    @NotNull(message = "{estoque_not_null}")
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private Estoque estoque;
+    
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica tipo) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica operacao, Estoque estoque ) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
         this.emissao = emissao;
-        this.tipo = tipo;
+        this.operacao = operacao;
+        this.estoque = estoque;
         ehValido();
     }
 
@@ -97,8 +105,12 @@ public class AjusteDeEstoque implements Serializable {
         return emissao;
     }
 
-    public OperacaoFisica getTipo() {
-        return tipo;
+    public OperacaoFisica getOperacao() {
+        return operacao;
+    }
+
+    public Estoque getEstoque() {
+        return estoque;
     }
 
     public String getDataFormatada() {
@@ -123,6 +135,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao + '}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +   ", operacao=" + operacao +  ", estoque=" + estoque +  '}';
     }
 }

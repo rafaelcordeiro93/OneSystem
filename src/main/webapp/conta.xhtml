@@ -17,39 +17,22 @@
 
                             <h2 class="BigTopic">#{l.Recepcao}</h2>
 
-                            <p:panel id="panelDT" visible="#{!contaView.panel}" style="border: none">
-                                <p:dataTable id="contaDT" var="conta" value="#{contaView.contaLista}" selectionMode="single" selection="#{contaView.contaSelecionada}" rowKey="#{conta.id}"
-                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{contaView.contasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
-                                    <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{contaView.abrirEdicao()}" title="Nuevo" update="conteudo"/>
-                                        #{l.Tabela_de_Contas}
-                                    </f:facet>
-
-                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{contaView.abrirEdicaoComDados()}" />
-
-                                    <p:column headerText="#{l.Id}" sortBy="#{conta.id}" filterBy="#{conta.id}" footerText="#{l.Id}" >                                        
-                                        <h:outputText value="#{conta.id}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Nome}" sortBy="#{conta.nome}" filterBy="#{conta.nome}" footerText="#{l.Nome}" >
-                                        <h:outputText value="#{conta.nome}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Banco}" sortBy="#{conta.banco.nome}" filterBy="#{conta.banco.nome}" footerText="#{l.Banco}" >
-                                        <h:outputText value="#{conta.banco.nome}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Moeda}" sortBy="#{conta.moeda.nome}" filterBy="#{conta.moeda.nome}" footerText="#{l.Moeda}" >
-                                        <h:outputText value="#{conta.moeda.nome}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:panel>
-
-                            <p:panel id="panelED" visible="#{contaView.panel}" style="border: none">
                                 <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
 
                                 <div class="Container100 Responsive100">
                                     <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <p:inputText value="#{contaView.conta.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
+                                        
+                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                            <p:inputText id="conta" readonly="true" placeholder="#{l.Id}" value="#{contaView.conta.id}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{contaView.selecionaConta}" update=":conteudo"
+                                                        process="@this"  />
+                                            </p:commandButton>
+                                        </h:panelGrid>     
+                                        
                                         <p:inputText value="#{contaView.conta.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                        
                                         <h:panelGrid columns="2" style="margin-top: -1%">
                                             <p:inputText id="contaBanco" value="#{contaView.conta.banco.nome}" readonly="true" placeholder="#{l.Banco}" maxlength="60" styleClass="Wid90"/>
                                             <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this"
@@ -58,6 +41,7 @@
                                                         process="@this" update="contaBanco" />
                                             </p:commandButton>
                                         </h:panelGrid>
+                                        
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="contaMoeda" readonly="true" placeholder="#{l.Moeda}" value="#{contaView.conta.moeda.nome}"/>
                                             <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
@@ -66,6 +50,7 @@
                                                         process="@this" update="contaMoeda" />
                                             </p:commandButton>
                                         </h:panelGrid>
+                                        
                                         <p:outputLabel/>
                                     </p:panelGrid>
                                 </div>
@@ -80,10 +65,7 @@
                                 <p:commandButton value="#{l.Limpar}" action="#{contaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                                 <p:commandButton value="#{l.Desfazer}" action="#{contaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
                                                  styleClass="OrangeButton" />
-                                <p:commandButton value="#{l.Voltar}" action="#{contaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
-                                                 immediate="true" styleClass="BrownButton" />
-                            </p:panel>   
-
+                              
                         </div>
                     </div>
                 </div>

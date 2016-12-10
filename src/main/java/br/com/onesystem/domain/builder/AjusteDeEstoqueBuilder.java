@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
@@ -21,7 +22,8 @@ public class AjusteDeEstoqueBuilder {
     private Item item;
     private Date emissao;
     private BigDecimal quantidade;
-    private OperacaoFisica tipo;
+    private OperacaoFisica operacao;
+    private Estoque estoque;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -53,13 +55,19 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
     
-    public AjusteDeEstoqueBuilder comEmissao(OperacaoFisica tipo){
-        this.tipo = tipo;
+      public AjusteDeEstoqueBuilder comOperacao(OperacaoFisica operacao){
+        this.operacao = operacao;
         return this;
     }
+      
+        public AjusteDeEstoqueBuilder comEstoque(Estoque estoque){
+        this.estoque = estoque;
+        return this;
+    }
+    
   
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,emissao, tipo);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,emissao,operacao, estoque);
     }
 
 }

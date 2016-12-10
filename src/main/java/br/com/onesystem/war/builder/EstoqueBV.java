@@ -84,11 +84,11 @@ public class EstoqueBV implements Serializable {
  
     public Estoque construir() throws DadoInvalidoException {
         return new EstoqueBuilder().comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).comEmissao(emissao).construir();
+                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
         return new EstoqueBuilder().comID(id).comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).comEmissao(emissao).construir();
+                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
     }
 }

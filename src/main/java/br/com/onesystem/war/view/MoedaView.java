@@ -38,7 +38,7 @@ public class MoedaView implements Serializable {
     public void add() {
         try {
             Moeda novoRegistro = moeda.construir();
-            if (!validaMoedaExistente(novoRegistro)) {
+            if (validaMoedaExistente(novoRegistro)) {
                 new AdicionaDAO<Moeda>().adiciona(novoRegistro);
                 InfoMessage.adicionado();
                 limparJanela();
