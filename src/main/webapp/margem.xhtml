@@ -16,28 +16,37 @@
                         <div class="ContainerIndent">                                  
                             <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
                             <div class="Container100 Responsive100">
-                                <div class="Container100 Responsive100">
+                                <div class="Container60 Responsive100">
                                     <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
                                         <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="margem" readonly="true" size="29" placeholder="#{l.Id}" value="#{grupoDeMargemView.grupoDeMargem.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMargemView.abrirDialogo()}" process="@this"
+                                            <p:inputText id="margem" readonly="true" size="13" placeholder="#{l.Id}" value="#{grupoDeMargemView.grupoDeMargem.id}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoDeMargemView.abrirDialogo()}" process="@this"
                                                              update="@none">
                                                 <p:ajax event="dialogReturn" listener="#{grupoDeMargemView.selecionaGrupoDeMargem}" update=":conteudo"
                                                         process="@this"  />
                                             </p:commandButton>
                                         </h:panelGrid>                                      
-                                        <p:inputText value="#{grupoDeMargemView.grupoDeMargem.nome}" placeholder="#{l.Nome}" size="35"
-                                                     />
-                                        <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.margem}" size="35"                                                
-                                                       decimalPlaces="3" symbolPosition="right" maxValue="100" minValue="0" placeholder="#{l.Margem}"/>
-                                        <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.custoFixo}" styleClass="Wid90" size="35"
-                                                        decimalPlaces="3" symbolPosition="right" maxValue="100" minValue="0" placeholder="#{l.Custo_Fixo}"/>
-                                                                                   <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.frete}" size="35" placeholder="#{l.Frete}"                                                      
-                                                        decimalPlaces="3" symbolPosition="right" maxValue="100" minValue="0"/>
-                                        <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.embalagem}" size="35" placeholder="#{l.Embalagem}"                                                        
-                                                        decimalPlaces="3" symbolPosition="right" maxValue="100" minValue="0"/>
-                                        <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.outrosCustos}" size="35" placeholder="#{l.Outros_Custos}"                                                      
-                                                        decimalPlaces="3" symbolPosition="right" maxValue="100" minValue="0"/>                                            
+                                        <p:inputText value="#{grupoDeMargemView.grupoDeMargem.nome}" placeholder="#{l.Nome}"            />
+                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.margem}" 
+                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Margem}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.custoFixo}" styleClass="Wid90"
+                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Custo_Fixo}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.frete}"                                            
+                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Frete}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.embalagem}"                                                  
+                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Embalagem}"/>
+                                        </pe:inputNumber>
+                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.outrosCustos}"                                                      
+                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Outros_Custos}"/>
+                                        </pe:inputNumber>                                            
                                     </p:panelGrid>
                                 </div>
                             </div>

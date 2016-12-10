@@ -18,7 +18,7 @@ public class SelecaoGrupoDeMargemView implements Serializable {
 
     private GrupoDeMargem grupoDeMargemSelecionada;
     private List<GrupoDeMargem> grupoDeMargemLista;
-    private List<GrupoDeMargem> grupoDeMargemFiltradas;
+    private List<GrupoDeMargem> grupoDeMargemsFiltradas;
 
     @ManagedProperty("#{grupoDeMargemService}")
     private GrupoDeMargemService service;
@@ -33,7 +33,7 @@ public class SelecaoGrupoDeMargemView implements Serializable {
         opcoes.put("modal", true);
         opcoes.put("resizable", false);
         opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", false);
+        opcoes.put("draggable", true);
         opcoes.put("contentHeight", 500);
 
         RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoDeMargem", opcoes, null);
@@ -59,12 +59,12 @@ public class SelecaoGrupoDeMargemView implements Serializable {
         this.grupoDeMargemLista = grupoDeMargemLista;
     }
 
-    public List<GrupoDeMargem> getGrupoDeMargemFiltradas() {
-        return grupoDeMargemFiltradas;
+    public List<GrupoDeMargem> getGrupoDeMargemsFiltradas() {
+        return grupoDeMargemsFiltradas;
     }
 
     public void setGrupoDeMargemsFiltradas(List<GrupoDeMargem> grupoDeMargemsFiltradas) {
-        this.grupoDeMargemFiltradas = grupoDeMargemsFiltradas;
+        this.grupoDeMargemsFiltradas = grupoDeMargemsFiltradas;
     }
 
     public GrupoDeMargemService getService() {

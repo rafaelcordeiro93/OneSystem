@@ -12,7 +12,7 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>#{l.Selecao_De_Grupo_Margem}</title>
+        <title>#{l.Selecao_De_Grupo_De_Margem}</title>
         <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
         <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
         <h:outputScript name="js/layout.js" library="modena-layout" />
@@ -24,12 +24,12 @@
     <h:body>
         <f:loadBundle basename="label_messages" var="l"/>
         <h:form>
-            <p:dataTable id="grupoDeMargemDT" var="grupoDeMargem" value="#{selecaoGrupoDeMargemView.grupoDeMargemLista}" selectionMode="single" selection="#{selecaoGrupoDeMargemView.grupoDeMargemSelecionada}" rowKey="#{grupoDeMargem.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoGrupoDeMargemView.grupoDeMargemFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
-
-                <p:ajax event="rowSelect" process="@this" listener="#{selecaoGrupoDeMargemView.selecionar()}" />
-
+            <p:dataTable id="grupoDT" var="grupoDeMargem" value="#{selecaoGrupoDeMargemView.grupoDeMargemLista}" selectionMode="single" selection="#{selecaoGrupoDeMargemView.grupoDeMargemSelecionada}" rowKey="#{grupoDeMargem.id}"
+                         rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15" filteredValue="#{selecaoGrupoDeMargemView.grupoDeMargemsFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
+                
+                 <p:ajax event="rowSelect" process="@this" listener="#{selecaoGrupoDeMargemView.selecionar()}" />
+                
                 <p:column headerText="#{l.Id}" sortBy="#{grupoDeMargem.id}" filterBy="#{grupoDeMargem.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                     <h:outputText value="#{grupoDeMargem.id}" />
                 </p:column>
@@ -42,7 +42,7 @@
                 <p:column headerText="#{l.Custo_Fixo}" sortBy="#{grupoDeMargem.custoFixo}" filterBy="#{grupoDeMargem.custoFixo}" footerText="#{l.Custo_Fixo}" filterMatchMode="contains">
                     <h:outputText value="#{grupoDeMargem.custoFixo}" />
                 </p:column>
-            </p:dataTable>
+            </p:dataTable>           
         </h:form>
     </h:body>
 
