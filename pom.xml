@@ -36,6 +36,11 @@
             <artifactId>primefaces-extensions</artifactId>
             <version>2.1.0</version>
         </dependency>
+        <dependency>  
+            <groupId>org.primefaces</groupId>  
+            <artifactId>primefaces</artifactId>  
+            <version>5.3</version>  
+        </dependency>  
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -47,11 +52,6 @@
             <artifactId>surefire-junit47</artifactId>
             <version>2.17</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>  
-            <groupId>org.primefaces</groupId>  
-            <artifactId>primefaces</artifactId>  
-            <version>6.0</version>  
         </dependency> 
         <dependency>
             <groupId>commons-io</groupId>

@@ -33,7 +33,7 @@ public class SelecaoPessoaView implements Serializable {
         opcoes.put("modal", true);
         opcoes.put("resizable", false);
         opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", false);
+        opcoes.put("draggable", true);
         opcoes.put("contentHeight", 500);
 
         RequestContext.getCurrentInstance().openDialog("selecao/selecaoPessoa", opcoes, null);
