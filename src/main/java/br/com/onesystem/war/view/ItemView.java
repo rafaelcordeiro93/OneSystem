@@ -59,9 +59,8 @@ public class ItemView implements Serializable {
 
     @PostConstruct
     public void init() {
-        limparJanela();
+        limparJanela();        
         inicializarConfiguracoes();
-
     }
 
     private void inicializarConfiguracoes() {
@@ -143,6 +142,7 @@ public class ItemView implements Serializable {
 
     public void selecionaItem(SelectEvent event) {
         itemSelecionada = (Item) event.getObject();
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada);
         item = new ItemBV(itemSelecionada);
     }
 
