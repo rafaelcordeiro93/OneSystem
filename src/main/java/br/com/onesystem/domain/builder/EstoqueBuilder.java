@@ -19,7 +19,7 @@ public class EstoqueBuilder {
     private Deposito deposito;
     private Item item;
     private BigDecimal saldo;
-    private OperacaoFisica tipo;
+    private OperacaoFisica operacaoFisica;
     private Date emissao = new Date();
 
     public EstoqueBuilder comID(Long ID) {
@@ -41,14 +41,18 @@ public class EstoqueBuilder {
         this.saldo = saldo;
         return this;
     }
-    public EstoqueBuilder comTipo(OperacaoFisica tipo) {
-        this.tipo = tipo;
+    public EstoqueBuilder comOperacaoFisica(OperacaoFisica operacaoFisica) {
+        this.operacaoFisica = operacaoFisica;
         return this;
     }
     
-
+    public EstoqueBuilder comEmissao(Date emissao){
+        this.emissao = emissao;
+        return this;
+    }
+    
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, tipo);
+        return new Estoque(id, item, saldo, deposito, emissao, operacaoFisica);
     }
 
 }

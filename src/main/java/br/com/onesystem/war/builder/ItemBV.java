@@ -21,7 +21,6 @@ public class ItemBV implements Serializable {
     private boolean ativo = true;
     private UnidadeMedidaItem unidadeMedida;
     private TipoItem tipoItem;
-    private BigDecimal saldo = BigDecimal.ZERO;
     private String ncm;
     private Marca marca;
     private GrupoFiscal grupoFiscal;
@@ -42,7 +41,6 @@ public class ItemBV implements Serializable {
         this.grupoFiscal = itemSelecionado.getGrupoFiscal();
         this.marca = itemSelecionado.getMarca();
         this.ncm = itemSelecionado.getNcm();
-        this.saldo = itemSelecionado.getSaldo();
         this.tipoItem = itemSelecionado.getTipoItem();
         this.unidadeMedida = itemSelecionado.getUnidadeDeMedida();
         this.ativo = itemSelecionado.isAtivo();
@@ -88,6 +86,14 @@ public class ItemBV implements Serializable {
         return estoqueMaximo;
     }
 
+    public GrupoDeMargem getMargem() {
+        return margem;
+    }
+
+    public void setMargem(GrupoDeMargem margem) {
+        this.margem = margem;
+    }
+
     public void setEstoqueMaximo(BigDecimal estoqueMaximo) {
         this.estoqueMaximo = estoqueMaximo;
     }
@@ -114,14 +120,6 @@ public class ItemBV implements Serializable {
 
     public void setTipoItem(TipoItem tipoItem) {
         this.tipoItem = tipoItem;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
     }
 
     public String getNcm() {
@@ -173,10 +171,10 @@ public class ItemBV implements Serializable {
     }
 
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo, margem);
+        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem);
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, saldo, margem);
+        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem);
     }
 }

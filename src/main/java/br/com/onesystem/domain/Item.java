@@ -5,6 +5,7 @@ import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.war.service.EstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -66,17 +67,12 @@ public class Item implements Serializable {
     private Marca marca;
     @ManyToOne(optional = true)
     private Grupo grupo;
-    @NotNull(message = "{estoqueMinimo_not_null}")
     @Min(value = 0, message = "{estoqueMinimo_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal estoqueMinimo;
-    @NotNull(message = "{estoqueMaximo_not_null}")
     @Min(value = 0, message = "{estoqueMaximo_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal estoqueMaximo;
-    @NotNull(message = "{saldo_not_null}")
-    @Column(nullable = false)
-    private BigDecimal saldo;
     @OneToMany(mappedBy = "item")
     private List<AjusteDeEstoque> listaDeAjustes;
     @OneToMany(mappedBy = "item")
@@ -89,13 +85,9 @@ public class Item implements Serializable {
     public Item() {
     }
 
-    public Item(Long id) {
-        this.id = id;
-    }
-    
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
-            Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo, BigDecimal saldo,
+            Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo,
             GrupoDeMargem margem) throws DadoInvalidoException {
         this.id = id;
         this.barras = barras;
@@ -111,7 +103,6 @@ public class Item implements Serializable {
         this.grupo = grupo;
         this.estoqueMinimo = estoqueMinimo;
         this.estoqueMaximo = estoqueMaximo;
-        this.saldo = saldo;
         this.margem = margem;
         ehValido();
     }
@@ -198,12 +189,12 @@ public class Item implements Serializable {
     }
 
     public BigDecimal getSaldo() {
-        return saldo;
+        return new EstoqueService().buscaSaldoTotalDeEstoque(this);
     }
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", saldo=" + saldo + ", precos=" + precos + '}';
+        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", precos=" + precos + '}';
     }
 
 }

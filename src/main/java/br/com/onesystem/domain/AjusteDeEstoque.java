@@ -44,9 +44,8 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{item_not_null}")
     @ManyToOne
     private Item item;
-    @NotNull(message = "{quantidade_not_null}")
     @Min(value = 0, message = "{quantidade_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal quantidade;
     @NotNull(message = "{deposito_not_null}")
     @ManyToOne
@@ -54,30 +53,35 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
-    @NotNull(message = "{operacaofisica_not_null}")
+    @NotNull(message = "{operacao_fisica_not_null}")
     @Enumerated(EnumType.STRING)
-    private OperacaoFisica operacao;
-    @NotNull(message = "{estoque_not_null}")
+    private OperacaoFisica operacaoFisica;
+    @Min(value = 0, message = "{quantidade_min}")
+    @Column(nullable = true)
+    private BigDecimal custo;    
     @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Estoque estoque;
     
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, Deposito deposito, Date emissao, OperacaoFisica operacao, Estoque estoque ) throws DadoInvalidoException {
+    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, 
+            Deposito deposito, Date emissao, OperacaoFisica operacaoFisica, Estoque estoque,
+            BigDecimal custo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
         this.emissao = emissao;
-        this.operacao = operacao;
+        this.operacaoFisica = operacaoFisica;
         this.estoque = estoque;
+        this.custo = custo;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "observacao");
+        List<String> campos = Arrays.asList("item", "emissao", "quantidade", "deposito", "observacao", "custo", "operacaoFisica");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 
@@ -105,14 +109,18 @@ public class AjusteDeEstoque implements Serializable {
         return emissao;
     }
 
-    public OperacaoFisica getOperacao() {
-        return operacao;
+    public OperacaoFisica getOperacaoFisica() {
+        return operacaoFisica;
     }
 
     public Estoque getEstoque() {
         return estoque;
     }
 
+    public BigDecimal getCusto() {
+        return custo;
+    }
+    
     public String getDataFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
@@ -135,6 +143,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +   ", operacao=" + operacao +  ", estoque=" + estoque +  '}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +   ", operacao=" + operacaoFisica +  ", estoque=" + estoque +  '}';
     }
 }

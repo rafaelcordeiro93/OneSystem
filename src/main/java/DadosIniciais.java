@@ -2,9 +2,12 @@
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.GrupoFinanceiro;
+import br.com.onesystem.domain.GrupoFiscal;
+import br.com.onesystem.domain.IVA;
 import br.com.onesystem.domain.Janela;
 import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Moeda;
@@ -12,11 +15,13 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.TipoPessoa;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -158,7 +163,6 @@ public class DadosIniciais {
 
 //        Usuario usuario = new Usuario(null, pessoa, "rafa@gmail.com", "e10adc3949ba59abbe56e057f20f883e", grupoDePrivilegio, true);
 //        new AdicionaDAO<Usuario>().adiciona(usuario);
-
         // -- Adiciona Grupo Financeiro
         AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
 
@@ -426,6 +430,25 @@ public class DadosIniciais {
         Conta conta = new Conta(null, "C/C 1222", banco, real);
         new AdicionaDAO<Conta>().adiciona(conta);
 
+        // Unidade De Medida Item
+        // ---------------------------------------------------------------------
+        UnidadeMedidaItem unidade = new UnidadeMedidaItem(null, "Unidade", "UN", 0);
+        new AdicionaDAO<UnidadeMedidaItem>().adiciona(unidade);
+
+        // IVA
+        // ---------------------------------------------------------------------
+        IVA iva = new IVA(null, new BigDecimal(10), "IVA 10%");
+        new AdicionaDAO<IVA>().adiciona(iva);
+        
+        // Grupo Fiscal
+        // ---------------------------------------------------------------------
+        GrupoFiscal grupoFiscal = new GrupoFiscal(null, "IVA 10%", iva);
+        new AdicionaDAO<GrupoFiscal>().adiciona(grupoFiscal);
+        
+        // Deposito
+        // ---------------------------------------------------------------------
+        Deposito deposito = new Deposito(null, "Depósito Exemplo");
+        new AdicionaDAO<Deposito>().adiciona(deposito);
     }
 
 }

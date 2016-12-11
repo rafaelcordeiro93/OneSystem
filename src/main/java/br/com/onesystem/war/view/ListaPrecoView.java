@@ -7,7 +7,7 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ListaPrecoBV;
-import br.com.onesystem.war.service.ListaPrecoService;
+import br.com.onesystem.war.service.ListaDePrecoService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.io.Serializable;
@@ -28,8 +28,8 @@ public class ListaPrecoView implements Serializable {
     private List<ListaDePreco> listaPrecoLista;
     private List<ListaDePreco> listaPrecosFiltradas;
 
-    @ManagedProperty("#{listaPrecoService}")
-    private ListaPrecoService service;
+    @ManagedProperty("#{listaDePrecoService}")
+    private ListaDePrecoService service;
 
     @PostConstruct
     public void init() {
@@ -170,11 +170,11 @@ public class ListaPrecoView implements Serializable {
         this.panel = panel;
     }
 
-    public ListaPrecoService getService() {
+    public ListaDePrecoService getService() {
         return service;
     }
 
-    public void setService(ListaPrecoService service) {
+    public void setService(ListaDePrecoService service) {
         this.service = service;
     }
 

@@ -35,10 +35,6 @@ public class Deposito implements Serializable {
 
     public Deposito() {
     }
-
-    public Deposito(Long id) {
-        this.id = id;
-    }
     
     public Deposito(Long id, String deposito) throws DadoInvalidoException {
         this.id = id;

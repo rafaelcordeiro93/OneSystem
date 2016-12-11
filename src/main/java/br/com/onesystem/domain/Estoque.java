@@ -45,27 +45,28 @@ public class Estoque implements Serializable {
     @Column(nullable = false)
     private BigDecimal saldo;
     @Enumerated(EnumType.STRING)
-    @NotNull(message = "{tipoOperacao_not_null}")
-    private OperacaoFisica tipo;
+    @NotNull(message = "{operacao_fisica_not_null}")
+    private OperacaoFisica operacaoFisica;
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
-    @NotNull(message = "{ajusteDeEstoque_not_null}")
 
     public Estoque() {
     }
 
-    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito, OperacaoFisica tipo) throws DadoInvalidoException {
+    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito, 
+            Date emissao, OperacaoFisica tipo) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.saldo = saldo;
         this.deposito = deposito;
-        this.tipo = tipo;
+        this.operacaoFisica = tipo;
+        this.emissao = emissao;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "saldo", "deposito");
+        List<String> campos = Arrays.asList("item", "saldo", "deposito", "operacaoFisica", "emissao");
         new ValidadorDeCampos<Estoque>().valida(this, campos);
     }
 
@@ -85,8 +86,8 @@ public class Estoque implements Serializable {
         return deposito;
     }
 
-    public OperacaoFisica getTipo() {
-        return tipo;
+    public OperacaoFisica getOperacaoFisica() {
+        return operacaoFisica;
     }
 
     public Date getEmissao() {
@@ -110,6 +111,6 @@ public class Estoque implements Serializable {
 
     @Override
     public String toString() {
-        return "Estoque{" + "id=" + id + ", item=" + item + ", saldo=" + saldo + ", deposito=" + deposito + ", tipo=" + tipo + ", emissao=" + emissao + '}';
+        return "Estoque{" + "id=" + id + ", item=" + item + ", deposito=" + deposito + ", saldo=" + saldo + ", operacaoFisica=" + operacaoFisica + ", emissao=" + emissao + '}';
     }
 }

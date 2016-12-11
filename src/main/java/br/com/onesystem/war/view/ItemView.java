@@ -3,10 +3,14 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Grupo;
+import br.com.onesystem.domain.GrupoDeMargem;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Marca;
+import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -20,6 +24,9 @@ import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.PrecoDeItemBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,31 +45,14 @@ public class ItemView implements Serializable {
 
     private ItemBV item;
     private Item itemSelecionada;
-    private List<Item> itemLista;
-    private List<Item> itemsFiltradas;
-    private Grupo grupoSelecionado;
-    private List<Grupo> grupoLista;
-    private List<Grupo> gruposFiltrados;
-    private Marca marcaSelecionada;
-    private List<Marca> marcaLista;
-    private List<Marca> marcasFiltradas;
-    private UnidadeMedidaItem unidadeMedidaSelecionada;
-    private List<UnidadeMedidaItem> unidadeMedidaLista;
-    private List<UnidadeMedidaItem> unidadeMedidaFiltradas;
+    private PrecoDeItemBV precoDeItemBV;
+    private boolean precoPorMargem = true;
+    private Configuracao configuracao;
     private List<SaldoDeEstoque> estoqueLista;
     private BigDecimal estoqueTotal;
 
-    @ManagedProperty("#{itemService}")
-    private ItemService service;
-
-    @ManagedProperty("#{grupoService}")
-    private GrupoService serviceGrupo;
-
-    @ManagedProperty("#{marcaService}")
-    private MarcaService serviceMarca;
-
-    @ManagedProperty("#{unidadeMedidaItemService}")
-    private UnidadeMedidaItemService serviceUnMedida;
+    @ManagedProperty("#{configuracaoService}")
+    private ConfiguracaoService serviceConfigurcao;
 
     @ManagedProperty("#{estoqueService}")
     private EstoqueService serviceEstoque;
@@ -70,24 +60,38 @@ public class ItemView implements Serializable {
     @PostConstruct
     public void init() {
         limparJanela();
-        itemLista = service.buscarItems();
-        grupoLista = serviceGrupo.buscarGrupos();
-        marcaLista = serviceMarca.buscarMarcas();
-        unidadeMedidaLista = serviceUnMedida.buscarUnidadeMedidaItens();
+        inicializarConfiguracoes();
 
+    }
+
+    private void inicializarConfiguracoes() {
+        try {
+            configuracao = serviceConfigurcao.buscar();
+            if (configuracao.getMoedaPadrao() == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+            }
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void add() {
         try {
             Item novoRegistro = item.construir();
-            if (!validaItemExistente(novoRegistro)) {
-                new AdicionaDAO<Item>().adiciona(novoRegistro);
-                itemLista.add(novoRegistro);
-                InfoMessage.print("¡Item '" + novoRegistro.getNome() + "' agregado con éxito!");
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("¡Ya existe el item!");
-            }
+            new AdicionaDAO<Item>().adiciona(novoRegistro);
+            InfoMessage.adicionado();
+            limparJanela();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void addPreco() {
+        try {
+            PrecoDeItem novoRegistro = precoDeItemBV.construir();
+            new AdicionaDAO<PrecoDeItem>().adiciona(novoRegistro);
+            InfoMessage.adicionado();
+            limparJanelaPreco();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -95,22 +99,13 @@ public class ItemView implements Serializable {
 
     public void update() {
         try {
-            Item itemExistente = item.construirComID();
-            if (itemExistente.getId() != null) {
-                if (!validaItemExistente(itemExistente)) {
-                    new AtualizaDAO<Item>(Item.class).atualiza(itemExistente);
-                    itemLista.set(itemLista.indexOf(itemExistente),
-                            itemExistente);
-                    if (itemsFiltradas != null && itemsFiltradas.contains(itemExistente)) {
-                        itemsFiltradas.set(itemsFiltradas.indexOf(itemExistente), itemExistente);
-                    }
-                    InfoMessage.print("¡Item '" + itemExistente.getNome() + "' cambiado con éxito!");
-                    limparJanela();
-                } else {
-                    throw new EDadoInvalidoException("¡Ya existe el item!");
-                }
+            if (itemSelecionada != null) {
+                Item itemExistente = item.construirComID();
+                new AtualizaDAO<Item>(Item.class).atualiza(itemExistente);
+                InfoMessage.atualizado();
+                limparJanela();
             } else {
-                throw new EDadoInvalidoException("!El item no se encontra registrada!");
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -119,13 +114,9 @@ public class ItemView implements Serializable {
 
     public void delete() {
         try {
-            if (itemLista != null && itemLista.contains(itemSelecionada)) {
+            if (itemSelecionada != null) {
                 new RemoveDAO<Item>(Item.class).remove(itemSelecionada, itemSelecionada.getId());
-                itemLista.remove(itemSelecionada);
-                if (itemsFiltradas != null && itemsFiltradas.contains(itemSelecionada)) {
-                    itemsFiltradas.remove(itemSelecionada);
-                }
-                InfoMessage.print("Item '" + this.item.getNome() + "' eliminado con éxito!");
+                InfoMessage.removido();
                 limparJanela();
             }
         } catch (DadoInvalidoException di) {
@@ -135,23 +126,19 @@ public class ItemView implements Serializable {
         }
     }
 
-    private boolean validaItemExistente(Item novoRegistro) {
-        for (Item novaItem : itemLista) {
-            if (novoRegistro.getNome().equals(novaItem.getNome())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public List<TipoItem> getTipoItem() {
         return Arrays.asList(TipoItem.values());
     }
 
     public void limparJanela() {
         item = new ItemBV();
-        itemSelecionada = new Item();
+        itemSelecionada = null;
         estoqueLista = new ArrayList<SaldoDeEstoque>();
+        limparJanelaPreco();
+    }
+
+    public void limparJanelaPreco() {
+        precoDeItemBV = new PrecoDeItemBV();
     }
 
     public void selecionaItem(SelectEvent event) {
@@ -159,8 +146,18 @@ public class ItemView implements Serializable {
         item = new ItemBV(itemSelecionada);
     }
 
+    public void selecionaListaDePreco(SelectEvent event) {
+        ListaDePreco listaDePreco = (ListaDePreco) event.getObject();
+        precoDeItemBV.setListaDePreco(listaDePreco);
+    }
+
+    public void selecionaMargem(SelectEvent event) {
+        GrupoDeMargem g = (GrupoDeMargem) event.getObject();
+        item.setMargem(g);    
+    }
+
     private void carregaEstoque() {
-        estoqueLista = new EstoqueService().buscaSaldoDeEstoque(itemSelecionada);
+        estoqueLista = new EstoqueService().buscaListaDeSaldoDeEstoque(itemSelecionada);
     }
 
     public void desfazer() {
@@ -174,16 +171,16 @@ public class ItemView implements Serializable {
         item.setGrupoFiscal(grupo);
     }
 
-    public void selecionaGrupo() {
-        item.setGrupo(grupoSelecionado);
+    public void selecionaGrupo(SelectEvent e) {
+        item.setGrupo((Grupo) e.getObject());
     }
 
-    public void selecionaMarca() {
-        item.setMarca(marcaSelecionada);
+    public void selecionaMarca(SelectEvent e) {
+        item.setMarca((Marca) e.getObject());
     }
 
-    public void selecionaUnidadeMedida() {
-        item.setUnidadeMedida(unidadeMedidaSelecionada);
+    public void selecionaUnidadeMedida(SelectEvent e) {
+        item.setUnidadeMedida((UnidadeMedidaItem) e.getObject());
     }
 
     public ItemBV getItem() {
@@ -202,125 +199,12 @@ public class ItemView implements Serializable {
         this.itemSelecionada = itemSelecionada;
     }
 
-    public List<Item> getItemLista() {
-        return itemLista;
+    public PrecoDeItemBV getPrecoDeItemBV() {
+        return precoDeItemBV;
     }
 
-    public void setItemLista(List<Item> itemLista) {
-        this.itemLista = itemLista;
-    }
-
-    public List<Item> getItemsFiltradas() {
-        return itemsFiltradas;
-    }
-
-    public void setItemsFiltradas(List<Item> itemsFiltradas) {
-        this.itemsFiltradas = itemsFiltradas;
-    }
-
-    public Grupo getGrupoSelecionado() {
-        return grupoSelecionado;
-    }
-
-    public void setGrupoSelecionado(Grupo grupoSelecionado) {
-        this.grupoSelecionado = grupoSelecionado;
-    }
-
-    public List<Grupo> getGrupoLista() {
-        return grupoLista;
-    }
-
-    public void setGrupoLista(List<Grupo> grupoLista) {
-        this.grupoLista = grupoLista;
-    }
-
-    public List<Grupo> getGruposFiltrados() {
-        return gruposFiltrados;
-    }
-
-    public void setGruposFiltrados(List<Grupo> gruposFiltrados) {
-        this.gruposFiltrados = gruposFiltrados;
-    }
-
-    public Marca getMarcaSelecionada() {
-        return marcaSelecionada;
-    }
-
-    public void setMarcaSelecionada(Marca marcaSelecionada) {
-        this.marcaSelecionada = marcaSelecionada;
-    }
-
-    public List<Marca> getMarcaLista() {
-        return marcaLista;
-    }
-
-    public void setMarcaLista(List<Marca> marcaLista) {
-        this.marcaLista = marcaLista;
-    }
-
-    public List<Marca> getMarcasFiltradas() {
-        return marcasFiltradas;
-    }
-
-    public void setMarcasFiltradas(List<Marca> marcasFiltradas) {
-        this.marcasFiltradas = marcasFiltradas;
-    }
-
-    public UnidadeMedidaItem getUnidadeMedidaSelecionada() {
-        return unidadeMedidaSelecionada;
-    }
-
-    public void setUnidadeMedidaSelecionada(UnidadeMedidaItem unidadeMedidaSelecionada) {
-        this.unidadeMedidaSelecionada = unidadeMedidaSelecionada;
-    }
-
-    public List<UnidadeMedidaItem> getUnidadeMedidaLista() {
-        return unidadeMedidaLista;
-    }
-
-    public void setUnidadeMedidaLista(List<UnidadeMedidaItem> unidadeMedidaLista) {
-        this.unidadeMedidaLista = unidadeMedidaLista;
-    }
-
-    public List<UnidadeMedidaItem> getUnidadeMedidaFiltradas() {
-        return unidadeMedidaFiltradas;
-    }
-
-    public void setUnidadeMedidaFiltradas(List<UnidadeMedidaItem> unidadeMedidaFiltradas) {
-        this.unidadeMedidaFiltradas = unidadeMedidaFiltradas;
-    }
-
-    public ItemService getService() {
-        return service;
-    }
-
-    public void setService(ItemService service) {
-        this.service = service;
-    }
-
-    public GrupoService getServiceGrupo() {
-        return serviceGrupo;
-    }
-
-    public void setServiceGrupo(GrupoService serviceGrupo) {
-        this.serviceGrupo = serviceGrupo;
-    }
-
-    public MarcaService getServiceMarca() {
-        return serviceMarca;
-    }
-
-    public void setServiceMarca(MarcaService serviceMarca) {
-        this.serviceMarca = serviceMarca;
-    }
-
-    public UnidadeMedidaItemService getServiceUnMedida() {
-        return serviceUnMedida;
-    }
-
-    public void setServiceUnMedida(UnidadeMedidaItemService serviceUnMedida) {
-        this.serviceUnMedida = serviceUnMedida;
-
+    public void setPrecoDeItemBV(PrecoDeItemBV precoDeItemBV) {
+        this.precoDeItemBV = precoDeItemBV;
     }
 
     public List<SaldoDeEstoque> getEstoqueLista() {
@@ -343,8 +227,32 @@ public class ItemView implements Serializable {
         return serviceEstoque;
     }
 
+    public boolean isPrecoPorMargem() {
+        return precoPorMargem;
+    }
+
+    public void setPrecoPorMargem(boolean precoPorMargem) {
+        this.precoPorMargem = precoPorMargem;
+    }
+
     public void setServiceEstoque(EstoqueService serviceEstoque) {
         this.serviceEstoque = serviceEstoque;
+    }
+
+    public Configuracao getConfiguracao() {
+        return configuracao;
+    }
+
+    public void setConfiguracao(Configuracao configuracao) {
+        this.configuracao = configuracao;
+    }
+
+    public ConfiguracaoService getServiceConfigurcao() {
+        return serviceConfigurcao;
+    }
+
+    public void setServiceConfigurcao(ConfiguracaoService serviceConfigurcao) {
+        this.serviceConfigurcao = serviceConfigurcao;
     }
 
 }

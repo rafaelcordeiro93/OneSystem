@@ -201,6 +201,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container50{ width:50%; float:left;}
 .Container45{ width:45%; float:left;}
 .Container40{ width:40%; float:left;}
+.Container35{ width:35%; float:left;}
 .Container33{ width:33.3%; float:left;}
 .Container30{ width:30%; float:left;}
 .Container25{ width:25%; float:left;}
@@ -212,7 +213,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .ContainerIndent{display:block; margin:0px auto; padding:10px;}
 
 /* Text Aligns */
-.TexAlCenter{ text-align:center;}
+.TexAlCenter{ text-align:center !important;}
 .TexAlLeft{ text-align:left;}
 .TexAlRight{ text-align:right !important;}
 

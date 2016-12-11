@@ -29,8 +29,8 @@
                                             </p:commandButton>
                                         </h:panelGrid>     
 
-                                        <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" disabled="true" value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
-                                        
+                                        <p:calendar pattern="dd/MM/yyyy" mask="99/99/9999" styleClass="Wid90" value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
+
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="itemAjuste" readonly="true" placeholder="#{l.Item}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item.nome}"/> 
                                             <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
@@ -40,26 +40,32 @@
                                             </p:commandButton>
                                         </h:panelGrid>  
 
+                                        <pe:inputNumber symbol="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.casasDecimais}" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Quantidade}"/>
+                                        </pe:inputNumber>
+
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="depositoAjuste" readonly="true" placeholder="#{l.Deposito}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.deposito.nome}"/> 
                                             <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDepositoView.abrirDialogo()}" process="@this"
                                                               update="@none">
                                                 <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaDeposito}"
-                                                        process="@this" update="conteudo" />
+                                                        process="@this" update="depositoAjuste" />
                                             </p:commandButton>
                                         </h:panelGrid>
 
-                                        <pe:inputNumber symbol="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.casasDecimais}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Quantidade}"/>
+                                        <pe:inputNumber symbol="#{ajusteDeEstoqueView.configuracao.moedaPadrao.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.custo}" decimalPlaces="2" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Custo}"/>
                                         </pe:inputNumber>
-                                        
-                                        <p:selectOneMenu value="#{ajusteDeEstoqueView.ajusteDeEstoque.operacao}" styleClass="Wid90">
-                                            <f:selectItems value="#{ajusteDeEstoqueView.operacao}" var="#{l.Operacao}" itemLabel="#{OperacaoFisica.operacao}" itemValue="#{OperacaoFisica}" />
-                                          </p:selectOneMenu>
 
-                                        <p:inputTextarea autoResize="true" placeholder="#{l.Observacao}" rows="2" cols="40"
+                                        <p:inputTextarea autoResize="true" placeholder="#{l.Observacao}" rows="2" cols="36"
                                                          maxlength="200" value="#{ajusteDeEstoqueView.ajusteDeEstoque.observacao}">
                                         </p:inputTextarea>
+
+                                        <p:selectOneMenu id="ajusteDeEstoqueOperacaoFisica" value="#{ajusteDeEstoqueView.ajusteDeEstoque.operacaoFisica}" styleClass="Wid40">
+                                            <f:selectItems value="#{ajusteDeEstoqueView.operacao}" var="#{l.Operacao}" itemLabel="#{OperacaoFisica}" itemValue="#{OperacaoFisica}" >
+                                                
+                                            </f:selectItems>
+                                        </p:selectOneMenu>
                                     </p:panelGrid>
                                 </div>
                             </div>
