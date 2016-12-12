@@ -217,7 +217,11 @@ public class FormaDeRecebimento implements Serializable {
 
     @Override
     public String toString() {
-        return "FormaDeRecebimento{" + "id=" + id + ", nome=" + nome + ", ativo=" + ativo + ", entrada=" + entrada + ", porcentagemDeEntrada=" + porcentagemDeEntrada + ", formaPadraoDeEntrada=" + formaPadraoDeEntrada + ", entradaEmCartao=" + entradaEmCartao + ", entradaEmDinheiro=" + entradaEmDinheiro + ", entradaEmCheque=" + entradaEmCheque + ", entradaEmCredito=" + entradaEmCredito + ", parcelaEmCheque=" + parcelaEmCheque + ", parcelaEmCartao=" + parcelaEmCartao + ", parcelaEmConta=" + parcelaEmConta + ", minimoDeParcelas=" + minimoDeParcelas + ", maximoDeParcelas=" + maximoDeParcelas + ", periodicidade=" + periodicidade + ", tipoPeriodicidade=" + tipoPeriodicidade + ", diasPrimeiraParcela=" + diasPrimeiraParcela + '}';
+        return "FormaDeRecebimento{" + "id=" + id + ", nome=" + nome + ", ativo=" + ativo + ", entrada=" + entrada + ", porcentagemDeEntrada=" + porcentagemDeEntrada + 
+                ", formaPadraoDeEntrada=" + formaPadraoDeEntrada + ", entradaEmCartao=" + entradaEmCartao + ", entradaEmDinheiro=" + entradaEmDinheiro + 
+                ", entradaEmCheque=" + entradaEmCheque + ", entradaEmCredito=" + entradaEmCredito + ", parcelaEmCheque=" + parcelaEmCheque + 
+                ", parcelaEmCartao=" + parcelaEmCartao + ", parcelaEmConta=" + parcelaEmConta + ", minimoDeParcelas=" + minimoDeParcelas + 
+                ", maximoDeParcelas=" + maximoDeParcelas + ", periodicidade=" + periodicidade + ", tipoPeriodicidade=" + tipoPeriodicidade + ", diasPrimeiraParcela=" + diasPrimeiraParcela + '}';
     }
 
 }
