@@ -23,8 +23,17 @@ public class EstoqueService implements Serializable {
     public List<Estoque> buscarEstoques() {
         return new ArmazemDeRegistros<Estoque>(Estoque.class).listaTodosOsRegistros();
     }
+    
+    public BigDecimal buscaSaldoTotalDeEstoque(Item item){
+        BigDecimal saldo = BigDecimal.ZERO;
+        List<SaldoDeEstoque> listaDeEstoque = buscaListaDeSaldoDeEstoque(item);
+        for(SaldoDeEstoque s : listaDeEstoque){
+            saldo = saldo.add(s.getSaldo());
+        }
+        return saldo;
+    }
 
-    public List<SaldoDeEstoque> buscaSaldoDeEstoque(Item item) {
+    public List<SaldoDeEstoque> buscaListaDeSaldoDeEstoque(Item item) {
         List<Estoque> estoque = new EstoqueDAO().buscarEstoques().eItem(item)
                 .listaDeResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
@@ -32,7 +41,7 @@ public class EstoqueService implements Serializable {
             boolean operacao = false;
             for (SaldoDeEstoque saldo : saldoDeEstoque) {
                 if (e.getDeposito().getId().equals(saldo.getDeposito().getId())) {
-                    if (e.getTipo().equals(OperacaoFisica.ENTRADA)) {
+                    if (e.getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
                         saldo.setSaldo(saldo.getSaldo().add(e.getSaldo()));
                         operacao = true;
                     } else {

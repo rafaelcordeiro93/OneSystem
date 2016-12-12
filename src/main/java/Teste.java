@@ -19,15 +19,6 @@ import java.util.List;
 public class Teste {
 
     public static void main(String[] args) throws DadoInvalidoException {
-
-          AjusteDeEstoque ajusteDeEstoq = new AjusteDeEstoque(null, "adsadasdsdasd", new Item(new Long(1)), BigDecimal.ONE, 
-                new Deposito(new Long(1)), new Date(), OperacaoFisica.ENTRADA, null);
-           Estoque estoque = new Estoque(null, ajusteDeEstoq.getItem(), ajusteDeEstoq.getQuantidade(), ajusteDeEstoq.getDeposito(), ajusteDeEstoq.getOperacao());
-           
-           AjusteDeEstoque ajuste = new AjusteDeEstoque(null, "adsadasdsdasd", new Item(new Long(1)), BigDecimal.ONE, 
-                new Deposito(new Long(1)), new Date(), OperacaoFisica.ENTRADA, estoque);
-           
-           new AdicionaDAO<AjusteDeEstoque>().adiciona(ajuste);
      
     }
 }

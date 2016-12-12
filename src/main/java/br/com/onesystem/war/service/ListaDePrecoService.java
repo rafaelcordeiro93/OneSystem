@@ -7,9 +7,9 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "listaPrecoService")
+@ManagedBean(name = "listaDePrecoService")
 @ApplicationScoped
-public class ListaPrecoService implements Serializable {
+public class ListaDePrecoService implements Serializable {
 
     public List<ListaDePreco> buscarListaPrecos() {
         return new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class).listaTodosOsRegistros();

@@ -45,6 +45,9 @@
                 <p:column headerText="#{l.Deposito}" sortBy="#{ajusteDeEstoque.deposito.nome}" filterBy="#{ajusteDeEstoque.deposito.nome}" footerText="#{l.Deposito}" filterMatchMode="contains">
                     <h:outputText value="#{ajusteDeEstoque.deposito.nome}" />
                 </p:column>
+                <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{ajusteDeEstoque.operacaoFisica}" filterBy="#{ajusteDeEstoque.operacaoFisica}" footerText="#{l.Operacao_Fisica}" filterMatchMode="contains">
+                    <h:outputText value="#{ajusteDeEstoque.operacaoFisica}" />
+                </p:column>
                 
             </p:dataTable>
         </h:form>

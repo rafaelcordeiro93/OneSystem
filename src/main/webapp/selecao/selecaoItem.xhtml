@@ -39,8 +39,8 @@
                 <p:column headerText="#{l.Codigo_De_Barras}" sortBy="#{item.barras}" filterBy="#{item.barras}" footerText="#{l.Codigo_De_Barras}" filterMatchMode="contains">
                     <h:outputText value="#{item.barras}" />
                 </p:column>
-                <p:column headerText="#{l.Saldo}" sortBy="#{item.saldo}" filterBy="#{item.saldo}" footerText="#{l.Saldo}" filterMatchMode="contains">
-                    <h:outputText value="#{item.saldo}" />
+                <p:column headerText="#{l.Saldo}" sortBy="#{item.saldo}" filterBy="#{item.saldo}" footerText="#{l.Saldo}" filterMatchMode="contains" styleClass="TexAlCenter">
+                    <h:outputText value="#{item.saldo}"/>
                 </p:column>
                 <p:column headerText="#{l.Marca}" sortBy="#{item.marca.nome}" filterBy="#{item.marca.nome}" footerText="#{l.Marca}" filterMatchMode="contains">
                     <h:outputText value="#{item.marca.nome}" />

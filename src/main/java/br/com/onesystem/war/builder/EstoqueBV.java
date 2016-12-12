@@ -25,7 +25,7 @@ public class EstoqueBV implements Serializable {
         this.deposito = estoqueSelecionado.getDeposito();
         this.item = estoqueSelecionado.getItem();
         this.saldo = estoqueSelecionado.getSaldo();
-        this.tipo = estoqueSelecionado.getTipo();
+        this.tipo = estoqueSelecionado.getOperacaoFisica();
         this.emissao = estoqueSelecionado.getEmissao();
 
     }
@@ -84,11 +84,11 @@ public class EstoqueBV implements Serializable {
  
     public Estoque construir() throws DadoInvalidoException {
         return new EstoqueBuilder().comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
         return new EstoqueBuilder().comID(id).comSaldo(saldo)
-                .comItem(item).comDeposito(deposito).comTipo(tipo).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
     }
 }

@@ -22,7 +22,8 @@ public class AjusteDeEstoqueBuilder {
     private Item item;
     private Date emissao;
     private BigDecimal quantidade;
-    private OperacaoFisica operacao;
+    private BigDecimal custo;
+    private OperacaoFisica operacaoFisica;
     private Estoque estoque;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
@@ -50,13 +51,18 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
     
+    public AjusteDeEstoqueBuilder comCusto(BigDecimal custo){
+        this.custo = custo;
+        return this;
+    }
+    
     public AjusteDeEstoqueBuilder comEmissao(Date emissao){
         this.emissao = emissao;
         return this;
     }
     
-      public AjusteDeEstoqueBuilder comOperacao(OperacaoFisica operacao){
-        this.operacao = operacao;
+      public AjusteDeEstoqueBuilder comOperacaoFisica(OperacaoFisica operacaoFisica){
+        this.operacaoFisica = operacaoFisica;
         return this;
     }
       
@@ -67,7 +73,7 @@ public class AjusteDeEstoqueBuilder {
     
   
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,emissao,operacao, estoque);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito,emissao,operacaoFisica, estoque, custo);
     }
 
 }
