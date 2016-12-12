@@ -29,7 +29,7 @@
                                             </p:commandButton>
                                         </h:panelGrid>     
 
-                                        <p:calendar pattern="dd/MM/yyyy" mask="99/99/9999" styleClass="Wid90" value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
+                                        <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999" styleClass="Wid90" value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
 
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="itemAjuste" readonly="true" placeholder="#{l.Item}" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item.nome}"/> 

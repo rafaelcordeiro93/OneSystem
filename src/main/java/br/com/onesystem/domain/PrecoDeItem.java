@@ -109,7 +109,7 @@ public class PrecoDeItem implements Serializable {
 
     @Override
     public String toString() {
-        return "PrecoDeItem{" + "id=" + id + ", item=" + item + ", listaDePreco=" + listaDePreco + ", valor=" + valor + ", emissao=" + emissao + ", dataDeExpiracao=" + dataDeExpiracao + '}';
+        return "PrecoDeItem{" + "id=" + id + ", item=" + item.getId() + ", listaDePreco=" + listaDePreco.getId() + ", valor=" + valor + ", emissao=" + emissao + ", dataDeExpiracao=" + dataDeExpiracao + '}';
     }
 
 }

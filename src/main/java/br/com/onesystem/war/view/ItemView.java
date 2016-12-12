@@ -27,6 +27,7 @@ import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.PrecoDeItemService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class ItemView implements Serializable {
     private Configuracao configuracao;
     private List<SaldoDeEstoque> estoqueLista;
     private BigDecimal estoqueTotal;
+    private List<PrecoDeItem> precoAtual;
+    private List<PrecoDeItem> precos;
 
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService serviceConfigurcao;
@@ -57,9 +60,12 @@ public class ItemView implements Serializable {
     @ManagedProperty("#{estoqueService}")
     private EstoqueService serviceEstoque;
 
+    @ManagedProperty("#{precoDeItemService}")
+    private PrecoDeItemService servicePrecoDeItem;
+
     @PostConstruct
     public void init() {
-        limparJanela();        
+        limparJanela();
         inicializarConfiguracoes();
     }
 
@@ -89,6 +95,7 @@ public class ItemView implements Serializable {
         try {
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
             new AdicionaDAO<PrecoDeItem>().adiciona(novoRegistro);
+            inicializaPrecos();
             InfoMessage.adicionado();
             limparJanelaPreco();
         } catch (DadoInvalidoException die) {
@@ -142,8 +149,22 @@ public class ItemView implements Serializable {
 
     public void selecionaItem(SelectEvent event) {
         itemSelecionada = (Item) event.getObject();
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada);
+        inicializaListas();
         item = new ItemBV(itemSelecionada);
+    }
+
+    private void inicializaListas() {
+        inicializaEstoque();
+        inicializaPrecos();
+    }
+
+    private void inicializaPrecos() {
+        precoAtual = servicePrecoDeItem.buscaListaDePrecoAtual(itemSelecionada);
+        precos = servicePrecoDeItem.buscaTodosPrecos(itemSelecionada);
+    }
+
+    private void inicializaEstoque() {
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada);
     }
 
     public void selecionaListaDePreco(SelectEvent event) {
@@ -153,7 +174,7 @@ public class ItemView implements Serializable {
 
     public void selecionaMargem(SelectEvent event) {
         GrupoDeMargem g = (GrupoDeMargem) event.getObject();
-        item.setMargem(g);    
+        item.setMargem(g);
     }
 
     private void carregaEstoque() {
@@ -253,6 +274,30 @@ public class ItemView implements Serializable {
 
     public void setServiceConfigurcao(ConfiguracaoService serviceConfigurcao) {
         this.serviceConfigurcao = serviceConfigurcao;
+    }
+
+    public List<PrecoDeItem> getPrecoAtual() {
+        return precoAtual;
+    }
+
+    public void setPrecoAtual(List<PrecoDeItem> precoAtual) {
+        this.precoAtual = precoAtual;
+    }
+
+    public List<PrecoDeItem> getPrecos() {
+        return precos;
+    }
+
+    public void setPrecos(List<PrecoDeItem> precos) {
+        this.precos = precos;
+    }
+
+    public PrecoDeItemService getServicePrecoDeItem() {
+        return servicePrecoDeItem;
+    }
+
+    public void setServicePrecoDeItem(PrecoDeItemService servicePrecoDeItem) {
+        this.servicePrecoDeItem = servicePrecoDeItem;
     }
 
 }

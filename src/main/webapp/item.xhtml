@@ -152,17 +152,20 @@
 
                                         <h:panelGrid columns="1" style="width: 100%; right: 0px">
                                             <h:outputText value="#{l.Preco_Atual}"/> 
-                                            <p:dataTable var="estoque" value="#{itemView.estoqueLista}"
+                                            <p:dataTable var="precoDeItem" value="#{itemView.precoAtual}"
                                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
                                                 <p:column headerText="#{l.Lista_De_Preco}">                                        
-                                                    <h:outputText value="#{estoque.deposito.nome}" />
+                                                    <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                                 </p:column>
                                                 <p:column headerText="#{l.Valor}">
-                                                    <h:outputText value="#{estoque.saldo}" />
+                                                    <h:outputText value="#{precoDeItem.valor}" />
+                                                </p:column>
+                                                <p:column headerText="#{l.Emissao}">
+                                                    <h:outputText value="#{precoDeItem.emissao}" />
                                                 </p:column>
                                                 <p:column headerText="#{l.Data_Expiracao}">
-                                                    <h:outputText value="#{estoque.saldo}" />
+                                                    <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
                                                 </p:column>
                                             </p:dataTable>
 
@@ -172,17 +175,20 @@
 
                                     <h:panelGrid columns="1" style="width: 50%; right: 0px">
                                         <h:outputText value="#{l.Historico}"/>
-                                        <p:dataTable var="estoque" value="#{itemView.estoqueLista}"
+                                        <p:dataTable var="precoDeItem" value="#{itemView.precos}"
                                                      emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                            <p:column headerText="#{l.Lista_De_Preco}">                                        
-                                                <h:outputText value="#{estoque.deposito.nome}" />
+                                            <p:column headerText="#{l.Lista_De_Preco}" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
+                                                <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                             </p:column>
-                                            <p:column headerText="#{l.Valor}">
-                                                <h:outputText value="#{estoque.saldo}" />
+                                            <p:column headerText="#{l.Valor}" sortBy="#{precoDeItem.valor}">
+                                                <h:outputText value="#{precoDeItem.valor}" />
                                             </p:column>
-                                            <p:column headerText="#{l.Data_Expiracao}">
-                                                <h:outputText value="#{estoque.saldo}" />
+                                            <p:column headerText="#{l.Emissao}" sortBy="#{precoDeItem.emissao}">
+                                                <h:outputText value="#{precoDeItem.emissao}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Data_Expiracao}" sortBy="#{precoDeItem.dataDeExpiracao}">
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
                                             </p:column>
                                         </p:dataTable>
 
