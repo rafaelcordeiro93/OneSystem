@@ -7,6 +7,7 @@ import br.com.onesystem.domain.builder.PrecoDeItemBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PrecoDeItemBV implements Serializable {

@@ -97,7 +97,7 @@ public class PrecoDeItem implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (!(objeto instanceof PrecoDeItem)) {
             return false;
         }
         PrecoDeItem outro = (PrecoDeItem) objeto;

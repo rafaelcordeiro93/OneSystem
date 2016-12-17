@@ -113,7 +113,7 @@ public class Item implements Serializable {
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("barras", "idFabricante", "nome", "unidadeDeMedida", "tipoItem",
-                "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo", "saldo");
+                "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo");
         new ValidadorDeCampos<Item>().valida(this, campos);
     }
 

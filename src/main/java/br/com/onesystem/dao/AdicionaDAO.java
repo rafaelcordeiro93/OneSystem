@@ -9,6 +9,7 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import javax.faces.FacesException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -18,14 +19,14 @@ import org.hibernate.exception.ConstraintViolationException;
  * @author Rafael-Pc
  */
 public class AdicionaDAO<T> {
-    
+
     private EntityManager em;
-    
+
     public AdicionaDAO() {
     }
-    
+
     public void adiciona(T t) throws ConstraintViolationException, DadoInvalidoException {
-        
+
         try {
 
             // consegue a entity manager
@@ -40,21 +41,20 @@ public class AdicionaDAO<T> {
 
             // commita a transacao
             em.getTransaction().commit();
-            
+
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();                
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
                 throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
             }
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
-        }
-        finally {
+        } finally {
             // fecha a entity manager
             em.close();
         }
     }
-    
+
     private String getMessage(ConstraintViolationException cve) {
         String mensagemFormatada = String.valueOf(cve.getCause())
                 .replaceFirst("\\(", "")
@@ -66,7 +66,7 @@ public class AdicionaDAO<T> {
         mensagemFormatada = mensagemFormatada.substring(mensagemFormatada.indexOf("Detalhe:") + 9, mensagemFormatada.length());
         return mensagemFormatada;
     }
-    
+
     private String getConstraint(ConstraintViolationException cve) {
         String constraint = String.valueOf(cve.getCause());
         constraint = constraint.substring(constraint.indexOf("(") + 1, constraint.indexOf(")"));

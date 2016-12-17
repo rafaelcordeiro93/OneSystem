@@ -51,7 +51,7 @@ public class GrupoDeMargem implements Serializable {
     private BigDecimal embalagem;
     @OneToMany(mappedBy = "margem")
     private List<Item> itens;
-    
+
     public GrupoDeMargem() {
     }
 
@@ -63,7 +63,7 @@ public class GrupoDeMargem implements Serializable {
         this.frete = frete;
         this.outrosCustos = outrosCustos;
         this.embalagem = embalagem;
-        ehValido();        
+        ehValido();
     }
 
     public Long getId() {
@@ -97,9 +97,25 @@ public class GrupoDeMargem implements Serializable {
     public List<Item> getItens() {
         return itens;
     }
-    
+
+    public BigDecimal getMargemDeCustos() {
+        if (custoFixo == null) {
+            custoFixo = BigDecimal.ZERO;
+        }
+        if (frete == null) {
+            frete = BigDecimal.ZERO;
+        }
+        if (embalagem == null) {
+            embalagem = BigDecimal.ZERO;
+        }
+        if (outrosCustos == null) {
+            outrosCustos = BigDecimal.ZERO;
+        }
+        return custoFixo.add(frete.add(embalagem.add(outrosCustos)));
+    }
+
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome","margem","custoFixo","frete","outrosCustos","embalagem");
+        List<String> campos = Arrays.asList("nome", "margem", "custoFixo", "frete", "outrosCustos", "embalagem");
         new ValidadorDeCampos<GrupoDeMargem>().valida(this, campos);
     }
 

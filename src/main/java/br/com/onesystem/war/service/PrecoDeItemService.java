@@ -35,7 +35,7 @@ public class PrecoDeItemService implements Serializable {
                 if (p.getListaDePreco().equals(l.getListaDePreco())) {
                     operacao = false;
                     if (p.getEmissao().after(l.getEmissao())) {
-                        lista.set(lista.indexOf(l), p);
+                       lista.set(lista.indexOf(l), p);
                     }
                 }
             }
