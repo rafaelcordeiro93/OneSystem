@@ -58,6 +58,9 @@ public class IVA implements Serializable {
     }
 
     public BigDecimal getIva() {
+        if(iva == null){
+            return BigDecimal.ZERO;
+        }
         return iva;
     }
 

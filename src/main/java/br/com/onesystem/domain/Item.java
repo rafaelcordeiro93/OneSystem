@@ -80,7 +80,9 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
     @ManyToOne
-    private GrupoDeMargem margem;
+    private Margem margem;
+    @ManyToOne
+    private Comissao comissao;
 
     public Item() {
     }
@@ -88,11 +90,11 @@ public class Item implements Serializable {
     public Item(Long id) {
         this.id = id;
     }
-    
+
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo,
-            GrupoDeMargem margem) throws DadoInvalidoException {
+            Margem margem, Comissao comissao) throws DadoInvalidoException {
         this.id = id;
         this.barras = barras;
         this.nome = nome;
@@ -108,6 +110,7 @@ public class Item implements Serializable {
         this.estoqueMinimo = estoqueMinimo;
         this.estoqueMaximo = estoqueMaximo;
         this.margem = margem;
+        this.comissao = comissao;
         ehValido();
     }
 
@@ -136,7 +139,7 @@ public class Item implements Serializable {
         return id;
     }
 
-    public GrupoDeMargem getMargem() {
+    public Margem getMargem() {
         return margem;
     }
 
@@ -164,6 +167,10 @@ public class Item implements Serializable {
         return idContabil;
     }
 
+    public Comissao getComissao() {
+        return comissao;
+    }
+    
     public boolean isAtivo() {
         return ativo;
     }

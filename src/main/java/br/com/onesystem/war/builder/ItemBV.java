@@ -1,8 +1,9 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.UnidadeMedidaItem;
@@ -27,7 +28,8 @@ public class ItemBV implements Serializable {
     private String idFabricante;
     private String idContabil;
     private BigDecimal estoqueMinimo;
-    private GrupoDeMargem margem;
+    private Margem margem;
+    private Comissao comissao;
 
     public ItemBV(Item itemSelecionado) {
         this.id = itemSelecionado.getId();
@@ -45,6 +47,7 @@ public class ItemBV implements Serializable {
         this.unidadeMedida = itemSelecionado.getUnidadeDeMedida();
         this.ativo = itemSelecionado.isAtivo();
         this.margem = itemSelecionado.getMargem();
+        this.comissao = itemSelecionado.getComissao();
     }
 
     public ItemBV() {
@@ -74,6 +77,14 @@ public class ItemBV implements Serializable {
         this.barras = barras;
     }
 
+    public Comissao getComissao() {
+        return comissao;
+    }
+
+    public void setComissao(Comissao comissao) {
+        this.comissao = comissao;
+    }
+    
     public Grupo getGrupo() {
         return grupo;
     }
@@ -86,11 +97,11 @@ public class ItemBV implements Serializable {
         return estoqueMaximo;
     }
 
-    public GrupoDeMargem getMargem() {
+    public Margem getMargem() {
         return margem;
     }
 
-    public void setMargem(GrupoDeMargem margem) {
+    public void setMargem(Margem margem) {
         this.margem = margem;
     }
 
@@ -171,10 +182,10 @@ public class ItemBV implements Serializable {
     }
 
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem);
+        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem);
+        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
     }
 }

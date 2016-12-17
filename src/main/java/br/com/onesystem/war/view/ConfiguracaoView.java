@@ -12,7 +12,11 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
+import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -56,6 +60,14 @@ public class ConfiguracaoView implements Serializable {
         } catch (DadoInvalidoException die) {
             die.print();
         }
+    }
+
+    public List<TipoDeFormacaoDePreco> getTipoFormacaoDePreco() {
+        return Arrays.asList(TipoDeFormacaoDePreco.values());
+    }
+    
+    public List<TipoDeCalculoDeCusto> getTipoDeCalculoDeCusto() {
+        return Arrays.asList(TipoDeCalculoDeCusto.values());
     }
 
     public void selecionaMoeda(SelectEvent event) {

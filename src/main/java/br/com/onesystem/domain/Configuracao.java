@@ -1,7 +1,11 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
+import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import java.io.Serializable;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,13 +31,22 @@ public class Configuracao implements Serializable {
     @OneToOne
     private Moeda moedaPadrao;
 
+    @Enumerated(EnumType.STRING)
+    private TipoDeFormacaoDePreco tipoDeFormacaoDePreco;
+
+    @Enumerated(EnumType.STRING)
+    private TipoDeCalculoDeCusto tipoDeCalculoDeCusto;
+
     public Configuracao() {
     }
 
-    public Configuracao(Long id, Despesa despesaDeComissao, Moeda moedaPadrao) {
+    public Configuracao(Long id, Despesa despesaDeComissao, Moeda moedaPadrao,
+            TipoDeFormacaoDePreco tipoDeFormacaoDePreco, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) {
         this.id = id;
         this.despesaDeComissao = despesaDeComissao;
         this.moedaPadrao = moedaPadrao;
+        this.tipoDeFormacaoDePreco = tipoDeFormacaoDePreco;
+        this.tipoDeCalculoDeCusto = tipoDeCalculoDeCusto;
     }
 
     public Long getId() {
@@ -46,6 +59,14 @@ public class Configuracao implements Serializable {
 
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
+    }
+
+    public TipoDeFormacaoDePreco getTipoDeFormacaoDePreco() {
+        return tipoDeFormacaoDePreco;
+    }
+
+    public TipoDeCalculoDeCusto getTipoDeCalculoDeCusto() {
+        return tipoDeCalculoDeCusto;
     }
 
     @Override
@@ -65,7 +86,6 @@ public class Configuracao implements Serializable {
 
     @Override
     public String toString() {
-        return "Configuracao{" + "id=" + id + ", despesaDeComissao=" + despesaDeComissao + ", moedaPadrao=" + moedaPadrao + '}';
+        return "Configuracao{" + "id=" + id + ", despesaDeComissao=" + despesaDeComissao + ", moedaPadrao=" + moedaPadrao + ", tipoDeFormacaoDePreco=" + tipoDeFormacaoDePreco + ", tipoDeCalculoDeCusto=" + tipoDeCalculoDeCusto + '}';
     }
-
 }

@@ -3,7 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.GrupoDeMargemBV;
@@ -22,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 public class GrupoDeMargemView implements Serializable {
 
     private GrupoDeMargemBV grupo;
-    private GrupoDeMargem grupoSelecionada;
+    private Margem grupoSelecionada;
 
     @PostConstruct
     public void init() {
@@ -31,8 +31,8 @@ public class GrupoDeMargemView implements Serializable {
 
     public void add() {
         try {
-            GrupoDeMargem novoRegistro = grupo.construir();
-            new AdicionaDAO<GrupoDeMargem>().adiciona(novoRegistro);
+            Margem novoRegistro = grupo.construir();
+            new AdicionaDAO<Margem>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -43,8 +43,8 @@ public class GrupoDeMargemView implements Serializable {
     public void update() {
         try {
             if (grupoSelecionada != null) {
-                GrupoDeMargem grupoExistente = grupo.construirComID();
-                new AtualizaDAO<GrupoDeMargem>(GrupoDeMargem.class).atualiza(grupoExistente);
+                Margem grupoExistente = grupo.construirComID();
+                new AtualizaDAO<Margem>(Margem.class).atualiza(grupoExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -58,7 +58,7 @@ public class GrupoDeMargemView implements Serializable {
     public void delete() {
         try {
             if (grupoSelecionada != null) {
-                new RemoveDAO<GrupoDeMargem>(GrupoDeMargem.class).remove(grupoSelecionada, grupoSelecionada.getId());
+                new RemoveDAO<Margem>(Margem.class).remove(grupoSelecionada, grupoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             } else {
@@ -72,7 +72,7 @@ public class GrupoDeMargemView implements Serializable {
     }
 
     public void selecionaGrupoDeMargem(SelectEvent e) {
-        grupoSelecionada = (GrupoDeMargem) e.getObject();
+        grupoSelecionada = (Margem) e.getObject();
         grupo = new GrupoDeMargemBV(grupoSelecionada);
     }
 
@@ -95,11 +95,11 @@ public class GrupoDeMargemView implements Serializable {
         this.grupo = grupo;
     }
 
-    public GrupoDeMargem getGrupoDeMargemSelecionada() {
+    public Margem getGrupoDeMargemSelecionada() {
         return grupoSelecionada;
     }
 
-    public void setGrupoDeMargemSelecionada(GrupoDeMargem grupoSelecionada) {
+    public void setGrupoDeMargemSelecionada(Margem grupoSelecionada) {
         this.grupoSelecionada = grupoSelecionada;
     }
 

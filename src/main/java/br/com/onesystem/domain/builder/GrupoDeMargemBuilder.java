@@ -1,6 +1,6 @@
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
 
@@ -53,8 +53,8 @@ public class GrupoDeMargemBuilder {
         return this;
     }
   
-    public GrupoDeMargem construir() throws DadoInvalidoException {
-        return new GrupoDeMargem(ID, nome,margem, custoFixo, frete, outrosCustos, embalagem);
+    public Margem construir() throws DadoInvalidoException {
+        return new Margem(ID, nome,margem, custoFixo, frete, outrosCustos, embalagem);
     }
 
 }

@@ -28,7 +28,7 @@
                         </h:panelGrid>
 
                         <div class="EmptyBox5"/>
-                        
+
                         <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Despesa_Comissao}</div>
                         <div class="EmptyBox10"/>
 
@@ -43,13 +43,31 @@
                         </h:panelGrid>
 
                         <div class="EmptyBox5"/>
+
+                        <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Tipo_Formacao_Preco}</div>
+                        <div class="EmptyBox10"/>
+
+                        <p:selectOneRadio value="#{configuracaoView.configuracaoBV.tipoDeFormacaoDePreco}">
+                            <f:selectItems value="#{configuracaoView.tipoFormacaoDePreco}" var="#{l.Tipo_Formacao_Preco}" itemLabel="#{TipoDeFormacaoDePreco}" itemValue="#{TipoDeFormacaoDePreco}" />
+                        </p:selectOneRadio>
+
+                        <div class="EmptyBox5"/>
+
+                        <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Tipo_Calculo_De_Custo}</div>
+                        <div class="EmptyBox10"/>
                         
+                        <p:selectOneMenu value="#{configuracaoView.configuracaoBV.tipoDeCalculoDeCusto}" styleClass="Wid20">
+                            <f:selectItems value="#{configuracaoView.tipoDeCalculoDeCusto}" var="#{l.Tipo_Calculo_Custo}" itemLabel="#{TipoDeCalculoDeCusto}" itemValue="#{TipoDeCalculoDeCusto}" />
+                        </p:selectOneMenu>
+
+                        <div class="EmptyBox5"/>
+
                         <p:separator/>
                         <p:commandButton value="#{l.Salvar}" action="#{configuracaoView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    
                     </div>
                 </div>
             </div>
-            
+
             <div class="Container100">
                 <div class="ContainerIndent">
                     <div class="Card ShadowEffect HeiAutoOnMobile">

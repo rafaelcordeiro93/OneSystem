@@ -10,6 +10,7 @@ import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoComissao;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Column;
@@ -19,7 +20,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -28,26 +31,32 @@ import org.hibernate.validator.constraints.Length;
  * @author Rafael Fernando Rauber
  */
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_GRUPODECOMISSAO",
-        sequenceName = "SEQ_GRUPODECOMISSAO")
-public class GrupoDeComissao implements Serializable {
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_COMISSAO",
+        sequenceName = "SEQ_COMISSAO")
+public class Comissao implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GRUPODECOMISSAO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_COMISSAO")
     private Long id;
     @NotNull(message = "{nome_not_null}")
     @Length(max = 60, min = 4, message = "{nome_length}")
     @Column(nullable = false, length = 60)
     private String nome;
-    @NotNull(message = "{tipo_comissao_not_null}")
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TipoComissao tipoComissao;
+    private BigDecimal comissaoVendedor;
+    @Min(value = 0, message = "{comissao_representante_min}")
+    private BigDecimal comissaoRepresentante;
+    @OneToMany(mappedBy = "comissao")
+    private List<Item> itens;
 
-    public GrupoDeComissao(Long id, String nome, TipoComissao tipoComissao) throws DadoInvalidoException {
+    public Comissao() {
+    }
+
+    public Comissao(Long id, String nome, BigDecimal comissaoVendedor,
+            BigDecimal comissaoRepresentante) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.tipoComissao = tipoComissao;
+        this.comissaoVendedor = comissaoVendedor;
+        this.comissaoRepresentante = comissaoRepresentante;
         ehValido();
     }
 
@@ -59,13 +68,23 @@ public class GrupoDeComissao implements Serializable {
         return nome;
     }
 
-    public TipoComissao getTipoComissao() {
-        return tipoComissao;
+    public BigDecimal getComissaoVendedor() {
+        if(comissaoVendedor == null){
+            return BigDecimal.ZERO;
+        }
+        return comissaoVendedor;
     }
-    
+
+    public BigDecimal getComissaoRepresentante() {
+        if(comissaoRepresentante == null){
+            return BigDecimal.ZERO;
+        }
+        return comissaoRepresentante;
+    }
+
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "tipoComissao");
-        new ValidadorDeCampos<GrupoDeComissao>().valida(this, campos);
+        List<String> campos = Arrays.asList("nome", "comissaoVendedor", "comissaoRepresentante");
+        new ValidadorDeCampos<Comissao>().valida(this, campos);
     }
 
     @Override
@@ -73,10 +92,10 @@ public class GrupoDeComissao implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof GrupoDeComissao)) {
+        if (!(objeto instanceof Comissao)) {
             return false;
         }
-        GrupoDeComissao outro = (GrupoDeComissao) objeto;
+        Comissao outro = (Comissao) objeto;
         if (this.id == null) {
             return false;
         }
@@ -85,7 +104,7 @@ public class GrupoDeComissao implements Serializable {
 
     @Override
     public String toString() {
-        return "GrupoDeComissao{" + "id=" + id + ", nome=" + nome + '}';
+        return "Comissao{" + "id=" + id + ", nome=" + nome + ", tipoComissao=" + comissaoVendedor + ", comissaoRepresentante=" + comissaoRepresentante + '}';
     }
 
 }

@@ -72,7 +72,15 @@
                                                         <p:ajax event="dialogReturn" listener="#{itemView.selecionaUnidadeMedida}"
                                                                 process="@this" update="itemUnMedida" />
                                                     </p:commandButton>
-                                                </h:panelGrid>                                                
+                                                </h:panelGrid>
+                                                <h:panelGrid columns="2" style="margin-top: -2%;">
+                                                    <p:inputText  id="itemMargem" readonly="true" placeholder="#{l.Margem}" value="#{itemView.item.margem.nome}"/>
+                                                    <p:commandButton id="itemBotaoMargem" icon="fa fa-search Fs16 White" action="#{selecaoGrupoDeMargemView.abrirDialogo()}" process="@this" disabled="#{!itemView.precoPorMargem}"
+                                                                     update="@none">
+                                                        <p:ajax event="dialogReturn" listener="#{itemView.selecionaMargem}" update="itemMargem"
+                                                                process="@this"  />
+                                                    </p:commandButton>
+                                                </h:panelGrid>                                                 
                                                 <p:selectOneMenu value="#{itemView.item.tipoItem}" styleClass="Wid70">
                                                     <f:selectItems value="#{itemView.tipoItem}" var="#{l.Tipo_Item}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
                                                 </p:selectOneMenu>
@@ -112,89 +120,80 @@
 
                                 <p:tab id="tabPreco" title="#{l.Preco}" disabled="#{itemView.tab}">
 
-                                        <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
-                                                     columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
-                                                <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none; margin-left: -2%;" styleClass="FormContent">   
-                                                    <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
-                                                        <p:ajax update="itemMargem itemBotaoMargem itemPreco"/>
-                                                        <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="true" />
-                                                        <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
-                                                    </p:selectOneRadio>
+                                    <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
+                                                 columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
+                                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none; margin-left: -2%;" styleClass="FormContent">   
+                                            <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
+                                                <p:ajax update="itemPreco"/>
+                                                <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="true" />
+                                                <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
+                                            </p:selectOneRadio>
 
-                                                    <h:panelGrid columns="2">
-                                                        <p:inputText id="itemListaPreco" readonly="true" placeholder="#{l.Lista_De_Preco}" value="#{itemView.precoDeItemBV.listaDePreco.nome}"/>
-                                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this"
-                                                                         update="@none">
-                                                            <p:ajax event="dialogReturn" listener="#{itemView.selecionaListaDePreco}" update="itemListaPreco"
-                                                                    process="@this"  />
-                                                        </p:commandButton>
-                                                    </h:panelGrid> 
+                                            <h:panelGrid columns="2">
+                                                <p:inputText id="itemListaPreco" readonly="true" placeholder="#{l.Lista_De_Preco}" value="#{itemView.precoDeItemBV.listaDePreco.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this"
+                                                                 update="@none">
+                                                    <p:ajax event="dialogReturn" listener="#{itemView.selecionaListaDePreco}" update="itemListaPreco itemPreco :conteudo:growl"
+                                                            process="@this"  />
+                                                </p:commandButton>
+                                            </h:panelGrid>                                                     
 
-                                                    <h:panelGrid columns="2" style="margin-top: -2%;">
-                                                        <p:inputText  id="itemMargem" readonly="true" placeholder="#{l.Margem}" value="#{itemView.item.margem.nome}" disabled="#{!itemView.precoPorMargem}"/>
-                                                        <p:commandButton id="itemBotaoMargem" icon="fa fa-search Fs16 White" action="#{selecaoGrupoDeMargemView.abrirDialogo()}" process="@this" disabled="#{!itemView.precoPorMargem}"
-                                                                         update="@none">
-                                                            <p:ajax event="dialogReturn" listener="#{itemView.selecionaMargem}" update="itemMargem itemPreco"
-                                                                    process="@this"  />
-                                                        </p:commandButton>
-                                                    </h:panelGrid> 
+                                            <pe:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
+                                                            symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                            </pe:inputNumber> 
 
-                                                    <pe:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
-                                                                    symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
-                                                        <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
-                                                    </pe:inputNumber> 
+                                            <p:calendar value="#{itemView.precoDeItemBV.dataDeExpiracao}" navigator="true" pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99" yearRange="c-0:c+100" placeholder="#{l.Data_Expiracao}" 
+                                                        locale="pt" showWeek="true"/>
 
-                                                    <p:calendar value="#{itemView.precoDeItemBV.dataDeExpiracao}" navigator="true" pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99" yearRange="c-0:c+100" placeholder="#{l.Data_Expiracao}" 
-                                                                locale="pt" showWeek="true"/>
+                                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.addPreco()}" update="itemPanelPreco precos :conteudo:growl" icon="fa fa-plus Fs16 White"/>
 
-                                                    <p:commandButton value="#{l.Adicionar}" action="#{itemView.addPreco()}" update="itemPanelPreco precos :conteudo:growl" icon="fa fa-plus Fs16 White"/>
+                                        </p:panelGrid>   
 
-                                                </p:panelGrid>   
-
-                                            <h:panelGrid columns="1" style="width: 100%; right: 0px;">
-                                                <h:outputText value="#{l.Preco_Atual}"/> 
-                                                <p:dataTable id="precoAtual" var="precoDeItem" value="#{itemView.precoAtual}"
-                                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
-
-                                                    <p:column headerText="#{l.Lista_De_Preco}">                                        
-                                                        <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
-                                                    </p:column>
-                                                    <p:column headerText="#{l.Valor}">
-                                                        <h:outputText value="#{precoDeItem.valor}" />
-                                                    </p:column>
-                                                    <p:column headerText="#{l.Emissao}">
-                                                        <h:outputText value="#{precoDeItem.emissao}" />
-                                                    </p:column>
-                                                    <p:column headerText="#{l.Data_Expiracao}">
-                                                        <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
-                                                    </p:column>
-                                                </p:dataTable>
-
-                                            </h:panelGrid>
-                                        </p:panelGrid>
-                                        <p:separator/>
-
-                                        <h:panelGrid columns="1" style="width: 80%; right: 0px">
-                                            <h:outputText value="#{l.Historico}"/>
-                                            <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" rowsPerPageTemplate="15,30,50,100"
-                                                         rows="15" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                        <h:panelGrid columns="1" style="width: 100%; right: 0px;">
+                                            <h:outputText value="#{l.Preco_Atual}"/> 
+                                            <p:dataTable id="precoAtual" var="precoDeItem" value="#{itemView.precoAtual}"
                                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                                <p:column headerText="#{l.Lista_De_Preco}" filterBy="#{precoDeItem.listaDePreco.nome}" filterMatchMode="contains" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
+                                                <p:column headerText="#{l.Lista_De_Preco}">                                        
                                                     <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                                 </p:column>
-                                                <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
+                                                <p:column headerText="#{l.Valor}">
                                                     <h:outputText value="#{precoDeItem.valor}" />
                                                 </p:column>
-                                                <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
+                                                <p:column headerText="#{l.Emissao}">
                                                     <h:outputText value="#{precoDeItem.emissao}" />
                                                 </p:column>
-                                                <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
+                                                <p:column headerText="#{l.Data_Expiracao}">
                                                     <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
                                                 </p:column>
                                             </p:dataTable>
 
                                         </h:panelGrid>
+                                    </p:panelGrid>
+                                    <p:separator/>
+
+                                    <h:panelGrid columns="1" style="width: 80%; right: 0px">
+                                        <h:outputText value="#{l.Historico}"/>
+                                        <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" rowsPerPageTemplate="15,30,50,100"
+                                                     rows="15" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                            <p:column headerText="#{l.Lista_De_Preco}" filterBy="#{precoDeItem.listaDePreco.nome}" filterMatchMode="contains" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
+                                                <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
+                                                <h:outputText value="#{precoDeItem.valor}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
+                                                <h:outputText value="#{precoDeItem.emissao}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </h:panelGrid>
 
                                 </p:tab>
 

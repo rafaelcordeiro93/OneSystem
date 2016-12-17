@@ -6,7 +6,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ListaDePreco;
@@ -25,7 +25,9 @@ import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.services.CalculadoraDePreco;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -35,6 +37,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -65,9 +69,6 @@ public class ItemView implements Serializable {
 
     @ManagedProperty("#{precoDeItemService}")
     private PrecoDeItemService servicePrecoDeItem;
-
-    @ManagedProperty("#{itemService}")
-    private ItemService serviceItem;
 
     @PostConstruct
     public void init() {
@@ -184,29 +185,30 @@ public class ItemView implements Serializable {
     }
 
     public void selecionaListaDePreco(SelectEvent event) {
-        ListaDePreco listaDePreco = (ListaDePreco) event.getObject();
-        precoDeItemBV.setListaDePreco(listaDePreco);
-        if (item.getMargem() != null) {
-            calculaPreco();
+        try {
+            if (item.getMargem() != null) {
+                calculaPreco();
+            }
+            ListaDePreco listaDePreco = (ListaDePreco) event.getObject();
+            precoDeItemBV.setListaDePreco(listaDePreco);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
     }
 
     public void selecionaMargem(SelectEvent event) {
-        GrupoDeMargem g = (GrupoDeMargem) event.getObject();
+        Margem g = (Margem) event.getObject();
         item.setMargem(g);
-        calculaPreco();
     }
 
-    private void calculaPreco() {
-        BigDecimal margemDeCustos = item.getMargem().getMargemDeCustos();
-        BigDecimal margem = item.getMargem().getMargem();
-        BigDecimal p = margemDeCustos.compareTo(BigDecimal.ZERO) == 1
-                ? margemDeCustos.divide(new BigDecimal(100)) : BigDecimal.ONE;
-        BigDecimal pMargem = margem.compareTo(BigDecimal.ZERO) == 1
-                ? margem.divide(new BigDecimal(100)) : BigDecimal.ONE;
-        BigDecimal ultimoCusto = serviceItem.ultimoCusto(itemSelecionada);
-
-        precoDeItemBV.setValor(ultimoCusto.add(pMargem.multiply(p.multiply(ultimoCusto))));
+    private void calculaPreco() throws DadoInvalidoException {
+        if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
+            CalculadoraDePreco calculadora = new CalculadoraDePreco(itemSelecionada, configuracao.getTipoDeCalculoDeCusto());
+            precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
+                    ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
+        } else {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+        }
     }
 
     public void desfazer() {
@@ -238,14 +240,6 @@ public class ItemView implements Serializable {
 
     public void setItem(ItemBV item) {
         this.item = item;
-    }
-
-    public ItemService getServiceItem() {
-        return serviceItem;
-    }
-
-    public void setServiceItem(ItemService serviceItem) {
-        this.serviceItem = serviceItem;
     }
 
     public Item getItemSelecionada() {

@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.war.service.GrupoDeMargemService;
 import java.io.Serializable;
 import java.util.HashMap;
@@ -16,9 +16,9 @@ import org.primefaces.context.RequestContext;
 @ViewScoped
 public class SelecaoGrupoDeMargemView implements Serializable {
 
-    private GrupoDeMargem grupoDeMargemSelecionada;
-    private List<GrupoDeMargem> grupoDeMargemLista;
-    private List<GrupoDeMargem> grupoDeMargemsFiltradas;
+    private Margem grupoDeMargemSelecionada;
+    private List<Margem> grupoDeMargemLista;
+    private List<Margem> grupoDeMargemsFiltradas;
 
     @ManagedProperty("#{grupoDeMargemService}")
     private GrupoDeMargemService service;
@@ -43,27 +43,27 @@ public class SelecaoGrupoDeMargemView implements Serializable {
         RequestContext.getCurrentInstance().closeDialog(grupoDeMargemSelecionada);
     }
 
-    public GrupoDeMargem getGrupoDeMargemSelecionada() {
+    public Margem getGrupoDeMargemSelecionada() {
         return grupoDeMargemSelecionada;
     }
 
-    public void setGrupoDeMargemSelecionada(GrupoDeMargem grupoDeMargemSelecionada) {
+    public void setGrupoDeMargemSelecionada(Margem grupoDeMargemSelecionada) {
         this.grupoDeMargemSelecionada = grupoDeMargemSelecionada;
     }
 
-    public List<GrupoDeMargem> getGrupoDeMargemLista() {
+    public List<Margem> getGrupoDeMargemLista() {
         return grupoDeMargemLista;
     }
 
-    public void setGrupoDeMargemLista(List<GrupoDeMargem> grupoDeMargemLista) {
+    public void setGrupoDeMargemLista(List<Margem> grupoDeMargemLista) {
         this.grupoDeMargemLista = grupoDeMargemLista;
     }
 
-    public List<GrupoDeMargem> getGrupoDeMargemsFiltradas() {
+    public List<Margem> getGrupoDeMargemsFiltradas() {
         return grupoDeMargemsFiltradas;
     }
 
-    public void setGrupoDeMargemsFiltradas(List<GrupoDeMargem> grupoDeMargemsFiltradas) {
+    public void setGrupoDeMargemsFiltradas(List<Margem> grupoDeMargemsFiltradas) {
         this.grupoDeMargemsFiltradas = grupoDeMargemsFiltradas;
     }
 

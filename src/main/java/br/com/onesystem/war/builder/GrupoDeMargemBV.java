@@ -1,6 +1,6 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.GrupoDeMargem;
+import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.builder.GrupoBuilder;
 import br.com.onesystem.domain.builder.GrupoDeMargemBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -17,7 +17,7 @@ public class GrupoDeMargemBV implements Serializable {
     private BigDecimal outrosCustos;
     private BigDecimal embalagem;
 
-    public GrupoDeMargemBV(GrupoDeMargem grupoDeMargem) {
+    public GrupoDeMargemBV(Margem grupoDeMargem) {
         this.id = grupoDeMargem.getId();
         this.nome = grupoDeMargem.getNome();
         this.margem = grupoDeMargem.getMargem();
@@ -86,13 +86,13 @@ public class GrupoDeMargemBV implements Serializable {
         this.embalagem = embalagem;
     }
     
-    public GrupoDeMargem construir() throws DadoInvalidoException {
+    public Margem construir() throws DadoInvalidoException {
         return new GrupoDeMargemBuilder().comNome(nome).comMargem(margem)
                 .comCustoFixo(custoFixo).comEmbalagem(embalagem).comFrete(frete)
                 .comOutrosCustos(outrosCustos).construir();
     }
 
-    public GrupoDeMargem construirComID() throws DadoInvalidoException {
+    public Margem construirComID() throws DadoInvalidoException {
         return new GrupoDeMargemBuilder().comID(id).comNome(nome).comMargem(margem)
                 .comCustoFixo(custoFixo).comEmbalagem(embalagem).comFrete(frete)
                 .comOutrosCustos(outrosCustos).construir();

@@ -28,12 +28,12 @@ import org.hibernate.validator.constraints.Length;
  * @author Rafael Fernando Rauber
  */
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_GRUPODEMARGEM",
-        sequenceName = "SEQ_GRUPODEMARGEM")
-public class GrupoDeMargem implements Serializable {
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_MARGEM",
+        sequenceName = "SEQ_MARGEM")
+public class Margem implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_GRUPODEMARGEM")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_MARGEM")
     private Long id;
     @NotNull(message = "{nome_not_null}")
     @Length(min = 2, max = 60, message = "{nome_length}")
@@ -52,10 +52,10 @@ public class GrupoDeMargem implements Serializable {
     @OneToMany(mappedBy = "margem")
     private List<Item> itens;
 
-    public GrupoDeMargem() {
+    public Margem() {
     }
 
-    public GrupoDeMargem(Long id, String nome, BigDecimal margem, BigDecimal custoFixo, BigDecimal frete, BigDecimal outrosCustos, BigDecimal embalagem) throws DadoInvalidoException {
+    public Margem(Long id, String nome, BigDecimal margem, BigDecimal custoFixo, BigDecimal frete, BigDecimal outrosCustos, BigDecimal embalagem) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.margem = margem;
@@ -75,22 +75,37 @@ public class GrupoDeMargem implements Serializable {
     }
 
     public BigDecimal getMargem() {
+        if (margem == null) {
+            margem = BigDecimal.ZERO;
+        }
         return margem;
     }
 
     public BigDecimal getCustoFixo() {
+        if (custoFixo == null) {
+            custoFixo = BigDecimal.ZERO;
+        }
         return custoFixo;
     }
 
     public BigDecimal getFrete() {
+        if (frete == null) {
+            frete = BigDecimal.ZERO;
+        }
         return frete;
     }
 
     public BigDecimal getOutrosCustos() {
+        if (outrosCustos == null) {
+            outrosCustos = BigDecimal.ZERO;
+        }
         return outrosCustos;
     }
 
     public BigDecimal getEmbalagem() {
+        if (embalagem == null) {
+            embalagem = BigDecimal.ZERO;
+        }
         return embalagem;
     }
 
@@ -98,25 +113,9 @@ public class GrupoDeMargem implements Serializable {
         return itens;
     }
 
-    public BigDecimal getMargemDeCustos() {
-        if (custoFixo == null) {
-            custoFixo = BigDecimal.ZERO;
-        }
-        if (frete == null) {
-            frete = BigDecimal.ZERO;
-        }
-        if (embalagem == null) {
-            embalagem = BigDecimal.ZERO;
-        }
-        if (outrosCustos == null) {
-            outrosCustos = BigDecimal.ZERO;
-        }
-        return custoFixo.add(frete.add(embalagem.add(outrosCustos)));
-    }
-
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "margem", "custoFixo", "frete", "outrosCustos", "embalagem");
-        new ValidadorDeCampos<GrupoDeMargem>().valida(this, campos);
+        new ValidadorDeCampos<Margem>().valida(this, campos);
     }
 
     @Override
@@ -124,10 +123,10 @@ public class GrupoDeMargem implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof GrupoDeMargem)) {
+        if (!(objeto instanceof Margem)) {
             return false;
         }
-        GrupoDeMargem outro = (GrupoDeMargem) objeto;
+        Margem outro = (Margem) objeto;
         if (this.id == null) {
             return false;
         }
