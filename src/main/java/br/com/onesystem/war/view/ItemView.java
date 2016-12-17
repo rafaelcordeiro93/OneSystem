@@ -3,6 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.GrupoDeMargem;
@@ -26,6 +27,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
+import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import java.io.Serializable;
@@ -53,6 +55,7 @@ public class ItemView implements Serializable {
     private BigDecimal estoqueTotal;
     private List<PrecoDeItem> precoAtual;
     private List<PrecoDeItem> precos;
+    private boolean tab = true;
 
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService serviceConfigurcao;
@@ -62,6 +65,9 @@ public class ItemView implements Serializable {
 
     @ManagedProperty("#{precoDeItemService}")
     private PrecoDeItemService servicePrecoDeItem;
+
+    @ManagedProperty("#{itemService}")
+    private ItemService serviceItem;
 
     @PostConstruct
     public void init() {
@@ -93,13 +99,20 @@ public class ItemView implements Serializable {
 
     public void addPreco() {
         try {
+            validaMargem();
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
             new AdicionaDAO<PrecoDeItem>().adiciona(novoRegistro);
+            limparJanelaPreco();
             inicializaPrecos();
             InfoMessage.adicionado();
-            limparJanelaPreco();
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    private void validaMargem() throws EDadoInvalidoException {
+        if (precoPorMargem && item.getMargem() == null) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("margem_not_null"));
         }
     }
 
@@ -141,6 +154,7 @@ public class ItemView implements Serializable {
         itemSelecionada = null;
         estoqueLista = new ArrayList<SaldoDeEstoque>();
         limparJanelaPreco();
+        tab = true;
     }
 
     public void limparJanelaPreco() {
@@ -149,16 +163,18 @@ public class ItemView implements Serializable {
 
     public void selecionaItem(SelectEvent event) {
         itemSelecionada = (Item) event.getObject();
-        inicializaListas();
+        inicializaDados();
         item = new ItemBV(itemSelecionada);
+        tab = false;
     }
 
-    private void inicializaListas() {
+    private void inicializaDados() {
         inicializaEstoque();
         inicializaPrecos();
     }
 
     private void inicializaPrecos() {
+        precoDeItemBV.setItem(itemSelecionada);
         precoAtual = servicePrecoDeItem.buscaListaDePrecoAtual(itemSelecionada);
         precos = servicePrecoDeItem.buscaTodosPrecos(itemSelecionada);
     }
@@ -170,15 +186,27 @@ public class ItemView implements Serializable {
     public void selecionaListaDePreco(SelectEvent event) {
         ListaDePreco listaDePreco = (ListaDePreco) event.getObject();
         precoDeItemBV.setListaDePreco(listaDePreco);
+        if (item.getMargem() != null) {
+            calculaPreco();
+        }
     }
 
     public void selecionaMargem(SelectEvent event) {
         GrupoDeMargem g = (GrupoDeMargem) event.getObject();
         item.setMargem(g);
+        calculaPreco();
     }
 
-    private void carregaEstoque() {
-        estoqueLista = new EstoqueService().buscaListaDeSaldoDeEstoque(itemSelecionada);
+    private void calculaPreco() {
+        BigDecimal margemDeCustos = item.getMargem().getMargemDeCustos();
+        BigDecimal margem = item.getMargem().getMargem();
+        BigDecimal p = margemDeCustos.compareTo(BigDecimal.ZERO) == 1
+                ? margemDeCustos.divide(new BigDecimal(100)) : BigDecimal.ONE;
+        BigDecimal pMargem = margem.compareTo(BigDecimal.ZERO) == 1
+                ? margem.divide(new BigDecimal(100)) : BigDecimal.ONE;
+        BigDecimal ultimoCusto = serviceItem.ultimoCusto(itemSelecionada);
+
+        precoDeItemBV.setValor(ultimoCusto.add(pMargem.multiply(p.multiply(ultimoCusto))));
     }
 
     public void desfazer() {
@@ -210,6 +238,14 @@ public class ItemView implements Serializable {
 
     public void setItem(ItemBV item) {
         this.item = item;
+    }
+
+    public ItemService getServiceItem() {
+        return serviceItem;
+    }
+
+    public void setServiceItem(ItemService serviceItem) {
+        this.serviceItem = serviceItem;
     }
 
     public Item getItemSelecionada() {
@@ -282,6 +318,14 @@ public class ItemView implements Serializable {
 
     public void setPrecoAtual(List<PrecoDeItem> precoAtual) {
         this.precoAtual = precoAtual;
+    }
+
+    public boolean isTab() {
+        return tab;
+    }
+
+    public void setTab(boolean tab) {
+        this.tab = tab;
     }
 
     public List<PrecoDeItem> getPrecos() {

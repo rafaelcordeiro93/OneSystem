@@ -1,6 +1,11 @@
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.war.service.AjusteDeEstoqueService;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 /*
@@ -15,9 +20,10 @@ import java.util.List;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) {
-         List<Baixa> resultados = new ArmazemDeRegistros<Baixa>(Baixa.class).listaTodosOsRegistros();
-
+    public static void main(String[] args) {       
+        Item item = new Item(new Long(1));
+        AjusteDeEstoque buscaUltimoAjuste = new AjusteDeEstoqueService().buscaUltimoAjuste(item);
+        System.out.println(buscaUltimoAjuste);
     }
     
 }
