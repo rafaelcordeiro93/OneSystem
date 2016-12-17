@@ -3,6 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.FatalMessage;
@@ -11,6 +12,8 @@ import br.com.onesystem.war.builder.ReceitaBV;
 import br.com.onesystem.war.service.ReceitaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.DespesaBV;
 import br.com.onesystem.war.service.GrupoFinanceiroService;
 import java.io.Serializable;
 import java.util.List;
@@ -25,28 +28,23 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class ReceitaView implements Serializable {
 
-    private boolean panel;
+  
     private ReceitaBV receita;
     private Receita receitaSelecionada;
-    private List<Receita> receitaLista;
-    private List<Receita> receitasFiltradas;
 
-    @ManagedProperty("#{receitaService}")
-    private ReceitaService service;
+
     
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        receitaLista = service.buscarReceitas();
+       
     }
 
     public void add() {
         try {
             Receita novoRegistro = receita.construir();
             new AdicionaDAO<Receita>().adiciona(novoRegistro);
-            receitaLista.add(novoRegistro);
-            InfoMessage.print("¡Receita '" + novoRegistro.getId() + "' agregado con éxito!");
+            InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
@@ -58,15 +56,10 @@ public class ReceitaView implements Serializable {
             Receita receitaExistente = receita.construirComID();
             if (receitaExistente.getId() != null) {
                 new AtualizaDAO<Receita>(Receita.class).atualiza(receitaExistente);
-                receitaLista.set(receitaLista.indexOf(receitaSelecionada),
-                        receitaExistente);
-                if (receitasFiltradas != null && receitasFiltradas.contains(receitaExistente)) {
-                    receitasFiltradas.set(receitasFiltradas.indexOf(receitaExistente), receitaExistente);
-                }
-                InfoMessage.print("¡Receita '" + receitaExistente.getId() + "' cambiado con éxito!");
+                InfoMessage.atualizado();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException("!La receita no se encontra registrada!");
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("receita_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -75,13 +68,9 @@ public class ReceitaView implements Serializable {
 
     public void delete() {
         try {
-            if (receitaLista != null && receitaLista.contains(receitaSelecionada)) {
+            if (receitaSelecionada != null ) {
                 new RemoveDAO<Receita>(Receita.class).remove(receitaSelecionada, receitaSelecionada.getId());
-                receitaLista.remove(receitaSelecionada);
-                if (receitasFiltradas != null && receitasFiltradas.contains(receitaSelecionada)) {
-                    receitasFiltradas.remove(receitaSelecionada);
-                }
-                InfoMessage.print("Receita '" + this.receita.getId() + "' eliminada con éxito!");
+                InfoMessage.removido();
                 limparJanela();
             }
         } catch (DadoInvalidoException di) {
@@ -89,6 +78,13 @@ public class ReceitaView implements Serializable {
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
+    }
+    
+    
+    public void selecionaReceita(SelectEvent e) {
+        Receita r = (Receita) e.getObject();
+        receita = new ReceitaBV(r);
+        receitaSelecionada = r;
     }
 
     public void limparJanela() {
@@ -101,19 +97,6 @@ public class ReceitaView implements Serializable {
         receita.setGrupoFinanceiro(grupoFinanceiroSelecionado);
     }
 
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        receita = new ReceitaBV(receitaSelecionada);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
-    }
 
     public void desfazer() {
         if (receitaSelecionada != null) {
@@ -121,13 +104,6 @@ public class ReceitaView implements Serializable {
         }
     }
 
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
-    }
 
     public ReceitaBV getReceita() {
         return receita;
@@ -145,28 +121,5 @@ public class ReceitaView implements Serializable {
         this.receitaSelecionada = receitaSelecionada;
     }
 
-    public List<Receita> getReceitaLista() {
-        return receitaLista;
-    }
-
-    public void setReceitaLista(List<Receita> receitaLista) {
-        this.receitaLista = receitaLista;
-    }
-
-    public List<Receita> getReceitasFiltradas() {
-        return receitasFiltradas;
-    }
-
-    public void setReceitasFiltradas(List<Receita> receitasFiltradas) {
-        this.receitasFiltradas = receitasFiltradas;
-    }
-
-    public ReceitaService getService() {
-        return service;
-    }
-
-    public void setService(ReceitaService service) {
-        this.service = service;
-    }
   
 }
