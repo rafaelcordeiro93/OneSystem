@@ -32,6 +32,8 @@ public class ListaDePreco implements Serializable {
     private String nome;
     @OneToMany(mappedBy = "listaDePreco")
     private List<PrecoDeItem> precos;
+    @OneToMany(mappedBy = "listaDePreco")
+    private List<NotaEmitida> notasEmitidas;
 
     public ListaDePreco() {
     }

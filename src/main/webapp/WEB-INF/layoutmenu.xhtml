@@ -15,8 +15,7 @@
                     <p:menuitem value="#{l.Pessoa}" icon="icon-people" outcome="/pessoa" />        
                 </p:submenu>
                 <p:submenu label="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart">
-                    <p:menuitem value="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart" outcome="/notasDeSaida" />
-                     <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
+                    <p:menuitem value="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
                 </p:submenu>
                 
                 <p:submenu label="#{l.Estoque}" icon="fa fa-table">              
@@ -24,6 +23,7 @@
                     <p:menuitem value="#{l.Moeda}" icon="icon-attach_money" outcome="/moeda" /> 
                     <p:menuitem value="#{l.Margem}" icon="icon-attach_money" outcome="/margem" /> 
                     <p:menuitem value="#{l.Cotacoes}" icon="icon-account_balance" outcome="/cotacao" />
+                    <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
                     <p:submenu label="#{l.Cadastros}" icon="icon-library_books">
                         <p:menuitem value="#{l.Unidade_Medida}" icon="icon-dns" outcome="/unidadeMedidaItem" />
                         <p:menuitem value="#{l.IVA}" icon="fa fa-money" outcome="/iva" />

@@ -1,0 +1,119 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">  
+
+                            <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
+                                         columnClasses="ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-3">
+                                <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                    <p:inputText id="notaEmitidaOperacao" size="32" readonly="true" placeholder="#{l.Operacao}" value="#{notaEmitidaView.notaEmitida.id}"/>
+                                    <p:commandButton id="botaoPesquisaOperacao" icon="fa fa-search Fs16 White" action="#{selecaoOperacaoView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaOperacao}"
+                                                process="@this" update="notaEmitidaOperacao" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                    <p:inputText id="notaEmitidaPessoa" size="32" readonly="true" placeholder="#{l.Pessoa}" value="#{notaEmitidaView.notaEmitida.pessoa.nome}"/>
+                                    <p:commandButton id="botaoPesquisaPessoa" icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaPessoa}"
+                                                process="@this" update="notaEmitidaPessoa" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                                
+                                <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                    <p:inputText id="notaEmitidaListaPreco" size="32" readonly="true" placeholder="#{l.Lista_De_Preco}" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}"/>
+                                    <p:commandButton id="botaoPesquisaListaPreco" icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaListaDePreco}"
+                                                process="@this" update="notaEmitidaListaPreco" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </p:panelGrid> 
+
+                            <p:separator/>
+
+                            <p:dataTable id="itensEmitidos" var="despesaProvisionadaBV" value="#{despesaProvisionadaView.parcelas}" rowKey="#{despesaProvisionadaBV.id}"
+                                         emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
+                                <p:ajax event="cellEdit" update=":conteudo:itensEmitidos" />
+
+                                <p:column headerText="#{l.Id}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="1">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Nome}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="3" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Deposito}" sortBy="#{despesaProvisionadaBV.valor}" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.valor}" /></f:facet>
+                                        <f:facet name="input"><p:inputText value="#{despesaProvisionadaBV.valor}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.UN}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="1" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.QTDE}" sortBy="#{despesaProvisionadaBV.vencimento}" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Unitario}" sortBy="#{despesaProvisionadaBV.vencimento}" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Desconto}" sortBy="#{despesaProvisionadaBV.vencimento}" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Acrescimo}" sortBy="#{despesaProvisionadaBV.vencimento}" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                <p:column headerText="#{l.Total}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="2" >
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                    </p:cellEditor>
+                                </p:column>
+                                
+                            </p:dataTable>
+                            
+                             <p:separator/>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -46,9 +46,8 @@ public class GrupoFinanceiroView implements Serializable {
 
     public void update() {
         try {
-            GrupoFinanceiro grupoFinanceiroExistente = grupoFinanceiro.construirComID();
-            if (grupoFinanceiroExistente.getId() != null) {
-
+            if (grupoFinanceiroSelecionado != null) {
+                GrupoFinanceiro grupoFinanceiroExistente = grupoFinanceiro.construirComID();
                 new AtualizaDAO<GrupoFinanceiro>(GrupoFinanceiro.class).atualiza(grupoFinanceiroExistente);
                 InfoMessage.atualizado();
                 limparJanela();
@@ -95,7 +94,7 @@ public class GrupoFinanceiroView implements Serializable {
 
     public void limparJanela() {
         grupoFinanceiro = new GrupoFinanceiroBV();
-        grupoFinanceiroSelecionado = new GrupoFinanceiro();
+        grupoFinanceiroSelecionado = null;
     }
 
     public void desfazer() {
