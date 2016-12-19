@@ -78,7 +78,10 @@ public class ItemView implements Serializable {
 
     private void inicializarConfiguracoes() {
         try {
-            configuracao = serviceConfigurcao.buscar();            
+            configuracao = serviceConfigurcao.buscar();
+            if (configuracao.getMoedaPadrao() == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+            }
         } catch (EDadoInvalidoException ex) {
             ex.print();
         }
@@ -199,8 +202,7 @@ public class ItemView implements Serializable {
     }
 
     private void calculaPreco() throws DadoInvalidoException {
-        if (configuracao != null && configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null
-                && configuracao.getMoedaPadrao() != null) {
+        if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
             CalculadoraDePreco calculadora = new CalculadoraDePreco(itemSelecionada, configuracao.getTipoDeCalculoDeCusto());
             precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
                     ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
