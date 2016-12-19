@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <f:facet name="first">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+            <meta name="apple-mobile-web-app-capable" content="yes" />
+        </f:facet>
+        <title>#{l.Selecao_De_Comissao}</title>
+        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
+        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
+        <h:outputScript name="js/layout.js" library="modena-layout" />
+        <h:outputScript name="js/personalizado.js" library="modena-layout" />
+
+    </h:head>
+
+
+    <h:body>
+        <f:loadBundle basename="label_messages" var="l"/>
+        <h:form>
+            <p:dataTable id="comissaoDT" var="comissao" value="#{selecaoComissaoView.comissaoLista}" selectionMode="single" selection="#{selecaoComissaoView.comissaoSelecionada}" rowKey="#{comissao.id}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{selecaoComissaoView.comissaosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
+
+                <p:ajax event="rowSelect" process="@this" listener="#{selecaoComissaoView.selecionar()}" />
+
+                <p:column headerText="#{l.Id}" sortBy="#{comissao.id}" filterBy="#{comissao.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                    <h:outputText value="#{comissao.id}" />
+                </p:column>
+                <p:column headerText="#{l.Nome}" sortBy="#{comissao.nome}" filterBy="#{comissao.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                    <h:outputText value="#{comissao.nome}" />
+                </p:column>
+                <p:column headerText="#{l.Comissao_Vendedor}" sortBy="#{comissao.comissaoVendedor}" filterBy="#{comissao.comissaoVendedor}" footerText="#{l.Comissao_Vendedor}" filterMatchMode="contains">
+                    <h:outputText value="#{comissao.comissaoVendedor}" />
+                </p:column>
+                <p:column headerText="#{l.Comissao_Representante}" sortBy="#{comissao.comissaoRepresentante}" filterBy="#{comissao.comissaoRepresentante}" footerText="#{l.Comissao_Representante}" filterMatchMode="contains">
+                    <h:outputText value="#{comissao.comissaoRepresentante}" />
+                </p:column>
+               
+                
+            </p:dataTable>
+        </h:form>
+    </h:body>
+
+</html>
