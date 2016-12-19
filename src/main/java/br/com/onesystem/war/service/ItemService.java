@@ -20,7 +20,7 @@ public class ItemService implements Serializable {
     public BigDecimal ultimoCusto(Item item){
         AjusteDeEstoqueService aj = new AjusteDeEstoqueService();
         AjusteDeEstoque uAjuste = aj.buscaUltimoAjuste(item);
-        return uAjuste.getCusto();
+        return uAjuste.getCusto() != null ? uAjuste.getCusto() : BigDecimal.ZERO;
     }
     
     public BigDecimal custoMedio(Item item){
