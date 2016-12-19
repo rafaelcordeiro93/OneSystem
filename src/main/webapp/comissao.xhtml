@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+
+                            <h2 class="BigTopic"> #{l.Edicao_De_Registro}</h2>
+
+                            <div class="Container100 Responsive100">
+                                <div class="Container50 Responsive50">
+                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                            <p:inputText id="comissao" readonly="true" placeholder="#{l.Id}" value="#{comissaoView.comissao.id}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoComissaoView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{comissaoView.selecionaComissao}" update=":conteudo"
+                                                        process="@this"  />
+                                            </p:commandButton>
+                                        </h:panelGrid>     
+
+                                        <p:inputText value="#{comissaoView.comissao.nome}" placeholder=" #{l.Nome}" maxlength="60" styleClass="Wid90"/>
+
+                                        <pe:inputNumber  value="#{comissaoView.comissao.comissaoVendedor}" decimalPlaces="0" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Comissao_Vendedor}"/>
+                                        </pe:inputNumber>
+
+                                        <pe:inputNumber  value="#{comissaoView.comissao.comissaoRepresentante}" decimalPlaces="0" >
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Comissao_Representante}"/>
+                                        </pe:inputNumber>
+
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+
+                            <div class="EmptyBox5"/>
+
+                            <p:separator/>
+
+                            <p:commandButton value=" #{l.Adicionar}" action="#{comissaoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value=" #{l.Atualizar}" action="#{comissaoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                            <p:commandButton value=" #{l.Remover}" action="#{comissaoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                            <p:commandButton value=" #{l.Limpar}" action="#{comissaoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                            <p:commandButton value=" #{l.Desfazer}" action="#{comissaoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                             styleClass="OrangeButton" />
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
