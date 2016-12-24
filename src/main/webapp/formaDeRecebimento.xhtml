@@ -38,7 +38,7 @@
                                             <p:selectBooleanCheckbox itemLabel="#{l.Entrada}" styleClass="MarTop5" id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
 
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.porcentagemDeEntrada}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Percentual_Entrada}"/>
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Percentual_Entrada}"/>
                                             </pe:inputNumber>       
 
                                             <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeEntrada}" styleClass="Wid40">
@@ -55,6 +55,8 @@
                                             <p:selectBooleanCheckbox itemLabel="#{l.Entrada_Credito}" styleClass="MarTop5" id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCredito}"/>
                                         </h:panelGrid>
 
+                                        <p:separator/>
+
                                         <h:panelGrid columns="3">
                                             <p:selectBooleanCheckbox itemLabel="#{l.Parcela_Cheque}" styleClass="MarTop5" id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCheque}"/>
                                             <p:selectBooleanCheckbox itemLabel="#{l.Parcela_Cartao}" styleClass="MarTop5" id="formaDeRecebimentoParcelaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCartao}"/>
@@ -63,19 +65,19 @@
 
                                         <h:panelGrid columns="2">
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.minimoDeParcelas}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Minimo_Parcelas}"/>
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Minimo_Parcelas}"/>
                                             </pe:inputNumber>    
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Maximo_Parcelas}"/>
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Maximo_Parcelas}"/>
                                             </pe:inputNumber>    
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="3" >
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.diasPrimeiraParcela}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Primeira_Parcela}"/>
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Primeira_Parcela}"/>
                                             </pe:inputNumber>         
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.periodicidade}" >
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Periodicidade}"/>
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Periodicidade}"/>
                                             </pe:inputNumber>     
                                             <p:selectOneMenu id="formaDeRecebimentoTipoPeriodicidade" value="#{formaDeRecebimentoView.formaDeRecebimento.tipoPeriodicidade}" styleClass="Wid40">
                                                 <f:selectItems value="#{formaDeRecebimentoView.tipoPeriodicidade}" var="#{l.Tipo_Periodicidade}" itemLabel="#{TipoPeriodicidade}" itemValue="#{TipoPeriodicidade}" >
