@@ -6,8 +6,10 @@
 package br.com.onesystem.domain;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -41,15 +45,28 @@ public class NotaEmitida implements Serializable {
     private List<Titulo> titulos;
     @ManyToOne
     private ListaDePreco listaDePreco;
+    @NotNull(message = "{valor_desconto_not_null}")
+    @Max(value = 9999999, message = "{valor_desconto_max}")
+    @Min(value = 0, message = "{valorDesconto_min}")
+    @Column(nullable = false)
+    private BigDecimal desconto = BigDecimal.ZERO;
+    @NotNull(message = "{valor_acrescimo_not_null}")
+    @Max(value = 9999999, message = "{valor_acrescimo_max}")
+    @Min(value = 0, message = "{valor_acrescimo_min}")
+    @Column(nullable = false)
+    private BigDecimal acrescimo = BigDecimal.ZERO;
 
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
-            List<Titulo> titulos, ListaDePreco listaDePreco) {
+            List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto,
+            BigDecimal acrescimo) {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
         this.itensEmitidos = itensEmitidos;
         this.titulos = titulos;
-        this.listaDePreco = listaDePreco;
+        this.listaDePreco = listaDePreco;        
+        this.acrescimo = acrescimo;
+        this.desconto = desconto;
     }
 
     public Long getId() {

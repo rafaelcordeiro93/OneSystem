@@ -8,21 +8,42 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemPorDeposito;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.war.builder.ItemBV;
+import br.com.onesystem.war.builder.ItemEmitidoBV;
+import br.com.onesystem.war.builder.ItemPorDepositoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
-import br.com.onesystem.war.builder.PessoaBV;
+import br.com.onesystem.war.builder.QuantidadeDeItemBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.view.dialogo.QuantidadeDeItemView;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
@@ -36,10 +57,37 @@ public class NotaEmitidaView implements Serializable {
 
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
+    private ItemEmitidoBV itemEmitido;
+    private ItemEmitido itemEmitidoSelecionado;
+    private List<ItemEmitido> itensEmitidos;
+    private ItemPorDepositoBV itemPorDepositoBV;
+    private List<ItemPorDeposito> itensPorDeposito;
+    private Configuracao configuracao;
+
+    @ManagedProperty("#{configuracaoService}")
+    private ConfiguracaoService configuracaoService;
 
     @PostConstruct
     public void init() {
+        iniciarConfiguracoes();
         limparJanela();
+        limpaSessao();
+    }
+
+    private void limpaSessao() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        if (session.getAttribute("onesystem.item.token") != null) {
+            session.removeAttribute("onesystem.item.token");
+        }
+    }
+
+    private void iniciarConfiguracoes() {
+        try {
+            configuracao = configuracaoService.buscar();
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void add() {
@@ -82,6 +130,11 @@ public class NotaEmitidaView implements Serializable {
         }
     }
 
+    public void selecionaItemEmitido(SelectEvent event) {
+        this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
+        this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
+    }
+
     public void selecionaOperacao(SelectEvent event) {
         notaEmitida.setOperacao((Operacao) event.getObject());
     }
@@ -100,8 +153,73 @@ public class NotaEmitidaView implements Serializable {
         notaEmitidaSelecionada = r;
     }
 
+    public void addItemNaLista() {
+        try {
+            itemEmitido.setId(new Date().getTime());
+            itensEmitidos.add(itemEmitido.construirComId());
+            limparItemEmitido();
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void updateItemNaLista() {
+        try {
+            if (itemEmitidoSelecionado != null) {
+                itensEmitidos.set(itensEmitidos.indexOf(itemEmitidoSelecionado),
+                        itemEmitido.construirComId());
+                limparItemEmitido();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void deleteItemNaLista() {
+        if (itemEmitidoSelecionado != null) {
+            itensEmitidos.remove(itemEmitidoSelecionado);
+            limparItemEmitido();
+        }
+    }
+
+    public void limparItemEmitido() {
+        itemEmitido = new ItemEmitidoBV();
+        itemEmitidoSelecionado = null;
+    }
+
+    public void selecionaItem(SelectEvent event) {
+        itemEmitido.setItem((Item) event.getObject());
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.setAttribute("onesystem.item.token", itemEmitido.getItem());
+    }
+
+    public void selecionaQuantidadeDeItemBV(SelectEvent event) {
+        List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
+        criaItemPorDeposito(lista);
+        itemEmitido.setListaDeItemPorDeposito(itensPorDeposito);
+    }
+
+    private void criaItemPorDeposito(List<QuantidadeDeItemBV> lista) {
+        itensPorDeposito = new ArrayList<ItemPorDeposito>();
+        try {
+            for (QuantidadeDeItemBV q : lista) {
+                itemPorDepositoBV = new ItemPorDepositoBV();
+                itemPorDepositoBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
+                itemPorDepositoBV.setQuantidade(q.getQuantidade());
+                itensPorDeposito.add(itemPorDepositoBV.construir());
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
+        itemEmitido = new ItemEmitidoBV();
+        itemPorDepositoBV = new ItemPorDepositoBV();
+        itensEmitidos = new ArrayList<ItemEmitido>();
+        itensPorDeposito = new ArrayList<ItemPorDeposito>();
         notaEmitidaSelecionada = null;
     }
 
@@ -125,6 +243,62 @@ public class NotaEmitidaView implements Serializable {
 
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
+    }
+
+    public ItemEmitidoBV getItemEmitido() {
+        return itemEmitido;
+    }
+
+    public void setItemEmitido(ItemEmitidoBV itemEmitido) {
+        this.itemEmitido = itemEmitido;
+    }
+
+    public List<ItemEmitido> getItensEmitidos() {
+        return itensEmitidos;
+    }
+
+    public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
+        this.itensEmitidos = itensEmitidos;
+    }
+
+    public ItemPorDepositoBV getItemPorDepositoBV() {
+        return itemPorDepositoBV;
+    }
+
+    public void setItemPorDepositoBV(ItemPorDepositoBV itemPorDepositoBV) {
+        this.itemPorDepositoBV = itemPorDepositoBV;
+    }
+
+    public List<ItemPorDeposito> getItensPorDeposito() {
+        return itensPorDeposito;
+    }
+
+    public void setItensPorDeposito(List<ItemPorDeposito> itensPorDeposito) {
+        this.itensPorDeposito = itensPorDeposito;
+    }
+
+    public Configuracao getConfiguracao() {
+        return configuracao;
+    }
+
+    public void setConfiguracao(Configuracao configuracao) {
+        this.configuracao = configuracao;
+    }
+
+    public ConfiguracaoService getConfiguracaoService() {
+        return configuracaoService;
+    }
+
+    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
+        this.configuracaoService = configuracaoService;
+    }
+
+    public ItemEmitido getItemEmitidoSelecionado() {
+        return itemEmitidoSelecionado;
+    }
+
+    public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
+        this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
 
 }

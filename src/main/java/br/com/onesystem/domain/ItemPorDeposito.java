@@ -40,9 +40,9 @@ public class ItemPorDeposito implements Serializable {
     @Column(nullable = false)
     private BigDecimal quantidade = BigDecimal.ZERO;
     @NotNull(message = "{deposito_not_null}")
-    @ManyToOne 
+    @ManyToOne
     private Deposito deposito;
-    @NotNull(message = "{item_emitido_not_null}")
+//    @NotNull(message = "{item_emitido_not_null}")
     @ManyToOne
     private ItemEmitido itemEmitido;
 

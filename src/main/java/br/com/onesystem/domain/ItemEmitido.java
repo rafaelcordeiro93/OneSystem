@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,34 +44,26 @@ public class ItemEmitido implements Serializable {
     @Max(value = 9999999, message = "{valor_unitario_max}")
     @Min(value = 0, message = "{valor_unitario_min}")
     @Column(nullable = false)
-    private BigDecimal valorUnitario = BigDecimal.ZERO;
-    @NotNull(message = "{valor_desconto_not_null}")
-    @Max(value = 9999999, message = "{valor_desconto_max}")
-    @Min(value = 0, message = "{valorDesconto_min}")
-    @Column(nullable = false)
-    private BigDecimal valorDesconto = BigDecimal.ZERO;
-    @NotNull(message = "{valor_acrescimo_not_null}")
-    @Max(value = 9999999, message = "{valor_acrescimo_max}")
-    @Min(value = 0, message = "{valor_acrescimo_min}")
-    @Column(nullable = false)
-    private BigDecimal valorAcrescimo = BigDecimal.ZERO;
-    @NotNull(message = "{nota_emitida_not_null}")
+    private BigDecimal unitario = BigDecimal.ZERO;    
     @ManyToOne
     private NotaEmitida notaEmitida;
-    @OneToMany(mappedBy = "itemEmitido")
+    @OneToMany(mappedBy = "itemEmitido", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<ItemPorDeposito> listaDeItemPorDeposito;
-
+    
     public ItemEmitido() {
     }
 
-    public ItemEmitido(Long id, Item item, BigDecimal valorUnitario, BigDecimal valorDesconto,
-            BigDecimal valorAcrescimo, NotaEmitida notaEmitida) throws DadoInvalidoException {
+    public ItemEmitido(Long id){
+        
+    }
+    
+    public ItemEmitido(Long id, Item item, BigDecimal valorUnitario, NotaEmitida notaEmitida,
+            List<ItemPorDeposito> listaDeItemPorDeposito) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.notaEmitida = notaEmitida;
-        this.valorAcrescimo = valorAcrescimo;
-        this.valorDesconto = valorDesconto;
-        this.valorUnitario = valorUnitario;
+        this.unitario = valorUnitario;
+        this.listaDeItemPorDeposito = listaDeItemPorDeposito;
         ehValido();
     }
 
@@ -82,24 +75,32 @@ public class ItemEmitido implements Serializable {
         return item;
     }
 
-    public BigDecimal getValorUnitario() {
-        return valorUnitario;
-    }
-
-    public BigDecimal getValorDesconto() {
-        return valorDesconto;
-    }
-
-    public BigDecimal getValorAcrescimo() {
-        return valorAcrescimo;
-    }
+    public BigDecimal getUnitario() {
+        return unitario;
+    } 
 
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
+    } 
+
+    public List<ItemPorDeposito> getListaDeItemPorDeposito() {
+        return listaDeItemPorDeposito;
+    }
+    
+    public BigDecimal getQuantidade(){
+        BigDecimal quantidade = BigDecimal.ZERO;
+        for(ItemPorDeposito ipd :listaDeItemPorDeposito){
+            quantidade = quantidade.add(ipd.getQuantidade());
+        }
+        return quantidade;
+    }
+    
+    public BigDecimal getTotal(){
+        return getQuantidade().multiply(unitario);
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "notaEmitida", "valorAcrescimo", "valorDesconto", "valorUnitario");
+        List<String> campos = Arrays.asList("item", "notaEmitida", "unitario");
         new ValidadorDeCampos<ItemEmitido>().valida(this, campos);
     }
 
@@ -108,7 +109,7 @@ public class ItemEmitido implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (!(objeto instanceof ItemEmitido)) {
             return false;
         }
         ItemEmitido outro = (ItemEmitido) objeto;
@@ -120,7 +121,7 @@ public class ItemEmitido implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + item + ", valorUnitario=" + valorUnitario + ", valorDesconto=" + valorDesconto + ", valorAcrescimo=" + valorAcrescimo + ", notaEmitida=" + notaEmitida + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + item + ", valorUnitario=" + unitario + ", notaEmitida=" + notaEmitida + '}';
     }
 
 }
