@@ -20,6 +20,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -92,6 +93,8 @@ public class FormaDeRecebimento implements Serializable {
     @Min(value = 0, message = "{dias_primeira_parcela_min}")
     @Column(nullable = false)
     private Integer diasPrimeiraParcela;
+    @OneToMany(mappedBy = "formaDeRecebimento")
+    private List<NotaEmitida> notasEmitidas;
 
     public FormaDeRecebimento() {
     }

@@ -78,12 +78,12 @@
                                     <p:inputText id="notaItemTotal" value="#{notaEmitidaView.configuracao.moedaPadrao.sigla} #{notaEmitidaView.itemEmitido.total}" size="22" readonly="true"/>
 
                                     <h:panelGrid columns="3">
-                                    <p:commandButton icon="fa fa-plus Fs16 White" action="#{notaEmitidaView.addItemNaLista}" 
-                                                     update=":conteudo"/>
-                                     <p:commandButton icon="fa fa-refresh Fs16 White" action="#{notaEmitidaView.updateItemNaLista}" 
-                                                      update=":conteudo" styleClass="GreenButton"/>     
-                                    <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{notaEmitidaView.deleteItemNaLista}" 
-                                                     update=":conteudo" styleClass="RedButton"/>
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{notaEmitidaView.addItemNaLista}" 
+                                                         update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-refresh Fs16 White" action="#{notaEmitidaView.updateItemNaLista}" 
+                                                         update=":conteudo" styleClass="GreenButton"/>     
+                                        <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{notaEmitidaView.deleteItemNaLista}" 
+                                                         update=":conteudo" styleClass="RedButton"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
 
@@ -93,7 +93,7 @@
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{notaEmitidaView.itemEmitidoSelecionado}">
 
                                 <p:ajax event="rowSelect" process="@this" listener="#{notaEmitidaView.selecionaItemEmitido}" update=":conteudo"/>
-                                
+
                                 <p:column headerText="#{l.Id}" sortBy="#{itemEmitido.item.id}"  colspan="1">
                                     <h:outputText value="#{itemEmitido.item.id}" />
                                 </p:column>
@@ -118,7 +118,17 @@
                             <p:separator/>
 
                             <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Forma_Recebimento}</div>
+
+                            <h:panelGrid columns="2" >
+                                <p:inputText value="#{notaEmitidaView.notaEmitida.formaDeRecebimento.nome}" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFormaDeRecebimentoView.abrirDialogo()}" process="@this"
+                                                 update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaFormaDeRecebimento}"
+                                            process="@this" update=":conteudo" />
+                                </p:commandButton>
+                            </h:panelGrid>
                             
+                            <p:separator/>
                         </div>
                     </div>
                 </div>

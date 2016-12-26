@@ -55,62 +55,58 @@ public class NotaEmitida implements Serializable {
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = false)
     private BigDecimal acrescimo = BigDecimal.ZERO;
+    @NotNull(message = "{forma_recebimento_not_null}")
+    @ManyToOne
+    private FormaDeRecebimento formaDeRecebimento;
 
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
             List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto,
-            BigDecimal acrescimo) {
+            BigDecimal acrescimo, FormaDeRecebimento formaDeRecebimento) {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
         this.itensEmitidos = itensEmitidos;
         this.titulos = titulos;
-        this.listaDePreco = listaDePreco;        
+        this.listaDePreco = listaDePreco;
         this.acrescimo = acrescimo;
         this.desconto = desconto;
+        this.formaDeRecebimento = formaDeRecebimento;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Pessoa getPessoa() {
         return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
     }
 
     public Operacao getOperacao() {
         return operacao;
     }
 
-    public void setOperacao(Operacao operacao) {
-        this.operacao = operacao;
-    }
-
     public List<ItemEmitido> getItensEmitidos() {
         return itensEmitidos;
-    }
-
-    public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
-        this.itensEmitidos = itensEmitidos;
     }
 
     public List<Titulo> getTitulos() {
         return titulos;
     }
 
-    public void setTitulos(List<Titulo> titulos) {
-        this.titulos = titulos;
-    }
-
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
+    }
+
+    public BigDecimal getDesconto() {
+        return desconto;
+    }
+
+    public BigDecimal getAcrescimo() {
+        return acrescimo;
+    }
+
+    public FormaDeRecebimento getFormaDeRecebimento() {
+        return formaDeRecebimento;
     }
 
     @Override
@@ -130,7 +126,7 @@ public class NotaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + '}';
+        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", formaDeRecebimento=" + formaDeRecebimento + '}';
     }
 
 }

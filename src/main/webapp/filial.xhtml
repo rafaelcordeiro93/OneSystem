@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+
+                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+
+                            <div class="Container100 Responsive100">
+                                <div class="Container50 Responsive50">
+                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+
+                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                            <p:inputText id="ajustedeestoque" readonly="true" placeholder="#{l.Id}" value="#{filialView.filial.id}"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFilialView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{filialView.selecionaFilial}" update=":conteudo"
+                                                        process="@this"  />
+                                            </p:commandButton>
+                                        </h:panelGrid>     
+
+                                        <p:inputText value="#{filialView.filial.nome}" placeholder=" #{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                        <p:inputText value="#{filialView.filial.razao_social}" placeholder=" #{l.Razao_social}" maxlength="60" styleClass="Wid90"/>
+                                        <p:inputText value="#{filialView.filial.fantasia}" placeholder=" #{l.Fantasia}" maxlength="60" styleClass="Wid90"/>
+                                        <p:inputText value="#{filialView.filial.ruc}" placeholder=" #{l.Ruc}" maxlength="60" styleClass="Wid90"/>
+
+                                        <p:inputText value="#{filialView.filial.endereco}" placeholder=" #{l.Endereco}" maxlength="60" styleClass="Wid90"/>
+                                        <p:inputText value="#{filialView.filial.bairro}" placeholder=" #{l.Bairro}" maxlength="60" styleClass="Wid90"/>
+
+                                        <h:panelGrid columns="2" style="margin-top: -2%">
+                                            <p:inputText id="cidade" readonly="true" placeholder="#{l.Cidade}" value="#{filialView.filial.cidade.nome}"/> 
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoCidadeView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{filialView.selecionaCidade}"
+                                                        process="@this" update="cidade" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+
+                                        <p:inputMask mask="(99) 9999-9999?9" id="Telefone" styleClass="Wid90" value="#{filialView.filial.telefone}" placeholder="#{l.Telefone}"/>
+
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+
+                            <div class="EmptyBox5"/>
+
+                            <p:separator/>
+                            
+
+                            <p:commandButton value="#{l.Adicionar}" action="#{filialView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value="#{l.Atualizar}" action="#{filialView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                            <p:commandButton value="#{l.Remover}" action="#{filialView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                            <p:commandButton value="#{l.Limpar}" action="#{filialView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                            <p:commandButton value="#{l.Desfazer}" action="#{filialView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                             styleClass="OrangeButton" />   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

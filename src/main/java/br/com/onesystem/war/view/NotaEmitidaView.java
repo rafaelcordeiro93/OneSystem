@@ -9,6 +9,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ItemPorDeposito;
@@ -54,7 +55,7 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @ViewScoped
 public class NotaEmitidaView implements Serializable {
-
+    
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
     private ItemEmitidoBV itemEmitido;
@@ -63,17 +64,17 @@ public class NotaEmitidaView implements Serializable {
     private ItemPorDepositoBV itemPorDepositoBV;
     private List<ItemPorDeposito> itensPorDeposito;
     private Configuracao configuracao;
-
+    
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
-
+    
     @PostConstruct
     public void init() {
         iniciarConfiguracoes();
         limparJanela();
         limpaSessao();
     }
-
+    
     private void limpaSessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -81,7 +82,7 @@ public class NotaEmitidaView implements Serializable {
             session.removeAttribute("onesystem.item.token");
         }
     }
-
+    
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
@@ -89,7 +90,7 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-
+    
     public void add() {
         try {
             NotaEmitida novoRegistro = notaEmitida.construir();
@@ -100,7 +101,7 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-
+    
     public void update() {
         try {
             if (notaEmitidaSelecionada != null) {
@@ -115,7 +116,7 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-
+    
     public void delete() {
         try {
             if (notaEmitidaSelecionada != null) {
@@ -129,30 +130,35 @@ public class NotaEmitidaView implements Serializable {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
     }
-
+    
     public void selecionaItemEmitido(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
     }
+    
+    public void selecionaFormaDeRecebimento(SelectEvent e) {
+        FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
+        notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
+    }    
 
     public void selecionaOperacao(SelectEvent event) {
         notaEmitida.setOperacao((Operacao) event.getObject());
     }
-
+    
     public void selecionaPessoa(SelectEvent event) {
         notaEmitida.setPessoa((Pessoa) event.getObject());
     }
-
+    
     public void selecionaListaDePreco(SelectEvent event) {
         notaEmitida.setListaDePreco((ListaDePreco) event.getObject());
     }
-
+    
     public void selecionaNotaEmitida(SelectEvent e) {
         NotaEmitida r = (NotaEmitida) e.getObject();
         notaEmitida = new NotaEmitidaBV(r);
         notaEmitidaSelecionada = r;
     }
-
+    
     public void addItemNaLista() {
         try {
             itemEmitido.setId(new Date().getTime());
@@ -162,7 +168,7 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-
+    
     public void updateItemNaLista() {
         try {
             if (itemEmitidoSelecionado != null) {
@@ -174,32 +180,32 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-
+    
     public void deleteItemNaLista() {
         if (itemEmitidoSelecionado != null) {
             itensEmitidos.remove(itemEmitidoSelecionado);
             limparItemEmitido();
         }
     }
-
+    
     public void limparItemEmitido() {
         itemEmitido = new ItemEmitidoBV();
         itemEmitidoSelecionado = null;
     }
-
+    
     public void selecionaItem(SelectEvent event) {
         itemEmitido.setItem((Item) event.getObject());
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
-
+    
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
         List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
         criaItemPorDeposito(lista);
         itemEmitido.setListaDeItemPorDeposito(itensPorDeposito);
     }
-
+    
     private void criaItemPorDeposito(List<QuantidadeDeItemBV> lista) {
         itensPorDeposito = new ArrayList<ItemPorDeposito>();
         try {
@@ -213,7 +219,7 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-
+    
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
         itemEmitido = new ItemEmitidoBV();
@@ -222,83 +228,83 @@ public class NotaEmitidaView implements Serializable {
         itensPorDeposito = new ArrayList<ItemPorDeposito>();
         notaEmitidaSelecionada = null;
     }
-
+    
     public void desfazer() {
         if (notaEmitidaSelecionada != null) {
             notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
         }
     }
-
+    
     public NotaEmitida getNotaEmitidaSelecionada() {
         return notaEmitidaSelecionada;
     }
-
+    
     public void setNotaEmitidaSelecionada(NotaEmitida notaEmitidaSelecionada) {
         this.notaEmitidaSelecionada = notaEmitidaSelecionada;
     }
-
+    
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
     }
-
+    
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-
+    
     public ItemEmitidoBV getItemEmitido() {
         return itemEmitido;
     }
-
+    
     public void setItemEmitido(ItemEmitidoBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-
+    
     public List<ItemEmitido> getItensEmitidos() {
         return itensEmitidos;
     }
-
+    
     public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
         this.itensEmitidos = itensEmitidos;
     }
-
+    
     public ItemPorDepositoBV getItemPorDepositoBV() {
         return itemPorDepositoBV;
     }
-
+    
     public void setItemPorDepositoBV(ItemPorDepositoBV itemPorDepositoBV) {
         this.itemPorDepositoBV = itemPorDepositoBV;
     }
-
+    
     public List<ItemPorDeposito> getItensPorDeposito() {
         return itensPorDeposito;
     }
-
+    
     public void setItensPorDeposito(List<ItemPorDeposito> itensPorDeposito) {
         this.itensPorDeposito = itensPorDeposito;
     }
-
+    
     public Configuracao getConfiguracao() {
         return configuracao;
     }
-
+    
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-
+    
     public ConfiguracaoService getConfiguracaoService() {
         return configuracaoService;
     }
-
+    
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
     }
-
+    
     public ItemEmitido getItemEmitidoSelecionado() {
         return itemEmitidoSelecionado;
     }
-
+    
     public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
         this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
-
+    
 }
