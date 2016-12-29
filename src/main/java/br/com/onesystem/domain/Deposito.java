@@ -31,7 +31,7 @@ public class Deposito implements Serializable {
     private List<AjusteDeEstoque> listadeAjuste;
     @OneToMany(mappedBy = "deposito") 
     private List<ItemPorDeposito> itensPorDeposito;
-    
+
 
     public Deposito() {
     }

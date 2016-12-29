@@ -4,7 +4,6 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.domain.Privilegio;
 import java.io.IOException;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;

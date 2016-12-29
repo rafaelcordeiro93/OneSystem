@@ -1,15 +1,18 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class NotaEmitidaBV implements Serializable {
@@ -22,6 +25,9 @@ public class NotaEmitidaBV implements Serializable {
     private List<ItemEmitido> itensEmitidos;
     private List<Titulo> titulos;
     private ListaDePreco listaDePreco;
+    private BigDecimal acrescimo = BigDecimal.ZERO;
+    private BigDecimal desconto = BigDecimal.ZERO;
+    private FormaDeRecebimento formaDeRecebimento;
 
     public NotaEmitidaBV(NotaEmitida notaEmitidaSelecionada) {
         this.id = notaEmitidaSelecionada.getId();
@@ -29,6 +35,7 @@ public class NotaEmitidaBV implements Serializable {
         this.operacao = notaEmitidaSelecionada.getOperacao();
         this.titulos = notaEmitidaSelecionada.getTitulos();
         this.itensEmitidos = notaEmitidaSelecionada.getItensEmitidos();
+        this.formaDeRecebimento = notaEmitidaSelecionada.getFormaDeRecebimento();
     }
 
     public NotaEmitidaBV() {
@@ -46,6 +53,14 @@ public class NotaEmitidaBV implements Serializable {
         return pessoa;
     }
 
+    public FormaDeRecebimento getFormaDeRecebimento() {
+        return formaDeRecebimento;
+    }
+
+    public void setFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
+        this.formaDeRecebimento = formaDeRecebimento;
+    }
+    
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
     }
@@ -53,7 +68,7 @@ public class NotaEmitidaBV implements Serializable {
     public void setListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
     }
-    
+
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
@@ -82,11 +97,31 @@ public class NotaEmitidaBV implements Serializable {
         this.titulos = titulos;
     }
 
+    public BigDecimal getAcrescimo() {
+        return acrescimo;
+    }
+
+    public void setAcrescimo(BigDecimal acrescimo) {
+        this.acrescimo = acrescimo;
+    }
+
+    public BigDecimal getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(null, pessoa, operacao, itensEmitidos, titulos, listaDePreco);
+        return new NotaEmitidaBuilder().comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimento(formaDeRecebimento)
+                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
+                .comPessoa(pessoa).comTitulos(titulos).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, titulos, listaDePreco);
+        return new NotaEmitidaBuilder().comId(id).comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimento(formaDeRecebimento)
+                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
+                .comPessoa(pessoa).comTitulos(titulos).construir();
     }
 }

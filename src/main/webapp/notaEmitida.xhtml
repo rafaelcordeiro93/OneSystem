@@ -2,7 +2,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -32,7 +33,7 @@
                                                 process="@this" update="notaEmitidaPessoa" />
                                     </p:commandButton>
                                 </h:panelGrid>
-                                
+
                                 <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
                                     <p:inputText id="notaEmitidaListaPreco" size="32" readonly="true" placeholder="#{l.Lista_De_Preco}" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}"/>
                                     <p:commandButton id="botaoPesquisaListaPreco" icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this"
@@ -45,69 +46,89 @@
 
                             <p:separator/>
 
-                            <p:dataTable id="itensEmitidos" var="despesaProvisionadaBV" value="#{despesaProvisionadaView.parcelas}" rowKey="#{despesaProvisionadaBV.id}"
-                                         emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
-                                <p:ajax event="cellEdit" update=":conteudo:itensEmitidos" />
+                            <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
+                            <p:panelGrid columns="5" columnClasses="ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-2, ui-panelgrid-cell ui-grid-col-5"
+                                         layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                <p:column headerText="#{l.Id}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="1">
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
+                                <h:panelGrid columns="2" style="margin-top: -1%;margin-left: -1%; padding: 0px">
+                                    <p:inputText value="#{notaEmitidaView.itemEmitido.item.nome}" placeholder="#{l.Item}" size="32" readonly="true"/>
+                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaItem}"
+                                                process="@this" update=":conteudo" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2" style="margin-top: -2%;">
+                                    <p:inputText value="#{notaEmitidaView.itemEmitido.quantidade}" placeholder="#{l.Item}" size="17" readonly="true"/>
+                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{quantidadeDeItemView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaQuantidadeDeItemBV}"
+                                                process="@this" update=":conteudo" />
+                                    </p:commandButton>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="3" style="margin-top: -0.7%;margin-left: -0.5%">
+                                    <pe:inputNumber id="notaEmitidaItemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.unitario}">
+                                        <p:ajax event="blur" update="notaItemTotal"/>
+                                        <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                    </pe:inputNumber>                                
+
+                                    <p:inputText id="notaItemTotal" value="#{notaEmitidaView.configuracao.moedaPadrao.sigla} #{notaEmitidaView.itemEmitido.total}" size="22" readonly="true"/>
+
+                                    <h:panelGrid columns="3">
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{notaEmitidaView.addItemNaLista}" 
+                                                         update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-refresh Fs16 White" action="#{notaEmitidaView.updateItemNaLista}" 
+                                                         update=":conteudo" styleClass="GreenButton"/>     
+                                        <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{notaEmitidaView.deleteItemNaLista}" 
+                                                         update=":conteudo" styleClass="RedButton"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+
+                            </p:panelGrid>
+
+                            <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{notaEmitidaView.itensEmitidos}" rowKey="#{itemEmitido.id}" 
+                                         emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{notaEmitidaView.itemEmitidoSelecionado}">
+
+                                <p:ajax event="rowSelect" process="@this" listener="#{notaEmitidaView.selecionaItemEmitido}" update=":conteudo"/>
+
+                                <p:column headerText="#{l.Id}" sortBy="#{itemEmitido.item.id}"  colspan="1">
+                                    <h:outputText value="#{itemEmitido.item.id}" />
                                 </p:column>
-                                <p:column headerText="#{l.Nome}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="3" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
+                                <p:column headerText="#{l.Nome}" sortBy="#{itemEmitido.item.nome}" colspan="3">
+                                    <h:outputText value="#{itemEmitido.item.nome}" />
                                 </p:column>
-                                <p:column headerText="#{l.Deposito}" sortBy="#{despesaProvisionadaBV.valor}" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.valor}" /></f:facet>
-                                        <f:facet name="input"><p:inputText value="#{despesaProvisionadaBV.valor}"/></f:facet>
-                                    </p:cellEditor>
+                                <p:column headerText="#{l.UN}" sortBy="#{itemEmitido.item.unidadeDeMedida.sigla}" colspan="1">
+                                    <h:outputText value="#{itemEmitido.item.unidadeDeMedida.sigla}" />
                                 </p:column>
-                                <p:column headerText="#{l.UN}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="1" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
+                                <p:column headerText="#{l.QTDE}" sortBy="#{itemEmitido.quantidade}" >
+                                    <h:outputText value="#{itemEmitido.quantidade}" />
                                 </p:column>
-                                <p:column headerText="#{l.QTDE}" sortBy="#{despesaProvisionadaBV.vencimento}" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
+                                <p:column headerText="#{l.Unitario}" sortBy="#{itemEmitido.unitario}">
+                                    <h:outputText value="#{itemEmitido.unitario}" />
                                 </p:column>
-                                <p:column headerText="#{l.Unitario}" sortBy="#{despesaProvisionadaBV.vencimento}" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
+                                <p:column headerText="#{l.Total}" sortBy="#{itemEmitido.total}" colspan="2" >
+                                    <h:outputText value="#{itemEmitido.total}" />
                                 </p:column>
-                                <p:column headerText="#{l.Desconto}" sortBy="#{despesaProvisionadaBV.vencimento}" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column headerText="#{l.Acrescimo}" sortBy="#{despesaProvisionadaBV.vencimento}" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                <p:column headerText="#{l.Total}" sortBy="#{despesaProvisionadaBV.vencimento}" colspan="2" >
-                                    <p:cellEditor>
-                                        <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                        <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                    </p:cellEditor>
-                                </p:column>
-                                
+
                             </p:dataTable>
+
+                            <p:separator/>
+
+                            <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Forma_Recebimento}</div>
+
+                            <h:panelGrid columns="2" >
+                                <p:inputText value="#{notaEmitidaView.notaEmitida.formaDeRecebimento.nome}" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFormaDeRecebimentoView.abrirDialogo()}" process="@this"
+                                                 update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaFormaDeRecebimento}"
+                                            process="@this" update=":conteudo" />
+                                </p:commandButton>
+                            </h:panelGrid>
                             
-                             <p:separator/>
-                            
+                            <p:separator/>
                         </div>
                     </div>
                 </div>

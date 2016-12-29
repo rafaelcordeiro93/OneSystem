@@ -37,7 +37,7 @@
                                         <h:panelGrid columns="3" >
                                             <p:selectBooleanCheckbox itemLabel="#{l.Entrada}" styleClass="MarTop5" id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
 
-                                            <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.porcentagemDeEntrada}" >
+                                            <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.porcentagemDeEntrada}" maxValue="100" minValue="0">
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Percentual_Entrada}"/>
                                             </pe:inputNumber>       
 

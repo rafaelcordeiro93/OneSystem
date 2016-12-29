@@ -255,7 +255,7 @@ public class PessoaBV implements Serializable {
                         conjuge, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato)
                 : new PessoaJuridica(fantasiaCI, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        nome, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
+                        desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
     }
 
     public Pessoa construirComID() throws DadoInvalidoException {
@@ -266,7 +266,7 @@ public class PessoaBV implements Serializable {
                         conjuge, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato)
                 : new PessoaJuridica(fantasiaCI, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        nome, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
+                        desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
     }
 
 }
