@@ -2,12 +2,14 @@
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaJuridica;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
+import br.com.onesystem.war.view.selecao.SelecaoFormaDeRecebimentoAtivaView;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -32,10 +34,11 @@ public class TesteRauber {
         String nome = "Teste";
         String ruc = "ruc";
         
-        try {
-            Pessoa pessoa = new PessoaJuridica(null, null, nome, TipoPessoa.PESSOA_JURIDICA, ruc, true, null, null, false, false, false, false, null, new Date(), null, null, null, null, null, null);
-        } catch (DadoInvalidoException ex) {
-            ex.printConsole();
+        SelecaoFormaDeRecebimentoAtivaView v = new SelecaoFormaDeRecebimentoAtivaView();
+        v.init();
+        
+        for(FormaDeRecebimento f : v.getFormaDeRecebimentoLista()){
+            System.out.println("a" + f.toString());
         }
     }
     

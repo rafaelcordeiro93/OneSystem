@@ -55,6 +55,7 @@
         <class>br.com.onesystem.domain.Margem</class>
         <class>br.com.onesystem.domain.Comissao</class>
         <class>br.com.onesystem.domain.Filial</class>
+        <class>br.com.onesystem.domain.FormaDeRecebimentoOuPagamento</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

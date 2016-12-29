@@ -14,7 +14,7 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoFormaDeRecebimentoView implements Serializable {
+public class SelecaoFormaDeRecebimentoAtivaView implements Serializable {
 
     private FormaDeRecebimento formaDeRecebimentoSelecionado;
     private List<FormaDeRecebimento> formaDeRecebimentoLista;
@@ -25,7 +25,7 @@ public class SelecaoFormaDeRecebimentoView implements Serializable {
 
     @PostConstruct
     public void init() {
-        formaDeRecebimentoLista = service.buscarFormasDeRecebimento();
+        formaDeRecebimentoLista = service.buscarFormasDeRecebimentoAtivas();
     }
 
     public void abrirDialogo() {
@@ -36,7 +36,7 @@ public class SelecaoFormaDeRecebimentoView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("contentHeight", 500);
 
-        RequestContext.getCurrentInstance().openDialog("selecao/selecaoFormaDeRecebimento", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("selecao/selecaoFormaDeRecebimentoAtiva", opcoes, null);
     }
 
     public void selecionar() {

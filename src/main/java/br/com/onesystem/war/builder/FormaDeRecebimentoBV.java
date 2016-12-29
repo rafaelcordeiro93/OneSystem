@@ -4,6 +4,7 @@ import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.builder.FormaDeRecebimentoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class FormaDeRecebimentoBV implements Serializable {
     Integer periodicidade;
     TipoPeriodicidade tipoPeriodicidade;
     Integer diasPrimeiraParcela;
+    private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
 
     public FormaDeRecebimentoBV(FormaDeRecebimento formaDeRecebimentoSelecionada) {
         this.id = formaDeRecebimentoSelecionada.getId();
@@ -52,6 +54,7 @@ public class FormaDeRecebimentoBV implements Serializable {
         this.periodicidade = formaDeRecebimentoSelecionada.getPeriodicidade();
         this.tipoPeriodicidade = formaDeRecebimentoSelecionada.getTipoPeriodicidade();
         this.diasPrimeiraParcela = formaDeRecebimentoSelecionada.getDiasPrimeiraParcela();
+        this.formaPadraoDeRecebimentoParcela = formaDeRecebimentoSelecionada.getFormaPadraoDeParcela();
     }
 
     public FormaDeRecebimentoBV() {
@@ -202,20 +205,28 @@ public class FormaDeRecebimentoBV implements Serializable {
         this.diasPrimeiraParcela = diasPrimeiraParcela;
     }
 
-    
-    
+    public TipoFormaDeRecebimentoParcela getFormaPadraoDeRecebimentoParcela() {
+        return formaPadraoDeRecebimentoParcela;
+    }
+
+    public void setFormaPadraoDeRecebimentoParcela(TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela) {
+        this.formaPadraoDeRecebimentoParcela = formaPadraoDeRecebimentoParcela;
+    }
+
     public FormaDeRecebimento construirComID() throws DadoInvalidoException {
-        return new FormaDeRecebimentoBuilder().comID(id).comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraEntrada(formaPadraoDeEntrada)
+        return new FormaDeRecebimentoBuilder().comID(id).comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).construir();
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela)
+                .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
 
     public FormaDeRecebimento construir() throws DadoInvalidoException {
-        return new FormaDeRecebimentoBuilder().comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraEntrada(formaPadraoDeEntrada)
+        return new FormaDeRecebimentoBuilder().comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).construir();
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela)
+                .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
 
 }

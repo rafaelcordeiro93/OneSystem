@@ -22,6 +22,8 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.war.builder.FormaDeRecebimentoOuPagamentoBV;
 import br.com.onesystem.war.builder.ItemBV;
 import br.com.onesystem.war.builder.ItemEmitidoBV;
 import br.com.onesystem.war.builder.ItemPorDepositoBV;
@@ -31,6 +33,8 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.view.dialogo.QuantidadeDeItemView;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -55,7 +59,8 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @ViewScoped
 public class NotaEmitidaView implements Serializable {
-    
+
+    private FormaDeRecebimentoOuPagamentoBV formaDeRecebimentoOuPagamento;
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
     private ItemEmitidoBV itemEmitido;
@@ -64,17 +69,17 @@ public class NotaEmitidaView implements Serializable {
     private ItemPorDepositoBV itemPorDepositoBV;
     private List<ItemPorDeposito> itensPorDeposito;
     private Configuracao configuracao;
-    
+
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
-    
+
     @PostConstruct
     public void init() {
         iniciarConfiguracoes();
         limparJanela();
         limpaSessao();
     }
-    
+
     private void limpaSessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -82,7 +87,7 @@ public class NotaEmitidaView implements Serializable {
             session.removeAttribute("onesystem.item.token");
         }
     }
-    
+
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
@@ -90,7 +95,7 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void add() {
         try {
             NotaEmitida novoRegistro = notaEmitida.construir();
@@ -101,7 +106,7 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-    
+
     public void update() {
         try {
             if (notaEmitidaSelecionada != null) {
@@ -116,7 +121,7 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-    
+
     public void delete() {
         try {
             if (notaEmitidaSelecionada != null) {
@@ -130,45 +135,100 @@ public class NotaEmitidaView implements Serializable {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
     }
-    
+
     public void selecionaItemEmitido(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
     }
-    
+
     public void selecionaFormaDeRecebimento(SelectEvent e) {
         FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
-        notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
-    }    
+        formaDeRecebimentoOuPagamento.setFormaDeRecebimento(formaDeRecebimento);
+        calculaTotaisFormaDeRecebimento(formaDeRecebimento);
+    }
+
+    private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
+        if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
+                && getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
+            calculaEntradaPadrao(formaDeRecebimento);
+        }
+    }
+
+    private void calculaEntradaPadrao(FormaDeRecebimento formaDeRecebimento) {
+            BigDecimal cem = new BigDecimal(100);
+            BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
+            BigDecimal resultado = p.multiply(getTotalNota());
+            alteraValorDeFormaDeRecebimento(formaDeRecebimento, resultado);
+    }
+
+    private void alteraValorDeFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento, BigDecimal resultado) {
+        switch (formaDeRecebimento.getFormaPadraoDeEntrada()) {
+            case DINHEIRO:
+                formaDeRecebimentoOuPagamento.setDinheiro(resultado);
+                break;
+            case CREDITO:
+                formaDeRecebimentoOuPagamento.setCredito(resultado);
+                break;
+            case CHEQUE:
+                formaDeRecebimentoOuPagamento.setCheque(resultado);
+                break;
+            case A_FATURAR:
+                formaDeRecebimentoOuPagamento.setaFaturar(resultado);
+                break;
+            case CARTAO:
+                formaDeRecebimentoOuPagamento.setCartao(resultado);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private BigDecimal getTotalNota() {
+        return getTotalItens().add(notaEmitida.getAcrescimo().
+                add(notaEmitida.getFrete().add(notaEmitida.getDespesaCobranca())).
+                subtract(notaEmitida.getDesconto()));
+    }
 
     public void selecionaOperacao(SelectEvent event) {
         notaEmitida.setOperacao((Operacao) event.getObject());
     }
-    
+
     public void selecionaPessoa(SelectEvent event) {
         notaEmitida.setPessoa((Pessoa) event.getObject());
     }
-    
+
     public void selecionaListaDePreco(SelectEvent event) {
         notaEmitida.setListaDePreco((ListaDePreco) event.getObject());
     }
-    
+
     public void selecionaNotaEmitida(SelectEvent e) {
         NotaEmitida r = (NotaEmitida) e.getObject();
         notaEmitida = new NotaEmitidaBV(r);
         notaEmitidaSelecionada = r;
     }
-    
+
     public void addItemNaLista() {
         try {
-            itemEmitido.setId(new Date().getTime());
+            itemEmitido.setId(retornarCodigo());
             itensEmitidos.add(itemEmitido.construirComId());
             limparItemEmitido();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
-    
+
+    private Long retornarCodigo() {
+        Long id = (long) 1;
+        if (!itensEmitidos.isEmpty()) {
+            for (ItemEmitido dp : itensEmitidos) {
+                if (dp.getId() >= id) {
+                    id = dp.getId() + 1;
+                }
+            }
+        }
+        return id;
+    }
+
     public void updateItemNaLista() {
         try {
             if (itemEmitidoSelecionado != null) {
@@ -180,32 +240,48 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void deleteItemNaLista() {
         if (itemEmitidoSelecionado != null) {
             itensEmitidos.remove(itemEmitidoSelecionado);
             limparItemEmitido();
         }
     }
-    
+
     public void limparItemEmitido() {
         itemEmitido = new ItemEmitidoBV();
         itemEmitidoSelecionado = null;
     }
-    
+
     public void selecionaItem(SelectEvent event) {
         itemEmitido.setItem((Item) event.getObject());
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
-    
+
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
         List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
         criaItemPorDeposito(lista);
         itemEmitido.setListaDeItemPorDeposito(itensPorDeposito);
     }
-    
+
+    public String getTotalItensFormatado() {
+        if (itensEmitidos.isEmpty()) {
+            return "";
+        } else {
+            return configuracao.getMoedaPadrao().getSigla() + " " + NumberFormat.getNumberInstance().format(getTotalItens());
+        }
+    }
+
+    private BigDecimal getTotalItens() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (ItemEmitido i : itensEmitidos) {
+            total = total.add(i.getTotal());
+        }
+        return total;
+    }
+
     private void criaItemPorDeposito(List<QuantidadeDeItemBV> lista) {
         itensPorDeposito = new ArrayList<ItemPorDeposito>();
         try {
@@ -219,92 +295,102 @@ public class NotaEmitidaView implements Serializable {
             die.print();
         }
     }
-    
+
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
         itemEmitido = new ItemEmitidoBV();
         itemPorDepositoBV = new ItemPorDepositoBV();
         itensEmitidos = new ArrayList<ItemEmitido>();
         itensPorDeposito = new ArrayList<ItemPorDeposito>();
+        formaDeRecebimentoOuPagamento = new FormaDeRecebimentoOuPagamentoBV();
         notaEmitidaSelecionada = null;
     }
-    
+
     public void desfazer() {
         if (notaEmitidaSelecionada != null) {
             notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
         }
     }
-    
+
     public NotaEmitida getNotaEmitidaSelecionada() {
         return notaEmitidaSelecionada;
     }
-    
+
     public void setNotaEmitidaSelecionada(NotaEmitida notaEmitidaSelecionada) {
         this.notaEmitidaSelecionada = notaEmitidaSelecionada;
     }
-    
+
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
     }
-    
+
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-    
+
     public ItemEmitidoBV getItemEmitido() {
         return itemEmitido;
     }
-    
+
     public void setItemEmitido(ItemEmitidoBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-    
+
     public List<ItemEmitido> getItensEmitidos() {
         return itensEmitidos;
     }
-    
+
     public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
         this.itensEmitidos = itensEmitidos;
     }
-    
+
     public ItemPorDepositoBV getItemPorDepositoBV() {
         return itemPorDepositoBV;
     }
-    
+
     public void setItemPorDepositoBV(ItemPorDepositoBV itemPorDepositoBV) {
         this.itemPorDepositoBV = itemPorDepositoBV;
     }
-    
+
     public List<ItemPorDeposito> getItensPorDeposito() {
         return itensPorDeposito;
     }
-    
+
     public void setItensPorDeposito(List<ItemPorDeposito> itensPorDeposito) {
         this.itensPorDeposito = itensPorDeposito;
     }
-    
+
     public Configuracao getConfiguracao() {
         return configuracao;
     }
-    
+
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-    
+
     public ConfiguracaoService getConfiguracaoService() {
         return configuracaoService;
     }
-    
+
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
     }
-    
+
     public ItemEmitido getItemEmitidoSelecionado() {
         return itemEmitidoSelecionado;
     }
-    
+
     public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
         this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
+
+    public FormaDeRecebimentoOuPagamentoBV getFormaDeRecebimentoOuPagamento() {
+        return formaDeRecebimentoOuPagamento;
+    }
+
+    public void setFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamentoBV formaDeRecebimentoOuPagamento) {
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+    }
+    
     
 }

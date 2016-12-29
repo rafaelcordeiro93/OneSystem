@@ -1,8 +1,10 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.FormaDeRecebimentoDAO;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -10,8 +12,12 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean(name = "formaDeRecebimentoService")
 @ApplicationScoped
 public class FormaDeRecebimentoService implements Serializable {
-    
-    public List<FormaDeRecebimento> buscarGruposFinanceiros(){
+
+    public List<FormaDeRecebimento> buscarFormasDeRecebimento() {
         return new ArmazemDeRegistros<FormaDeRecebimento>(FormaDeRecebimento.class).listaTodosOsRegistros();
+    }
+
+    public List<FormaDeRecebimento> buscarFormasDeRecebimentoAtivas() {
+        return new FormaDeRecebimentoDAO().buscarFormasDeRecebimento().ativas().listaDeResultados();
     }
 }

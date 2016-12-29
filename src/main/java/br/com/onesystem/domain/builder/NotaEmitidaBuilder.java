@@ -6,6 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.FormaDeRecebimento;
+import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
@@ -30,7 +31,9 @@ public class NotaEmitidaBuilder {
     private ListaDePreco listaDePreco;
     private BigDecimal desconto = BigDecimal.ZERO;
     private BigDecimal acrescimo = BigDecimal.ZERO;
-    private FormaDeRecebimento formaDeRecebimento;
+    private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
+    private BigDecimal frete;
+    private BigDecimal despesaCobranca;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -71,14 +74,24 @@ public class NotaEmitidaBuilder {
         this.acrescimo = acrescimo;
         return this;
     }
-
-    public NotaEmitidaBuilder comFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
-        this.formaDeRecebimento = formaDeRecebimento;
+    
+    public NotaEmitidaBuilder comFrete(BigDecimal frete) {
+        this.frete = frete;
+        return this;
+    }
+    
+    public NotaEmitidaBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
+        this.despesaCobranca = despesaCobranca;
+        return this;
+    }
+    
+    public NotaEmitidaBuilder comFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento) {
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
         return this;
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, titulos, listaDePreco, desconto, acrescimo, formaDeRecebimento);
+        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, titulos, listaDePreco, desconto, acrescimo, formaDeRecebimentoOuPagamento, frete, despesaCobranca);
     }
 
 }

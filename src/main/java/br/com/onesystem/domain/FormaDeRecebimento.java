@@ -9,6 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -51,6 +52,7 @@ public class FormaDeRecebimento implements Serializable {
     private boolean entrada = false;
     @Max(value = 100)
     private BigDecimal porcentagemDeEntrada;
+    @Enumerated(EnumType.STRING)
     private TipoFormaDeRecebimento formaPadraoDeEntrada;
     @NotNull(message = "{entrada_cartao_not_null}")
     @Column(nullable = false)
@@ -94,15 +96,18 @@ public class FormaDeRecebimento implements Serializable {
     @Column(nullable = false)
     private Integer diasPrimeiraParcela;
     @OneToMany(mappedBy = "formaDeRecebimento")
-    private List<NotaEmitida> notasEmitidas;
+    private List<FormaDeRecebimentoOuPagamento> notasEmitidas;
+    @Enumerated(EnumType.STRING)
+    private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
 
     public FormaDeRecebimento() {
     }
 
-    public FormaDeRecebimento(Long id, String nome, boolean ativo, boolean entrada, BigDecimal porcentagemDeEntrada, 
-            TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque, 
-            boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas, 
-            Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela) throws DadoInvalidoException {
+    public FormaDeRecebimento(Long id, String nome, boolean ativo, boolean entrada, BigDecimal porcentagemDeEntrada,
+            TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque,
+            boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas,
+            Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela,
+            TipoFormaDeRecebimentoParcela formaPadraoDeParcela) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.ativo = ativo;
@@ -121,6 +126,7 @@ public class FormaDeRecebimento implements Serializable {
         this.periodicidade = periodicidade;
         this.tipoPeriodicidade = tipoPeriodicidade;
         this.diasPrimeiraParcela = diasPrimeiraParcela;
+        this.formaPadraoDeParcela = formaPadraoDeParcela;
         ehValido();
     }
 
@@ -196,6 +202,10 @@ public class FormaDeRecebimento implements Serializable {
         return diasPrimeiraParcela;
     }
 
+    public TipoFormaDeRecebimentoParcela getFormaPadraoDeParcela() {
+        return formaPadraoDeParcela;
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "ativo", "entrada", "porcentagemDeEntrada", "formaPadraoDeEntrada", "entradaEmCartao", "entradaEmDinheiro",
                 "entradaEmCheque", "entradaEmCredito", "parcelaEmCheque", "parcelaEmCartao", "parcelaEmConta", "minimoDeParcelas", "maximoDeParcelas",
@@ -220,11 +230,15 @@ public class FormaDeRecebimento implements Serializable {
 
     @Override
     public String toString() {
-        return "FormaDeRecebimento{" + "id=" + id + ", nome=" + nome + ", ativo=" + ativo + ", entrada=" + entrada + ", porcentagemDeEntrada=" + porcentagemDeEntrada + 
-                ", formaPadraoDeEntrada=" + formaPadraoDeEntrada + ", entradaEmCartao=" + entradaEmCartao + ", entradaEmDinheiro=" + entradaEmDinheiro + 
-                ", entradaEmCheque=" + entradaEmCheque + ", entradaEmCredito=" + entradaEmCredito + ", parcelaEmCheque=" + parcelaEmCheque + 
-                ", parcelaEmCartao=" + parcelaEmCartao + ", parcelaEmConta=" + parcelaEmConta + ", minimoDeParcelas=" + minimoDeParcelas + 
-                ", maximoDeParcelas=" + maximoDeParcelas + ", periodicidade=" + periodicidade + ", tipoPeriodicidade=" + tipoPeriodicidade + ", diasPrimeiraParcela=" + diasPrimeiraParcela + '}';
+        return "FormaDeRecebimento{" + "id=" + id + ", nome=" + nome + ", ativo=" + ativo + ", entrada="
+                + entrada + ", porcentagemDeEntrada=" + porcentagemDeEntrada + ", formaPadraoDeEntrada="
+                + formaPadraoDeEntrada + ", entradaEmCartao=" + entradaEmCartao + ", entradaEmDinheiro="
+                + entradaEmDinheiro + ", entradaEmCheque=" + entradaEmCheque + ", entradaEmCredito="
+                + entradaEmCredito + ", parcelaEmCheque=" + parcelaEmCheque + ", parcelaEmCartao="
+                + parcelaEmCartao + ", parcelaEmConta=" + parcelaEmConta + ", minimoDeParcelas="
+                + minimoDeParcelas + ", maximoDeParcelas=" + maximoDeParcelas + ", periodicidade="
+                + periodicidade + ", tipoPeriodicidade=" + tipoPeriodicidade + ", diasPrimeiraParcela="
+                + diasPrimeiraParcela + ", formaPadraoDeParcela=" + formaPadraoDeParcela + '}';
     }
 
 }

@@ -5,8 +5,11 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -55,13 +59,17 @@ public class NotaEmitida implements Serializable {
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = false)
     private BigDecimal acrescimo = BigDecimal.ZERO;
-    @NotNull(message = "{forma_recebimento_not_null}")
-    @ManyToOne
-    private FormaDeRecebimento formaDeRecebimento;
+    @Min(value = 0, message = "{valor_frete}")
+    private BigDecimal frete = BigDecimal.ZERO;
+    @Min(value = 0, message = "{valor_despesasCobranca}")
+    private BigDecimal despesasCobranca = BigDecimal.ZERO;
+    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
+    private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
 
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
             List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto,
-            BigDecimal acrescimo, FormaDeRecebimento formaDeRecebimento) {
+            BigDecimal acrescimo, FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento,
+            BigDecimal frete, BigDecimal despesasCobranca) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -70,9 +78,18 @@ public class NotaEmitida implements Serializable {
         this.listaDePreco = listaDePreco;
         this.acrescimo = acrescimo;
         this.desconto = desconto;
-        this.formaDeRecebimento = formaDeRecebimento;
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+        this.frete = frete;
+        this.despesasCobranca = despesasCobranca;
+        ehValido();
     }
 
+     public final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("pessoa", "operacao", "desconto",
+                "acrescimo", "frete", "despesasCobranca");
+        new ValidadorDeCampos<NotaEmitida>().valida(this, campos);
+    }
+    
     public Long getId() {
         return id;
     }
@@ -105,8 +122,28 @@ public class NotaEmitida implements Serializable {
         return acrescimo;
     }
 
-    public FormaDeRecebimento getFormaDeRecebimento() {
-        return formaDeRecebimento;
+    public BigDecimal getFrete() {
+        return frete;
+    }
+
+    public void setFrete(BigDecimal frete) {
+        this.frete = frete;
+    }
+
+    public BigDecimal getDespesasCobranca() {
+        return despesasCobranca;
+    }
+
+    public void setDespesasCobranca(BigDecimal despesasCobranca) {
+        this.despesasCobranca = despesasCobranca;
+    }
+
+    public FormaDeRecebimentoOuPagamento getFormaDeRecebimentoOuPagamento() {
+        return formaDeRecebimentoOuPagamento;
+    }
+
+    public void setFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento) {
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
     }
 
     @Override
@@ -126,7 +163,7 @@ public class NotaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", formaDeRecebimento=" + formaDeRecebimento + '}';
+        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + ", desconto=" + desconto + ", acrescimo=" + acrescimo + '}';
     }
 
 }
