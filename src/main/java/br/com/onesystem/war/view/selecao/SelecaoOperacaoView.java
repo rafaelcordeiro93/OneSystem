@@ -25,12 +25,7 @@ public class SelecaoOperacaoView implements Serializable {
 
     @PostConstruct
     public void init() {
-        
         operacaoLista = service.buscarOperacao();
-        for(Operacao p : operacaoLista){
-            System.out.println( p );
-        }
-        
     }
 
     public void abrirDialogo() {

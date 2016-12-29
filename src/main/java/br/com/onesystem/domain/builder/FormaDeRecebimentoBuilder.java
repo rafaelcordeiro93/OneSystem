@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import java.math.BigDecimal;
 
@@ -30,6 +31,7 @@ public class FormaDeRecebimentoBuilder {
     Integer periodicidade;
     TipoPeriodicidade tipoPeriodicidade;
     Integer diasPrimeiraParcela;
+    private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
 
     public FormaDeRecebimentoBuilder comID(Long ID) {
         this.id = ID;
@@ -56,8 +58,13 @@ public class FormaDeRecebimentoBuilder {
         return this;
     }
 
-    public FormaDeRecebimentoBuilder comFormaPadraEntrada(TipoFormaDeRecebimento formaPadraoDeEntrada) {
+    public FormaDeRecebimentoBuilder comFormaPadraoEntrada(TipoFormaDeRecebimento formaPadraoDeEntrada) {
         this.formaPadraoDeEntrada = formaPadraoDeEntrada;
+        return this;
+    }
+
+    public FormaDeRecebimentoBuilder comFormaPadraoParcela(TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela) {
+        this.formaPadraoDeRecebimentoParcela = formaPadraoDeRecebimentoParcela;
         return this;
     }
 
@@ -122,8 +129,11 @@ public class FormaDeRecebimentoBuilder {
     }
 
     public FormaDeRecebimento construir() throws DadoInvalidoException {
-        return new FormaDeRecebimento(id, nome, ativo, entrada, porcentagemDeEntrada, formaPadraoDeEntrada, entradaEmCartao, entradaEmDinheiro,
-                entradaEmCheque, entradaEmCredito, parcelaEmCheque, parcelaEmCartao, parcelaEmConta, minimoDeParcelas, maximoDeParcelas, periodicidade, tipoPeriodicidade, diasPrimeiraParcela);
+        return new FormaDeRecebimento(id, nome, ativo, entrada, porcentagemDeEntrada,
+                formaPadraoDeEntrada, entradaEmCartao, entradaEmDinheiro,
+                entradaEmCheque, entradaEmCredito, parcelaEmCheque, parcelaEmCartao,
+                parcelaEmConta, minimoDeParcelas, maximoDeParcelas, periodicidade,
+                tipoPeriodicidade, diasPrimeiraParcela, formaPadraoDeRecebimentoParcela);
     }
 
 }

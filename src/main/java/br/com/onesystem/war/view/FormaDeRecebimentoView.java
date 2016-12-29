@@ -13,6 +13,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
@@ -102,6 +103,10 @@ public class FormaDeRecebimentoView implements Serializable {
 
     public List<TipoFormaDeRecebimento> getFormaDeRecebimentoPadrao() {
         return Arrays.asList(TipoFormaDeRecebimento.values());
+    }
+    
+    public List<TipoFormaDeRecebimentoParcela> getTipoFormaDeRecebimentoPadraoParcela() {
+        return Arrays.asList(TipoFormaDeRecebimentoParcela.values());
     }
 
      public List<TipoPeriodicidade> getTipoPeriodicidade() {

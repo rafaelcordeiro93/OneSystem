@@ -57,17 +57,21 @@
 
                                         <p:separator/>
 
-                                        <h:panelGrid columns="3">
+                                        <h:panelGrid columns="4">
                                             <p:selectBooleanCheckbox itemLabel="#{l.Parcela_Cheque}" styleClass="MarTop5" id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCheque}"/>
                                             <p:selectBooleanCheckbox itemLabel="#{l.Parcela_Cartao}" styleClass="MarTop5" id="formaDeRecebimentoParcelaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCartao}"/>
                                             <p:selectBooleanCheckbox itemLabel="#{l.Parcela_Conta}" styleClass="MarTop5" id="formaDeRecebimentoParcelaemConta" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmConta}"/>
+                                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeParcela" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeRecebimentoParcela}" styleClass="Wid40">
+                                                <f:selectItems value="#{formaDeRecebimentoView.tipoFormaDeRecebimentoPadraoParcela}" var="#{l.Padrao_Parcela}" itemLabel="#{tipoFormaDeRecebimentoParcela}" itemValue="#{tipoFormaDeRecebimentoParcela}" >
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
                                         </h:panelGrid>
 
                                         <h:panelGrid columns="2">
                                             <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.minimoDeParcelas}" >
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Minimo_Parcelas}"/>
                                             </pe:inputNumber>    
-                                            <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" >
+                                            <pe:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" title="#{l.Maximo_Parcelas}">
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Maximo_Parcelas}"/>
                                             </pe:inputNumber>    
                                         </h:panelGrid>
