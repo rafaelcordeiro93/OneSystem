@@ -18,7 +18,7 @@
                 <p:submenu label="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart">
                     <p:menuitem value="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
                 </p:submenu>
-                
+
                 <p:submenu label="#{l.Estoque}" icon="fa fa-table">              
                     <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
                     <p:menuitem value="#{l.Moeda}" icon="icon-attach_money" outcome="/moeda" /> 
@@ -31,13 +31,13 @@
                         <p:menuitem value="#{l.Marca}" icon="fa fa-newspaper-o" outcome="/marca" />
                         <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
                         <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaPreco" />
-                         <p:menuitem value="#{l.Comissao}" icon="fa fa-th-list" outcome="/comissao" />
+                        <p:menuitem value="#{l.Comissao}" icon="fa fa-th-list" outcome="/comissao" />
                         <p:menuitem value="#{l.Grupo}" icon="icon-group_work" outcome="/grupo" />
                         <p:menuitem value="#{l.Grupo_Fiscal}" icon="icon-flip" outcome="/grupoFiscal" />
                     </p:submenu>
                     <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="icon-edit" outcome="/ajusteDeEstoque" />
                 </p:submenu>
-                
+
                 <p:submenu label="#{l.Financeiro}" icon="icon-attach_money">                    
                     <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/recebimento" />
                     <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/pagamento" />  
@@ -54,15 +54,16 @@
                         <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-file-text-o" outcome="/grupoFinanceiro" />
                         <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-file-text-o" outcome="/despesaProvisionada" />
                         <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-file-text-o" outcome="/receitaProvisionada" />
+                        <p:menuitem value="#{l.Cartao}" icon="fa fa-file-text-o" outcome="/cartao" />
                     </p:submenu>
                 </p:submenu>
-                
+
                 <p:submenu label="#{l.Cambio}" icon="fa fa-exchange">
                     <p:menuitem value="#{l.Recepcao}" icon="fa fa-money" outcome="/recepcao" />
                     <p:menuitem value="#{l.Contrato_De_Cambio}" icon="icon-paper" outcome="/contratoDeCambio" />
                     <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/cambio" />
                 </p:submenu>
-                
+
                 <p:submenu label="#{l.Relatorios}" icon="fa fa-list-alt">
                     <p:submenu label="#{l.Financeiro}" icon="icon-attach_money">
                         <p:menuitem value="#{l.Conta_a_Pagar}" icon="fa fa-minus" outcome="/relatorioDeContaAPagar" />
