@@ -6,44 +6,35 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemEmitido;
-import br.com.onesystem.domain.ItemPorDeposito;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.util.FatalMessage;
+import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.FormaDeRecebimentoOuPagamentoBV;
-import br.com.onesystem.war.builder.ItemBV;
 import br.com.onesystem.war.builder.ItemEmitidoBV;
-import br.com.onesystem.war.builder.ItemPorDepositoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.view.dialogo.QuantidadeDeItemView;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.el.ELResolver;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -59,27 +50,25 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @ViewScoped
 public class NotaEmitidaView implements Serializable {
-
+    
     private FormaDeRecebimentoOuPagamentoBV formaDeRecebimentoOuPagamento;
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
     private ItemEmitidoBV itemEmitido;
     private ItemEmitido itemEmitidoSelecionado;
-    private List<ItemEmitido> itensEmitidos;
-    private ItemPorDepositoBV itemPorDepositoBV;
-    private List<ItemPorDeposito> itensPorDeposito;
+    private EstoqueBV estoqueBV;
     private Configuracao configuracao;
-
+    
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
-
+    
     @PostConstruct
     public void init() {
         iniciarConfiguracoes();
         limparJanela();
         limpaSessao();
     }
-
+    
     private void limpaSessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -87,7 +76,7 @@ public class NotaEmitidaView implements Serializable {
             session.removeAttribute("onesystem.item.token");
         }
     }
-
+    
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
@@ -95,72 +84,61 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-
-    public void add() {
+    
+    public void finalizar() {
         try {
             NotaEmitida novoRegistro = notaEmitida.construir();
+            preparaInclusaoDeItemEmitido(novoRegistro);
             new AdicionaDAO<NotaEmitida>().adiciona(novoRegistro);
+
+            //receberValores();
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
+        } catch (ConstraintViolationException cpe) {
+            ErrorMessage.print(cpe.toString());
         }
     }
-
-    public void update() {
-        try {
-            if (notaEmitidaSelecionada != null) {
-                NotaEmitida notaEmitidaExistente = notaEmitida.construirComID();
-                new AtualizaDAO<NotaEmitida>(NotaEmitida.class).atualiza(notaEmitidaExistente);
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("!La notaEmitida no se encontra registrada!");
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
+    
+    private void preparaInclusaoDeItemEmitido(NotaEmitida novoRegistro) throws ConstraintViolationException, DadoInvalidoException {
+        for (ItemEmitido ie : novoRegistro.getItensEmitidos()) {
+            ie.preparaInclusao(novoRegistro);
+            preparaInclusaoDeEstoque(ie);
         }
     }
-
-    public void delete() {
-        try {
-            if (notaEmitidaSelecionada != null) {
-                new RemoveDAO<NotaEmitida>(NotaEmitida.class).remove(notaEmitidaSelecionada, notaEmitidaSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
+    
+    private void preparaInclusaoDeEstoque(ItemEmitido ie) {
+        for (Estoque estoque : ie.getEstoque()) {
+            estoque.preparaInclusaoDe(ie);
         }
     }
-
+        
     public void selecionaItemEmitido(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
     }
-
+    
     public void selecionaFormaDeRecebimento(SelectEvent e) {
         FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
         formaDeRecebimentoOuPagamento.setFormaDeRecebimento(formaDeRecebimento);
         calculaTotaisFormaDeRecebimento(formaDeRecebimento);
     }
-
+    
     private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
                 && getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
             calculaEntradaPadrao(formaDeRecebimento);
         }
     }
-
+    
     private void calculaEntradaPadrao(FormaDeRecebimento formaDeRecebimento) {
-            BigDecimal cem = new BigDecimal(100);
-            BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
-            BigDecimal resultado = p.multiply(getTotalNota());
-            alteraValorDeFormaDeRecebimento(formaDeRecebimento, resultado);
+        BigDecimal cem = new BigDecimal(100);
+        BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
+        BigDecimal resultado = p.multiply(getTotalNota());
+        alteraValorDeFormaDeRecebimento(formaDeRecebimento, resultado);
     }
-
+    
     private void alteraValorDeFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento, BigDecimal resultado) {
         switch (formaDeRecebimento.getFormaPadraoDeEntrada()) {
             case DINHEIRO:
@@ -182,45 +160,63 @@ public class NotaEmitidaView implements Serializable {
                 break;
         }
     }
-
+    
     private BigDecimal getTotalNota() {
-        return getTotalItens().add(notaEmitida.getAcrescimo().
-                add(notaEmitida.getFrete().add(notaEmitida.getDespesaCobranca())).
-                subtract(notaEmitida.getDesconto()));
+        BigDecimal acrescimo = notaEmitida.getAcrescimo() == null ? BigDecimal.ZERO : notaEmitida.getAcrescimo();
+        BigDecimal frete = notaEmitida.getFrete() == null ? BigDecimal.ZERO : notaEmitida.getFrete();
+        BigDecimal despesaCobranca = notaEmitida.getDespesaCobranca() == null ? BigDecimal.ZERO : notaEmitida.getDespesaCobranca();
+        BigDecimal desconto = notaEmitida.getDesconto() == null ? BigDecimal.ZERO : notaEmitida.getDesconto();
+        
+        return getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
     }
-
+    
     public void selecionaOperacao(SelectEvent event) {
         notaEmitida.setOperacao((Operacao) event.getObject());
     }
-
+    
     public void selecionaPessoa(SelectEvent event) {
         notaEmitida.setPessoa((Pessoa) event.getObject());
     }
-
+    
     public void selecionaListaDePreco(SelectEvent event) {
         notaEmitida.setListaDePreco((ListaDePreco) event.getObject());
     }
-
+    
     public void selecionaNotaEmitida(SelectEvent e) {
         NotaEmitida r = (NotaEmitida) e.getObject();
         notaEmitida = new NotaEmitidaBV(r);
         notaEmitidaSelecionada = r;
     }
-
+    
+    public void receberValores() {
+        try {
+            if (formaDeRecebimentoOuPagamento.getDinheiro().compareTo(BigDecimal.ZERO) > 1) {
+                Baixa baixa = new BaixaBuilder().cancelada(false)
+                        .comConta(null).comDesconto(notaEmitida.getDesconto()).comEmissao(notaEmitida.getEmissao())
+                        .comNaturezaFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira())
+                        .comPessoa(notaEmitida.getPessoa()).comReceita(notaEmitida.getOperacao().getVendaAVista()).
+                        comTotal(getTotalNota()).comValor(getTotalNota()).construir();
+                notaEmitida.getBaixas().add(baixa);
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+    
     public void addItemNaLista() {
         try {
             itemEmitido.setId(retornarCodigo());
-            itensEmitidos.add(itemEmitido.construirComId());
+            notaEmitida.getItensEmitidos().add(itemEmitido.construirComId());
             limparItemEmitido();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
-
+    
     private Long retornarCodigo() {
         Long id = (long) 1;
-        if (!itensEmitidos.isEmpty()) {
-            for (ItemEmitido dp : itensEmitidos) {
+        if (!notaEmitida.getItensEmitidos().isEmpty()) {
+            for (ItemEmitido dp : notaEmitida.getItensEmitidos()) {
                 if (dp.getId() >= id) {
                     id = dp.getId() + 1;
                 }
@@ -228,11 +224,11 @@ public class NotaEmitidaView implements Serializable {
         }
         return id;
     }
-
+    
     public void updateItemNaLista() {
         try {
             if (itemEmitidoSelecionado != null) {
-                itensEmitidos.set(itensEmitidos.indexOf(itemEmitidoSelecionado),
+                notaEmitida.getItensEmitidos().set(notaEmitida.getItensEmitidos().indexOf(itemEmitidoSelecionado),
                         itemEmitido.construirComId());
                 limparItemEmitido();
             }
@@ -240,157 +236,132 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-
+    
     public void deleteItemNaLista() {
         if (itemEmitidoSelecionado != null) {
-            itensEmitidos.remove(itemEmitidoSelecionado);
+            notaEmitida.getItensEmitidos().remove(itemEmitidoSelecionado);
             limparItemEmitido();
         }
     }
-
+    
     public void limparItemEmitido() {
         itemEmitido = new ItemEmitidoBV();
         itemEmitidoSelecionado = null;
     }
-
+    
     public void selecionaItem(SelectEvent event) {
         itemEmitido.setItem((Item) event.getObject());
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
-
+    
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
-        List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
-        criaItemPorDeposito(lista);
-        itemEmitido.setListaDeItemPorDeposito(itensPorDeposito);
+        try {
+            List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
+            itemEmitido.setEstoque(criarBaixaDeEstoque(lista));
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
     }
-
+    
     public String getTotalItensFormatado() {
-        if (itensEmitidos.isEmpty()) {
+        if (notaEmitida.getItensEmitidos().isEmpty()) {
             return "";
         } else {
             return configuracao.getMoedaPadrao().getSigla() + " " + NumberFormat.getNumberInstance().format(getTotalItens());
         }
     }
-
+    
     private BigDecimal getTotalItens() {
         BigDecimal total = BigDecimal.ZERO;
-        for (ItemEmitido i : itensEmitidos) {
+        for (ItemEmitido i : notaEmitida.getItensEmitidos()) {
             total = total.add(i.getTotal());
         }
         return total;
     }
-
-    private void criaItemPorDeposito(List<QuantidadeDeItemBV> lista) {
-        itensPorDeposito = new ArrayList<ItemPorDeposito>();
-        try {
-            for (QuantidadeDeItemBV q : lista) {
-                itemPorDepositoBV = new ItemPorDepositoBV();
-                itemPorDepositoBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
-                itemPorDepositoBV.setQuantidade(q.getQuantidade());
-                itensPorDeposito.add(itemPorDepositoBV.construir());
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
+    
+    private List<Estoque> criarBaixaDeEstoque(List<QuantidadeDeItemBV> lista) throws DadoInvalidoException {
+        List<Estoque> estoquesBV = new ArrayList<Estoque>();
+        for (QuantidadeDeItemBV q : lista) {
+            estoqueBV = new EstoqueBV();
+            estoqueBV.setTipo(notaEmitida.getOperacao().getContasDeEstoque().get(0).getOperacaoFisica());
+            estoqueBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
+            estoqueBV.setQuantidade(q.getQuantidade());
+            estoqueBV.setItem(itemEmitido.getItem());
+            estoquesBV.add(estoqueBV.construir());
         }
+        return estoquesBV;
     }
-
+       
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
         itemEmitido = new ItemEmitidoBV();
-        itemPorDepositoBV = new ItemPorDepositoBV();
-        itensEmitidos = new ArrayList<ItemEmitido>();
-        itensPorDeposito = new ArrayList<ItemPorDeposito>();
+        notaEmitida.setItensEmitidos(new ArrayList<ItemEmitido>());
         formaDeRecebimentoOuPagamento = new FormaDeRecebimentoOuPagamentoBV();
         notaEmitidaSelecionada = null;
     }
-
+    
     public void desfazer() {
         if (notaEmitidaSelecionada != null) {
             notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
         }
     }
-
+    
     public NotaEmitida getNotaEmitidaSelecionada() {
         return notaEmitidaSelecionada;
     }
-
+    
     public void setNotaEmitidaSelecionada(NotaEmitida notaEmitidaSelecionada) {
         this.notaEmitidaSelecionada = notaEmitidaSelecionada;
     }
-
+    
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
     }
-
+    
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-
+    
     public ItemEmitidoBV getItemEmitido() {
         return itemEmitido;
     }
-
+    
     public void setItemEmitido(ItemEmitidoBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-
-    public List<ItemEmitido> getItensEmitidos() {
-        return itensEmitidos;
-    }
-
-    public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
-        this.itensEmitidos = itensEmitidos;
-    }
-
-    public ItemPorDepositoBV getItemPorDepositoBV() {
-        return itemPorDepositoBV;
-    }
-
-    public void setItemPorDepositoBV(ItemPorDepositoBV itemPorDepositoBV) {
-        this.itemPorDepositoBV = itemPorDepositoBV;
-    }
-
-    public List<ItemPorDeposito> getItensPorDeposito() {
-        return itensPorDeposito;
-    }
-
-    public void setItensPorDeposito(List<ItemPorDeposito> itensPorDeposito) {
-        this.itensPorDeposito = itensPorDeposito;
-    }
-
+        
     public Configuracao getConfiguracao() {
         return configuracao;
     }
-
+    
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-
+    
     public ConfiguracaoService getConfiguracaoService() {
         return configuracaoService;
     }
-
+    
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
     }
-
+    
     public ItemEmitido getItemEmitidoSelecionado() {
         return itemEmitidoSelecionado;
     }
-
+    
     public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
         this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
-
+    
     public FormaDeRecebimentoOuPagamentoBV getFormaDeRecebimentoOuPagamento() {
         return formaDeRecebimentoOuPagamento;
     }
-
+    
     public void setFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamentoBV formaDeRecebimentoOuPagamento) {
         this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
     }
-    
     
 }

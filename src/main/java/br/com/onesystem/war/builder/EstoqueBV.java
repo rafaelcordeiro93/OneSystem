@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
@@ -16,18 +17,19 @@ public class EstoqueBV implements Serializable {
     private Long id;
     private Deposito deposito;
     private Item item;
-    private BigDecimal saldo;
+    private BigDecimal quantidade;
     private OperacaoFisica tipo;
     private Date emissao = new Date();
+    private ItemEmitido itemEmitido;
 
     public EstoqueBV(Estoque estoqueSelecionado) {
         this.id = estoqueSelecionado.getId();
         this.deposito = estoqueSelecionado.getDeposito();
         this.item = estoqueSelecionado.getItem();
-        this.saldo = estoqueSelecionado.getSaldo();
+        this.quantidade = estoqueSelecionado.getQuantidade();
         this.tipo = estoqueSelecionado.getOperacaoFisica();
         this.emissao = estoqueSelecionado.getEmissao();
-
+        this.itemEmitido = itemEmitido;
     }
 
     public EstoqueBV() {
@@ -57,12 +59,12 @@ public class EstoqueBV implements Serializable {
         this.item = item;
     }
 
-    public BigDecimal getSaldo() {
-        return saldo;
+    public BigDecimal getQuantidade() {
+        return quantidade;
     }
 
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
+    public void setQuantidade(BigDecimal quantidade) {
+        this.quantidade = quantidade;
     }
 
     public OperacaoFisica getTipo() {
@@ -81,14 +83,23 @@ public class EstoqueBV implements Serializable {
         this.emissao = emissao;
     }
 
- 
+    public ItemEmitido getItemEmitido() {
+        return itemEmitido;
+    }
+
+    public void setItemEmitido(ItemEmitido itemEmitido) {
+        this.itemEmitido = itemEmitido;
+    }
+    
+    
+
     public Estoque construir() throws DadoInvalidoException {
-        return new EstoqueBuilder().comSaldo(saldo)
+        return new EstoqueBuilder().comSaldo(quantidade)
                 .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
-        return new EstoqueBuilder().comID(id).comSaldo(saldo)
+        return new EstoqueBuilder().comID(id).comSaldo(quantidade)
                 .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
     }
 }

@@ -29,8 +29,6 @@ public class Deposito implements Serializable {
     private String nome;
     @OneToMany(mappedBy = "deposito")
     private List<AjusteDeEstoque> listadeAjuste;
-    @OneToMany(mappedBy = "deposito") 
-    private List<ItemPorDeposito> itensPorDeposito;
 
 
     public Deposito() {

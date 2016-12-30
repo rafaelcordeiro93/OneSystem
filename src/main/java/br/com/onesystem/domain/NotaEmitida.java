@@ -10,6 +10,8 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,6 +23,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -43,9 +47,9 @@ public class NotaEmitida implements Serializable {
     @NotNull(message = "{operacao_not_null}")
     @ManyToOne
     private Operacao operacao;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ItemEmitido> itensEmitidos;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Titulo> titulos;
     @ManyToOne
     private ListaDePreco listaDePreco;
@@ -53,43 +57,51 @@ public class NotaEmitida implements Serializable {
     @Max(value = 9999999, message = "{valor_desconto_max}")
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = false)
-    private BigDecimal desconto = BigDecimal.ZERO;
+    private BigDecimal desconto;
     @NotNull(message = "{valor_acrescimo_not_null}")
     @Max(value = 9999999, message = "{valor_acrescimo_max}")
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = false)
-    private BigDecimal acrescimo = BigDecimal.ZERO;
+    private BigDecimal acrescimo;
     @Min(value = 0, message = "{valor_frete}")
-    private BigDecimal frete = BigDecimal.ZERO;
+    private BigDecimal frete;
     @Min(value = 0, message = "{valor_despesasCobranca}")
-    private BigDecimal despesasCobranca = BigDecimal.ZERO;
+    private BigDecimal despesasCobranca;
     @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Baixa> baixas;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date emissao;
+    private boolean cancelada;
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
-            List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto,
-            BigDecimal acrescimo, FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento,
-            BigDecimal frete, BigDecimal despesasCobranca) throws DadoInvalidoException {
+    public NotaEmitida() {
+    }
+
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos, List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto, BigDecimal acrescimo, BigDecimal frete, BigDecimal despesasCobranca, FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento, List<Baixa> baixas, Date emissao, boolean cancelada) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
         this.itensEmitidos = itensEmitidos;
         this.titulos = titulos;
         this.listaDePreco = listaDePreco;
-        this.acrescimo = acrescimo;
         this.desconto = desconto;
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+        this.acrescimo = acrescimo;
         this.frete = frete;
         this.despesasCobranca = despesasCobranca;
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+        this.baixas = baixas;
+        this.emissao = emissao;
+        this.cancelada = cancelada;
         ehValido();
     }
 
-     public final void ehValido() throws DadoInvalidoException {
+    public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("pessoa", "operacao", "desconto",
                 "acrescimo", "frete", "despesasCobranca");
         new ValidadorDeCampos<NotaEmitida>().valida(this, campos);
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -126,24 +138,24 @@ public class NotaEmitida implements Serializable {
         return frete;
     }
 
-    public void setFrete(BigDecimal frete) {
-        this.frete = frete;
-    }
-
     public BigDecimal getDespesasCobranca() {
         return despesasCobranca;
-    }
-
-    public void setDespesasCobranca(BigDecimal despesasCobranca) {
-        this.despesasCobranca = despesasCobranca;
     }
 
     public FormaDeRecebimentoOuPagamento getFormaDeRecebimentoOuPagamento() {
         return formaDeRecebimentoOuPagamento;
     }
 
-    public void setFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento) {
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public Date getEmissao() {
+        return emissao;
+    }
+
+    public boolean isCancelada() {
+        return cancelada;
     }
 
     @Override

@@ -110,8 +110,11 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private Recepcao recepcao;
 
-    private boolean cancelada = false;
+    @ManyToOne
+    private NotaEmitida notaEmitida;
 
+    private boolean cancelada = false;
+    
     public Baixa() {
     }
 
@@ -121,7 +124,7 @@ public class Baixa implements Serializable, Movimento {
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, Despesa despesa,
             Conta conta, Receita receita, Cambio cambio, Titulo titulo, Transferencia transferencia,
             Recepcao recepcao, DespesaProvisionada despesaProvisionada,
-            ReceitaProvisionada receitaProvisionada) throws DadoInvalidoException {
+            ReceitaProvisionada receitaProvisionada, NotaEmitida notaEmitida) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
         this.cancelada = cancelada;
@@ -144,6 +147,7 @@ public class Baixa implements Serializable, Movimento {
         this.recepcao = recepcao;
         this.despesaProvisionada = despesaProvisionada;
         this.receitaProvisionada = receitaProvisionada;
+        this.notaEmitida = notaEmitida;
         ehValido();
     }
 
@@ -213,6 +217,14 @@ public class Baixa implements Serializable, Movimento {
 
     public DespesaProvisionada getDespesaProvisionada() {
         return despesaProvisionada;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
+    }
+
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
     }
 
     public ReceitaProvisionada getReceitaProvisionada() {

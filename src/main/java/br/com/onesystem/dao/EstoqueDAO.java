@@ -37,7 +37,7 @@ public class EstoqueDAO {
     }
 
     public EstoqueDAO eItem(Item item) {
-        consulta += " and e.item = :pItem ";
+        consulta += " and e.item = :pItem";
         parametros.put("pItem", item);
         return this;
     }

@@ -62,8 +62,8 @@ public class AjusteDeEstoqueView implements Serializable {
 
     public void add() {
         try {
-            lancaEstoque();
             AjusteDeEstoque novoRegistro = ajusteDeEstoque.construir();
+            lancaEstoque(novoRegistro);
             new AdicionaDAO<AjusteDeEstoque>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
@@ -74,9 +74,10 @@ public class AjusteDeEstoqueView implements Serializable {
 
     public void update() {
         try {
-            lancaEstoque();
+
             if (ajusteDeEstoqueSelecionada != null) {
                 AjusteDeEstoque ajusteDeEstoqueExistente = ajusteDeEstoque.construirComID();
+                lancaEstoque(ajusteDeEstoqueExistente);
                 new AtualizaDAO<AjusteDeEstoque>(AjusteDeEstoque.class).atualiza(ajusteDeEstoqueExistente);
                 InfoMessage.atualizado();
                 limparJanela();
@@ -102,7 +103,7 @@ public class AjusteDeEstoqueView implements Serializable {
         }
     }
 
-    private void lancaEstoque() throws DadoInvalidoException {
+    private void lancaEstoque(AjusteDeEstoque ajusteDeEstoque) throws DadoInvalidoException {
         if (ajusteDeEstoque.getOperacaoFisica() != OperacaoFisica.SEM_ALTERACAO) {
             Estoque estoque = new EstoqueBuilder().comID(ajusteDeEstoque.getEstoque()
                     != null ? ajusteDeEstoque.getEstoque().getId() : null).
@@ -111,8 +112,9 @@ public class AjusteDeEstoqueView implements Serializable {
                     comEmissao(ajusteDeEstoque.getEmissao()).
                     comSaldo(ajusteDeEstoque.getQuantidade()).
                     comEmissao(ajusteDeEstoque.getEmissao()).
-                    comOperacaoFisica(ajusteDeEstoque.getOperacaoFisica()).construir();
-            ajusteDeEstoque.setEstoque(estoque);
+                    comOperacaoFisica(ajusteDeEstoque.getOperacaoFisica()).
+                    comAjusteDeEstoque(ajusteDeEstoque).construir();
+            ajusteDeEstoque.preparaInclusaoDe(estoque);
         }
     }
 

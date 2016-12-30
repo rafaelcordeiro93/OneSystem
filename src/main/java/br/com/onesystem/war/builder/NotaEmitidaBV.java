@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
 import br.com.onesystem.domain.ItemEmitido;
@@ -14,6 +15,7 @@ import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public class NotaEmitidaBV implements Serializable {
@@ -25,12 +27,15 @@ public class NotaEmitidaBV implements Serializable {
     private Operacao operacao;
     private List<ItemEmitido> itensEmitidos;
     private List<Titulo> titulos;
+    private List<Baixa> baixas;
     private ListaDePreco listaDePreco;
     private BigDecimal acrescimo = BigDecimal.ZERO;
     private BigDecimal desconto = BigDecimal.ZERO;
     private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
     private BigDecimal frete;
     private BigDecimal despesaCobranca;
+    private Date emissao;
+    private boolean cancelada = false;
 
     public NotaEmitidaBV(NotaEmitida notaEmitidaSelecionada) {
         this.id = notaEmitidaSelecionada.getId();
@@ -38,6 +43,15 @@ public class NotaEmitidaBV implements Serializable {
         this.operacao = notaEmitidaSelecionada.getOperacao();
         this.titulos = notaEmitidaSelecionada.getTitulos();
         this.itensEmitidos = notaEmitidaSelecionada.getItensEmitidos();
+        this.listaDePreco = notaEmitidaSelecionada.getListaDePreco();
+        this.acrescimo = notaEmitidaSelecionada.getAcrescimo();
+        this.desconto = notaEmitidaSelecionada.getDesconto();
+        this.formaDeRecebimentoOuPagamento = notaEmitidaSelecionada.getFormaDeRecebimentoOuPagamento();
+        this.frete = notaEmitidaSelecionada.getFrete();
+        this.despesaCobranca = notaEmitidaSelecionada.getDespesasCobranca();
+        this.emissao = notaEmitidaSelecionada.getEmissao();
+        this.cancelada = notaEmitidaSelecionada.isCancelada();
+        this.baixas = notaEmitidaSelecionada.getBaixas();
     }
 
     public NotaEmitidaBV() {
@@ -130,16 +144,42 @@ public class NotaEmitidaBV implements Serializable {
     public void setDespesaCobranca(BigDecimal despesaCobranca) {
         this.despesaCobranca = despesaCobranca;
     }
+
+    public Date getEmissao() {
+        return emissao;
+    }
+
+    public void setEmissao(Date emissao) {
+        this.emissao = emissao;
+    }
+
+    public boolean isCancelada() {
+        return cancelada;
+    }
+
+    public void setCancelada(boolean cancelada) {
+        this.cancelada = cancelada;
+    }
+
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public void setBaixas(List<Baixa> baixas) {
+        this.baixas = baixas;
+    }
     
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimentoOuPagamento(formaDeRecebimentoOuPagamento)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).comFrete(frete)
-                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos).construir();
+                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao)
+                .cancelada(cancelada).comBaixas(baixas).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comId(id).comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimentoOuPagamento(formaDeRecebimentoOuPagamento)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).comFrete(frete)
-                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos).construir();
+                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos)
+                .comEmissao(emissao).cancelada(cancelada).comBaixas(baixas).construir();
     }
 }

@@ -2,16 +2,19 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
@@ -44,6 +47,8 @@ public class BaixaBV implements Serializable {
     private Transferencia transferencia;
     private DespesaProvisionada despesaProvisionada;
     private ReceitaProvisionada receitaProvisionada;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
+    private NotaEmitida notaEmitida;
 
     public BaixaBV() {
     }
@@ -68,6 +73,8 @@ public class BaixaBV implements Serializable {
         this.receitaProvisionada = baixa.getReceitaProvisionada();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
+        this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
+        this.notaEmitida = baixa.getNotaEmitida();
     }
 
     public void selecionaTitulo(Titulo titulo) {
@@ -259,7 +266,7 @@ public class BaixaBV implements Serializable {
     public void setDespesaProvisionada(DespesaProvisionada despesaProvisionada) {
         this.despesaProvisionada = despesaProvisionada;
     }
-    
+
     public String getEmissaoFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
@@ -274,12 +281,21 @@ public class BaixaBV implements Serializable {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(null, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, unidadeFinanciera, pessoa, despesa, conta, receita, cambio, titulo, transferencia, recepcao, despesaProvisionada, receitaProvisionada);
+        return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+                .comConta(conta).comDesconto(desconto).comDespesa(despesa).comDespesaProvisionada(despesaProvisionada)
+                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
+                .comNaturezaFinanceira(unidadeFinanciera).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
+                .comPessoa(pessoa).comReceita(receita).comReceitaProvisionada(receitaProvisionada).comRecepcao(recepcao)
+                .comTitulo(titulo).comTotal(total).comTransferencia(transferencia).comValor(valor).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
-        Baixa baixa = new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, unidadeFinanciera, pessoa, despesa, conta, receita, cambio, titulo, transferencia, recepcao, despesaProvisionada, receitaProvisionada);
-        return baixa;
+        return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+                .comConta(conta).comDesconto(desconto).comDespesa(despesa).comDespesaProvisionada(despesaProvisionada)
+                .comEmissao(emissao).comHistorico(historico).comId(id).comJuros(juros).comMultas(multas)
+                .comNaturezaFinanceira(unidadeFinanciera).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
+                .comPessoa(pessoa).comReceita(receita).comReceitaProvisionada(receitaProvisionada).comRecepcao(recepcao)
+                .comTitulo(titulo).comTotal(total).comTransferencia(transferencia).comValor(valor).construir();
     }
 
 }

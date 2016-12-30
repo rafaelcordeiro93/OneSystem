@@ -1,9 +1,11 @@
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.math.BigDecimal;
@@ -21,6 +23,8 @@ public class EstoqueBuilder {
     private BigDecimal saldo;
     private OperacaoFisica operacaoFisica;
     private Date emissao = new Date();
+    private ItemEmitido itemEmitido;
+    private AjusteDeEstoque ajusteDeEstoque;
 
     public EstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -51,8 +55,20 @@ public class EstoqueBuilder {
         return this;
     }
     
-    public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, emissao, operacaoFisica);
+    public EstoqueBuilder comItemEmitido(ItemEmitido itemEmitido){
+        this.itemEmitido = itemEmitido;
+        return this;
     }
+    
+    public EstoqueBuilder comAjusteDeEstoque(AjusteDeEstoque ajusteDeEstoque) {
+        this.ajusteDeEstoque = ajusteDeEstoque;
+        return this;
+    }
+    
+    public Estoque construir() throws DadoInvalidoException {
+        return new Estoque(id, item, saldo, deposito, emissao, operacaoFisica, itemEmitido, ajusteDeEstoque);
+    }
+
+    
 
 }

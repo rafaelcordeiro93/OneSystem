@@ -87,7 +87,7 @@
 
                             </p:panelGrid>
 
-                            <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{notaEmitidaView.itensEmitidos}" rowKey="#{itemEmitido.id}" 
+                            <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{notaEmitidaView.notaEmitida.itensEmitidos}" rowKey="#{itemEmitido.id}" 
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{notaEmitidaView.itemEmitidoSelecionado}">
 
                                 <p:ajax event="rowSelect" process="@this" listener="#{notaEmitidaView.selecionaItemEmitido}" update=":conteudo"/>
@@ -116,7 +116,7 @@
 
                                 <p:columnGroup type="footer">
                                     <p:row>
-                                        <p:column colspan="1" footerText="#{notaEmitidaView.itensEmitidos.size() eq 0 ? '' : notaEmitidaView.itensEmitidos.size()}" />
+                                        <p:column colspan="1" footerText="#{notaEmitidaView.notaEmitida.itensEmitidos.size() eq 0 ? '' : notaEmitidaView.notaEmitida.itensEmitidos.size()}" />
                                         <p:column colspan="6"/>
                                         <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
                                         <p:column colspan="2" footerText="#{notaEmitidaView.totalItensFormatado}"/>
@@ -177,7 +177,7 @@
                                     </pe:inputNumber>                                     
 
                                     <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmDinheiro}"
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                                    value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla}" symbolPosition="left" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Dinheiro}"/>
                                     </pe:inputNumber> 
@@ -263,7 +263,7 @@
 
                             <p:separator/>
 
-                            <p:commandButton value="#{l.Finalizar}"/>
+                            <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.finalizar()}" update=":conteudo"/>
                             <p:commandButton value="#{l.Limpar}" styleClass="BrownButton"/>
 
                         </div>

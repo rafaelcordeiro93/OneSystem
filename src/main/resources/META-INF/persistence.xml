@@ -47,7 +47,6 @@
         <class>br.com.onesystem.domain.ListaDePreco</class>
         <class>br.com.onesystem.domain.ItemEmitido</class>
         <class>br.com.onesystem.domain.PrecoDeItem</class>
-        <class>br.com.onesystem.domain.ItemPorDeposito</class>
         <class>br.com.onesystem.domain.Configuracao</class>
         <class>br.com.onesystem.domain.TabelaDeComissao</class>
         <class>br.com.onesystem.domain.GrupoFiscal</class>

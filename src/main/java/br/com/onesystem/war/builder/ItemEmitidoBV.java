@@ -5,12 +5,13 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemEmitido;
-import br.com.onesystem.domain.ItemPorDeposito;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.ItemEmitidoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class ItemEmitidoBV {
     private Item item;
     private BigDecimal unitario = BigDecimal.ZERO;
     private NotaEmitida notaEmitida;
-    private List<ItemPorDeposito> listaDeItemPorDeposito = new ArrayList<ItemPorDeposito>();
+    private List<Estoque> estoque = new ArrayList<Estoque>();
 
     public ItemEmitidoBV() {
     }
@@ -34,8 +35,8 @@ public class ItemEmitidoBV {
         this.id = itemEmitidoSelecionado.getId();
         this.item = itemEmitidoSelecionado.getItem();
         this.notaEmitida = itemEmitidoSelecionado.getNotaEmitida();
-        this.listaDeItemPorDeposito = itemEmitidoSelecionado.getListaDeItemPorDeposito();
         this.unitario = itemEmitidoSelecionado.getUnitario();
+        estoque = itemEmitidoSelecionado.getEstoque();
     }
 
     public Long getId() {
@@ -70,18 +71,18 @@ public class ItemEmitidoBV {
         this.notaEmitida = notaEmitida;
     }
 
-    public List<ItemPorDeposito> getListaDeItemPorDeposito() {
-        return listaDeItemPorDeposito;
+    public List<Estoque> getEstoque() {
+        return estoque;
     }
 
-    public void setListaDeItemPorDeposito(List<ItemPorDeposito> listaDeItemPorDeposito) {
-        this.listaDeItemPorDeposito = listaDeItemPorDeposito;
+    public void setEstoque(List<Estoque> estoque) {
+        this.estoque = estoque;
     }
-
-    public BigDecimal getQuantidade() {
+    
+     public BigDecimal getQuantidade() {
         BigDecimal quantidade = BigDecimal.ZERO;
-        for (ItemPorDeposito ipd : listaDeItemPorDeposito) {
-            quantidade = quantidade.add(ipd.getQuantidade());
+        for (Estoque e : estoque) {
+            quantidade = quantidade.add(e.getQuantidade());
         }
         return quantidade;
     }
@@ -91,13 +92,11 @@ public class ItemEmitidoBV {
     }
 
     public ItemEmitido construir() throws DadoInvalidoException {
-        return new ItemEmitidoBuilder().comItem(item).comNotaEmitida(notaEmitida).comUnitario(unitario)
-                .comItemPorDeposito(listaDeItemPorDeposito).construir();
+        return new ItemEmitidoBuilder().comItem(item).comNotaEmitida(notaEmitida).comUnitario(unitario).comEstoque(estoque).construir();
     }
 
     public ItemEmitido construirComId() throws DadoInvalidoException {
-        return new ItemEmitidoBuilder().comId(id).comItem(item).comNotaEmitida(notaEmitida).comUnitario(unitario)
-                .comItemPorDeposito(listaDeItemPorDeposito).construir();
+        return new ItemEmitidoBuilder().comId(id).comItem(item).comNotaEmitida(notaEmitida).comUnitario(unitario).comEstoque(estoque).construir();
     }
 
 }

@@ -59,7 +59,8 @@ public class AjusteDeEstoque implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = true)
     private BigDecimal custo;    
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, 
+            mappedBy = "ajusteDeEstoque")
     private Estoque estoque;
     
     public AjusteDeEstoque() {
@@ -119,6 +120,13 @@ public class AjusteDeEstoque implements Serializable {
 
     public BigDecimal getCusto() {
         return custo;
+    }
+    
+    public void preparaInclusaoDe(Estoque estoque) {
+        if (this.estoque == null) {
+            this.id = null;
+            this.estoque = estoque;
+        }
     }
     
     public String getDataFormatada() {

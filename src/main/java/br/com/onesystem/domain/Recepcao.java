@@ -1,5 +1,6 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -84,8 +85,8 @@ public class Recepcao implements Serializable {
         if (baixa == null) {
             baixa = new ArrayList<Baixa>();
         }
-        Baixa novaBaixa = new Baixa(null, 0, false, BigDecimal.ZERO, valor, BigDecimal.ZERO, BigDecimal.ZERO,
-                emissao, null, OperacaoFinanceira.ENTRADA, pessoa, null, conta, null, null, null, null, this, null, null);
+        Baixa novaBaixa = new BaixaBuilder().comValor(valor).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.ENTRADA)
+                .comPessoa(pessoa).comConta(conta).construir();        
         this.baixa.add(novaBaixa);
     }
 

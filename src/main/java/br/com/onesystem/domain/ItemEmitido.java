@@ -44,26 +44,21 @@ public class ItemEmitido implements Serializable {
     @Max(value = 9999999, message = "{valor_unitario_max}")
     @Min(value = 0, message = "{valor_unitario_min}")
     @Column(nullable = false)
-    private BigDecimal unitario = BigDecimal.ZERO;    
+    private BigDecimal unitario = BigDecimal.ZERO;
     @ManyToOne
     private NotaEmitida notaEmitida;
-    @OneToMany(mappedBy = "itemEmitido", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<ItemPorDeposito> listaDeItemPorDeposito;
-    
+    @OneToMany(mappedBy = "itemEmitido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Estoque> estoque;
+
     public ItemEmitido() {
     }
 
-    public ItemEmitido(Long id){
-        
-    }
-    
-    public ItemEmitido(Long id, Item item, BigDecimal valorUnitario, NotaEmitida notaEmitida,
-            List<ItemPorDeposito> listaDeItemPorDeposito) throws DadoInvalidoException {
+    public ItemEmitido(Long id, Item item, BigDecimal valorUnitario, NotaEmitida notaEmitida, List<Estoque> estoques) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.notaEmitida = notaEmitida;
         this.unitario = valorUnitario;
-        this.listaDeItemPorDeposito = listaDeItemPorDeposito;
+        this.estoque = estoques;
         ehValido();
     }
 
@@ -77,26 +72,33 @@ public class ItemEmitido implements Serializable {
 
     public BigDecimal getUnitario() {
         return unitario;
-    } 
+    }
 
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
-    } 
-
-    public List<ItemPorDeposito> getListaDeItemPorDeposito() {
-        return listaDeItemPorDeposito;
     }
-    
-    public BigDecimal getQuantidade(){
+
+    public BigDecimal getQuantidade() {
         BigDecimal quantidade = BigDecimal.ZERO;
-        for(ItemPorDeposito ipd :listaDeItemPorDeposito){
-            quantidade = quantidade.add(ipd.getQuantidade());
+        for (Estoque e : estoque) {
+            quantidade = quantidade.add(e.getQuantidade());
         }
         return quantidade;
     }
-    
-    public BigDecimal getTotal(){
+
+    public BigDecimal getTotal() {
         return getQuantidade().multiply(unitario);
+    }
+
+    public List<Estoque> getEstoque() {
+        return estoque;
+    }
+
+    public void preparaInclusao(NotaEmitida notaEmitida) {
+        if (this.notaEmitida == null) {
+            this.id = null;
+            this.notaEmitida = notaEmitida;
+        }
     }
 
     private void ehValido() throws DadoInvalidoException {
@@ -121,7 +123,7 @@ public class ItemEmitido implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + item + ", valorUnitario=" + unitario + ", notaEmitida=" + notaEmitida + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + (item == null ? null : item.getId()) + ", valorUnitario=" + unitario + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + '}';
     }
 
 }

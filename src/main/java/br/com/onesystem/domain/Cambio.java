@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.dao.ConfiguracaoDAO;
 import br.com.onesystem.dao.TituloDAO;
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
 import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.services.ValidadorDeCampos;
@@ -152,9 +153,8 @@ public class Cambio implements Serializable {
     }
 
     private void pagarBaixa() throws DadoInvalidoException {
-        Baixa baixa = new Baixa(null, 0, false, BigDecimal.ZERO, valorBruto,
-                BigDecimal.ZERO, BigDecimal.ZERO, emissao, "Baixa",
-                OperacaoFinanceira.SAIDA, contrato.getPessoa(), null, conta, null, this, null, null, null, null, null);
+        Baixa baixa = new BaixaBuilder().comValor(valorBruto).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.SAIDA)
+                .comPessoa(contrato.getPessoa()).comConta(conta).construir();
         pagamentos.add(baixa);
     }
 
