@@ -64,10 +64,10 @@
                                     <p:panelGrid columns="3" columnClasses="ui-panelgrid-cell ui-grid-col-4, ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-4"
                                                  layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                        <pe:inputNumber id="cartaoNumeroParcelas" maxValue="999" minValue="0" styleClass="Wid90"
-                                                        decimalPlaces="0" value="#{cartaoView.taxa.numeroParcelas}">
+                                        <pe:inputNumber id="cartaoNumeroDias" maxValue="999" minValue="0" styleClass="Wid90"
+                                                        decimalPlaces="0" value="#{cartaoView.taxa.numeroDias}">
                                             <p:ajax event="blur"/>
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Numero_Parcelas}"/>
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Numero_Dias}"/>
                                         </pe:inputNumber>     
 
                                         <pe:inputNumber id="cartaoTaxa" maxValue="999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
@@ -95,8 +95,8 @@
                                         <p:column style="width: 5%; text-align: center" colspan="1">
                                             <h:outputText value="#{taxa.id}" />
                                         </p:column>
-                                        <p:column headerText="#{l.Numero_Parcelas}" sortBy="#{taxa.numeroParcelas}"  colspan="1">
-                                            <h:outputText value="#{taxa.numeroParcelas}" />
+                                        <p:column headerText="#{l.Numero_Parcelas}" sortBy="#{taxa.numeroDias}"  colspan="1">
+                                            <h:outputText value="#{taxa.numeroDias}" />
                                         </p:column>
                                         <p:column headerText="#{l.Taxa}" sortBy="#{taxa.taxa}" colspan="2">
                                             <h:outputText  value="#{taxa.taxa}" />

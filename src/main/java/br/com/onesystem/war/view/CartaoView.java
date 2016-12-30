@@ -144,7 +144,7 @@ public class CartaoView implements Serializable {
         try {
             taxa.setId(retornarCodigo());
             for (TaxaDeAdministracao lista : cartao.getTaxaDeAdministracao()) {
-                if (taxa.getNumeroParcelas().equals(lista.getNumeroParcelas())) {
+                if (taxa.getNumeroDias().equals(lista.getNumeroDias())) {
                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Parcela_Ja_Existe"));
                 }
             }

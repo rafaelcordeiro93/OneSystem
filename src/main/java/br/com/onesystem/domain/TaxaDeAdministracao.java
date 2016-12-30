@@ -24,7 +24,7 @@ public class TaxaDeAdministracao implements Serializable {
     @GeneratedValue(generator = "SEQ_TAXADEADMINISTRACAO", strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull(message = "{numero_parcelas_not_null}")
-    private Integer numeroParcelas;
+    private Integer numeroDias;
     @NotNull(message = "{taxa_not_null}")
     private BigDecimal taxa;
     @ManyToOne
@@ -33,11 +33,17 @@ public class TaxaDeAdministracao implements Serializable {
     public TaxaDeAdministracao() {
     }
 
-    public TaxaDeAdministracao(Long id, Integer numeroParcelas, BigDecimal taxa, Cartao cartao) throws DadoInvalidoException {
+    public TaxaDeAdministracao(Long id, Integer numeroDias, BigDecimal taxa, Cartao cartao) throws DadoInvalidoException {
         this.id = id;
-        this.numeroParcelas = numeroParcelas;
+        this.numeroDias = numeroDias;
         this.taxa = taxa;
         this.cartao = cartao;
+        ehValido();
+    }
+    
+    public final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("numeroDias", "taxa");
+        new ValidadorDeCampos<TaxaDeAdministracao>().valida(this, campos);
     }
 
     public void preparaInclusao(Cartao cartao) {
@@ -51,8 +57,8 @@ public class TaxaDeAdministracao implements Serializable {
         return id;
     }
 
-    public Integer getNumeroParcelas() {
-        return numeroParcelas;
+    public Integer getNumeroDias() {
+        return numeroDias;
     }
 
     public BigDecimal getTaxa() {
@@ -80,7 +86,7 @@ public class TaxaDeAdministracao implements Serializable {
 
     @Override
     public String toString() {
-        return "TaxaDeAdministracao{" + "id=" + id + ", numeroParcelas=" + numeroParcelas + ", taxa=" + taxa + ", cartao=" + (cartao == null ? null : cartao.getId()) + '}';
+        return "TaxaDeAdministracao{" + "id=" + id + ", numeroParcelas=" + numeroDias + ", taxa=" + taxa + ", cartao=" + (cartao == null ? null : cartao.getId()) + '}';
     }
 
 }

@@ -10,14 +10,14 @@ import java.math.BigDecimal;
 public class TaxaDeAdministracaoBV implements Serializable {
 
   private Long id;
-    private Integer numeroParcelas;
+    private Integer numeroDias;
     private BigDecimal taxa;
     private Cartao cartao;
     
 
     public TaxaDeAdministracaoBV(TaxaDeAdministracao taxaDeAdministracaoSelecionada) {
         this.id = taxaDeAdministracaoSelecionada.getId();
-        this.numeroParcelas = taxaDeAdministracaoSelecionada.getNumeroParcelas();
+        this.numeroDias = taxaDeAdministracaoSelecionada.getNumeroDias();
         this.taxa = taxaDeAdministracaoSelecionada.getTaxa();
         this.cartao = taxaDeAdministracaoSelecionada.getCartao();
     
@@ -34,12 +34,12 @@ public class TaxaDeAdministracaoBV implements Serializable {
         this.id = id;
     }
 
-    public Integer getNumeroParcelas() {
-        return numeroParcelas;
+    public Integer getNumeroDias() {
+        return numeroDias;
     }
 
-    public void setNumeroParcelas(Integer numeroParcelas) {
-        this.numeroParcelas = numeroParcelas;
+    public void setNumeroDias(Integer numeroDias) {
+        this.numeroDias = numeroDias;
     }
 
     public BigDecimal getTaxa() {
@@ -60,10 +60,10 @@ public class TaxaDeAdministracaoBV implements Serializable {
 
     
     public TaxaDeAdministracao construir() throws DadoInvalidoException {
-        return new TaxaDeAdministracaoBuilder().comNumeroDeParcelas(numeroParcelas).comTaxa(taxa).comCartao(cartao).construir();
+        return new TaxaDeAdministracaoBuilder().comNumeroDeParcelas(numeroDias).comTaxa(taxa).comCartao(cartao).construir();
     }
 
     public TaxaDeAdministracao construirComID() throws DadoInvalidoException {
-        return new TaxaDeAdministracaoBuilder().comID(id).comNumeroDeParcelas(numeroParcelas).comTaxa(taxa).comCartao(cartao).construir();
+        return new TaxaDeAdministracaoBuilder().comID(id).comNumeroDeParcelas(numeroDias).comTaxa(taxa).comCartao(cartao).construir();
     }
 }
