@@ -23,7 +23,7 @@ public class TaxaDeAdministracao implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_TAXADEADMINISTRACAO", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull(message = "{numero_parcelas_not_null}")
+    @NotNull(message = "{numero_dias_not_null}")
     private Integer numeroDias;
     @NotNull(message = "{taxa_not_null}")
     private BigDecimal taxa;
