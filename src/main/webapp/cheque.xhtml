@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+
+                            <h2 class="BigTopic"> #{l.Edicao_De_Registro}</h2>
+
+                            <div class="Container100 Responsive100">
+                                    <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
+                                                 columnClasses="ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5">
+
+                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Id}" style="text-align: right"/>
+                                            <!-- -->
+                                            <p:inputText id="chequeid" readonly="true" value="#{chequeView.cheque.id}" />
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaCheque}" update=":conteudo"
+                                                        process="@this"  />
+                                            </p:commandButton>
+                                        </h:panelGrid>     
+
+                                        <h:panelGrid columns="2"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Venda}" style="text-align: right"/>
+                                            <!-- -->
+                                            <p:inputText id="selecionaVenda" readonly="true"  value="#{chequeView.cheque.venda.id}"/> 
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaVenda}"
+                                                        process="@this" update="selecionaVenda" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Numero_Parcelas}" style="text-align: right"/>
+                                            <pe:inputNumber id="numeroParcelasValor" maxValue="99" minValue="0" styleClass="Wid90" 
+                                                            decimalPlaces="0" value="#{chequeView.cheque.numeroParcela}">
+                                            </pe:inputNumber>             
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Valor}" style="text-align: right"/>
+                                            <pe:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
+                                                            decimalPlaces="2" value="#{chequeView.cheque.valor}">
+                                            </pe:inputNumber>             
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Emissao}" style="text-align: right" />
+                                            <p:calendar value="#{chequeView.cheque.emissao}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Vencimento}" style="text-align: right" />
+                                            <p:calendar value="#{chequeView.cheque.vencimento}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="2"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Banco}" style="text-align: right"/>
+                                            <!-- -->
+                                            <p:inputText id="selecionaBanco" readonly="true"  value="#{chequeView.cheque.banco.nome}"/> 
+                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this"
+                                                              update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaBanco}"
+                                                        process="@this" update="selecionaBanco" />
+                                            </p:commandButton>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Agencia}" style="text-align: right"/>
+                                            <p:inputText value="#{chequeView.cheque.agencia}" />         
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Conta}" style="text-align: right"/>
+                                            <p:inputText value="#{chequeView.cheque.conta}" />         
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Numero_Cheque}" style="text-align: right"/>
+                                            <p:inputText value="#{chequeView.cheque.numeroCheque}" />         
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Tipo_Situacao}" style="text-align: right"/>
+                                            <p:selectOneMenu id="TipoSituacao" value="#{chequeView.cheque.tipoSituacao}" styleClass="Wid80">
+                                                <f:selectItems value="#{chequeView.tipoSituacao}" var="#{l.Tipo_Situacao}" itemLabel="#{TipoSituacao}" itemValue="#{TipoSituacao}" >
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Multas}" style="text-align: right"/>
+                                            <pe:inputNumber id="Multas" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
+                                                            decimalPlaces="2" value="#{chequeView.cheque.multas}">
+                                            </pe:inputNumber>             
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Juros}" style="text-align: right"/>
+                                            <pe:inputNumber id="Juros" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
+                                                            decimalPlaces="2" value="#{chequeView.cheque.juros}">
+                                            </pe:inputNumber>             
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Descontos}" style="text-align: right"/>
+                                            <pe:inputNumber id="Desconto" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
+                                                            decimalPlaces="2" value="#{chequeView.cheque.descontos}">
+                                            </pe:inputNumber>             
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Emitente}" style="text-align: right"/>
+                                            <p:inputText value="#{chequeView.cheque.emitente}" />         
+                                        </h:panelGrid>
+
+                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
+                                            <p:outputLabel  value="#{l.Observacao}" style="text-align: right"/>
+                                            <p:inputTextarea autoResize="true" rows="2" cols="26"
+                                                             maxlength="200" value="#{chequeView.cheque.observacao}">
+                                            </p:inputTextarea>
+                                        </h:panelGrid>
+
+                                    </p:panelGrid>
+                                </div>
+                            </div>
+
+                            <div class="EmptyBox5"/>
+
+                            <p:separator/>
+
+                            <p:commandButton value="#{l.Adicionar}" action="#{chequeView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value="#{l.Atualizar}" action="#{chequeView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                            <p:commandButton value="#{l.Remover}" action="#{chequeView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                            <p:commandButton value="#{l.Limpar}" action="#{chequeView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                            <p:commandButton value="#{l.Desfazer}" action="#{chequeView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                             styleClass="OrangeButton" />
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>
