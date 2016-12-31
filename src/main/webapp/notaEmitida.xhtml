@@ -177,7 +177,7 @@
                                     </pe:inputNumber>                                     
 
                                     <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmDinheiro}"
-                                                    value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla}" symbolPosition="left" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                                    value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Dinheiro}"/>
                                     </pe:inputNumber> 

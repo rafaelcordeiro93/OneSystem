@@ -5,23 +5,29 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.MoedaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.MoedaBV;
-import br.com.onesystem.war.service.MoedaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoBandeira;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.UploadedFile;
 
 @ManagedBean
 @ViewScoped
@@ -29,7 +35,7 @@ public class MoedaView implements Serializable {
 
     private MoedaBV moeda;
     private Moeda moedaSelecionada;
-
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -47,7 +53,7 @@ public class MoedaView implements Serializable {
             }
         } catch (DadoInvalidoException die) {
             die.print();
-        }
+        } 
     }
 
     public void update() {
@@ -80,17 +86,25 @@ public class MoedaView implements Serializable {
             di.print();
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
+        } 
     }
 
-    public void selecionaMoeda(SelectEvent e) {
+    public void selecionaMoeda(SelectEvent e) {        
         moedaSelecionada = (Moeda) e.getObject();
         moeda = new MoedaBV(moedaSelecionada);
     }
-
+    
+    public List<TipoBandeira> getBandeiras(){
+       return Arrays.asList(TipoBandeira.values());
+    }
+    
     private boolean validaMoedaExistente(Moeda novoRegistro) {
         List<Moeda> lista = new MoedaDAO().buscarMoedas().porNome(novoRegistro).porSigla(novoRegistro).listaDeResultados();
-        return lista.isEmpty();
+        if (moeda.getId() != null) {
+            return moeda.getId().compareTo(lista.get(0).getId()) == 0;
+        } else {
+            return lista.isEmpty();
+        }
     }
 
     public void desfazer() {

@@ -4,14 +4,18 @@ import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.TipoBandeira;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -34,6 +38,8 @@ public class Moeda implements Serializable {
     @Length(min = 1, max = 3, message = "{sigla_length}")
     @Column(nullable = false, length = 3)
     private String sigla;
+    @Enumerated(EnumType.STRING)
+    private TipoBandeira bandeira;
     @OneToMany(mappedBy = "moeda")
     private List<Cotacao> cotacoes;
     @OneToMany(mappedBy = "moeda")
@@ -48,10 +54,11 @@ public class Moeda implements Serializable {
     public Moeda() {
     }
 
-    public Moeda(Long id, String nome, String sigla) throws DadoInvalidoException {
+    public Moeda(Long id, String nome, String sigla, TipoBandeira bandeira) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.sigla = sigla;
+        this.bandeira = bandeira;
         ehValido();
     }
 
@@ -77,6 +84,10 @@ public class Moeda implements Serializable {
 
     public List<Conta> getListaContas() {
         return listaContas;
+    }
+
+    public TipoBandeira getBandeira() {
+        return bandeira;
     }
 
     @Override

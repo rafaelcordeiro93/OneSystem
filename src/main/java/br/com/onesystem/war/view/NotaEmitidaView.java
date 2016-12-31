@@ -87,11 +87,11 @@ public class NotaEmitidaView implements Serializable {
     
     public void finalizar() {
         try {
+            notaEmitida.setFormaDeRecebimentoOuPagamento(formaDeRecebimentoOuPagamento.construir());
             NotaEmitida novoRegistro = notaEmitida.construir();
             preparaInclusaoDeItemEmitido(novoRegistro);
+            preparaInclusaoDeRecebimentoDeValores(novoRegistro);
             new AdicionaDAO<NotaEmitida>().adiciona(novoRegistro);
-
-            //receberValores();
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -113,7 +113,7 @@ public class NotaEmitidaView implements Serializable {
             estoque.preparaInclusaoDe(ie);
         }
     }
-        
+    
     public void selecionaItemEmitido(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
@@ -188,18 +188,14 @@ public class NotaEmitidaView implements Serializable {
         notaEmitidaSelecionada = r;
     }
     
-    public void receberValores() {
-        try {
-            if (formaDeRecebimentoOuPagamento.getDinheiro().compareTo(BigDecimal.ZERO) > 1) {
-                Baixa baixa = new BaixaBuilder().cancelada(false)
-                        .comConta(null).comDesconto(notaEmitida.getDesconto()).comEmissao(notaEmitida.getEmissao())
-                        .comNaturezaFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira())
-                        .comPessoa(notaEmitida.getPessoa()).comReceita(notaEmitida.getOperacao().getVendaAVista()).
-                        comTotal(getTotalNota()).comValor(getTotalNota()).construir();
-                notaEmitida.getBaixas().add(baixa);
-            }
-        } catch (DadoInvalidoException ex) {
-            ex.print();
+    public void preparaInclusaoDeRecebimentoDeValores(NotaEmitida novoRegistro) throws DadoInvalidoException {
+        if (novoRegistro.getFormaDeRecebimentoOuPagamento().getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
+            Baixa baixa = new BaixaBuilder().cancelada(false)
+                    .comConta(null).comDesconto(novoRegistro.getDesconto()).comEmissao(novoRegistro.getEmissao())
+                    .comNaturezaFinanceira(novoRegistro.getOperacao().getOperacaoFinanceira())
+                    .comPessoa(novoRegistro.getPessoa()).comReceita(novoRegistro.getOperacao().getVendaAVista()).
+                    comTotal(getTotalNota()).comValor(getTotalNota()).comNotaEmitida(novoRegistro).construir();
+            novoRegistro.getBaixas().add(baixa);
         }
     }
     
@@ -293,7 +289,7 @@ public class NotaEmitidaView implements Serializable {
         }
         return estoquesBV;
     }
-       
+    
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
         itemEmitido = new ItemEmitidoBV();
@@ -331,7 +327,7 @@ public class NotaEmitidaView implements Serializable {
     public void setItemEmitido(ItemEmitidoBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-        
+    
     public Configuracao getConfiguracao() {
         return configuracao;
     }

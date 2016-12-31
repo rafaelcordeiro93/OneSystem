@@ -1,6 +1,7 @@
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Despesa;
@@ -8,6 +9,7 @@ import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Janela;
 import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Moeda;
@@ -20,6 +22,9 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
+import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
+import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -416,14 +421,18 @@ public class DadosIniciais {
 
         //Moeda
         // ---------------------------------------------------------------------
-        Moeda real = new Moeda(null, "Real", "R$");
-        Moeda dolar = new Moeda(null, "Dólar", "$");
-        Moeda guarani = new Moeda(null, "Guarani", "Gs");
+        Moeda real = new Moeda(null, "Real", "R$", null);
+        Moeda dolar = new Moeda(null, "Dólar", "$", null);
+        Moeda guarani = new Moeda(null, "Guarani", "Gs", null);
 
         AdicionaDAO<Moeda> daoMoeda = new AdicionaDAO<Moeda>();
         daoMoeda.adiciona(real);
         daoMoeda.adiciona(dolar);
         daoMoeda.adiciona(guarani);
+
+        //Configuracao
+        Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO);
+        new AdicionaDAO<Configuracao>().adiciona(configuracao);
 
         // Conta
         // ---------------------------------------------------------------------
@@ -439,16 +448,22 @@ public class DadosIniciais {
         // ---------------------------------------------------------------------
         IVA iva = new IVA(null, new BigDecimal(10), "IVA 10%");
         new AdicionaDAO<IVA>().adiciona(iva);
-        
+
         // Grupo Fiscal
         // ---------------------------------------------------------------------
         GrupoFiscal grupoFiscal = new GrupoFiscal(null, "IVA 10%", iva);
         new AdicionaDAO<GrupoFiscal>().adiciona(grupoFiscal);
-        
+
         // Deposito
         // ---------------------------------------------------------------------
         Deposito deposito = new Deposito(null, "Depósito Exemplo");
         new AdicionaDAO<Deposito>().adiciona(deposito);
+
+        // Item
+        Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,
+                grupoFiscal, unidade, null, null, null, null, null, null);
+        new AdicionaDAO<Item>().adiciona(item);
+
     }
 
 }

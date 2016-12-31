@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.view.selecao.SelecaoFormaDeRecebimentoAtivaView;
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
@@ -22,24 +23,16 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author Rafael Fernando Rauber
  */
 public class TesteRauber {
 
-    public static void main(String[] args) {   
-        
-        String nome = "Teste";
-        String ruc = "ruc";
-        
-        SelecaoFormaDeRecebimentoAtivaView v = new SelecaoFormaDeRecebimentoAtivaView();
-        v.init();
-        
-        for(FormaDeRecebimento f : v.getFormaDeRecebimentoLista()){
-            System.out.println("a" + f.toString());
-        }
+    public static void main(String[] args) {
+
+        File file = new File("E:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem-war\\target\\OneSystem-war-1.0-SNAPSHOT\\resources\\img\\1483202599775-flagge-paraguay.gif");
+        file.delete();
     }
-    
+
 }

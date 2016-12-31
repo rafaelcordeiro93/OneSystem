@@ -97,7 +97,7 @@ public class Baixa implements Serializable, Movimento {
 
     @ManyToOne
     private Cambio cambio;
-    
+
     @ManyToOne
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
@@ -114,7 +114,7 @@ public class Baixa implements Serializable, Movimento {
     private NotaEmitida notaEmitida;
 
     private boolean cancelada = false;
-    
+
     public Baixa() {
     }
 
@@ -268,6 +268,8 @@ public class Baixa implements Serializable, Movimento {
         } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             if (recepcao != null) {
                 return geraMovimentacaoEntradaRecepcao(msg);
+            } else if (notaEmitida != null) {
+                return geraMovimentacaoEntradaNotaEmitida(msg);
             } else if (transferencia != null) {
                 return geraMovimentacaoEntradaTransferencia(msg);
             } else if (despesaProvisionada != null) {
@@ -298,6 +300,10 @@ public class Baixa implements Serializable, Movimento {
         }
         String str = pessoa == null ? historicoFormatado : " " + msg.getMessage("pagos_por") + " " + pessoa.getNome();
         return this.receita.getNome() + " - " + str;
+    }
+
+    private String geraMovimentacaoEntradaNotaEmitida(BundleUtil msg) {
+        return msg.getMessage("Nota_Emitida") + " - " + notaEmitida.getId() + " - " + this.getPessoa();
     }
 
     private String geraMovimentacaoEntradaTransferencia(BundleUtil msg) {
