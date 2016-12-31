@@ -3,23 +3,20 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.CotacaoBV;
-import br.com.onesystem.war.builder.UnidadeMedidaItemBV;
-import br.com.onesystem.war.service.CotacaoService;
-import br.com.onesystem.war.service.MoedaService;
+import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.OperacaoBV;
+import br.com.onesystem.valueobjects.TipoSituacaoCheque;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -30,11 +27,10 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class CotacaoView implements Serializable {
+public class ChequeView implements Serializable {
 
-    private CotacaoBV cotacao;
-    private Cotacao cotacaoSelecionada;
-
+    private ChequeBV cheque;
+    private Cheque chequeSelecionada;
     private Configuracao configuracao;
 
     @ManagedProperty("#{configuracaoService}")
@@ -59,8 +55,9 @@ public class CotacaoView implements Serializable {
 
     public void add() {
         try {
-            Cotacao novoRegistro = cotacao.construir();
-            new AdicionaDAO<Cotacao>().adiciona(novoRegistro);
+            Cheque novoRegistro = cheque.construir();
+
+            new AdicionaDAO<Cheque>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -71,13 +68,14 @@ public class CotacaoView implements Serializable {
     public void update() {
         try {
 
-            if (cotacaoSelecionada != null) {
-                Cotacao cotacaoExistente = cotacao.construirComID();
-                new AtualizaDAO<Cotacao>(Cotacao.class).atualiza(cotacaoExistente);
+            if (chequeSelecionada != null) {
+                Cheque chequeExistente = cheque.construirComID();
+
+                new AtualizaDAO<Cheque>(Cheque.class).atualiza(chequeExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("cotacao_nao_encontrado"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("cheque_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -86,8 +84,8 @@ public class CotacaoView implements Serializable {
 
     public void delete() {
         try {
-            if (cotacaoSelecionada != null) {
-                new RemoveDAO<Cotacao>(Cotacao.class).remove(cotacaoSelecionada, cotacaoSelecionada.getId());
+            if (chequeSelecionada != null) {
+                new RemoveDAO<Cheque>(Cheque.class).remove(chequeSelecionada, chequeSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }
@@ -98,42 +96,51 @@ public class CotacaoView implements Serializable {
         }
     }
 
-    public void selecionaMoeda(SelectEvent event) {
-        Moeda cotacaoSelecionada = (Moeda) event.getObject();
-        this.cotacao.setMoeda(cotacaoSelecionada);
+    public void selecionaVenda(SelectEvent event) {
+        NotaEmitida notaSelecionado = (NotaEmitida) event.getObject();
+        cheque.setVenda(notaSelecionado);
     }
 
-    public void selecionaCotacao(SelectEvent e) {
-        Cotacao a = (Cotacao) e.getObject();
-        cotacao = new CotacaoBV(a);
-        cotacaoSelecionada = a;
+    public void selecionaBanco(SelectEvent event) {
+        Banco bancoSelecionado = (Banco) event.getObject();
+        cheque.setBanco(bancoSelecionado);
+    }
+
+    public void selecionaCheque(SelectEvent e) {
+        Cheque a = (Cheque) e.getObject();
+        cheque = new ChequeBV(a);
+        chequeSelecionada = a;
+    }
+
+    public List<TipoSituacaoCheque> getTipoSituacao() {
+        return Arrays.asList(TipoSituacaoCheque.values());
     }
 
     public void limparJanela() {
-        cotacao = new CotacaoBV();
-        cotacaoSelecionada = new Cotacao();
+        cheque = new ChequeBV();
+        chequeSelecionada = null;
     }
 
     public void desfazer() {
-        if (cotacaoSelecionada != null) {
-            cotacao = new CotacaoBV(cotacaoSelecionada);
+        if (chequeSelecionada != null) {
+            cheque = new ChequeBV(chequeSelecionada);
         }
     }
 
-    public CotacaoBV getCotacao() {
-        return cotacao;
+    public ChequeBV getCheque() {
+        return cheque;
     }
 
-    public void setCotacao(CotacaoBV cotacao) {
-        this.cotacao = cotacao;
+    public void setCheque(ChequeBV cheque) {
+        this.cheque = cheque;
     }
 
-    public Cotacao getCotacaoSelecionada() {
-        return cotacaoSelecionada;
+    public Cheque getChequeSelecionada() {
+        return chequeSelecionada;
     }
 
-    public void setCotacaoSelecionada(Cotacao cotacaoSelecionada) {
-        this.cotacaoSelecionada = cotacaoSelecionada;
+    public void setChequeSelecionada(Cheque chequeSelecionada) {
+        this.chequeSelecionada = chequeSelecionada;
     }
 
     public Configuracao getConfiguracao() {
