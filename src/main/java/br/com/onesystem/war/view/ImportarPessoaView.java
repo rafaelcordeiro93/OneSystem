@@ -4,7 +4,8 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaJuridica;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.IDadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImportadorRUC;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.service.PessoaService;
@@ -34,12 +35,13 @@ public class ImportarPessoaView implements Serializable {
     }
 
     public void upload(FileUploadEvent event) throws DadoInvalidoException, IOException {
-
-        File destFile = new File("rucimport.txt");//cria um arquivo txt
-        FileUtils.copyInputStreamToFile(event.getFile().getInputstream(), destFile);//adiciona o conteudo o UploadedFile no arquivo novo criado
-
-        add(importador.Importar(destFile));
-       
+        try {
+            File destFile = new File("rucimport.txt");//cria um arquivo txt
+            FileUtils.copyInputStreamToFile(event.getFile().getInputstream(), destFile);//adiciona o conteudo o UploadedFile no arquivo novo criado
+            add(importador.Importar(destFile));
+        } catch (EDadoInvalidoException e) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("erro_ao_importar") + e.getMessage());
+        }
 
     }
 
@@ -52,7 +54,7 @@ public class ImportarPessoaView implements Serializable {
             } catch (NullPointerException npe) {
             }
         }
-         InfoMessage.adicionado();
+        InfoMessage.adicionado();
     }
 
     public Boolean pessoaExiste(Pessoa pessoa) throws DadoInvalidoException {

@@ -22,15 +22,17 @@
 
                                         <div class="Container100 Responsive100">
                                             <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                                                <p:outputLabel  value="#{l.Id}"/>
                                                 <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                                    <p:inputText value="#{itemView.item.id}" placeholder="#{l.Id}" styleClass="Wid90" readonly="true"/>
+                                                    <p:inputText value="#{itemView.item.id}" styleClass="Wid90" readonly="true"/>
                                                     <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
                                                                      update="@none">
                                                         <p:ajax event="dialogReturn" listener="#{itemView.selecionaItem}"
                                                                 process="@this" update=":conteudo" />
                                                     </p:commandButton>
                                                 </h:panelGrid>
-                                                <p:inputText value="#{itemView.item.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                                                <p:outputLabel  value="#{l.Nome}"/>
+                                                <p:inputText value="#{itemView.item.nome}"  maxlength="60" styleClass="Wid90"/>
                                                 <p:inputText value="#{itemView.item.barras}" placeholder="#{l.Codigo_De_Barras}" maxlength="60" styleClass="Wid90"/>
                                                 <p:inputMask value="#{itemView.item.ncm}" mask="99999999" placeholder="#{l.Ncm}" styleClass="Wid90"/>                                            
 
