@@ -57,6 +57,7 @@
         <class>br.com.onesystem.domain.FormaDeRecebimentoOuPagamento</class>
         <class>br.com.onesystem.domain.Cartao</class>
         <class>br.com.onesystem.domain.TaxaDeAdministracao</class>
+          <class>br.com.onesystem.domain.BoletoDeCartao</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

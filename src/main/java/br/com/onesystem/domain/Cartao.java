@@ -26,17 +26,17 @@ public class Cartao implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_CARTAO", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull(message = "{observacao_not_null}")
-    @Length(min = 2, max = 60, message = "{observacao_lenght}")
+    @NotNull(message = "{nome_not_null}")
+    @Length(min = 2, max = 60, message = "{nome_lenght}")
     @Column(length = 60, nullable = false)
     private String nome;
-    @NotNull(message = "{item_not_null}")
+    @NotNull(message = "{conta_not_null}")
     @ManyToOne
     private Conta conta;
-    @NotNull(message = "{item_not_null}")
+    @NotNull(message = "{despesa_not_null}")
     @ManyToOne
     private Despesa despesa;
-    @NotNull(message = "{item_not_null}")
+    @NotNull(message = "{juros_not_null}")
     @ManyToOne
     private Despesa juros;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "cartao")
