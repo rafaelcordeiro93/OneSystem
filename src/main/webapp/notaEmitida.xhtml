@@ -263,7 +263,8 @@
 
                             <p:separator/>
 
-                            <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.finalizar()}" update=":conteudo"/>
+                            <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.addTotalCotacoes}" update=":conteudo"/>
+
                             <p:commandButton value="#{l.Limpar}" styleClass="BrownButton"/>
 
                         </div>
@@ -271,6 +272,44 @@
                 </div>
             </div>
         </div>
+
+        <p:dialog widgetVar="cotacaoVal" >
+
+            <p:dataTable id="cotacaoValoresData" var="cotacaoValores" value="#{notaEmitidaView.cotacoes}" selectionMode="single" selection="#{notaEmitidaView.cotacaoValoresSelecionado}" rowKey="#{cotacaoValores.id}"
+                         emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
+
+                <p:column style="text-align: center; width: 5%" >                                         
+                    <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{cotacaoValores.cotacao.moeda.bandeira}.png" />
+                </p:column>
+
+                <p:column headerText="#{l.Cotacao}" style="text-align: right; width: 15%">                                        
+                    <h:outputText value="#{cotacaoValores.cotacao.moeda.sigla} #{cotacaoValores.cotacao.valor}" />
+                </p:column>
+
+                <p:column headerText="#{l.Conversao}">                                        
+                    <h:outputText value="#{cotacaoValores.valorConvertidoRestante}" />
+                </p:column>
+
+                <p:column headerText="#{l.Valor}">  
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{cotacaoValores.cotacao.moeda.sigla} #{cotacaoValores.valorAReceber}"/></f:facet>
+                        <f:facet name="input"><p:inputText value="#{cotacaoValores.valorAReceber}">
+                                <p:ajax event="blur" listener="#{notaEmitidaView.addTotalCotacoes}" update="cotacaoValoresData" />
+                            </p:inputText></f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column>
+                    <p:outputLabel value="#{cotacaoValores.valorConvertidoRecebido}"/>
+                </p:column>   
+
+                <p:column>
+                    <p:outputLabel value="#{cotacaoValores.valorRestante}"/>
+                </p:column>   
+
+            </p:dataTable>
+
+        </p:dialog>
 
     </ui:define>
 
