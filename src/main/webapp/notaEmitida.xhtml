@@ -16,8 +16,8 @@
 
                             <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
                                          columnClasses="ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-3">
-                                <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                    <p:inputText id="notaEmitidaOperacao" size="32" readonly="true" placeholder="#{l.Operacao}" value="#{notaEmitidaView.notaEmitida.operacao.nome}"/>
+                                <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%;width: 100%" >
+                                    <p:inputText id="notaEmitidaOperacao" size="36" readonly="true" placeholder="#{l.Operacao}" value="#{notaEmitidaView.notaEmitida.operacao.nome}"/>
                                     <p:commandButton id="botaoPesquisaOperacao" icon="fa fa-search Fs16 White" action="#{selecaoOperacaoView.abrirDialogo()}" process="@this"
                                                      update="@none">
                                         <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaOperacao}"
@@ -206,26 +206,26 @@
                                         <f:passThroughAttribute name="placeholder" value="#{l.Cheque}"/>
                                     </pe:inputNumber> 
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" 
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00"
                                                     decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Frete}"/>
-                                    </pe:inputNumber>                                     
+                                    </p:inputNumber>                                     
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCartao}"
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCartao}"
                                                     decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Cartao}"/>
-                                    </pe:inputNumber>   
+                                    </p:inputNumber>   
 
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.A_Faturar}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
                                     <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCredito}"/>
                                     <p:commandButton value="#{l.Detalhes_Cheque}" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCheque}"/>

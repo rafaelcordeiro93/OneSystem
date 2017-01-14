@@ -1,21 +1,21 @@
 @font-face {
     font-family: 'robotolight';
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.eot.xhtml?ln=primefaces-modena");
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.eot.xhtml?ln=primefaces-modena#iefix") format('embedded-opentype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.woff2.xhtml?ln=primefaces-modena") format('woff2'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.woff.xhtml?ln=primefaces-modena") format('woff'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.ttf.xhtml?ln=primefaces-modena") format('truetype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-light-webfont.svg.xhtml?ln=primefaces-modena#robotolight") format('svg');
+    src: url("#{resource['primefaces-modena:fonts/roboto-light-webfont.eot']}");
+    src: url("#{resource['primefaces-modena:fonts/roboto-light-webfont.eot']}#iefix") format('embedded-opentype'), url("#{resource['primefaces-modena:fonts/roboto-light-webfont.woff2']}") format('woff2'), url("#{resource['primefaces-modena:fonts/roboto-light-webfont.woff']}") format('woff'), url("#{resource['primefaces-modena:fonts/roboto-light-webfont.ttf']}") format('truetype'), url("#{resource['primefaces-modena:fonts/roboto-light-webfont.svg']}#robotolight") format('svg');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'robotoregular';
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.eot.xhtml?ln=primefaces-modena");
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.eot.xhtml?ln=primefaces-modena#iefix") format('embedded-opentype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.woff2.xhtml?ln=primefaces-modena") format('woff2'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.woff.xhtml?ln=primefaces-modena") format('woff'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.ttf.xhtml?ln=primefaces-modena") format('truetype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-regular-webfont.svg.xhtml?ln=primefaces-modena#robotoregular") format('svg');
+    src: url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.eot']}");
+    src: url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.eot']}#iefix") format('embedded-opentype'), url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.woff2']}") format('woff2'), url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.woff']}") format('woff'), url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.ttf']}") format('truetype'), url("#{resource['primefaces-modena:fonts/roboto-regular-webfont.svg']}#robotoregular") format('svg');
     font-weight: normal;
     font-style: normal;
 }
 @font-face {
     font-family: 'robotomedium';
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.eot.xhtml?ln=primefaces-modena");
-    src: url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.eot.xhtml?ln=primefaces-modena#iefix") format('embedded-opentype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.woff2.xhtml?ln=primefaces-modena") format('woff2'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.woff.xhtml?ln=primefaces-modena") format('woff'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.ttf.xhtml?ln=primefaces-modena") format('truetype'), url("/OneSystem-war/javax.faces.resource/fonts/roboto-medium-webfont.svg.xhtml?ln=primefaces-modena#robotomedium") format('svg');
+    src: url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.eot']}");
+    src: url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.eot']}#iefix") format('embedded-opentype'), url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.woff2']}") format('woff2'), url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.woff']}") format('woff'), url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.ttf']}") format('truetype'), url("#{resource['primefaces-modena:fonts/roboto-medium-webfont.svg']}#robotomedium") format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -144,30 +144,30 @@ label.ui-state-error {
 }
 .ui-icon,
 .ui-widget-content .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/ui-icons_72b42d_256x240.png.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/ui-icons_72b42d_256x240.png']}");
 }
 .ui-state-hover .ui-icon,
 .ui-state-focus .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/ui-icons_ffffff_256x240.png.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/ui-icons_ffffff_256x240.png']}");
 }
 .ui-state-active .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/ui-icons_ffffff_256x240.png.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/ui-icons_ffffff_256x240.png']}");
 }
 .ui-state-highlight .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/ui-icons_4eb305_256x240.png.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/ui-icons_4eb305_256x240.png']}");
 }
 .ui-state-error .ui-icon,
 .ui-state-error-text .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/ui-icons_cd0a0a_256x240.png.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/ui-icons_cd0a0a_256x240.png']}");
 }
 /* positioning */
 .ui-icon-default {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/default.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/default.svg']}") !important;
     background-position: center;
     background-size: 100%;
 }
 .ui-icon-blank {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/blank.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/blank.svg']}") !important;
     background-position: center;
     background-size: 100%;
 }
@@ -403,7 +403,7 @@ label.ui-state-error {
     background-position: -48px -96px;
 }
 .ui-icon-note {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/note.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/note.svg']}");
     background-position: center;
     background-size: 100%;
 }
@@ -767,7 +767,7 @@ label {
     border: solid 1px #e0e0e0;
 }
 .ui-breadcrumb ul li .ui-menuitem-link {
-    font-size: 13px;
+    font-size: 16px;
     color: #546e7a;
     letter-spacing: 0px;
     font-family: 'robotoregular';
@@ -781,7 +781,7 @@ label {
     margin-right: 10px !important;
 }
 .ui-breadcrumb .ui-icon-home {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/breadcrumb-home.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/breadcrumb-home.svg']}") !important;
     background-position: center 5px !important;
     background-size: 100% !important;
     height: 30px;
@@ -790,7 +790,7 @@ label {
 }
 .ui-breadcrumb-chevron {
     height: 20px !important;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/breadcrumb-arrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/breadcrumb-arrow.svg']}") !important;
     background-position: center !important;
     background-size: 60% !important;
     margin-top: 3px !important;
@@ -823,13 +823,13 @@ label {
 /*.ui-datatable-scrollable{border:0px; background-color:transparent;}
 .ui-datatable-scrollable:hover{border:0px !important; background-color:transparent;}*/
 .ui-datatable .ui-icon-arrowthick-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
 }
 .ui-datatable .ui-icon-arrowthick-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
@@ -900,7 +900,7 @@ label {
 }
 .ui-datatable table tbody td {
     font-family: 'robotoregular';
-    padding: 8px 10px !important;
+    padding: 10px 10px !important;
 }
 .ui-datatable-fs .ui-datatable-frozenlayout-right,
 .ui-datatable-fs .ui-datatable-frozenlayout-left {
@@ -913,7 +913,7 @@ label {
 }
 .ui-datatable table {
     border-collapse: collapse;
-    font-size: 13px;
+    font-size: 14px;
 }
 .ui-datatable table thead tr th,
 .ui-datatable table tfoot tr td,
@@ -924,7 +924,7 @@ label {
     outline: none;
     padding: 4px 10px;
     font-family: 'robotolight';
-    font-size: 13px;
+    font-size: 14px;
 }
 .ui-datatable table thead tr th.ui-state-hover,
 .ui-datatable table thead tr th.ui-state-active,
@@ -950,7 +950,7 @@ label {
 .ui-datatable table tbody tr td {
     color: #546e7a;
     border: solid 1px #d9e3e8;
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'robotoregular';
     -webkit-transition: all 0.5s ease;
     -moz-transition: all 0.5s ease;
@@ -959,27 +959,27 @@ label {
     transition: all 0.5s ease;
 }
 .ui-datatable table tbody tr td .ui-row-toggler.ui-icon-circle-triangle-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-gray.svg']}");
     background-position: center !important;
     background-size: 110%;
 }
 .ui-datatable table tbody tr td .ui-row-toggler.ui-icon-circle-triangle-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-gray.svg']}");
     background-position: center !important;
     background-size: 110%;
 }
 .ui-datatable table tbody tr td .ui-row-editor .ui-icon-pencil {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/pen-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/pen-blue.svg']}");
     background-position: center !important;
     background-size: 120%;
 }
 .ui-datatable table tbody tr td .ui-row-editor .ui-icon-check {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/check-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/check-blue.svg']}");
     background-position: center !important;
     background-size: 120%;
 }
 .ui-datatable table tbody tr td .ui-row-editor .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-red.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-red.svg']}");
     background-position: center !important;
     background-size: 120%;
 }
@@ -995,13 +995,13 @@ label {
     color: #f1f6f9;
 }
 .ui-datatable table tbody tr td .ui-icon-arrow-4 {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/movearrow-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/movearrow-gray.svg']}");
     background-position: center !important;
     background-size: 100%;
 }
 .ui-datatable table thead tr .ui-state-default .ui-icon-carat-2-n-s,
 .ui-datatable .ui-datatable-sticky table thead tr .ui-state-default .ui-icon-carat-2-n-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/updown-navy-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/updown-navy-arrow.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
@@ -1009,7 +1009,7 @@ label {
 }
 .ui-datatable table thead tr .ui-state-hover .ui-icon-carat-2-n-s,
 .ui-datatable .ui-datatable-sticky table thead tr .ui-state-hover .ui-icon-carat-2-n-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/updown-navy-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/updown-navy-arrow.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
@@ -1017,7 +1017,7 @@ label {
 }
 .ui-datatable table thead tr .ui-state-active .ui-icon-triangle-1-n,
 .ui-datatable .ui-datatable-sticky table thead tr .ui-state-active .ui-icon-triangle-1-n {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow-navy.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
@@ -1025,7 +1025,7 @@ label {
 }
 .ui-datatable table thead tr .ui-state-active .ui-icon-triangle-1-s,
 .ui-datatable .ui-datatable-sticky table thead tr .ui-state-active .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-size: 110%;
     background-repeat: no-repeat;
@@ -1035,7 +1035,7 @@ label {
     background-color: #f5f5f5;
     color: #7a8f98;
     font-family: 'robotoregular';
-    font-size: 13px;
+    font-size: 14px;
     padding: 10px !important;
     border-radius: 1px !important;
 }
@@ -1068,7 +1068,7 @@ label {
     border-left: solid 1px transparent;
     border-bottom: 0px;
     border-top: 0px;
-    font-size: 13px;
+    font-size: 14px;
     background-color: #d9e3e8;
 }
 .ui-draggable-dragging {
@@ -1085,14 +1085,14 @@ label {
     background-image: none;
 }
 .ui-datatable > .ui-icon-arrowthick-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-blue.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
     margin-left: 5px;
 }
 .ui-datatable > .ui-icon-arrowthick-1-n {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow-blue.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
@@ -1130,7 +1130,7 @@ label {
     font-weight: normal;
 }
 .ui-datagrid .ui-datagrid-content {
-    font-size: 13px;
+    font-size: 14px;
     padding: 5px;
 }
 .ui-datagrid-footer {
@@ -1139,7 +1139,7 @@ label {
     margin: 0px;
     padding: 10px 10px !important;
     border-top: solid 1px #E8EDF2 !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #C7D1D7;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
@@ -1177,7 +1177,7 @@ label {
     padding-bottom: 15px;
     padding-right: 15px;
     font-family: 'robotoregular';
-    font-size: 13px;
+    font-size: 16px;
     color: #546e7a;
 }
 .ui-datalist-item {
@@ -1189,7 +1189,7 @@ label {
     margin: 0px;
     padding: 10px 10px !important;
     border-top: solid 1px #E8EDF2 !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #C7D1D7;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
@@ -1223,7 +1223,7 @@ label {
     border-radius: 1px;
 }
 .ui-paginator .ui-paginator-current {
-    font-size: 13px;
+    font-size: 14px;
     padding: 15px;
     color: #9ad6f8;
     font-family: 'robotolight';
@@ -1234,8 +1234,8 @@ label {
 .ui-datatable .ui-paginator .ui-paginator-next,
 .ui-paginator .ui-paginator-last,
 .ui-datatable .ui-paginator .ui-paginator-rpp-options {
-    font-size: 12px;
-    padding: 3px 3px;
+    font-size: 10px;
+    padding: 10px 3px;
     font-weight: bold;
     border: solid 3px transparent;
     color: #a6defd;
@@ -1252,25 +1252,25 @@ label {
     outline: none;
 }
 .ui-paginator .ui-paginator-first .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-double-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-double-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
 }
 .ui-paginator .ui-paginator-last .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-double-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-double-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
 }
 .ui-paginator .ui-paginator-prev .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
 }
 .ui-paginator .ui-paginator-next .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-size: 100%;
     background-repeat: no-repeat;
@@ -1282,14 +1282,14 @@ label {
     color: #ffffff !important;
     background-repeat: no-repeat;
     border-bottom: solid 3px #ffffff;
-    font-size: 13px;
+    font-size: 14px;
     border-radius: 0px !important;
 }
 .ui-paginator .ui-paginator-rpp-options {
     outline: none;
     color: #ffffff !important;
     font-family: 'robotoregular';
-    font-size: 13px !important;
+    font-size: 14px !important;
     background-color: #0277bd;
     border: solid 1px transparent;
 }
@@ -1299,7 +1299,7 @@ label {
 /*Style For PickList ------------------------------------------------------------------------------------- */
 .ui-picklist {
     display: table !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #546e7a;
     font-family: 'robotoregular';
 }
@@ -1308,7 +1308,7 @@ label {
     padding: 8px 6px 8px 30px !important;
 }
 .ui-picklist .ui-picklist-filter-container .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/search-icon.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/search-icon.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -1356,7 +1356,7 @@ label {
     padding: 10px 8px !important;
     color: #546e7a;
     border-radius: 0px;
-    font-size: 13px;
+    font-size: 14px;
     margin: 0px;
 }
 .ui-picklist .ui-picklist-list .ui-state-hover {
@@ -1390,7 +1390,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-move-up .ui-icon,
 .ui-picklist .ui-picklist-source-controls .ui-picklist-button-move-up .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1403,7 +1403,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-move-top .ui-icon,
 .ui-picklist .ui-picklist-source-controls .ui-picklist-button-move-top .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/toparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/toparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1416,7 +1416,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-move-down .ui-icon,
 .ui-picklist .ui-picklist-source-controls .ui-picklist-button-move-down .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1429,7 +1429,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-move-bottom .ui-icon,
 .ui-picklist .ui-picklist-source-controls .ui-picklist-button-move-bottom .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/bottomarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/bottomarrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1442,7 +1442,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-add .ui-icon,
 .ui-picklist td .ui-picklist-button-add .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1455,7 +1455,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-add-all .ui-icon,
 .ui-picklist td .ui-picklist-button-add-all .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-end-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-end-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1468,7 +1468,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-remove .ui-icon,
 .ui-picklist td .ui-picklist-button-remove .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1481,7 +1481,7 @@ label {
 }
 .ui-picklist .ui-picklist-buttons-cell .ui-picklist-button-remove-all .ui-icon,
 .ui-picklist td .ui-picklist-button-remove-all .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-end-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-end-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1494,7 +1494,7 @@ label {
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-move-up .ui-icon,
 .ui-picklist .ui-picklist-target-controls .ui-picklist-button-move-up .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1507,7 +1507,7 @@ label {
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-move-top .ui-icon,
 .ui-picklist .ui-picklist-target-controls .ui-picklist-button-move-top .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/toparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/toparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1520,7 +1520,7 @@ label {
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-move-down .ui-icon,
 .ui-picklist .ui-picklist-target-controls .ui-picklist-button-move-down .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1533,7 +1533,7 @@ label {
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-move-bottom .ui-icon,
 .ui-picklist .ui-picklist-target-controls .ui-picklist-button-move-bottom .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/bottomarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/bottomarrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1545,7 +1545,7 @@ label {
     height: 26px;
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-add .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 75%;
@@ -1557,7 +1557,7 @@ label {
     height: 26px;
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-add-all .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/bottomarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/bottomarrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1569,7 +1569,7 @@ label {
     height: 26px;
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-remove .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1581,7 +1581,7 @@ label {
     height: 26px;
 }
 .ui-picklist-vertical .ui-picklist-buttons-cell .ui-picklist-button-remove-all .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/toparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/toparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1616,7 +1616,7 @@ label {
 .ui-orderlist .ui-orderlist-list .ui-orderlist-item {
     padding: 10px 8px !important;
     font-size: 15px;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/move-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/move-gray.svg']}");
     background-position: center right !important;
     background-repeat: no-repeat;
     background-size: 20px;
@@ -1642,7 +1642,7 @@ label {
     border-radius: 2px !important;
 }
 .ui-orderlist .ui-orderlist-controls .ui-orderlist-button-move-up .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1654,7 +1654,7 @@ label {
     height: 26px;
 }
 .ui-orderlist .ui-orderlist-controls .ui-orderlist-button-move-top .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/toparrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/toparrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1666,7 +1666,7 @@ label {
     height: 26px;
 }
 .ui-orderlist .ui-orderlist-controls .ui-orderlist-button-move-down .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1678,7 +1678,7 @@ label {
     height: 26px;
 }
 .ui-orderlist .ui-orderlist-controls .ui-orderlist-button-move-bottom .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/bottomarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/bottomarrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 70%;
@@ -1719,7 +1719,7 @@ label {
     padding-top: 5px !important;
 }
 .ui-carousel .ui-carousel-header .ui-carousel-next-button {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 85%;
@@ -1730,7 +1730,7 @@ label {
     border-radius: 30px;
 }
 .ui-carousel .ui-carousel-header .ui-carousel-prev-button {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 85%;
@@ -1749,7 +1749,7 @@ label {
     margin-top: 11px;
 }
 .ui-carousel .ui-carousel-header .ui-carousel-page-links .ui-carousel-page-link {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/blank.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/blank.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 140%;
@@ -1758,7 +1758,7 @@ label {
     border: 1px solid transparent;
 }
 .ui-carousel .ui-carousel-header .ui-carousel-page-links .ui-icon-radio-on {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/blank-active.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/blank-active.svg']}");
 }
 .ui-carousel .ui-carousel-viewport {
     padding-top: 5px;
@@ -1769,7 +1769,7 @@ label {
     margin: 0px;
     padding: 10px 15px !important;
     margin: 3px -1px -2px -1px !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #7a8f98;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
@@ -1817,7 +1817,7 @@ label {
 }
 .fc-header tbody tr td .fc-button {
     margin: 0px 2px !important;
-    font-size: 13px;
+    font-size: 16px;
     overflow: hidden;
     height: auto !important;
     color: #FFFFFF;
@@ -1838,13 +1838,13 @@ label {
     margin: 5px;
 }
 .fc-header tbody tr td .fc-button-next .fc-icon-wrap .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/right-one-arrow-for-data.svg']}") !important;
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 130%;
 }
 .fc-header tbody tr td .fc-button-prev .fc-icon-wrap .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-one-arrow-for-data.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/left-one-arrow-for-data.svg']}") !important;
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 130%;
@@ -1944,10 +1944,10 @@ label {
     border-radius: 0px !important;
     font-family: 'robotolight';
     padding: 3px 5px !important;
-    font-size: 13px;
+    font-size: 16px;
 }
 .fc-toolbar .fc-prev-button .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -1955,7 +1955,7 @@ label {
     height: 22px;
 }
 .fc-toolbar .fc-next-button .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-one-arrow-for-data.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-one-arrow-for-data.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -1972,7 +1972,7 @@ label {
 }
 .fc-center {
     color: #ffffff;
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-family: 'robotolight';
     font-weight: lighter;
 }
@@ -2101,7 +2101,7 @@ hr.ui-widget-header {
     color: #778d9b;
 }
 .fc-popover .fc-header .fc-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2135,13 +2135,13 @@ hr.ui-widget-header {
     color: #03a9f4;
 }
 .ui-tree .ui-treenode .ui-treenode-leaf-icon {
-    /*background-image:url("/OneSystem-war/javax.faces.resource/images/treenode-gray.svg.xhtml?ln=primefaces-modena");*/
+    /*background-image:url("#{resource['primefaces-modena:images/treenode-gray.svg']}");*/
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
 }
 .ui-tree .ui-treenode .ui-icon-grip-dotted-vertical {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/treenode-dots-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/treenode-dots-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2159,7 +2159,7 @@ hr.ui-widget-header {
     border-radius: 3px;
 }
 .ui-tree .ui-treenode-content .ui-chkbox-box .ui-icon-minus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2173,61 +2173,61 @@ hr.ui-widget-header {
     margin-right: 3px;
 }
 .ui-tree .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 120%;
 }
 .ui-tree .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 130%;
 }
 .ui-tree .ui-icon-triangle-1-w {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/leftarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/leftarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 120%;
 }
 .ui-tree .ui-icon-folder-collapsed {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/folder-close-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/folder-close-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 140%;
 }
 .ui-tree .ui-icon-folder-open {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/folder-open-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/folder-open-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 160%;
 }
 .ui-tree .ui-icon-document {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/document-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/document-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 160%;
 }
 .ui-tree .ui-icon-note {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/note-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/note-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 150%;
 }
 .ui-tree .ui-icon-image {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/image-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/image-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 150%;
 }
 .ui-tree .ui-icon-video {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/video-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/video-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 160%;
 }
 .ui-tree .ui-icon-music {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/music-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/music-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 160%;
@@ -2280,7 +2280,7 @@ hr.ui-widget-header {
 }
 .ui-treetable table {
     margin: 0px 0px 1px;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 14px;
 }
 .ui-treetable .ui-treetable-scrollable-body table {
@@ -2296,7 +2296,7 @@ hr.ui-widget-header {
     outline: none;
     padding: 12px 5px;
     font-family: 'robotolight';
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-treetable table thead tr th.ui-state-active,
 .ui-treetable table thead tr th.ui-state-hover {
@@ -2312,7 +2312,7 @@ hr.ui-widget-header {
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
     padding: 10px 7px;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-treetable table tbody .ui-state-hover td {
     color: #03a9f4 !important;
@@ -2330,49 +2330,49 @@ hr.ui-widget-header {
     margin-right: 7px;
 }
 .ui-treetable .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable .ui-chkbox-box .ui-icon-minus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable table thead tr th .ui-icon-triangle-1-n {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}") !important;
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable table thead tr th .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}") !important;
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable table thead tr th .ui-icon-carat-2-n-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/updown-navy-arrow-softgreen.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/updown-navy-arrow-softgreen.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-treetable table thead tr th.ui-state-hover .ui-icon-carat-2-n-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/updown-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/updown-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -2403,7 +2403,7 @@ hr.ui-widget-header {
     border-radius: 2px;
 }
 .ui-tree-horizontal .ui-icon-plus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/plus-sign-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 115%;
@@ -2411,7 +2411,7 @@ hr.ui-widget-header {
     margin-top: 1px;
 }
 .ui-tree-horizontal .ui-icon-minus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2422,7 +2422,7 @@ hr.ui-widget-header {
     height: auto !important;
     background-color: #f5f5f5;
     padding: 10px 10px !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #7a8f98;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
@@ -2457,7 +2457,7 @@ hr.ui-widget-header {
     border-radius: 0px;
     -webkit-border-radius: 0px;
     -moz-border-radius: 0px;
-    font-size: 13px !important;
+    font-size: 16px !important;
     color: #ffffff;
     background-color: #26a69a;
     padding: 13px 5px 13px 30px !important;
@@ -2471,27 +2471,27 @@ hr.ui-widget-header {
     color: #ffffff;
 }
 .ui-accordion-header .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-accordion-header .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-accordion-content {
     padding: 5px!important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     color: #546e7a;
 }
 /*Style For UI PanelGrid --------------------------------------------------------------------------------------*/
 .ui-panelgrid {
     border: solid 1px #e0e0e0;
     background-color: #ffffff;
-    font-size: 13px;
+    font-size: 16px;
     font-family: 'robotolight';
 }
 .ui-panelgrid-content {
@@ -2520,7 +2520,7 @@ hr.ui-widget-header {
     border-radius: 2px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-scrollpanel .ui-scrollpanel-vbar {
     width: 10px;
@@ -2601,7 +2601,7 @@ hr.ui-widget-header {
     border-right: solid 1px #e0e0e0;
 }
 .ui-tabs-top .ui-tabs-navscroller .ui-tabs-navscroller-btn-left .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -2615,7 +2615,7 @@ hr.ui-widget-header {
     border-left: solid 1px #e0e0e0;
 }
 .ui-tabs-top .ui-tabs-navscroller .ui-tabs-navscroller-btn-right .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -2632,7 +2632,7 @@ hr.ui-widget-header {
 .ui-tabs-top .ui-tabs-nav li {
     border: solid 1px transparent !important;
     top: 1px !important;
-    font-size: 13px;
+    font-size: 14px;
     margin: 0 .2em 1px 0 !important;
     -webkit-transition: none;
     -moz-transition: none;
@@ -2641,7 +2641,7 @@ hr.ui-widget-header {
     transition: none;
 }
 .ui-tabs-top .ui-tabs-nav li .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-soft-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-soft-blue.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2649,7 +2649,7 @@ hr.ui-widget-header {
 }
 .ui-tabs-top .ui-tabs-nav li.ui-state-hover .ui-icon-close,
 .ui-tabs-top .ui-tabs-nav li.ui-state-active .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2725,10 +2725,10 @@ hr.ui-widget-header {
     -moz-border-radius: 0px !important;
 }
 .ui-ribbon .ui-button .ui-button-text {
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
 .ui-ribbon .ui-selectonemenu-label {
-    font-size: 13px !important;
+    font-size: 14px !important;
 }
 .ui-ribbon .ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
     margin-top: 12px !important;
@@ -2768,7 +2768,7 @@ hr.ui-widget-header {
 .ui-tabs-left .ui-tabs-nav li {
     border: solid 1px transparent !important;
     top: 1px !important;
-    font-size: 13px;
+    font-size: 14px;
     margin-right: -1px !important;
 }
 .ui-tabs-left .ui-tabs-nav li a {
@@ -2798,7 +2798,7 @@ hr.ui-widget-header {
     padding: 14px 14px !important;
 }
 .ui-tabs-left .ui-tabs-nav li .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-soft-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-soft-blue.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2807,7 +2807,7 @@ hr.ui-widget-header {
 }
 .ui-tabs-left .ui-tabs-nav li.ui-state-hover .ui-icon-close,
 .ui-tabs-left .ui-tabs-nav li.ui-state-active .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2834,7 +2834,7 @@ hr.ui-widget-header {
 .ui-tabs-right .ui-tabs-nav li {
     border: solid 1px transparent !important;
     top: 1px !important;
-    font-size: 13px;
+    font-size: 14px;
     margin-right: -1px !important;
 }
 .ui-tabs-right .ui-tabs-nav li a {
@@ -2864,7 +2864,7 @@ hr.ui-widget-header {
     padding: 14px 14px !important;
 }
 .ui-tabs-right .ui-tabs-nav li .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-soft-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-soft-blue.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2872,7 +2872,7 @@ hr.ui-widget-header {
 }
 .ui-tabs-right .ui-tabs-nav li.ui-state-hover .ui-icon-close,
 .ui-tabs-right .ui-tabs-nav li.ui-state-active .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2945,7 +2945,7 @@ hr.ui-widget-header {
     border-right: solid 1px #e0e0e0;
 }
 .ui-tabs-bottom .ui-tabs-navscroller .ui-tabs-navscroller-btn-left .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -2960,7 +2960,7 @@ hr.ui-widget-header {
     border-left: solid 1px #e0e0e0;
 }
 .ui-tabs-bottom .ui-tabs-navscroller .ui-tabs-navscroller-btn-right .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -2976,7 +2976,7 @@ hr.ui-widget-header {
 }
 .ui-tabs-bottom .ui-tabs-nav li {
     border: solid 1px transparent !important;
-    font-size: 13px;
+    font-size: 14px;
     -webkit-transition: none;
     -moz-transition: none;
     -ms-transition: none;
@@ -2984,7 +2984,7 @@ hr.ui-widget-header {
     transition: none;
 }
 .ui-tabs-bottom .ui-tabs-nav li .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-soft-blue.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-soft-blue.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -2992,7 +2992,7 @@ hr.ui-widget-header {
 }
 .ui-tabs-bottom .ui-tabs-nav li.ui-state-hover .ui-icon-close,
 .ui-tabs-bottom .ui-tabs-nav li.ui-state-active .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -3081,31 +3081,31 @@ hr.ui-widget-header {
     margin-top: 6px;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-closethick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-minus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-dialog-docking-zone .ui-icon-plus {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/plus-sign-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
 }
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-icon .ui-icon-extlink {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/external-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/external-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-dialog .ui-dialog-titlebar .ui-icon-newwin {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/external-gray-revert.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/external-gray-revert.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -3116,10 +3116,10 @@ hr.ui-widget-header {
 .ui-dialog .ui-dialog-content {
     padding: 20px !important;
     color: #546e7a;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-dialog .ui-dialog-content .ui-icon-alert {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-red.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/warn-red.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 140%;
@@ -3136,7 +3136,7 @@ hr.ui-widget-header {
     text-align: right !important;
 }
 .ui-dialog .ui-resizable-se {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/handle-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/handle-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -3148,7 +3148,7 @@ hr.ui-widget-header {
     background-color: #003d50;
 }
 .ui-overlaypanel .ui-overlaypanel-close .ui-icon-closethick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
@@ -3176,7 +3176,7 @@ hr.ui-widget-header {
     right: 5px;
 }
 .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-left .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 130%;
@@ -3190,7 +3190,7 @@ hr.ui-widget-header {
     filter: alpha(opacity=100);
 }
 .ui-lightbox .ui-lightbox-content-wrapper .ui-lightbox-nav-right .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 130%;
@@ -3220,7 +3220,7 @@ hr.ui-widget-header {
     margin-top: 8px;
 }
 .ui-lightbox .ui-lightbox-caption .ui-lightbox-close .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -3240,7 +3240,7 @@ hr.ui-widget-header {
 }
 .ui-fieldset-legend {
     color: #ffffff;
-    font-size: 13px;
+    font-size: 16px;
     line-height: 15px;
     font-family: 'robotolight';
     background-color: #0288d1;
@@ -3259,7 +3259,7 @@ hr.ui-widget-header {
     background-color: #1797dd;
 }
 .ui-fieldset-legend .ui-icon-plusthick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/plus-sign-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
@@ -3267,7 +3267,7 @@ hr.ui-widget-header {
     margin-top: 0px !important;
 }
 .ui-fieldset-legend .ui-icon-minusthick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
@@ -3275,16 +3275,15 @@ hr.ui-widget-header {
     margin-top: 0px !important;
 }
 .ui-fieldset-content {
-    font-size: 13px;
+    font-size: 16px;
     color: #546e7a;
 }
 /*Style For UI InputField ------------------------------------------------------------------------------------- */
 .ui-inputfield {
     color: #546e7a;
-    width: 90%;
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'robotoregular' !important;
-    padding: 6px !important;
+    padding: 9px 10px !important;
     border: solid 0px #c6d6df;
     border-bottom: solid 1px #b0bec5;
     -webkit-transition: all 0.5s ease;
@@ -3293,9 +3292,9 @@ hr.ui-widget-header {
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
     background-color: #f5f5f5;
-    -moz-border-radius: 0px;
-    -webkit-border-radius: 0px;
     border-radius: 0px;
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
 }
 .ui-inputfield.ui-state-hover,
 .ui-inputfield.ui-state-focus {
@@ -3338,11 +3337,11 @@ hr.ui-widget-header {
     border-top-left-radius: 2px;
 }
 .ui-button-text-only .ui-button-text {
-    padding: 5px 8px !important;
+    padding: 10px 24px 10px 24px !important;
 }
 .ui-button-text {
-    padding: 5px 8px 5px 26px !important;
-    font-size: 13px;
+    padding: 10px 20px 10px 40px !important;
+    font-size: 14px;
     font-family: 'robotoregular';
     color: #ffffff;
     text-shadow: none;
@@ -3369,7 +3368,7 @@ hr.ui-widget-header {
 }
 .ui-button-icon-left {
     z-index: 120;
-    margin-left: 0px;
+    margin-left: 8px;
 }
 .ui-button {
     border: 0px;
@@ -3378,19 +3377,19 @@ hr.ui-widget-header {
     /*margin-right: 1px !important;*/
 }
 .ui-button-icon-only {
-    min-width: 35px !important;
+    min-width: 40px !important;
     border-radius: 30px !important;
     -webkit-border-radius: 30px !important;
     -moz-border-radius: 30px !important;
 }
 .ui-button-icon-only .ui-icon {
-    font-size: 13px !important;
+    font-size: 16px !important;
 }
 .ui-button.ui-button-icon-only .ui-button-text {
-    padding: 6px !important;
-    /*    border-radius: 30px !important;
-        -webkit-border-radius: 30px !important;
-        -moz-border-radius: 30px !important;*/
+    padding: 9px 0px !important;
+/*    border-radius: 30px !important;
+    -webkit-border-radius: 30px !important;
+    -moz-border-radius: 30px !important;*/
 }
 @media screen and (min-width: 0\0) {
     .ui-button.ui-button-icon-only .ui-button-text {
@@ -3434,7 +3433,7 @@ hr.ui-widget-header {
     border-radius: 2px !important;
 }
 .ui-splitbutton .ui-splitbutton-menubutton .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/menu-dots.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/menu-dots.svg']}") !important;
     background-size: 100%;
     background-position: center;
 }
@@ -3463,7 +3462,7 @@ hr.ui-widget-header {
     }
 }
 .ui-menu .ui-menu-list .ui-widget-header {
-    font-size: 13px;
+    font-size: 16px;
     color: #ffffff;
     background-color: #0288d1;
     width: 84% !important;
@@ -3472,7 +3471,7 @@ hr.ui-widget-header {
     padding: 7px 8%;
 }
 .ui-menu.ui-menu-toggleable li.ui-widget-header {
-    font-size: 13px;
+    font-size: 16px;
     color: #ffffff;
     background-color: #0288d1;
     width: 84% !important;
@@ -3488,24 +3487,24 @@ hr.ui-widget-header {
     padding-left: 8% !important;
 }
 .ui-menu .ui-menu-list .ui-widget-header .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-menu .ui-menu-list .ui-widget-header .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-menu .ui-menu-list .ui-menuitem {
-    font-size: 13px;
+    font-size: 14px;
     display: table;
     border-radius: 0px;
 }
 .ui-megamenu-vertical .ui-menu-list .ui-menuitem {
-    font-size: 13px;
+    font-size: 14px;
     width: 100%;
     display: table;
 }
@@ -3520,7 +3519,7 @@ hr.ui-widget-header {
 .ui-menu .ui-menuitem .ui-menuitem-link {
     color: #546e7a;
     font-family: 'robotoregular';
-    font-size: 13px;
+    font-size: 16px;
     padding: 14px 0px;
     width: 100%;
     border-radius: 0px;
@@ -3546,13 +3545,13 @@ hr.ui-widget-header {
     margin: 0px 10px;
 }
 .ui-menu .ui-menuitem .ui-menuitem-link .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
 }
 .ui-menu .ui-menuitem .ui-menuitem-link .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -3575,14 +3574,14 @@ hr.ui-widget-header {
     background-color: #f5f5f5;
     color: #778d9b;
     padding: 10px 5%;
-    font-size: 13px;
+    font-size: 16px;
     border-radius: 0px;
 }
 .ui-menu .ui-slidemenu-wrapper .ui-slidemenu-backward:hover {
     color: #03a9f4;
 }
 .ui-menu .ui-slidemenu-wrapper .ui-slidemenu-backward .ui-icon-triangle-1-w {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/leftarrow-gray.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/leftarrow-gray.svg']}");
     margin: 2px 5px 0px 0px;
     background-position: center !important;
     background-repeat: no-repeat;
@@ -3602,7 +3601,7 @@ hr.ui-widget-header {
     -webkit-border-radius: 0px !important;
     -moz-border-radius: 0px !important;
     color: #ffffff;
-    font-size: 13px;
+    font-size: 16px;
     font-weight: normal;
     margin-bottom: 1px !important;
     background-color: #0288d1;
@@ -3612,20 +3611,20 @@ hr.ui-widget-header {
     background-color: #039be5;
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-header .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 105%;
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-header .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 110%;
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-header a {
     padding: 12px 5px 13px 30px;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-panelmenu .ui-menuitem {
     border-radius: 0px;
@@ -3641,7 +3640,7 @@ hr.ui-widget-header {
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-content .ui-menuitem a {
     color: #546e7a;
-    font-size: 13px;
+    font-size: 16px;
     font-family: 'robotoregular';
     padding: 14px 5% 14px 10%;
     overflow: hidden;
@@ -3649,13 +3648,13 @@ hr.ui-widget-header {
     float: none !important;
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-content .ui-menuitem .ui-menuitem-link .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
 }
 .ui-panelmenu .ui-panelmenu-panel .ui-panelmenu-content .ui-menuitem .ui-menuitem-link .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-navy.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow-navy.svg']}");
     background-position: center !important;
     background-repeat: no-repeat;
     background-size: 90%;
@@ -3675,7 +3674,7 @@ hr.ui-widget-header {
     border-top-right-radius: 2px;
 }
 .ui-tabmenu .ui-tabmenu-nav .ui-tabmenuitem a {
-    font-size: 13px;
+    font-size: 16px;
     color: #546e7a;
     padding: 12px 15px !important;
     font-family: 'robotoregular';
@@ -3725,7 +3724,7 @@ hr.ui-widget-header {
 .ui-messages-warn .ui-icon-close,
 .ui-messages-error .ui-icon-close,
 .ui-messages-fatal .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}") !important;
     background-size: 110%;
     background-position: center;
 }
@@ -3771,33 +3770,33 @@ hr.ui-widget-header {
     background-size: 100%  !important;
 }
 .ui-message-error-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-pink.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-pink.svg']}") !important;
     background-position: top !important;
     background-size: 120% !important;
 }
 .ui-messages-error-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-pink.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-pink.svg']}") !important;
     background-position: top !important;
     background-size: 90% !important;
     width: 40px !important;
     height: 40px !important;
 }
 .ui-messages-info-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-blue.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-blue.svg']}") !important;
     background-position: top !important;
     background-size: 90% !important;
     width: 40px !important;
     height: 40px !important;
 }
 .ui-messages-warn-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-hardal.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-hardal.svg']}") !important;
     background-position: top !important;
     background-size: 90% !important;
     width: 40px !important;
     height: 40px !important;
 }
 .ui-messages-fatal-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-red.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-red.svg']}") !important;
     background-position: top !important;
     background-size: 90% !important;
     width: 40px !important;
@@ -3829,7 +3828,7 @@ hr.ui-widget-header {
 }
 .ui-datagrid .ui-panel .ui-panel-titlebar {
     padding: 6px 10px 6px 10px !important;
-    font-size: 13px;
+    font-size: 16px;
     color: #546E7A;
     z-index: 100;
     font-family: 'robotoregular';
@@ -3848,35 +3847,35 @@ hr.ui-widget-header {
     margin-top: 0px;
 }
 .ui-panel .ui-panel-titlebar .ui-icon-closethick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-white.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 .ui-panel .ui-panel-titlebar .ui-icon-minusthick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/minus-sign-white.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 .ui-panel .ui-panel-titlebar .ui-icon-plusthick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/plus-sign-white.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 .ui-panel .ui-panel-titlebar .ui-icon-gear {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/gear.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/gear.svg']}") !important;
     background-position: center !important;
     background-size: 140% !important;
 }
 .ui-panel .ui-panel-content {
     padding: 5px !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #546e7a;
     font-family: 'robotoregular';
 }
 .ui-panel .ui-panel-footer {
     background-color: #F5F5F5;
     margin: 0px -2px -2px -2px !important;
-    font-size: 13px;
+    font-size: 14px;
     border-bottom-right-radius: 1px;
     border-bottom-left-radius: 1px;
     color: #7A8F98;
@@ -3895,7 +3894,7 @@ hr.ui-widget-header {
 }
 .ui-selectonemenu,
 .ui-selectcheckboxmenu {
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-family: 'robotoregular' !important;
     padding: 0px 56px 0px 0px !important;
     border-bottom: solid 1px #B0BEC5 !important;
@@ -3911,8 +3910,8 @@ hr.ui-widget-header {
 }
 .ui-selectonemenu .ui-selectonemenu-trigger,
 .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger {
-    padding: 0px 15px !important;
-    font-size: 13px;
+    padding: 0px 12px !important;
+    font-size: 16px;
     color: #ffffff !important;
     text-shadow: none;
     z-index: 100;
@@ -3943,7 +3942,7 @@ hr.ui-widget-header {
 .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list-item {
     border-radius: 0px !important;
     -webkit-border-radius: 0px !important;
-    font-size: 13px;
+    font-size: 14px;
     -moz-border-radius: 0px !important;
     margin: 0px 0px 1px !important;
     color: #546e7a;
@@ -3957,7 +3956,7 @@ hr.ui-widget-header {
 .ui-selectonemenu-panel .ui-selectonemenu-item-group {
     border-radius: 0px !important;
     -webkit-border-radius: 0px !important;
-    font-size: 13px;
+    font-size: 14px;
     -moz-border-radius: 0px !important;
     margin: 0px !important;
     color: #ffffff;
@@ -3985,8 +3984,8 @@ hr.ui-widget-header {
 }
 .ui-selectonemenu-trigger .ui-icon-triangle-1-s,
 .ui-selectcheckboxmenu-trigger .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow.svg.xhtml?ln=primefaces-modena") !important;
-    margin-top: 10px !important;
+    background-image: url("#{resource['primefaces-modena:images/downarrow.svg']}") !important;
+    margin-top: 14px !important;
     background-size: 130%;
     background-position: center;
 }
@@ -4000,7 +3999,7 @@ hr.ui-widget-header {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/search-icon.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/search-icon.svg']}");
     left: 5px !important;
     top: 8px !important;
 }
@@ -4012,7 +4011,7 @@ hr.ui-widget-header {
     border: solid 1px #f5f5f5 !important;
     border-radius: 0px !important;
     -webkit-border-radius: 0px !important;
-    font-size: 13px;
+    font-size: 14px;
     -moz-border-radius: 0px !important;
     margin: 0px !important;
     color: #546e7a;
@@ -4029,7 +4028,7 @@ hr.ui-widget-header {
 }
 /*Style For SelectCheckBoxMenu ------------------------------------------------------------------------------------- */
 .ui-selectcheckboxmenu {
-    font-size: 13px !important;
+    font-size: 16px !important;
     font-family: 'robotoregular' !important;
     padding: 0px 15px 0px 0px !important;
     -webkit-transition: all 0.5s ease;
@@ -4045,7 +4044,7 @@ hr.ui-widget-header {
 .ui-selectcheckboxmenu .ui-selectcheckboxmenu-label {
     padding: 9px 26px 9px 10px !important;
     background-color: #f5f5f5;
-    font-size: 13px;
+    font-size: 16px;
     color: #546e7a;
     border-bottom-right-radius: 0px !important;
     border-top-right-radius: 0px !important;
@@ -4071,7 +4070,7 @@ hr.ui-widget-header {
     padding-bottom: 15px;
 }
 .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-list-item {
-    font-size: 13px !important;
+    font-size: 14px !important;
     border: 0px !important;
     padding: 10px 14px !important;
 }
@@ -4094,7 +4093,7 @@ hr.ui-widget-header {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/search-icon.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/search-icon.svg']}");
     left: 0px;
 }
 .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
@@ -4109,7 +4108,7 @@ hr.ui-widget-header {
     margin-top: 0px;
 }
 .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-close .ui-icon-circle-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}") !important;
     background-size: 100%;
     background-position: center;
 }
@@ -4132,7 +4131,7 @@ hr.ui-widget-header {
 }
 .ui-growl-message {
     width: 220px !important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     line-height: 16px !important;
     color: #546e7a !important;
     font-family: 'robotoregular';
@@ -4152,13 +4151,13 @@ hr.ui-widget-header {
 }
 .ui-growl-image-error,
 .ui-growl-image-warn {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-pink.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-pink.svg']}") !important;
     background-position: center !important;
     background-size: 140% !important;
     margin-top: 5px;
 }
 .ui-growl-image-info {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-blue.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-blue.svg']}") !important;
     background-position: center !important;
     background-size: 140% !important;
     margin-top: 5px;
@@ -4166,7 +4165,7 @@ hr.ui-widget-header {
 .ui-growl-icon-close {
     width: 10px !important;
     height: 10px !important;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-pink.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-pink.svg']}") !important;
     background-position: center !important;
     background-size: 130% !important;
 }
@@ -4181,7 +4180,7 @@ hr.ui-widget-header {
 }
 .ui-log-header {
     padding: 10px !important;
-    font-size: 13px !important;
+    font-size: 16px !important;
     color: #ffffff;
     position: relative;
     z-index: 100;
@@ -4191,58 +4190,58 @@ hr.ui-widget-header {
     background-color: #E53935;
 }
 .ui-log-header .ui-log-clear .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/clear.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/clear.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-header .ui-log-all .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/all-doc.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/all-doc.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-header .ui-log-info .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/info.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/info.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-item-info .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/info-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/info-gray.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
     width: 20px;
     height: 20px;
 }
 .ui-log-header .ui-log-warn .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-item-warn .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/warn-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/warn-gray.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
     width: 20px;
     height: 20px;
 }
 .ui-log-header .ui-log-debug .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/debug.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/debug.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-item-debug .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/debug-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/debug-gray.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
     width: 20px;
     height: 20px;
 }
 .ui-log-header .ui-log-error .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/error.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/error.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
 }
 .ui-log-item-error .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/error-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/error-gray.svg']}") !important;
     background-position: center !important;
     background-size: 140%;
     width: 20px;
@@ -4262,14 +4261,14 @@ hr.ui-widget-header {
     margin: 5px;
 }
 .ui-log-items {
-    font-size: 13px;
+    font-size: 14px;
     color: #546e7a;
 }
 /*Style For Checkbox --------------------------------------------------------------------------------------*/
 .ui-selectmanycheckbox label {
     margin: -2px 15px 0px 0px !important;
     color: #546e7a;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-chkbox .ui-chkbox-box {
     background: none;
@@ -4336,14 +4335,14 @@ hr.ui-widget-header {
 }
 .ui-chkbox .ui-chkbox-label {
     margin: 1px 15px 0px 5px !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #546e7a;
 }
 /*Style For Radio Button --------------------------------------------------------------------------------------*/
 .ui-selectoneradio label {
     margin: 1px 15px 0px 0px !important;
     color: #546e7a;
-    font-size: 13px;
+    font-size: 16px;
 }
 .ui-radiobutton {
     margin: 5px 5px 0px 0px !important;
@@ -4416,7 +4415,7 @@ hr.ui-widget-header {
 }
 #keypad-div .keypad-row button {
     font-family: 'robotoregular';
-    font-size: 13px;
+    font-size: 14px;
     padding: 2px 3px;
     border: solid 1px #546e7a;
     background-color: #546e7a;
@@ -4449,7 +4448,7 @@ hr.ui-widget-header {
 }
 /*Style For Password Panel --------------------------------------------------------------------------------------*/
 .ui-password-panel {
-    font-size: 13px;
+    font-size: 14px;
     color: #546e7a;
     padding: 10px !important;
     background-color: #ffffff !important;
@@ -4458,7 +4457,7 @@ hr.ui-widget-header {
     border: solid 1px #b0bec5;
 }
 .ui-password-panel .ui-password-meter {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/password-meter.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/password-meter.svg']}") !important;
     background-size: 100% !important;
 }
 /*Style For Input Switch --------------------------------------------------------------------------------------*/
@@ -4466,7 +4465,7 @@ hr.ui-widget-header {
     border: solid 1px #1e88e5;
     padding: 2px !important;
     color: #778d9b;
-    font-size: 13px;
+    font-size: 16px;
     background-color: #1e88e5;
     font-family: 'robotoregular';
     height: 28px !important;
@@ -4525,7 +4524,7 @@ hr.ui-widget-header {
 .ui-selectonelistbox .ui-selectlistbox-item {
     padding: 10px 7px !important;
     border-radius: 0px;
-    font-size: 13px;
+    font-size: 14px;
     display: block;
     margin: 0px !important;
 }
@@ -4566,7 +4565,7 @@ hr.ui-widget-header {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/search-icon.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/search-icon.svg']}");
     left: 14px;
     top: 16px;
 }
@@ -4582,7 +4581,7 @@ hr.ui-widget-header {
     font-family: 'robotoregular';
     border-radius: 2px !important;
     border: solid 1px #e0e0e0;
-    font-size: 13px;
+    font-size: 14px;
 }
 .ui-selectmanymenu .ui-selectlistbox-filter-container .ui-icon-search {
     width: 30px;
@@ -4590,7 +4589,7 @@ hr.ui-widget-header {
     background-size: 100%;
     background-position: center;
     background-repeat: no-repeat;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/search-icon.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/search-icon.svg']}");
     left: 13px;
     top: 16px;
 }
@@ -4671,7 +4670,7 @@ hr.ui-widget-header {
     background-size: 90%;
 }
 .ui-rating-cancel a {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/dislike-on.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/dislike-on.svg']}") !important;
     opacity: 1;
     background-position: center !important;
     background-size: 110% !important;
@@ -4681,19 +4680,19 @@ hr.ui-widget-header {
     color: #778d9b;
 }
 .ui-rating-cancel-hover a {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/dislike-on.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/dislike-on.svg']}") !important;
     opacity: 0.5;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-rating-star a {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/star.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/star.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
     margin: 0px 1px;
 }
 .ui-rating-star-on a {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/star-on.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/star-on.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
@@ -4742,14 +4741,14 @@ hr.ui-widget-header {
     padding: 4px 20px 4px 20px !important;
 }
 .ui-spinner .ui-spinner-up .ui-button-text .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/plus-sign.svg']}") !important;
     background-position: center !important;
     background-size: 90% !important;
     margin-left: 12px;
     margin-top: -8px;
 }
 .ui-spinner .ui-spinner-down .ui-button-text .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/minus-sign.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/minus-sign.svg']}") !important;
     background-position: center !important;
     background-size: 90% !important;
     margin-left: 12px;
@@ -4806,14 +4805,14 @@ hr.ui-widget-header {
     top: 3px;
 }
 .ui-datepicker-header .ui-datepicker-prev .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}");
     background-position: center !important;
     background-size: 130% !important;
     top: 50%;
     left: 48%;
 }
 .ui-datepicker-header .ui-datepicker-next .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}");
     background-position: center !important;
     background-size: 130% !important;
     top: 50%;
@@ -4883,7 +4882,7 @@ hr.ui-widget-header {
     margin-left: 2px !important;
 }
 .ui-datepicker-trigger .ui-icon {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/calendar.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/calendar.svg']}");
     background-position: center !important;
     background-size: 145% !important;
 }
@@ -4948,7 +4947,7 @@ hr.ui-widget-header {
     -moz-border-radius: 1px  !important;
 }
 .ui-outputlabel {
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'robotoregular';
 }
 .ui-outputlabel {
@@ -4974,13 +4973,13 @@ hr.ui-widget-header {
 }
 .ui-galleria-nav-prev {
     left: 2px !important;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/leftarrow-navy.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/leftarrow-navy.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-galleria-nav-next {
     right: 2px !important;
-    background-image: url("/OneSystem-war/javax.faces.resource/images/rightarrow-navy.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/rightarrow-navy.svg']}") !important;
     background-position: center !important;
     background-size: 120% !important;
 }
@@ -5055,7 +5054,7 @@ hr.ui-widget-header {
     border-top-left-radius: 0px !important;
 }
 .ui-autocomplete .ui-autocomplete-dropdown .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow.svg.xhtml?ln=primefaces-modena");
+    background-image: url("#{resource['primefaces-modena:images/downarrow.svg']}");
     background-position: center !important;
     background-size: 130% !important;
     z-index: 999;
@@ -5071,7 +5070,7 @@ hr.ui-widget-header {
 }
 .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-item {
     color: #546e7a;
-    font-size: 13px;
+    font-size: 14px;
     padding: 10px 16px;
     border-radius: 0px;
     -webkit-transition: all 0.5s ease;
@@ -5088,7 +5087,7 @@ hr.ui-widget-header {
     color: #ffffff;
     background-color: #546e7a;
     padding: 6px 8px;
-    font-size: 13px;
+    font-size: 16px;
     border: 0px;
     margin: 0px;
     font-weight: normal;
@@ -5111,25 +5110,25 @@ hr.ui-widget-header {
     padding: 5px;
 }
 .ui-autocomplete-multiple .ui-autocomplete-multiple-container .ui-autocomplete-token .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-gray.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-autocomplete-input-token input[type="text"] {
     color: #003d50;
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'robotoregular' !important;
 }
 .ui-autocomplete-itemtip {
     border: solid 1px #d1d3d4;
     background-color: #fbfcfd;
-    font-size: 13px;
+    font-size: 14px;
     padding: 2px !important;
 }
 .ui-autocomplete-itemtip table thead tr th {
     border-bottom: solid 1px #e8edf2 !important;
     color: #778d9b;
-    font-size: 13px;
+    font-size: 16px;
 }
 /* Style For UI MultiSelectListbox --------------------------------------------------------------------------------------*/
 .ui-multiselectlistbox .ui-multiselectlistbox-listcontainer {
@@ -5145,7 +5144,7 @@ hr.ui-widget-header {
     -ms-transition: all 0.5s ease;
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
-    font-size: 13px;
+    font-size: 16px;
     font-family: 'robotoregular';
     border-top-right-radius: 2px;
     border-top-left-radius: 2px;
@@ -5165,7 +5164,7 @@ hr.ui-widget-header {
     overflow: hidden;
 }
 .ui-multiselectlistbox .ui-multiselectlistbox-listcontainer .ui-multiselectlistbox-list .ui-multiselectlistbox-item {
-    font-size: 13px;
+    font-size: 14px;
     padding: 7px 13px;
     border-radius: 0px;
     -webkit-border-radius: 0px;
@@ -5190,7 +5189,7 @@ hr.ui-widget-header {
 }
 /* Style For UI MenuButton --------------------------------------------------------------------------------------*/
 .ui-menubutton .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/downarrow-white.svg']}") !important;
     background-position: center !important;
     background-size: 120% !important;
 }
@@ -5231,27 +5230,27 @@ hr.ui-widget-header {
 }
 .ui-fileupload-choose .ui-icon-plusthick,
 .ui-fileupload-simple .ui-icon-plusthick {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/plus-sign-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/plus-sign-white.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-fileupload-upload .ui-icon-arrowreturnthick-1-n {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/upload.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/upload.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-fileupload-cancel .ui-icon-cancel {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-fileupload-content .ui-fileupload-cancel .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
 .ui-fileupload-content .ui-messages-error .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete-pink.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete-pink.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
 }
@@ -5305,12 +5304,12 @@ hr.ui-widget-header {
 }
 /*Style For UI Inplace --------------------------------------------------------------------------------------*/
 .ui-inplace .ui-inplace-editor .ui-button .ui-icon-check {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/check-white.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/check-white.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 .ui-inplace .ui-inplace-editor .ui-button .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
@@ -5349,7 +5348,7 @@ hr.ui-widget-header {
 .ui-layout-unit .ui-layout-unit-header {
     color: #ffffff;
     padding: 8px 6px 10px 10px !important;
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'robotoregular';
     background-color: #003d50;
     border-radius: 2px;
@@ -5358,44 +5357,44 @@ hr.ui-widget-header {
     font-family: 'robotoregular';
 }
 .ui-layout-unit .ui-layout-unit-header .ui-layout-unit-header-icon .ui-icon-close {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/delete.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/delete.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
     margin-top: 3px;
 }
 .ui-layout-unit .ui-layout-unit-header .ui-layout-unit-header-icon .ui-icon-triangle-1-n {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/uparrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/uparrow.svg']}") !important;
     background-position: center !important;
     background-size: 120% !important;
     margin-top: 3px;
 }
 .ui-layout-unit .ui-layout-unit-header .ui-layout-unit-header-icon .ui-icon-triangle-1-w {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
     margin-top: 3px;
 }
 .ui-layout-unit .ui-layout-unit-header .ui-layout-unit-header-icon .ui-icon-triangle-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}") !important;
     background-position: center !important;
     background-size: 100% !important;
     margin-top: 3px;
 }
 .ui-layout-unit .ui-layout-unit-header .ui-layout-unit-header-icon .ui-icon-triangle-1-s {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/downarrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/downarrow.svg']}") !important;
     background-position: center !important;
     background-size: 120% !important;
     margin-top: 3px;
 }
 .ui-layout-resizer .ui-layout-toggler .ui-icon-arrow-4-diag {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/expand-gray.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/expand-gray.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 /*Style For UI Wizard --------------------------------------------------------------------------------------*/
 .ui-wizard .ui-wizard-step-titles li {
     padding: 10px 20px !important;
-    font-size: 13px;
+    font-size: 14px;
     color: #ffffff;
     font-family: 'robotoregular';
     border-radius: 2px !important;
@@ -5407,12 +5406,12 @@ hr.ui-widget-header {
     background-color: #29a1ec;
 }
 .ui-wizard .ui-wizard-nav-back .ui-icon-arrowthick-1-w {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/left-arrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/left-arrow.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
 .ui-wizard .ui-wizard-nav-next .ui-icon-arrowthick-1-e {
-    background-image: url("/OneSystem-war/javax.faces.resource/images/right-arrow.svg.xhtml?ln=primefaces-modena") !important;
+    background-image: url("#{resource['primefaces-modena:images/right-arrow.svg']}") !important;
     background-position: center !important;
     background-size: 110% !important;
 }
