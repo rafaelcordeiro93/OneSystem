@@ -4,6 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -54,6 +55,10 @@ public class Cotacao implements Serializable {
 
     public BigDecimal getValor() {
         return valor;
+    }
+    
+    public String getValorFormatado() {
+        return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(valor);
     }
 
     public Date getData() {

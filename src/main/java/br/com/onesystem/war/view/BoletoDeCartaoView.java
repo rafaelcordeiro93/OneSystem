@@ -13,7 +13,7 @@ import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.TipoSituacao;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -111,8 +111,8 @@ public class BoletoDeCartaoView implements Serializable {
         boletoDeCartaoSelecionada = a;
     }
 
-    public List<TipoSituacao> getTipoSituacao() {
-        return Arrays.asList(TipoSituacao.values());
+    public List<SituacaoDeCartao> getTipoSituacao() {
+        return Arrays.asList(SituacaoDeCartao.values());
     }
 
     public void limparJanela() {

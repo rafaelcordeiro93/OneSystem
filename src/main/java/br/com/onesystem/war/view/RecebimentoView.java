@@ -189,10 +189,8 @@ public class RecebimentoView implements Serializable {
                 this.baixaReceitaProvisionada.setHistorico("Recebimento de " + str + this.baixaReceitaProvisionada.getPessoa() == null ? " para " + this.baixaReceitaProvisionada.getPessoa().getNome() : "");
             }
         }
-        if (this.baixa.getTitulo() != null) {
-            if (this.baixa.getValor().compareTo(this.baixa.getTitulo().getSaldo()) > 0) {
+        if (this.baixa.getTitulo() != null && this.baixa.getValor().compareTo(this.baixa.getTitulo().getSaldo()) > 0) {
                 throw new EDadoInvalidoException("O valor deve ser menor que o saldo.");
-            }
         }
     }
 

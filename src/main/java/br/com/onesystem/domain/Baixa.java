@@ -7,7 +7,6 @@ import br.com.onesystem.services.Movimento;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.NumberUtils;
-import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
@@ -18,7 +17,6 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,7 +26,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -413,11 +410,7 @@ public class Baixa implements Serializable, Movimento {
     public Pessoa getPessoa() {
         return pessoa;
     }
-
-    public TipoFormaPagRec getTipoFormaPagRec() {
-        return null;
-    }
-
+    
     public Conta getConta() {
         return conta;
     }

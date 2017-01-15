@@ -65,9 +65,6 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = Calendar.getInstance().getTime();
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date ultimoPagamento = Calendar.getInstance().getTime();
-
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira unidadeFinanceira;
@@ -100,7 +97,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Date ultimoPagamento, Moeda moeda, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
+            Cambio cambio, Moeda moeda, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -111,7 +108,6 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
-        this.ultimoPagamento = ultimoPagamento;
         this.moeda = moeda;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -132,13 +128,8 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
             throw new EDadoInvalidoException("O valor deve ser menor ou igual ao saldo!");
         } else {
             this.saldo = saldo.subtract(valor);
-            atualizaPagamento(new Date());
         }
         return valor;
-    }
-
-    private void atualizaPagamento(Date data) {
-        this.ultimoPagamento = data;
     }
 
     public void setValor(BigDecimal valor) throws EDadoInvalidoException {
@@ -196,11 +187,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     public Cambio getCambio() {
         return cambio;
     }
-
-    public Date getUltimoPagamento() {
-        return ultimoPagamento;
-    }
-
+    
     public Date getEmissao() {
         return emissao;
     }

@@ -4,7 +4,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoSituacao;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -21,7 +21,11 @@ public class BoletoDeCartaoBuilder {
     private Integer dias;
     private BigDecimal valor;
     private String codTransacao;
-    private TipoSituacao tipoSituacao;
+    private SituacaoDeCartao tipoSituacao;
+    private Integer numeroParcela;
+
+    public BoletoDeCartaoBuilder() {
+    }
 
     public BoletoDeCartaoBuilder comID(Long ID) {
         this.id = ID;
@@ -58,13 +62,18 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
-    public BoletoDeCartaoBuilder comTipoSituacao(TipoSituacao tipoSituacao) {
+    public BoletoDeCartaoBuilder comTipoSituacao(SituacaoDeCartao tipoSituacao) {
         this.tipoSituacao = tipoSituacao;
+        return this;
+    }
+    
+    public BoletoDeCartaoBuilder comNumeroParcela(Integer numeroParcela) {
+        this.numeroParcela = numeroParcela;
         return this;
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codTransacao, tipoSituacao);
+        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codTransacao, tipoSituacao, numeroParcela);
     }
 
 }

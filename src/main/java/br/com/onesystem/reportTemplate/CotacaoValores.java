@@ -6,8 +6,12 @@
 package br.com.onesystem.reportTemplate;
 
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Moeda;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  *
@@ -20,13 +24,15 @@ public class CotacaoValores {
     private BigDecimal valorAReceber;
     private BigDecimal total;
     private BigDecimal totalConvertidoRecebido;
+    private final Moeda moeda;
 
-    public CotacaoValores(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido) {
+    public CotacaoValores(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido, Moeda moeda) {
         this.id = cotacao.getId();
         this.cotacao = cotacao;
         this.valorAReceber = valorAReceber;
         this.total = total;
         this.totalConvertidoRecebido = totalConvertidoRecebido;
+        this.moeda = moeda;
     }
 
     public Cotacao getCotacao() {
@@ -42,7 +48,11 @@ public class CotacaoValores {
     }
 
     public BigDecimal getValorAReceber() {
-        return valorAReceber;
+        return valorAReceber == null ? BigDecimal.ZERO : valorAReceber;
+    }
+
+    public String getValorAReceberFormatado() {
+        return NumberFormat.getCurrencyInstance(cotacao.getMoeda().getBandeira().getLocal()).format(getValorAReceber());
     }
 
     public Long getId() {
@@ -65,16 +75,21 @@ public class CotacaoValores {
         this.totalConvertidoRecebido = totalConvertidoRecebido;
     }
 
+    public String getValorConvertidoRestanteFormatado() {
+        return NumberFormat.getCurrencyInstance(cotacao.getMoeda().getBandeira().getLocal()).format(getValorConvertidoRestante());
+    }
+
     public BigDecimal getValorConvertidoRestante() {
         if (total != null && totalConvertidoRecebido != null && cotacao.getValor() != null) {
-            return (total.multiply(cotacao.getValor())).subtract(totalConvertidoRecebido.multiply(cotacao.getValor()));
+            BigDecimal valorNaMoeda = totalConvertidoRecebido.multiply(cotacao.getValor(), MathContext.DECIMAL64);
+            valorNaMoeda = valorNaMoeda.setScale(14, RoundingMode.HALF_DOWN);
+            BigDecimal totalC = total.multiply(cotacao.getValor());
+            BigDecimal subtract = (totalC).subtract(valorNaMoeda);
+            subtract = subtract.setScale(2, BigDecimal.ROUND_UP);
+            return subtract;
         } else {
             return BigDecimal.ZERO;
         }
-    }
-
-    public BigDecimal getValorRestante() {
-        return getValorConvertidoRestante().divide(cotacao.getValor(), 2, BigDecimal.ROUND_UP);
     }
 
     /**
@@ -87,7 +102,15 @@ public class CotacaoValores {
         if (valorAReceber == null || valorAReceber == BigDecimal.ZERO) {
             return BigDecimal.ZERO;
         } else {
-            return valorAReceber.divide(cotacao.getValor(), 16, BigDecimal.ROUND_UP);
+            return valorAReceber.divide(cotacao.getValor(), 14, BigDecimal.ROUND_UP);
+        }
+    }
+
+    public String getValorConvertidoRecebidoView() {
+        if (valorAReceber == null || valorAReceber == BigDecimal.ZERO) {
+            return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(BigDecimal.ZERO);
+        } else {
+            return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(valorAReceber.divide(cotacao.getValor(), 2, BigDecimal.ROUND_UP));
         }
     }
 

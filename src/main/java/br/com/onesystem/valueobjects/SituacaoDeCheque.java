@@ -8,18 +8,17 @@ package br.com.onesystem.valueobjects;
  *
  * @author Rauber
  */
-public enum TipoSituacao {
+public enum SituacaoDeCheque {
 
     ABERTO("Aberto", "ABERTO"),
     CANCELADO("Cancelado", "CANCELADO"),
-    DISPONIVEL("Disponível", "DISPONIVEL"),
-    PARCIAL("Parcial", "PARCIAL"),
-    QUITADO("Quitado", "QUITADO");
+    DEVOLVIDO("Devolvido", "DEVOLVIDO"),
+    DESCONTADO("Descontado", "DESCONTADO");
 
     private String tipoUnidade;
     private String tipoUnidadeUP;
 
-    private TipoSituacao(String tiponidade, String tipoUnidadeUP) {
+    private SituacaoDeCheque(String tiponidade, String tipoUnidadeUP) {
         this.tipoUnidade = tiponidade;
         this.tipoUnidadeUP = tipoUnidadeUP;
     }

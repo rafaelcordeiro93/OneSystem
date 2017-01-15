@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 public class FormaDeRecebimentoOuPagamentoBuilder {
 
     private Long id;
+    private Moeda moeda;
     private FormaDeRecebimento formaDeRecebimento;
     private BigDecimal parcelas;
     private BigDecimal dinheiro;
@@ -36,6 +38,11 @@ public class FormaDeRecebimentoOuPagamentoBuilder {
 
     public FormaDeRecebimentoOuPagamentoBuilder comParcelas(BigDecimal parcelas) {
         this.parcelas = parcelas;
+        return this;
+    }
+    
+    public FormaDeRecebimentoOuPagamentoBuilder comMoeda(Moeda moeda) {
+        this.moeda = moeda;
         return this;
     }
     
@@ -70,7 +77,7 @@ public class FormaDeRecebimentoOuPagamentoBuilder {
      }
 
     public FormaDeRecebimentoOuPagamento construir() throws DadoInvalidoException {
-        return new FormaDeRecebimentoOuPagamento(id, formaDeRecebimento, parcelas, dinheiro, credito, cheque, cartao, aFaturar, notaEmitida);
+        return new FormaDeRecebimentoOuPagamento(id, formaDeRecebimento, parcelas, dinheiro, credito, cheque, cartao, aFaturar, notaEmitida, moeda);
     }
 
 }

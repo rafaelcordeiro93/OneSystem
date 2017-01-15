@@ -62,7 +62,7 @@
 
                                         <p:inputText  placeholder="#{l.Cod_Transacao}" value="#{boletoDeCartaoView.boletoDeCartao.codTransacao}"/> 
 
-                                        <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.boletoDeCartao.tipoSituacao}" styleClass="Wid40">
+                                        <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.boletoDeCartao.situacao}" styleClass="Wid40">
                                             <f:selectItems value="#{boletoDeCartaoView.tipoSituacao}" var="#{l.Tipo_Sitiacao}" itemLabel="#{TipoSituacao}" itemValue="#{TipoSituacao}" >
                                             </f:selectItems>
                                         </p:selectOneMenu>

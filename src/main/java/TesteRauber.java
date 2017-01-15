@@ -12,9 +12,10 @@ import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.view.selecao.SelecaoFormaDeRecebimentoAtivaView;
 import java.io.File;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,8 +32,9 @@ public class TesteRauber {
 
     public static void main(String[] args) {
 
-        File file = new File("E:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem-war\\target\\OneSystem-war-1.0-SNAPSHOT\\resources\\img\\1483202599775-flagge-paraguay.gif");
-        file.delete();
+        BigDecimal bd = new BigDecimal(239003293);
+        System.out.println(NumberFormat.getCurrencyInstance(Locale.FRANCE).format(bd));
+        
     }
 
 }

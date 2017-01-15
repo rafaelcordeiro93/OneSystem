@@ -2,7 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.TipoSituacaoCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -50,7 +50,7 @@ public class Cheque implements Serializable {
     @NotNull(message = "{numero_cheque_not_null}")
     private String numeroCheque;
     @NotNull(message = "{tipo_situacao_not_null}")
-    private TipoSituacaoCheque tipoSituacao;
+    private SituacaoDeCheque tipoSituacao;
     @Column(nullable = true)
     private BigDecimal multas;
     @Column(nullable = true)
@@ -67,7 +67,7 @@ public class Cheque implements Serializable {
     }
 
     public Cheque(Long id, NotaEmitida venda, Integer numeroParcela, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
-            String conta, String numeroCheque, TipoSituacaoCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
+            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
             String observacao) throws DadoInvalidoException {
         this.id = id;
         this.venda = venda;
@@ -134,7 +134,7 @@ public class Cheque implements Serializable {
         return numeroCheque;
     }
 
-    public TipoSituacaoCheque getTipoSituacao() {
+    public SituacaoDeCheque getTipoSituacao() {
         return tipoSituacao;
     }
 

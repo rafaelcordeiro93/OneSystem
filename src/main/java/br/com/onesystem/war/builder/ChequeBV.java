@@ -5,7 +5,7 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoSituacaoCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,7 +22,7 @@ public class ChequeBV implements Serializable {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private TipoSituacaoCheque tipoSituacao;
+    private SituacaoDeCheque tipoSituacao;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -131,11 +131,11 @@ public class ChequeBV implements Serializable {
         this.numeroCheque = numeroCheque;
     }
 
-    public TipoSituacaoCheque getTipoSituacao() {
+    public SituacaoDeCheque getTipoSituacao() {
         return tipoSituacao;
     }
 
-    public void setTipoSituacao(TipoSituacaoCheque tipoSituacao) {
+    public void setTipoSituacao(SituacaoDeCheque tipoSituacao) {
         this.tipoSituacao = tipoSituacao;
     }
 

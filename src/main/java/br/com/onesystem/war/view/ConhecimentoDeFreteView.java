@@ -140,7 +140,7 @@ public class ConhecimentoDeFreteView implements Serializable {
         for (int i = 1; i <= numeroParcela.intValue(); i++) {
             count = count + intervaloDias;
            TituloBV dp = new TituloBV(null , conhecimentoDeFrete.getPessoa(),null,parcela, null,null,
-                        conhecimentoDeFrete.getEmissao(),null,null, null, null, null ,conhecimentoDeFrete.getMoeda(), conhecimentoDeFreteSelecionado);
+                        conhecimentoDeFrete.getEmissao(),null, null, null, null ,conhecimentoDeFrete.getMoeda(), conhecimentoDeFreteSelecionado);
             parcelas.add(dp);
         }
     }

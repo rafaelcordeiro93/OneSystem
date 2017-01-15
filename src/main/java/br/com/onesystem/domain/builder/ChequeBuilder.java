@@ -4,7 +4,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoSituacaoCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -24,7 +24,7 @@ public class ChequeBuilder {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private TipoSituacaoCheque tipoSituacao;
+    private SituacaoDeCheque tipoSituacao;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -81,7 +81,7 @@ public class ChequeBuilder {
         return this;
     }
 
-    public ChequeBuilder comTipoSituacao(TipoSituacaoCheque tipoSituacao) {
+    public ChequeBuilder comTipoSituacao(SituacaoDeCheque tipoSituacao) {
         this.tipoSituacao = tipoSituacao;
         return this;
     }

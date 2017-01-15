@@ -50,11 +50,13 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
     private BigDecimal aFaturar;
     @OneToOne
     private NotaEmitida notaEmitida;
+    @ManyToOne
+    private Moeda moeda;
 
     public FormaDeRecebimentoOuPagamento() {
     }
 
-    public FormaDeRecebimentoOuPagamento(Long id, FormaDeRecebimento formaDeRecebimento, BigDecimal parcelas, BigDecimal dinheiro, BigDecimal credito, BigDecimal cheque, BigDecimal cartao, BigDecimal aFaturar, NotaEmitida notaEmitida) throws DadoInvalidoException {
+    public FormaDeRecebimentoOuPagamento(Long id, FormaDeRecebimento formaDeRecebimento, BigDecimal parcelas, BigDecimal dinheiro, BigDecimal credito, BigDecimal cheque, BigDecimal cartao, BigDecimal aFaturar, NotaEmitida notaEmitida, Moeda moeda) throws DadoInvalidoException {
         this.id = id;
         this.formaDeRecebimento = formaDeRecebimento;
         this.parcelas = parcelas;
@@ -64,6 +66,7 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
         this.cartao = cartao;
         this.aFaturar = aFaturar;
         this.notaEmitida = notaEmitida;
+        this.moeda = moeda;
         ehValido();
     }
 
@@ -101,6 +104,10 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
 
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
+    }
+
+    public Moeda getMoeda() {
+        return moeda;
     }
 
     public final void ehValido() throws DadoInvalidoException {

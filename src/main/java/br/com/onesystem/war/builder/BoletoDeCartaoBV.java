@@ -5,7 +5,7 @@ import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoSituacao;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -19,7 +19,7 @@ public class BoletoDeCartaoBV implements Serializable {
     private Integer dias;
     private BigDecimal valor;
     private String codTransacao;
-    private TipoSituacao tipoSituacao;
+    private SituacaoDeCartao situacao;
 
     public BoletoDeCartaoBV(BoletoDeCartao boletoDeCartaoSelecionada) {
         this.id = boletoDeCartaoSelecionada.getId();
@@ -28,8 +28,8 @@ public class BoletoDeCartaoBV implements Serializable {
         this.emissao = boletoDeCartaoSelecionada.getEmissao();
         this.dias = boletoDeCartaoSelecionada.getDias();
         this.valor = boletoDeCartaoSelecionada.getValor();
-        this.codTransacao = boletoDeCartaoSelecionada.getCodTransacao();
-        this.tipoSituacao = boletoDeCartaoSelecionada.getTipoSituacao();
+        this.codTransacao = boletoDeCartaoSelecionada.getCodigoTransacao();
+        this.situacao = boletoDeCartaoSelecionada.getSituacao();
 
     }
 
@@ -92,19 +92,19 @@ public class BoletoDeCartaoBV implements Serializable {
         this.codTransacao = codTransacao;
     }
 
-    public TipoSituacao getTipoSituacao() {
-        return tipoSituacao;
+    public SituacaoDeCartao getSituacao() {
+        return situacao;
     }
 
-    public void setTipoSituacao(TipoSituacao tipoSituacao) {
-        this.tipoSituacao = tipoSituacao;
+    public void setSituacao(SituacaoDeCartao situacao) {
+        this.situacao = situacao;
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(tipoSituacao).construir();
+        return new BoletoDeCartaoBuilder().comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(tipoSituacao).construir();
+        return new BoletoDeCartaoBuilder().comID(id).comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
     }
 }

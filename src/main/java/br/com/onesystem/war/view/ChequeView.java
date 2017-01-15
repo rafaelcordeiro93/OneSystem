@@ -13,7 +13,7 @@ import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.TipoSituacaoCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -112,8 +112,8 @@ public class ChequeView implements Serializable {
         chequeSelecionada = a;
     }
 
-    public List<TipoSituacaoCheque> getTipoSituacao() {
-        return Arrays.asList(TipoSituacaoCheque.values());
+    public List<SituacaoDeCheque> getTipoSituacao() {
+        return Arrays.asList(SituacaoDeCheque.values());
     }
 
     public void limparJanela() {

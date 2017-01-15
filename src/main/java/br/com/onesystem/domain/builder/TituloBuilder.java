@@ -31,7 +31,6 @@ public class TituloBuilder {
     private BigDecimal saldo;
     private Date vencimento;
     private Date emissao = Calendar.getInstance().getTime();
-    private Date ultimoPagamento = Calendar.getInstance().getTime();
     private OperacaoFinanceira operacaoFinanceira;
     private Recepcao recepcao;
     private Cambio cambio;
@@ -113,7 +112,7 @@ private ConhecimentoDeFrete conhecimentoDeFrete;
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
+                tipoFormaPagRec, vencimento, recepcao, cambio, moeda, notaEmitida, conhecimentoDeFrete);
     }
 
 }

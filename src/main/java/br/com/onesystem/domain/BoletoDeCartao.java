@@ -4,7 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.CaseType;
-import br.com.onesystem.valueobjects.TipoSituacao;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -44,28 +44,32 @@ public class BoletoDeCartao implements Serializable {
     private BigDecimal valor;
     @CharacterType(value = CaseType.DIGIT, message = "cod_transacao_somente_numeros")
     @NotNull(message = "{cod_transacao_not_null}")
-    private String codTransacao;
+    private String codigoTransacao;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_situacao_not_null}")
-    private TipoSituacao tipoSituacao;
+    private SituacaoDeCartao situacao;
+    @NotNull(message = "{numero_parcelas_not_null}")
+    private Integer numeroParcela;
 
     public BoletoDeCartao() {
     }
 
-    public BoletoDeCartao(Long id, NotaEmitida venda, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codTransacao, TipoSituacao tipoSituacao) throws DadoInvalidoException {
+    public BoletoDeCartao(Long id, NotaEmitida venda, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
+            Integer numeroParcela) throws DadoInvalidoException {
         this.id = id;
         this.venda = venda;
         this.cartao = cartao;
         this.emissao = emissao;
         this.dias = dias;
         this.valor = valor;
-        this.codTransacao = codTransacao;
-        this.tipoSituacao = tipoSituacao;
+        this.codigoTransacao = codigoTransacao;
+        this.situacao = situacao;
+        this.numeroParcela = numeroParcela;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("emissao", "dias", "valor", "codTransacao");
+        List<String> campos = Arrays.asList("emissao", "dias", "valor", "codigoTransacao", "numeroParcela");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, campos);
     }
 
@@ -93,12 +97,16 @@ public class BoletoDeCartao implements Serializable {
         return valor;
     }
 
-    public String getCodTransacao() {
-        return codTransacao;
+    public String getCodigoTransacao() {
+        return codigoTransacao;
     }
 
-    public TipoSituacao getTipoSituacao() {
-        return tipoSituacao;
+    public SituacaoDeCartao getSituacao() {
+        return situacao;
+    }
+
+    public Integer getNumeroParcela() {
+        return numeroParcela;
     }
 
     @Override
@@ -118,7 +126,7 @@ public class BoletoDeCartao implements Serializable {
 
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (venda == null ? null : venda.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codTransacao + ", tipoSituacao=" + tipoSituacao + '}';
+        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (venda == null ? null : venda.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", numeroParcela=" + numeroParcela + '}';
     }
 
 }

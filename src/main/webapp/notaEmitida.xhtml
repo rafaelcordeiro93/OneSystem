@@ -207,13 +207,13 @@
                                     </pe:inputNumber> 
 
                                     <p:inputNumber maxValue="9999999.99" minValue="0.00"
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Frete}"/>
                                     </p:inputNumber>                                     
 
                                     <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCartao}"
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Cartao}"/>
                                     </p:inputNumber>   
@@ -273,38 +273,47 @@
             </div>
         </div>
 
-        <p:dialog widgetVar="cotacaoVal" >
+        <p:dialog widgetVar="cotacaoVal" width="900" header="#{l.Cambio}" >
+
+            <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
+                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Total em Dinheiro:" />
+                <p:outputLabel id="totalDinheiro" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiroFormatado}" />
+                
+                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Valor a trocar:" />
+                <p:outputLabel id="valorATrocar" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valorRestante}" />
+               
+                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Ganho de Câmbio:" />
+                <p:outputLabel id="ganhoDeCambio" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.ganhoDeCambio}" />
+            </p:panelGrid>
 
             <p:dataTable id="cotacaoValoresData" var="cotacaoValores" value="#{notaEmitidaView.cotacoes}" selectionMode="single" selection="#{notaEmitidaView.cotacaoValoresSelecionado}" rowKey="#{cotacaoValores.id}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom" paginatorAlwaysVisible="false"
                          emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
 
-                <p:column style="text-align: center; width: 5%" >                                         
+                <p:column style="text-align: center; width: 7%" >                                         
                     <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{cotacaoValores.cotacao.moeda.bandeira}.png" />
                 </p:column>
 
                 <p:column headerText="#{l.Cotacao}" style="text-align: right; width: 15%">                                        
-                    <h:outputText value="#{cotacaoValores.cotacao.moeda.sigla} #{cotacaoValores.cotacao.valor}" />
+                    <h:outputText value="#{cotacaoValores.cotacao.valorFormatado}" />
                 </p:column>
 
                 <p:column headerText="#{l.Conversao}">                                        
-                    <h:outputText value="#{cotacaoValores.valorConvertidoRestante}" />
+                    <h:outputText value="#{cotacaoValores.valorConvertidoRestanteFormatado}" />
                 </p:column>
 
                 <p:column headerText="#{l.Valor}">  
                     <p:cellEditor>
-                        <f:facet name="output"><h:outputText value="#{cotacaoValores.cotacao.moeda.sigla} #{cotacaoValores.valorAReceber}"/></f:facet>
+                        <f:facet name="output"><h:outputText value="#{cotacaoValores.valorAReceberFormatado}"/></f:facet>
                         <f:facet name="input"><p:inputText value="#{cotacaoValores.valorAReceber}">
-                                <p:ajax event="blur" listener="#{notaEmitidaView.addTotalCotacoes}" update="cotacaoValoresData" />
+                                <p:ajax event="blur" listener="#{notaEmitidaView.addTotalCotacoes}" update="cotacaoValoresData :conteudo:valorATrocar :conteudo:ganhoDeCambio" />
                             </p:inputText></f:facet>
                     </p:cellEditor>
                 </p:column>
 
                 <p:column>
-                    <p:outputLabel value="#{cotacaoValores.valorConvertidoRecebido}"/>
-                </p:column>   
-
-                <p:column>
-                    <p:outputLabel value="#{cotacaoValores.valorRestante}"/>
+                    <p:outputLabel value="#{cotacaoValores.valorConvertidoRecebidoView}"/>
                 </p:column>   
 
             </p:dataTable>

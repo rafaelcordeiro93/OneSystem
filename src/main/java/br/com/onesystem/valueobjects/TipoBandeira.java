@@ -5,25 +5,29 @@
  */
 package br.com.onesystem.valueobjects;
 
+import java.util.Locale;
+
 /**
  *
  * @author Rafael Fernando Rauber
  */
 public enum TipoBandeira {
 
-    BRASIL(1,"Brasil"),
-    PARAGUAI(2,"Paraguai"),
-    ESTADOS_UNIDOS(3,"Estados Unidos"),
-    INGLATERRA(4, "Inglaterra"),
-    FRANCA(5,"França"),
-    ALEMANHA(6,"Alemanha");
+    BRASIL(1, "Brasil", new Locale("pt", "BR")),
+    PARAGUAI(2, "Paraguai", new Locale("es", "PY")),
+    ESTADOS_UNIDOS(3, "Estados Unidos", Locale.US),
+    INGLATERRA(4, "Inglaterra", Locale.ENGLISH),
+    FRANCA(5, "França", Locale.FRANCE),
+    ALEMANHA(6, "Alemanha", Locale.GERMANY);
 
     private Integer id;
     private String nome;
+    private Locale local;
 
-    TipoBandeira(Integer id, String nome) {
+    TipoBandeira(Integer id, String nome, Locale local) {
         this.id = id;
         this.nome = nome;
+        this.local = local;
     }
 
     public Integer getId() {
@@ -33,7 +37,9 @@ public enum TipoBandeira {
     public String getNome() {
         return nome;
     }
-    
-    
+
+    public Locale getLocal() {
+        return local;
+    }
 
 }

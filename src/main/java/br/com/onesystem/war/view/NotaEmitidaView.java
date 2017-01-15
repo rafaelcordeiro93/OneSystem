@@ -132,7 +132,7 @@ public class NotaEmitidaView implements Serializable {
     public void selecionaFormaDeRecebimento(SelectEvent e) {
         FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
         formaDeRecebimentoOuPagamento.setFormaDeRecebimento(formaDeRecebimento);
-        calculaTotaisFormaDeRecebimento(formaDeRecebimento);
+        calculaTotaisFormaDeRecebimento(formaDeRecebimento);        
     }
 
     private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
@@ -309,7 +309,30 @@ public class NotaEmitidaView implements Serializable {
         inicializaCotacoes();
     }
 
+    public String getValorRestante() {
+        BigDecimal total = formaDeRecebimentoOuPagamento.getDinheiro();
+        BigDecimal valorAReceber = BigDecimal.ZERO;
+        for (CotacaoValores c : cotacoes) {
+            valorAReceber = valorAReceber.add(c.getValorConvertidoRecebido());
+        }
+        return total == null ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
+                : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
+                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber));
+    }
+
+    public String getGanhoDeCambio() {
+        BigDecimal total = formaDeRecebimentoOuPagamento.getDinheiro();
+        BigDecimal valorAReceber = BigDecimal.ZERO;
+        for (CotacaoValores c : cotacoes) {
+            valorAReceber = valorAReceber.add(c.getValorConvertidoRecebido());
+        }
+        return total == null ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
+                : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber).multiply(new BigDecimal(-1)))
+                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO);
+    }
+
     public void addTotalCotacoes() {
+        formaDeRecebimentoOuPagamento.setMoeda(configuracao.getMoedaPadrao());
         RequestContext rc = RequestContext.getCurrentInstance();
         rc.update("cotacaoVal");
         for (CotacaoValores c : cotacoes) {
@@ -328,10 +351,10 @@ public class NotaEmitidaView implements Serializable {
     }
 
     private void inicializaCotacoes() {
-        cotacaoLista = service.buscarCotacoes();
+        cotacaoLista = service.buscarCotacoesDoDiaAtual();
         cotacoes = new ArrayList<CotacaoValores>();
         for (Cotacao c : cotacaoLista) {
-            cotacoes.add(new CotacaoValores(c, null, null, null));
+            cotacoes.add(new CotacaoValores(c, null, null, null, configuracao.getMoedaPadrao()));
         }
     }
 

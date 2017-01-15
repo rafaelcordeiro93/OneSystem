@@ -23,7 +23,6 @@ public class TituloBV implements Serializable {
     private BigDecimal saldo;
     private Date vencimento;
     private Date emissao;
-    private Date ultimoPagamento;
     private OperacaoFinanceira unidadeFinanceira;
     private Recepcao recepcao;
     private Cambio cambio;
@@ -40,17 +39,16 @@ public class TituloBV implements Serializable {
         this.saldo = tituloSelecionado.getSaldo();
         this.vencimento = tituloSelecionado.getVencimento();
         this.emissao = tituloSelecionado.getEmissao();
-        this.ultimoPagamento = tituloSelecionado.getUltimoPagamento();
         this.unidadeFinanceira = tituloSelecionado.getUnidadeFinanceira();
         this.recepcao = tituloSelecionado.getRecepcao();
         this.cambio = tituloSelecionado.getCambio();
         this.tipoFormaPagRec = tituloSelecionado.getTipoFormaPagRec();
         this.moeda = tituloSelecionado.getMoeda();
-        
+
     }
 
-    public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, 
-            Date vencimento, Date emissao, Date ultimoPagamento, OperacaoFinanceira unidadeFinanceira, 
+    public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo,
+            Date vencimento, Date emissao, OperacaoFinanceira unidadeFinanceira,
             Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Moeda moeda, ConhecimentoDeFrete conhecimentoDeFrete) {
         this.id = id;
         this.pessoa = pessoa;
@@ -59,23 +57,22 @@ public class TituloBV implements Serializable {
         this.saldo = saldo;
         this.vencimento = vencimento;
         this.emissao = emissao;
-        this.ultimoPagamento = ultimoPagamento;
         this.unidadeFinanceira = unidadeFinanceira;
         this.recepcao = recepcao;
         this.cambio = cambio;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.moeda = moeda;
-        this.conhecimentoDeFrete  = conhecimentoDeFrete;
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
-    
-      public TituloBV(ConhecimentoDeFrete conhecimento) {
-       
+
+    public TituloBV(ConhecimentoDeFrete conhecimento) {
+
         this.pessoa = conhecimento.getPessoa();
         this.valor = conhecimento.getValorFrete();
         this.conhecimentoDeFrete = conhecimento;
         this.emissao = conhecimento.getEmissao();
         this.moeda = conhecimento.getMoeda();
-        
+
     }
 
     public TituloBV() {
@@ -137,14 +134,6 @@ public class TituloBV implements Serializable {
         this.emissao = emissao;
     }
 
-    public Date getUltimoPagamento() {
-        return ultimoPagamento;
-    }
-
-    public void setUltimoPagamento(Date ultimoPagamento) {
-        this.ultimoPagamento = ultimoPagamento;
-    }
-
     public OperacaoFinanceira getUnidadeFinanceira() {
         return unidadeFinanceira;
     }
@@ -196,16 +185,14 @@ public class TituloBV implements Serializable {
     public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
-    
-    
-    
+
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(null, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
+                tipoFormaPagRec, vencimento, recepcao, cambio, moeda, notaEmitida, conhecimentoDeFrete);
     }
 
     public Titulo construirComID() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, unidadeFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, ultimoPagamento, moeda, notaEmitida, conhecimentoDeFrete);
+                tipoFormaPagRec, vencimento, recepcao, cambio, moeda, notaEmitida, conhecimentoDeFrete);
     }
 }
