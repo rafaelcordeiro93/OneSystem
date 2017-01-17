@@ -61,10 +61,10 @@ public abstract class Pessoa implements Serializable {
     @Column(nullable = true, length = 60)
     private String contato;
     @Column(nullable = false)
-    private boolean ativo;   
+    private boolean ativo;
 //    @Length(min = 4, max = 120, message = "{direcao_lenght}")
     @Column(nullable = true, length = 120)
-    private String direcao;    
+    private String direcao;
 //    @Length(min = 4, max = 60, message = "{bairro_lenght}")
     @Column(nullable = true, length = 80)
     private String bairro;
@@ -107,10 +107,12 @@ public abstract class Pessoa implements Serializable {
     private List<ReceitaProvisionada> receitasProvisionadas;
     @OneToMany(mappedBy = "pessoa")
     private List<NotaEmitida> notasEmitidas;
+    @OneToMany(mappedBy = "pessoa")
+    private List<Credito> creditos;
 
     public Pessoa() {
     }
-    
+
     public Pessoa(Long id, String nome, TipoPessoa tipo, String ruc, boolean ativo,
             String direcao, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
             boolean categoriaVendedor, boolean categoriaTransportador, Double desconto,
@@ -220,8 +222,8 @@ public abstract class Pessoa implements Serializable {
     public void instanciaContactoList() {
         contatos = new ArrayList<Contato>();
     }
-    
-    public void setConfiguracaoCambio(ConfiguracaoCambio configuracaoCambio){
+
+    public void setConfiguracaoCambio(ConfiguracaoCambio configuracaoCambio) {
         this.configuracaoCambio = configuracaoCambio;
     }
 

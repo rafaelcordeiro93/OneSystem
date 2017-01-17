@@ -142,11 +142,10 @@
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" style="padding-top: 3px !important">
-                                    <pe:inputNumber  value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.parcelas}" disabled="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
+                                    <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.parcelas}" disabled="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
                                                      maxValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
-                                        <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Parcelas}"/>
-                                    </pe:inputNumber>
+                                        <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:neParcelas"/>
+                                    </p:inputNumber>
                                 </h:panelGrid>
 
                             </p:panelGrid>
@@ -174,7 +173,7 @@
                                     <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                         <f:passThroughAttribute name="placeholder" value="#{l.Acrescimo}"/>
-                                    </pe:inputNumber>                                     
+                                    </pe:inputNumber>
 
                                     <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmDinheiro}"
                                                     value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
@@ -235,29 +234,29 @@
 
                             <p:separator/>
 
-                            <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" 
+                            <p:dataTable id="neParcelas" var="parcelaBV" value="#{notaEmitidaView.parcelas}" 
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
                                 <p:column headerText="#{l.Parcela}" >                                        
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.id}" />
                                 </p:column>
                                 <p:column headerText="#{l.Modalidade}" >                                        
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.tipoFormaDeRecebimentoParcela}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Vencimento}">
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.vencimentoFormatado}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Valor}">
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.valor}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Detalhes}">
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.observacao}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Dias}">
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.dias}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Dia_Semana}">
-                                    <h:outputText />
+                                    <h:outputText value="#{parcelaBV.diaDaSemana}"/>
                                 </p:column>
                             </p:dataTable>
 

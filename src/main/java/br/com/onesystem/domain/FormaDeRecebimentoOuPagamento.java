@@ -37,7 +37,7 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
     @ManyToOne
     private FormaDeRecebimento formaDeRecebimento;
     @Min(value = 0, message = "{min_parcelas}")
-    private BigDecimal parcelas;
+    private Integer parcelas;
     @Min(value = 0, message = "{min_dinheiro}")
     private BigDecimal dinheiro;
     @Min(value = 0, message = "{min_credito}")
@@ -56,7 +56,7 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
     public FormaDeRecebimentoOuPagamento() {
     }
 
-    public FormaDeRecebimentoOuPagamento(Long id, FormaDeRecebimento formaDeRecebimento, BigDecimal parcelas, BigDecimal dinheiro, BigDecimal credito, BigDecimal cheque, BigDecimal cartao, BigDecimal aFaturar, NotaEmitida notaEmitida, Moeda moeda) throws DadoInvalidoException {
+    public FormaDeRecebimentoOuPagamento(Long id, FormaDeRecebimento formaDeRecebimento, Integer parcelas, BigDecimal dinheiro, BigDecimal credito, BigDecimal cheque, BigDecimal cartao, BigDecimal aFaturar, NotaEmitida notaEmitida, Moeda moeda) throws DadoInvalidoException {
         this.id = id;
         this.formaDeRecebimento = formaDeRecebimento;
         this.parcelas = parcelas;
@@ -78,7 +78,7 @@ public class FormaDeRecebimentoOuPagamento implements Serializable {
         return formaDeRecebimento;
     }
 
-    public BigDecimal getParcelas() {
+    public Integer getParcelas() {
         return parcelas;
     }
 

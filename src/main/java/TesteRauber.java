@@ -7,9 +7,11 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaJuridica;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.view.selecao.SelecaoFormaDeRecebimentoAtivaView;
+import com.ibm.icu.util.Calendar;
 import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -32,8 +34,18 @@ public class TesteRauber {
 
     public static void main(String[] args) {
 
-        BigDecimal bd = new BigDecimal(239003293);
-        System.out.println(NumberFormat.getCurrencyInstance(Locale.FRANCE).format(bd));
+        TipoPeriodicidade t = TipoPeriodicidade.MENSAL;
+        Calendar c = Calendar.getInstance();
+        
+       if(t == TipoPeriodicidade.DIARIO){
+            c.setTime(new Date());
+            c.add(Calendar.DAY_OF_MONTH, 2);
+        }else{
+            c.setTime(new Date());
+            c.add(Calendar.MONTH, 1);
+        }
+       
+        System.out.println("Data: " + c.getTime());
         
     }
 

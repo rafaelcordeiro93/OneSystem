@@ -74,6 +74,8 @@ public class NotaEmitida implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
     private boolean cancelada;
+    @OneToMany(mappedBy = "notaEmitida")
+    private List<Credito> creditos;
 
     public NotaEmitida() {
     }

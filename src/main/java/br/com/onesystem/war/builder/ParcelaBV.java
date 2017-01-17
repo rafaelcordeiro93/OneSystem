@@ -6,23 +6,29 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Recepcao;
+import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
+import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
-public class ParcelaBuilder {
+public class ParcelaBV implements Serializable {
 
     private Long id;
     private NotaEmitida notaEmitida;
@@ -36,19 +42,59 @@ public class ParcelaBuilder {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private SituacaoDeCheque tipoSituacaoCheque;
+    private SituacaoDeCheque situacaoDeCheque;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
-    private Cartao cartao;
+    private BoletoDeCartao boletoDeCartao;
     private Integer dias;
     private String codTransacao;
     private SituacaoDeCartao tipoSituacaoCartao;
     private Moeda moeda;
     private Cambio cambio;
     private Recepcao recepcao;
+    private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+
+    public ParcelaBV() {
+    }
+
+    public ParcelaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete, 
+            OperacaoFinanceira unidadeFinanceira, Integer numeroParcela, BigDecimal valor, 
+            Date emissao, Date vencimento, Banco banco, String agencia, String conta, 
+            String numeroCheque, SituacaoDeCheque situacaoDeCheque, BigDecimal multas, 
+            BigDecimal juros, BigDecimal descontos, String emitente, String observacao, 
+            BoletoDeCartao boletoDeCartao, Integer dias, String codTransacao, 
+            SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio, 
+            Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
+        this.id = id;
+        this.notaEmitida = notaEmitida;
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+        this.unidadeFinanceira = unidadeFinanceira;
+        this.numeroParcela = numeroParcela;
+        this.valor = valor;
+        this.emissao = emissao;
+        this.vencimento = vencimento;
+        this.banco = banco;
+        this.agencia = agencia;
+        this.conta = conta;
+        this.numeroCheque = numeroCheque;
+        this.situacaoDeCheque = situacaoDeCheque;
+        this.multas = multas;
+        this.juros = juros;
+        this.descontos = descontos;
+        this.emitente = emitente;
+        this.observacao = observacao;
+        this.boletoDeCartao = boletoDeCartao;
+        this.dias = dias;
+        this.codTransacao = codTransacao;
+        this.tipoSituacaoCartao = tipoSituacaoCartao;
+        this.moeda = moeda;
+        this.cambio = cambio;
+        this.recepcao = recepcao;
+        this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
+    }
 
     public Long getId() {
         return id;
@@ -109,6 +155,15 @@ public class ParcelaBuilder {
     public Date getVencimento() {
         return vencimento;
     }
+    
+    public String getVencimentoFormatado() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(vencimento);
+    }
+    
+    public String getDiaDaSemana(){
+        return new DateUtil().getDiaDaSemana(vencimento);
+    }
 
     public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
@@ -146,12 +201,12 @@ public class ParcelaBuilder {
         this.numeroCheque = numeroCheque;
     }
 
-    public SituacaoDeCheque getTipoSituacaoCheque() {
-        return tipoSituacaoCheque;
+    public SituacaoDeCheque getSituacaoDeCheque() {
+        return situacaoDeCheque;
     }
 
-    public void setTipoSituacaoCheque(SituacaoDeCheque tipoSituacaoCheque) {
-        this.tipoSituacaoCheque = tipoSituacaoCheque;
+    public void setSituacaoDeCheque(SituacaoDeCheque situacaoDeCheque) {
+        this.situacaoDeCheque = situacaoDeCheque;
     }
 
     public BigDecimal getMultas() {
@@ -194,12 +249,12 @@ public class ParcelaBuilder {
         this.observacao = observacao;
     }
 
-    public Cartao getCartao() {
-        return cartao;
+    public BoletoDeCartao getBoletoDeCartao() {
+        return boletoDeCartao;
     }
 
-    public void setCartao(Cartao cartao) {
-        this.cartao = cartao;
+    public void setBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
+        this.boletoDeCartao = boletoDeCartao;
     }
 
     public Integer getDias() {
@@ -248,6 +303,14 @@ public class ParcelaBuilder {
 
     public void setRecepcao(Recepcao recepcao) {
         this.recepcao = recepcao;
+    }
+
+    public TipoFormaDeRecebimentoParcela getTipoFormaDeRecebimentoParcela() {
+        return tipoFormaDeRecebimentoParcela;
+    }
+
+    public void setTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
+        this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
     }
 
 }

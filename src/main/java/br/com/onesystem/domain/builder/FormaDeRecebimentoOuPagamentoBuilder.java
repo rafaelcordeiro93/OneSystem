@@ -5,8 +5,6 @@ import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import java.math.BigDecimal;
 
 /**
@@ -18,7 +16,7 @@ public class FormaDeRecebimentoOuPagamentoBuilder {
     private Long id;
     private Moeda moeda;
     private FormaDeRecebimento formaDeRecebimento;
-    private BigDecimal parcelas;
+    private Integer parcelas;
     private BigDecimal dinheiro;
     private BigDecimal credito;
     private BigDecimal cheque;
@@ -36,7 +34,7 @@ public class FormaDeRecebimentoOuPagamentoBuilder {
         return this;
     }
 
-    public FormaDeRecebimentoOuPagamentoBuilder comParcelas(BigDecimal parcelas) {
+    public FormaDeRecebimentoOuPagamentoBuilder comParcelas(Integer parcelas) {
         this.parcelas = parcelas;
         return this;
     }

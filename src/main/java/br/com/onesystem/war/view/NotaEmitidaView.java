@@ -18,25 +18,30 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.BaixaBuilder;
+import br.com.onesystem.domain.builder.ParcelaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.CotacaoValores;
+import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.FormaDeRecebimentoOuPagamentoBV;
 import br.com.onesystem.war.builder.ItemEmitidoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
+import br.com.onesystem.war.builder.ParcelaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -65,6 +70,7 @@ public class NotaEmitidaView implements Serializable {
     private CotacaoValores cotacaoValoresSelecionado;
     private List<Cotacao> cotacaoLista;
     private List<CotacaoValores> cotacoes;
+    private List<ParcelaBV> parcelas;
 
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
@@ -132,7 +138,7 @@ public class NotaEmitidaView implements Serializable {
     public void selecionaFormaDeRecebimento(SelectEvent e) {
         FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
         formaDeRecebimentoOuPagamento.setFormaDeRecebimento(formaDeRecebimento);
-        calculaTotaisFormaDeRecebimento(formaDeRecebimento);        
+        calculaTotaisFormaDeRecebimento(formaDeRecebimento);
     }
 
     private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
@@ -178,6 +184,44 @@ public class NotaEmitidaView implements Serializable {
         BigDecimal desconto = notaEmitida.getDesconto() == null ? BigDecimal.ZERO : notaEmitida.getDesconto();
 
         return getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
+    }
+
+    /**
+     * Método que criará as parcelas automaticamente ao informar e sair do campo
+     * número de parcelas.
+     */
+    public void criaParcelas() {
+        FormaDeRecebimentoOuPagamentoBV f = formaDeRecebimentoOuPagamento;
+        Integer numParcelas = f.getParcelas(); //Número de parcelas
+        TipoPeriodicidade tipoPeridiocidade = f.getFormaDeRecebimento().getTipoPeriodicidade();
+        Integer periodicidade = f.getFormaDeRecebimento().getPeriodicidade();
+
+        if (numParcelas != null && numParcelas > 0) {
+
+            BigDecimal valorParcelado = getTotalNota().divide(new BigDecimal(numParcelas), 2, BigDecimal.ROUND_UP);
+
+            // Busca o primeiro vencimento das parcelas
+            Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
+
+            parcelas = new ArrayList<>();
+            for (int i = 1; i <= numParcelas; i++) {
+                parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(valorParcelado)
+                        .comVencimento(vencimento).comTipoFormaDeRecebimentoParcela(f.getFormaDeRecebimento().getFormaPadraoDeParcela()).construir());
+                vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
+            }
+        }
+    }
+
+    private Long getIdParcela() {
+        Long id = (long) 1;
+        if (!parcelas.isEmpty()) {
+            for (ParcelaBV p : parcelas) {
+                if (p.getId() >= id) {
+                    id = p.getId() + 1;
+                }
+            }
+        }
+        return id;
     }
 
     public void selecionaOperacao(SelectEvent event) {
@@ -458,6 +502,10 @@ public class NotaEmitidaView implements Serializable {
 
     public void setService(CotacaoService service) {
         this.service = service;
+    }
+
+    public List<ParcelaBV> getParcelas() {
+        return parcelas;
     }
 
 }

@@ -19,7 +19,7 @@ public class FormaDeRecebimentoOuPagamentoBV implements Serializable {
     private Long id;
     private FormaDeRecebimento formaDeRecebimento;
     private Moeda moeda;
-    private BigDecimal parcelas;
+    private Integer parcelas;
     private BigDecimal dinheiro;
     private BigDecimal credito;
     private BigDecimal cheque;
@@ -54,11 +54,11 @@ public class FormaDeRecebimentoOuPagamentoBV implements Serializable {
         this.formaDeRecebimento = formaDeRecebimento;
     }
 
-    public BigDecimal getParcelas() {
+    public Integer getParcelas() {
         return parcelas;
     }
 
-    public void setParcelas(BigDecimal parcelas) {
+    public void setParcelas(Integer parcelas) {
         this.parcelas = parcelas;
     }
 
