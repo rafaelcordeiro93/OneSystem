@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
-<!-- 2017-01-14T19:59:09 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_de_Cambio" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f856bea6-d443-4127-aa67-e08f8faa8f28">
+<!-- 2017-01-15T14:01:55 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioDeBalancoFisico" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f856bea6-d443-4127-aa67-e08f8faa8f28">
 	<property name="ireport.zoom" value="1.4641000000000157"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="412"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
-	<field name="pessoa.nome" class="java.lang.String"/>
-	<field name="id" class="java.lang.Long"/>
-	<field name="emissao" class="java.util.Date"/>
-	<field name="conta.nome" class="java.lang.String"/>
-	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="item.nome" class="java.lang.String"/>
+	<field name="item.id" class="java.lang.Long"/>
+	<field name="saldo" class="java.math.BigDecimal"/>
+	<field name="custoMedio" class="java.math.BigDecimal"/>
+	<field name="custoTotal" class="java.math.BigDecimal"/>
 	<variable name="valorCalculado_1" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
@@ -21,16 +20,8 @@
 		<variableExpression><![CDATA[]]></variableExpression>
 	</variable>
 	<variable name="valor_1" class="java.math.BigDecimal" calculation="Sum">
-		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+		<variableExpression><![CDATA[$F{custoTotal}]]></variableExpression>
 	</variable>
-	<background>
-		<band height="802">
-			<image scaleImage="FillFrame" vAlign="Top">
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="74" width="555" height="707" uuid="b09af65e-facd-4260-9c46-9eaa2652d43c"/>
-				<imageExpression><![CDATA["d:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem\\src\\main\\resources\\relatorios\\triangle-blue.jpg"]]></imageExpression>
-			</image>
-		</band>
-	</background>
 	<title>
 		<band height="72">
 			<frame>
@@ -40,7 +31,7 @@
 					<textElement>
 						<font fontName="Roboto Lt" size="34" isBold="true"/>
 					</textElement>
-					<text><![CDATA[Relatório de Recepção]]></text>
+					<text><![CDATA[Relatório de Balanço Fisico]]></text>
 				</staticText>
 			</frame>
 		</band>
@@ -65,46 +56,46 @@
 				<textElement textAlignment="Left" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Pessoa]]></text>
+				<text><![CDATA[Item]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="278" y="1" width="61" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="1bd91397-5b86-4b84-b647-f4d84be63eb0"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Emissão]]></text>
+				<text><![CDATA[Saldo]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="340" y="1" width="103" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="88fe916c-7084-418e-8eea-3520e4bc71d8"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Conta]]></text>
+				<text><![CDATA[Media]]></text>
 			</staticText>
 			<staticText>
 				<reportElement mode="Opaque" x="444" y="1" width="110" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="63523295-38da-4eb4-a6a8-b1734f935b23"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="10" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Valor]]></text>
+				<text><![CDATA[Total]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="21">
-			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="true">
 				<reportElement x="444" y="-1" width="110" height="20" uuid="91a98606-355a-46d1-92fc-2328506bf149"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{custoTotal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="1" y="0" width="61" height="20" uuid="8c85bc97-cc2c-4ef8-afdb-e6d01526d268"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{item.id}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="d796b25a-09b7-4170-93fd-d7d353b8a042"/>
@@ -114,21 +105,21 @@
 				<textElement verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{pessoa.nome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{item.nome}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="278" y="0" width="61" height="20" uuid="50d64d05-ad7f-4c3d-966e-32a3c2089d3d"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="9" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{emissao}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{saldo}]]></textFieldExpression>
 			</textField>
-			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="340" y="0" width="103" height="20" uuid="738c6bf8-1e78-4ee9-8d79-95c98f854363"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Roboto Lt" size="9"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{conta.nome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{custoMedio}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

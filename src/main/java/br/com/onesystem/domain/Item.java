@@ -9,6 +9,7 @@ import br.com.onesystem.war.service.EstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -200,9 +201,13 @@ public class Item implements Serializable {
     }
 
     public BigDecimal getSaldo() {
-        return new EstoqueService().buscaSaldoTotalDeEstoque(this);
+        return new EstoqueService().buscaSaldoTotalDeEstoque(this, null);
     }
 
+      public BigDecimal getSaldo(Date data) {
+        return new EstoqueService().buscaSaldoTotalDeEstoque(this, data);
+    }
+       
     @Override
     public String toString() {
         return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", precos=" + precos + '}';

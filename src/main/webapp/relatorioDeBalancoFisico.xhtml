@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100 Responsive100">
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic">#{l.Relatorio_de_Balanco_Fisico}</h2>
+
+                            <div class="Container50 Responsive100">
+                                <h:panelGrid columns="2" style="margin-left: -1%;margin-top: -2%">
+
+
+                                    <h:panelGrid columns="3">
+                                        <p:inputText id="relatorioSaldoItem" readonly="true" placeholder="#{l.Item}" value="#{relatorioDeBalancoFisicoView.relatorio.item.nome}"/>
+                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this"
+                                                         update="@none">
+                                            <p:ajax event="dialogReturn" listener="#{relatorioDeBalancoFisicoView.selecionaItem}"
+                                                    process="@this" update="relatorioSaldoItem" />
+                                        </p:commandButton>
+                                        <p:commandButton action="#{relatorioDeBalancoFisicoView.removerItem()}" icon="fa fa-trash-o Fs16 White" update=":conteudo" styleClass="RedButton"/>
+                                    </h:panelGrid>
+                                    <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeBalancoFisicoView.relatorio.emissao}" placeholder="#{l.Data}"/> 
+                                </h:panelGrid>
+
+                                <br></br>
+                                <p:pickList id="pickList" value="#{relatorioDeBalancoFisicoView.campos}" showCheckbox="true" var="campos" itemLabel="#{campos}" itemValue="#{campos}"> 
+                                            <f:facet name="sourceCaption">#{l.Campos_Disponiveis}</f:facet>
+                                    <f:facet name="targetCaption">#{l.Campos_Selecionados}</f:facet>
+
+                                </p:pickList>
+                                <br></br>
+                                <p:commandButton value="#{l.Imprimir}" action="#{relatorioDeBalancoFisicoView.imprimir()}" icon="fa fa-print Fs16 White" update=":conteudo" 
+                                                 ajax="false"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

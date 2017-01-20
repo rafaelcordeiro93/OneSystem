@@ -24,17 +24,17 @@ public class EstoqueService implements Serializable {
         return new ArmazemDeRegistros<Estoque>(Estoque.class).listaTodosOsRegistros();
     }
     
-    public BigDecimal buscaSaldoTotalDeEstoque(Item item){
+    public BigDecimal buscaSaldoTotalDeEstoque(Item item, Date data){
         BigDecimal saldo = BigDecimal.ZERO;
-        List<SaldoDeEstoque> listaDeEstoque = buscaListaDeSaldoDeEstoque(item);
+        List<SaldoDeEstoque> listaDeEstoque = buscaListaDeSaldoDeEstoque(item, data);
         for(SaldoDeEstoque s : listaDeEstoque){
             saldo = saldo.add(s.getSaldo());
         }
         return saldo;
     }
 
-    public List<SaldoDeEstoque> buscaListaDeSaldoDeEstoque(Item item) {
-        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().eItem(item)
+    public List<SaldoDeEstoque> buscaListaDeSaldoDeEstoque(Item item, Date data) {
+        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().eItem(item).wEmissao(data)
                 .listaDeResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         for (Estoque e : estoque) {
