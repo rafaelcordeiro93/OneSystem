@@ -15,6 +15,11 @@ public class DateUtil {
         calendar.setTime(date);
         return date;
     }
+    
+    public long getDifererencaDeDiasEntreDatas(Date dataMaior, Date dataMenor) {
+        final long DIA = 24L * 60L * 60L * 1000L;
+        return ((dataMaior.getTime() - dataMenor.getTime()) / DIA);
+    }
 
     /**
      * @param data usado como base para calcular próxima data.

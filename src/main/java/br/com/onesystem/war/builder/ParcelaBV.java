@@ -56,6 +56,7 @@ public class ParcelaBV implements Serializable {
     private Cambio cambio;
     private Recepcao recepcao;
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+    private String diaDaSemana;
 
     public ParcelaBV() {
     }
@@ -160,11 +161,16 @@ public class ParcelaBV implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(vencimento);
     }
-    
-    public String getDiaDaSemana(){
-        return new DateUtil().getDiaDaSemana(vencimento);
+
+    public String getDiaDaSemana() {
+        diaDaSemana = new DateUtil().getDiaDaSemana(vencimento);
+        return diaDaSemana;
     }
 
+    public void setDiaDaSemana(String diaDaSemana) {
+        this.diaDaSemana = diaDaSemana;
+    }
+    
     public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
     }
@@ -258,6 +264,8 @@ public class ParcelaBV implements Serializable {
     }
 
     public Integer getDias() {
+        Long diasCalculados = new DateUtil().getDifererencaDeDiasEntreDatas(vencimento, new Date());
+        dias = diasCalculados.intValue();
         return dias;
     }
 
@@ -312,5 +320,5 @@ public class ParcelaBV implements Serializable {
     public void setTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
     }
-
+   
 }

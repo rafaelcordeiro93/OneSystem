@@ -50,6 +50,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -205,8 +206,9 @@ public class NotaEmitidaView implements Serializable {
 
             parcelas = new ArrayList<>();
             for (int i = 1; i <= numParcelas; i++) {
+                Long dias = new DateUtil().getDifererencaDeDiasEntreDatas(vencimento, new Date());
                 parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(valorParcelado)
-                        .comVencimento(vencimento).comTipoFormaDeRecebimentoParcela(f.getFormaDeRecebimento().getFormaPadraoDeParcela()).construir());
+                        .comVencimento(vencimento).comDias(dias.intValue()).comTipoFormaDeRecebimentoParcela(f.getFormaDeRecebimento().getFormaPadraoDeParcela()).construir());
                 vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
             }
         }

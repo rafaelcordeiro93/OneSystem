@@ -143,7 +143,7 @@
 
                                 <h:panelGrid columns="1" style="padding-top: 3px !important">
                                     <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.parcelas}" disabled="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
-                                                     maxValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
+                                                   maxValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
                                         <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:neParcelas"/>
                                     </p:inputNumber>
                                 </h:panelGrid>
@@ -234,17 +234,25 @@
 
                             <p:separator/>
 
-                            <p:dataTable id="neParcelas" var="parcelaBV" value="#{notaEmitidaView.parcelas}" 
+                            <p:dataTable id="neParcelas" var="parcelaBV" value="#{notaEmitidaView.parcelas}" editMode="cell" editable="true"
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                <p:column headerText="#{l.Parcela}" >                                        
+                                <p:ajax event="cellEdit" update=":conteudo:neParcelas" />
+
+                                <p:column headerText="#{l.Parcela}" width="5%">                                        
                                     <h:outputText value="#{parcelaBV.id}" />
                                 </p:column>
                                 <p:column headerText="#{l.Modalidade}" >                                        
                                     <h:outputText value="#{parcelaBV.tipoFormaDeRecebimentoParcela}"/>
                                 </p:column>
-                                <p:column headerText="#{l.Vencimento}">
-                                    <h:outputText value="#{parcelaBV.vencimentoFormatado}"/>
+                                <p:column headerText="#{l.Vencimento}">                                    
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{parcelaBV.vencimentoFormatado}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:calendar pattern="dd/MM/yyyy" value="#{parcelaBV.vencimento}">
+                                            </p:calendar>
+                                        </f:facet>
+                                    </p:cellEditor>
                                 </p:column>
                                 <p:column headerText="#{l.Valor}">
                                     <h:outputText value="#{parcelaBV.valor}"/>
@@ -277,10 +285,10 @@
             <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
                 <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Total em Dinheiro:" />
                 <p:outputLabel id="totalDinheiro" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiroFormatado}" />
-                
+
                 <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Valor a trocar:" />
                 <p:outputLabel id="valorATrocar" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valorRestante}" />
-               
+
                 <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Ganho de Câmbio:" />
                 <p:outputLabel id="ganhoDeCambio" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.ganhoDeCambio}" />
             </p:panelGrid>
