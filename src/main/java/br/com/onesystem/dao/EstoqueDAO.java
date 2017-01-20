@@ -10,6 +10,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,9 +44,21 @@ public class EstoqueDAO {
     }
 
     public EstoqueDAO wEmissao(Date emissao) {
-        consulta += " and e.emissao = :pEmissao ";
-        parametros.put("pEmissao", emissao);
+        if (emissao != null) {
+            Calendar dataAtual = getDataComHoraFimdoDia(emissao);
+            consulta += " and e.emissao <= :pEmissao ";
+            parametros.put("pEmissao", dataAtual.getTime());
+        }
         return this;
+    }
+
+    private Calendar getDataComHoraFimdoDia(Date emissao) {
+        Calendar dataAtual = Calendar.getInstance();
+        dataAtual.setTime(emissao);
+        dataAtual.set(Calendar.HOUR_OF_DAY, 23);
+        dataAtual.set(Calendar.MINUTE, 59);
+        dataAtual.set(Calendar.SECOND, 59);
+        return dataAtual;
     }
 
     public List<Estoque> listaDeResultados() {

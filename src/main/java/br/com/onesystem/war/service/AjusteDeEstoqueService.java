@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -28,14 +29,17 @@ public class AjusteDeEstoqueService implements Serializable {
     public BigDecimal buscaMediaDeCustoDeAjuste(Item item) {
         List<AjusteDeEstoque> lista = new AjusteDeEstoqueDAO().buscarAjustesDeEstoque().porItem(item)
                 .listaDeResultados();
-        if(lista.size() == 0){
+        if (lista.size() == 0) {
             return BigDecimal.ZERO;
         }
         BigDecimal media = BigDecimal.ZERO;
         for (AjusteDeEstoque ade : lista) {
+            if (ade.getCusto() == null) {
+                break;
+            }
             media = media.add(ade.getCusto());
-        }        
-        return media.divide(new BigDecimal(lista.size()));
+        }
+        return media.divide(new BigDecimal(lista.size()), 2, RoundingMode.HALF_UP);
     }
 
 }

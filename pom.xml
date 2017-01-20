@@ -219,6 +219,12 @@
             <artifactId>poi</artifactId>
             <version>3.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>ar.com.fdvs</groupId>
+            <artifactId>DynamicJasper</artifactId>
+            <version>5.0.9</version>
+        </dependency>
+        
     </dependencies>
 
     <build>

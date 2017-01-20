@@ -78,6 +78,9 @@
                         <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/relatorioDeCambio" />
                         <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/relatorioDeSaldoDeDivisaoDeLucro" />
                     </p:submenu>
+                    <p:submenu label="#{l.Estoque}" icon="fa fa-table">
+                        <p:menuitem value="#{l.Balanco_Fisico}" icon="fa fa-money" outcome="/relatorioDeBalancoFisico" />
+                    </p:submenu>
                 </p:submenu>
                 <p:separator />
             </pm:menu>
