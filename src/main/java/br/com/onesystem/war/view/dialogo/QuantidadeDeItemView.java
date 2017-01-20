@@ -47,7 +47,7 @@ public class QuantidadeDeItemView implements Serializable {
         HttpSession session = (HttpSession) ec.getSession(true);
 
         Item item = (Item) session.getAttribute("onesystem.item.token");
-        listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item);
+        listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item, null);
         criaLista();
     }
 

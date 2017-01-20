@@ -62,6 +62,7 @@ public class AjusteDeEstoqueView implements Serializable {
 
     public void add() {
         try {
+            
             AjusteDeEstoque novoRegistro = ajusteDeEstoque.construir();
             lancaEstoque(novoRegistro);
             new AdicionaDAO<AjusteDeEstoque>().adiciona(novoRegistro);

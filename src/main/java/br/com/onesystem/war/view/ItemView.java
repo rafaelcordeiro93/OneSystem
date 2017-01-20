@@ -173,7 +173,7 @@ public class ItemView implements Serializable {
     }
 
     private void inicializaEstoque() {
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada);
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada,null);
     }
 
     public void selecionaListaDePreco(SelectEvent event) {
