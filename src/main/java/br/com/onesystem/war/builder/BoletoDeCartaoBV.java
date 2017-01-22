@@ -23,7 +23,7 @@ public class BoletoDeCartaoBV implements Serializable {
 
     public BoletoDeCartaoBV(BoletoDeCartao boletoDeCartaoSelecionada) {
         this.id = boletoDeCartaoSelecionada.getId();
-        this.venda = boletoDeCartaoSelecionada.getVenda();
+        this.venda = boletoDeCartaoSelecionada.getNotaEmitida();
         this.cartao = boletoDeCartaoSelecionada.getCartao();
         this.emissao = boletoDeCartaoSelecionada.getEmissao();
         this.dias = boletoDeCartaoSelecionada.getDias();
@@ -101,10 +101,10 @@ public class BoletoDeCartaoBV implements Serializable {
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
+        return new BoletoDeCartaoBuilder().comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).comVenda(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
+        return new BoletoDeCartaoBuilder().comID(id).comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
     }
 }

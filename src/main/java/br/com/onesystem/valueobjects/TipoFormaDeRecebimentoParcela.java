@@ -14,5 +14,5 @@ public enum TipoFormaDeRecebimentoParcela {
 
     CHEQUE,
     CARTAO,
-    CONTA
+    TITULO
 }

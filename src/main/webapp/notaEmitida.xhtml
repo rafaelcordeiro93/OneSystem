@@ -133,7 +133,7 @@
                                          columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
                                 <h:panelGrid columns="2" style="margin: -2px;">
-                                    <p:inputText value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.nome}" size="35" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
+                                    <p:inputText value="#{notaEmitidaView.valoresAVista.formaDeRecebimento.nome}" size="35" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
                                     <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFormaDeRecebimentoAtivaView.abrirDialogo()}" process="@this"
                                                      update="@none">
                                         <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaFormaDeRecebimento}"
@@ -142,8 +142,8 @@
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" style="padding-top: 3px !important">
-                                    <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.parcelas}" disabled="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
-                                                   maxValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
+                                    <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.valoresAVista.parcelas}" disabled="#{notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
+                                                   maxValue="#{notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.valoresAVista.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
                                         <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:neParcelas"/>
                                     </p:inputNumber>
                                 </h:panelGrid>
@@ -170,64 +170,63 @@
 
                                 <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   placeholder="#{l.Acrescimo}" value="#{notaEmitidaView.valoresAVista.acrescimo}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Acrescimo}"/>
-                                    </pe:inputNumber>
+                                    </p:inputNumber>
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmDinheiro}"
-                                                    value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmDinheiro}"
+                                                   value="#{notaEmitidaView.valoresAVista.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   placeholder="#{l.Dinheiro}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Dinheiro}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" 
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" placeholder="#{l.Desconto}" decimalSeparator="," thousandSeparator="."
+                                                   styleClass="Wid90" value="#{notaEmitidaView.valoresAVista.desconto}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Desconto}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCredito}"
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCredito}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Credito}"
+                                                   value="#{notaEmitidaView.valoresAVista.credito}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Credito}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" 
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" placeholder="#{l.Despesa_Cobranca}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{notaEmitidaView.valoresAVista.despesaCobranca}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Despesa_Cobranca}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
-                                    <pe:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCheque}"
-                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCheque}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Cheque}"
+                                                   value="#{notaEmitidaView.valoresAVista.cheque}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Cheque}"/>
-                                    </pe:inputNumber> 
+                                    </p:inputNumber> 
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00"
-                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" placeholder="#{l.Frete}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{notaEmitidaView.valoresAVista.frete}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Frete}"/>
                                     </p:inputNumber>                                     
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCartao}"
-                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCartao}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Cartao}"
+                                                   value="#{notaEmitidaView.valoresAVista.boletoDeCartao}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.Cartao}"/>
                                     </p:inputNumber>   
 
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   placeholder="#{l.A_Faturar}" value="#{notaEmitidaView.valoresAVista.AFaturar}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
-                                        <f:passThroughAttribute name="placeholder" value="#{l.A_Faturar}"/>
                                     </p:inputNumber> 
 
-                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCredito}"/>
-                                    <p:commandButton value="#{l.Detalhes_Cheque}" disabled="#{!notaEmitidaView.formaDeRecebimentoOuPagamento.formaDeRecebimento.entradaEmCheque}"/>
+                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCredito}"/>
+                                    <p:commandButton value="#{l.Detalhes_Cheque}" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCheque}"/>
 
                                 </p:panelGrid>
                             </p:panelGrid>
@@ -235,9 +234,10 @@
                             <p:separator/>
 
                             <p:dataTable id="neParcelas" var="parcelaBV" value="#{notaEmitidaView.parcelas}" editMode="cell" editable="true"
+                                         selectionMode="single" selection="#{notaEmitidaView.parcelaSelecionada}" rowKey="#{parcelaBV.id}"
+                                         paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
-
-                                <p:ajax event="cellEdit" update=":conteudo:neParcelas" />
 
                                 <p:column headerText="#{l.Parcela}" width="5%">                                        
                                     <h:outputText value="#{parcelaBV.id}" />
@@ -249,23 +249,47 @@
                                     <p:cellEditor>
                                         <f:facet name="output"><h:outputText value="#{parcelaBV.vencimentoFormatado}"/></f:facet>
                                         <f:facet name="input">
-                                            <p:calendar pattern="dd/MM/yyyy" value="#{parcelaBV.vencimento}">
+                                            <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{parcelaBV.vencimento}">
+                                                <p:ajax event="dateSelect" update="vencimentoParcela diasParcela diaDaSemana" />
                                             </p:calendar>
                                         </f:facet>
                                     </p:cellEditor>
                                 </p:column>
                                 <p:column headerText="#{l.Valor}">
-                                    <h:outputText value="#{parcelaBV.valor}"/>
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{parcelaBV.valor}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:inputNumber maxValue="9999999.99" minValue="0.00" value="#{parcelaBV.valor}"
+                                                           decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                                <p:ajax event="blur" update="neParcelas"/>
+                                            </p:inputNumber> 
+                                        </f:facet>
+                                    </p:cellEditor>
                                 </p:column>
-                                <p:column headerText="#{l.Detalhes}">
-                                    <h:outputText value="#{parcelaBV.observacao}"/>
+                                <p:column headerText="#{l.Detalhes}" style="text-align: center">
+                                    <p:cellEditor>
+                                        <f:facet name="output"><h:outputText value="#{parcelaBV.observacao != null ? ' - ' : ''}"/></f:facet>
+                                        <f:facet name="input">
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{notaEmitidaView.detalharParcela}"/>
+                                        </f:facet>
+                                    </p:cellEditor>
+
                                 </p:column>
                                 <p:column headerText="#{l.Dias}">
-                                    <h:outputText value="#{parcelaBV.dias}"/>
+                                    <h:outputText id="diasParcela" value="#{parcelaBV.dias}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Dia_Semana}">
-                                    <h:outputText value="#{parcelaBV.diaDaSemana}"/>
+                                    <h:outputText id="diaDaSemana" value="#{parcelaBV.diaDaSemana}"/>
                                 </p:column>
+
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
+                                        <p:column id="totalParcelas" footerText="#{notaEmitidaView.totalParcelas}"/>
+                                        <p:column colspan="3"/>
+                                    </p:row>                                  
+                                </p:columnGroup>
+
                             </p:dataTable>
 
                             <p:separator/>
@@ -284,7 +308,7 @@
 
             <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
                 <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Total em Dinheiro:" />
-                <p:outputLabel id="totalDinheiro" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.formaDeRecebimentoOuPagamento.dinheiroFormatado}" />
+                <p:outputLabel id="totalDinheiro" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valoresAVista.dinheiroFormatado}" />
 
                 <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Valor a trocar:" />
                 <p:outputLabel id="valorATrocar" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valorRestante}" />
@@ -313,9 +337,11 @@
                 <p:column headerText="#{l.Valor}">  
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{cotacaoValores.valorAReceberFormatado}"/></f:facet>
-                        <f:facet name="input"><p:inputText value="#{cotacaoValores.valorAReceber}">
+                        <f:facet name="input">
+                            <p:inputText value="#{cotacaoValores.valorAReceber}">
                                 <p:ajax event="blur" listener="#{notaEmitidaView.addTotalCotacoes}" update="cotacaoValoresData :conteudo:valorATrocar :conteudo:ganhoDeCambio" />
-                            </p:inputText></f:facet>
+                            </p:inputText>
+                        </f:facet>
                     </p:cellEditor>
                 </p:column>
 
@@ -323,7 +349,57 @@
                     <p:outputLabel value="#{cotacaoValores.valorConvertidoRecebidoView}"/>
                 </p:column>   
 
-            </p:dataTable>
+            </p:dataTable>            
+
+        </p:dialog>
+
+        <p:dialog widgetVar="detalheCheque" width="900" header="#{l.Cambio}" closable="false" closeOnEscape="false">
+
+            <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
+                <p:inputText id="dcBanco" value="#{notaEmitidaView.parcelaSelecionada.banco}" placeholder="#{l.Banco}" />
+                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionarBanco}"
+                            process="@this" update="dcBanco" />
+                </p:commandButton>
+
+                <p:inputText value="#{notaEmitidaView.parcelaSelecionada.agencia}" />        
+
+                <p:inputText value="#{notaEmitidaView.parcelaSelecionada.conta}" />     
+
+                <p:inputText value="#{notaEmitidaView.parcelaSelecionada.numeroCheque}" />   
+
+                <p:inputText value="#{notaEmitidaView.parcelaSelecionada.emitente}" />      
+
+                <p:inputTextarea autoResize="true" rows="2" cols="26"
+                                 maxlength="200" value="#{notaEmitidaView.parcelaSelecionada.observacao}">
+                </p:inputTextarea>
+
+            </p:panelGrid>        
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Fechar}" onclick="PF('detalheCheque').show()" />
+
+        </p:dialog>
+
+        <p:dialog widgetVar="detalheCartao" width="900" header="#{l.Cambio}" closable="false" closeOnEscape="false">
+
+            <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
+                <p:inputText id="detalheParcelaCartao" readonly="true" placeholder="#{l.Cartao}" value="#{notaEmitidaView.parcelaSelecionada.cartao}"/> 
+                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaViewView.abrirDialogo()}" process="@this"
+                                  update="@none">
+                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaCartao}"
+                            process="@this" update="detalheParcelaCartao" />
+                </p:commandButton>
+
+                <p:inputText  placeholder="#{l.Codigo_Transacao}" value="#{notaEmitidaView.parcelaSelecionada.codigoTransacao}"/>  
+
+            </p:panelGrid>        
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Fechar}" onclick="PF('detalheCartao').show()" />
 
         </p:dialog>
 

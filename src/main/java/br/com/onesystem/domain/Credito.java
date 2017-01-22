@@ -21,6 +21,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -50,7 +51,7 @@ public class Credito implements Serializable {
     @Max(value = 999999999, message = "{valor_max}")
     @Column(nullable = false)
     private BigDecimal valor;
-    @ManyToOne
+    @OneToOne
     private NotaEmitida notaEmitida;
     @Enumerated(EnumType.STRING)
     private TipoContabil tipoContabil;

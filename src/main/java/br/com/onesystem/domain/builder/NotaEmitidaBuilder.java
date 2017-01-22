@@ -7,7 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.FormaDeRecebimento;
-import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
@@ -15,7 +15,6 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,14 +30,11 @@ public class NotaEmitidaBuilder {
     private List<ItemEmitido> itensEmitidos;
     private List<Titulo> titulos;
     private ListaDePreco listaDePreco;
-    private BigDecimal desconto = BigDecimal.ZERO;
-    private BigDecimal acrescimo = BigDecimal.ZERO;
-    private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
-    private BigDecimal frete;
-    private BigDecimal despesaCobranca;
+    private ValoresAVista valoresAVista;
     private Date emissao;
     private boolean cancelada = false;
     private List<Baixa> baixas;
+    private FormaDeRecebimento formaDeRecebimento;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -70,28 +66,8 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
-    public NotaEmitidaBuilder comDesconto(BigDecimal desconto) {
-        this.desconto = desconto;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comAcrescimo(BigDecimal acrescimo) {
-        this.acrescimo = acrescimo;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comFrete(BigDecimal frete) {
-        this.frete = frete;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
-        this.despesaCobranca = despesaCobranca;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento) {
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+    public NotaEmitidaBuilder comValoresAVista(ValoresAVista valoresAVista) {
+        this.valoresAVista = valoresAVista;
         return this;
     }
 
@@ -110,8 +86,13 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
+    public NotaEmitidaBuilder comFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
+        this.formaDeRecebimento = formaDeRecebimento;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, titulos, listaDePreco, desconto, acrescimo, frete, despesaCobranca, formaDeRecebimentoOuPagamento, baixas, emissao, cancelada);
+        return new NotaEmitida(id, pessoa, operacao, listaDePreco, valoresAVista, emissao, cancelada, formaDeRecebimento);
     }
 
 }

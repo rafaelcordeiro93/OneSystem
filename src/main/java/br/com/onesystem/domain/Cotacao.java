@@ -32,16 +32,20 @@ public class Cotacao implements Serializable {
     private BigDecimal valor;
     @NotNull(message = "{data_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date data;
+    private Date emissao;
+    @NotNull(message = "{conta_not_null}")
+    @ManyToOne(optional = false)
+    private Conta conta;
 
     public Cotacao() {
     }
 
-    public Cotacao(Long id, Moeda moeda, BigDecimal valor, Date data) throws DadoInvalidoException {
+    public Cotacao(Long id, Moeda moeda, BigDecimal valor, Date data, Conta conta) throws DadoInvalidoException {
         this.id = id;
         this.moeda = moeda;
         this.valor = valor;
-        this.data = data;
+        this.emissao = data;
+        this.conta = conta;
         ehValido();
     }
 
@@ -56,17 +60,21 @@ public class Cotacao implements Serializable {
     public BigDecimal getValor() {
         return valor;
     }
-    
+
     public String getValorFormatado() {
         return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(valor);
     }
 
-    public Date getData() {
-        return data;
+    public Conta getConta() {
+        return conta;
     }
-    
+
+    public Date getEmissao() {
+        return emissao;
+    }
+
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "data");
+        List<String> campos = Arrays.asList("valor", "data", "conta");
         new ValidadorDeCampos<Cotacao>().valida(this, campos);
     }
 
@@ -87,7 +95,7 @@ public class Cotacao implements Serializable {
 
     @Override
     public String toString() {
-        return "Cotacao{" + "id=" + id + ", moeda=" + moeda + ", valor=" + valor + '}';
+        return "Cotacao{" + "id=" + id + ", moeda=" + moeda + ", valor=" + valor + ", emissao=" + emissao + ", conta=" + conta + '}';
     }
 
 }

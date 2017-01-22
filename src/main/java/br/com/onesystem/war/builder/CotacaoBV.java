@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -13,13 +14,15 @@ public class CotacaoBV implements Serializable {
     private Long id;
     private Date data = DateUtil.getCurrentDateTime();
     private Moeda moeda;
+    private Conta conta;
     private BigDecimal valor;
 
     public CotacaoBV(Cotacao cotacaoSelecionada) {
         this.id = cotacaoSelecionada.getId();
-        this.data = cotacaoSelecionada.getData();
+        this.data = cotacaoSelecionada.getEmissao();
         this.moeda = cotacaoSelecionada.getMoeda();
         this.valor = cotacaoSelecionada.getValor();
+        this.conta = cotacaoSelecionada.getConta();
     }
 
     public CotacaoBV() {
@@ -57,11 +60,19 @@ public class CotacaoBV implements Serializable {
         this.valor = valor;
     }
 
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+    
     public Cotacao construir() throws DadoInvalidoException {
-        return new Cotacao(null, moeda, valor, data);
+        return new Cotacao(null, moeda, valor, data, conta);
     }
 
     public Cotacao construirComID() throws DadoInvalidoException {
-        return new Cotacao(id, moeda, valor, data);
+        return new Cotacao(id, moeda, valor, data, conta);
     }
 }

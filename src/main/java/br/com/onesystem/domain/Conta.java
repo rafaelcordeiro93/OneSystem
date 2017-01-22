@@ -54,6 +54,8 @@ public class Conta implements Serializable {
     @NotNull(message = "moeda_not_null")
     @ManyToOne(optional = false)
     private Moeda moeda;
+    @OneToMany(mappedBy = "conta")
+    private List<Cotacao> cotacoes;
     
     public Conta() {
     }

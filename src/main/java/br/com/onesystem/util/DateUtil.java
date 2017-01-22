@@ -15,7 +15,22 @@ public class DateUtil {
         calendar.setTime(date);
         return date;
     }
+
     
+    /**
+     * Utilizado para extrair a diferença em dias entre duas datas.
+     * 
+     * @param dataMaior a maior das datas para que seja efetuado a subtração
+     * @param dataMenor a menor das datas para ser subtraída.
+     * @return número de dias entre as datas.
+     * @see java.time.LocalDate
+     * @see java.time.Instant
+     * @see java.time.Period
+     * @deprecated Utilizar nova api de Datas do Java 8. Pode ser utilizada a
+     * classe Local Date convertendo um date para Instant, e buscando a
+     * diferença de dias entre datas através da Classe Period.
+     */
+    @Deprecated
     public long getDifererencaDeDiasEntreDatas(Date dataMaior, Date dataMenor) {
         final long DIA = 24L * 60L * 60L * 1000L;
         return ((dataMaior.getTime() - dataMenor.getTime()) / DIA);
@@ -44,7 +59,12 @@ public class DateUtil {
     /**
      * @param data deve ser enviado uma data para buscar o dia da semana
      * @return retorna o dia da semana
+     * @see java.time.LocalDate
+     * @see java.time.DayOfWeek
+     * @deprecated utilizar classes da nova API java 8 LocalDate e DayOfWeek 
+     * para trabalhar buscando o dia da semana.
      */
+    @Deprecated
     public String getDiaDaSemana(Date data) {
         com.ibm.icu.util.Calendar c = new com.ibm.icu.util.GregorianCalendar();
         c.setTime(data);

@@ -29,7 +29,7 @@ public class Cheque implements Serializable {
     @GeneratedValue(generator = "SEQ_CHEQUE", strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne
-    private NotaEmitida venda;
+    private NotaEmitida notaEmitida;
     @NotNull(message = "{numero_parcelas_not_null}")
     private Integer numeroParcela;
     @NotNull(message = "{valor_not_null}")
@@ -62,15 +62,17 @@ public class Cheque implements Serializable {
     @Length(min = 0, max = 120, message = "{observacao_lenght}")
     @Column(length = 120, nullable = true)
     private String observacao;
+    @ManyToOne
+    private ValoresAVista valoresAVista;
 
     public Cheque() {
     }
 
-    public Cheque(Long id, NotaEmitida venda, Integer numeroParcela, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
+    public Cheque(Long id, NotaEmitida notaEmitida, Integer numeroParcela, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
-            String observacao) throws DadoInvalidoException {
+            String observacao, ValoresAVista formaDeRecebimentoOuPagamento) throws DadoInvalidoException {
         this.id = id;
-        this.venda = venda;
+        this.notaEmitida = notaEmitida;
         this.numeroParcela = numeroParcela;
         this.valor = valor;
         this.emissao = emissao;
@@ -85,6 +87,7 @@ public class Cheque implements Serializable {
         this.descontos = descontos;
         this.emitente = emitente;
         this.observacao = observacao;
+        this.valoresAVista = formaDeRecebimentoOuPagamento;
         ehValido();
     }
 
@@ -98,8 +101,8 @@ public class Cheque implements Serializable {
         return id;
     }
 
-    public NotaEmitida getVenda() {
-        return venda;
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
     }
 
     public Integer getNumeroParcela() {
@@ -158,6 +161,10 @@ public class Cheque implements Serializable {
         return observacao;
     }
 
+    public ValoresAVista getValoresAVista() {
+        return valoresAVista;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -175,10 +182,10 @@ public class Cheque implements Serializable {
 
     @Override
     public String toString() {
-        return "Cheque{" + "id=" + id + ", venda=" + (venda == null ? null : venda.getId()) + ", numeroParcela=" + numeroParcela + ", valor=" + valor
+        return "Cheque{" + "id=" + id + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", numeroParcela=" + numeroParcela + ", valor=" + valor
                 + ", emissao=" + emissao + ", vencimento=" + vencimento + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
-                + ", descontos=" + descontos + ", emitente=" + emitente + ", observacao=" + observacao + '}';
+                + ", descontos=" + descontos + ", emitente=" + emitente + ", observacao=" + observacao + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
     }
 
 }

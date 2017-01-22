@@ -96,7 +96,7 @@ public class FormaDeRecebimento implements Serializable {
     @Column(nullable = false)
     private Integer diasPrimeiraParcela;
     @OneToMany(mappedBy = "formaDeRecebimento")
-    private List<FormaDeRecebimentoOuPagamento> notasEmitidas;
+    private List<ValoresAVista> notasEmitidas;
     @Enumerated(EnumType.STRING)
     private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
 

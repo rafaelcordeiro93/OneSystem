@@ -33,8 +33,8 @@
                 <p:column headerText="#{l.Id}" sortBy="#{cotacao.id}" filterBy="#{cotacao.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                     <h:outputText value="#{cotacao.id}" />
                 </p:column>
-                <p:column headerText="#{l.Data}" sortBy="#{cotacao.data}" filterBy="#{cotacao.data}" footerText="#{l.Data}" filterMatchMode="contains">
-                    <h:outputText value="#{cotacao.data}" />
+                <p:column headerText="#{l.Data}" sortBy="#{cotacao.emissao}" filterBy="#{cotacao.emissao}" footerText="#{l.Data}" filterMatchMode="contains">
+                    <h:outputText value="#{cotacao.emissao}" />
                 </p:column>
                 <p:column headerText="#{l.Moeda}" sortBy="#{cotacao.moeda.nome}" filterBy="#{cotacao.moeda.nome}" footerText="#{l.Moeda}" filterMatchMode="contains">
                     <h:outputText value="#{cotacao.moeda.nome}" />

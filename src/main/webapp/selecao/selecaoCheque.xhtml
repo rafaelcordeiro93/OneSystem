@@ -33,8 +33,8 @@
                 <p:column headerText="#{l.Id}" sortBy="#{cheque.id}" filterBy="#{cheque.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                     <h:outputText value="#{cheque.id}" />
                 </p:column>
-                <p:column headerText="#{l.Nota_Emitida}" sortBy="#{cheque.venda.pessoa.nome}" filterBy="#{cheque.venda.pessoa.nome}" footerText="#{l.Nota_Emitida}" filterMatchMode="contains">
-                    <h:outputText value="#{cheque.venda.pessoa.nome}" />
+                <p:column headerText="#{l.Nota_Emitida}" sortBy="#{cheque.notaEmitida.pessoa.nome}" filterBy="#{cnotaEmitida.venda.pessoa.nome}" footerText="#{l.Nota_Emitida}" filterMatchMode="contains">
+                    <h:outputText valunotaEmitidacheque.venda.pessoa.nome}" />
                 </p:column>
                 <p:column headerText="#{l.Banco}" sortBy="#{cheque.banco.nome}" filterBy="#{cheque.banco.nome}" footerText="#{l.Banco}" filterMatchMode="contains">
                     <h:outputText value="#{cheque.banco.nome}" />

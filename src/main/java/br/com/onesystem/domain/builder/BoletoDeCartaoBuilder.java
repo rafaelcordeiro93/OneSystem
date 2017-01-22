@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
@@ -23,6 +24,7 @@ public class BoletoDeCartaoBuilder {
     private String codTransacao;
     private SituacaoDeCartao tipoSituacao;
     private Integer numeroParcela;
+    private ValoresAVista formaDeRecebimentoOuPagamento;
 
     public BoletoDeCartaoBuilder() {
     }
@@ -32,8 +34,8 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
-    public BoletoDeCartaoBuilder comVenda(NotaEmitida venda) {
-        this.venda = venda;
+    public BoletoDeCartaoBuilder comNotaEmitida(NotaEmitida notaEmitida) {
+        this.venda = notaEmitida;
         return this;
     }
 
@@ -71,9 +73,14 @@ public class BoletoDeCartaoBuilder {
         this.numeroParcela = numeroParcela;
         return this;
     }
+    
+    public BoletoDeCartaoBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento){
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+        return this;
+    }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codTransacao, tipoSituacao, numeroParcela);
+        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codTransacao, tipoSituacao, numeroParcela, formaDeRecebimentoOuPagamento);
     }
 
 }

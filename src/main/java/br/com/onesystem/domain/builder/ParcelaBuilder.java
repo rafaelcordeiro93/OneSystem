@@ -8,6 +8,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
@@ -44,13 +45,12 @@ public class ParcelaBuilder {
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
-    private BoletoDeCartao boletoDeCartao;
-    private Integer dias;
+    private Cartao cartao;
     private String codigoTransacao;
     private SituacaoDeCartao situacaoDeCartao;
     private Moeda moeda;
     private Cambio cambio;
-    private Recepcao recepcao;    
+    private Recepcao recepcao;
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
 
     public ParcelaBuilder comID(Long ID) {
@@ -143,18 +143,13 @@ public class ParcelaBuilder {
         return this;
     }
 
-    public ParcelaBuilder comDias(Integer dias) {
-        this.dias = dias;
-        return this;
-    }
-
     public ParcelaBuilder comCodigoTransacao(String codigoTransacao) {
         this.codigoTransacao = codigoTransacao;
         return this;
     }
 
-    public ParcelaBuilder comBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
-        this.boletoDeCartao = boletoDeCartao;
+    public ParcelaBuilder comCartao(Cartao cartao) {
+        this.cartao = cartao;
         return this;
     }
 
@@ -177,14 +172,14 @@ public class ParcelaBuilder {
         this.recepcao = recepcao;
         return this;
     }
-    
-    public ParcelaBuilder comTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela){
+
+    public ParcelaBuilder comTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
         return this;
     }
 
     public ParcelaBV construir() {
-        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, boletoDeCartao, dias, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela);
+        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela);
     }
 
 }

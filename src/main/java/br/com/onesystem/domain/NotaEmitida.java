@@ -49,58 +49,45 @@ public class NotaEmitida implements Serializable {
     private Operacao operacao;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ItemEmitido> itensEmitidos;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Titulo> titulos;
+    @NotNull(message = "{forma_recebimento_not_null}")
+    @ManyToOne
+    private FormaDeRecebimento formaDeRecebimento;
     @ManyToOne
     private ListaDePreco listaDePreco;
-    @NotNull(message = "{valor_desconto_not_null}")
-    @Max(value = 9999999, message = "{valor_desconto_max}")
-    @Min(value = 0, message = "{valorDesconto_min}")
-    @Column(nullable = false)
-    private BigDecimal desconto;
-    @NotNull(message = "{valor_acrescimo_not_null}")
-    @Max(value = 9999999, message = "{valor_acrescimo_max}")
-    @Min(value = 0, message = "{valor_acrescimo_min}")
-    @Column(nullable = false)
-    private BigDecimal acrescimo;
-    @Min(value = 0, message = "{valor_frete}")
-    private BigDecimal frete;
-    @Min(value = 0, message = "{valor_despesasCobranca}")
-    private BigDecimal despesasCobranca;
     @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
+    private ValoresAVista valoresAVista;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Baixa> baixas;
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
     private boolean cancelada;
-    @OneToMany(mappedBy = "notaEmitida")
-    private List<Credito> creditos;
+    @OneToOne(mappedBy = "notaEmitida")
+    private Credito credito;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Cheque> cheques;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<BoletoDeCartao> cartoes;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Titulo> titulos;
 
     public NotaEmitida() {
     }
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos, List<Titulo> titulos, ListaDePreco listaDePreco, BigDecimal desconto, BigDecimal acrescimo, BigDecimal frete, BigDecimal despesasCobranca, FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento, List<Baixa> baixas, Date emissao, boolean cancelada) throws DadoInvalidoException {
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, ListaDePreco listaDePreco, ValoresAVista valoresAVista,
+            Date emissao, boolean cancelada, FormaDeRecebimento formaDeRecebimento) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
-        this.itensEmitidos = itensEmitidos;
-        this.titulos = titulos;
         this.listaDePreco = listaDePreco;
-        this.desconto = desconto;
-        this.acrescimo = acrescimo;
-        this.frete = frete;
-        this.despesasCobranca = despesasCobranca;
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
-        this.baixas = baixas;
+        this.valoresAVista = valoresAVista;
         this.emissao = emissao;
         this.cancelada = cancelada;
+        this.formaDeRecebimento = formaDeRecebimento;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "desconto",
-                "acrescimo", "frete", "despesasCobranca");
+        List<String> campos = Arrays.asList("pessoa", "operacao", "formaDeRecebimento");
         new ValidadorDeCampos<NotaEmitida>().valida(this, campos);
     }
 
@@ -116,6 +103,10 @@ public class NotaEmitida implements Serializable {
         return operacao;
     }
 
+    public FormaDeRecebimento getFormaDeRecebimento() {
+        return formaDeRecebimento;
+    }
+
     public List<ItemEmitido> getItensEmitidos() {
         return itensEmitidos;
     }
@@ -128,24 +119,8 @@ public class NotaEmitida implements Serializable {
         return listaDePreco;
     }
 
-    public BigDecimal getDesconto() {
-        return desconto;
-    }
-
-    public BigDecimal getAcrescimo() {
-        return acrescimo;
-    }
-
-    public BigDecimal getFrete() {
-        return frete;
-    }
-
-    public BigDecimal getDespesasCobranca() {
-        return despesasCobranca;
-    }
-
-    public FormaDeRecebimentoOuPagamento getFormaDeRecebimentoOuPagamento() {
-        return formaDeRecebimentoOuPagamento;
+    public ValoresAVista getValoresAVista() {
+        return valoresAVista;
     }
 
     public List<Baixa> getBaixas() {
@@ -158,6 +133,34 @@ public class NotaEmitida implements Serializable {
 
     public boolean isCancelada() {
         return cancelada;
+    }
+
+    public Credito getCredito() {
+        return credito;
+    }
+
+    public List<Cheque> getCheques() {
+        return cheques;
+    }
+
+    public List<BoletoDeCartao> getCartoes() {
+        return cartoes;
+    }
+
+    public void setCheques(List<Cheque> cheques) {
+        this.cheques = cheques;
+    }
+
+    public void setCartoes(List<BoletoDeCartao> cartoes) {
+        this.cartoes = cartoes;
+    }
+
+    public void setTitulos(List<Titulo> titulos) {
+        this.titulos = titulos;
+    }
+
+    public void setBaixas(List<Baixa> baixas) {
+        this.baixas = baixas;
     }
 
     @Override
@@ -177,7 +180,7 @@ public class NotaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + ", desconto=" + desconto + ", acrescimo=" + acrescimo + '}';
+        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + '}';
     }
 
 }

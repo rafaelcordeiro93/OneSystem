@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.FormaDeRecebimento;
-import br.com.onesystem.domain.FormaDeRecebimentoOuPagamento;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
@@ -31,11 +31,12 @@ public class NotaEmitidaBV implements Serializable {
     private ListaDePreco listaDePreco;
     private BigDecimal acrescimo = BigDecimal.ZERO;
     private BigDecimal desconto = BigDecimal.ZERO;
-    private FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento;
+    private ValoresAVista valoresAVista;
     private BigDecimal frete;
     private BigDecimal despesaCobranca;
     private Date emissao;
     private boolean cancelada = false;
+    private FormaDeRecebimento formaDeRecebimento;
 
     public NotaEmitidaBV(NotaEmitida notaEmitidaSelecionada) {
         this.id = notaEmitidaSelecionada.getId();
@@ -44,11 +45,8 @@ public class NotaEmitidaBV implements Serializable {
         this.titulos = notaEmitidaSelecionada.getTitulos();
         this.itensEmitidos = notaEmitidaSelecionada.getItensEmitidos();
         this.listaDePreco = notaEmitidaSelecionada.getListaDePreco();
-        this.acrescimo = notaEmitidaSelecionada.getAcrescimo();
-        this.desconto = notaEmitidaSelecionada.getDesconto();
-        this.formaDeRecebimentoOuPagamento = notaEmitidaSelecionada.getFormaDeRecebimentoOuPagamento();
-        this.frete = notaEmitidaSelecionada.getFrete();
-        this.despesaCobranca = notaEmitidaSelecionada.getDespesasCobranca();
+        this.valoresAVista = notaEmitidaSelecionada.getValoresAVista();
+        this.formaDeRecebimento = notaEmitidaSelecionada.getFormaDeRecebimento();
         this.emissao = notaEmitidaSelecionada.getEmissao();
         this.cancelada = notaEmitidaSelecionada.isCancelada();
         this.baixas = notaEmitidaSelecionada.getBaixas();
@@ -117,16 +115,24 @@ public class NotaEmitidaBV implements Serializable {
         return desconto;
     }
 
+    public FormaDeRecebimento getFormaDeRecebimento() {
+        return formaDeRecebimento;
+    }
+
+    public void setFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
+        this.formaDeRecebimento = formaDeRecebimento;
+    }
+
     public void setDesconto(BigDecimal desconto) {
         this.desconto = desconto;
     }
 
-    public FormaDeRecebimentoOuPagamento getFormaDeRecebimentoOuPagamento() {
-        return formaDeRecebimentoOuPagamento;
+    public ValoresAVista getValoresAVista() {
+        return valoresAVista;
     }
 
-    public void setFormaDeRecebimentoOuPagamento(FormaDeRecebimentoOuPagamento formaDeRecebimentoOuPagamento) {
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+    public void setValoresAVista(ValoresAVista valoresAVista) {
+        this.valoresAVista = valoresAVista;
     }
 
     public BigDecimal getFrete() {
@@ -168,18 +174,18 @@ public class NotaEmitidaBV implements Serializable {
     public void setBaixas(List<Baixa> baixas) {
         this.baixas = baixas;
     }
-    
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimentoOuPagamento(formaDeRecebimentoOuPagamento)
-                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).comFrete(frete)
-                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao)
+        return new NotaEmitidaBuilder().comValoresAVista(valoresAVista)
+                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).
+                comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao)
                 .cancelada(cancelada).comBaixas(baixas).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().comId(id).comAcrescimo(acrescimo).comDesconto(desconto).comFormaDeRecebimentoOuPagamento(formaDeRecebimentoOuPagamento)
-                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).comFrete(frete)
-                .comDespesaCobranca(despesaCobranca).comPessoa(pessoa).comTitulos(titulos)
+        return new NotaEmitidaBuilder().comId(id).comValoresAVista(valoresAVista)
+                .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
+                .comPessoa(pessoa).comTitulos(titulos)
                 .comEmissao(emissao).cancelada(cancelada).comBaixas(baixas).construir();
     }
 }

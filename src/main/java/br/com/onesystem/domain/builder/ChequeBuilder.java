@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -30,13 +31,14 @@ public class ChequeBuilder {
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
+    private ValoresAVista formaDeRecebimentoOuPagamento;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
         return this;
     }
 
-    public ChequeBuilder comVenda(NotaEmitida venda) {
+    public ChequeBuilder comNotaEmitida(NotaEmitida venda) {
         this.venda = venda;
         return this;
     }
@@ -110,9 +112,14 @@ public class ChequeBuilder {
         this.observacao = observacao;
         return this;
     }
+    
+    public ChequeBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento){
+        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+        return this;
+    }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, venda, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao);
+        return new Cheque(id, venda, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento);
     }
 
 }

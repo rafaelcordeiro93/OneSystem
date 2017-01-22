@@ -31,7 +31,7 @@ public class ChequeBV implements Serializable {
 
     public ChequeBV(Cheque chequeelecionada) {
         this.id = chequeelecionada.getId();
-        this.venda = chequeelecionada.getVenda();
+        this.venda = chequeelecionada.getNotaEmitida();
         this.numeroParcela = chequeelecionada.getNumeroParcela();
         this.valor = chequeelecionada.getValor();
         this.emissao = chequeelecionada.getEmissao();
@@ -180,13 +180,13 @@ public class ChequeBV implements Serializable {
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new ChequeBuilder().comVenda(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
+        return new ChequeBuilder().comNotaEmitida(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comObservacao(observacao).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
-        return new ChequeBuilder().comID(id).comVenda(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
+        return new ChequeBuilder().comID(id).comNotaEmitida(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comObservacao(observacao).construir();
     }

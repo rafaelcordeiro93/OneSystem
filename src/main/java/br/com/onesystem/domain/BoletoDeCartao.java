@@ -17,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +32,7 @@ public class BoletoDeCartao implements Serializable {
     @GeneratedValue(generator = "SEQ_BOLETODECARTAO", strategy = GenerationType.SEQUENCE)
     private Long id;
     @ManyToOne
-    private NotaEmitida venda;
+    private NotaEmitida notaEmitida;
     @NotNull(message = "{cartao_not_null}")
     @ManyToOne
     private Cartao cartao;
@@ -50,14 +51,16 @@ public class BoletoDeCartao implements Serializable {
     private SituacaoDeCartao situacao;
     @NotNull(message = "{numero_parcelas_not_null}")
     private Integer numeroParcela;
+    @OneToOne
+    private ValoresAVista valoresAVista;
 
     public BoletoDeCartao() {
     }
 
-    public BoletoDeCartao(Long id, NotaEmitida venda, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            Integer numeroParcela) throws DadoInvalidoException {
+    public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
+            Integer numeroParcela, ValoresAVista formaDeRecebimentoOuPagamento) throws DadoInvalidoException {
         this.id = id;
-        this.venda = venda;
+        this.notaEmitida = notaEmitida;
         this.cartao = cartao;
         this.emissao = emissao;
         this.dias = dias;
@@ -65,6 +68,7 @@ public class BoletoDeCartao implements Serializable {
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
         this.numeroParcela = numeroParcela;
+        this.valoresAVista = formaDeRecebimentoOuPagamento;
         ehValido();
     }
 
@@ -77,8 +81,8 @@ public class BoletoDeCartao implements Serializable {
         return id;
     }
 
-    public NotaEmitida getVenda() {
-        return venda;
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
     }
 
     public Cartao getCartao() {
@@ -109,6 +113,10 @@ public class BoletoDeCartao implements Serializable {
         return numeroParcela;
     }
 
+    public ValoresAVista getValoresAVista() {
+        return valoresAVista;
+    }
+        
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -126,7 +134,7 @@ public class BoletoDeCartao implements Serializable {
 
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (venda == null ? null : venda.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", numeroParcela=" + numeroParcela + '}';
+        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", numeroParcela=" + numeroParcela + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
     }
 
 }
