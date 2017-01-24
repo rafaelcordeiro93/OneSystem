@@ -4,6 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
@@ -96,6 +97,11 @@ public class CotacaoView implements Serializable {
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
+    }
+
+    public void selecionarConta(SelectEvent event) {
+        Conta conta = (Conta) event.getObject();
+        this.cotacao.setConta(conta);
     }
 
     public void selecionaMoeda(SelectEvent event) {

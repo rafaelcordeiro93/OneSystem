@@ -41,10 +41,10 @@ public class CotacaoDAO {
         return this;
     }
 
-    public CotacaoDAO naData(Date data) {
-        consulta += "and c.data between :pData and :pDataFinal";
-        parametros.put("pData", getDataComHoraZerada(data));
-        parametros.put("pDataFinal", getDataComHoraFimDoDia(data));
+    public CotacaoDAO naEmissao(Date emissao) {
+        consulta += "and c.emissao between :pEmissao and :pEmissaoFinal";
+        parametros.put("pEmissao", getDataComHoraZerada(emissao));
+        parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
         return this;
     }
 

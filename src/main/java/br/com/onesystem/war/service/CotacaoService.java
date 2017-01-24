@@ -18,7 +18,7 @@ public class CotacaoService implements Serializable {
     }
     
     public List<Cotacao> buscarCotacoesDoDiaAtual(){
-        return new CotacaoDAO().buscarCotacoes().naData(new Date()).listaDeResultados();
+        return new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
     }
 
 }

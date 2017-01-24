@@ -47,6 +47,7 @@
                             <p:separator/>
 
                             <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
+
                             <p:panelGrid columns="5" columnClasses="ui-panelgrid-cell ui-grid-col-3, ui-panelgrid-cell ui-grid-col-2, ui-panelgrid-cell, ui-panelgrid-cell,  ui-panelgrid-cell"
                                          layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
@@ -133,7 +134,7 @@
                                          columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
 
                                 <h:panelGrid columns="2" style="margin: -2px;">
-                                    <p:inputText value="#{notaEmitidaView.valoresAVista.formaDeRecebimento.nome}" size="35" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
+                                    <p:inputText value="#{notaEmitidaView.notaEmitida.formaDeRecebimento.nome}" size="35" placeholder="#{l.Forma_Recebimento}" styleClass="Wid90" readonly="true"/>
                                     <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFormaDeRecebimentoAtivaView.abrirDialogo()}" process="@this"
                                                      update="@none">
                                         <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaFormaDeRecebimento}"
@@ -142,8 +143,8 @@
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" style="padding-top: 3px !important">
-                                    <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.valoresAVista.parcelas}" disabled="#{notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
-                                                   maxValue="#{notaEmitidaView.valoresAVista.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.valoresAVista.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
+                                    <p:inputNumber placeholder="#{l.Parcelas}" value="#{notaEmitidaView.valoresAVista.parcelas}" disabled="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
+                                                   maxValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas}" minValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
                                         <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:neParcelas"/>
                                     </p:inputNumber>
                                 </h:panelGrid>
@@ -175,7 +176,7 @@
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber>
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmDinheiro}"
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmDinheiro}"
                                                    value="#{notaEmitidaView.valoresAVista.dinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    placeholder="#{l.Dinheiro}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
@@ -186,7 +187,7 @@
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber> 
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCredito}"
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Credito}"
                                                    value="#{notaEmitidaView.valoresAVista.credito}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
@@ -198,9 +199,9 @@
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber> 
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCheque}"
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Cheque}"
-                                                   value="#{notaEmitidaView.valoresAVista.cheque}">
+                                                   value="">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber> 
 
@@ -210,9 +211,9 @@
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber>                                     
 
-                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCartao}"
+                                    <p:inputNumber maxValue="9999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" placeholder="#{l.Cartao}"
-                                                   value="#{notaEmitidaView.valoresAVista.boletoDeCartao}">
+                                                   value="#{notaEmitidaView.valoresAVista.boletoDeCartao.valor}">
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber>   
 
@@ -225,8 +226,8 @@
                                         <p:ajax event="blur" update="notaItemTotal"/>
                                     </p:inputNumber> 
 
-                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCredito}"/>
-                                    <p:commandButton value="#{l.Detalhes_Cheque}" disabled="#{!notaEmitidaView.valoresAVista.formaDeRecebimento.entradaEmCheque}"/>
+                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"/>
+                                    <p:commandButton value="#{l.Detalhes_Cheque}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"/>
 
                                 </p:panelGrid>
                             </p:panelGrid>
@@ -353,9 +354,10 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheCheque" width="900" header="#{l.Cambio}" closable="false" closeOnEscape="false">
+        <p:dialog widgetVar="detalheCheque" width="900" header="#{l.Detalhe}" closable="false" closeOnEscape="false">
 
             <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
+
                 <p:inputText id="dcBanco" value="#{notaEmitidaView.parcelaSelecionada.banco}" placeholder="#{l.Banco}" />
                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this"
                                  update="@none">
@@ -383,7 +385,7 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheCartao" width="900" header="#{l.Cambio}" closable="false" closeOnEscape="false">
+        <p:dialog widgetVar="detalheCartao" width="900" header="#{l.Cambio}" closable="false" closeOnEscape="false" >
 
             <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;width: 30%" styleClass="FormContent">
                 <p:inputText id="detalheParcelaCartao" readonly="true" placeholder="#{l.Cartao}" value="#{notaEmitidaView.parcelaSelecionada.cartao}"/> 

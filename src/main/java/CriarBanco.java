@@ -1,12 +1,8 @@
 
 
-import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.util.JPAUtil;
-import java.util.Calendar;
-import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 public class CriarBanco {
 

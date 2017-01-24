@@ -65,7 +65,7 @@ import org.primefaces.event.SelectEvent;
 @ManagedBean
 @ViewScoped
 public class NotaEmitidaView implements Serializable {
-    
+
     private ValoresAVistaBV valoresAVista;
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
@@ -79,10 +79,10 @@ public class NotaEmitidaView implements Serializable {
     private List<ParcelaBV> parcelas;
     private ParcelaBV parcelaSelecionada;
     private NotaEmitida novoRegistroNE;
-    
+
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
-    
+
     @ManagedProperty("#{cotacaoService}")
     private CotacaoService service;
 
@@ -93,7 +93,7 @@ public class NotaEmitidaView implements Serializable {
         limparJanela();
         limpaSessao();
     }
-    
+
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
@@ -101,7 +101,7 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void limparJanela() {
         novoRegistroNE = null;
         notaEmitida = new NotaEmitidaBV();
@@ -109,11 +109,10 @@ public class NotaEmitidaView implements Serializable {
         notaEmitida.setItensEmitidos(new ArrayList<ItemEmitido>());
         valoresAVista = new ValoresAVistaBV();
         parcelas = new ArrayList<ParcelaBV>();
-        parcelaSelecionada = null;
         notaEmitidaSelecionada = null;
         inicializaCotacoes();
     }
-    
+
     private void limpaSessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -121,7 +120,7 @@ public class NotaEmitidaView implements Serializable {
             session.removeAttribute("onesystem.item.token");
         }
     }
-    
+
     private void inicializaCotacoes() {
         cotacaoLista = service.buscarCotacoesDoDiaAtual();
         cotacoes = new ArrayList<CotacaoValores>();
@@ -170,7 +169,7 @@ public class NotaEmitidaView implements Serializable {
             } else {
                 add();
             }
-            
+
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -208,7 +207,7 @@ public class NotaEmitidaView implements Serializable {
         novoRegistroNE.setCheques(cheques);
         novoRegistroNE.setTitulos(titulos);
     }
-    
+
     private List<Estoque> criarBaixaDeEstoque(List<QuantidadeDeItemBV> lista) throws DadoInvalidoException {
         List<Estoque> estoquesBV = new ArrayList<Estoque>();
         for (QuantidadeDeItemBV q : lista) {
@@ -265,12 +264,12 @@ public class NotaEmitidaView implements Serializable {
             List<Baixa> baixas = new ArrayList<Baixa>();
             for (CotacaoValores c : cotacoes) {
                 if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
-                 Baixa baixa = new BaixaBuilder().cancelada(false)
-                        .comConta(c.getCotacao().getConta()).comDesconto(novoRegistroNE.getValoresAVista().getDesconto()).comEmissao(novoRegistroNE.getEmissao())
-                        .comNaturezaFinanceira(novoRegistroNE.getOperacao().getOperacaoFinanceira())
-                        .comPessoa(novoRegistroNE.getPessoa()).comReceita(novoRegistroNE.getOperacao().getVendaAVista()).
-                        comTotal(getTotalNota()).comValor(getTotalNota()).comNotaEmitida(novoRegistroNE).construir();   
-                }                
+                    Baixa baixa = new BaixaBuilder().cancelada(false)
+                            .comConta(c.getCotacao().getConta()).comDesconto(novoRegistroNE.getValoresAVista().getDesconto()).comEmissao(novoRegistroNE.getEmissao())
+                            .comNaturezaFinanceira(novoRegistroNE.getOperacao().getOperacaoFinanceira())
+                            .comPessoa(novoRegistroNE.getPessoa()).comReceita(novoRegistroNE.getOperacao().getVendaAVista()).
+                            comTotal(getTotalNota()).comValor(getTotalNota()).comNotaEmitida(novoRegistroNE).construir();
+                }
             }
             novoRegistroNE.setBaixas(baixas);
         }
@@ -287,7 +286,7 @@ public class NotaEmitidaView implements Serializable {
             alteraValorDeFormaDeRecebimento(formaDeRecebimento, resultado);
         }
     }
-    
+
     private void alteraValorDeFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento, BigDecimal resultado) {
         switch (formaDeRecebimento.getFormaPadraoDeEntrada()) {
             case DINHEIRO:
@@ -321,7 +320,7 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void updateItemNaLista() {
         try {
             if (itemEmitidoSelecionado != null) {
@@ -333,19 +332,19 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void deleteItemNaLista() {
         if (itemEmitidoSelecionado != null) {
             notaEmitida.getItensEmitidos().remove(itemEmitidoSelecionado);
             limparItemEmitido();
         }
     }
-    
+
     public void limparItemEmitido() {
         itemEmitido = new ItemEmitidoBV();
         itemEmitidoSelecionado = null;
     }
-    
+
     public String getTotalItensFormatado() {
         if (notaEmitida.getItensEmitidos().isEmpty()) {
             return "";
@@ -353,7 +352,7 @@ public class NotaEmitidaView implements Serializable {
             return configuracao.getMoedaPadrao().getSigla() + " " + NumberFormat.getNumberInstance().format(getTotalItens());
         }
     }
-    
+
     private BigDecimal getTotalItens() {
         BigDecimal total = BigDecimal.ZERO;
         for (ItemEmitido i : notaEmitida.getItensEmitidos()) {
@@ -384,14 +383,14 @@ public class NotaEmitidaView implements Serializable {
         Integer numParcelas = valoresAVista.getParcelas(); //Número de parcelas
         TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
         Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
-        
+
         if (numParcelas != null && numParcelas > 0) {
-            
+
             BigDecimal valorParcelado = getTotalNota().divide(new BigDecimal(numParcelas), 2, BigDecimal.ROUND_UP);
 
             // Busca o primeiro vencimento das parcelas
             Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
-            
+
             parcelas = new ArrayList<>();
             for (int i = 1; i <= numParcelas; i++) {
                 parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(valorParcelado)
@@ -406,32 +405,32 @@ public class NotaEmitidaView implements Serializable {
     public void selecionaCartao(SelectEvent event) {
         parcelaSelecionada.setCartao((Cartao) event.getObject());
     }
-    
+
     public void selecionaOperacao(SelectEvent event) {
         notaEmitida.setOperacao((Operacao) event.getObject());
     }
-    
+
     public void selecionaPessoa(SelectEvent event) {
         notaEmitida.setPessoa((Pessoa) event.getObject());
     }
-    
+
     public void selecionaListaDePreco(SelectEvent event) {
         notaEmitida.setListaDePreco((ListaDePreco) event.getObject());
     }
-    
+
     public void selecionaNotaEmitida(SelectEvent e) {
         NotaEmitida r = (NotaEmitida) e.getObject();
         notaEmitida = new NotaEmitidaBV(r);
         notaEmitidaSelecionada = r;
     }
-    
+
     public void selecionaItem(SelectEvent event) {
         itemEmitido.setItem((Item) event.getObject());
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
-    
+
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
         try {
             List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
@@ -440,18 +439,18 @@ public class NotaEmitidaView implements Serializable {
             ex.print();
         }
     }
-    
+
     public void selecionaItemEmitido(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
     }
-    
+
     public void selecionaFormaDeRecebimento(SelectEvent e) {
         FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
         notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
         calculaTotaisFormaDeRecebimento(formaDeRecebimento);
     }
-    
+
     public void selecionarBanco(SelectEvent event) {
         Banco banco = (Banco) event.getObject();
         parcelaSelecionada.setBanco(banco);
@@ -464,10 +463,10 @@ public class NotaEmitidaView implements Serializable {
         BigDecimal frete = notaEmitida.getFrete() == null ? BigDecimal.ZERO : notaEmitida.getFrete();
         BigDecimal despesaCobranca = notaEmitida.getDespesaCobranca() == null ? BigDecimal.ZERO : notaEmitida.getDespesaCobranca();
         BigDecimal desconto = notaEmitida.getDesconto() == null ? BigDecimal.ZERO : notaEmitida.getDesconto();
-        
+
         return getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
     }
-    
+
     public String getValorRestante() {
         BigDecimal total = valoresAVista.getDinheiro();
         BigDecimal valorAReceber = BigDecimal.ZERO;
@@ -478,7 +477,7 @@ public class NotaEmitidaView implements Serializable {
                 : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
                 : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber));
     }
-    
+
     public String getGanhoDeCambio() {
         BigDecimal total = valoresAVista.getDinheiro();
         BigDecimal valorAReceber = BigDecimal.ZERO;
@@ -489,7 +488,7 @@ public class NotaEmitidaView implements Serializable {
                 : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber).multiply(new BigDecimal(-1)))
                 : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO);
     }
-    
+
     public BigDecimal getTotalConvertidoRecebido() {
         BigDecimal total = BigDecimal.ZERO;
         for (CotacaoValores c : cotacoes) {
@@ -497,17 +496,17 @@ public class NotaEmitidaView implements Serializable {
         }
         return total;
     }
-    
+
     public String getTotalParcelas() {
         BigDecimal totalParcela = BigDecimal.ZERO;
         for (ParcelaBV p : parcelas) {
             totalParcela = totalParcela.add(p.getValor());
         }
-        
+
         return totalParcela.compareTo(BigDecimal.ZERO) == 0 ? ""
                 : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcela);
     }
-    
+
     private Long getIdParcela() {
         Long id = (long) 1;
         if (!parcelas.isEmpty()) {
@@ -519,7 +518,7 @@ public class NotaEmitidaView implements Serializable {
         }
         return id;
     }
-    
+
     private Long getCodigoItem() {
         Long id = (long) 1;
         if (!notaEmitida.getItensEmitidos().isEmpty()) {
@@ -537,111 +536,119 @@ public class NotaEmitidaView implements Serializable {
     public ValoresAVistaBV getValoresAVista() {
         return valoresAVista;
     }
-    
+
     public void setValoresAVista(ValoresAVistaBV valoresAVista) {
         this.valoresAVista = valoresAVista;
     }
-    
+
     public NotaEmitida getNotaEmitidaSelecionada() {
         return notaEmitidaSelecionada;
     }
-    
+
     public void setNotaEmitidaSelecionada(NotaEmitida notaEmitidaSelecionada) {
         this.notaEmitidaSelecionada = notaEmitidaSelecionada;
     }
-    
+
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
     }
-    
+
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-    
+
     public ItemEmitidoBV getItemEmitido() {
         return itemEmitido;
     }
-    
+
     public void setItemEmitido(ItemEmitidoBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-    
+
     public ItemEmitido getItemEmitidoSelecionado() {
         return itemEmitidoSelecionado;
     }
-    
+
     public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
         this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
-    
+
     public EstoqueBV getEstoqueBV() {
         return estoqueBV;
     }
-    
+
     public void setEstoqueBV(EstoqueBV estoqueBV) {
         this.estoqueBV = estoqueBV;
     }
-    
+
     public Configuracao getConfiguracao() {
         return configuracao;
     }
-    
+
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-    
+
     public CotacaoValores getCotacaoValoresSelecionado() {
         return cotacaoValoresSelecionado;
     }
-    
+
     public void setCotacaoValoresSelecionado(CotacaoValores cotacaoValoresSelecionado) {
         this.cotacaoValoresSelecionado = cotacaoValoresSelecionado;
     }
-    
+
     public List<Cotacao> getCotacaoLista() {
         return cotacaoLista;
     }
-    
+
     public void setCotacaoLista(List<Cotacao> cotacaoLista) {
         this.cotacaoLista = cotacaoLista;
     }
-    
+
     public List<CotacaoValores> getCotacoes() {
         return cotacoes;
     }
-    
+
     public void setCotacoes(List<CotacaoValores> cotacoes) {
         this.cotacoes = cotacoes;
     }
-    
+
     public List<ParcelaBV> getParcelas() {
         return parcelas;
     }
-    
+
     public void setParcelas(List<ParcelaBV> parcelas) {
         this.parcelas = parcelas;
     }
-    
+
     public ParcelaBV getParcelaSelecionada() {
         return parcelaSelecionada;
     }
-    
+
     public void setParcelaSelecionada(ParcelaBV parcelaSelecionada) {
         this.parcelaSelecionada = parcelaSelecionada;
     }
-    
+
+    public NotaEmitida getNovoRegistroNE() {
+        return novoRegistroNE;
+    }
+
+    public void setNovoRegistroNE(NotaEmitida novoRegistroNE) {
+        this.novoRegistroNE = novoRegistroNE;
+    }
+
     public ConfiguracaoService getConfiguracaoService() {
         return configuracaoService;
     }
-    
+
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
     }
-    
+
     public CotacaoService getService() {
         return service;
     }
-    
+
     public void setService(CotacaoService service) {
         this.service = service;
     }

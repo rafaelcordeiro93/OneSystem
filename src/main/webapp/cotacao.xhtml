@@ -48,11 +48,20 @@
                                                             decimalPlaces="2" value="#{cotacaoView.cotacao.valor}">
                                             </pe:inputNumber>             
                                         </h:panelGrid>
-                                        
+
                                         <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
                                             <p:outputLabel  value="#{l.Data}" style="text-align: right" />
                                             <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
                                         </h:panelGrid>
+
+                                        <h:panelGrid columns="2" style="margin-top: -1.5%">
+                                            <p:inputText id="extratoConta" readonly="true" placeholder="#{l.Conta}" value="#{cotacaoView.cotacao.conta.nome}" styleClass="Wid80"/>
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                                             update="@none">
+                                                <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionarConta}"
+                                                        process="@this" update="conteudo" />
+                                            </p:commandButton>
+                                        </h:panelGrid> 
                                     </p:panelGrid>
                                 </div>
                             </div>
