@@ -16,12 +16,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-
 import org.primefaces.event.SelectEvent;
-
 import ar.com.fdvs.dj.domain.builders.ColumnBuilderException;
 import br.com.onesystem.util.ImpressoraDeRelatorioItem;
-
 import java.io.IOException;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
@@ -40,11 +37,8 @@ public class RelatorioDeBalancoFisicoView implements Serializable {
     private List<Item> itens;
     private ImpressoraDeRelatorioItem impressora;
     private DualListModel<String> campos;
-    private JasperPrint print;
     private List<String> camposSource = new ArrayList<String>();
     private List<String> camposTarget = new ArrayList<String>();
-
-    private Map<String, Object> parametros;
 
     @ManagedProperty("#{itemService}")
     private ItemService service;
@@ -59,7 +53,7 @@ public class RelatorioDeBalancoFisicoView implements Serializable {
         criarCampos();
     }
 
-    public void imprimir() throws ColumnBuilderException, ClassNotFoundException, JRException, IOException {
+    public void imprimir() throws ClassNotFoundException, JRException, IOException {
         try {
             List<BalancoFisico> lista = new ArrayList<BalancoFisico>();
             String sigla = serviceConfigurcao.buscar().getMoedaPadrao().getSigla();
@@ -83,12 +77,16 @@ public class RelatorioDeBalancoFisicoView implements Serializable {
     }
 
     private void criarCampos() {
-        camposSource.add("ID");
-        camposSource.add("Nome");
-        camposSource.add("Saldo");
-        camposSource.add("Custo Médio");
-        camposSource.add("Custo Total");
-
+        camposSource.add(new BundleUtil().getMessage("id"));
+        camposSource.add(new BundleUtil().getMessage("nome"));
+        camposSource.add(new BundleUtil().getMessage("saldo"));
+        camposSource.add(new BundleUtil().getMessage("custo_medio"));
+        camposSource.add(new BundleUtil().getMessage("custo_total"));
+        camposSource.add(new BundleUtil().getMessage("marca"));
+        camposSource.add(new BundleUtil().getMessage("grupo"));
+        camposSource.add(new BundleUtil().getMessage("grupo_fiscal"));
+//        camposSource.add(new BundleUtil().getMessage("deposito"));
+//        camposSource.add(new BundleUtil().getMessage("saldo_por_deposito"));
         campos = new DualListModel<String>(camposSource, camposTarget);
     }
 

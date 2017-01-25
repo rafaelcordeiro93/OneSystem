@@ -24,7 +24,7 @@ public class Teste {
   List<BalancoFisico> balanco = new ArrayList<BalancoFisico>();
         List<Item> lista = service.buscarItems();
         for(Item item : lista){
-          balanco.add(new BalancoFisico(item, moeda.buscar().getMoedaPadrao(),service.custoMedio(item), new Date()));
+         // balanco.add(new BalancoFisico(item, moeda.buscar().getMoedaPadrao(),service.custoMedio(item), new Date()));
         }
         ImpressoraDeRelatorioConsole imp = new ImpressoraDeRelatorioConsole();
         
