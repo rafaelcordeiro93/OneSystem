@@ -37,56 +37,101 @@ public class ImpressoraDeRelatorioItem {
                 .setMargins(0, 0, 0, 0)
                 .setPrintBackgroundOnOddRows(true)
                 .setUseFullPageWidth(true)
+                //.setPageSizeAndOrientation(Page.Page_A4_Portrait())
+                // .addFirstPageImageBanner("diretorio", 800, 50, ImageBanner.ALIGN_RIGHT)
+                // .addImageBanner("diretorio", 800, 50, ImageBanner.ALIGN_RIGHT)
                 .setReportName("Relatorio")
                 .setAllowDetailSplit(true)
-                .setGrandTotalLegend("Total")
+                .setGrandTotalLegend(new BundleUtil().getMessage("total"))
+                .setGrandTotalLegendStyle(getSubTitleStyle())
+                //.addSubreportInGroupFooter(0, subreport)
                 //nao esta funcionando o style de subtitle, quando adiciona um style o campo fica em branco
                 .setDefaultStyles(getTitleStyle(), null, getColumnHeaderStyle(), getColumnDetailsStyle());
 
         AbstractColumn colunaId = ColumnBuilder.getNew()
                 .setColumnProperty("item.id", Long.class.getName())
-                .setTitle("ID").setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getMessage("id")).setWidth(new Integer(75))
                 .build();
 
         AbstractColumn colunaNome = ColumnBuilder.getNew()
                 .setColumnProperty("item.nome", String.class.getName())
-                .setTitle("Nome").setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getMessage("nome")).setWidth(new Integer(100))
                 .build();
 
         AbstractColumn colunaSaldo = ColumnBuilder.getNew()
                 .setColumnProperty("saldo", BigDecimal.class.getName()).setPattern("0.00")
-                .setTitle("Saldo").setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getMessage("saldo")).setWidth(new Integer(75))
                 .build();
 
         AbstractColumn colunaCustoMedio = ColumnBuilder.getNew()
                 .setColumnProperty("custoMedio", BigDecimal.class.getName())
-                .setTitle("Custo Medio").setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
+                .setTitle(new BundleUtil().getMessage("custo_medio")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
                 .build();
 
         AbstractColumn colunaCustoTotal = ColumnBuilder.getNew()
                 .setColumnProperty("custoTotal", BigDecimal.class.getName())
-                .setTitle("Custo Total").setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
+                .setTitle(new BundleUtil().getMessage("custo_total")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
                 .build();
 
+        AbstractColumn colunaMarca = ColumnBuilder.getNew()
+                .setColumnProperty("item.marca.nome", String.class.getName())
+                .setTitle(new BundleUtil().getMessage("marca")).setWidth(new Integer(100))
+                .build();
+
+        AbstractColumn colunaGrupoFiscal = ColumnBuilder.getNew()
+                .setColumnProperty("item.grupoFiscal.nome", String.class.getName())
+                .setTitle(new BundleUtil().getMessage("grupo_fiscal")).setWidth(new Integer(100))
+                .build();
+
+        AbstractColumn colunaGrupo = ColumnBuilder.getNew()
+                .setColumnProperty("item.grupo.nome", String.class.getName())
+                .setTitle(new BundleUtil().getMessage("grupo")).setWidth(new Integer(100))
+                .build();
+//
+//        AbstractColumn colunaDeposito = ColumnBuilder.getNew()
+//                .setColumnProperty("saldoPorDeposito.deposito.nome", String.class.getName())
+//                .setTitle(new BundleUtil().getMessage("deposito")).setWidth(new Integer(100))
+//                .build();
+//
+//        AbstractColumn colunaSaldoPorDeposito = ColumnBuilder.getNew()
+//                .setColumnProperty("saldoPorDeposito", List.class.getName())
+//                .setTitle(new BundleUtil().getMessage("saldo_por_deposito")).setWidth(new Integer(100))
+//                .build();
+
         for (Object a : campos) {
-            if (a.equals("ID")) {
+            if (a.equals(new BundleUtil().getMessage("id"))) {
                 drb.addColumn(colunaId);
             }
-            if (a.equals("Nome")) {
+            if (a.equals(new BundleUtil().getMessage("nome"))) {
                 drb.addColumn(colunaNome);
             }
-            if (a.equals("Saldo")) {
+            if (a.equals(new BundleUtil().getMessage("saldo"))) {
                 drb.addColumn(colunaSaldo);
             }
-            if (a.equals("Custo Médio")) {
+            if (a.equals(new BundleUtil().getMessage("custo_medio"))) {
                 drb.addColumn(colunaCustoMedio);
             }
-            if (a.equals("Custo Total")) {
+            if (a.equals(new BundleUtil().getMessage("custo_total"))) {
                 drb.addColumn(colunaCustoTotal);
                 drb.addGlobalFooterVariable(colunaCustoTotal, DJCalculation.SUM);
             }
+            if (a.equals(new BundleUtil().getMessage("marca"))) {
+                drb.addColumn(colunaMarca);
+            }
+            if (a.equals(new BundleUtil().getMessage("grupo"))) {
+                drb.addColumn(colunaGrupo);
+            }
+            if (a.equals(new BundleUtil().getMessage("grupo_fiscal"))) {
+                drb.addColumn(colunaGrupoFiscal);
+            }
+//            if (a.equals(new BundleUtil().getMessage("deposito"))) {
+//                drb.addColumn(colunaDeposito);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("saldo_por_deposito"))) {
+//                drb.addColumn(colunaSaldoPorDeposito);
+//            }
         }
-
+        
         DynamicReport dr = drb.build();
         JRDataSource ds = new JRBeanCollectionDataSource(lista);
         JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
@@ -97,7 +142,7 @@ public class ImpressoraDeRelatorioItem {
         FacesContext.getCurrentInstance().responseComplete();
 
     }
-
+   
     Font font = new Font(30, "Courier New", true);
 
     private Style getTitleStyle() {
@@ -118,8 +163,11 @@ public class ImpressoraDeRelatorioItem {
     private Style getSubTitleStyle() {
         Style subtitleStyle = new Style();
         subtitleStyle.setBackgroundColor(new Color(35, 98, 201));
+        subtitleStyle.setPadding(new Integer(3));
+        subtitleStyle.setBorder(Border.THIN());
         subtitleStyle.setTextColor(Color.WHITE);
         subtitleStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
+        subtitleStyle.setVerticalAlign(VerticalAlign.MIDDLE);
         subtitleStyle.setFont(Font.ARIAL_SMALL);
         subtitleStyle.setTransparency(Transparency.OPAQUE);
         return subtitleStyle;
@@ -127,15 +175,11 @@ public class ImpressoraDeRelatorioItem {
 
     private Style getColumnHeaderStyle() {
         Style hStyle = new Style();
-        // hStyle.setBorder(Border.THIN());
+        hStyle.setBorder(Border.THIN());
         hStyle.setTransparent(false);
         hStyle.setBackgroundColor(new Color(35, 98, 201));
         hStyle.setTextColor(Color.WHITE);
         hStyle.setBorderColor(Color.WHITE);
-        hStyle.setBorderBottom(Border.THIN());
-        hStyle.setBorderLeft(Border.THIN());
-        hStyle.setBorderRight(Border.THIN());
-        hStyle.setBorderTop(Border.THIN());
         hStyle.setPadding(3);
         hStyle.setHorizontalAlign(HorizontalAlign.CENTER);
         hStyle.setVerticalAlign(VerticalAlign.MIDDLE);

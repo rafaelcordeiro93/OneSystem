@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Moeda;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -20,12 +21,14 @@ public class BalancoFisico {
     private Moeda moedaPadrao;
     private BigDecimal custoMedio;
     private BigDecimal saldo;
+   
 
     public BalancoFisico(Item item, Moeda moedaPadrao, BigDecimal custoMedio, Date data) {
         this.item = item;
         this.custoMedio = custoMedio;
         this.moedaPadrao = moedaPadrao;
         this.saldo = item.getSaldo(data);
+       
     }
 
     public Item getItem() {

@@ -3,6 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.war.service.EstoqueService;
@@ -171,7 +172,7 @@ public class Item implements Serializable {
     public Comissao getComissao() {
         return comissao;
     }
-    
+
     public boolean isAtivo() {
         return ativo;
     }
@@ -204,10 +205,10 @@ public class Item implements Serializable {
         return new EstoqueService().buscaSaldoTotalDeEstoque(this, null);
     }
 
-      public BigDecimal getSaldo(Date data) {
+    public BigDecimal getSaldo(Date data) {
         return new EstoqueService().buscaSaldoTotalDeEstoque(this, data);
     }
-       
+
     @Override
     public String toString() {
         return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", precos=" + precos + '}';
