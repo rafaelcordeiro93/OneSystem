@@ -7,47 +7,47 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <div class="Container100 Responsive100">
-                                <div class="Container50 Responsive50">
-                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="margem" size="23" value="#{unidadeMedidaItemView.unidadeMedidaItem.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{unidadeMedidaItemView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoUnidadeMedidaItemView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{unidadeMedidaItemView.selecionaUnidadeMedidaItem}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>      
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="ajustedeestoque" readonly="true" placeholder="#{l.Id}" value="#{unidadeMedidaItemView.unidadeMedidaItem.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoUnidadeMedidaItemView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{unidadeMedidaItemView.selecionaUnidadeMedidaItem}" update=":conteudo"
-                                                        process="@this"  />
-                                            </p:commandButton>
-                                        </h:panelGrid>     
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.nome}"/>
 
-                                        <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
-                                        <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.sigla}" placeholder="#{l.Sigla}" maxlength="3" styleClass="Wid90"/>
-                                        <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.casasDecimais}" placeholder="#{l.Casas_Decimais}" maxlength="1" styleClass="Wid90"/>
-                                    </p:panelGrid>
-                                </div>
-                            </div>
+                            <p:outputLabel value="#{l.Sigla}"/>
+                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.sigla}" maxlength="3" />
 
-                            <div class="EmptyBox5"/>
+                            <p:outputLabel value="#{l.Casas_Decimais}"/>
+                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.casasDecimais}" maxlength="1"/>
+                        </p:panelGrid>
 
-                            <p:separator/>
-
-                            <p:commandButton value="#{l.Adicionar}" action="#{unidadeMedidaItemView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{unidadeMedidaItemView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{unidadeMedidaItemView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{unidadeMedidaItemView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{unidadeMedidaItemView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />
-
-                        </div>
                     </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{unidadeMedidaItemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{unidadeMedidaItemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{unidadeMedidaItemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{unidadeMedidaItemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{unidadeMedidaItemView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
                 </div>
             </div>
         </div>

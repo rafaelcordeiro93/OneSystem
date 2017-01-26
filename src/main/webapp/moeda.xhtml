@@ -7,56 +7,59 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <div class="Container50 Responsive100">
-                                <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                    <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%" columnClasses="Wid90">
-                                        <p:inputText value="#{moedaView.moeda.id}" placeholder="#{l.Id}" styleClass="Wid90" readonly="true"/>
-                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
-                                                         update="@none">
-                                            <p:ajax event="dialogReturn" listener="#{moedaView.selecionaMoeda}" update=":conteudo"
-                                                    process="@this"  />
-                                        </p:commandButton>
-                                    </h:panelGrid>   
-                                    <p:inputText value="#{moedaView.moeda.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
-                                    <p:inputText value="#{moedaView.moeda.sigla}" placeholder="#{l.Sigla}" maxlength="3" styleClass="Wid90"/>
 
-                                    <p:selectOneMenu id="advanced" value="#{moedaView.moeda.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
-                                                     effect="fade" var="t" style="width: 77%">
-                                        <f:selectItems value="#{moedaView.bandeiras}" var="tipoBandeira" itemLabel="#{tipoBandeira.nome}" itemValue="#{tipoBandeira}" />
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="margem" size="23" value="#{moedaView.moeda.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{moedaView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{moedaView.selecionaMoeda}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>  
 
-                                        <p:column style="width:10%">
-                                            <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{t}.png" />
-                                        </p:column>
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{moedaView.moeda.nome}"/>
 
-                                        <p:column>
-                                            <h:outputText value="#{t.nome}" />
-                                        </p:column>
-                                    </p:selectOneMenu>
+                            <p:outputLabel value="#{l.Sigla}"/>
+                            <p:inputText value="#{moedaView.moeda.sigla}"/>
 
-                                </p:panelGrid>
-                            </div>
+                            <p:outputLabel value="#{l.Tipo_Bandeira}"/>
+                            <p:selectOneMenu id="advanced" value="#{moedaView.moeda.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
+                                             effect="fade" var="t" style="width: 77%">
+                                <f:selectItems value="#{moedaView.bandeiras}" var="tipoBandeira" itemValue="#{tipoBandeira}" />
+                                <p:column style="width:10%">
+                                    <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{t}.png" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{t.nome}" />
+                                </p:column>
+                            </p:selectOneMenu>
 
-                            <div class="EmptyBox5"/>
-
-                            <p:separator/>
-
-                            <p:commandButton value="#{l.Adicionar}" action="#{moedaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{moedaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{moedaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{moedaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             immediate="true" styleClass="OrangeButton" />
-
-                        </div>
+                        </p:panelGrid>
                     </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{moedaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{moedaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{moedaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{moedaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" immediate="true" />
+
+
                 </div>
             </div>
         </div>

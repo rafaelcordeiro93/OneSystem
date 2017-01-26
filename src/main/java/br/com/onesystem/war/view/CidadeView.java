@@ -3,26 +3,18 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CidadeDAO;
-import br.com.onesystem.dao.GrupoDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Cidade;
-import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.CidadeBV;
-import br.com.onesystem.war.service.CidadeService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -47,7 +39,7 @@ public class CidadeView implements Serializable {
                 InfoMessage.adicionado();
                 limparJanela();
             } else {
-                throw new EDadoInvalidoException("¡Ya existe la ciudad!");
+                throw new EDadoInvalidoException("registro_ja_existe");
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -63,10 +55,10 @@ public class CidadeView implements Serializable {
                     InfoMessage.atualizado();
                     limparJanela();
                 } else {
-                    throw new EDadoInvalidoException(new BundleUtil().getMessage("cidade_ja_registrada"));
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_ja_existe"));
                 }
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("cidade_nao_registrada"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -90,6 +82,22 @@ public class CidadeView implements Serializable {
     private boolean validaCidadeExistente(Cidade novoRegistro) {
         List<Cidade> lista = new CidadeDAO().buscarCidades().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
+    }
+
+    public void buscaPorId() {
+        Long id = cidade.getId();
+        if (id != null) {
+            try {
+                CidadeDAO dao = new CidadeDAO();
+                Cidade c = dao.buscarCidades().porId(id).resultado();
+                cidadeSelecionada = c;
+                cidade = new CidadeBV(cidadeSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                cidade.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void selecionaCidade(SelectEvent e) {

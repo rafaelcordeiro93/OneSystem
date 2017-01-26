@@ -2,26 +2,19 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.DepositoDAO;
 import br.com.onesystem.dao.IvaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.IVA;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.IVABV;
-import br.com.onesystem.war.service.IVAService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.DepositoBV;
+import br.com.onesystem.war.builder.IVABV;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -92,12 +85,28 @@ public class IVAView implements Serializable {
         return lista.isEmpty();
     }
 
-        public void selecionaIVA(SelectEvent e) {
+    public void selecionaIVA(SelectEvent e) {
         IVA i = (IVA) e.getObject();
         iva = new IVABV(i);
         ivaSelecionada = i;
     }
-    
+
+    public void buscaPorId() {
+        Long id = iva.getId();
+        if (id != null) {
+            try {
+                IvaDAO dao = new IvaDAO();
+                IVA c = dao.buscarIVA().porId(id).resultado();
+                ivaSelecionada = c;
+                iva = new IVABV(ivaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                iva.setId(id);
+                die.print();
+            }
+        }
+    }
+
     public void limparJanela() {
         iva = new IVABV();
         ivaSelecionada = null;

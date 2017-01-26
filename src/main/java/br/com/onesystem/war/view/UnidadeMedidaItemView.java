@@ -2,28 +2,19 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.DepositoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.UnidadeMedidaItemDAO;
-import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.UnidadeMedidaItem;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.PessoaBV;
-import br.com.onesystem.war.builder.UnidadeMedidaItemBV;
-import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.exception.impl.IDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.DepositoBV;
+import br.com.onesystem.war.builder.UnidadeMedidaItemBV;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -47,8 +38,8 @@ public class UnidadeMedidaItemView implements Serializable {
                 new AdicionaDAO<UnidadeMedidaItem>().adiciona(novoRegistro);
                 InfoMessage.adicionado();
                 limparJanela();
-            }else{
-             throw new EDadoInvalidoException(new BundleUtil().getMessage("unidademedidaitem_ja_cadastrado"));
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("unidademedidaitem_ja_cadastrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -63,9 +54,8 @@ public class UnidadeMedidaItemView implements Serializable {
                     new AtualizaDAO<UnidadeMedidaItem>(UnidadeMedidaItem.class).atualiza(unidadeMedidaItemExistente);
                     InfoMessage.atualizado();
                     limparJanela();
-                }
-                else{
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("unidademedidaitem_ja_cadastrado"));
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("unidademedidaitem_ja_cadastrado"));
                 }
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("unidademedidaitem_nao_cadastrado"));
@@ -98,6 +88,22 @@ public class UnidadeMedidaItemView implements Serializable {
         UnidadeMedidaItem u = (UnidadeMedidaItem) e.getObject();
         unidadeMedidaItem = new UnidadeMedidaItemBV(u);
         unidadeMedidaItemSelecionada = u;
+    }
+
+    public void buscaPorId() {
+        Long id = unidadeMedidaItem.getId();
+        if (id != null) {
+            try {
+                UnidadeMedidaItemDAO dao = new UnidadeMedidaItemDAO();
+                UnidadeMedidaItem c = dao.buscarUnidadeMedidaItem().porId(id).resultado();
+                unidadeMedidaItemSelecionada = c;
+                unidadeMedidaItem = new UnidadeMedidaItemBV(unidadeMedidaItemSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                unidadeMedidaItem.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void desfazer() {

@@ -4,15 +4,13 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.DepositoDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.DepositoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.CidadeBV;
+import br.com.onesystem.war.builder.DepositoBV;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -69,7 +67,7 @@ public class DepositoView implements Serializable {
 
     public void delete() {
         try {
-            if (depositoSelecionada != null ) {
+            if (depositoSelecionada != null) {
                 new RemoveDAO<Deposito>(Deposito.class).remove(depositoSelecionada, depositoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
@@ -82,14 +80,30 @@ public class DepositoView implements Serializable {
     }
 
     private boolean validaDepositoExistente(Deposito novoRegistro) {
-           List<Deposito> lista = new DepositoDAO().buscarDepositos().porNome(novoRegistro).listaDeResultados();
+        List<Deposito> lista = new DepositoDAO().buscarDepositos().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
-    
-     public void selecionaDeposito(SelectEvent e) {
+
+    public void selecionaDeposito(SelectEvent e) {
         Deposito d = (Deposito) e.getObject();
         deposito = new DepositoBV(d);
         depositoSelecionada = d;
+    }
+
+    public void buscaPorId() {
+        Long id = deposito.getId();
+        if (id != null) {
+            try {
+                DepositoDAO dao = new DepositoDAO();
+                Deposito c = dao.buscarDepositos().porId(id).resultado();
+                depositoSelecionada = c;
+                deposito = new DepositoBV(depositoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                deposito.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void limparJanela() {
@@ -97,7 +111,6 @@ public class DepositoView implements Serializable {
         depositoSelecionada = null;
     }
 
-   
     public void desfazer() {
         if (depositoSelecionada != null) {
             deposito = new DepositoBV(depositoSelecionada);

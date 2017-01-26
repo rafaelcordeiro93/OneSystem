@@ -5,7 +5,8 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Margem;
+import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -18,13 +19,13 @@ import javax.persistence.NoResultException;
  *
  * @author Rafael Fernando Rauber
  */
-public class MargemDAO {
+public class ListaDePrecoDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public MargemDAO() {
+    public ListaDePrecoDAO() {
         limpar();
     }
 
@@ -34,28 +35,34 @@ public class MargemDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public MargemDAO buscarMargemW() {
-        consulta += "select m from Margem m where m.id > 0 ";
+    public ListaDePrecoDAO buscarListaDePrecoW() {
+        consulta += "select l from ListaDePreco l where l.id > 0 ";
         return this;
     }
 
-    public MargemDAO porId(Long id) {
-        consulta += "and m.id = :pId ";
-        parametros.put("pId", id);
+    public ListaDePrecoDAO porId(Long id) {
+        consulta += "and l.id = :lId ";
+        parametros.put("lId", id);
         return this;
     }
 
-    public List<Margem> listaDeResultados() {
-        List<Margem> resultado = new ArmazemDeRegistros<Margem>(Margem.class)
+    public ListaDePrecoDAO porNome(ListaDePreco listaDePreco) {
+        consulta += " and l.nome = :lNome ";
+        parametros.put("lNome", listaDePreco.getNome());
+        return this;
+    }
+
+    public List<ListaDePreco> listaDeResultados() {
+        List<ListaDePreco> resultado = new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Margem resultado() throws DadoInvalidoException {
+    public ListaDePreco resultado() throws DadoInvalidoException {
         try {
-            Margem resultado = new ArmazemDeRegistros<Margem>(Margem.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);        
+            ListaDePreco resultado = new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {

@@ -1,10 +1,13 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.UnidadeMedidaItem;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 public class UnidadeMedidaItemDAO {
 
@@ -27,6 +30,12 @@ public class UnidadeMedidaItemDAO {
         return this;
     }
 
+    public UnidadeMedidaItemDAO porId(Long id) {
+        consulta += " and d.id = :dId ";
+        parametros.put("dId", id);
+        return this;
+    }
+
     public UnidadeMedidaItemDAO porNome(UnidadeMedidaItem unidadeMedidaItem) {
         consulta += " and d.nome = :dNome ";
         parametros.put("dNome", unidadeMedidaItem.getNome());
@@ -39,4 +48,16 @@ public class UnidadeMedidaItemDAO {
         limpar();
         return resultado;
     }
+
+    public UnidadeMedidaItem resultado() throws DadoInvalidoException {
+        try {
+            UnidadeMedidaItem resultado = new ArmazemDeRegistros<UnidadeMedidaItem>(UnidadeMedidaItem.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
+    }
+
 }

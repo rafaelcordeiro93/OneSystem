@@ -2,26 +2,20 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Receita;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.CotacaoBV;
-import br.com.onesystem.war.builder.UnidadeMedidaItemBV;
-import br.com.onesystem.war.service.CotacaoService;
-import br.com.onesystem.war.service.MoedaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.OperacaoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,7 +29,6 @@ public class CotacaoView implements Serializable {
 
     private CotacaoBV cotacao;
     private Cotacao cotacaoSelecionada;
-
     private Configuracao configuracao;
 
     @ManagedProperty("#{configuracaoService}")
@@ -113,6 +106,22 @@ public class CotacaoView implements Serializable {
         Cotacao a = (Cotacao) e.getObject();
         cotacao = new CotacaoBV(a);
         cotacaoSelecionada = a;
+    }
+
+    public void buscaPorId() {
+        Long id = cotacao.getId();
+        if (id != null) {
+            try {
+                CotacaoDAO dao = new CotacaoDAO();
+                Cotacao c = dao.buscarCotacoes().porId(id).resultado();
+                cotacaoSelecionada = c;
+                cotacao = new CotacaoBV(cotacaoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                cotacao.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void limparJanela() {

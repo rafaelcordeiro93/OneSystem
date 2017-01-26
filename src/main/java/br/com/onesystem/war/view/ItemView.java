@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Grupo;
@@ -154,6 +155,24 @@ public class ItemView implements Serializable {
         precoDeItemBV = new PrecoDeItemBV();
     }
 
+    public void buscaPorId() {
+        Long id = item.getId();
+        if (id != null) {
+            try {
+                ItemDAO dao = new ItemDAO();
+                Item c = dao.buscarItems().porId(id).resultado();
+                itemSelecionada = c;
+                inicializaDados();
+                item = new ItemBV(itemSelecionada);
+                tab = false;
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                item.setId(id);
+                die.print();
+            }
+        }
+    }
+
     public void selecionaItem(SelectEvent event) {
         itemSelecionada = (Item) event.getObject();
         inicializaDados();
@@ -173,7 +192,7 @@ public class ItemView implements Serializable {
     }
 
     private void inicializaEstoque() {
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada,null);
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(itemSelecionada, null);
     }
 
     public void selecionaListaDePreco(SelectEvent event) {

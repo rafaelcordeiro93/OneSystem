@@ -1,11 +1,13 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 public class ItemDAO {
 
@@ -30,8 +32,16 @@ public class ItemDAO {
 
     public ItemDAO porItem(Item item) {
         if (item != null) {
-            consulta += " and i.id = :iid ";
-            parametros.put("iid", item.getId());
+            consulta += " and i.id = :iId ";
+            parametros.put("iId", item.getId());
+        }
+        return this;
+    }
+
+    public ItemDAO porId(Long id) {
+        if (id != null) {
+            consulta += " and i.id = :iId ";
+            parametros.put("iId", id);
         }
         return this;
     }
@@ -42,4 +52,16 @@ public class ItemDAO {
         limpar();
         return resultado;
     }
+
+    public Item resultado() throws DadoInvalidoException {
+        try {
+            Item resultado = new ArmazemDeRegistros<Item>(Item.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
+    }
+
 }

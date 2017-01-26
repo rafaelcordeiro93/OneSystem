@@ -74,7 +74,7 @@ public class Cotacao implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "data", "conta");
+        List<String> campos = Arrays.asList("valor", "conta");
         new ValidadorDeCampos<Cotacao>().valida(this, campos);
     }
 

@@ -5,17 +5,17 @@ import br.com.onesystem.domain.builder.ListaPrecoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 
-public class ListaPrecoBV implements Serializable {
+public class ListaDePrecoBV implements Serializable {
 
     private Long id;
     private String nome;  
 
-    public ListaPrecoBV(ListaDePreco listaPrecoSelecionada) {
+    public ListaDePrecoBV(ListaDePreco listaPrecoSelecionada) {
         this.id = listaPrecoSelecionada.getId();
         this.nome = listaPrecoSelecionada.getNome();
     }
 
-    public ListaPrecoBV() {
+    public ListaDePrecoBV() {
     }
 
     public Long getId() {

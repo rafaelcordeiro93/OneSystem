@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.PessoaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Contato;
@@ -189,6 +190,28 @@ public class PessoaView implements Serializable {
         }
     }
 
+    public void buscaPorId() {
+        Long id = pessoa.getId();
+        if (id != null) {
+            try {
+                PessoaDAO dao = new PessoaDAO();
+                Pessoa p = dao.buscarPessoas().porId(id).resultado();
+                pessoaSelecionada = p;
+                pessoa = new PessoaBV(pessoaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                pessoa.setId(id);
+                die.print();
+            }
+        }
+    }
+
+    public void selecionaCidade(SelectEvent e) {
+        pessoa.setCidade((Cidade) e.getObject());
+    }
+    
+      
+
     public void desfazer() {
         if (pessoaSelecionada != null) {
             pessoa = new PessoaBV(pessoaSelecionada);
@@ -229,9 +252,6 @@ public class PessoaView implements Serializable {
         pessoa = new PessoaBV(pessoaSelecionada);
     }
 
-    public void selecionaCidade() {
-        pessoa.setCidade(cidadeSelecionada);
-    }
 
     public Pessoa getPessoaSelecionada() {
         return pessoaSelecionada;

@@ -1,27 +1,23 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AjusteDeEstoqueDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
-import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
-import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;
-import br.com.onesystem.valueobjects.TipoItem;
-import br.com.onesystem.war.builder.GrupoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -62,7 +58,7 @@ public class AjusteDeEstoqueView implements Serializable {
 
     public void add() {
         try {
-            
+
             AjusteDeEstoque novoRegistro = ajusteDeEstoque.construir();
             lancaEstoque(novoRegistro);
             new AdicionaDAO<AjusteDeEstoque>().adiciona(novoRegistro);
@@ -133,6 +129,22 @@ public class AjusteDeEstoqueView implements Serializable {
         AjusteDeEstoque a = (AjusteDeEstoque) e.getObject();
         ajusteDeEstoque = new AjusteDeEstoqueBV(a);
         ajusteDeEstoqueSelecionada = a;
+    }
+
+    public void buscaPorId() {
+        Long id = ajusteDeEstoque.getId();
+        if (id != null) {
+            try {
+                AjusteDeEstoqueDAO dao = new AjusteDeEstoqueDAO();
+                AjusteDeEstoque c = dao.buscarAjustesDeEstoque().porId(id).resultado();
+                ajusteDeEstoqueSelecionada = c;
+                ajusteDeEstoque = new AjusteDeEstoqueBV(ajusteDeEstoqueSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                ajusteDeEstoque.setId(id);
+                die.print();
+            }
+        }
     }
 
     public List<OperacaoFisica> getOperacao() {

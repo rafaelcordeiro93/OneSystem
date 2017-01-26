@@ -3,7 +3,9 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.MarcaDAO;
+import br.com.onesystem.dao.MarcaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -11,6 +13,7 @@ import br.com.onesystem.war.builder.MarcaBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.MarcaBV;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -89,6 +92,22 @@ public class MarcaView implements Serializable {
         Marca m = (Marca) e.getObject();
         marca = new MarcaBV(m);
         marcaSelecionada = m;
+    }
+
+    public void buscaPorId() {
+        Long id = marca.getId();
+        if (id != null) {
+            try {
+                MarcaDAO dao = new MarcaDAO();
+                Marca c = dao.buscarMarcas().porId(id).resultado();
+                marcaSelecionada = c;
+                marca = new MarcaBV(marcaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                marca.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void limparJanela() {

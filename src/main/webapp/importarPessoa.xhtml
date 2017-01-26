@@ -3,30 +3,24 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
+                        
+                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" >
 
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                            <p:fileUpload label="#{l.Procurar_arquivo}" uploadLabel="#{l.Fazer_upload}" cancelLabel="#{l.Cancelar}"   fileUploadListener="#{importarPessoaView.upload}" />
 
-                            <div class="Container100 Responsive100">
-                                <div class="Container50 Responsive50">
-                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                     
-                                        <p:fileUpload label="#{l.Procurar_arquivo}" uploadLabel="#{l.Fazer_upload}" cancelLabel="#{l.Cancelar}"   fileUploadListener="#{importarPessoaView.upload}" />
+                        </p:panelGrid>
 
-                                    </p:panelGrid>
-                                </div>
-                            </div>
 
-                        </div>
                     </div>
                 </div>
             </div>
