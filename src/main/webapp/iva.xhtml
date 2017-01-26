@@ -7,48 +7,46 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <div class="Container100 Responsive100">
-                                <div class="Container50 Responsive50">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="margem" size="26" value="#{iVAView.IVA.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{iVAView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoIVAView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{iVAView.selecionaIVA}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>     
 
-                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{iVAView.IVA.nome}" maxlength="60"/>
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="iva" readonly="true" placeholder="#{l.Id}" value="#{iVAView.IVA.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoIVAView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{iVAView.selecionaIVA}" update=":conteudo"
-                                                        process="@this"  />
-                                            </p:commandButton>
-                                        </h:panelGrid>     
-
-                                        <p:inputText value="#{iVAView.IVA.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
-
-                                        <p:inputText value="#{iVAView.IVA.iva}" placeholder="#{l.IVA}" maxlength="2" styleClass="Wid90"/>
-                                    </p:panelGrid>
-                                </div>
-                            </div>
-
-                            <div class="EmptyBox5"/>
-
-                            <p:separator/>
-
-                            <p:commandButton value="#{l.Adicionar}" action="#{iVAView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{iVAView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{iVAView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{iVAView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{iVAView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />
-                           
-                        </div>
+                            <p:outputLabel value="#{l.IVA}"/>
+                            <p:inputText value="#{iVAView.IVA.iva}" maxlength="2"/>
+                        </p:panelGrid>
                     </div>
+
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{iVAView.add()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{iVAView.update()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{iVAView.delete()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{iVAView.limparJanela()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{iVAView.desfazer()}"  styleClass="Mar2 orange-btn"  update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+
+
                 </div>
             </div>
         </div>

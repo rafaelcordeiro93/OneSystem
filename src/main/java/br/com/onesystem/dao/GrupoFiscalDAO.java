@@ -1,6 +1,6 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Comissao;
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
-public class ComissaoDAO {
+public class GrupoFiscalDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public ComissaoDAO() {
+    public GrupoFiscalDAO() {
         limpar();
     }
 
@@ -25,33 +25,33 @@ public class ComissaoDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public ComissaoDAO buscarComissaos() {
-        consulta += "select c from Comissao c where c.id > 0 ";
+    public GrupoFiscalDAO buscarGrupos() {
+        consulta += "select g from GrupoFiscal g where g.id > 0 ";
         return this;
     }
 
-    public ComissaoDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
-        parametros.put("cId", id);
+    public GrupoFiscalDAO porId(Long id) {
+        consulta += " and g.id = :gId ";
+        parametros.put("gId", id);
         return this;
     }
 
-    public ComissaoDAO porNome(Comissao comissao) {
-        consulta += " and c.nome = :cNome ";
-        parametros.put("cNome", comissao.getNome());
+    public GrupoFiscalDAO porNome(GrupoFiscal grupo) {
+        consulta += " and g.nome = :pNome ";
+        parametros.put("pNome", grupo.getNome());
         return this;
     }
 
-    public List<Comissao> listaDeResultados() {
-        List<Comissao> resultado = new ArmazemDeRegistros<Comissao>(Comissao.class)
+    public List<GrupoFiscal> listaDeResultados() {
+        List<GrupoFiscal> resultado = new ArmazemDeRegistros<GrupoFiscal>(GrupoFiscal.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Comissao resultado() throws DadoInvalidoException {
+    public GrupoFiscal resultado() throws DadoInvalidoException {
         try {
-            Comissao resultado = new ArmazemDeRegistros<Comissao>(Comissao.class)
+            GrupoFiscal resultado = new ArmazemDeRegistros<GrupoFiscal>(GrupoFiscal.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
@@ -59,5 +59,4 @@ public class ComissaoDAO {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
         }
     }
-
 }

@@ -7,105 +7,112 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">
-                            <h2 class="TexAlCenter BigTopic"></h2>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <p:tabView effect="fade" effectDuration="normal" id="tabsPessoa">
-                                <p:ajax event="tabChange" update="tabsPessoa"/>
+                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                                <p:tab title="#{l.Dados_Da_Pessoa}" id="detalhesPessoais">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="pessoaId" size="23" value="#{pessoaView.pessoa.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{pessoaView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{pessoaView.selecionaPessoa}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>   
 
-                                    <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="pessoa" readonly="true" placeholder="#{l.Id}" value="#{pessoaView.pessoa.id}"/>
-                                            <p:commandButton id="botaoPesquisa" icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{pessoaView.selecionaPessoa}"
-                                                        process="@this" update=":conteudo" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
-                                        <p:inputText id="pessoaNombre" styleClass="Wid90" value="#{pessoaView.pessoa.nome}" placeholder="#{l.Nome}"/>
-                                        <p:selectBooleanCheckbox itemLabel="Ativo" styleClass="MarTop5" id="pessoaStatus" value="#{pessoaView.pessoa.ativo}"/>                                        
-                                        <p:inputText id="pessoaRuc" styleClass="Wid90" value="#{pessoaView.pessoa.ruc}" placeholder="#{l.Ruc}"/>
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{pessoaView.pessoa.nome}"/>
 
-                                        <p:selectOneRadio id="pessoaTipo" value="#{pessoaView.pessoa.fisicaJuridica}">
-                                            <f:selectItem itemLabel="#{l.Fisica}" itemValue="false" />
-                                            <f:selectItem itemLabel="#{l.Juridica}" itemValue="true" />
-                                            <p:ajax update=":conteudo:tabsPessoa:pessoaCI
-                                                    :conteudo:tabsPessoa:pessoaNascimento
-                                                    :conteudo:tabsPessoa:pessoaConjuge" listener="#{pessoaView.fisicaJuridicaOnSelect()}"/>
-                                        </p:selectOneRadio>
-                                        <p:inputText id="pessoaCI" styleClass="Wid90" value="#{pessoaView.pessoa.fantasiaCI}" placeholder="#{pessoaView.pessoa.fantasiaCILabel}"/>
-                                        <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.pessoa.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.pessoa.nascimento}" placeholder="#{l.Nascimento}" styleClass="Wid100"/> 
-                                        <p:inputText id="pessoaConjuge" disabled="#{pessoaView.pessoa.fisicaJuridica}" styleClass="Wid90" value="#{pessoaView.pessoa.conjuge}" placeholder="#{l.Conjuge}"/>
+                            <p:outputLabel value="#{l.Ativo}"/>
+                            <p:selectBooleanCheckbox  value="#{pessoaView.pessoa.ativo}"/>  
 
-                                        <p:inputText id="pessoaDirecion" styleClass="Wid90" value="#{pessoaView.pessoa.direcao}" placeholder="#{l.Endereco}"/>
-                                        <p:inputText id="pessoaBarrio" styleClass="Wid90" value="#{pessoaView.pessoa.bairro}" placeholder="#{l.Bairro}"/>
-                                        <h:panelGrid columns="2" style="margin-top: -1%">
-                                            <p:inputText id="pessoaCiudad" disabled="true" value="#{pessoaView.pessoa.cidade.nome}" styleClass="Disabled" placeholder="#{l.Cidade}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" styleClass="MarLeft5" onclick="PF('pessoaCidadeDlg').show()"/>
-                                        </h:panelGrid>
-                                        <p:inputText id="pessoaDepartamento" styleClass="Wid90" value="#{pessoaView.pessoa.cidade.uf}" disabled="true" placeholder="#{l.Uf}"/>
+                            <p:outputLabel value="#{l.Ruc}"/>
+                            <p:inputText value="#{pessoaView.pessoa.ruc}"/>
 
-                                        <p:inputText id="pessoaPais" disabled="true" styleClass="Wid90" value="#{pessoaView.pessoa.cidade.pais}" placeholder="#{l.Pais}"/>
-                                        <p:inputMask mask="(99) 9999-9999?9" id="pessoaTelefone" styleClass="Wid90" value="#{pessoaView.pessoa.telefone}" placeholder="#{l.Telefone}"/>
-                                        <p:inputText id="pessoaContato" styleClass="Wid90" value="#{pessoaView.pessoa.contato}" placeholder="#{l.Contato}"/>
-                                        <p:inputText id="pessoaEmail" styleClass="Wid90" value="#{pessoaView.pessoa.email}" placeholder="#{l.Email}"/>
+                            <p:outputLabel value="#{l.Tipo_Pessoa}"/>
+                            <p:selectOneRadio id="pessoaTipo" value="#{pessoaView.pessoa.fisicaJuridica}">
+                                <f:selectItem itemLabel="#{l.Fisica}" itemValue="false" />
+                                <f:selectItem itemLabel="#{l.Juridica}" itemValue="true" />
+                                <p:ajax update=":conteudo:pessoaCI
+                                        :conteudo:pessoaNascimento
+                                        :conteudo:pessoaConjuge
+                                        :conteudo:pessoaCILabel" listener="#{pessoaView.fisicaJuridicaOnSelect()}"/>
+                            </p:selectOneRadio>
 
-                                        <p:selectBooleanCheckbox styleClass="MarTop5" id="pessoaClassificacaoCliente" value="#{pessoaView.pessoa.categoriaCliente}" itemLabel="#{l.Cliente}"/>
-                                        <p:selectBooleanCheckbox styleClass="MarTop5" id="pessoaClassificacaoProveedor" value="#{pessoaView.pessoa.categoriaFornecedor}" itemLabel="#{l.Fornecedor}"/>
-                                        <p:selectBooleanCheckbox styleClass="MarTop5" id="pessoaClassificacaoVendedor" value="#{pessoaView.pessoa.categoriaVendedor}" itemLabel="#{l.Vendedor}"/>
-                                        <p:selectBooleanCheckbox styleClass="MarTop5" id="pessoaClassificacaoPortador" value="#{pessoaView.pessoa.categoriaTransportador}" itemLabel="#{l.Transportador}"/>
+                            <p:outputLabel id="pessoaCILabel" value="#{pessoaView.pessoa.fantasiaCILabel}"/> 
+                            <p:inputText id="pessoaCI"  value="#{pessoaView.pessoa.fantasiaCI}"/>
 
-                                    </p:panelGrid>
-                                    <p:separator/>
+                            <p:outputLabel value="#{l.Nascimento}"/>
+                            <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.pessoa.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.pessoa.nascimento}" /> 
 
-                                    <p:commandButton value="#{l.Adicionar}" action="#{pessoaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                    <p:commandButton value="#{l.Atualizar}" action="#{pessoaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                    <p:commandButton value="#{l.Remover}" action="#{pessoaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                    <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                    <p:commandButton value="#{l.Desfazer}" action="#{pessoaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                                     styleClass="OrangeButton" />
+                            <p:outputLabel value="#{l.Conjuge}"/>
+                            <p:inputText id="pessoaConjuge" disabled="#{pessoaView.pessoa.fisicaJuridica}" value="#{pessoaView.pessoa.conjuge}" />
 
-                                    <div class="EmptyBox5"/>
-                                </p:tab>                                  
+                            <p:outputLabel value="#{l.Endereco}"/>
+                            <p:inputText value="#{pessoaView.pessoa.direcao}" />
 
-                            </p:tabView>              
-                        </div>
+                            <p:outputLabel value="#{l.Bairro}"/>
+                            <p:inputText  value="#{pessoaView.pessoa.bairro}"/>
+
+                            <p:outputLabel value="#{l.Cidade}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputText id="cidadeId" readonly="true" value="#{pessoaView.pessoa.cidade.nome}"/>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCidadeView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{pessoaView.selecionaCidade}" process="@this" update="cidadeId
+                                            :conteudo:pessoaUf
+                                            :conteudo:pessoaPais" />
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                            <p:outputLabel value="#{l.Uf}"/>
+                            <p:inputText id="pessoaUf" value="#{pessoaView.pessoa.cidade.uf}" readonly="true" />
+
+                            <p:outputLabel value="#{l.Pais}"/>
+                            <p:inputText id="pessoaPais" value="#{pessoaView.pessoa.cidade.pais}" readonly="true" />
+
+                            <p:outputLabel value="#{l.Telefone}"/>
+                            <p:inputMask mask="(99) 9999-9999?9"  value="#{pessoaView.pessoa.telefone}" />
+
+                            <p:outputLabel value="#{l.Contato}"/>
+                            <p:inputText value="#{pessoaView.pessoa.contato}" />
+
+                            <p:outputLabel value="#{l.Email}"/>
+                            <p:inputText  value="#{pessoaView.pessoa.email}" />
+
+                            <p:outputLabel value="#{l.Cliente}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.pessoa.categoriaCliente}" />
+
+                            <p:outputLabel value="#{l.Fornecedor}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.pessoa.categoriaFornecedor}"/>
+
+                            <p:outputLabel value="#{l.Vendedor}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.pessoa.categoriaVendedor}"/>
+
+                            <p:outputLabel value="#{l.Transportador}"/>
+                            <p:selectBooleanCheckbox  value="#{pessoaView.pessoa.categoriaTransportador}"/>
+
+                        </p:panelGrid>
                     </div>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{pessoaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{pessoaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{pessoaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{pessoaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+
+
                 </div>
             </div>
         </div>
-
-        <p:dialog header="#{l.Consulta_De_Cidades}" maximizable="true" width="950" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pessoaCidadeDlg" draggable="false">
-
-            <h:form id="cidadeDTForm">
-                <p:dataTable id="cidadeDT" var="cidade" value="#{pessoaView.cidadeLista}" selectionMode="single" selection="#{pessoaView.cidadeSelecionada}" rowKey="#{cidade.id}"
-                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             filteredValue="#{pessoaView.cidadesFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
-
-                    <p:column headerText="#{l.Id}" sortBy="#{cidade.id}" filterBy="#{cidade.id}" footerText="#{l.Id}" >                                        
-                        <h:outputText value="#{cidade.id}" />
-                    </p:column>
-                    <p:column headerText="#{l.Nome}" sortBy="#{cidade.nome}" filterBy="#{cidade.nome}" footerText="#{l.Nome}" >
-                        <h:outputText value="#{cidade.nome}" />
-                    </p:column>
-                    <p:column headerText="#{l.Uf}" sortBy="#{cidade.uf}" filterBy="#{cidade.uf}" footerText="#{l.Uf}">
-                        <h:outputText value="#{cidade.uf}" />
-                    </p:column>
-                    <p:column headerText="#{l.Pais}" sortBy="#{cidade.pais}" filterBy="#{cidade.pais}" footerText="#{l.Pais}">
-                        <h:outputText value="#{cidade.pais}" />
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-            <p:commandButton action="#{pessoaView.selecionaCidade()}" styleClass="Fright" 
-                             onclick="PF('pessoaCidadeDlg').hide()" value="#{l.Concluido}"
-                             update="conteudo"/>
-        </p:dialog>
 
     </ui:define>
 

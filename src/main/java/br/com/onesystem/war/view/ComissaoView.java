@@ -50,7 +50,7 @@ public class ComissaoView implements Serializable {
         try {
             Comissao comissaoExistente = comissao.construirComID();
             if (comissaoExistente.getId() != null) {
-                if (!validaComissaoExistente(comissaoExistente)) {
+                if (validaComissaoExistente(comissaoExistente)) {
                     new AtualizaDAO<Comissao>(Comissao.class).atualiza(comissaoExistente);
                     InfoMessage.atualizado();
                     limparJanela();
@@ -90,6 +90,22 @@ public class ComissaoView implements Serializable {
         comissaoSelecionada = c;
     }
 
+        public void buscaPorId() {
+        Long id = comissao.getId();
+        if (id != null) {
+            try {
+                ComissaoDAO dao = new ComissaoDAO();
+                Comissao c = dao.buscarComissaos().porId(id).resultado();
+                comissaoSelecionada = c;
+                comissao = new ComissaoBV(comissaoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                comissao.setId(id);
+                die.print();
+            }
+        }
+    }
+    
     public void limparJanela() {
         comissao = new ComissaoBV();
         comissaoSelecionada = null;

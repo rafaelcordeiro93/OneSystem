@@ -2,7 +2,9 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.GrupoFiscalDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.util.FatalMessage;
@@ -11,6 +13,7 @@ import br.com.onesystem.war.builder.GrupoFiscalBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.GrupoFiscalBV;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -81,6 +84,22 @@ public class GrupoFiscalView implements Serializable {
     public void selecionaGrupoFiscal(SelectEvent event) {
         grupoFiscalSelecionada = (GrupoFiscal) event.getObject();
         grupoFiscal = new GrupoFiscalBV(grupoFiscalSelecionada);
+    }
+
+    public void buscaPorId() {
+        Long id = grupoFiscal.getId();
+        if (id != null) {
+            try {
+                GrupoFiscalDAO dao = new GrupoFiscalDAO();
+                GrupoFiscal c = dao.buscarGrupos().porId(id).resultado();
+                grupoFiscalSelecionada = c;
+                grupoFiscal = new GrupoFiscalBV(grupoFiscalSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                grupoFiscal.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void selecionaIVA(SelectEvent event) {

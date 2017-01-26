@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="listaprecoid" size="23" value="#{listaDePrecoView.listaPreco.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{listaDePrecoView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{listaDePrecoView.selecionaListaDePreco}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>     
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{listaDePrecoView.listaPreco.nome}"/>
+
+
+                        </p:panelGrid>
+                    </div>
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{listaDePrecoView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{listaDePrecoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{listaDePrecoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{listaDePrecoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{listaDePrecoView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

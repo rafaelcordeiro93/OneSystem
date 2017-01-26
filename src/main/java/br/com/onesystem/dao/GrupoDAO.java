@@ -1,17 +1,13 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Grupo;
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 public class GrupoDAO {
 
@@ -34,6 +30,12 @@ public class GrupoDAO {
         return this;
     }
 
+    public GrupoDAO porId(Long id) {
+        consulta += " and g.id = :gId ";
+        parametros.put("gId", id);
+        return this;
+    }
+
     public GrupoDAO porNome(Grupo grupo) {
         consulta += " and g.nome = :pNome ";
         parametros.put("pNome", grupo.getNome());
@@ -45,5 +47,16 @@ public class GrupoDAO {
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
+    }
+
+    public Grupo resultado() throws DadoInvalidoException {
+        try {
+            Grupo resultado = new ArmazemDeRegistros<Grupo>(Grupo.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
     }
 }

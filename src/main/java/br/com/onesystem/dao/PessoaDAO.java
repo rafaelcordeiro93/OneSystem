@@ -1,6 +1,6 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Comissao;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
-public class ComissaoDAO {
+public class PessoaDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public ComissaoDAO() {
+    public PessoaDAO() {
         limpar();
     }
 
@@ -25,33 +25,33 @@ public class ComissaoDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public ComissaoDAO buscarComissaos() {
-        consulta += "select c from Comissao c where c.id > 0 ";
+    public PessoaDAO buscarPessoas() {
+        consulta += "select p from Pessoa p where p.id > 0 ";
         return this;
     }
 
-    public ComissaoDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
-        parametros.put("cId", id);
+    public PessoaDAO porNome(Pessoa pessoa) {
+        consulta += " and p.nome = :pNome ";
+        parametros.put("pNome", pessoa.getNome());
         return this;
     }
 
-    public ComissaoDAO porNome(Comissao comissao) {
-        consulta += " and c.nome = :cNome ";
-        parametros.put("cNome", comissao.getNome());
+    public PessoaDAO porId(Long id) {
+        consulta += " and p.id = :pId ";
+        parametros.put("pId", id);
         return this;
     }
 
-    public List<Comissao> listaDeResultados() {
-        List<Comissao> resultado = new ArmazemDeRegistros<Comissao>(Comissao.class)
+    public List<Pessoa> listaDeResultados() {
+        List<Pessoa> resultado = new ArmazemDeRegistros<Pessoa>(Pessoa.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Comissao resultado() throws DadoInvalidoException {
+    public Pessoa resultado() throws DadoInvalidoException {
         try {
-            Comissao resultado = new ArmazemDeRegistros<Comissao>(Comissao.class)
+            Pessoa resultado = new ArmazemDeRegistros<Pessoa>(Pessoa.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
@@ -59,5 +59,4 @@ public class ComissaoDAO {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
         }
     }
-
 }

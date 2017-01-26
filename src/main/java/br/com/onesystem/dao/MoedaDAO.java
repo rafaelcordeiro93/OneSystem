@@ -1,17 +1,13 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 public class MoedaDAO {
 
@@ -30,19 +26,25 @@ public class MoedaDAO {
     }
 
     public MoedaDAO buscarMoedas() {
-        consulta += "select g from Moeda g where g.id > 0 ";
+        consulta += "select m from Moeda m where m.id > 0 ";
         return this;
     }
 
     public MoedaDAO porNome(Moeda moeda) {
-        consulta += " and g.nome = :pNome ";
-        parametros.put("pNome", moeda.getNome());
+        consulta += " and m.nome = :mNome ";
+        parametros.put("mNome", moeda.getNome());
         return this;
     }
-    
+
     public MoedaDAO porSigla(Moeda moeda) {
-        consulta += " and g.sigla = :pSigla ";
-        parametros.put("pSigla", moeda.getSigla());
+        consulta += " and m.sigla = :mSigla ";
+        parametros.put("mSigla", moeda.getSigla());
+        return this;
+    }
+
+    public MoedaDAO porId(Long id) {
+        consulta += " and m.id = :mId ";
+        parametros.put("mId", id);
         return this;
     }
 
@@ -52,4 +54,16 @@ public class MoedaDAO {
         limpar();
         return resultado;
     }
+
+    public Moeda resultado() throws DadoInvalidoException {
+        try {
+            Moeda resultado = new ArmazemDeRegistros<Moeda>(Moeda.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
+    }
+
 }

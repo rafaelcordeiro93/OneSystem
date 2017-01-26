@@ -7,27 +7,19 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.MoedaBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoBandeira;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import br.com.onesystem.war.builder.MoedaBV;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.imageio.ImageIO;
 import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.UploadedFile;
 
 @ManagedBean
 @ViewScoped
@@ -35,7 +27,7 @@ public class MoedaView implements Serializable {
 
     private MoedaBV moeda;
     private Moeda moedaSelecionada;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -53,7 +45,7 @@ public class MoedaView implements Serializable {
             }
         } catch (DadoInvalidoException die) {
             die.print();
-        } 
+        }
     }
 
     public void update() {
@@ -86,18 +78,34 @@ public class MoedaView implements Serializable {
             di.print();
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
-        } 
+        }
     }
 
-    public void selecionaMoeda(SelectEvent e) {        
+    public void selecionaMoeda(SelectEvent e) {
         moedaSelecionada = (Moeda) e.getObject();
         moeda = new MoedaBV(moedaSelecionada);
     }
-    
-    public List<TipoBandeira> getBandeiras(){
-       return Arrays.asList(TipoBandeira.values());
+
+    public void buscaPorId() {
+        Long id = moeda.getId();
+        if (id != null) {
+            try {
+                MoedaDAO dao = new MoedaDAO();
+                Moeda c = dao.buscarMoedas().porId(id).resultado();
+                moedaSelecionada = c;
+                moeda = new MoedaBV(moedaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                moeda.setId(id);
+                die.print();
+            }
+        }
     }
-    
+
+    public List<TipoBandeira> getBandeiras() {
+        return Arrays.asList(TipoBandeira.values());
+    }
+
     private boolean validaMoedaExistente(Moeda novoRegistro) {
         List<Moeda> lista = new MoedaDAO().buscarMoedas().porNome(novoRegistro).porSigla(novoRegistro).listaDeResultados();
         if (moeda.getId() != null) {

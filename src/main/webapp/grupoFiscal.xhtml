@@ -7,47 +7,52 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
-                            <div class="Container100 Responsive100">
-                                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                                    <p:panelGrid columns="5" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="grupoFiscal" readonly="true" placeholder="#{l.Id}" value="#{grupoFiscalView.grupoFiscal.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoFiscalView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{grupoFiscalView.selecionaGrupoFiscal}"
-                                                        process="@this" update=":conteudo" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
-                                        <p:inputText value="#{grupoFiscalView.grupoFiscal.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="grupoFiscalIVA" readonly="true" placeholder="#{l.IVA}" value="#{grupoFiscalView.grupoFiscal.iva.nome}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoIVAView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{grupoFiscalView.selecionaIVA}"
-                                                        process="@this" update="grupoFiscalIVA" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
-                                    </p:panelGrid>
-                                </div>
 
-                            <div class="EmptyBox5"/>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <p:separator/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <p:commandButton value="#{l.Adicionar}" action="#{grupoFiscalView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{grupoFiscalView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{grupoFiscalView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{grupoFiscalView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{grupoFiscalView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="cidadeid" size="26" value="#{grupoFiscalView.grupoFiscal.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{grupoFiscalView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoFiscalView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{grupoFiscalView.selecionaGrupoFiscal}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>     
 
-                        </div>
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{grupoFiscalView.grupoFiscal.nome}" maxlength="60"/>
+
+                            <p:outputLabel value="#{l.IVA}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputText id="grupoFiscalIVA" size="26" readonly="true" value="#{grupoFiscalView.grupoFiscal.iva.nome}"/>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoIVAView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{grupoFiscalView.selecionaIVA}" process="@this" update="grupoFiscalIVA" />
+                                </p:commandButton>
+                            </h:panelGrid>
+
+                        </p:panelGrid>
                     </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{grupoFiscalView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{grupoFiscalView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{grupoFiscalView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{grupoFiscalView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{grupoFiscalView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+
+
                 </div>
             </div>
         </div>

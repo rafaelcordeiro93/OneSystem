@@ -7,10 +7,10 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.GrupoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.GrupoBV;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -83,6 +83,22 @@ public class GrupoView implements Serializable {
         Grupo g = (Grupo) e.getObject();
         grupo = new GrupoBV(g);
         grupoSelecionada = g;
+    }
+
+    public void buscaPorId() {
+        Long id = grupo.getId();
+        if (id != null) {
+            try {
+                GrupoDAO dao = new GrupoDAO();
+                Grupo c = dao.buscarGrupos().porId(id).resultado();
+                grupoSelecionada = c;
+                grupo = new GrupoBV(grupoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                grupo.setId(id);
+                die.print();
+            }
+        }
     }
 
     private boolean validaGrupoExistente(Grupo novoRegistro) {

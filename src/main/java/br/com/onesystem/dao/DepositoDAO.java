@@ -1,18 +1,13 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
 public class DepositoDAO {
 
@@ -35,6 +30,12 @@ public class DepositoDAO {
         return this;
     }
 
+    public DepositoDAO porId(Long id) {
+        consulta += " and d.id = :dId ";
+        parametros.put("dId", id);
+        return this;
+    }
+
     public DepositoDAO porNome(Deposito deposito) {
         consulta += " and d.nome = :dNome ";
         parametros.put("dNome", deposito.getNome());
@@ -47,4 +48,16 @@ public class DepositoDAO {
         limpar();
         return resultado;
     }
+
+    public Deposito resultado() throws DadoInvalidoException {
+        try {
+            Deposito resultado = new ArmazemDeRegistros<Deposito>(Deposito.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
+    }
+
 }
