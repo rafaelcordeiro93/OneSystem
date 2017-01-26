@@ -11,84 +11,46 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
+            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.layout]}" />
         </f:facet>
-        <title>#{l.Nome_Sistema}</title>
-
-        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
-        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
-        <h:outputScript name="js/layout.js" library="modena-layout" />
-        <h:outputScript name="js/personalizado.js" library="modena-layout" />
-
-        <ui:insert name="head" />
+        <title><ui:insert name="title">PrimeFaces Poseidon</ui:insert></title>
+        <h:outputScript name="js/nanoscroller.js" library="atlantis-layout" />
+        <h:outputScript name="js/layout.js" library="atlantis-layout" />
+        <ui:insert name="head"/>
     </h:head>
 
-    <h:body class="GrayModena Geometry">
-
+    <h:body styleClass="main-body">
         <f:loadBundle basename="label_messages" var="l"/>
-        <ui:include src="topbar.xhtml" />
+        <div class="layout-wrapper #{guestPreferences.overlayMenu ? 'layout-overlay-menu' : null} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">
+            <ui:include src="./topbar.xhtml" />
+            <ui:include src="./menu.xhtml" />
 
-        <div id="wrapper">
-            <div id="wrapperIndent">
+            <div class="layout-main">
+                <h:form id="conteudo">
+                    <p:growl id="growl" showDetail="true" life="10000" showSummary="true" />      
+                    <div class="layout-main-content">
+                        <ui:insert name="content"/>
+                    </div>                            
+                </h:form>
 
-                <ui:include src="layoutmenu.xhtml" />
-
-                <div id="layout-portlets-cover">
-                    <div class="Container96 Fnone MarAuto">
-
-                        <!-- SUB TOPBAR START -->
-
-                        <div class="Container100 UserLinks">
-                            <div class="ContainerIndent TexAlRight">
-                                <a href="#" class="DispInlBlock Fright BoldGray MarRight10 HoverEffect"><span class="Fs22 FontRobotoLight">#{templateView.nome}, #{l.Bem_Vindo}</span> <i class="icon-account_circle Fright Fs30"></i></a>
-                            </div>   
-
-                            <div class="EmptyBox10"></div>
-                        </div>
-
-                        <div class="Container100 UserLinks">
-                            <div class="ContainerIndent">
-                                <span class="BoldGray Fs18 FontRobotoLight Fleft ShowOnDesktop"><i class="icon-arrow-right"></i> #{templateView.janela}</span>
-
-                                <a href="#" class="BoldGray Fs16 FontRobotoLight Fright HoverEffect"><i class="icon-paper"></i> #{l.Notas}</a>
-                                <a href="#" class="BoldGray Fs16 FontRobotoLight Fright MarRight20 HoverEffect"><i class="icon-briefcase"></i> #{l.Tarefas}</a>
-                                <a href="#" class="BoldGray Fs16 FontRobotoLight Fright MarRight20 HoverEffect"><i class="icon-link"></i> #{l.Ultimos_Links}</a>
-                                <a href="#" class="BoldGray Fs16 FontRobotoLight Fright MarRight20 HoverEffect"><i class="icon-layers"></i> #{l.Faturas}</a>
-                            </div>
-
-                            <div class="EmptyBox5"></div>
-                        </div>
-
-                        <!-- SUB TOPBAR END -->
-                        <h:form id="conteudo">
-                            <p:growl id="growl" showDetail="true" life="10000" showSummary="true" />      
-                            <ui:insert name="content">
-                                Template
-                            </ui:insert>
-                        </h:form>
-
-                    </div>
-                </div>
-
-                <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
-                    <f:facet name="start">
-                        <p:graphicImage name="images/preloader.gif" library="modena-layout"/>
-                    </f:facet>
-
-                    <f:facet name="complete">
-                        <h:outputText value="" />
-                    </f:facet>
-                </p:ajaxStatus>
+                <ui:include src="./footer.xhtml" />
             </div>
         </div>
 
-        <h:outputStylesheet name="css/core-layout.css" library="modena-layout" />
-        <h:outputStylesheet name="css/animate.css" library="modena-layout" />
-        <h:outputStylesheet name="css/modena-font.css" library="modena-layout" />
-        <h:outputStylesheet name="css/ripple-effect.css" library="modena-layout" />
-        <h:outputStylesheet name="css/perfect-scrollbar.css" library="modena-layout" />
-        <h:outputStylesheet name="css/font-awesome.css" library="modena-layout" />
-        <h:outputStylesheet name="css/modena-layout.css" library="modena-layout" />
-        <h:outputStylesheet name="css/personalizado.css" library="personalizado" />
+        <p:ajaxStatus style="width:32px;height:32px;position:fixed;right:7px;bottom:7px">
+            <f:facet name="start">
+                <i class="fa fa-circle-o-notch fa-spin ajax-loader" aria-hidden="true"></i>
+            </f:facet>
+
+            <f:facet name="complete">
+                <h:outputText value="" />
+            </f:facet>
+        </p:ajaxStatus>
+
+        <h:outputStylesheet name="css/nanoscroller.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/animate.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/core-layout.css" library="atlantis-layout" />
     </h:body>
 
 </html>

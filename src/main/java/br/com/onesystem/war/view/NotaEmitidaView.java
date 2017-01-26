@@ -275,7 +275,7 @@ public class NotaEmitidaView implements Serializable {
         }
     }
 
-    // -------------- Operações para criação da entidade ----------------------
+    // -------------- Fim Operações para criação da entidade ------------------
     // ---------------------- Forma de Recebimento ----------------------------
     private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0

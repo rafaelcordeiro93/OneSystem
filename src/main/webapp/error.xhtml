@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <f:facet name="first">
@@ -12,38 +12,19 @@
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
         </f:facet>
-        <title>#{l.Nome_Sistema}</title>
-        <ui:insert name="head" />
+        <title>PrimeFaces Atlantis - Error</title>
     </h:head>
 
-    <h:body styleClass="RedModena Geometry" style="height:auto;">
-        
-        <div class="Wid90 DispBlock MarAuto MarTopPerc10 TexAlCenter">
-            <div class="Wid33 MarAuto WidAutoOnMobile">
-                <div class="EmptyBox30"></div>
-                <div class="Card ShadowEffect">
-                    <div class="EmptyBox40"></div>
-                    <i class="icon-error Fs100 Red"></i>
-                    <div class="Wid100 OvHidden Fs30 Red">Error Exception Occured!</div>
-                    <div class="Wid100 OvHidden Fs20 BoldGray">Please contact system administrator.</div>
-                    <div class="EmptyBox20"></div>
-                    <div class="Separator"></div>
-                    <div class="EmptyBox10"></div>
-                    <div class="Wid100"><p:button value="Back To Dashboard" icon="fa fa-dashboard" styleClass="RedButton Wid60 Fs18 White RaisedButton" href="dashboard.xhtml"/></div>
-                    <div class="EmptyBox20"></div>
-                </div>
-                <div class="Wid100 TexAlCenter MarTop20 Fs14 FontRobotoRegular Gray">
-                        <i class="fa fa-copyright"></i>  PrimeFaces Modena Theme And Layout <br/> All rights reserved.
-                    </div>
-            </div>
+    <h:body styleClass="exception-body">
+        <div class="exception-panel">
+            <p:graphicImage name="images/icon-error.png" library="atlantis-layout" />
+            
+            <h1>Error Occured</h1>
+            <p>An error occured, please try again later.</p>
+            <p:button value="Dashboard" styleClass="green-btn" outcome="/dashboard" />
         </div>
-        
-        <h:outputStylesheet name="css/core-layout.css" library="modena-layout" />
-        <h:outputStylesheet name="css/animate.css" library="modena-layout" />
-        <h:outputStylesheet name="css/modena-font.css" library="modena-layout" />
-        <h:outputStylesheet name="css/ripple-effect.css" library="modena-layout" />
-        <h:outputStylesheet name="css/font-awesome.css" library="modena-layout" />
-        <h:outputStylesheet name="css/modena-layout.css" library="modena-layout" />
+    
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
     </h:body>
 
 </html>

@@ -3,69 +3,63 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
-                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">                                  
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                            <div class="Container100 Responsive100">
-                                <div class="Container60 Responsive100">
-                                    <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="margem" readonly="true" size="13" placeholder="#{l.Id}" value="#{grupoDeMargemView.grupoDeMargem.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoDeMargemView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{grupoDeMargemView.selecionaGrupoDeMargem}" update=":conteudo"
-                                                        process="@this"  />
-                                            </p:commandButton>
-                                        </h:panelGrid>                                      
-                                        <p:inputText value="#{grupoDeMargemView.grupoDeMargem.nome}" placeholder="#{l.Nome}"            />
-                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.margem}" 
-                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Margem}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.custoFixo}" styleClass="Wid90"
-                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Custo_Fixo}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.frete}"                                            
-                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Frete}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.embalagem}"                                                  
-                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Embalagem}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.outrosCustos}"                                                      
-                                                        decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Outros_Custos}"/>
-                                        </pe:inputNumber>                                            
-                                    </p:panelGrid>
-                                </div>
-                            </div>
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
+                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2, ui-g-12 ui-md-1 ui-grc-2, ui-g-12 ui-md-2">
 
-                            <div class="EmptyBox5"/>
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="margem" size="23" value="#{grupoDeMargemView.grupoDeMargem.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="keyup" listener="#{grupoDeMargemView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search" action="#{selecaoGrupoDeMargemView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{grupoDeMargemView.selecionaGrupoDeMargem}" update=":conteudo" process="@this"  />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                            <p:separator/>
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{grupoDeMargemView.grupoDeMargem.nome}" />
 
-                            <p:commandButton value="#{l.Adicionar}" action="#{grupoDeMargemView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{grupoDeMargemView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{grupoDeMargemView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{grupoDeMargemView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{grupoDeMargemView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />
-                        </div>
+                            <p:outputLabel value="#{l.Margem}"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.margem}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+
+                            <p:outputLabel value="#{l.Custo_Fixo}"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.custoFixo}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+
+                            <p:outputLabel value="#{l.Frete}"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.frete}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+
+                            <p:outputLabel value="#{l.Embalagem}"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.embalagem}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+
+                            <p:outputLabel value="#{l.Outros_Custos}"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.grupoDeMargem.outrosCustos}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+
+                        </p:panelGrid>
                     </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{grupoDeMargemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{grupoDeMargemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{grupoDeMargemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{grupoDeMargemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{grupoDeMargemView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
                 </div>
             </div>
         </div>
+
 
     </ui:define>
 

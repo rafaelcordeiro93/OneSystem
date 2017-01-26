@@ -36,7 +36,7 @@ public class SelecaoItemView implements Serializable {
         opcoes.put("draggable", false);
         opcoes.put("height", 500);
         opcoes.put("contentWidth", "100%");
-        opcoes.put("contentHeight", "100%");
+        opcoes.put("contentHeight", "100%"); 
         opcoes.put("headerElement", "customheader");
 
         RequestContext.getCurrentInstance().openDialog("selecao/selecaoItem", opcoes, null);

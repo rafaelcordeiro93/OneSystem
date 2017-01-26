@@ -32,9 +32,12 @@ public class SelecaoGrupoDeMargemView implements Serializable {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("modal", true);
         opcoes.put("resizable", false);
-        opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", true);
-        opcoes.put("contentHeight", 500);
+        opcoes.put("width", 950);
+        opcoes.put("draggable", false);
+        opcoes.put("height", 500);
+        opcoes.put("contentWidth", "100%");
+        opcoes.put("contentHeight", "100%"); 
+        opcoes.put("headerElement", "customheader");
 
         RequestContext.getCurrentInstance().openDialog("selecao/selecaoGrupoDeMargem", opcoes, null);
     }

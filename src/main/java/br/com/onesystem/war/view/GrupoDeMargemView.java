@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.MargemDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Margem;
 import br.com.onesystem.util.FatalMessage;
@@ -68,6 +69,22 @@ public class GrupoDeMargemView implements Serializable {
             di.print();
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
+        }
+    }
+
+    public void buscaPorId() {
+        Long id = grupo.getId();
+        if (id != null) {
+            try {
+                MargemDAO dao = new MargemDAO();
+                Margem m = dao.buscarMargemW().porId(id).resultado();
+                grupoSelecionada = m;
+                grupo = new GrupoDeMargemBV(grupoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                grupo.setId(id);
+                die.print();
+            }
         }
     }
 
