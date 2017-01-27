@@ -2,19 +2,19 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.FormaDeRecebimentoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.FormaDeRecebimentoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
+import br.com.onesystem.war.builder.FormaDeRecebimentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -67,7 +67,7 @@ public class FormaDeRecebimentoView implements Serializable {
 
     public void update() {
         try {
-            
+
             if (formaDeRecebimentoSelecionada != null) {
                 FormaDeRecebimento formaDeRecebimentoExistente = formaDeRecebimento.construirComID();
                 new AtualizaDAO<FormaDeRecebimento>(FormaDeRecebimento.class).atualiza(formaDeRecebimentoExistente);
@@ -101,18 +101,34 @@ public class FormaDeRecebimentoView implements Serializable {
         formaDeRecebimentoSelecionada = a;
     }
 
+    public void buscaPorId() {
+        Long id = formaDeRecebimento.getId();
+        if (id != null) {
+            try {
+                FormaDeRecebimentoDAO dao = new FormaDeRecebimentoDAO();
+                FormaDeRecebimento c = dao.buscarFormasDeRecebimento().porId(id).resultado();
+                formaDeRecebimentoSelecionada = c;
+                formaDeRecebimento = new FormaDeRecebimentoBV(formaDeRecebimentoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                formaDeRecebimento.setId(id);
+                die.print();
+            }
+        }
+    }
+
     public List<TipoFormaDeRecebimento> getFormaDeRecebimentoPadrao() {
         return Arrays.asList(TipoFormaDeRecebimento.values());
     }
-    
+
     public List<TipoFormaDeRecebimentoParcela> getTipoFormaDeRecebimentoPadraoParcela() {
         return Arrays.asList(TipoFormaDeRecebimentoParcela.values());
     }
 
-     public List<TipoPeriodicidade> getTipoPeriodicidade() {
+    public List<TipoPeriodicidade> getTipoPeriodicidade() {
         return Arrays.asList(TipoPeriodicidade.values());
     }
-    
+
     public void limparJanela() {
         formaDeRecebimento = new FormaDeRecebimentoBV();
         formaDeRecebimentoSelecionada = null;
@@ -156,5 +172,4 @@ public class FormaDeRecebimentoView implements Serializable {
         this.serviceConfigurcao = serviceConfigurcao;
     }
 
-  
 }
