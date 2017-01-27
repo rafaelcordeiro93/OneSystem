@@ -2,6 +2,8 @@
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.MargemDAO;
 import br.com.onesystem.domain.Margem;
+import br.com.onesystem.domain.builder.GrupoDeMargemBuilder;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.DateUtil;
 import com.ibm.icu.util.Calendar;
 import java.util.Date;
@@ -18,19 +20,16 @@ import javax.persistence.NoResultException;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DadoInvalidoException {
 
-        try{
-        MargemDAO dao =  new MargemDAO();
-        
-//        Margem m = dao.buscarMargemW().porId(new Long(45341)).resultado();
-        
-//        System.out.println("Margem: " + m);
-        }catch(NoResultException nre){
+        try {
+            Margem m = new ArmazemDeRegistros<Margem>(Margem.class).find(new GrupoDeMargemBuilder().comID(new Long(1)).construir());
+
+            System.out.println("Margem: " + m);
+        } catch (NoResultException nre) {
             System.out.println("teste sadfsdfa");
         }
-                
-        
+
     }
 
 }

@@ -21,7 +21,7 @@ public class ArmazemDeRegistros<T> {
         CriteriaQuery<T> query = entityManager.getCriteriaBuilder().createQuery(classe);
         query.select(query.from(classe));
         List<T> lista = entityManager.createQuery(query).getResultList();
- 
+
         return lista;
     }
 
@@ -31,7 +31,7 @@ public class ArmazemDeRegistros<T> {
         adicionarParametrosNaConsulta(query, parametros);
         return query.getResultList();
     }
-    
+
     public T resultadoUnicoDaConsulta(String consulta, Map<String, Object> parametros) {
         EntityManager manager = JPAUtil.getEntityManager();
         TypedQuery<T> query = manager.createQuery(consulta, classe);
@@ -45,12 +45,9 @@ public class ArmazemDeRegistros<T> {
         }
     }
 
-    public T pegaORegistro() {
+    public T find(T objeto) {
         EntityManager entityManager = JPAUtil.getEntityManager();
-        CriteriaQuery<T> query = entityManager.getCriteriaBuilder().createQuery(classe);
-        query.select(query.from(classe));
-        T objeto = entityManager.createQuery(query).getSingleResult();
-        entityManager.close();
-        return objeto;
+        return entityManager.find(classe, objeto);
     }
+
 }

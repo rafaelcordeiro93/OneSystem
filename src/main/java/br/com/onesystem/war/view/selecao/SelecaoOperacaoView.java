@@ -2,69 +2,28 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.war.service.OperacaoService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoOperacaoView implements Serializable {
-
-    private Operacao operacaoSelecionada;
-    private List<Operacao> operacaoLista;
-    private List<Operacao> operacaoFiltradas;
+public class SelecaoOperacaoView extends BasicCrudMBImpl<Operacao> implements Serializable {
 
     @ManagedProperty("#{operacaoService}")
     private OperacaoService service;
 
     @PostConstruct
     public void init() {
-        operacaoLista = service.buscarOperacao();
+        beans = service.buscarOperacao();
     }
 
+    @Override
     public void abrirDialogo() {
-        Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("modal", true);
-        opcoes.put("resizable", false);
-        opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", false);
-        opcoes.put("contentHeight", 500);
-
-        RequestContext.getCurrentInstance().openDialog("selecao/selecaoOperacao", opcoes, null);
-    }
-
-    public void selecionar() {
-        RequestContext.getCurrentInstance().closeDialog(operacaoSelecionada);
-    }
-
-    public Operacao getOperacaoSelecionada() {
-        return operacaoSelecionada;
-    }
-
-    public void setOperacaoSelecionada(Operacao operacaoSelecionada) {
-        this.operacaoSelecionada = operacaoSelecionada;
-    }
-
-    public List<Operacao> getOperacaoLista() {
-        return operacaoLista;
-    }
-
-    public void setOperacaoLista(List<Operacao> operacaoLista) {
-        this.operacaoLista = operacaoLista;
-    }
-
-    public List<Operacao> getOperacaoFiltradas() {
-        return operacaoFiltradas;
-    }
-
-    public void setOperacaoFiltradas(List<Operacao> operacaoFiltradas) {
-        this.operacaoFiltradas = operacaoFiltradas;
+        exibirNaTela("selecaoOperacao");
     }
 
     public OperacaoService getService() {

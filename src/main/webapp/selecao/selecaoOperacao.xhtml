@@ -1,43 +1,24 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-
-    <h:head>
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-        </f:facet>
-        <title>#{l.Selecao_De_Operacaos}</title>
-        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
-        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
-        <h:outputScript name="js/layout.js" library="modena-layout" />
-        <h:outputScript name="js/personalizado.js" library="modena-layout" />
-
-    </h:head>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
 
 
-    <h:body>
-        <f:loadBundle basename="label_messages" var="l"/>
-        <h:form>
-            <p:dataTable id="operacaoDT" var="operacao" value="#{selecaoOperacaoView.operacaoLista}" selectionMode="single" selection="#{selecaoOperacaoView.operacaoSelecionada}" rowKey="#{operacao.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoOperacaoView.operacaoFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
+    <ui:define name="title">#{l.Selecao_De_Operacao}</ui:define>
 
-                <p:ajax event="rowSelect" process="@this" listener="#{selecaoOperacaoView.selecionar()}" />
+    <ui:define name="content">
 
-                <p:column headerText="#{l.Id}" sortBy="#{operacao.id}" filterBy="#{operacao.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
-                    <h:outputText value="#{operacao.id}" />
-                </p:column>
-                <p:column headerText="#{l.Nome}" sortBy="#{operacao.nome}" filterBy="#{operacao.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
-                    <h:outputText value="#{operacao.nome}" />
-                </p:column>
-            </p:dataTable>
-        </h:form>
-    </h:body>
+        <a:dataTable id="operacaoDT" managedBeanName="#{selecaoOperacaoView}">            
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.nome}" />
+            </p:column>
+        </a:dataTable>
 
-</html>
+    </ui:define>
+</ui:composition>

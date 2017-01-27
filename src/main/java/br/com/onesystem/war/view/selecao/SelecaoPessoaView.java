@@ -2,72 +2,28 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.war.service.PessoaService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoPessoaView implements Serializable {
-
-    private Pessoa pessoaSelecionada;
-    private List<Pessoa> pessoaLista;
-    private List<Pessoa> pessoasFiltradas;
+public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serializable {
 
     @ManagedProperty("#{pessoaService}")
     private PessoaService service;
 
     @PostConstruct
     public void init() {
-        pessoaLista = service.buscarPessoas();
+        beans = service.buscarPessoas();
     }
 
+    @Override
     public void abrirDialogo() {
-        Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("modal", true);
-        opcoes.put("resizable", false);
-        opcoes.put("width", 950);
-        opcoes.put("draggable", true);
-        opcoes.put("height", 500);        
-        opcoes.put("contentWidth", "100%");
-        opcoes.put("contentHeight", "100%");
-        opcoes.put("headerElement", "customheader");
-
-        RequestContext.getCurrentInstance().openDialog("selecao/selecaoPessoa", opcoes, null);
-    }
-
-    public void selecionar() {
-        RequestContext.getCurrentInstance().closeDialog(pessoaSelecionada);
-    }
-
-    public Pessoa getPessoaSelecionada() {
-        return pessoaSelecionada;
-    }
-
-    public void setPessoaSelecionada(Pessoa pessoaSelecionada) {
-        this.pessoaSelecionada = pessoaSelecionada;
-    }
-
-    public List<Pessoa> getPessoaLista() {
-        return pessoaLista;
-    }
-
-    public void setPessoaLista(List<Pessoa> pessoaLista) {
-        this.pessoaLista = pessoaLista;
-    }
-
-    public List<Pessoa> getPessoasFiltradas() {
-        return pessoasFiltradas;
-    }
-
-    public void setPessoasFiltradas(List<Pessoa> pessoasFiltradas) {
-        this.pessoasFiltradas = pessoasFiltradas;
+        exibirNaTela("selecaoPessoa");
     }
 
     public PessoaService getService() {
@@ -77,4 +33,5 @@ public class SelecaoPessoaView implements Serializable {
     public void setService(PessoaService service) {
         this.service = service;
     }
+
 }
