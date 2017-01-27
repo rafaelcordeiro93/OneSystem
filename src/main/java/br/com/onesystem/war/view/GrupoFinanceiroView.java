@@ -3,7 +3,9 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.GrupoFinanceiroDAO;
+import br.com.onesystem.dao.GrupoFinanceiroDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -12,6 +14,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.war.builder.GrupoFinanceiroBV;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +85,22 @@ public class GrupoFinanceiroView implements Serializable {
         GrupoFinanceiro r = (GrupoFinanceiro) e.getObject();
         grupoFinanceiro = new GrupoFinanceiroBV(r);
         grupoFinanceiroSelecionado = r;
+    }
+
+    public void buscaPorId() {
+        Long id = grupoFinanceiro.getId();
+        if (id != null) {
+            try {
+                GrupoFinanceiroDAO dao = new GrupoFinanceiroDAO();
+                GrupoFinanceiro c = dao.buscarGrupoFinanceiros().porId(id).resultado();
+                grupoFinanceiroSelecionado = c;
+                grupoFinanceiro = new GrupoFinanceiroBV(grupoFinanceiroSelecionado);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                grupoFinanceiro.setId(id);
+                die.print();
+            }
+        }
     }
 
     public List<NaturezaFinanceira> getNaturezasFinanceiras() {

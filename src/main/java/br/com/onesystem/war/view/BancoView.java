@@ -2,22 +2,18 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BancoDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.BancoBV;
-import br.com.onesystem.war.service.BancoService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
+import br.com.onesystem.war.builder.BancoBV;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -90,6 +86,22 @@ public class BancoView implements Serializable {
         Banco b = (Banco) e.getObject();
         banco = new BancoBV(b);
         bancoSelecionada = b;
+    }
+
+    public void buscaPorId() {
+        Long id = banco.getId();
+        if (id != null) {
+            try {
+                BancoDAO dao = new BancoDAO();
+                Banco c = dao.buscarBancos().porId(id).resultado();
+                bancoSelecionada = c;
+                banco = new BancoBV(bancoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                banco.setId(id);
+                die.print();
+            }
+        }
     }
 
     public BancoBV getBanco() {

@@ -2,7 +2,9 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.CartaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
@@ -14,6 +16,7 @@ import br.com.onesystem.war.builder.CartaoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.CartaoBV;
 import br.com.onesystem.war.builder.TaxaDeAdministracaoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
@@ -135,6 +138,22 @@ public class CartaoView implements Serializable {
         cartaoSelecionada = a;
     }
 
+    public void buscaPorId() {
+        Long id = cartao.getId();
+        if (id != null) {
+            try {
+                CartaoDAO dao = new CartaoDAO();
+                Cartao c = dao.buscarCartaos().porId(id).resultado();
+                cartaoSelecionada = c;
+                cartao = new CartaoBV(cartaoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                cartao.setId(id);
+                die.print();
+            }
+        }
+    }
+
     public void selecionaTaxa(SelectEvent event) {
         this.taxaSelecionado = (TaxaDeAdministracao) event.getObject();
         this.taxa = new TaxaDeAdministracaoBV(taxaSelecionado);
@@ -145,7 +164,7 @@ public class CartaoView implements Serializable {
             taxa.setId(retornarCodigo());
             for (TaxaDeAdministracao lista : cartao.getTaxaDeAdministracao()) {
                 if (taxa.getNumeroDias().equals(lista.getNumeroDias())) {
-                   throw new EDadoInvalidoException(new BundleUtil().getMessage("Parcela_Ja_Existe"));
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Parcela_Ja_Existe"));
                 }
             }
             cartao.getTaxaDeAdministracao().add(taxa.construirComID());

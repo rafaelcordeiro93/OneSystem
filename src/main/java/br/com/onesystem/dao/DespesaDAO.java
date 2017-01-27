@@ -5,8 +5,7 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -19,13 +18,13 @@ import javax.persistence.NoResultException;
  *
  * @author Rafael
  */
-public class ContaDAO {
+public class DespesaDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public ContaDAO() {
+    public DespesaDAO() {
         limpar();
     }
 
@@ -35,33 +34,33 @@ public class ContaDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public ContaDAO buscarContaW() {
-        consulta += "select c from Conta c where c.id > 0 ";
+    public DespesaDAO buscarDespesaW() {
+        consulta += "select d from Despesa d where d.id > 0 ";
         return this;
     }
 
-    public ContaDAO ePorMoeda(Moeda moeda) {
-        consulta += "and c.moeda = :pMoeda ";
-        parametros.put("pMoeda", moeda);
+    public DespesaDAO ePorMoeda(Despesa despesa) {
+        consulta += "and d.nome = :dNome ";
+        parametros.put("dNome", despesa.getNome());
         return this;
     }
 
-    public ContaDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
-        parametros.put("cId", id);
+    public DespesaDAO porId(Long id) {
+        consulta += " and d.id = :dId ";
+        parametros.put("dId", id);
         return this;
     }
 
-    public List<Conta> listaDeResultados() {
-        List<Conta> resultado = new ArmazemDeRegistros<Conta>(Conta.class)
+    public List<Despesa> listaDeResultados() {
+        List<Despesa> resultado = new ArmazemDeRegistros<Despesa>(Despesa.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Conta resultado() throws DadoInvalidoException {
+    public Despesa resultado() throws DadoInvalidoException {
         try {
-            Conta resultado = new ArmazemDeRegistros<Conta>(Conta.class)
+            Despesa resultado = new ArmazemDeRegistros<Despesa>(Despesa.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;

@@ -2,8 +2,10 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.NotaEmitida;
@@ -14,6 +16,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -110,6 +113,22 @@ public class ChequeView implements Serializable {
         Cheque a = (Cheque) e.getObject();
         cheque = new ChequeBV(a);
         chequeSelecionada = a;
+    }
+
+    public void buscaPorId() {
+        Long id = cheque.getId();
+        if (id != null) {
+            try {
+                ChequeDAO dao = new ChequeDAO();
+                Cheque c = dao.buscarCheques().porId(id).resultado();
+                chequeSelecionada = c;
+                cheque = new ChequeBV(chequeSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                cheque.setId(id);
+                die.print();
+            }
+        }
     }
 
     public List<SituacaoDeCheque> getTipoSituacao() {

@@ -2,9 +2,9 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -12,14 +12,10 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.CidadeBV;
 import br.com.onesystem.war.builder.ContaBV;
-import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -78,12 +74,28 @@ public class ContaView implements Serializable {
         }
     }
 
-      public void selecionaConta(SelectEvent e) {
+    public void selecionaConta(SelectEvent e) {
         Conta c = (Conta) e.getObject();
         conta = new ContaBV(c);
         contaSelecionada = c;
     }
-    
+
+    public void buscaPorId() {
+        Long id = conta.getId();
+        if (id != null) {
+            try {
+                ContaDAO dao = new ContaDAO();
+                Conta c = dao.buscarContaW().porId(id).resultado();
+                contaSelecionada = c;
+                conta = new ContaBV(contaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                conta.setId(id);
+                die.print();
+            }
+        }
+    }
+
     public void limparJanela() {
         conta = new ContaBV();
         contaSelecionada = null;

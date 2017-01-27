@@ -3,123 +3,110 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
 
-                            <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <div class="Container100 Responsive100">
-                                <div class="Container50 Responsive50">
-                                    <p:panelGrid columns="2" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-left: -1%">
+                                <p:inputNumber id="cidadeid" size="23" value="#{cartaoView.cartao.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{cartaoView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCartaoView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaCartao}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:inputText id="ajustedeestoque" readonly="true" placeholder="#{l.Id}" value="#{cartaoView.cartao.id}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCartaoView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaCartao}" update=":conteudo"
-                                                        process="@this"  />
-                                            </p:commandButton>
-                                        </h:panelGrid>     
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{cartaoView.cartao.nome}" maxlength="60"/>
 
-                                        <p:inputText value="#{cartaoView.cartao.nome}" placeholder="#{l.Nome}" maxlength="60" styleClass="Wid90"/>
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <h:panelGrid columns="2" style="margin-left: -1%">
+                                <p:inputText id="selecionaConta" size="23" readonly="true" value="#{cartaoView.cartao.conta.nome}"/> 
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaConta}" process="@this" update="selecionaConta" />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%">
-                                            <p:inputText id="selecionaConta" readonly="true" placeholder="#{l.Conta}" value="#{cartaoView.cartao.conta.nome}"/> 
-                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
-                                                              update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaConta}"
-                                                        process="@this" update="selecionaConta" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
+                            <p:outputLabel value="#{l.Despesa}"/>
+                            <h:panelGrid columns="2" style="margin-left: -1%">
+                                <p:inputText id="selecionaDespesa" size="23" readonly="true" value="#{cartaoView.cartao.despesa.nome}"/> 
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaDespesa}" process="@this" update="selecionaDespesa" />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%">
-                                            <p:inputText id="selecionaDespesa" readonly="true" placeholder="#{l.Despesa}" value="#{cartaoView.cartao.despesa.nome}"/> 
-                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
-                                                              update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaDespesa}"
-                                                        process="@this" update="selecionaDespesa" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
+                            <p:outputLabel value="#{l.Juros}"/>
+                            <h:panelGrid columns="2" style="margin-left: -1%">
+                                <p:inputText id="selecionaJuros" size="23" readonly="true" value="#{cartaoView.cartao.juros.nome}"/> 
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaJuros}" process="@this" update="selecionaJuros" />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%">
-                                            <p:inputText id="selecionaJuros" readonly="true" placeholder="#{l.Juros}" value="#{cartaoView.cartao.juros.nome}"/> 
-                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
-                                                              update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaJuros}"
-                                                        process="@this" update="selecionaJuros" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
-                                    </p:panelGrid>
-
-
-                                    <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Parcelas}</div>
-                                    <p:panelGrid columns="3" columnClasses="ui-panelgrid-cell ui-grid-col-4, ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-4"
-                                                 layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-
-                                        <pe:inputNumber id="cartaoNumeroDias" maxValue="999" minValue="0" styleClass="Wid90"
-                                                        decimalPlaces="0" value="#{cartaoView.taxa.numeroDias}">
-                                            <p:ajax event="blur"/>
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Numero_Dias}"/>
-                                        </pe:inputNumber>     
-
-                                        <pe:inputNumber id="cartaoTaxa" maxValue="999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                                        symbol="% " decimalPlaces="2" value="#{cartaoView.taxa.taxa}">
-                                            <p:ajax event="blur"/>
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Taxa}"/>
-                                        </pe:inputNumber>        
-
-                                        <h:panelGrid columns="3">
-                                            <p:commandButton icon="fa fa-plus Fs16 White" action="#{cartaoView.addTaxaNaLista()}" 
-                                                             update=":conteudo"/>
-                                            <p:commandButton icon="fa fa-refresh Fs16 White" action="#{cartaoView.updateTaxaNaLista()}" 
-                                                             update=":conteudo" styleClass="GreenButton"/>     
-                                            <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{cartaoView.deleteTaxaNaLista()}" 
-                                                             update=":conteudo" styleClass="RedButton"/>
-                                        </h:panelGrid>
-
-                                    </p:panelGrid>
-                                    <!-- -->
-                                    <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.cartao.taxaDeAdministracao}" rowKey="#{taxa.id}" 
-                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
-
-                                        <p:ajax event="rowSelect" process="@this" listener="#{cartaoView.selecionaTaxa}" update=":conteudo"/>
-
-                                        <p:column style="width: 5%; text-align: center" colspan="1">
-                                            <h:outputText value="#{taxa.id}" />
-                                        </p:column>
-                                        <p:column headerText="#{l.Numero_Parcelas}" sortBy="#{taxa.numeroDias}"  colspan="1">
-                                            <h:outputText value="#{taxa.numeroDias}" />
-                                        </p:column>
-                                        <p:column headerText="#{l.Taxa}" sortBy="#{taxa.taxa}" colspan="2">
-                                            <h:outputText  value="#{taxa.taxa}" />
-                                        </p:column>
-
-                                    </p:dataTable>
-
-                                </div>
-                            </div>
-
-                            <div class="EmptyBox5"/>
-
-                            <p:separator/>
-
-                            <p:commandButton value="#{l.Adicionar}" action="#{cartaoView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{cartaoView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{cartaoView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{cartaoView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{cartaoView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />   
-
-                        </div>
+                        </p:panelGrid>
                     </div>
+
+                    <div class="EmptyBox20"/>
+                    <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Parcelas}</div>
+                    <div class="EmptyBox20"/>
+
+                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements "
+                                 style="width: 50%" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2">
+
+                        <p:outputLabel value="#{l.Numero_Dias}"/>
+                        <p:inputNumber id="cartaoNumeroDias" maxValue="999" minValue="0" decimalPlaces="0" value="#{cartaoView.taxa.numeroDias}">
+                            <p:ajax event="blur"/>
+                        </p:inputNumber>     
+
+                        <p:outputLabel value="#{l.Taxa}"/>
+                        <p:inputNumber id="cartaoTaxa" maxValue="999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="% " decimalPlaces="2" value="#{cartaoView.taxa.taxa}">
+                            <p:ajax event="blur"/>
+                        </p:inputNumber>        
+
+                        <h:panelGrid columns="3">
+                            <p:commandButton icon="fa fa-plus Fs16 White" action="#{cartaoView.addTaxaNaLista()}"  update=":conteudo"/>
+                            <p:commandButton icon="fa fa-refresh Fs16 White" action="#{cartaoView.updateTaxaNaLista()}" update=":conteudo" styleClass="green-btn"/>     
+                            <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{cartaoView.deleteTaxaNaLista()}" update=":conteudo" styleClass="orange-btn"/>
+                        </h:panelGrid>
+
+                    </p:panelGrid>
+                    <div class="EmptyBox10"/>
+
+                    <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.cartao.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 50%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
+                        <p:ajax event="rowSelect" process="@this" listener="#{cartaoView.selecionaTaxa}" update=":conteudo"/>
+                        <p:column style="width: 5%; text-align: center" colspan="1">
+                            <h:outputText value="#{taxa.id}" />
+                        </p:column>
+                        <p:column headerText="#{l.Numero_Parcelas}" sortBy="#{taxa.numeroDias}"  colspan="1">
+                            <h:outputText value="#{taxa.numeroDias}" />
+                        </p:column>
+                        <p:column headerText="#{l.Taxa}" sortBy="#{taxa.taxa}" colspan="2">
+                            <h:outputText  value="#{taxa.taxa}" />
+                        </p:column>
+                    </p:dataTable>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{cartaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{cartaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{cartaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{cartaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{cartaoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>   
+
+
                 </div>
             </div>
         </div>

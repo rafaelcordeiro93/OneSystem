@@ -1,22 +1,20 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.GrupoFinanceiro;
-import br.com.onesystem.domain.GrupoFinanceiro;
-import br.com.onesystem.domain.GrupoFinanceiro;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
 public class GrupoFinanceiroDAO {
-    
-    
+
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
@@ -36,12 +34,17 @@ public class GrupoFinanceiroDAO {
         return this;
     }
 
+    public GrupoFinanceiroDAO porId(Long id) {
+        consulta += " and g.id = :gId ";
+        parametros.put("gId", id);
+        return this;
+    }
+
     public GrupoFinanceiroDAO porNome(GrupoFinanceiro grupoFinanceiro) {
         consulta += " and g.nome = :pNome ";
         parametros.put("pNome", grupoFinanceiro.getNome());
         return this;
     }
-       
 
     public List<GrupoFinanceiro> buscarGruposDeReceitas() {
         EntityManager manager = JPAUtil.getEntityManager();
@@ -64,12 +67,23 @@ public class GrupoFinanceiroDAO {
 
         return query.getResultList();
     }
-    
-     public List<GrupoFinanceiro> listaDeResultados() {
+
+    public List<GrupoFinanceiro> listaDeResultados() {
         List<GrupoFinanceiro> resultado = new ArmazemDeRegistros<GrupoFinanceiro>(GrupoFinanceiro.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
-     
+
+    public GrupoFinanceiro resultado() throws DadoInvalidoException {
+        try {
+            GrupoFinanceiro resultado = new ArmazemDeRegistros<GrupoFinanceiro>(GrupoFinanceiro.class)
+                    .resultadoUnicoDaConsulta(consulta, parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
+    }
+
 }

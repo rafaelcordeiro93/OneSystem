@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class BoletoDeCartaoBV implements Serializable {
-
+    
     private Long id;
     private NotaEmitida venda;
     private Cartao cartao;
@@ -19,8 +19,9 @@ public class BoletoDeCartaoBV implements Serializable {
     private Integer dias;
     private BigDecimal valor;
     private String codTransacao;
+    private Integer numeroParcela;
     private SituacaoDeCartao situacao;
-
+    
     public BoletoDeCartaoBV(BoletoDeCartao boletoDeCartaoSelecionada) {
         this.id = boletoDeCartaoSelecionada.getId();
         this.venda = boletoDeCartaoSelecionada.getNotaEmitida();
@@ -30,81 +31,89 @@ public class BoletoDeCartaoBV implements Serializable {
         this.valor = boletoDeCartaoSelecionada.getValor();
         this.codTransacao = boletoDeCartaoSelecionada.getCodigoTransacao();
         this.situacao = boletoDeCartaoSelecionada.getSituacao();
-
+        this.numeroParcela = boletoDeCartaoSelecionada.getNumeroParcela();
     }
-
+    
     public BoletoDeCartaoBV() {
     }
-
+    
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public NotaEmitida getVenda() {
         return venda;
     }
-
+    
     public void setVenda(NotaEmitida venda) {
         this.venda = venda;
     }
-
+    
     public Cartao getCartao() {
         return cartao;
     }
-
+    
     public void setCartao(Cartao cartao) {
         this.cartao = cartao;
     }
-
+    
     public Date getEmissao() {
         return emissao;
     }
-
+    
     public void setEmissao(Date emissao) {
         this.emissao = emissao;
     }
-
+    
     public Integer getDias() {
         return dias;
     }
-
+    
     public void setDias(Integer dias) {
         this.dias = dias;
     }
-
+    
     public BigDecimal getValor() {
         return valor;
     }
-
+    
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
-
+    
     public String getCodTransacao() {
         return codTransacao;
     }
-
+    
     public void setCodTransacao(String codTransacao) {
         this.codTransacao = codTransacao;
     }
-
+    
     public SituacaoDeCartao getSituacao() {
         return situacao;
     }
-
+    
     public void setSituacao(SituacaoDeCartao situacao) {
         this.situacao = situacao;
     }
-
-    public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
+    
+    public Integer getNumeroParcela() {
+        return numeroParcela;
     }
-
+    
+    public void setNumeroParcela(Integer numeroParcela) {
+        this.numeroParcela = numeroParcela;
+    }
+    
+    public BoletoDeCartao construir() throws DadoInvalidoException {
+        return new BoletoDeCartaoBuilder().comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).comNumeroParcela(numeroParcela).construir();
+    }
+    
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).construir();
+        return new BoletoDeCartaoBuilder().comID(id).comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comDias(dias).comValor(valor).comCodTransacao(codTransacao).comTipoSituacao(situacao).comNumeroParcela(numeroParcela).construir();
     }
 }

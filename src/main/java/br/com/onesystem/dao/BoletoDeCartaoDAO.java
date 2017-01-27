@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -15,17 +9,13 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
-/**
- *
- * @author Rafael
- */
-public class ContaDAO {
+public class BoletoDeCartaoDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public ContaDAO() {
+    public BoletoDeCartaoDAO() {
         limpar();
     }
 
@@ -35,33 +25,33 @@ public class ContaDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public ContaDAO buscarContaW() {
-        consulta += "select c from Conta c where c.id > 0 ";
+    public BoletoDeCartaoDAO buscarBoletoDeCartaos() {
+        consulta += "select b from BoletoDeCartao b where b.id > 0 ";
         return this;
     }
 
-    public ContaDAO ePorMoeda(Moeda moeda) {
-        consulta += "and c.moeda = :pMoeda ";
-        parametros.put("pMoeda", moeda);
+    public BoletoDeCartaoDAO porNome(BoletoDeCartao boletoDeCartao) {
+        consulta += " and b.nome = :bNome ";
+        parametros.put("bNome", boletoDeCartao.getCartao().getNome());
         return this;
     }
 
-    public ContaDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
-        parametros.put("cId", id);
+    public BoletoDeCartaoDAO porId(Long id) {
+        consulta += " and b.id = :bId ";
+        parametros.put("bId", id);
         return this;
     }
 
-    public List<Conta> listaDeResultados() {
-        List<Conta> resultado = new ArmazemDeRegistros<Conta>(Conta.class)
+    public List<BoletoDeCartao> listaDeResultados() {
+        List<BoletoDeCartao> resultado = new ArmazemDeRegistros<BoletoDeCartao>(BoletoDeCartao.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Conta resultado() throws DadoInvalidoException {
+    public BoletoDeCartao resultado() throws DadoInvalidoException {
         try {
-            Conta resultado = new ArmazemDeRegistros<Conta>(Conta.class)
+            BoletoDeCartao resultado = new ArmazemDeRegistros<BoletoDeCartao>(BoletoDeCartao.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
@@ -69,5 +59,4 @@ public class ContaDAO {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
         }
     }
-
 }
