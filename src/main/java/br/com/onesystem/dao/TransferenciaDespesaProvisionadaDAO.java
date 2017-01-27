@@ -33,14 +33,14 @@ public class TransferenciaDespesaProvisionadaDAO {
         consulta += "select t from TransferenciaDespesaProvisionada t where t.id is not null ";
         return this;
     }
-
+    
     public TransferenciaDespesaProvisionadaDAO ePorEmissaoEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataInicial", dataInicial);
         parametros.put("pDataFinal", dataFinal);
         consulta += "and t.emissao between :pDataInicial and :pDataFinal ";
         return this;
     }
-    
+
     public TransferenciaDespesaProvisionadaDAO ePorDestino(Pessoa pessoa) {
         if (pessoa != null) {
             parametros.put("pDestino", pessoa);
@@ -48,7 +48,7 @@ public class TransferenciaDespesaProvisionadaDAO {
         }
         return this;
     }
-    
+
     public TransferenciaDespesaProvisionadaDAO ePorOrigem(Pessoa pessoa) {
         if (pessoa != null) {
             parametros.put("pOrigem", pessoa);
