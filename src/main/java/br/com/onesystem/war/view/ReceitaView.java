@@ -2,24 +2,19 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ReceitaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.ReceitaBV;
-import br.com.onesystem.war.service.ReceitaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.war.builder.DespesaBV;
-import br.com.onesystem.war.service.GrupoFinanceiroService;
+import br.com.onesystem.war.builder.ReceitaBV;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -28,16 +23,13 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class ReceitaView implements Serializable {
 
-  
     private ReceitaBV receita;
     private Receita receitaSelecionada;
 
-
-    
     @PostConstruct
     public void init() {
         limparJanela();
-       
+
     }
 
     public void add() {
@@ -68,7 +60,7 @@ public class ReceitaView implements Serializable {
 
     public void delete() {
         try {
-            if (receitaSelecionada != null ) {
+            if (receitaSelecionada != null) {
                 new RemoveDAO<Receita>(Receita.class).remove(receitaSelecionada, receitaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
@@ -79,12 +71,27 @@ public class ReceitaView implements Serializable {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
     }
-    
-    
+
     public void selecionaReceita(SelectEvent e) {
         Receita r = (Receita) e.getObject();
         receita = new ReceitaBV(r);
         receitaSelecionada = r;
+    }
+
+    public void buscaPorId() {
+        Long id = receita.getId();
+        if (id != null) {
+            try {
+                ReceitaDAO dao = new ReceitaDAO();
+                Receita c = dao.buscarReceitaW().porId(id).resultado();
+                receitaSelecionada = c;
+                receita = new ReceitaBV(receitaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                receita.setId(id);
+                die.print();
+            }
+        }
     }
 
     public void limparJanela() {
@@ -93,17 +100,14 @@ public class ReceitaView implements Serializable {
     }
 
     public void selecionaGrupoFinanceiro(SelectEvent event) {
-        GrupoFinanceiro grupoFinanceiroSelecionado = (GrupoFinanceiro) event.getObject();
-        receita.setGrupoFinanceiro(grupoFinanceiroSelecionado);
+        receita.setGrupoFinanceiro((GrupoFinanceiro) event.getObject());
     }
-
 
     public void desfazer() {
         if (receitaSelecionada != null) {
             receita = new ReceitaBV(receitaSelecionada);
         }
     }
-
 
     public ReceitaBV getReceita() {
         return receita;
@@ -121,5 +125,4 @@ public class ReceitaView implements Serializable {
         this.receitaSelecionada = receitaSelecionada;
     }
 
-  
 }

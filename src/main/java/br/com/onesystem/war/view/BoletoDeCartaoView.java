@@ -2,18 +2,19 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BoletoDeCartaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -56,7 +57,6 @@ public class BoletoDeCartaoView implements Serializable {
     public void add() {
         try {
             BoletoDeCartao novoRegistro = boletoDeCartao.construir();
-            System.out.println(novoRegistro);
             new AdicionaDAO<BoletoDeCartao>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
@@ -109,6 +109,22 @@ public class BoletoDeCartaoView implements Serializable {
         BoletoDeCartao a = (BoletoDeCartao) e.getObject();
         boletoDeCartao = new BoletoDeCartaoBV(a);
         boletoDeCartaoSelecionada = a;
+    }
+
+    public void buscaPorId() {
+        Long id = boletoDeCartao.getId();
+        if (id != null) {
+            try {
+                BoletoDeCartaoDAO dao = new BoletoDeCartaoDAO();
+                BoletoDeCartao c = dao.buscarBoletoDeCartaos().porId(id).resultado();
+                boletoDeCartaoSelecionada = c;
+                boletoDeCartao = new BoletoDeCartaoBV(boletoDeCartaoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                boletoDeCartao.setId(id);
+                die.print();
+            }
+        }
     }
 
     public List<SituacaoDeCartao> getTipoSituacao() {

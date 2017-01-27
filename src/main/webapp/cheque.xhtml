@@ -8,147 +8,99 @@
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox20"/>
+                    <div class="ui-fluid">
 
-                            <h2 class="BigTopic"> #{l.Edicao_De_Registro}</h2>
+                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
-                            <div class="Container100 Responsive100">
-                                    <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent"
-                                                 columnClasses="ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5, ui-panelgrid-cell ui-grid-col-5">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                <p:inputNumber id="chequeid" size="26" value="#{chequeView.cheque.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                    <p:ajax event="blur" listener="#{chequeView.buscaPorId}" update=":conteudo"/>
+                                </p:inputNumber>
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaCheque}" update=":conteudo" process="@this"/>
+                                </p:commandButton>
+                            </h:panelGrid>    
 
-                                        <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Id}" style="text-align: right"/>
-                                            <!-- -->
-                                            <p:inputText id="chequeid" readonly="true" value="#{chequeView.cheque.id}" />
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this"
-                                                             update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaCheque}" update=":conteudo"
-                                                        process="@this"  />
-                                            </p:commandButton>
-                                        </h:panelGrid>     
 
-                                        <h:panelGrid columns="2"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Venda}" style="text-align: right"/>
-                                            <!-- -->
-                                            <p:inputText id="selecionaVenda" readonly="true"  value="#{chequeView.cheque.venda.id}"/> 
-                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
-                                                              update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaVenda}"
-                                                        process="@this" update="selecionaVenda" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Venda}" />
+                            <h:panelGrid columns="2"  style="margin-left: -1%">
+                                <p:inputText id="selecionaVenda" size="26" readonly="true"  value="#{chequeView.cheque.venda.id}"/> 
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaVenda}" process="@this" update="selecionaVenda" />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Numero_Parcelas}" style="text-align: right"/>
-                                            <pe:inputNumber id="numeroParcelasValor" maxValue="99" minValue="0" styleClass="Wid90" 
-                                                            decimalPlaces="0" value="#{chequeView.cheque.numeroParcela}">
-                                            </pe:inputNumber>             
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Numero_Parcelas}" />
+                            <p:inputNumber id="numeroParcelasValor" maxValue="99" minValue="0" decimalPlaces="0" value="#{chequeView.cheque.numeroParcela}"/>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Valor}" style="text-align: right"/>
-                                            <pe:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
-                                                            decimalPlaces="2" value="#{chequeView.cheque.valor}">
-                                            </pe:inputNumber>             
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Valor}"/>
+                            <p:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{chequeView.cheque.valor}"/>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Emissao}" style="text-align: right" />
-                                            <p:calendar value="#{chequeView.cheque.emissao}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Emissao}" />
+                            <p:calendar value="#{chequeView.cheque.emissao}" pattern="dd/MM/yyyy HH:mm:ss" />
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Vencimento}" style="text-align: right" />
-                                            <p:calendar value="#{chequeView.cheque.vencimento}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
-                                        </h:panelGrid>
 
-                                        <h:panelGrid columns="2"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Banco}" style="text-align: right"/>
-                                            <!-- -->
-                                            <p:inputText id="selecionaBanco" readonly="true"  value="#{chequeView.cheque.banco.nome}"/> 
-                                            <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this"
-                                                              update="@none">
-                                                <p:ajax event="dialogReturn" listener="#{chequeView.selecionaBanco}"
-                                                        process="@this" update="selecionaBanco" />
-                                            </p:commandButton>
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Vencimento}" />
+                            <p:calendar value="#{chequeView.cheque.vencimento}" pattern="dd/MM/yyyy HH:mm:ss" />
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Agencia}" style="text-align: right"/>
-                                            <p:inputText value="#{chequeView.cheque.agencia}" />         
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Banco}" />
+                            <h:panelGrid columns="2"  style="margin-left: -1%">
+                                <p:inputText id="selecionaBanco" size="26" readonly="true"  value="#{chequeView.cheque.banco.nome}"/> 
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaBanco}" process="@this" update="selecionaBanco" />
+                                </p:commandButton>
+                            </h:panelGrid>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Conta}" style="text-align: right"/>
-                                            <p:inputText value="#{chequeView.cheque.conta}" />         
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Agencia}" style="text-align: right"/>
+                            <p:inputText value="#{chequeView.cheque.agencia}" />         
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Numero_Cheque}" style="text-align: right"/>
-                                            <p:inputText value="#{chequeView.cheque.numeroCheque}" />         
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Conta}" style="text-align: right"/>
+                            <p:inputText value="#{chequeView.cheque.conta}" />         
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Tipo_Situacao}" style="text-align: right"/>
-                                            <p:selectOneMenu id="TipoSituacao" value="#{chequeView.cheque.tipoSituacao}" styleClass="Wid80">
-                                                <f:selectItems value="#{chequeView.tipoSituacao}" var="#{l.Tipo_Situacao}" itemLabel="#{TipoSituacao}" itemValue="#{TipoSituacao}" >
-                                                </f:selectItems>
-                                            </p:selectOneMenu>
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Numero_Cheque}" />
+                            <p:inputText value="#{chequeView.cheque.numeroCheque}" />         
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Multas}" style="text-align: right"/>
-                                            <pe:inputNumber id="Multas" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
-                                                            decimalPlaces="2" value="#{chequeView.cheque.multas}">
-                                            </pe:inputNumber>             
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Tipo_Situacao}"/>
+                            <p:selectOneMenu id="TipoSituacao" value="#{chequeView.cheque.tipoSituacao}">
+                                <f:selectItems value="#{chequeView.tipoSituacao}" var="#{l.Tipo_Situacao}" itemValue="#{TipoSituacao}"/>
+                            </p:selectOneMenu>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Juros}" style="text-align: right"/>
-                                            <pe:inputNumber id="Juros" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
-                                                            decimalPlaces="2" value="#{chequeView.cheque.juros}">
-                                            </pe:inputNumber>             
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Multas}" style="text-align: right"/>
+                            <p:inputNumber id="Multas" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{chequeView.cheque.multas}"/>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Descontos}" style="text-align: right"/>
-                                            <pe:inputNumber id="Desconto" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}"
-                                                            decimalPlaces="2" value="#{chequeView.cheque.descontos}">
-                                            </pe:inputNumber>             
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Juros}" style="text-align: right"/>
+                            <p:inputNumber id="Juros" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{chequeView.cheque.juros}"/>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Emitente}" style="text-align: right"/>
-                                            <p:inputText value="#{chequeView.cheque.emitente}" />         
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Descontos}"/>
+                            <p:inputNumber id="Desconto" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{chequeView.cheque.descontos}"/>
 
-                                        <h:panelGrid columns="1"  style="margin-top: -2%;margin-left: -1%">
-                                            <p:outputLabel  value="#{l.Observacao}" style="text-align: right"/>
-                                            <p:inputTextarea autoResize="true" rows="2" cols="26"
-                                                             maxlength="200" value="#{chequeView.cheque.observacao}">
-                                            </p:inputTextarea>
-                                        </h:panelGrid>
+                            <p:outputLabel  value="#{l.Emitente}"/>
+                            <p:inputText value="#{chequeView.cheque.emitente}" />         
 
-                                    </p:panelGrid>
-                                </div>
-                            </div>
+                            <p:outputLabel  value="#{l.Observacao}"/>
+                            <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{chequeView.cheque.observacao}"/>
 
-                            <div class="EmptyBox5"/>
+                        </p:panelGrid>
 
-                            <p:separator/>
-
-                            <p:commandButton value="#{l.Adicionar}" action="#{chequeView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{chequeView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{chequeView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{chequeView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                            <p:commandButton value="#{l.Desfazer}" action="#{chequeView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                             styleClass="OrangeButton" />
-                        
                     </div>
+
+                    <div class="EmptyBox10"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Adicionar}" action="#{chequeView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{chequeView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{chequeView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{chequeView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value="#{l.Desfazer}" action="#{chequeView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
+
                 </div>
             </div>
         </div>
