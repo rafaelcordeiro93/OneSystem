@@ -36,7 +36,7 @@
 
                             <p:outputLabel value="#{l.Tipo_Bandeira}"/>
                             <p:selectOneMenu id="advanced" value="#{moedaView.moeda.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
-                                             effect="fade" var="t" style="width: 77%">
+                                             effect="fade" var="t">
                                 <f:selectItems value="#{moedaView.bandeiras}" var="tipoBandeira" itemValue="#{tipoBandeira}" />
                                 <p:column style="width:10%">
                                     <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{t}.png" />

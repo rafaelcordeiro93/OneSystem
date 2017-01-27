@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
+        <composite:attribute name="managedBeanName" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true"
+                             shortDescription="Nome do managedBean do componente" />
+    </composite:interface>
+
+    <composite:implementation>
+        <h:form>
+            <p:dataTable id="#{cc.attrs.id}" var="bean" value="#{cc.attrs.managedBeanName.beans}" selectionMode="single" selection="#{cc.attrs.managedBeanName.beanSelecionado}" rowKey="#{bean.id}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         filteredValue="#{cc.attrs.managedBeanName.beansFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
+
+                <p:ajax event="rowSelect" process="@this" listener="#{cc.attrs.managedBeanName.selecionar()}" />
+
+                <composite:insertChildren />
+
+            </p:dataTable>
+        </h:form>
+
+        <h:outputStylesheet name="css/nanoscroller.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/animate.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+        <f:loadBundle basename="label_messages" var="l"/>
+
+    </composite:implementation>
+
+</html>
