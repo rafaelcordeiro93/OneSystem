@@ -20,27 +20,11 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2, ui-g-12 ui-md-1 ui-grc-2, ui-g-12 ui-md-2">
      
                             <p:outputLabel value="#{l.Operacao}"/>
-                            <a:inputDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" managedBeanDialog="#{selecaoOperacaoView}"
-                                           managedBeanView="#{notaEmitidaView}"/>
-                           
-                            <p:outputLabel value="#{l.Operacao}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%;" >
-                                <p:inputText id="notaEmitidaOperacao" readonly="true" value="#{notaEmitidaView.notaEmitida.operacao.nome}"/>
-                                <p:commandButton id="botaoPesquisaOperacao23" icon="fa fa-search" action="#{selecaoOperacaoView.abrirDialogo()}" process="@this"
-                                                 update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaOperacao}" process="@this" update="notaEmitidaOperacao" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
+                            <a:inputDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}"/>
+                            
                             <p:outputLabel value="#{l.Pessoa}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputText id="notaEmitidaPessoa" size="32" readonly="true" value="#{notaEmitidaView.notaEmitida.pessoa.nome}"/>
-                                <p:commandButton id="botaoPesquisaPessoa" icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaPessoa}" process="@this" update="notaEmitidaPessoa" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
+                            <a:inputDialog id="nePessoa" value="#{notaEmitidaView.notaEmitida.pessoa.nome}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}"/>
+                           
                             <p:outputLabel value="#{l.Lista_De_Preco}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
                                 <p:inputText id="notaEmitidaListaPreco" size="32" readonly="true" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}"/>

@@ -40,6 +40,7 @@ import br.com.onesystem.war.builder.ParcelaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -64,7 +65,7 @@ import org.primefaces.event.SelectEvent;
  */
 @ManagedBean
 @ViewScoped
-public class NotaEmitidaView implements Serializable {
+public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Serializable {
 
     private ValoresAVistaBV valoresAVista;
     private NotaEmitida notaEmitidaSelecionada;
@@ -402,6 +403,17 @@ public class NotaEmitidaView implements Serializable {
 
     // ------------------------- Fim Parcelas ---------------------------------
     // ----------------------------- Selecao ----------------------------------
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+
+        if (obj instanceof Operacao) {
+            notaEmitida.setOperacao((Operacao) obj);
+        } else if (obj instanceof Pessoa) {
+            notaEmitida.setPessoa((Pessoa) obj);
+        }
+    }
+
     public void selecionaCartao(SelectEvent event) {
         parcelaSelecionada.setCartao((Cartao) event.getObject());
     }

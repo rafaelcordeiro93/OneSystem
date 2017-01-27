@@ -9,8 +9,8 @@
     <composite:interface>
         <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
         <composite:attribute name="value" required="true" shortDescription="Valor exibido no InputText." />
-        <composite:attribute name="managedBeanDialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
-        <composite:attribute name="managedBeanView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
+        <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
+        <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
     </composite:interface>
 
     <composite:implementation>
@@ -19,8 +19,8 @@
         
         <h:panelGrid columns="2">
             <p:inputText id="#{cc.attrs.id}-txt" readonly="true" value="#{cc.attrs.value}"/>
-            <p:commandButton id="#{cc.attrs.id}-btn" icon="fa fa-search" action="#{cc.attrs.managedBeanDialog.abrirDialogo()}" process="@this" update="@none">
-                <p:ajax event="dialogReturn" listener="#{cc.attrs.managedBeanView.selecionar}" process="@this" update="#{cc.attrs.id}-txt" />
+            <p:commandButton id="#{cc.attrs.id}-btn" icon="fa fa-search" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
+                <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt" />
             </p:commandButton>
         </h:panelGrid>
 
