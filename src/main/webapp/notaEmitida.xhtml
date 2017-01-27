@@ -16,13 +16,15 @@
                     <div class="EmptyBox5"/>
 
                     <div class="ui-fluid">
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-2, ui-g-12 ui-md-1 ui-grc-2, ui-g-12 ui-md-2">
-
-                            <p:dataTable 
-                            
+                       <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2, ui-g-12 ui-md-1 ui-grc-2, ui-g-12 ui-md-2">
+     
                             <p:outputLabel value="#{l.Operacao}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%;width: 100%" >
+                            <a:inputDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" managedBeanDialog="#{selecaoOperacaoView}"
+                                           managedBeanView="#{notaEmitidaView}"/>
+                           
+                            <p:outputLabel value="#{l.Operacao}"/>
+                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%;" >
                                 <p:inputText id="notaEmitidaOperacao" readonly="true" value="#{notaEmitidaView.notaEmitida.operacao.nome}"/>
                                 <p:commandButton id="botaoPesquisaOperacao23" icon="fa fa-search" action="#{selecaoOperacaoView.abrirDialogo()}" process="@this"
                                                  update="@none">
@@ -30,16 +32,18 @@
                                 </p:commandButton>
                             </h:panelGrid>
 
+                            <p:outputLabel value="#{l.Pessoa}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputText id="notaEmitidaPessoa" size="32" readonly="true" placeholder="#{l.Pessoa}" value="#{notaEmitidaView.notaEmitida.pessoa.nome}"/>
+                                <p:inputText id="notaEmitidaPessoa" size="32" readonly="true" value="#{notaEmitidaView.notaEmitida.pessoa.nome}"/>
                                 <p:commandButton id="botaoPesquisaPessoa" icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
                                                  update="@none">
                                     <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaPessoa}" process="@this" update="notaEmitidaPessoa" />
                                 </p:commandButton>
                             </h:panelGrid>
 
+                            <p:outputLabel value="#{l.Lista_De_Preco}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputText id="notaEmitidaListaPreco" size="32" readonly="true" placeholder="#{l.Lista_De_Preco}" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}"/>
+                                <p:inputText id="notaEmitidaListaPreco" size="32" readonly="true" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}"/>
                                 <p:commandButton id="botaoPesquisaListaPreco" icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this"
                                                  update="@none">
                                     <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaListaDePreco}"

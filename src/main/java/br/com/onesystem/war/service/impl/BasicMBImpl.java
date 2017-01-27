@@ -1,11 +1,11 @@
 package br.com.onesystem.war.service.impl;
 
+import org.primefaces.event.SelectEvent;
+
 public abstract class BasicMBImpl<Bean> {
 
-    protected Bean beanSelecionado;
+    protected Bean bean;
     
-    public void selecionar(){
-        
-    }
+    public abstract void selecionar(SelectEvent event);
     
 }
