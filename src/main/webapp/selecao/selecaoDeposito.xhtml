@@ -1,44 +1,22 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-
-    <h:head>
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-        </f:facet>
-        <title>#{l.Selecao_De_Depositos}</title>
-        <h:outputScript name="js/ripple-effect.js" library="modena-layout" />
-        <h:outputScript name="js/perfect-scrollbar.js" library="modena-layout" />
-        <h:outputScript name="js/layout.js" library="modena-layout" />
-        <h:outputScript name="js/personalizado.js" library="modena-layout" />
-
-    </h:head>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
 
 
-    <h:body>
-        <f:loadBundle basename="label_messages" var="l"/>
-        <h:form>
-            <p:dataTable id="depositoDT" var="deposito" value="#{selecaoDepositoView.depositoLista}" selectionMode="single" selection="#{selecaoDepositoView.depositoSelecionada}" rowKey="#{deposito.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoDepositoView.depositosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
+    <ui:define name="title">#{l.Selecao_De_Deposito}</ui:define>
 
-                <p:ajax event="rowSelect" process="@this" listener="#{selecaoDepositoView.selecionar()}" />
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoDepositoView}">
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.nome}" />
+            </p:column>
+        </a:dataTable>
 
-                <p:column headerText="#{l.Id}" sortBy="#{deposito.id}" filterBy="#{deposito.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
-                    <h:outputText value="#{deposito.id}" />
-                </p:column>
-                <p:column headerText="#{l.Nome}" sortBy="#{deposito.nome}" filterBy="#{deposito.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
-                    <h:outputText value="#{deposito.nome}" />
-                </p:column>
-                
-            </p:dataTable>
-        </h:form>
-    </h:body>
-
-</html>
+    </ui:define>
+</ui:composition>

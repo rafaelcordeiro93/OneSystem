@@ -1,7 +1,9 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.ContratoDeCambio;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.war.service.ContratoDeCambioService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -14,57 +16,18 @@ import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoContratoDeCambioView implements Serializable {
-
-    private ContratoDeCambio contratoDeCambioSelecionado;
-    private List<ContratoDeCambio> contratoDeCambioLista;
-    private List<ContratoDeCambio> contratoDeCambioFiltrados;
+public class SelecaoContratoDeCambioView extends BasicCrudMBImpl<ContratoDeCambio> implements Serializable {
 
     @ManagedProperty("#{contratoDeCambioService}")
     private ContratoDeCambioService service;
 
     @PostConstruct
     public void init() {
-        contratoDeCambioLista = service.buscarContratosDeCambio();
+        beans = service.buscarContratosDeCambio();
     }
 
     public void abrirDialogo() {
-        Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("modal", true);
-        opcoes.put("resizable", false);
-        opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", false);
-        opcoes.put("contentHeight", 500);
-
-        RequestContext.getCurrentInstance().openDialog("selecao/selecaoContratoDeCambio", opcoes, null);
-    }
-
-    public void selecionar() {
-        RequestContext.getCurrentInstance().closeDialog(contratoDeCambioSelecionado);
-    }
-
-    public ContratoDeCambio getContratoDeCambioSelecionado() {
-        return contratoDeCambioSelecionado;
-    }
-
-    public void setContratoDeCambioSelecionado(ContratoDeCambio contratoDeCambioSelecionado) {
-        this.contratoDeCambioSelecionado = contratoDeCambioSelecionado;
-    }
-
-    public List<ContratoDeCambio> getContratoDeCambioLista() {
-        return contratoDeCambioLista;
-    }
-
-    public void setContratoDeCambioLista(List<ContratoDeCambio> contratoDeCambioLista) {
-        this.contratoDeCambioLista = contratoDeCambioLista;
-    }
-
-    public List<ContratoDeCambio> getContratoDeCambioFiltrados() {
-        return contratoDeCambioFiltrados;
-    }
-
-    public void setContratoDeCambioFiltrados(List<ContratoDeCambio> contratoDeCambioFiltrados) {
-        this.contratoDeCambioFiltrados = contratoDeCambioFiltrados;
+        exibirNaTela("selecaoContratoDeCambio");
     }
 
     public ContratoDeCambioService getService() {

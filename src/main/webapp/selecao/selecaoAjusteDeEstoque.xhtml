@@ -1,56 +1,35 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
-
-    <h:head>
-        <f:facet name="first">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-            <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-            <meta name="apple-mobile-web-app-capable" content="yes" />
-        </f:facet>
-        <title>#{l.Selecao_De_Ajuste_De_Estoque}</title>
-
-    </h:head>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
 
 
-    <h:body>
-        <f:loadBundle basename="label_messages" var="l"/>
-        <h:form>
-            <p:dataTable id="ajusteDeEstoqueDT" var="ajusteDeEstoque" value="#{selecaoAjusteDeEstoqueView.ajusteDeEstoqueLista}" selectionMode="single" selection="#{selecaoAjusteDeEstoqueView.ajusteDeEstoqueSelecionada}" rowKey="#{ajusteDeEstoque.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         filteredValue="#{selecaoAjusteDeEstoqueView.ajusteDeEstoquesFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
+    <ui:define name="title">#{l.Selecao_De_Ajuste_De_Estoque}</ui:define>
 
-                <p:ajax event="rowSelect" process="@this" listener="#{selecaoAjusteDeEstoqueView.selecionar()}" />
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoAjusteDeEstoqueView}">
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.item.nome}" filterBy="#{bean.item.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.item.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Emissao}" filterMatchMode="contains">
+                <h:outputText value="#{bean.dataFormatada}" />
+            </p:column>
+            <p:column headerText="#{l.Quantidade}" sortBy="#{bean.quantidade}" filterBy="#{bean.quantidade}" footerText="#{l.Quantidade}" filterMatchMode="contains">
+                <h:outputText value="#{bean.quantidade}" />
+            </p:column>
+            <p:column headerText="#{l.Deposito}" sortBy="#{bean.deposito.nome}" filterBy="#{bean.deposito.nome}" footerText="#{l.Deposito}" filterMatchMode="contains">
+                <h:outputText value="#{bean.deposito.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{bean.operacaoFisica}" filterBy="#{bean.operacaoFisica}" footerText="#{l.Operacao_Fisica}" filterMatchMode="contains">
+                <h:outputText value="#{bean.operacaoFisica}" />
+            </p:column>
 
-                <p:column headerText="#{l.Id}" sortBy="#{ajusteDeEstoque.id}" filterBy="#{ajusteDeEstoque.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
-                    <h:outputText value="#{ajusteDeEstoque.id}" />
-                </p:column>
-                <p:column headerText="#{l.Nome}" sortBy="#{ajusteDeEstoque.item.nome}" filterBy="#{ajusteDeEstoque.item.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
-                    <h:outputText value="#{ajusteDeEstoque.item.nome}" />
-                </p:column>
-                <p:column headerText="#{l.Emissao}" sortBy="#{ajusteDeEstoque.emissao}" filterBy="#{ajusteDeEstoque.emissao}" footerText="#{l.Emissao}" filterMatchMode="contains">
-                    <h:outputText value="#{ajusteDeEstoque.dataFormatada}" />
-                </p:column>
-                <p:column headerText="#{l.Quantidade}" sortBy="#{ajusteDeEstoque.quantidade}" filterBy="#{ajusteDeEstoque.quantidade}" footerText="#{l.Quantidade}" filterMatchMode="contains">
-                    <h:outputText value="#{ajusteDeEstoque.quantidade}" />
-                </p:column>
-                <p:column headerText="#{l.Deposito}" sortBy="#{ajusteDeEstoque.deposito.nome}" filterBy="#{ajusteDeEstoque.deposito.nome}" footerText="#{l.Deposito}" filterMatchMode="contains">
-                    <h:outputText value="#{ajusteDeEstoque.deposito.nome}" />
-                </p:column>
-                <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{ajusteDeEstoque.operacaoFisica}" filterBy="#{ajusteDeEstoque.operacaoFisica}" footerText="#{l.Operacao_Fisica}" filterMatchMode="contains">
-                    <h:outputText value="#{ajusteDeEstoque.operacaoFisica}" />
-                </p:column>
-                
-            </p:dataTable>
-        </h:form>
-        
-        <h:outputStylesheet name="css/nanoscroller.css" library="atlantis-layout" />
-        <h:outputStylesheet name="css/animate.css" library="atlantis-layout" />
-        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
-    </h:body>
+        </a:dataTable>
 
-</html>
+    </ui:define>
+</ui:composition>
