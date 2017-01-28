@@ -2,69 +2,27 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.war.service.ReceitaService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import org.primefaces.context.RequestContext;
 
 @ManagedBean
 @ViewScoped
-public class SelecaoReceitaView implements Serializable {
-
-    private Receita receitaSelecionada;
-    private List<Receita> receitaLista;
-    private List<Receita> receitasFiltradas;
+public class SelecaoReceitaView extends BasicCrudMBImpl<Receita> implements Serializable {
 
     @ManagedProperty("#{receitaService}")
     private ReceitaService service;
 
     @PostConstruct
     public void init() {
-        receitaLista = service.buscarReceitas();
+        beans = service.buscarReceitas();
     }
 
     public void abrirDialogo() {
-        Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("modal", true);
-        opcoes.put("resizable", false);
-        opcoes.put("contentWidth", 950);
-        opcoes.put("draggable", false);
-        opcoes.put("contentHeight", 500);
-
-        RequestContext.getCurrentInstance().openDialog("selecao/selecaoReceita", opcoes, null);
-    }
-
-    public void selecionar() {
-        RequestContext.getCurrentInstance().closeDialog(receitaSelecionada);
-    }
-
-    public Receita getReceitaSelecionada() {
-        return receitaSelecionada;
-    }
-
-    public void setReceitaSelecionada(Receita receitaSelecionada) {
-        this.receitaSelecionada = receitaSelecionada;
-    }
-
-    public List<Receita> getReceitaLista() {
-        return receitaLista;
-    }
-
-    public void setReceitaLista(List<Receita> receitaLista) {
-        this.receitaLista = receitaLista;
-    }
-
-    public List<Receita> getReceitasFiltradas() {
-        return receitasFiltradas;
-    }
-
-    public void setReceitasFiltradas(List<Receita> receitasFiltradas) {
-        this.receitasFiltradas = receitasFiltradas;
+        exibirNaTela("selecaoReceita");
     }
 
     public ReceitaService getService() {
