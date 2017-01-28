@@ -11,6 +11,7 @@ import br.com.onesystem.war.builder.GrupoDeMargemBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,7 +21,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class GrupoDeMargemView implements Serializable {
+public class GrupoDeMargemView extends BasicMBImpl<Margem> implements Serializable {
 
     private GrupoDeMargemBV grupo;
     private Margem grupoSelecionada;
@@ -72,6 +73,7 @@ public class GrupoDeMargemView implements Serializable {
         }
     }
 
+    @Override
     public void buscaPorId() {
         Long id = grupo.getId();
         if (id != null) {
@@ -88,9 +90,13 @@ public class GrupoDeMargemView implements Serializable {
         }
     }
 
-    public void selecionaGrupoDeMargem(SelectEvent e) {
-        grupoSelecionada = (Margem) e.getObject();
-        grupo = new GrupoDeMargemBV(grupoSelecionada);
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof Margem) {
+            grupoSelecionada = (Margem) obj;
+            grupo = new GrupoDeMargemBV(grupoSelecionada);
+        }
     }
 
     public void limparJanela() {

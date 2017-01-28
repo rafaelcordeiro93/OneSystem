@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
@@ -276,6 +277,23 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         }
     }
 
+    @Override
+    public void buscaPorId() {
+        Long id = notaEmitida.getId();
+        if (id != null) {
+            try {
+                NotaEmitidaDAO dao = new NotaEmitidaDAO();
+                NotaEmitida ne = dao.buscarNotaEmitidaW().porId(id).resultado();
+                notaEmitidaSelecionada = ne;
+                notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                notaEmitida.setId(id);
+                die.print();
+            }
+        }
+    }
+
     // -------------- Fim Operações para criação da entidade ------------------
     // ---------------------- Forma de Recebimento ----------------------------
     private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
@@ -411,6 +429,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             notaEmitida.setOperacao((Operacao) obj);
         } else if (obj instanceof Pessoa) {
             notaEmitida.setPessoa((Pessoa) obj);
+        } else if (obj instanceof ListaDePreco) {
+            notaEmitida.setListaDePreco((ListaDePreco) obj);
         }
     }
 
@@ -424,10 +444,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void selecionaPessoa(SelectEvent event) {
         notaEmitida.setPessoa((Pessoa) event.getObject());
-    }
-
-    public void selecionaListaDePreco(SelectEvent event) {
-        notaEmitida.setListaDePreco((ListaDePreco) event.getObject());
     }
 
     public void selecionaNotaEmitida(SelectEvent e) {
