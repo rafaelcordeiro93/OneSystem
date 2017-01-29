@@ -1,0 +1,58 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">                                 
+                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+                    <div class="EmptyBox5"/>
+                    <div class="ui-fluid">
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputNumberDialog id="neId" value="#{contaDeEstoqueView.contaDeEstoque.id}" dialog="#{selecaoContaDeEstoqueView}" mbView="#{contaDeEstoqueView}"/>
+
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{contaDeEstoqueView.contaDeEstoque.nome}" maxlength="60"/>
+
+                            <p:outputLabel value="#{l.Operacao}"/>
+                            <a:inputTextDialog id="neOperacao" value="#{contaDeEstoqueView.contaDeEstoque.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}"/> 
+
+                            <p:outputLabel value="#{l.Operacao_Fisica}"/>
+                            <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.contaDeEstoque.operacaoFisica}">
+                                <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="#{l.Operacao_Fisica}" itemValue="#{Operacao_Fisica}" >
+                                </f:selectItems>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+
+                    </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <p:separator/>
+
+                    <p:commandButton value=" #{l.Adicionar}" action="#{contaDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value=" #{l.Atualizar}" action="#{contaDeEstoqueView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value=" #{l.Remover}" action="#{contaDeEstoqueView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value=" #{l.Limpar}" action="#{contaDeEstoqueView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <p:commandButton value=" #{l.Desfazer}" action="#{contaDeEstoqueView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -17,7 +17,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
@@ -33,8 +33,9 @@ public class ContaDeEstoque implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_CONTADEESTOQUE", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull(message = "{operacao_not_null}")
-    @ManyToOne
+    @NotNull(message = "{nome_not_null}")
+    private String nome;
+    @OneToMany(mappedBy = "contasDeEstoque")
     private Operacao operacao;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{operacao_fisica_not_null}")
@@ -43,8 +44,9 @@ public class ContaDeEstoque implements Serializable {
     public ContaDeEstoque() {
     }
 
-    public ContaDeEstoque(Long id, Operacao operacao, OperacaoFisica operacaoFisica) throws DadoInvalidoException {
+    public ContaDeEstoque(Long id, String nome, Operacao operacao, OperacaoFisica operacaoFisica) throws DadoInvalidoException {
         this.id = id;
+        this.nome = nome;
         this.operacao = operacao;
         this.operacaoFisica = operacaoFisica;
         ehValido();
@@ -62,8 +64,12 @@ public class ContaDeEstoque implements Serializable {
         return operacaoFisica;
     }
 
+    public String getNome() {
+        return nome;
+    }
+
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("operacao", "operacaoFisica");
+        List<String> campos = Arrays.asList("nome", "operacao", "operacaoFisica");
         new ValidadorDeCampos<ContaDeEstoque>().valida(this, campos);
     }
 
@@ -84,7 +90,7 @@ public class ContaDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "ContaDeEstoque{" + "id=" + id + ", operacao=" + operacao + ", operacaoFisica=" + operacaoFisica + '}';
+        return "ContaDeEstoque{" + "id=" + id + ", nome=" + nome + ", operacao=" + operacao + ", operacaoFisica=" + operacaoFisica + '}';
     }
 
 }
