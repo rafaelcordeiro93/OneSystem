@@ -18,7 +18,8 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2, ui-g-12 ui-md-1 ui-grc-2, ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="margem" value="#{grupoDeMargemView.grupoDeMargem.id}" dialog="#{selecaoGrupoDeMargemView}" mbView="#{grupoDeMargemView}"/>
+                            <a:inputNumberDialog id="margem" value="#{grupoDeMargemView.grupoDeMargem.id}" dialog="#{selecaoGrupoDeMargemView}" mbView="#{grupoDeMargemView}"
+                                                 update=":conteudo" />
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{grupoDeMargemView.grupoDeMargem.nome}" />

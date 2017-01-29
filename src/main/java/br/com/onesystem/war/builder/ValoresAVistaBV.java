@@ -24,6 +24,8 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal dinheiro;
     private BigDecimal acrescimo;
     private BigDecimal desconto;
+    private BigDecimal porcentagemAcrescimo;
+    private BigDecimal porcentagemDesconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
     private BigDecimal credito;
@@ -142,7 +144,23 @@ public class ValoresAVistaBV implements Serializable {
     public void setCheques(List<Cheque> cheques) {
         this.cheques = cheques;
     }
-    
+
+    public BigDecimal getPorcentagemAcrescimo() {
+        return porcentagemAcrescimo;
+    }
+
+    public void setPorcentagemAcrescimo(BigDecimal porcentagemAcrescimo) {
+        this.porcentagemAcrescimo = porcentagemAcrescimo;
+    }
+
+    public BigDecimal getPorcentagemDesconto() {
+        return porcentagemDesconto;
+    }
+
+    public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
+        this.porcentagemDesconto = porcentagemDesconto;
+    }
+
     public ValoresAVista construir() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)

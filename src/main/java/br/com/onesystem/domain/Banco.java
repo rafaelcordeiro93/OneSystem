@@ -1,13 +1,10 @@
 package br.com.onesystem.domain;
 
-import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

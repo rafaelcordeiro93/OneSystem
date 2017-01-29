@@ -29,11 +29,7 @@ public class NotaEmitidaBV implements Serializable {
     private List<Titulo> titulos;
     private List<Baixa> baixas;
     private ListaDePreco listaDePreco;
-    private BigDecimal acrescimo = BigDecimal.ZERO;
-    private BigDecimal desconto = BigDecimal.ZERO;
     private ValoresAVista valoresAVista;
-    private BigDecimal frete;
-    private BigDecimal despesaCobranca;
     private Date emissao;
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
@@ -103,28 +99,12 @@ public class NotaEmitidaBV implements Serializable {
         this.titulos = titulos;
     }
 
-    public BigDecimal getAcrescimo() {
-        return acrescimo;
-    }
-
-    public void setAcrescimo(BigDecimal acrescimo) {
-        this.acrescimo = acrescimo;
-    }
-
-    public BigDecimal getDesconto() {
-        return desconto;
-    }
-
     public FormaDeRecebimento getFormaDeRecebimento() {
         return formaDeRecebimento;
     }
 
     public void setFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         this.formaDeRecebimento = formaDeRecebimento;
-    }
-
-    public void setDesconto(BigDecimal desconto) {
-        this.desconto = desconto;
     }
 
     public ValoresAVista getValoresAVista() {
@@ -134,23 +114,7 @@ public class NotaEmitidaBV implements Serializable {
     public void setValoresAVista(ValoresAVista valoresAVista) {
         this.valoresAVista = valoresAVista;
     }
-
-    public BigDecimal getFrete() {
-        return frete;
-    }
-
-    public void setFrete(BigDecimal frete) {
-        this.frete = frete;
-    }
-
-    public BigDecimal getDespesaCobranca() {
-        return despesaCobranca;
-    }
-
-    public void setDespesaCobranca(BigDecimal despesaCobranca) {
-        this.despesaCobranca = despesaCobranca;
-    }
-
+    
     public Date getEmissao() {
         return emissao;
     }

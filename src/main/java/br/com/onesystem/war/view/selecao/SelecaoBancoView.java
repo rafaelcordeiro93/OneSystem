@@ -21,6 +21,7 @@ public class SelecaoBancoView extends BasicCrudMBImpl<Banco> implements Serializ
         beans = service.buscarBancos();
     }
 
+    @Override
     public void abrirDialogo() {
         exibirNaTela("selecaoBanco");
     }

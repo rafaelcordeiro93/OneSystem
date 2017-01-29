@@ -21,6 +21,7 @@ public class SelecaoGrupoDeMargemView extends BasicCrudMBImpl<Margem> implements
         beans = service.buscarGrupoDeMargens();
     }
 
+    @Override
     public void abrirDialogo() {
         exibirNaTela("selecaoGrupoDeMargem");
     }

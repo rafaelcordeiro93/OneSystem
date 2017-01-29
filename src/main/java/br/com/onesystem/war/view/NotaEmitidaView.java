@@ -33,6 +33,7 @@ import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
+import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.ValoresAVistaBV;
 import br.com.onesystem.war.builder.ItemEmitidoBV;
@@ -82,6 +83,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     private ParcelaBV parcelaSelecionada;
     private NotaEmitida novoRegistroNE;
 
+    //Variáveis para criação de Cheques
+    private ChequeBV cheque;
+    private List<ChequeBV> cheques;
+    private ChequeBV chequeSelecionado;
+
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
 
@@ -112,6 +118,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         valoresAVista = new ValoresAVistaBV();
         parcelas = new ArrayList<ParcelaBV>();
         notaEmitidaSelecionada = null;
+        parcelaSelecionada = new ParcelaBV();
+        cheque = new ChequeBV();
         inicializaCotacoes();
     }
 
@@ -296,18 +304,19 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     // -------------- Fim Operações para criação da entidade ------------------
     // ---------------------- Forma de Recebimento ----------------------------
-    private void calculaTotaisFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
+    private void calculaTotaisFormaDeRecebimento() {
+        FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
         if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
                 && getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal cem = new BigDecimal(100);
             BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
             BigDecimal resultado = p.multiply(getTotalNota());
-            alteraValorDeFormaDeRecebimento(formaDeRecebimento, resultado);
+            incluiValorDeFormaDeRecebimento(resultado);
         }
     }
 
-    private void alteraValorDeFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento, BigDecimal resultado) {
-        switch (formaDeRecebimento.getFormaPadraoDeEntrada()) {
+    private void incluiValorDeFormaDeRecebimento(BigDecimal resultado) {
+        switch (notaEmitida.getFormaDeRecebimento().getFormaPadraoDeEntrada()) {
             case DINHEIRO:
                 valoresAVista.setDinheiro(resultado);
                 break;
@@ -431,32 +440,27 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             notaEmitida.setPessoa((Pessoa) obj);
         } else if (obj instanceof ListaDePreco) {
             notaEmitida.setListaDePreco((ListaDePreco) obj);
+        } else if (obj instanceof Item) {
+            itemEmitido.setItem((Item) obj);
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+            session.setAttribute("onesystem.item.token", itemEmitido.getItem());
+        } else if (obj instanceof FormaDeRecebimento) {
+            FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
+            notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
+            calculaTotaisFormaDeRecebimento();
+        } else if (obj instanceof Banco) {
+            cheque.setBanco((Banco) obj);
         }
     }
 
+    public void selecionaChequeDeEntrada(SelectEvent event){
+        chequeSelecionado = (ChequeBV) event.getObject();
+        cheque = chequeSelecionado;
+    }
+    
     public void selecionaCartao(SelectEvent event) {
         parcelaSelecionada.setCartao((Cartao) event.getObject());
-    }
-
-    public void selecionaOperacao(SelectEvent event) {
-        notaEmitida.setOperacao((Operacao) event.getObject());
-    }
-
-    public void selecionaPessoa(SelectEvent event) {
-        notaEmitida.setPessoa((Pessoa) event.getObject());
-    }
-
-    public void selecionaNotaEmitida(SelectEvent e) {
-        NotaEmitida r = (NotaEmitida) e.getObject();
-        notaEmitida = new NotaEmitidaBV(r);
-        notaEmitidaSelecionada = r;
-    }
-
-    public void selecionaItem(SelectEvent event) {
-        itemEmitido.setItem((Item) event.getObject());
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
 
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
@@ -473,24 +477,84 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
     }
 
-    public void selecionaFormaDeRecebimento(SelectEvent e) {
-        FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) e.getObject();
-        notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
-        calculaTotaisFormaDeRecebimento(formaDeRecebimento);
-    }
-
     public void selecionarBanco(SelectEvent event) {
         Banco banco = (Banco) event.getObject();
         parcelaSelecionada.setBanco(banco);
     }
 
     // ----------------------------- Fim Selecao ------------------------------
+    // ------------------ Outras Operações da Janela --------------------------
+    /**
+     * Calcula o valor de acréscimo e desconto após informar um dos campos de
+     * porcentagem de acréscimo e desconto.
+     */
+    public void calculaValorAcrescimoEDesconto() {
+        BigDecimal total = getTotalItens();
+        if (total.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal pAcrescimo = valoresAVista.getPorcentagemAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getPorcentagemAcrescimo();
+            BigDecimal pDesconto = valoresAVista.getPorcentagemDesconto() == null ? BigDecimal.ZERO : valoresAVista.getPorcentagemDesconto();
+            BigDecimal acrescimo = BigDecimal.ZERO;
+            BigDecimal desconto = BigDecimal.ZERO;
+            BigDecimal cem = new BigDecimal(100);
+
+            if (pAcrescimo.compareTo(BigDecimal.ZERO) > 0) {
+                acrescimo = (pAcrescimo.multiply(total)).divide(cem, 2, BigDecimal.ROUND_UP);
+                valoresAVista.setAcrescimo(acrescimo);
+            } else {
+                valoresAVista.setAcrescimo(BigDecimal.ZERO);
+            }
+            if (pDesconto.compareTo(BigDecimal.ZERO) > 0) {
+                desconto = (pDesconto.multiply(valoresAVista.getAcrescimo().add(total))).divide(cem, 2, BigDecimal.ROUND_UP);
+                valoresAVista.setDesconto(desconto);
+            } else {
+                valoresAVista.setDesconto(BigDecimal.ZERO);
+            }
+
+            incluiValorDeFormaDeRecebimento(getTotalNota());
+        }
+    }
+
+    /**
+     * Calcula a porcentagem de acréscimo e desconto após informar um dos campos
+     * de valor de acréscimo e desconto.
+     */
+    public void calculaPorcentagemAcrescimoEDesconto() {
+        BigDecimal total = getTotalItens();
+        if (total.compareTo(BigDecimal.ZERO) > 0) {
+            BigDecimal acrescimo = valoresAVista.getAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getAcrescimo();
+            BigDecimal desconto = valoresAVista.getDesconto() == null ? BigDecimal.ZERO : valoresAVista.getDesconto();
+            BigDecimal pAcrescimo = BigDecimal.ZERO;
+            BigDecimal pDesconto = BigDecimal.ZERO;
+            BigDecimal cem = new BigDecimal(100);
+
+            if (acrescimo.compareTo(BigDecimal.ZERO) > 0) {
+                pAcrescimo = (acrescimo.multiply(cem)).divide(total, 2, BigDecimal.ROUND_UP);
+                valoresAVista.setPorcentagemAcrescimo(pAcrescimo);
+            } else {
+                valoresAVista.setPorcentagemAcrescimo(BigDecimal.ZERO);
+            }
+            if (desconto.compareTo(BigDecimal.ZERO) > 0) {
+                pDesconto = (desconto.multiply(cem)).divide((valoresAVista.getAcrescimo().add(total)), 2, BigDecimal.ROUND_UP);
+                valoresAVista.setPorcentagemDesconto(pDesconto);
+            } else {
+                valoresAVista.setPorcentagemDesconto(BigDecimal.ZERO);
+            }
+
+            incluiValorDeFormaDeRecebimento(getTotalNota());
+        }
+    }
+
+    public void calculaValoresTotais() {
+        incluiValorDeFormaDeRecebimento(getTotalNota());
+    }
+
+    // ---------------- Fim Outras Operações da Janela ------------------------
     //----------------------- Getter Personalizados ---------------------------
-    private BigDecimal getTotalNota() {
-        BigDecimal acrescimo = notaEmitida.getAcrescimo() == null ? BigDecimal.ZERO : notaEmitida.getAcrescimo();
-        BigDecimal frete = notaEmitida.getFrete() == null ? BigDecimal.ZERO : notaEmitida.getFrete();
-        BigDecimal despesaCobranca = notaEmitida.getDespesaCobranca() == null ? BigDecimal.ZERO : notaEmitida.getDespesaCobranca();
-        BigDecimal desconto = notaEmitida.getDesconto() == null ? BigDecimal.ZERO : notaEmitida.getDesconto();
+    public BigDecimal getTotalNota() {
+        BigDecimal acrescimo = valoresAVista.getAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getAcrescimo();
+        BigDecimal frete = valoresAVista.getFrete() == null ? BigDecimal.ZERO : valoresAVista.getFrete();
+        BigDecimal despesaCobranca = valoresAVista.getDespesaCobranca() == null ? BigDecimal.ZERO : valoresAVista.getDespesaCobranca();
+        BigDecimal desconto = valoresAVista.getDesconto() == null ? BigDecimal.ZERO : valoresAVista.getDesconto();
 
         return getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
     }
@@ -679,6 +743,30 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void setService(CotacaoService service) {
         this.service = service;
+    }
+
+    public ChequeBV getCheque() {
+        return cheque;
+    }
+
+    public void setCheque(ChequeBV cheque) {
+        this.cheque = cheque;
+    }
+
+    public List<ChequeBV> getCheques() {
+        return cheques;
+    }
+
+    public void setCheques(List<ChequeBV> cheques) {
+        this.cheques = cheques;
+    }
+
+    public ChequeBV getChequeSelecionado() {
+        return chequeSelecionado;
+    }
+
+    public void setChequeSelecionado(ChequeBV chequeSelecionado) {
+        this.chequeSelecionado = chequeSelecionado;
     }
 
     //------------------- Fim Getters and Setters -----------------------------

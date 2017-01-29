@@ -193,6 +193,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .PaddingPx4{padding: 4px !important}
 .PaddingTopDown3Px{padding: 3px 0px 3px 0px !important}
 .Padding-right-Px2{padding: 0px 2px 0px 0px !important}
+.PaddingTop2Px{padding: 2px 0px 0px 0px !important}
 
 /* Containers */
 .Container100{ width:100%; float:left;}

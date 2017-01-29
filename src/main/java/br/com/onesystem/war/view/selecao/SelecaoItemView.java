@@ -21,6 +21,7 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
         beans = service.buscarItems();
     }
 
+    @Override
     public void abrirDialogo() {
         exibirNaTela("selecaoItem");
     }
