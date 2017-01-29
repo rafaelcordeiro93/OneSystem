@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class ValoresAVistaBV implements Serializable {
     private BoletoDeCartao boletoDeCartao;
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
-    private List<Cheque> cheques;
+    private List<Cheque> cheques = new ArrayList<Cheque>();
 
     public ValoresAVistaBV() {
     }

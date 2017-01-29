@@ -5,6 +5,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -119,6 +120,11 @@ public class Cheque implements Serializable {
 
     public Date getVencimento() {
         return vencimento;
+    }
+    
+    public String getVencimentoFormatado() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(getVencimento());
     }
 
     public Banco getBanco() {

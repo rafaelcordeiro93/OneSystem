@@ -31,6 +31,7 @@ import br.com.onesystem.reportTemplate.CotacaoValores;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.ChequeBV;
@@ -85,8 +86,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     //Variáveis para criação de Cheques
     private ChequeBV cheque;
-    private List<ChequeBV> cheques;
-    private ChequeBV chequeSelecionado;
+    private Cheque chequeSelecionado;
 
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService configuracaoService;
@@ -428,6 +428,29 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         }
     }
 
+    /**
+     * Adiciona o cheque dentro da lista de cheques na janela
+     * detalheChequeEntrada.
+     */
+    public void addChequeEntrada() {
+        try {
+            preparaChequeEntrada();
+            Cheque c = cheque.construirComID();
+            valoresAVista.getCheques().add(c);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    /**
+     * Prepara cheque para ser adicionado.
+     */
+    private void preparaChequeEntrada() {
+        cheque.setId(getIdCheque());
+        cheque.setNumeroParcela(1);
+        cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
+    }
+
     // ------------------------- Fim Parcelas ---------------------------------
     // ----------------------------- Selecao ----------------------------------
     @Override
@@ -454,11 +477,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         }
     }
 
-    public void selecionaChequeDeEntrada(SelectEvent event){
-        chequeSelecionado = (ChequeBV) event.getObject();
-        cheque = chequeSelecionado;
+    public void selecionaChequeDeEntrada(SelectEvent event) {
+        chequeSelecionado = (Cheque) event.getObject();
+        cheque = new ChequeBV(chequeSelecionado);
     }
-    
+
     public void selecionaCartao(SelectEvent event) {
         parcelaSelecionada.setCartao((Cartao) event.getObject());
     }
@@ -611,6 +634,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         return id;
     }
 
+    private Long getIdCheque() {
+        Long id = (long) 1;
+        if (!parcelas.isEmpty()) {
+            for (Cheque c : valoresAVista.getCheques()) {
+                if (c.getId() >= id) {
+                    id = c.getId() + 1;
+                }
+            }
+        }
+        return id;
+    }
+
     private Long getCodigoItem() {
         Long id = (long) 1;
         if (!notaEmitida.getItensEmitidos().isEmpty()) {
@@ -753,19 +788,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         this.cheque = cheque;
     }
 
-    public List<ChequeBV> getCheques() {
-        return cheques;
-    }
-
-    public void setCheques(List<ChequeBV> cheques) {
-        this.cheques = cheques;
-    }
-
-    public ChequeBV getChequeSelecionado() {
+    public Cheque getChequeSelecionado() {
         return chequeSelecionado;
     }
 
-    public void setChequeSelecionado(ChequeBV chequeSelecionado) {
+    public void setChequeSelecionado(Cheque chequeSelecionado) {
         this.chequeSelecionado = chequeSelecionado;
     }
 

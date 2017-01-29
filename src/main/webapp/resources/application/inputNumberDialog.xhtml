@@ -12,13 +12,15 @@
         <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
         <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
         <composite:attribute name="update" default="" shortDescription="Atualiza componte por ajax."/>
+        <composite:attribute name="style" shortDescription="Estilo CSS aplicado quando renderizado o componente."/>
+        <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
     </composite:interface>
 
     <composite:implementation>
 
         <f:loadBundle basename="label_messages" var="l"/>
 
-        <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad">
+        <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100 #{cc.attrs.styleClass}" style="#{cc.attrs.style}">
             <p:inputNumber id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
                 <p:ajax event="blur" listener="#{cc.attrs.mbView.buscaPorId}" update="#{cc.attrs.id}-txt #{cc.attrs.update}"/>
             </p:inputNumber>
