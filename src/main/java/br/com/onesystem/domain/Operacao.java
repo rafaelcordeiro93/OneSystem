@@ -77,8 +77,8 @@ public class Operacao implements Serializable {
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
     private Despesa compraAPrazo;
-    @OneToMany(mappedBy = "operacao")
-    private List<ContaDeEstoque> contasDeEstoque;
+    @ManyToOne
+    private ContaDeEstoque contasDeEstoque;
     @OneToMany(mappedBy = "operacao")
     private List<NotaEmitida> notasEmitidas;
 
@@ -162,7 +162,7 @@ public class Operacao implements Serializable {
         return compraAPrazo;
     }
 
-    public List<ContaDeEstoque> getContasDeEstoque() {
+    public ContaDeEstoque getContasDeEstoque() {
         return contasDeEstoque;
     }
 

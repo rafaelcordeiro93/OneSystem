@@ -222,7 +222,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         List<Estoque> estoquesBV = new ArrayList<Estoque>();
         for (QuantidadeDeItemBV q : lista) {
             estoqueBV = new EstoqueBV();
-            estoqueBV.setTipo(notaEmitida.getOperacao().getContasDeEstoque().get(0).getOperacaoFisica());
+            estoqueBV.setTipo(notaEmitida.getOperacao().getContasDeEstoque().getOperacaoFisica());
             estoqueBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
             estoqueBV.setQuantidade(q.getQuantidade());
             estoqueBV.setItem(itemEmitido.getItem());

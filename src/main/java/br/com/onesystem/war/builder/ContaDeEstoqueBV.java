@@ -1,0 +1,66 @@
+package br.com.onesystem.war.builder;
+
+import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFisica;
+import java.io.Serializable;
+
+public class ContaDeEstoqueBV implements Serializable {
+
+    private Long id;
+    private String nome;
+    private Operacao operacao;
+    private OperacaoFisica operacaoFisica;
+
+    public ContaDeEstoqueBV(ContaDeEstoque contaDeEstoqueSelecionada) {
+        this.id = contaDeEstoqueSelecionada.getId();
+        this.nome = contaDeEstoqueSelecionada.getNome();
+        this.operacao = contaDeEstoqueSelecionada.getOperacao();
+        this.operacaoFisica = contaDeEstoqueSelecionada.getOperacaoFisica();
+    }
+
+    public ContaDeEstoqueBV() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Operacao getOperacao() {
+        return operacao;
+    }
+
+    public void setOperacao(Operacao operacao) {
+        this.operacao = operacao;
+    }
+
+    public OperacaoFisica getOperacaoFisica() {
+        return operacaoFisica;
+    }
+
+    public void setOperacaoFisica(OperacaoFisica operacaoFisica) {
+        this.operacaoFisica = operacaoFisica;
+    }
+
+    public ContaDeEstoque construir() throws DadoInvalidoException {
+        return new ContaDeEstoqueBuilder().comNome(nome).comOperacao(operacao).comOperacaoFisica(operacaoFisica).construir();
+    }
+
+    public ContaDeEstoque construirComID() throws DadoInvalidoException {
+        return new ContaDeEstoqueBuilder().comID(id).comNome(nome).comOperacao(operacao).comOperacaoFisica(operacaoFisica).construir();
+    }
+}
