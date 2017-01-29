@@ -4,6 +4,7 @@ import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
+import java.util.List;
 
 /**
  *
@@ -13,9 +14,9 @@ public class ContaDeEstoqueBuilder {
 
     private Long id;
     private String nome;
-    private Operacao operacao;
+    private List<Operacao> operacoes;
     private OperacaoFisica operacaoFisica;
-    
+
     public ContaDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
         return this;
@@ -26,8 +27,8 @@ public class ContaDeEstoqueBuilder {
         return this;
     }
 
-    public ContaDeEstoqueBuilder comOperacao(Operacao operacao) {
-        this.operacao = operacao;
+    public ContaDeEstoqueBuilder comOperacoes(List<Operacao> operacoes) {
+        this.operacoes = operacoes;
         return this;
     }
 
@@ -37,7 +38,7 @@ public class ContaDeEstoqueBuilder {
     }
 
     public ContaDeEstoque construir() throws DadoInvalidoException {
-        return new ContaDeEstoque(id, nome, operacao, operacaoFisica);
+        return new ContaDeEstoque(id, nome, operacaoFisica, operacoes);
     }
 
 }

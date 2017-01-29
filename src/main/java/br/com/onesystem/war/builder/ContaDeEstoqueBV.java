@@ -5,19 +5,20 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
+import java.util.List;
 import java.io.Serializable;
 
 public class ContaDeEstoqueBV implements Serializable {
 
     private Long id;
     private String nome;
-    private Operacao operacao;
+    private List<Operacao> operacao;
     private OperacaoFisica operacaoFisica;
 
     public ContaDeEstoqueBV(ContaDeEstoque contaDeEstoqueSelecionada) {
         this.id = contaDeEstoqueSelecionada.getId();
         this.nome = contaDeEstoqueSelecionada.getNome();
-        this.operacao = contaDeEstoqueSelecionada.getOperacao();
+        this.operacao = contaDeEstoqueSelecionada.getOperacoes();
         this.operacaoFisica = contaDeEstoqueSelecionada.getOperacaoFisica();
     }
 
@@ -40,11 +41,11 @@ public class ContaDeEstoqueBV implements Serializable {
         this.nome = nome;
     }
 
-    public Operacao getOperacao() {
+    public List<Operacao> getOperacao() {
         return operacao;
     }
 
-    public void setOperacao(Operacao operacao) {
+    public void setOperacao(List<Operacao> operacao) {
         this.operacao = operacao;
     }
 
@@ -57,10 +58,10 @@ public class ContaDeEstoqueBV implements Serializable {
     }
 
     public ContaDeEstoque construir() throws DadoInvalidoException {
-        return new ContaDeEstoqueBuilder().comNome(nome).comOperacao(operacao).comOperacaoFisica(operacaoFisica).construir();
+        return new ContaDeEstoqueBuilder().comNome(nome).comOperacoes(operacao).comOperacaoFisica(operacaoFisica).construir();
     }
 
     public ContaDeEstoque construirComID() throws DadoInvalidoException {
-        return new ContaDeEstoqueBuilder().comID(id).comNome(nome).comOperacao(operacao).comOperacaoFisica(operacaoFisica).construir();
+        return new ContaDeEstoqueBuilder().comID(id).comNome(nome).comOperacoes(operacao).comOperacaoFisica(operacaoFisica).construir();
     }
 }

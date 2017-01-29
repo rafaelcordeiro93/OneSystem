@@ -78,7 +78,7 @@ public class Operacao implements Serializable {
     @ManyToOne
     private Despesa compraAPrazo;
     @ManyToOne
-    private ContaDeEstoque contasDeEstoque;
+    private ContaDeEstoque contaDeEstoque;
     @OneToMany(mappedBy = "operacao")
     private List<NotaEmitida> notasEmitidas;
 
@@ -162,8 +162,8 @@ public class Operacao implements Serializable {
         return compraAPrazo;
     }
 
-    public ContaDeEstoque getContasDeEstoque() {
-        return contasDeEstoque;
+    public ContaDeEstoque getContaDeEstoque() {
+        return contaDeEstoque;
     }
 
     private void ehValido() throws DadoInvalidoException {

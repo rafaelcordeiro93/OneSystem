@@ -35,8 +35,8 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @OneToMany(mappedBy = "contasDeEstoque")
-    private Operacao operacao;
+    @OneToMany(mappedBy = "contaDeEstoque")
+    private List<Operacao> operacoes;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{operacao_fisica_not_null}")
     private OperacaoFisica operacaoFisica;
@@ -44,11 +44,11 @@ public class ContaDeEstoque implements Serializable {
     public ContaDeEstoque() {
     }
 
-    public ContaDeEstoque(Long id, String nome, Operacao operacao, OperacaoFisica operacaoFisica) throws DadoInvalidoException {
+    public ContaDeEstoque(Long id, String nome, OperacaoFisica operacaoFisica, List<Operacao> operacoes) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.operacao = operacao;
         this.operacaoFisica = operacaoFisica;
+        this.operacoes = operacoes;
         ehValido();
     }
 
@@ -56,8 +56,8 @@ public class ContaDeEstoque implements Serializable {
         return id;
     }
 
-    public Operacao getOperacao() {
-        return operacao;
+    public List<Operacao> getOperacoes() {
+        return operacoes;
     }
 
     public OperacaoFisica getOperacaoFisica() {
@@ -69,7 +69,7 @@ public class ContaDeEstoque implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "operacao", "operacaoFisica");
+        List<String> campos = Arrays.asList("nome", "operacaoFisica");
         new ValidadorDeCampos<ContaDeEstoque>().valida(this, campos);
     }
 
@@ -90,7 +90,7 @@ public class ContaDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "ContaDeEstoque{" + "id=" + id + ", nome=" + nome + ", operacao=" + operacao + ", operacaoFisica=" + operacaoFisica + '}';
+        return "ContaDeEstoque{" + "id=" + id + ", nome=" + nome + ", operacaoFisica=" + operacaoFisica + '}';
     }
 
 }
