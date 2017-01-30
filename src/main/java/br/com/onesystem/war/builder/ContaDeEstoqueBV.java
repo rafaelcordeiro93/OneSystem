@@ -7,12 +7,13 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.util.List;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class ContaDeEstoqueBV implements Serializable {
 
     private Long id;
     private String nome;
-    private List<Operacao> operacao;
+    private List<Operacao> operacao = new ArrayList<Operacao>();
     private OperacaoFisica operacaoFisica;
 
     public ContaDeEstoqueBV(ContaDeEstoque contaDeEstoqueSelecionada) {

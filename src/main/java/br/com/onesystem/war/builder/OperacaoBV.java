@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Receita;
@@ -10,6 +11,7 @@ import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoNota;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
+import java.util.List;
 
 public class OperacaoBV implements Serializable {
 
@@ -27,6 +29,7 @@ public class OperacaoBV implements Serializable {
     private TipoContabil contabilizarCMV;
     private Despesa compraAVista;
     private Despesa compraAPrazo;
+    private List<ContaDeEstoque> contaDeEstoque;
 
     public OperacaoBV(Operacao operacaoSelecionada) {
         this.id = operacaoSelecionada.getId();
@@ -43,6 +46,7 @@ public class OperacaoBV implements Serializable {
         this.contabilizarCMV = operacaoSelecionada.getContabilizarCMV();
         this.compraAVista = operacaoSelecionada.getCompraAVista();
         this.compraAPrazo = operacaoSelecionada.getCompraAPrazo();
+        this.contaDeEstoque = operacaoSelecionada.getContaDeEstoque();
     }
 
     public OperacaoBV() {
@@ -160,15 +164,23 @@ public class OperacaoBV implements Serializable {
         this.compraAPrazo = compraAPrazo;
     }
 
+    public List<ContaDeEstoque> getContaDeEstoque() {
+        return contaDeEstoque;
+    }
+
+    public void setContaDeEstoque(List<ContaDeEstoque> contaDeEstoque) {
+        this.contaDeEstoque = contaDeEstoque;
+    }
+
     public Operacao construir() throws DadoInvalidoException {
         return new OperacaoBuilder().comNome(nome).comOperacaoFinanceira(operacaoFinanceira).comTipoNota(tipoNota).comTipoOperacao(tipoOperacao).comVendaAVista(vendaAVista).
                 comVendaAPrazo(vendaAPrazo).comServicoAVista(servicoAVista).comServicoAPrazo(servicoAPrazo).comReceitaFrete(receitaFrete).comDespesaCMV(despesaCMV).
-                comTipoContabil(contabilizarCMV).comCompraAVista(compraAVista).comCompraAPrazo(compraAPrazo).construir();
+                comTipoContabil(contabilizarCMV).comCompraAVista(compraAVista).comCompraAPrazo(compraAPrazo).comContaDeEstoque(contaDeEstoque).construir();
     }
 
     public Operacao construirComID() throws DadoInvalidoException {
         return new OperacaoBuilder().comID(id).comNome(nome).comOperacaoFinanceira(operacaoFinanceira).comTipoNota(tipoNota).comTipoOperacao(tipoOperacao).comVendaAVista(vendaAVista).
                 comVendaAPrazo(vendaAPrazo).comServicoAVista(servicoAVista).comServicoAPrazo(servicoAPrazo).comReceitaFrete(receitaFrete).comDespesaCMV(despesaCMV).
-                comTipoContabil(contabilizarCMV).comCompraAVista(compraAVista).comCompraAPrazo(compraAPrazo).construir();
+                comTipoContabil(contabilizarCMV).comCompraAVista(compraAVista).comCompraAPrazo(compraAPrazo).comContaDeEstoque(contaDeEstoque).construir();
     }
 }

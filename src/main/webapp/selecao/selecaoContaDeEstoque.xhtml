@@ -6,18 +6,15 @@
                 template="/WEB-INF/templateDialog.xhtml">
 
 
-    <ui:define name="title">#{l.Selecao_De_Comissao}</ui:define>
+    <ui:define name="title">#{l.Selecao_De_Conta_De_Estoque}</ui:define>
 
     <ui:define name="content">
-        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoComissaoView}">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoContaDeEstoqueView}">
             <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                 <h:outputText value="#{bean.id}" />
             </p:column>
             <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
                 <h:outputText value="#{bean.nome}" />
-            </p:column>
-            <p:column headerText="#{l.Operacao}" sortBy="#{bean.operacao.nome}" filterBy="#{bean.operacao.nome}" footerText="#{l.Operacao}" filterMatchMode="contains">
-                <h:outputText value="#{bean.operacao.nome}" />
             </p:column>
             <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{bean.operacaoFisica}" filterBy="#{bean.operacaoFisica}" footerText="#{l.Operacao_Fisica}" filterMatchMode="contains">
                 <h:outputText value="#{bean.operacaoFisica}" />

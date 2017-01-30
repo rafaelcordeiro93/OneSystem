@@ -11,12 +11,14 @@ import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -35,7 +37,7 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @OneToMany(mappedBy = "contaDeEstoque")
+    @ManyToMany(mappedBy = "contaDeEstoque")
     private List<Operacao> operacoes;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{operacao_fisica_not_null}")
@@ -78,7 +80,7 @@ public class ContaDeEstoque implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (!(objeto instanceof ContaDeEstoque)) {
             return false;
         }
         ContaDeEstoque outro = (ContaDeEstoque) objeto;
