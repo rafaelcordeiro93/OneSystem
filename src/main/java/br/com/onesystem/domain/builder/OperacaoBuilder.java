@@ -1,9 +1,7 @@
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.Filial;
-import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -33,7 +31,7 @@ public class OperacaoBuilder {
     private TipoContabil contabilizarCMV;
     private Despesa compraAVista;
     private Despesa compraAPrazo;
-    private List<ContaDeEstoque> contaDeEstoque;
+    private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public OperacaoBuilder comID(Long ID) {
         this.id = ID;
@@ -105,14 +103,14 @@ public class OperacaoBuilder {
         return this;
     }
     
-     public OperacaoBuilder comContaDeEstoque(List<ContaDeEstoque> contaDeEstoque) {
-        this.contaDeEstoque = contaDeEstoque;
+     public OperacaoBuilder comOperacaoDeEstoque(List<OperacaoDeEstoque> operacaoDeEstoque) {
+        this.operacaoDeEstoque = operacaoDeEstoque;
         return this;
     }
 
     public Operacao construir() throws DadoInvalidoException {
         return new Operacao(id, nome, operacaoFinanceira, tipoNota, tipoOperacao, vendaAVista, vendaAPrazo, servicoAVista,
-                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo, contaDeEstoque);
+                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo, operacaoDeEstoque);
     }
 
 }

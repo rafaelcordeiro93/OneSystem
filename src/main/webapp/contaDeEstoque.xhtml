@@ -29,17 +29,17 @@
                         </p:panelGrid>
 
                     </div>
-                    
-                     <p:separator/>
+
+                    <p:separator/>
 
                     <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements "
                                  style="width: 50%" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2">
 
                         <p:outputLabel value="#{l.Operacao}"/>
-                        <a:inputTextDialog id="neOperacao" value="#{contaDeEstoqueView.operacoes.nome}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}"/> 
+                        <a:inputTextDialog id="neOperacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}"/> 
 
                         <p:outputLabel value="#{l.Operacao_Fisica}"/>
-                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.contaDeEstoque.operacaoFisica}">
+                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}">
                             <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="#{l.Operacao_Fisica}" itemValue="#{Operacao_Fisica}" >
                             </f:selectItems>
                         </p:selectOneMenu>
@@ -55,17 +55,17 @@
                     <div class="EmptyBox10"/>
 
 
-                    <p:dataTable id="TaxaDT" var="operacao" value="#{contaDeEstoqueView.contaDeEstoque.operacao}" rowKey="#{operacao.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 50%" 
-                                 reflow="true" selectionMode="single" selection="#{contaDeEstoqueView.operacoesSelecionado}">
-                        <p:ajax event="rowSelect" process="@this" listener="#{contaDeEstoqueView.selecionaOperacoes}" update=":conteudo"/>
-                        <p:column style="width: 5%; text-align: center" colspan="1"> 
-                            <h:outputText value="#{operacao.id}" />
+                    <p:dataTable id="TaxaDT" var="operacaoDeEstoqueBV" value="#{contaDeEstoqueView.listaOperacoesDeEstoqueBV}" rowKey="#{operacaoDeEstoqueBV.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 50%" 
+                                 reflow="true" selectionMode="single" selection="#{contaDeEstoqueView.operacaoDeEstoqueSelecionado}">
+                        <p:ajax event="rowSelect" process="@this" listener="#{contaDeEstoqueView.selecionaOperacaoDeEstoque}" update=":conteudo"/>
+                        <p:column style="width: 10%; text-align: center" headerText="#{l.Id}" sortBy="#{operacaoDeEstoqueBV.id}" colspan="1">
+                            <h:outputText value="#{operacaoDeEstoqueBV.id}" />
                         </p:column>
-                        <p:column headerText="#{l.Operacao}" sortBy="#{operacao.nome}"  colspan="1">
-                            <h:outputText value="#{operacao.nome}" />
+                        <p:column headerText="#{l.Operacao}" sortBy="#{operacaoDeEstoqueBV.operacao.nome}" colspan="1">
+                            <h:outputText value="#{operacaoDeEstoqueBV.operacao.nome}" />
                         </p:column>
-                        <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{contaDeEstoqueView.contaDeEstoque.operacaoFisica}" colspan="2">
-                            <h:outputText  value="#{contaDeEstoqueView.contaDeEstoque.operacaoFisica}" />
+                        <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{operacaoDeEstoqueBV.operacaoFisica}" colspan="2">
+                            <h:outputText  value="#{operacaoDeEstoqueBV.operacaoFisica}" />
                         </p:column>
                     </p:dataTable>
 

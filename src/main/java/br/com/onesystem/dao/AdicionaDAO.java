@@ -49,10 +49,13 @@ public class AdicionaDAO<T> {
             }
         } catch (Exception ex) {
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
+        } catch (StackOverflowError soe) {
+            System.out.println("Verifique Lista do toString()");
+            throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
-            // fecha a entity manager
-            // em.close(); --- Cordeiro&Rauber: Foi tira o fexamento de Entity Manager por nao 
+//             fecha a entity manager  --- Cordeiro&Rauber: Foi tira o fexamento de Entity Manager por nao 
 //           carregar a sessao necessaria para a inclusao de lista ManyToMany dentro das classes.  
+            em.close();
         }
     }
 

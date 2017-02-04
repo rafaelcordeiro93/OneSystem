@@ -7,18 +7,14 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -37,20 +33,16 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @ManyToMany(mappedBy = "contaDeEstoque")
-    private List<Operacao> operacoes;
-    @Enumerated(EnumType.STRING)
-    @NotNull(message = "{operacao_fisica_not_null}")
-    private OperacaoFisica operacaoFisica;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "contaDeEstoque")
+    private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public ContaDeEstoque() {
     }
 
-    public ContaDeEstoque(Long id, String nome, OperacaoFisica operacaoFisica, List<Operacao> operacoes) throws DadoInvalidoException {
+    public ContaDeEstoque(Long id, String nome, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.operacaoFisica = operacaoFisica;
-        this.operacoes = operacoes;
+        this.operacaoDeEstoque = operacaoDeEstoque;
         ehValido();
     }
 
@@ -58,20 +50,16 @@ public class ContaDeEstoque implements Serializable {
         return id;
     }
 
-    public List<Operacao> getOperacoes() {
-        return operacoes;
-    }
-
-    public OperacaoFisica getOperacaoFisica() {
-        return operacaoFisica;
-    }
-
     public String getNome() {
         return nome;
     }
 
+    public List<OperacaoDeEstoque> getOperacaoDeEstoque() {
+        return operacaoDeEstoque;
+    }
+
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "operacaoFisica");
+        List<String> campos = Arrays.asList("nome");
         new ValidadorDeCampos<ContaDeEstoque>().valida(this, campos);
     }
 
@@ -92,7 +80,7 @@ public class ContaDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "ContaDeEstoque{" + "id=" + id + ", nome=" + nome + ", operacaoFisica=" + operacaoFisica + '}';
+        return "ContaDeEstoque{" + "id=" + id + ", nome=" + nome + '}';
     }
 
 }
