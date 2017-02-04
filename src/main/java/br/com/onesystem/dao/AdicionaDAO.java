@@ -51,7 +51,8 @@ public class AdicionaDAO<T> {
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } finally {
             // fecha a entity manager
-            em.close();
+            // em.close(); --- Cordeiro&Rauber: Foi tira o fexamento de Entity Manager por nao 
+//           carregar a sessao necessaria para a inclusao de lista ManyToMany dentro das classes.  
         }
     }
 

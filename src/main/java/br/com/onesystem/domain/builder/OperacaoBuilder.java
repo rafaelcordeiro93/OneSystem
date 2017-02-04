@@ -33,6 +33,7 @@ public class OperacaoBuilder {
     private TipoContabil contabilizarCMV;
     private Despesa compraAVista;
     private Despesa compraAPrazo;
+    private List<ContaDeEstoque> contaDeEstoque;
 
     public OperacaoBuilder comID(Long ID) {
         this.id = ID;
@@ -103,10 +104,15 @@ public class OperacaoBuilder {
         this.compraAPrazo = compraAPrazo;
         return this;
     }
+    
+     public OperacaoBuilder comContaDeEstoque(List<ContaDeEstoque> contaDeEstoque) {
+        this.contaDeEstoque = contaDeEstoque;
+        return this;
+    }
 
     public Operacao construir() throws DadoInvalidoException {
         return new Operacao(id, nome, operacaoFinanceira, tipoNota, tipoOperacao, vendaAVista, vendaAPrazo, servicoAVista,
-                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo);
+                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo, contaDeEstoque);
     }
 
 }
