@@ -17,8 +17,8 @@
                 <p:column headerText="#{l.Data}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Data}" filterMatchMode="contains">
                     <h:outputText value="#{bean.emissao}" />
                 </p:column>
-                <p:column headerText="#{l.Moeda}" sortBy="#{bean.moeda.nome}" filterBy="#{bean.moeda.nome}" footerText="#{l.Moeda}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.moeda.nome}" />
+                <p:column headerText="#{l.Moeda}" sortBy="#{bean.conta.moeda.nome}" filterBy="#{bean.conta.moeda.nome}" footerText="#{l.Moeda}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.conta.moeda.nome}" />
                 </p:column>
                 <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" filterBy="#{bean.valor}" footerText="#{l.Valor}" filterMatchMode="contains">
                     <h:outputText value="#{bean.valor}" />

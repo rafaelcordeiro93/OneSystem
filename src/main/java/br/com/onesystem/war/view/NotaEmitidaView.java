@@ -135,7 +135,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         cotacaoLista = service.buscarCotacoesDoDiaAtual();
         cotacoes = new ArrayList<CotacaoValores>();
         for (Cotacao c : cotacaoLista) {
-            cotacoes.add(new CotacaoValores(c, null, null, null, configuracao.getMoedaPadrao()));
+            cotacoes.add(new CotacaoValores(c, null, null, null));
         }
     }
 

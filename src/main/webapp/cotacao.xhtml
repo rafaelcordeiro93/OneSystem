@@ -28,29 +28,23 @@
                                 </p:commandButton>
                             </h:panelGrid>     
 
-
-                            <p:outputLabel  value="#{l.Moeda}" />
-                            <h:panelGrid columns="2" style="margin-left: -1%" >
-                                <p:inputText id="selecionaMoeda" size="26" readonly="true"  value="#{cotacaoView.cotacao.moeda.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionaMoeda}" process="@this" update="selecionaMoeda" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <p:outputLabel  value="#{l.Valor}"/>
-                            <p:inputNumber maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"  symbol="#{cotacaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{cotacaoView.cotacao.valor}"/>         
-
-
-                            <p:outputLabel  value="#{l.Data}" />
-                            <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90"  />
-
                             <p:outputLabel  value="#{l.Conta}"/>
                             <h:panelGrid columns="2" style="margin-left: -1%" >
                                 <p:inputText id="Conta" readonly="true" size="26" value="#{cotacaoView.cotacao.conta.nome}"/>
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionarConta}" process="@this" update="Conta" />
+                                    <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionarConta}" process="@this" update="Conta Valor" />
                                 </p:commandButton>
                             </h:panelGrid> 
+
+
+                            <p:outputLabel  value="#{l.Valor}"/>
+                            <p:inputNumber id="Valor" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cotacaoView.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{cotacaoView.cotacao.valor}"/>         
+
+
+                            <p:outputLabel  value="#{l.Data}" />
+                            <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" />
+
+
                         </p:panelGrid>
 
                     </div>
