@@ -47,6 +47,9 @@ public class AtualizaDAO<T> {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
                 throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
             }
+        } catch (StackOverflowError soe) {
+            System.out.println("Verifique Lista do toString()");
+            throw new FDadoInvalidoException("Verifique Lista do toString()");
         } catch (Exception ex) {
             throw new FDadoInvalidoException("<AtualizaDAO> Erro de Gravação: " + ex.getMessage());
         } finally {

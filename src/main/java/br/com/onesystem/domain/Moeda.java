@@ -41,8 +41,6 @@ public class Moeda implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoBandeira bandeira;
     @OneToMany(mappedBy = "moeda")
-    private List<Cotacao> cotacoes;
-    @OneToMany(mappedBy = "moeda")
     private List<DespesaProvisionada> listaDespesas;
     @OneToMany(mappedBy = "moeda")
     private List<Conta> listaContas;
@@ -74,10 +72,6 @@ public class Moeda implements Serializable {
 
     public String getSigla() {
         return sigla;
-    }
-
-    public List<Cotacao> getCotacoes() {
-        return cotacoes;
     }
 
     public List<DespesaProvisionada> getListaDespesas() {

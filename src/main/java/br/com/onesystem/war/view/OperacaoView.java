@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.OperacaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
@@ -123,11 +124,11 @@ public class OperacaoView implements Serializable {
         this.operacao.setReceitaFrete(receitaSelecionada);
     }
 
-      public void selecionaDespesaCMV(SelectEvent event) {
+    public void selecionaDespesaCMV(SelectEvent event) {
         Despesa despesaSelecionada = (Despesa) event.getObject();
         this.operacao.setDespesaCMV(despesaSelecionada);
     }
-    
+
     public void selecionaCompraAVista(SelectEvent event) {
         Despesa despesaSelecionada = (Despesa) event.getObject();
         this.operacao.setCompraAVista(despesaSelecionada);
@@ -142,6 +143,22 @@ public class OperacaoView implements Serializable {
         Operacao a = (Operacao) e.getObject();
         operacao = new OperacaoBV(a);
         operacaoSelecionada = a;
+    }
+
+    public void buscaPorId() {
+        Long id = operacao.getId();
+        if (id != null) {
+            try {
+                OperacaoDAO dao = new OperacaoDAO();
+                Operacao c = dao.buscarOperacao().porId(id).resultado();
+                operacaoSelecionada = c;
+                operacao = new OperacaoBV(operacaoSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                operacao.setId(id);
+                die.print();
+            }
+        }
     }
 
     public List<OperacaoFinanceira> getOperacaoFinanceira() {

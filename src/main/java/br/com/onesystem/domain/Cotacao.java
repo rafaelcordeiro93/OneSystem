@@ -27,8 +27,6 @@ public class Cotacao implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_COTACAO", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @ManyToOne(optional = false)
-    private Moeda moeda;
     @NotNull(message = "{valor_not_null}")
     private BigDecimal valor;
     @NotNull(message = "{data_not_null}")
@@ -43,9 +41,8 @@ public class Cotacao implements Serializable {
     public Cotacao() {
     }
 
-    public Cotacao(Long id, Moeda moeda, BigDecimal valor, Date data, Conta conta) throws DadoInvalidoException {
+    public Cotacao(Long id, BigDecimal valor, Date data, Conta conta) throws DadoInvalidoException {
         this.id = id;
-        this.moeda = moeda;
         this.valor = valor;
         this.emissao = data;
         this.conta = conta;
@@ -56,16 +53,14 @@ public class Cotacao implements Serializable {
         return id;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
-    }
+  
 
     public BigDecimal getValor() {
         return valor;
     }
 
     public String getValorFormatado() {
-        return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(valor);
+        return NumberFormat.getCurrencyInstance(conta.getMoeda().getBandeira().getLocal()).format(valor);
     }
 
     public Conta getConta() {
@@ -98,7 +93,7 @@ public class Cotacao implements Serializable {
 
     @Override
     public String toString() {
-        return "Cotacao{" + "id=" + id + ", moeda=" + moeda + ", valor=" + valor + ", emissao=" + emissao + ", conta=" + conta + '}';
+        return "Cotacao{" + "id=" + id + ", valor=" + valor + ", emissao=" + emissao + ", conta=" + conta + '}';
     }
 
 }
