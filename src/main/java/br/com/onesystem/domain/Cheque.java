@@ -114,7 +114,7 @@ public class Cheque implements Serializable {
     }
 
     public String getValorFormatado() {
-        Locale local = cotacao.getMoeda().getBandeira().getLocal();
+        Locale local = cotacao.getConta().getMoeda().getBandeira().getLocal();
         NumberFormat nf = NumberFormat.getCurrencyInstance(local);
 
         return nf.format(getValor());

@@ -180,7 +180,7 @@ public class ParcelaBV implements Serializable {
     }
 
     public String getValorFormatado() {
-        return NumberFormat.getCurrencyInstance(cotacao.getMoeda().getBandeira().getLocal()).format(valor);
+        return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(valor);
     }
 
     public BigDecimal getValor() {

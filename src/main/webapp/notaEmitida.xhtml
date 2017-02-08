@@ -372,7 +372,7 @@
                          emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
 
                 <p:column style="text-align: center; width: 7%" >                                         
-                    <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{cotacaoValores.cotacao.moeda.bandeira}.png" />
+                    <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{cotacaoValores.cotacao.conta.moeda.bandeira}.png" />
                 </p:column>
 
                 <p:column headerText="#{l.Cotacao}" style="text-align: right; width: 15%">                                        
@@ -429,7 +429,7 @@
                 <p:inputText value="#{notaEmitidaView.cheque.numeroCheque}" />   
 
                 <p:outputLabel value="#{l.Valor}"/>
-                <p:inputNumber id="dceValor" maxValue="999999999999.99" symbol="#{notaEmitidaView.cheque.cotacao.moeda.sigla} " minValue="0.00" value="#{notaEmitidaView.cheque.valor}"
+                <p:inputNumber id="dceValor" maxValue="999999999999.99" symbol="#{notaEmitidaView.cheque.cotacao.conta.moeda.sigla} " minValue="0.00" value="#{notaEmitidaView.cheque.valor}"
                                decimalSeparator="," thousandSeparator="."/>
 
                 <p:outputLabel value="#{l.Vencimento}"/>
