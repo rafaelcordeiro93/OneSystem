@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
@@ -25,12 +26,16 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.domain.builder.ParcelaBuilder;
+import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.CotacaoValores;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.Money;
+import br.com.onesystem.valueobjects.OperacaoFisica;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
@@ -47,9 +52,14 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -60,6 +70,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -82,7 +93,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     private List<CotacaoValores> cotacoes;
     private List<ParcelaBV> parcelas;
     private ParcelaBV parcelaSelecionada;
+    private ParcelaBV parcelaBV;
     private NotaEmitida novoRegistroNE;
+    private Cotacao cotacao;
 
     //Variáveis para criação de Cheques
     private ChequeBV cheque;
@@ -100,12 +113,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         iniciarConfiguracoes();
         limparJanela();
         limpaSessao();
+
     }
 
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
-        } catch (EDadoInvalidoException ex) {
+            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+        } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
@@ -118,9 +133,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         valoresAVista = new ValoresAVistaBV();
         parcelas = new ArrayList<ParcelaBV>();
         notaEmitidaSelecionada = null;
-        parcelaSelecionada = new ParcelaBV();
         cheque = new ChequeBV();
         inicializaCotacoes();
+        limparChequeEntrada();
+        parcelaBV = new ParcelaBV();
     }
 
     private void limpaSessao() {
@@ -151,7 +167,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
-            Logger.getLogger(NotaEmitidaView.class.getName()).log(Level.SEVERE, null, ex);
+            ex.print();
         } catch (ConstraintViolationException cpe) {
             ErrorMessage.print(cpe.toString());
         }
@@ -222,9 +238,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         List<Estoque> estoquesBV = new ArrayList<Estoque>();
         for (QuantidadeDeItemBV q : lista) {
             estoqueBV = new EstoqueBV();
-            estoqueBV.setTipo(notaEmitida.getOperacao().getContaDeEstoque().getOperacaoFisica());
             estoqueBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
             estoqueBV.setQuantidade(q.getQuantidade());
+            estoqueBV.setTipo(OperacaoFisica.SAIDA);
             estoqueBV.setItem(itemEmitido.getItem());
             estoquesBV.add(estoqueBV.construir());
         }
@@ -395,11 +411,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      * Método responsável por abrir o diálogo de detalhamento das parcelas.
      */
     public void detalharParcela() {
+        parcelaBV = new ParcelaBV(parcelaSelecionada);
         RequestContext req = RequestContext.getCurrentInstance();
         if (parcelaSelecionada.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CHEQUE) {
-            req.execute("PF('detalheCheque').show()");
+            req.execute("PF('detalheChequeParcela').show()");
+            req.update("conteudo:panelDetCheParcela");
         } else if (parcelaSelecionada.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CARTAO) {
-            req.execute("PF('detalheCartao').show()");
+
+            req.execute("PF('detalheCartaoParcela').show()");
+            req.update("conteudo:panelDetCartaoPar");
         }
     }
 
@@ -408,23 +428,37 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      * número de parcelas.
      */
     public void criaParcelas() {
-        Integer numParcelas = valoresAVista.getParcelas(); //Número de parcelas
-        TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
-        Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
+        try {
+            if (valoresAVista.getAFaturar() != null && (valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0
+                    || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0)) {
+                Integer numParcelas = valoresAVista.getParcelas(); //Número de parcelas
+                TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
+                Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
 
-        if (numParcelas != null && numParcelas > 0) {
+                if (numParcelas != null && numParcelas > 0) {
 
-            BigDecimal valorParcelado = getTotalNota().divide(new BigDecimal(numParcelas), 2, BigDecimal.ROUND_UP);
+                    BigDecimal soma = valoresAVista.getAFaturar().add(getTotalParcelas());
+                    Money m = Money.valueOf(soma.toString(), "USD");
+                    Money[] distribute = m.distribute(numParcelas);
 
-            // Busca o primeiro vencimento das parcelas
-            Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
+                    // Busca o primeiro vencimento das parcelas
+                    Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
 
-            parcelas = new ArrayList<>();
-            for (int i = 1; i <= numParcelas; i++) {
-                parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(valorParcelado)
-                        .comVencimento(vencimento).comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).construir());
-                vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
+                    parcelas = new ArrayList<>();
+                    for (int i = 0; i < numParcelas; i++) {
+                        parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
+                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
+                                .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).construir());
+                        vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
+                    }
+
+                    recalculaValorAFaturar();
+                }
+            } else {
+                ErrorMessage.print(new BundleUtil().getMessage("Nao_Existe_Valor_A_Faturar"));
             }
+        } catch (CurrencyMissmatchException cme) {
+            ErrorMessage.print("Erro ao calcular o valor das parcelas.");
         }
     }
 
@@ -437,9 +471,35 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             preparaChequeEntrada();
             Cheque c = cheque.construirComID();
             valoresAVista.getCheques().add(c);
+            limparChequeEntrada();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+    }
+
+    public void updateChequeEntrada() {
+        try {
+            if (chequeSelecionado != null) {
+                Cheque c = cheque.construirComID();
+                valoresAVista.getCheques().set(valoresAVista.getCheques().indexOf(chequeSelecionado), c);
+                limparChequeEntrada();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void deleteChequeEntrada() {
+        if (chequeSelecionado != null) {
+            valoresAVista.getCheques().remove(valoresAVista.getCheques().indexOf(chequeSelecionado));
+        }
+        limparChequeEntrada();
+    }
+
+    public void limparChequeEntrada() {
+        chequeSelecionado = null;
+        cheque = new ChequeBV();
+        cheque.setCotacao(cotacao);
     }
 
     /**
@@ -447,7 +507,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      */
     private void preparaChequeEntrada() {
         cheque.setId(getIdCheque());
-        cheque.setNumeroParcela(1);
         cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
     }
 
@@ -483,7 +542,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     }
 
     public void selecionaCartao(SelectEvent event) {
-        parcelaSelecionada.setCartao((Cartao) event.getObject());
+        parcelaBV.setCartao((Cartao) event.getObject());
     }
 
     public void selecionaQuantidadeDeItemBV(SelectEvent event) {
@@ -502,11 +561,52 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void selecionarBanco(SelectEvent event) {
         Banco banco = (Banco) event.getObject();
-        parcelaSelecionada.setBanco(banco);
+        parcelaBV.setBanco(banco);
+    }
+
+    public void selecionaChequeEntrada(SelectEvent event) {
+        chequeSelecionado = (Cheque) event.getObject();
+        cheque = new ChequeBV(chequeSelecionado);
     }
 
     // ----------------------------- Fim Selecao ------------------------------
     // ------------------ Outras Operações da Janela --------------------------
+    public void addDetalheParcelaCartao() {
+        try {
+            parcelaBV.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
+            parcelaBV.construirBoletoDeCartao(null); // Constroi Boleto de Cartão para validar.
+
+            //Seleciona o cartao na parcela
+            parcelaSelecionada.setCartao(parcelaBV.getCartao());
+            parcelaSelecionada.setCodigoTransacao(parcelaBV.getCodigoTransacao());
+            parcelas.set(parcelas.indexOf(parcelaSelecionada), parcelaSelecionada);
+            parcelaBV = new ParcelaBV();
+            parcelaSelecionada = null;
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void addDetalheParcelaCheque() {
+        try {
+            parcelaBV.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
+            parcelaBV.construirCheque(null); // Constroi Cheque para validar.
+
+            //Seleciona o cheque na parcela
+            parcelaSelecionada.setBanco(parcelaBV.getBanco());
+            parcelaSelecionada.setAgencia(parcelaBV.getAgencia());
+            parcelaSelecionada.setNumeroCheque(parcelaBV.getNumeroCheque());
+            parcelaSelecionada.setConta(parcelaBV.getConta());
+            parcelaSelecionada.setEmitente(parcelaBV.getEmitente());
+            parcelaSelecionada.setObservacao(parcelaBV.getObservacao());
+            parcelas.set(parcelas.indexOf(parcelaSelecionada), parcelaSelecionada);
+            parcelaBV = new ParcelaBV();
+            parcelaSelecionada = null;
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
     /**
      * Calcula o valor de acréscimo e desconto após informar um dos campos de
      * porcentagem de acréscimo e desconto.
@@ -527,7 +627,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
                 valoresAVista.setAcrescimo(BigDecimal.ZERO);
             }
             if (pDesconto.compareTo(BigDecimal.ZERO) > 0) {
-                desconto = (pDesconto.multiply(valoresAVista.getAcrescimo().add(total))).divide(cem, 2, BigDecimal.ROUND_UP);
+                desconto = (pDesconto.multiply((total))).divide(cem, 2, BigDecimal.ROUND_UP);
                 valoresAVista.setDesconto(desconto);
             } else {
                 valoresAVista.setDesconto(BigDecimal.ZERO);
@@ -557,7 +657,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
                 valoresAVista.setPorcentagemAcrescimo(BigDecimal.ZERO);
             }
             if (desconto.compareTo(BigDecimal.ZERO) > 0) {
-                pDesconto = (desconto.multiply(cem)).divide((valoresAVista.getAcrescimo().add(total)), 2, BigDecimal.ROUND_UP);
+                pDesconto = (desconto.multiply(cem)).divide(((total)), 2, BigDecimal.ROUND_UP);
                 valoresAVista.setPorcentagemDesconto(pDesconto);
             } else {
                 valoresAVista.setPorcentagemDesconto(BigDecimal.ZERO);
@@ -571,8 +671,35 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         incluiValorDeFormaDeRecebimento(getTotalNota());
     }
 
+    public void recalculaValores() {
+        if (parcelas.isEmpty()) {
+            recalculaValorAFaturar();
+        } else {
+            recalculaValorAFaturar();
+            criaParcelas();
+        }
+    }
+
+    public void recalculaValorAFaturar() {
+
+        BigDecimal cheque = getTotalCheque() == null ? BigDecimal.ZERO : getTotalCheque();
+        BigDecimal cartao = valoresAVista.getBoletoDeCartao().getValor() == null ? BigDecimal.ZERO : valoresAVista.getBoletoDeCartao().getValor();
+        BigDecimal credito = valoresAVista.getCredito() == null ? BigDecimal.ZERO : valoresAVista.getCredito();
+        BigDecimal dinheiro = valoresAVista.getDinheiro() == null ? BigDecimal.ZERO : valoresAVista.getDinheiro();
+        BigDecimal totalParcelas = getTotalParcelas() == null ? BigDecimal.ZERO : getTotalParcelas();
+        BigDecimal soma = cheque.add(cartao).add(credito).add(totalParcelas).add(dinheiro);
+
+        valoresAVista.setAFaturar(getTotalNota().subtract(soma));
+    }
+
     // ---------------- Fim Outras Operações da Janela ------------------------
     //----------------------- Getter Personalizados ---------------------------
+    public Integer getDiasDeVencimento(Date vencimento) {
+        LocalDate venc = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Long dias = LocalDate.now().until(venc, ChronoUnit.DAYS);
+        return dias.intValue();
+    }
+
     public BigDecimal getTotalNota() {
         BigDecimal acrescimo = valoresAVista.getAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getAcrescimo();
         BigDecimal frete = valoresAVista.getFrete() == null ? BigDecimal.ZERO : valoresAVista.getFrete();
@@ -585,12 +712,17 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     public String getValorRestante() {
         BigDecimal total = valoresAVista.getDinheiro();
         BigDecimal valorAReceber = BigDecimal.ZERO;
+        NumberFormat nf = NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal());
+
         for (CotacaoValores c : cotacoes) {
             valorAReceber = valorAReceber.add(c.getValorConvertidoRecebido());
         }
-        return total == null ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
-                : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
-                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber));
+
+        if (total == null || total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0) {
+            return nf.format(BigDecimal.ZERO);
+        } else {
+            return nf.format(total.subtract(valorAReceber));
+        }
     }
 
     public String getGanhoDeCambio() {
@@ -612,14 +744,24 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         return total;
     }
 
-    public String getTotalParcelas() {
+    public BigDecimal getTotalParcelas() {
         BigDecimal totalParcela = BigDecimal.ZERO;
         for (ParcelaBV p : parcelas) {
-            totalParcela = totalParcela.add(p.getValor());
+            if (p.getCotacao() != null && p.getCotacao() != cotacao) {
+                totalParcela = totalParcela.add(p.getValor().divide(p.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+            } else {
+                totalParcela = totalParcela.add(p.getValor());
+            }
         }
 
-        return totalParcela.compareTo(BigDecimal.ZERO) == 0 ? ""
-                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcela);
+        return totalParcela;
+    }
+
+    public String getTotalParcelasFormatado() {
+        BigDecimal totalParcelas = getTotalParcelas();
+
+        return totalParcelas.compareTo(BigDecimal.ZERO) == 0 ? ""
+                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcelas);
     }
 
     private Long getIdParcela() {
@@ -636,7 +778,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     private Long getIdCheque() {
         Long id = (long) 1;
-        if (!parcelas.isEmpty()) {
+        if (!valoresAVista.getCheques().isEmpty()) {
             for (Cheque c : valoresAVista.getCheques()) {
                 if (c.getId() >= id) {
                     id = c.getId() + 1;
@@ -656,6 +798,25 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             }
         }
         return id;
+    }
+
+    public BigDecimal getTotalCheque() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Cheque c : valoresAVista.getCheques()) {
+            if (c.getCotacao() != null && c.getCotacao() != cotacao) {
+                total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+            } else {
+                total = total.add(c.getValor());
+            }
+        }
+        return total;
+    }
+
+    public String getTotalChequeFormatado() {
+        Locale local = configuracao.getMoedaPadrao().getBandeira().getLocal();
+        NumberFormat nf = NumberFormat.getCurrencyInstance(local);
+
+        return nf.format(getTotalCheque());
     }
 
     //------------------- Fim Getter Personalizados ---------------------------
@@ -678,6 +839,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
+    }
+
+    public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
+        return Arrays.asList(TipoFormaDeRecebimentoParcela.values());
     }
 
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {
@@ -748,14 +913,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         this.parcelas = parcelas;
     }
 
-    public ParcelaBV getParcelaSelecionada() {
-        return parcelaSelecionada;
-    }
-
-    public void setParcelaSelecionada(ParcelaBV parcelaSelecionada) {
-        this.parcelaSelecionada = parcelaSelecionada;
-    }
-
     public NotaEmitida getNovoRegistroNE() {
         return novoRegistroNE;
     }
@@ -794,6 +951,22 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void setChequeSelecionado(Cheque chequeSelecionado) {
         this.chequeSelecionado = chequeSelecionado;
+    }
+
+    public ParcelaBV getParcelaSelecionada() {
+        return parcelaSelecionada;
+    }
+
+    public void setParcelaSelecionada(ParcelaBV parcelaSelecionada) {
+        this.parcelaSelecionada = parcelaSelecionada;
+    }
+
+    public ParcelaBV getParcelaBV() {
+        return parcelaBV;
+    }
+
+    public void setParcelaBV(ParcelaBV parcelaBV) {
+        this.parcelaBV = parcelaBV;
     }
 
     //------------------- Fim Getters and Setters -----------------------------

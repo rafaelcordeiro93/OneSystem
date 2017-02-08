@@ -12,7 +12,18 @@ package br.com.onesystem.valueobjects;
  */
 public enum TipoFormaDeRecebimentoParcela {
 
-    CHEQUE,
-    CARTAO,
-    TITULO
+    CHEQUE(new Long(1)),
+    CARTAO(new Long(2)),
+    TITULO(new Long(3));
+    
+    private Long id;
+    
+    private TipoFormaDeRecebimentoParcela(Long id) {
+        this.id = id;
+    }
+    
+    public Long getId() {
+        return id;
+    }    
+
 }

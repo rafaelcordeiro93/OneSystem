@@ -12,7 +12,6 @@ public enum SituacaoDeCartao {
 
     ABERTO("Aberto", "ABERTO"),
     CANCELADO("Cancelado", "CANCELADO"),
-    DISPONIVEL("Disponível", "DISPONIVEL"),
     PARCIAL("Parcial", "PARCIAL"),
     QUITADO("Quitado", "QUITADO");
 

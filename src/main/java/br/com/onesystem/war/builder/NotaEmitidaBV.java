@@ -30,7 +30,7 @@ public class NotaEmitidaBV implements Serializable {
     private List<Baixa> baixas;
     private ListaDePreco listaDePreco;
     private ValoresAVista valoresAVista;
-    private Date emissao;
+    private Date emissao = new Date();
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
 
@@ -114,7 +114,7 @@ public class NotaEmitidaBV implements Serializable {
     public void setValoresAVista(ValoresAVista valoresAVista) {
         this.valoresAVista = valoresAVista;
     }
-    
+
     public Date getEmissao() {
         return emissao;
     }

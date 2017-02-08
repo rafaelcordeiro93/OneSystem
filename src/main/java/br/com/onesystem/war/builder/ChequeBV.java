@@ -2,6 +2,8 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -14,7 +16,6 @@ public class ChequeBV implements Serializable {
 
     private Long id;
     private NotaEmitida venda;
-    private Integer numeroParcela;
     private BigDecimal valor;
     private Date emissao = new Date();
     private Date vencimento = new Date();
@@ -28,24 +29,25 @@ public class ChequeBV implements Serializable {
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
+    private Cotacao cotacao;
 
-    public ChequeBV(Cheque chequeelecionada) {
-        this.id = chequeelecionada.getId();
-        this.venda = chequeelecionada.getNotaEmitida();
-        this.numeroParcela = chequeelecionada.getNumeroParcela();
-        this.valor = chequeelecionada.getValor();
-        this.emissao = chequeelecionada.getEmissao();
-        this.vencimento = chequeelecionada.getVencimento();
-        this.banco = chequeelecionada.getBanco();
-        this.agencia = chequeelecionada.getAgencia();
-        this.conta = chequeelecionada.getConta();
-        this.numeroCheque = chequeelecionada.getNumeroCheque();
-        this.tipoSituacao = chequeelecionada.getTipoSituacao();
-        this.multas = chequeelecionada.getMultas();
-        this.juros = chequeelecionada.getJuros();
-        this.descontos = chequeelecionada.getDescontos();
-        this.emitente = chequeelecionada.getEmitente();
-        this.observacao = chequeelecionada.getObservacao();
+    public ChequeBV(Cheque chequeSelecionado) {
+        this.id = chequeSelecionado.getId();
+        this.venda = chequeSelecionado.getNotaEmitida();
+        this.valor = chequeSelecionado.getValor();
+        this.emissao = chequeSelecionado.getEmissao();
+        this.vencimento = chequeSelecionado.getVencimento();
+        this.banco = chequeSelecionado.getBanco();
+        this.agencia = chequeSelecionado.getAgencia();
+        this.conta = chequeSelecionado.getConta();
+        this.numeroCheque = chequeSelecionado.getNumeroCheque();
+        this.tipoSituacao = chequeSelecionado.getTipoSituacao();
+        this.multas = chequeSelecionado.getMultas();
+        this.juros = chequeSelecionado.getJuros();
+        this.descontos = chequeSelecionado.getDescontos();
+        this.emitente = chequeSelecionado.getEmitente();
+        this.observacao = chequeSelecionado.getObservacao();
+        this.cotacao = chequeSelecionado.getCotacao();
     }
 
     public ChequeBV() {
@@ -65,14 +67,6 @@ public class ChequeBV implements Serializable {
 
     public void setVenda(NotaEmitida venda) {
         this.venda = venda;
-    }
-
-    public Integer getNumeroParcela() {
-        return numeroParcela;
-    }
-
-    public void setNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
     }
 
     public BigDecimal getValor() {
@@ -179,15 +173,23 @@ public class ChequeBV implements Serializable {
         this.observacao = observacao;
     }
 
+    public Cotacao getCotacao() {
+        return cotacao;
+    }
+
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+    }
+
     public Cheque construir() throws DadoInvalidoException {
-        return new ChequeBuilder().comNotaEmitida(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
+        return new ChequeBuilder().comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comObservacao(observacao).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(observacao).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
-        return new ChequeBuilder().comID(id).comNotaEmitida(venda).comNumeroParcelas(numeroParcela).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
+        return new ChequeBuilder().comID(id).comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comObservacao(observacao).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(observacao).construir();
     }
 }

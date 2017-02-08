@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Recepcao;
@@ -26,6 +27,7 @@ import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -45,7 +47,6 @@ public class ParcelaBV implements Serializable {
     private NotaEmitida notaEmitida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private OperacaoFinanceira unidadeFinanceira;
-    private Integer numeroParcela;
     private BigDecimal valor;
     private Date emissao;
     private Date vencimento;
@@ -61,28 +62,59 @@ public class ParcelaBV implements Serializable {
     private String observacao;
     private Cartao cartao;
     private String codigoTransacao;
-    private SituacaoDeCartao tipoSituacaoCartao;
+    private SituacaoDeCartao situacaoDeCartao;
     private Moeda moeda;
     private Cambio cambio;
     private Recepcao recepcao;
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+    private Integer dias;
+    private Cotacao cotacao;
 
     public ParcelaBV() {
     }
 
+    public ParcelaBV(ParcelaBV p) {
+        this.id = p.getId();
+        this.notaEmitida = p.getNotaEmitida();
+        this.conhecimentoDeFrete = p.getConhecimentoDeFrete();
+        this.unidadeFinanceira = p.getUnidadeFinanceira();
+        this.valor = p.getValor();
+        this.emissao = p.getEmissao();
+        this.vencimento = p.getVencimento();
+        this.banco = p.getBanco();
+        this.agencia = p.getAgencia();
+        this.conta = p.getConta();
+        this.numeroCheque = p.getNumeroCheque();
+        this.situacaoDeCheque = p.getSituacaoDeCheque();
+        this.multas = p.getMultas();
+        this.juros = p.getJuros();
+        this.descontos = p.getDescontos();
+        this.emitente = p.getEmitente();
+        this.observacao = p.getObservacao();
+        this.cartao = p.getCartao();
+        this.codigoTransacao = p.getCodigoTransacao();
+        this.situacaoDeCartao = p.getSituacaoDeCartao();
+        this.moeda = p.getMoeda();
+        this.cambio = p.getCambio();
+        this.recepcao = p.getRecepcao();
+        this.tipoFormaDeRecebimentoParcela = p.getTipoFormaDeRecebimentoParcela();
+        this.dias = p.getDias();
+        this.cotacao = p.getCotacao();
+    }
+
     public ParcelaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
-            OperacaoFinanceira unidadeFinanceira, Integer numeroParcela, BigDecimal valor,
+            OperacaoFinanceira unidadeFinanceira, BigDecimal valor,
             Date emissao, Date vencimento, Banco banco, String agencia, String conta,
             String numeroCheque, SituacaoDeCheque situacaoDeCheque, BigDecimal multas,
             BigDecimal juros, BigDecimal descontos, String emitente, String observacao,
-            Cartao cartao, String codTransacao,
+            Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
-            Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
+            Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela,
+            Integer dias, Cotacao cotacao) {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.unidadeFinanceira = unidadeFinanceira;
-        this.numeroParcela = numeroParcela;
         this.valor = valor;
         this.emissao = emissao;
         this.vencimento = vencimento;
@@ -97,12 +129,14 @@ public class ParcelaBV implements Serializable {
         this.emitente = emitente;
         this.observacao = observacao;
         this.cartao = cartao;
-        this.codigoTransacao = codTransacao;
-        this.tipoSituacaoCartao = tipoSituacaoCartao;
+        this.codigoTransacao = codigoTransacao;
+        this.situacaoDeCartao = tipoSituacaoCartao;
         this.moeda = moeda;
         this.cambio = cambio;
         this.recepcao = recepcao;
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
+        this.dias = dias;
+        this.cotacao = cotacao;
     }
 
     public Long getId() {
@@ -129,6 +163,14 @@ public class ParcelaBV implements Serializable {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
 
+    public Cotacao getCotacao() {
+        return cotacao;
+    }
+
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+    }
+
     public OperacaoFinanceira getUnidadeFinanceira() {
         return unidadeFinanceira;
     }
@@ -137,12 +179,8 @@ public class ParcelaBV implements Serializable {
         this.unidadeFinanceira = unidadeFinanceira;
     }
 
-    public Integer getNumeroParcela() {
-        return numeroParcela;
-    }
-
-    public void setNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
+    public String getValorFormatado() {
+        return NumberFormat.getCurrencyInstance(cotacao.getMoeda().getBandeira().getLocal()).format(valor);
     }
 
     public BigDecimal getValor() {
@@ -268,9 +306,23 @@ public class ParcelaBV implements Serializable {
     }
 
     public Integer getDias() {
+        return dias;
+    }
+
+    public void calcularVencimento() {
+        LocalDate venc = LocalDate.now();
+        venc = venc.plusDays(new Long(dias));
+        vencimento = Date.from(venc.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    public void calcularDiasDeVencimento() {
         LocalDate venc = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         Long dias = LocalDate.now().until(venc, ChronoUnit.DAYS);
-        return dias.intValue();
+        setDias(dias.intValue());
+    }
+
+    public void setDias(Integer dias) {
+        this.dias = dias;
     }
 
     public String getCodigoTransacao() {
@@ -281,12 +333,12 @@ public class ParcelaBV implements Serializable {
         this.codigoTransacao = codigoTransacao;
     }
 
-    public SituacaoDeCartao getTipoSituacaoCartao() {
-        return tipoSituacaoCartao;
+    public SituacaoDeCartao getSituacaoDeCartao() {
+        return situacaoDeCartao;
     }
 
-    public void setTipoSituacaoCartao(SituacaoDeCartao tipoSituacaoCartao) {
-        this.tipoSituacaoCartao = tipoSituacaoCartao;
+    public void setSituacaoDeCartao(SituacaoDeCartao situacaoDeCartao) {
+        this.situacaoDeCartao = situacaoDeCartao;
     }
 
     public Moeda getMoeda() {
@@ -309,6 +361,14 @@ public class ParcelaBV implements Serializable {
         return recepcao;
     }
 
+    public String getDescricaoCheque() {
+        return banco == null ? "" : banco.getNome() + " / " + agencia + " / " + conta + " Nº " + numeroCheque;
+    }
+
+    public String getDescricaoCartao() {
+        return cartao == null ? "" : cartao.getNome() + " Nº " + codigoTransacao;
+    }
+
     public void setRecepcao(Recepcao recepcao) {
         this.recepcao = recepcao;
     }
@@ -322,8 +382,8 @@ public class ParcelaBV implements Serializable {
     }
 
     public BoletoDeCartao construirBoletoDeCartao(NotaEmitida notaEmitida) throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comCartao(cartao).comCodTransacao(codigoTransacao).
-                comDias(getDias()).comEmissao(emissao).comNumeroParcela(numeroParcela).
+        return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
+                comDias(getDias()).comEmissao(emissao).
                 comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comNotaEmitida(notaEmitida)
                 .construir();
     }
@@ -331,7 +391,7 @@ public class ParcelaBV implements Serializable {
     public Cheque construirCheque(NotaEmitida notaEmitida) throws DadoInvalidoException {
         return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
-                .comNumeroParcelas(numeroParcela).comObservacao(observacao).
+                .comObservacao(observacao).comCotacao(cotacao).
                 comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
                 .comNotaEmitida(notaEmitida).construir();
     }
@@ -340,6 +400,20 @@ public class ParcelaBV implements Serializable {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(moeda).comHistorico(observacao).
                 comNotaEmitida(notaEmitida).construir();
+    }
+
+    public boolean equals(Object objeto) {
+        if (objeto == null) {
+            return false;
+        }
+        if (!(objeto instanceof ParcelaBV)) {
+            return false;
+        }
+        ParcelaBV outro = (ParcelaBV) objeto;
+        if (this.id == null) {
+            return false;
+        }
+        return this.id.equals(outro.id);
     }
 
 }

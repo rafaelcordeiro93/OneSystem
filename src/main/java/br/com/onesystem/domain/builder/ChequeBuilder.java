@@ -2,6 +2,8 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -17,7 +19,6 @@ public class ChequeBuilder {
 
     private Long id;
     private NotaEmitida venda;
-    private Integer numeroParcela;
     private BigDecimal valor;
     private Date emissao = new Date();
     private Date vencimento = new Date();
@@ -32,6 +33,7 @@ public class ChequeBuilder {
     private String emitente;
     private String observacao;
     private ValoresAVista formaDeRecebimentoOuPagamento;
+    private Cotacao cotacao;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
@@ -40,11 +42,6 @@ public class ChequeBuilder {
 
     public ChequeBuilder comNotaEmitida(NotaEmitida venda) {
         this.venda = venda;
-        return this;
-    }
-
-    public ChequeBuilder comNumeroParcelas(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
         return this;
     }
 
@@ -108,18 +105,23 @@ public class ChequeBuilder {
         return this;
     }
 
+    public ChequeBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+        return this;
+    }
+
     public ChequeBuilder comObservacao(String observacao) {
         this.observacao = observacao;
         return this;
     }
-    
-    public ChequeBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento){
+
+    public ChequeBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento) {
         this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
         return this;
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, venda, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento);
+        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento, cotacao);
     }
 
 }

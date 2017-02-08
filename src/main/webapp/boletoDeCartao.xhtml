@@ -50,14 +50,11 @@
                             <p:outputLabel value="#{l.Numero_Dias}"/>
                             <pe:inputNumber id="boletoDeCartaoNumeroDias" maxValue="999" minValue="0"  decimalPlaces="0" value="#{boletoDeCartaoView.boletoDeCartao.dias}"/>
 
-                            <p:outputLabel value="#{l.Numero_Parcelas}"/>
-                            <pe:inputNumber id="boletoDeCartaoNumeroParcelas" maxValue="999" minValue="0"  decimalPlaces="0" value="#{boletoDeCartaoView.boletoDeCartao.numeroParcela}"/>
-
                             <p:outputLabel value="#{l.Valor}"/>
                             <p:inputNumber id="boletoDeCartaoValor" maxValue="99999999.99" minValue="0.00" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{boletoDeCartaoView.boletoDeCartao.valor}"/>
 
                             <p:outputLabel value="#{l.Cod_Transacao}"/>
-                            <p:inputText  value="#{boletoDeCartaoView.boletoDeCartao.codTransacao}"/> 
+                            <p:inputText  value="#{boletoDeCartaoView.boletoDeCartao.codigoTransacao}"/> 
 
                             <p:outputLabel value="#{l.Tipo_Situacao}"/>
                             <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.boletoDeCartao.situacao}">

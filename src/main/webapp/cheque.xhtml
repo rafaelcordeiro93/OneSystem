@@ -37,9 +37,6 @@
                                 </p:commandButton>
                             </h:panelGrid>
 
-                            <p:outputLabel  value="#{l.Numero_Parcelas}" />
-                            <p:inputNumber id="numeroParcelasValor" maxValue="99" minValue="0" decimalPlaces="0" value="#{chequeView.cheque.numeroParcela}"/>
-
                             <p:outputLabel  value="#{l.Valor}"/>
                             <p:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{chequeView.cheque.valor}"/>
 
