@@ -14,12 +14,16 @@ import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -77,8 +81,9 @@ public class Operacao implements Serializable {
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
     private Despesa compraAPrazo;
-    @ManyToOne
-    private ContaDeEstoque contaDeEstoque;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(name = "operacao_contadeestoque", joinColumns = @JoinColumn(name = "operacao_id"), inverseJoinColumns = @JoinColumn(name = "contadeestoque_id"))
+    private List<ContaDeEstoque> contaDeEstoque;
     @OneToMany(mappedBy = "operacao")
     private List<NotaEmitida> notasEmitidas;
 
@@ -88,7 +93,7 @@ public class Operacao implements Serializable {
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoNota tipoNota,
             TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
             Receita servicoAPrazo, Receita receitaFrete, Despesa despesaCMV, TipoContabil contabilizarCMV,
-            Despesa compraAVista, Despesa compraAPrazo) throws DadoInvalidoException {
+            Despesa compraAVista, Despesa compraAPrazo, List<ContaDeEstoque> contaDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.operacaoFinanceira = operacaoFinanceira;
@@ -103,7 +108,14 @@ public class Operacao implements Serializable {
         this.contabilizarCMV = contabilizarCMV;
         this.compraAVista = compraAVista;
         this.compraAPrazo = compraAPrazo;
+        this.contaDeEstoque = contaDeEstoque;
         ehValido();
+    }
+
+    public void preparaInclusao(List<ContaDeEstoque> contaDeEstoque) {
+        if (this.contaDeEstoque == null) {
+            this.contaDeEstoque = contaDeEstoque;
+        }
     }
 
     public Long getId() {
@@ -162,7 +174,7 @@ public class Operacao implements Serializable {
         return compraAPrazo;
     }
 
-    public ContaDeEstoque getContaDeEstoque() {
+    public List<ContaDeEstoque> getContaDeEstoque() {
         return contaDeEstoque;
     }
 
@@ -177,7 +189,7 @@ public class Operacao implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (!(objeto instanceof Operacao)) {
             return false;
         }
         Operacao outro = (Operacao) objeto;
@@ -189,7 +201,7 @@ public class Operacao implements Serializable {
 
     @Override
     public String toString() {
-        return "Operacao{" + "id=" + id + ", nome=" + nome + ", operacaoFinanceira=" + operacaoFinanceira + ", tipoNota=" + tipoNota + ", tipoOperacao=" + tipoOperacao + ", vendaAVista=" + vendaAVista + ", vendaAPrazo=" + vendaAPrazo + ", servicoAVista=" + servicoAVista + ", servicoAPrazo=" + servicoAPrazo + ", receitaFrete=" + receitaFrete + ", despesaCMV=" + despesaCMV + ", contabilizarCMV=" + contabilizarCMV + ", compraAVista=" + compraAVista + ", compraAPrazo=" + compraAPrazo + '}';
+        return "Operacao{" + "id=" + id + ", nome=" + nome + ", operacaoFinanceira=" + operacaoFinanceira + ", tipoNota=" + tipoNota + ", tipoOperacao=" + tipoOperacao + ", vendaAVista=" + vendaAVista + ", vendaAPrazo=" + vendaAPrazo + ", servicoAVista=" + servicoAVista + ", servicoAPrazo=" + servicoAPrazo + ", receitaFrete=" + receitaFrete + ", despesaCMV=" + despesaCMV + ", contabilizarCMV=" + contabilizarCMV + ", compraAVista=" + compraAVista + ", compraAPrazo=" + compraAPrazo + ", contaDeEstoque=" + contaDeEstoque + '}';
     }
 
 }

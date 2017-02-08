@@ -69,8 +69,8 @@
       <!--  Configurações específicas do Hibernate  -->
       <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="false"/>
+      <property name="hibernate.show_sql" value="true"/>
+      <property name="hibernate.format_sql" value="true"/>
       <!-- Outros Auxiliares -->
       <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
     </properties>
