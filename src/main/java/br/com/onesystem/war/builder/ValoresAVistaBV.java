@@ -30,7 +30,7 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
     private BigDecimal credito;
-    private BoletoDeCartao boletoDeCartao;
+    private BoletoDeCartaoBV boletoDeCartao = new BoletoDeCartaoBV();
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
     private List<Cheque> cheques = new ArrayList<Cheque>();
@@ -98,11 +98,11 @@ public class ValoresAVistaBV implements Serializable {
         this.credito = credito;
     }
 
-    public BoletoDeCartao getBoletoDeCartao() {
+    public BoletoDeCartaoBV getBoletoDeCartao() {
         return boletoDeCartao;
     }
 
-    public void setBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
+    public void setBoletoDeCartao(BoletoDeCartaoBV boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
     }
 
@@ -161,16 +161,16 @@ public class ValoresAVistaBV implements Serializable {
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-
+    
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comCredito(credito).comDinheiro(dinheiro)
+        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir()).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }
 
     public ValoresAVista construirComID() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao)
+        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir())
                 .comCheques(cheques).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)

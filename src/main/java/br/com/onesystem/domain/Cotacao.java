@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,6 +35,8 @@ public class Cotacao implements Serializable {
     @NotNull(message = "{conta_not_null}")
     @ManyToOne(optional = false)
     private Conta conta;
+    @OneToMany(mappedBy = "cotacao")
+    private List<Cheque> cheques;
 
     public Cotacao() {
     }

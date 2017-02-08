@@ -5,8 +5,8 @@
     
     <name>primefaces_atlantis</name>
     
-	<lifecycle>
-        <phase-listener>br.com.onesystem.util.LogPhaseListener</phase-listener>
+    <lifecycle>
+        <phase-listener>br.com.onesystem.services.LogPhaseListener</phase-listener>
     </lifecycle> 
     
     <application>
@@ -20,12 +20,12 @@
         <component-class>org.primefaces.atlantis.component.Menu</component-class>
     </component>
     
-     <component>
+    <component>
         <component-type>org.primefaces.component.AtlantisTabMenu</component-type>
         <component-class>org.primefaces.atlantis.component.TabMenu</component-class>
     </component>
     
-     <component>
+    <component>
         <component-type>org.primefaces.component.AtlantisTab</component-type>
         <component-class>org.primefaces.atlantis.component.Tab</component-class>
     </component>

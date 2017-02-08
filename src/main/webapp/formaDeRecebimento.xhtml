@@ -30,8 +30,8 @@
                             <p:outputLabel value="#{l.Nome}" />
                             <p:inputText value="#{formaDeRecebimentoView.formaDeRecebimento.nome}"  maxlength="60"/>
 
-                            <p:outputLabel value="#{l.Entrada}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
+                            <p:outputLabel value="#{l.Ativo}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoAtiva" value="#{formaDeRecebimentoView.formaDeRecebimento.ativo}"/>
 
                             <p:outputLabel value="#{l.Percentual_Entrada}" />
                             <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.porcentagemDeEntrada}" maxValue="100" minValue="0"/>
@@ -40,7 +40,10 @@
                             <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeEntrada}">
                                 <f:selectItems value="#{formaDeRecebimentoView.formaDeRecebimentoPadrao}" var="#{l.Padrao_Entrada}" itemValue="#{formaDeRecebimentoPadrao}" />
                             </p:selectOneMenu>
-
+                            
+                            <p:outputLabel value="#{l.Entrada}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
+                            
                             <p:outputLabel value="#{l.Entrada_Cartao}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCartao}"/>
 
@@ -51,7 +54,7 @@
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCheque}"/>
 
                             <p:outputLabel value="#{l.Entrada_Credito}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCredito}"/>
+                            <p:selectBooleanCheckbox disabled="true" id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCredito}"/>
 
                         </p:panelGrid>
                     </div>

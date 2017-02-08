@@ -21,9 +21,8 @@ public class BoletoDeCartaoBuilder {
     private Date emissao;
     private Integer dias;
     private BigDecimal valor;
-    private String codTransacao;
+    private String codigoTransacao;
     private SituacaoDeCartao tipoSituacao;
-    private Integer numeroParcela;
     private ValoresAVista formaDeRecebimentoOuPagamento;
 
     public BoletoDeCartaoBuilder() {
@@ -59,18 +58,13 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
-    public BoletoDeCartaoBuilder comCodTransacao(String codTransacao) {
-        this.codTransacao = codTransacao;
+    public BoletoDeCartaoBuilder comCodigoTransacao(String codigoTransacao) {
+        this.codigoTransacao = codigoTransacao;
         return this;
     }
 
     public BoletoDeCartaoBuilder comTipoSituacao(SituacaoDeCartao tipoSituacao) {
         this.tipoSituacao = tipoSituacao;
-        return this;
-    }
-    
-    public BoletoDeCartaoBuilder comNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
         return this;
     }
     
@@ -80,7 +74,7 @@ public class BoletoDeCartaoBuilder {
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codTransacao, tipoSituacao, numeroParcela, formaDeRecebimentoOuPagamento);
+        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codigoTransacao, tipoSituacao, formaDeRecebimentoOuPagamento);
     }
 
 }

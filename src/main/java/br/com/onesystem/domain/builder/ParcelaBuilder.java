@@ -10,6 +10,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Recepcao;
@@ -31,7 +32,6 @@ public class ParcelaBuilder {
     private NotaEmitida notaEmitida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private OperacaoFinanceira operacaoFinanceira;
-    private Integer numeroParcela;
     private BigDecimal valor;
     private Date emissao;
     private Date vencimento;
@@ -52,9 +52,16 @@ public class ParcelaBuilder {
     private Cambio cambio;
     private Recepcao recepcao;
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+    private Integer dias;
+    private Cotacao cotacao;
 
     public ParcelaBuilder comID(Long ID) {
         this.id = ID;
+        return this;
+    }
+        
+    public ParcelaBuilder comValor(BigDecimal valor) {
+        this.valor = valor;
         return this;
     }
 
@@ -70,16 +77,6 @@ public class ParcelaBuilder {
 
     public ParcelaBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
-        return this;
-    }
-
-    public ParcelaBuilder comNumeroParcelas(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
-        return this;
-    }
-
-    public ParcelaBuilder comValor(BigDecimal valor) {
-        this.valor = valor;
         return this;
     }
 
@@ -178,8 +175,18 @@ public class ParcelaBuilder {
         return this;
     }
 
+    public ParcelaBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+        return this;
+    }
+
+    public ParcelaBuilder comDias(Integer dias) {
+        this.dias = dias;
+        return this;
+    }
+
     public ParcelaBV construir() {
-        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, numeroParcela, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela);
+        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao);
     }
 
 }

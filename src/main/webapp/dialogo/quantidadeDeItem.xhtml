@@ -21,10 +21,10 @@
             <p:column headerText="#{l.Saldo}" sortBy="#{quantidadeDeItemBV.saldoDeEstoque.saldo}" filterBy="#{quantidadeDeItemBV.saldoDeEstoque.saldo}" footerText="#{l.Saldo}" >
                 <h:outputText value="#{quantidadeDeItemBV.saldoDeEstoque.saldo}" />
             </p:column>
-            <p:column headerText="#{l.Quantidade}" sortBy="#{quantidadeDeItemBV.quantidade}" filterBy="#{quantidadeDeItemBV.quantidade}" footerText="#{l.Quantidade}" >
+            <p:column styleClass="TexAlCenter" headerText="#{l.Quantidade}" sortBy="#{quantidadeDeItemBV.quantidade}" filterBy="#{quantidadeDeItemBV.quantidade}" footerText="#{l.Quantidade}" >
                 <p:cellEditor>
                     <f:facet name="output"><h:outputText value="#{quantidadeDeItemBV.quantidade}" /></f:facet>
-                    <f:facet name="input"><p:inputText value="#{quantidadeDeItemBV.quantidade}"/></f:facet>
+                    <f:facet name="input"><p:inputText styleClass="TexAlCenter" value="#{quantidadeDeItemBV.quantidade}"/></f:facet>
                 </p:cellEditor>
             </p:column>
 

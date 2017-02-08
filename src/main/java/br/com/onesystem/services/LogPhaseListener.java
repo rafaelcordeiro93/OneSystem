@@ -2,9 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.onesystem.util;
+package br.com.onesystem.services;
 
+import br.com.onesystem.util.DadosNecessarios;
+import br.com.onesystem.war.builder.DadosNecessariosBV;
 import java.io.IOException;
+import java.util.List;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -28,6 +31,8 @@ public class LogPhaseListener implements PhaseListener {
             Object login = session.getAttribute("softone.login.token");
             String janela = context.getViewRoot().getViewId();
             validaAcesso(login, janela, ec);
+
+            carregaDados(janela, session, ec);
 
         } catch (IOException ex) {
             System.out.println("Falha ao redirecionar a página.");
@@ -64,5 +69,13 @@ public class LogPhaseListener implements PhaseListener {
     @Override
     public PhaseId getPhaseId() {
         return PhaseId.RESTORE_VIEW;
+    }
+
+    private void carregaDados(String janela, HttpSession session, ExternalContext ec) throws IOException {
+        List<DadosNecessariosBV> pendencias = new DadosNecessarios().valida(janela);
+        if (!pendencias.isEmpty()) {
+            session.setAttribute("onesystem.dadosNecessarios.list", pendencias);
+            ec.redirect("/OneSystem-war/configuracaoNecessaria.xhtml");
+        }
     }
 }

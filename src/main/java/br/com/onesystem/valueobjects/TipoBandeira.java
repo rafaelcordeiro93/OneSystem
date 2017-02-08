@@ -20,9 +20,9 @@ public enum TipoBandeira {
     FRANCA(5, "França", Locale.FRANCE),
     ALEMANHA(6, "Alemanha", Locale.GERMANY);
 
-    private Integer id;
-    private String nome;
-    private Locale local;
+    private final Integer id;
+    private final String nome;
+    private final Locale local;
 
     TipoBandeira(Integer id, String nome, Locale local) {
         this.id = id;

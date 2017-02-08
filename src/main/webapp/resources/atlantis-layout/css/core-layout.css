@@ -143,7 +143,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Wid33{ width:33.3%;}
 .Wid25{ width:25%;}
 .Wid20{ width:20%;}
-.Wid12{ width:14.66%;}
+.Wid14{ width:14.66%;}
 .Wid12{ width:12.66%;}
 .Wid10{ width:10%;}
 
@@ -219,6 +219,11 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Container5{ width:5%; float:left;}
 
 .ContainerIndent{display:block; margin:0px auto; padding:10px;}
+
+/* z-index */
+.zIndex500{
+    z-index: 500 !important;
+}
 
 /* Text Aligns */
 .TexAlCenter{ text-align:center !important;}
@@ -459,3 +464,83 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
         margin-left: 0px;
     }
 }
+
+.BrownButton .ui-button-text {
+    background-color: #6D4C41;
+    border-color: #6D4C41 !important;
+}
+.BrownButton.ui-state-hover .ui-button-text,
+.BrownButton.ui-state-focus .ui-button-text {
+    background-color: #8D6E63 !important;
+    border-color: #8D6E63 !important;
+}
+
+/* shadow for elements*/
+.shadows {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);
+}
+/* Style */
+.Bold {
+    font-weight: bold;
+}
+/* text colors */
+.White {
+    color: #ffffff;
+}
+.WhiteBlue {
+    color: #E1F5FE;
+}
+.SoftBlue {
+    color: #03A9F4;
+}
+.Blue {
+    color: #0288D1;
+}
+.Turquoise {
+    color: #26C6DA;
+}
+.SoftGray {
+    color: #ECEFF1;
+}
+.Gray {
+    color: #90A4AE;
+}
+.BoldGray {
+    color: #546E7A;
+}
+.SoftOrange {
+    color: #FFCC80;
+}
+.Orange {
+    color: #FB8C00;
+}
+.SoftGreen {
+    color: #A5D6A7;
+}
+.Green {
+    color: #43A047;
+}
+.LeadenGreen {
+    color: #26A69A;
+}
+.SoftRed {
+    color: #EF9A9A;
+}
+.Red {
+    color: #E53935;
+}
+.Pink {
+    color: #FF4081;
+}
+.SoftPurple {
+    color: #CE93D8;
+}
+.Purple {
+    color: #8E24AA;
+}
+.Yellow {
+    color: #F7D100;
+}
+

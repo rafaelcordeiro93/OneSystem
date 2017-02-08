@@ -58,11 +58,11 @@
                     </div>
 
                     <div class="EmptyBox20"/>
-                    <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Parcelas}</div>
+                    <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Taxas}</div>
                     <div class="EmptyBox20"/>
 
                     <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements "
-                                 style="width: 50%" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2">
+                                 style="width: 55%" columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2">
 
                         <p:outputLabel value="#{l.Numero_Dias}"/>
                         <p:inputNumber id="cartaoNumeroDias" maxValue="999" minValue="0" decimalPlaces="0" value="#{cartaoView.taxa.numeroDias}">
@@ -83,15 +83,15 @@
                     </p:panelGrid>
                     <div class="EmptyBox10"/>
 
-                    <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.cartao.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 50%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
+                    <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.cartao.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 40%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
                         <p:ajax event="rowSelect" process="@this" listener="#{cartaoView.selecionaTaxa}" update=":conteudo"/>
-                        <p:column style="width: 5%; text-align: center" colspan="1">
+                        <p:column style="text-align: center" width="10%">
                             <h:outputText value="#{taxa.id}" />
                         </p:column>
-                        <p:column headerText="#{l.Numero_Parcelas}" sortBy="#{taxa.numeroDias}"  colspan="1">
+                        <p:column headerText="#{l.Numero_Dias}" sortBy="#{taxa.numeroDias}">
                             <h:outputText value="#{taxa.numeroDias}" />
                         </p:column>
-                        <p:column headerText="#{l.Taxa}" sortBy="#{taxa.taxa}" colspan="2">
+                        <p:column headerText="#{l.Taxa}" sortBy="#{taxa.taxa}">
                             <h:outputText  value="#{taxa.taxa}" />
                         </p:column>
                     </p:dataTable>

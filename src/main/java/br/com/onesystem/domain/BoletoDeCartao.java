@@ -49,8 +49,6 @@ public class BoletoDeCartao implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_situacao_not_null}")
     private SituacaoDeCartao situacao;
-    @NotNull(message = "{numero_parcelas_not_null}")
-    private Integer numeroParcela;
     @OneToOne
     private ValoresAVista valoresAVista;
 
@@ -58,7 +56,7 @@ public class BoletoDeCartao implements Serializable {
     }
 
     public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            Integer numeroParcela, ValoresAVista formaDeRecebimentoOuPagamento) throws DadoInvalidoException {
+            ValoresAVista formaDeRecebimentoOuPagamento) throws DadoInvalidoException {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.cartao = cartao;
@@ -67,13 +65,12 @@ public class BoletoDeCartao implements Serializable {
         this.valor = valor;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
-        this.numeroParcela = numeroParcela;
         this.valoresAVista = formaDeRecebimentoOuPagamento;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("emissao", "dias", "valor", "codigoTransacao", "numeroParcela");
+        List<String> campos = Arrays.asList("emissao", "dias", "valor", "codigoTransacao", "dias", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, campos);
     }
 
@@ -109,14 +106,10 @@ public class BoletoDeCartao implements Serializable {
         return situacao;
     }
 
-    public Integer getNumeroParcela() {
-        return numeroParcela;
-    }
-
     public ValoresAVista getValoresAVista() {
         return valoresAVista;
     }
-        
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -134,7 +127,7 @@ public class BoletoDeCartao implements Serializable {
 
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", numeroParcela=" + numeroParcela + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
+        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
     }
 
 }
