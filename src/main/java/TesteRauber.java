@@ -1,4 +1,6 @@
 
+import ar.com.fdvs.dj.domain.builders.ColumnBuilder;
+import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.MargemDAO;
 import br.com.onesystem.domain.Margem;
@@ -21,14 +23,6 @@ import javax.persistence.NoResultException;
 public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
-
-        try {
-            Margem m = new ArmazemDeRegistros<Margem>(Margem.class).find(new GrupoDeMargemBuilder().comID(new Long(1)).construir());
-
-            System.out.println("Margem: " + m);
-        } catch (NoResultException nre) {
-            System.out.println("teste sadfsdfa");
-        }
 
     }
 

@@ -98,39 +98,40 @@ public class ImpressoraDeRelatorioItem {
 //                .setTitle(new BundleUtil().getMessage("saldo_por_deposito")).setWidth(new Integer(100))
 //                .build();
 
-        for (Object a : campos) {
-            if (a.equals(new BundleUtil().getMessage("id"))) {
-                drb.addColumn(colunaId);
-            }
-            if (a.equals(new BundleUtil().getMessage("nome"))) {
-                drb.addColumn(colunaNome);
-            }
-            if (a.equals(new BundleUtil().getMessage("saldo"))) {
-                drb.addColumn(colunaSaldo);
-            }
-            if (a.equals(new BundleUtil().getMessage("custo_medio"))) {
-                drb.addColumn(colunaCustoMedio);
-            }
-            if (a.equals(new BundleUtil().getMessage("custo_total"))) {
-                drb.addColumn(colunaCustoTotal);
-                drb.addGlobalFooterVariable(colunaCustoTotal, DJCalculation.SUM);
-            }
-            if (a.equals(new BundleUtil().getMessage("marca"))) {
-                drb.addColumn(colunaMarca);
-            }
-            if (a.equals(new BundleUtil().getMessage("grupo"))) {
-                drb.addColumn(colunaGrupo);
-            }
-            if (a.equals(new BundleUtil().getMessage("grupo_fiscal"))) {
-                drb.addColumn(colunaGrupoFiscal);
-            }
+//        for (Object a : campos) {
+//            if (a.equals(new BundleUtil().getMessage("id"))) {
+//                drb.addColumn(colunaId);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("nome"))) {
+//                drb.addColumn(colunaNome);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("saldo"))) {
+//                drb.addColumn(colunaSaldo);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("custo_medio"))) {
+//                drb.addColumn(colunaCustoMedio);
+//            }
+////            if (a.equals(new BundleUtil().getMessage("custo_total"))) {
+////                drb.addColumn(colunaCustoTotal);
+//drb.addGlo
+//                drb.addGlobalFooterVariable(colunaCustoTotal, DJCalculation.SUM);
+////            }
+//            if (a.equals(new BundleUtil().getMessage("marca"))) {
+//                drb.addColumn(colunaMarca);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("grupo"))) {
+//                drb.addColumn(colunaGrupo);
+//            }
+//            if (a.equals(new BundleUtil().getMessage("grupo_fiscal"))) {
+//                drb.addColumn(colunaGrupoFiscal);
+//            }
 //            if (a.equals(new BundleUtil().getMessage("deposito"))) {
 //                drb.addColumn(colunaDeposito);
 //            }
 //            if (a.equals(new BundleUtil().getMessage("saldo_por_deposito"))) {
 //                drb.addColumn(colunaSaldoPorDeposito);
 //            }
-        }
+//        }
         
         DynamicReport dr = drb.build();
         JRDataSource ds = new JRBeanCollectionDataSource(lista);

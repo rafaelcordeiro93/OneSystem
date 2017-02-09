@@ -18,25 +18,19 @@ import java.util.List;
 public class BalancoFisico {
 
     private Item item;
-    private Moeda moedaPadrao;
     private BigDecimal custoMedio;
     private BigDecimal saldo;
    
 
-    public BalancoFisico(Item item, Moeda moedaPadrao, BigDecimal custoMedio, Date data) {
+    public BalancoFisico(Item item, BigDecimal custoMedio, Date data) {
         this.item = item;
         this.custoMedio = custoMedio;
-        this.moedaPadrao = moedaPadrao;
         this.saldo = item.getSaldo(data);
        
     }
 
     public Item getItem() {
         return item;
-    }
-
-    public Moeda getMoedaPadrao() {
-        return moedaPadrao;
     }
 
     public BigDecimal getCustoMedio() {

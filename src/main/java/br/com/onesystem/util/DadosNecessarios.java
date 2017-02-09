@@ -30,8 +30,9 @@ public class DadosNecessarios implements Serializable {
         if (janela.equals("/notaEmitida.xhtml")) {
             Moeda moeda = getMoedaPadrao();
             getCotacaoEmMoedaPadrao(moeda);
+        } else if (janela.equals("/relatorioDeBalancoFisico.xhtml")) {
+            Moeda moeda = getMoedaPadrao();
         }
-
         return pendencias;
     }
 
