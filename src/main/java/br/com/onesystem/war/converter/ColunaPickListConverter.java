@@ -29,7 +29,7 @@ public class ColunaPickListConverter implements Converter {
                 ColunaService service = (ColunaService) fc.getExternalContext().getApplicationMap().get("colunaService");
                 List<Coluna> lista = service.buscarColuna();
                 for (Coluna mdr : lista) {
-                    if (mdr.getKey().equals(new String(value))) {
+                    if (mdr.getId().equals(new Long(value))) {
                         return mdr;
                     }
                 }
@@ -45,7 +45,7 @@ public class ColunaPickListConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            return String.valueOf(((Coluna) object).getKey());
+            return String.valueOf(((Coluna) object).getId());
         } else {
             return null;
         }

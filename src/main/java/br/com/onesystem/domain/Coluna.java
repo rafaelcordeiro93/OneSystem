@@ -6,20 +6,37 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.util.BundleUtil;
+import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
-/**
- *
- * @author Rafael
- */
-public class Coluna {
+@Entity
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_COLUNA",
+        sequenceName = "SEQ_COLUNA")
+public class Coluna implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_COLUNA")
+    private Long id;
+    @NotNull(message = "{key_not_null}")
+    @Length(max = 2, min = 60, message = "{key_length}")
     private String key;
     private String nome;
 
-    public Coluna(String key) {
+    public Coluna(Long id, String key) {
+        this.id = id;
         this.key = key;
         this.nome = new BundleUtil().getLabel(key);
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getKey() {
@@ -42,7 +59,7 @@ public class Coluna {
             return false;
         }
         final Coluna other = (Coluna) obj;
-        if (!Objects.equals(this.key, other.key)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

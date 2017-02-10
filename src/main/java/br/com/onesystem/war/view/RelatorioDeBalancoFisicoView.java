@@ -25,6 +25,7 @@ import br.com.onesystem.reportTemplate.column.BalancoFisicoColumn;
 import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoRelatorio;
+import br.com.onesystem.war.builder.ColunaBV;
 import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.IOException;
@@ -40,6 +41,7 @@ import org.primefaces.model.DualListModel;
 public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements Serializable {
 
     private RelatorioDeBalancoFisicoBV relatorio;
+    private Coluna coluna;
     private ModeloDeRelatorioBV modelo;
     private List<Item> itens;
     private ImpressoraDeRelatorioDinamico impressora;
@@ -61,12 +63,12 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
 
     public void addTemplateRelatorios() {
         try {
-   System.out.println(campos.getTarget());
+            System.out.println(campos.getTarget());
             modelo.setTipoRelatorio(TipoRelatorio.BALANCO_FISICO);
             List<String> keys = getKeys();
             System.out.println("1");
             modelo.setListaDeCampos(keys);
-            
+
             System.out.println(campos.getTarget());
             ModeloDeRelatorio novoRegistro = modelo.construir();
 
@@ -85,14 +87,26 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
 
     private List<String> getKeys() {
         List<String> key = new ArrayList<>();
-         System.out.println("2" + campos.getTarget());
+        System.out.println("2" + campos.getTarget());
         for (Coluna c : campos.getTarget()) {
-             System.out.println("3");
+            System.out.println("3");
             key.add(c.getKey());
         }
- System.out.println("4");
+        System.out.println("4");
         return null;
     }
+
+//    private Long retornarCodigo() {
+//        Long id = (long) 1;
+//        if (!listaColuna.isEmpty()) {
+//            for (ColunaBV dp : listaColuna) {
+//                if (dp.getId() >= id) {
+//                    id = dp.getId() + 1;
+//                }
+//            }
+//        }
+//        return id;
+//    }
 
     public void imprimir() throws ClassNotFoundException, JRException, IOException {
         try {
@@ -118,14 +132,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
     }
 
     private void criarCampos() {
-        camposSource.add(new Coluna("Id"));
-        camposSource.add(new Coluna("Nome"));
-        camposSource.add(new Coluna("Saldo"));
-        camposSource.add(new Coluna("Custo_Medio"));
-        camposSource.add(new Coluna("Custo_Total"));
-        camposSource.add(new Coluna("Marca"));
-        camposSource.add(new Coluna("Grupo"));
-        camposSource.add(new Coluna("Grupo_Fiscal"));
+        camposSource.add(new Coluna(new Long(1),"Id"));
+        camposSource.add(new Coluna(new Long(2),"Nome"));
+        camposSource.add(new Coluna(new Long(3),"Saldo"));
+//        camposSource.add(new Coluna("Custo_Medio"));
+//        camposSource.add(new Coluna("Custo_Total"));
+//        camposSource.add(new Coluna("Marca"));
+//        camposSource.add(new Coluna("Grupo"));
+//        camposSource.add(new Coluna("Grupo_Fiscal"));
         campos = new DualListModel<Coluna>(camposSource, camposTarget);
     }
 
