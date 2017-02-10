@@ -61,12 +61,16 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
 
     public void addTemplateRelatorios() {
         try {
-
+   System.out.println(campos.getTarget());
             modelo.setTipoRelatorio(TipoRelatorio.BALANCO_FISICO);
             List<String> keys = getKeys();
+            System.out.println("1");
             modelo.setListaDeCampos(keys);
+            
+            System.out.println(campos.getTarget());
             ModeloDeRelatorio novoRegistro = modelo.construir();
 
+            System.out.println(modelo.getNome() + "" + modelo.getListaDeCampos());
             if (validaTemplateRelatoriosExistente(novoRegistro)) {
                 new AdicionaDAO<ModeloDeRelatorio>().adiciona(novoRegistro);
                 InfoMessage.adicionado();
@@ -80,7 +84,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
     }
 
     private List<String> getKeys() {
-      return null;
+        List<String> key = new ArrayList<>();
+         System.out.println("2" + campos.getTarget());
+        for (Coluna c : campos.getTarget()) {
+             System.out.println("3");
+            key.add(c.getKey());
+        }
+ System.out.println("4");
+        return null;
     }
 
     public void imprimir() throws ClassNotFoundException, JRException, IOException {

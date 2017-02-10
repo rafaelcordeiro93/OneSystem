@@ -18,10 +18,10 @@
                         <h:panelGrid columns="2">
 
 
-                            <h:panelGrid columns="3" style="margin-left: -1%">
-                                <p:outputLabel value="#{l.Nome}"/>
-                                <p:inputText id="itemAjuste" size="26" value="#{relatorioDeBalancoFisicoView.modelo.nome}"/> 
-                            </h:panelGrid>
+                            <!-- <h:panelGrid columns="3" style="margin-left: -1%">
+                                 <p:outputLabel value="#{l.Nome}"/>
+                                 <p:inputText id="itemAjuste" size="26" value="#{relatorioDeBalancoFisicoView.modelo.nome}"/> 
+                             </h:panelGrid> -->
 
                             <h:panelGrid columns="1" >
                                 <h:panelGrid columns="3">
@@ -32,7 +32,7 @@
                             </h:panelGrid>
                         </h:panelGrid>
 
-                        <p:selectOneMenu  id="modeloRelatorio" value="#{relatorioDeBalancoFisicoView.modelo.nome}" converter="modeloDeRelatorioConverter" styleClass="Wid50">
+                        <p:selectOneMenu  id="modeloRelatorio" value="#{relatorioDeBalancoFisicoView.modelo.nome}" converter="modeloDeRelatorioConverter" editable="true">
                             <f:selectItems value="#{relatorioDeBalancoFisicoView.modelosDeRelatorio}" var="modeloDeRelatorio" itemValue="#{modeloDeRelatorio}" itemLabel="#{modeloDeRelatorio.nome}"/>
                         </p:selectOneMenu>
 
@@ -52,10 +52,26 @@
                         </h:panelGrid>
 
                         <br></br>
-                        <p:pickList id="pickList" value="#{relatorioDeBalancoFisicoView.campos}" var="coluna" itemLabel="#{coluna}" itemValue="#{coluna}"  > 
+                       <!-- <p:pickList id="pickList" value="#{relatorioDeBalancoFisicoView.campos}" var="coluna" itemLabel="#{coluna}" itemValue="#{coluna}"  > 
                             <f:facet name="sourceCaption">#{l.Campos_Disponiveis}</f:facet>
                             <f:facet name="targetCaption">#{l.Campos_Selecionados}</f:facet>
+                       
+                        <p:column style="width:75%;">
+                                <h:outputText value="#{coluna.nome}" />
+                            </p:column>
+                        </p:pickList>-->
+
+                        <p:pickList id="myPickList"
+                                    value="#{relatorioDeBalancoFisicoView.campos}"
+                                    var="coluna" 
+                                    converter="colunaPickListConverter"
+                                    itemValue="#{coluna}" itemLabel="#{coluna.nome}">
+                            <f:facet name="sourceCaption">#{l.Campos_Disponiveis}</f:facet>
+                            <f:facet name="targetCaption">#{l.Campos_Selecionados}</f:facet>
+
+                           
                         </p:pickList>
+
                         <br/>
                     </div>
                     <p:commandButton value="#{l.Imprimir}" action="#{relatorioDeBalancoFisicoView.imprimir()}" icon="fa fa-print Fs16 White" update=":conteudo" 
