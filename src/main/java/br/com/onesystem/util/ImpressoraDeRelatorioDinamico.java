@@ -15,11 +15,10 @@ import ar.com.fdvs.dj.domain.constants.Font;
 import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
 import ar.com.fdvs.dj.domain.constants.Transparency;
 import ar.com.fdvs.dj.domain.constants.VerticalAlign;
-import ar.com.fdvs.dj.domain.entities.columns.AbstractColumn;
 import br.com.onesystem.reportTemplate.ColunaRepository;
-import br.com.onesystem.util.BundleUtil;
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
@@ -51,7 +50,7 @@ public class ImpressoraDeRelatorioDinamico {
         JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
         HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         res.setContentType("application/pdf");
-        res.addHeader("Content-disposition", "attachment; filename=" + "Relatorio" + ".pdf");
+        res.addHeader("Content-disposition", "attachment; filename=" + nome + new Date()  + ".pdf");
         JasperExportManager.exportReportToPdfStream(jp, res.getOutputStream());
         FacesContext.getCurrentInstance().responseComplete();
     }
