@@ -49,7 +49,7 @@ public class CotacaoDAO {
     }
 
     public CotacaoDAO porMoeda(Moeda moeda) {
-        consulta += " and c.moeda = :cMoeda ";
+        consulta += " and c.conta.moeda = :cMoeda ";
         parametros.put("cMoeda", moeda);
         return this;
     }
@@ -64,7 +64,7 @@ public class CotacaoDAO {
     public CotacaoDAO naMaiorEmissao(Date emissao) {
         consulta += "and c.emissao in (select max(ct.emissao) from Cotacao ct "
                 + "where ct.emissao between :pEmissao and :pEmissaoFinal "
-                + "group by ct.moeda,ct.conta) ";
+                + "group by ct.conta) ";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
         parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
         return this;

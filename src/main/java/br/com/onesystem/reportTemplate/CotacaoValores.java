@@ -24,13 +24,15 @@ public class CotacaoValores {
     private BigDecimal valorAReceber;
     private BigDecimal total;
     private BigDecimal totalConvertidoRecebido;
+    private Moeda moedaPadrao;
 
-    public CotacaoValores(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido) {
+    public CotacaoValores(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido, Moeda moedaPadrao) {
         this.id = cotacao.getId();
         this.cotacao = cotacao;
         this.valorAReceber = valorAReceber;
         this.total = total;
         this.totalConvertidoRecebido = totalConvertidoRecebido;
+        this.moedaPadrao = moedaPadrao;
     }
 
     public Cotacao getCotacao() {
@@ -80,10 +82,10 @@ public class CotacaoValores {
     public BigDecimal getValorConvertidoRestante() {
         if (total != null && totalConvertidoRecebido != null && cotacao.getValor() != null) {
             BigDecimal valorNaMoeda = totalConvertidoRecebido.multiply(cotacao.getValor(), MathContext.DECIMAL64);
-            valorNaMoeda = valorNaMoeda.setScale(14, RoundingMode.HALF_DOWN);
+            valorNaMoeda = valorNaMoeda.setScale(14, BigDecimal.ROUND_HALF_EVEN);
             BigDecimal totalC = total.multiply(cotacao.getValor());
             BigDecimal subtract = (totalC).subtract(valorNaMoeda);
-            subtract = subtract.setScale(2, BigDecimal.ROUND_UP);
+            subtract = subtract.setScale(2, BigDecimal.ROUND_HALF_EVEN);
             return subtract;
         } else {
             return BigDecimal.ZERO;
@@ -106,9 +108,9 @@ public class CotacaoValores {
 
     public String getValorConvertidoRecebidoView() {
         if (valorAReceber == null || valorAReceber == BigDecimal.ZERO) {
-            return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(BigDecimal.ZERO);
+            return NumberFormat.getCurrencyInstance(moedaPadrao.getBandeira().getLocal()).format(BigDecimal.ZERO);
         } else {
-            return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(valorAReceber.divide(cotacao.getValor(), 2, BigDecimal.ROUND_UP));
+            return NumberFormat.getCurrencyInstance(moedaPadrao.getBandeira().getLocal()).format(valorAReceber.divide(cotacao.getValor(), 2, BigDecimal.ROUND_UP));
         }
     }
 

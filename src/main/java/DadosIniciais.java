@@ -22,6 +22,7 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.TipoBandeira;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.valueobjects.TipoItem;
@@ -421,9 +422,9 @@ public class DadosIniciais {
 
         //Moeda
         // ---------------------------------------------------------------------
-        Moeda real = new Moeda(null, "Real", "R$", null);
-        Moeda dolar = new Moeda(null, "Dólar", "$", null);
-        Moeda guarani = new Moeda(null, "Guarani", "Gs", null);
+        Moeda real = new Moeda(null, "Real", "R$", TipoBandeira.BRASIL);
+        Moeda dolar = new Moeda(null, "Dólar", "$", TipoBandeira.ESTADOS_UNIDOS);
+        Moeda guarani = new Moeda(null, "Guarani", "Gs", TipoBandeira.PARAGUAI);
 
         AdicionaDAO<Moeda> daoMoeda = new AdicionaDAO<Moeda>();
         daoMoeda.adiciona(real);

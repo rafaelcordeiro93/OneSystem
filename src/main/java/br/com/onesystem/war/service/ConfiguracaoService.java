@@ -1,9 +1,7 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ConfiguracaoDAO;
-import br.com.onesystem.dao.ConfiguracaoFinanceiroDAO;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.ConfiguracaoFinanceiro;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;

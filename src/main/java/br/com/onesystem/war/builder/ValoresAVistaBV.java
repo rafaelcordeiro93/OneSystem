@@ -35,7 +35,8 @@ public class ValoresAVistaBV implements Serializable {
     private NotaEmitida notaEmitida;
     private List<Cheque> cheques = new ArrayList<Cheque>();
 
-    public ValoresAVistaBV() {
+    public ValoresAVistaBV(Moeda moeda) {
+        this.moeda = moeda;
     }
 
     public Long getId() {
@@ -83,7 +84,8 @@ public class ValoresAVistaBV implements Serializable {
     }
 
     public String getDinheiroFormatado() {
-        return moeda != null ? NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(dinheiro) : "";
+        NumberFormat nf = NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal());
+        return moeda != null && dinheiro.compareTo(BigDecimal.ZERO) > 0 ? nf.format(dinheiro) : nf.format(BigDecimal.ZERO);
     }
 
     public void setDinheiro(BigDecimal dinheiro) {
@@ -161,7 +163,7 @@ public class ValoresAVistaBV implements Serializable {
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-    
+
     public ValoresAVista construir() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir()).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)

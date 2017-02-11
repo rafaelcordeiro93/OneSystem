@@ -60,8 +60,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -70,7 +68,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -113,7 +110,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         iniciarConfiguracoes();
         limparJanela();
         limpaSessao();
-
     }
 
     private void iniciarConfiguracoes() {
@@ -130,7 +126,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         notaEmitida = new NotaEmitidaBV();
         itemEmitido = new ItemEmitidoBV();
         notaEmitida.setItensEmitidos(new ArrayList<ItemEmitido>());
-        valoresAVista = new ValoresAVistaBV();
+        valoresAVista = new ValoresAVistaBV(configuracao.getMoedaPadrao());
         parcelas = new ArrayList<ParcelaBV>();
         notaEmitidaSelecionada = null;
         cheque = new ChequeBV();
@@ -151,7 +147,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         cotacaoLista = service.buscarCotacoesDoDiaAtual();
         cotacoes = new ArrayList<CotacaoValores>();
         for (Cotacao c : cotacaoLista) {
-            cotacoes.add(new CotacaoValores(c, null, null, null));
+            cotacoes.add(new CotacaoValores(c, null, null, null, configuracao.getMoedaPadrao()));
         }
     }
 
@@ -191,7 +187,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
             // Se existir valor em dinheiro abre a janela de cotações.
             if (valoresAVista.getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
-                addTotalCotacoes(); // abre a janela de cotações
+                recalculaCotacoes(); // abre a janela de cotações
             } else {
                 add();
             }
@@ -248,18 +244,36 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     }
 
     /**
+     * Calcula a cotacao inicial ao abrir a janela de cotacoes
+     */
+    public void calculaCotacaoInicial() {
+        RequestContext rc = RequestContext.getCurrentInstance();
+        rc.update("cotacaoVal");
+        if (valoresAVista.getDinheiro().compareTo(getTotalConvertidoRecebido()) > 0) {
+            for (CotacaoValores c : cotacoes) {
+                if (c.getCotacao().getConta().getMoeda().equals(configuracao.getMoedaPadrao())) {
+                    c.setValorAReceber(valoresAVista.getDinheiro());
+                    c.setTotalConvertidoRecebido(getTotalConvertidoRecebido());
+                    break;
+                }
+            }
+        }
+        rc.update("conteudo:cotacaoValoresData");
+        rc.execute("PF('cotacaoVal').show()");
+    }
+
+    /**
      * Busca a moeda padrão e abre a janela de cotações com o valor restante na
      * cotação de cada moeda.
      */
-    public void addTotalCotacoes() {
-        valoresAVista.setMoeda(configuracao.getMoedaPadrao());
+    public void recalculaCotacoes() {
         RequestContext rc = RequestContext.getCurrentInstance();
         rc.update("cotacaoVal");
         for (CotacaoValores c : cotacoes) {
             c.setTotal(valoresAVista.getDinheiro());
             c.setTotalConvertidoRecebido(getTotalConvertidoRecebido());
         }
-        rc.execute("PF('cotacaoVal').show()");
+        rc.update("conteudo:cotacaoValoresData");
     }
 
     /**
@@ -725,23 +739,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         }
     }
 
-    public String getGanhoDeCambio() {
-        BigDecimal total = valoresAVista.getDinheiro();
-        BigDecimal valorAReceber = BigDecimal.ZERO;
-        for (CotacaoValores c : cotacoes) {
-            valorAReceber = valorAReceber.add(c.getValorConvertidoRecebido());
-        }
-        return total == null ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO)
-                : total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0 ? NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(total.subtract(valorAReceber).multiply(new BigDecimal(-1)))
-                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(BigDecimal.ZERO);
-    }
-
     public BigDecimal getTotalConvertidoRecebido() {
         BigDecimal total = BigDecimal.ZERO;
         for (CotacaoValores c : cotacoes) {
             total = total.add(c.getValorConvertidoRecebido());
         }
         return total;
+    }
+
+    public String getTotalConvertidoRecebidoFormatado() {
+        return NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(getTotalConvertidoRecebido());
     }
 
     public BigDecimal getTotalParcelas() {
@@ -842,7 +849,17 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     }
 
     public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
-        return Arrays.asList(TipoFormaDeRecebimentoParcela.values());
+        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<TipoFormaDeRecebimentoParcela>();
+        if (notaEmitida.getFormaDeRecebimento().isParcelaEmCartao()) {
+            forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
+        }
+        if (notaEmitida.getFormaDeRecebimento().isParcelaEmCheque()) {
+            forma.add(TipoFormaDeRecebimentoParcela.CHEQUE);
+        }
+        if (notaEmitida.getFormaDeRecebimento().isParcelaEmConta()) {
+            forma.add(TipoFormaDeRecebimentoParcela.TITULO);
+        }
+        return forma;
     }
 
     public void setNotaEmitida(NotaEmitidaBV notaEmitida) {

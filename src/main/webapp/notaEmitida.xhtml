@@ -69,7 +69,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100 PaddingTop2Px">
                                     <p:outputLabel value="#{l.Total}"/>
-                                    <p:inputText id="notaItemTotal" value="#{notaEmitidaView.configuracao.moedaPadrao.sigla} #{notaEmitidaView.itemEmitido.total}" size="22" readonly="true"/>
+                                    <p:inputNumber id="notaItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
+                                                   symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.total}">
+                                    </p:inputNumber>   
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
@@ -149,13 +151,14 @@
                                     <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
                                                    value="#{notaEmitidaView.valoresAVista.porcentagemAcrescimo}">
-                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota" 
+                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar" 
                                                 listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber> 
                                     <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaEmitidaView.valoresAVista.acrescimo}">
                                         <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber>
 
                                     <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
@@ -168,6 +171,7 @@
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    styleClass="Wid90" value="#{notaEmitidaView.valoresAVista.desconto}">
                                         <p:ajax event="change" update="nePDesconto neDinheiro totalNota" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:spacer/>
@@ -221,9 +225,8 @@
                                 <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
                                              columnClasses="ui-g-12 ui-md-12">
 
-                                    <p:commandButton value="#{l.Cotacao}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmDinheiro}"
-                                                     onclick="PF('cotacaoVal').show()"/>
-
+                                    <p:spacer height="25"/>
+                                    
                                     <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"/>
 
                                     <p:commandButton value="#{l.Cheques}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
@@ -343,7 +346,7 @@
 
                         <p:separator/>
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.addTotalCotacoes}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.recalculaCotacoes}" update=":conteudo"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="BrownButton"/>
 
@@ -354,19 +357,7 @@
 
         <p:dialog widgetVar="cotacaoVal" width="900" header="#{l.Cambio}"  modal="true">
 
-            <p:panelGrid id="panelDetDinEnt" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                         columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
-                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Total em Dinheiro:" />
-                <p:outputLabel id="totalDinheiro" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valoresAVista.dinheiroFormatado}" />
-
-                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Valor a trocar:" />
-                <p:outputLabel id="valorATrocar" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.valorRestante}" />
-
-                <p:outputLabel styleClass="DispBlock FontRobotoLight" value="Ganho de Câmbio:" />
-                <p:outputLabel id="ganhoDeCambio" styleClass="DispBlock FontRobotoLight" value="#{notaEmitidaView.ganhoDeCambio}" />
-            </p:panelGrid>
-
-            <p:dataTable id="cotacaoValoresData" var="cotacaoValores" value="#{notaEmitidaView.cotacoes}" selectionMode="single" selection="#{notaEmitidaView.cotacaoValoresSelecionado}" rowKey="#{cotacaoValores.id}"
+            <p:dataTable id="cotacaoValoresData" var="cotacaoValores" value="#{notaEmitidaView.cotacoes}" rowKey="#{cotacaoValores.id}"
                          rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          paginatorPosition="bottom" paginatorAlwaysVisible="false"
                          emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
@@ -387,18 +378,30 @@
                     <p:cellEditor>
                         <f:facet name="output"><h:outputText value="#{cotacaoValores.valorAReceberFormatado}"/></f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{cotacaoValores.valorAReceber}">
-                                <p:ajax event="blur" listener="#{notaEmitidaView.addTotalCotacoes}" update="cotacaoValoresData :conteudo:valorATrocar :conteudo:ganhoDeCambio" />
-                            </p:inputText>
+                            <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                           value="#{cotacaoValores.valorAReceber}" symbol="#{cotacaoValores.cotacao.conta.moeda.sigla } ">                                           
+                                <p:ajax event="blur" listener="#{notaEmitidaView.recalculaCotacoes}" update="cotacaoValoresData" />
+                            </p:inputNumber> 
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
 
-                <p:column>
+                <p:column headerText="#{l.Valor_Na_Moeda_Padrao}">
                     <p:outputLabel value="#{cotacaoValores.valorConvertidoRecebidoView}"/>
                 </p:column>   
 
-            </p:dataTable>            
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="4" style="text-align:right" footerText="#{l.Total}" />
+                        <p:column id="totalConvertidoRecebido" footerText="#{notaEmitidaView.totalConvertidoRecebidoFormatado}"/>
+                    </p:row>                                  
+                </p:columnGroup>
+
+            </p:dataTable>   
+
+            <div class="EmptyBox5"/>
+
+            <p:commandButton value="#{l.Fechar}" onclick="PF('cotacaoVal').hide()"/>
 
         </p:dialog>
 
@@ -493,7 +496,7 @@
 
             </p:dataTable>
 
-            <p:spacer height="25" width="0"/>
+            <p:spacer height="24" width="0"/>
             <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeEntrada').hide()" update=":conteudo:ne:chequeEntrada :conteudo:ne:neAFaturar" actionListener="#{notaEmitidaView.recalculaValorAFaturar}" />
 
         </p:dialog>
