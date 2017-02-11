@@ -5,9 +5,9 @@ import org.primefaces.event.SelectEvent;
 public abstract class BasicMBImpl<Bean> {
 
     protected Bean bean;
-    
+
     public abstract void selecionar(SelectEvent event);
-    
+
     public abstract void buscaPorId();
-    
+
 }
