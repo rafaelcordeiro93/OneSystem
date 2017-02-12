@@ -17,11 +17,11 @@
 
                         <h:panelGrid columns="2">
 
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{relatorioDeBalancoFisicoView.modelo.nome}" />
+                            
+                            <a:inputTextDialog id="nomeID" value="#{relatorioDeBalancoFisicoView.modelo.nome}" dialog="#{selecaoModeloDeRelatorioView}" mbView="#{relatorioDeBalancoFisicoView}" update=":conteudo"/>
 
-                            <!-- <h:panelGrid columns="3" style="margin-left: -1%">
-                                 <p:outputLabel value="#{l.Nome}"/>
-                                 <p:inputText id="itemAjuste" size="26" value="#{relatorioDeBalancoFisicoView.modelo.nome}"/> 
-                             </h:panelGrid> -->
 
                             <h:panelGrid columns="1" >
                                 <h:panelGrid columns="3">
@@ -30,13 +30,8 @@
                                     <p:commandButton icon="fa fa-trash-o Fs16 White"  update=":conteudo" styleClass="orange-btn"/>
                                 </h:panelGrid>
                             </h:panelGrid>
+
                         </h:panelGrid>
-
-                        <p:selectOneMenu  id="modeloRelatorio" value="#{relatorioDeBalancoFisicoView.modelo.nome}" converter="modeloDeRelatorioConverter" editable="true">
-                            <f:selectItems value="#{relatorioDeBalancoFisicoView.modelosDeRelatorio}" var="modeloDeRelatorio" itemValue="#{modeloDeRelatorio}" itemLabel="#{modeloDeRelatorio.nome}"/>
-                        </p:selectOneMenu>
-
-                        <p:commandButton value="Mostrar"/>
 
                         <p:separator/>
 
@@ -52,14 +47,6 @@
                         </h:panelGrid>
 
                         <br></br>
-                       <!-- <p:pickList id="pickList" value="#{relatorioDeBalancoFisicoView.campos}" var="coluna" itemLabel="#{coluna}" itemValue="#{coluna}"  > 
-                            <f:facet name="sourceCaption">#{l.Campos_Disponiveis}</f:facet>
-                            <f:facet name="targetCaption">#{l.Campos_Selecionados}</f:facet>
-                       
-                        <p:column style="width:75%;">
-                                <h:outputText value="#{coluna.nome}" />
-                            </p:column>
-                        </p:pickList>-->
 
                         <p:pickList id="myPickList"
                                     value="#{relatorioDeBalancoFisicoView.campos}"
@@ -69,7 +56,8 @@
                             <f:facet name="sourceCaption">#{l.Campos_Disponiveis}</f:facet>
                             <f:facet name="targetCaption">#{l.Campos_Selecionados}</f:facet>
 
-                           
+                            
+
                         </p:pickList>
 
                         <br/>

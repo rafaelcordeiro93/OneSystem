@@ -6,7 +6,6 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Coluna;
-import br.com.onesystem.war.service.ColunaService;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -14,6 +13,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
+import org.primefaces.component.picklist.PickList;
+import org.primefaces.model.DualListModel;
 
 /**
  *
@@ -26,10 +27,10 @@ public class ColunaPickListConverter implements Converter {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ColunaService service = (ColunaService) fc.getExternalContext().getApplicationMap().get("colunaService");
-                List<Coluna> lista = service.buscarColuna();
+                DualListModel<Coluna> colunaPick = (DualListModel<Coluna>) ((PickList) uic).getValue();
+                List<Coluna> lista = colunaPick.getSource();
                 for (Coluna mdr : lista) {
-                    if (mdr.getId().equals(new Long(value))) {
+                    if (mdr.getKey().equals(value)) {
                         return mdr;
                     }
                 }
@@ -45,7 +46,7 @@ public class ColunaPickListConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            return String.valueOf(((Coluna) object).getId());
+            return ((Coluna) object).getKey();
         } else {
             return null;
         }

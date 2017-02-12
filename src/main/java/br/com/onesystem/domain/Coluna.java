@@ -5,13 +5,18 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -25,14 +30,26 @@ public class Coluna implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_COLUNA")
     private Long id;
     @NotNull(message = "{key_not_null}")
-    @Length(max = 2, min = 60, message = "{key_length}")
+    
     private String key;
     private String nome;
+    @ManyToOne
+    private ModeloDeRelatorio modelo;
 
-    public Coluna(Long id, String key) {
+    public Coluna() {
+    }
+
+    public Coluna(Long id, String key, ModeloDeRelatorio modelo) throws DadoInvalidoException {
         this.id = id;
         this.key = key;
         this.nome = new BundleUtil().getLabel(key);
+        this.modelo = modelo;
+        ehValido();
+    }
+
+    public final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("key");
+        new ValidadorDeCampos<Coluna>().valida(this, campos);
     }
 
     public Long getId() {
@@ -47,6 +64,10 @@ public class Coluna implements Serializable {
         return nome;
     }
 
+    public ModeloDeRelatorio getModelo() {
+        return modelo;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -59,7 +80,7 @@ public class Coluna implements Serializable {
             return false;
         }
         final Coluna other = (Coluna) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.key, other.key)) {
             return false;
         }
         return true;
