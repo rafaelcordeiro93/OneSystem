@@ -7,15 +7,23 @@ package br.com.onesystem.util;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
+import br.com.onesystem.war.service.ColunaService;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.OperacaoService;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -23,24 +31,57 @@ import java.util.List;
  */
 public class DadosNecessarios implements Serializable {
 
-    private List<DadosNecessariosBV> pendencias = new ArrayList<DadosNecessariosBV>();
-    private ConfiguracaoService configuracaoService;
+    private List<DadosNecessariosBV> pendencias = new ArrayList<>();
+    FacesContext fc = FacesContext.getCurrentInstance();
 
     public List<DadosNecessariosBV> valida(String janela) {
-        if (janela.equals("/notaEmitida.xhtml")) {
-            Moeda moeda = getMoedaPadrao();
-            getCotacaoEmMoedaPadrao(moeda);
-        } else if (janela.equals("/relatorioDeBalancoFisico.xhtml")) {
-            Moeda moeda = getMoedaPadrao();
+        switch (janela) {
+            case "/notaEmitida.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                getContaDeEstoque();
+                getOperacoes();
+                break;
+            }
+            case "/relatorioDeBalancoFisico.xhtml": {
+                getMoedaPadrao();
+                getContaDeEstoque();
+                break;
+            }
+            case "/ajusteDeEstoque.xhtml": {
+                getMoedaPadrao();
+                getContaDeEstoque();
+                break;
+            }
+            case "/item.xhtml": {
+                getContaDeEstoque();
+                break;
+            }
+            default:
+                break;
         }
         return pendencias;
+    }
+
+    private ContaDeEstoque getContaDeEstoque() {
+        BundleUtil b = new BundleUtil();
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+
+        ConfiguracaoEstoqueService configuracaoEstoqueService = new ConfiguracaoEstoqueService();
+        ConfiguracaoEstoque conf = configuracaoEstoqueService.buscar();
+        if (conf == null | conf.getContaDeEstoqueEmpresa() == null) {
+            bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+        return conf.getContaDeEstoqueEmpresa();
     }
 
     private Moeda getMoedaPadrao() {
         BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
         try {
-            configuracaoService = new ConfiguracaoService();
+            ConfiguracaoService configuracaoService = new ConfiguracaoService();
             Configuracao conf = configuracaoService.buscar();
             if (conf.getMoedaPadrao() == null) {
                 bv.getLista().add(b.getMessage("moeda_padrao_not_null"));
@@ -55,7 +96,7 @@ public class DadosNecessarios implements Serializable {
         }
     }
 
-    private void getCotacaoEmMoedaPadrao(Moeda moeda) {
+    private Cotacao getCotacaoEmMoedaPadrao(Moeda moeda) {
         BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/cotacao.xhtml");
         try {
@@ -64,15 +105,32 @@ public class DadosNecessarios implements Serializable {
                 if (cotacao == null) {
                     bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
                     pendencias.add(bv);
+                    return null;
                 }
+                return cotacao;
             } else {
                 bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
                 pendencias.add(bv);
+                return null;
             }
         } catch (DadoInvalidoException ex) {
             bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
             pendencias.add(bv);
+            return null;
         }
+    }
+
+    private List<Operacao> getOperacoes() {
+        BundleUtil b = new BundleUtil();
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/operacoes.xhtml");
+        OperacaoService operacaoService = new OperacaoService();
+        List<Operacao> operacoes = operacaoService.buscar();
+        if (operacoes.isEmpty()) {
+            bv.getLista().add(b.getMessage("operacao_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+        return operacoes;
     }
 
 }

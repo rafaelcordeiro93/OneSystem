@@ -22,7 +22,8 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:outputLabel value="#{l.Operacao}"/>
-                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}"/>
+                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}"
+                                                       update=":conteudo:growl"/>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
@@ -226,7 +227,7 @@
                                              columnClasses="ui-g-12 ui-md-12">
 
                                     <p:spacer height="25"/>
-                                    
+
                                     <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"/>
 
                                     <p:commandButton value="#{l.Cheques}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
@@ -581,6 +582,60 @@
             <p:separator/>
 
             <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeParcela').hide()" action="#{notaEmitidaView.addDetalheParcelaCheque}" update="panelDetCheParcela :conteudo:ne:neParcelas" />
+
+        </p:dialog>
+
+        <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('operacaoAjusteDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog> <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                              modal="true" closable="false" closeOnEscape="false" visible="false"
+                              responsive="true" styleClass="zIndex500">
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('notaOperacaoNaoRelacionadaDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
 
         </p:dialog>
 

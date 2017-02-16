@@ -1,15 +1,9 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFisica;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,7 +37,13 @@ public class EstoqueDAO {
         return this;
     }
 
-    public EstoqueDAO wEmissao(Date emissao) {
+    public EstoqueDAO porContaDeEstoque(ContaDeEstoque contaDeEstoque) {
+        consulta += " and e.operacaoDeEstoque.contaDeEstoque = :pContaDeEstoque";
+        parametros.put("pContaDeEstoque", contaDeEstoque);
+        return this;
+    }
+    
+    public EstoqueDAO porEmissao(Date emissao) {
         if (emissao != null) {
             Calendar dataAtual = getDataComHoraFimdoDia(emissao);
             consulta += " and e.emissao <= :pEmissao ";

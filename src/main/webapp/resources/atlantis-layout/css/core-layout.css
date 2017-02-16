@@ -475,6 +475,14 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     border-color: #8D6E63 !important;
 }
 
+.red-btn .ui-button-text {
+    background-color: #E53935;
+}
+.red-btn.ui-state-hover .ui-button-text,
+.red-btn.ui-state-focus .ui-button-text {
+    background-color: #EA5753 !important;
+}
+
 /* shadow for elements*/
 .shadows {
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.5);

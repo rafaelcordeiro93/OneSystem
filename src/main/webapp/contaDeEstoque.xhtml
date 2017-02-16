@@ -15,8 +15,8 @@
                     <div class="EmptyBox5"/>
                     <div class="ui-fluid">
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ,ui-g-12 ui-md-2">
 
 
                             <p:outputLabel value="#{l.Id}"/>
@@ -32,20 +32,20 @@
 
                     <p:separator/>
 
-                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements "
-                                 style="width: 50%" columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2">
+                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                 columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1">
 
                         <p:outputLabel value="#{l.Operacao}"/>
                         <a:inputTextDialog id="neOperacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}"/> 
 
                         <p:outputLabel value="#{l.Operacao_Fisica}"/>
-                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}">
+                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}" styleClass="Wid90">
                             <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="#{l.Operacao_Fisica}" itemValue="#{Operacao_Fisica}" >
                             </f:selectItems>
                         </p:selectOneMenu>
 
 
-                        <h:panelGrid columns="3">
+                        <h:panelGrid columns="3" style="margin-top: -2px">
                             <p:commandButton icon="fa fa-plus Fs16 White" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
                             <p:commandButton icon="fa fa-refresh Fs16 White" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn"/>     
                             <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn"/>

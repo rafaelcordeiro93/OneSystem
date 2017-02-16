@@ -16,13 +16,13 @@ import javax.persistence.SequenceGenerator;
 
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1,
-        sequenceName = "SEQ_CONFIGUCARAO", name = "SEQ_CONFIGUCARAO")
+        sequenceName = "SEQ_CONFIGURACAO", name = "SEQ_CONFIGURACAO")
 @NamedQueries({
-    @NamedQuery(name = "Configuracao.busca", query = "select c from Configuracao c")})
+    @NamedQuery(name = "Configuracao.busca", query = "select c from Configuracao c ")})
 public class Configuracao implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONFIGUCARAO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CONFIGURACAO")
     private Long id;
 
     @OneToOne

@@ -92,4 +92,9 @@ public class ConfiguracaoCambio implements Serializable {
         return this.id.equals(outro.id);
     }
 
+    @Override
+    public String toString() {
+        return "ConfiguracaoCambio{" + "id=" + id + ", ativo=" + ativo + ", contaCaixa=" + contaCaixa + ", despesaDivisaoLucro=" + despesaDivisaoLucro + ", pessoaDivisaoLucro=" + pessoaDivisaoLucro + '}';
+    }
+
 }

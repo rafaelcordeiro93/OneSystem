@@ -4,10 +4,9 @@ import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.OperacaoFisica;
-import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +17,7 @@ public class EstoqueBV implements Serializable {
     private Deposito deposito;
     private Item item;
     private BigDecimal quantidade;
-    private OperacaoFisica tipo;
+    private OperacaoDeEstoque operacaoDeEstoque;
     private Date emissao = new Date();
     private ItemEmitido itemEmitido;
 
@@ -27,8 +26,17 @@ public class EstoqueBV implements Serializable {
         this.deposito = estoqueSelecionado.getDeposito();
         this.item = estoqueSelecionado.getItem();
         this.quantidade = estoqueSelecionado.getQuantidade();
-        this.tipo = estoqueSelecionado.getOperacaoFisica();
         this.emissao = estoqueSelecionado.getEmissao();
+        this.itemEmitido = estoqueSelecionado.getItemEmitido();        
+        this.operacaoDeEstoque = estoqueSelecionado.getOperacaoDeEstoque();
+    }
+
+    public EstoqueBV(Deposito deposito, BigDecimal quantidade, Item item, OperacaoDeEstoque operacaoDeEstoque,
+            ItemEmitido itemEmitido) {
+        this.deposito = deposito;
+        this.quantidade = quantidade;
+        this.item = item;
+        this.operacaoDeEstoque = operacaoDeEstoque;
         this.itemEmitido = itemEmitido;
     }
 
@@ -67,14 +75,6 @@ public class EstoqueBV implements Serializable {
         this.quantidade = quantidade;
     }
 
-    public OperacaoFisica getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(OperacaoFisica tipo) {
-        this.tipo = tipo;
-    }
-
     public Date getEmissao() {
         return emissao;
     }
@@ -90,16 +90,14 @@ public class EstoqueBV implements Serializable {
     public void setItemEmitido(ItemEmitido itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-    
-    
 
     public Estoque construir() throws DadoInvalidoException {
         return new EstoqueBuilder().comSaldo(quantidade)
-                .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
         return new EstoqueBuilder().comID(id).comSaldo(quantidade)
-                .comItem(item).comDeposito(deposito).comOperacaoFisica(tipo).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
     }
 }

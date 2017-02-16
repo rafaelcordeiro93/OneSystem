@@ -2,7 +2,6 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -12,15 +11,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -53,21 +48,21 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
-    @NotNull(message = "{operacao_fisica_not_null}")
-    @Enumerated(EnumType.STRING)
-    private OperacaoFisica operacaoFisica;
+    @NotNull(message = "{operacao_not_null}")
+    @ManyToOne(optional = false)
+    private Operacao operacao;
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = true)
-    private BigDecimal custo;    
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER, 
+    private BigDecimal custo;
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER,
             mappedBy = "ajusteDeEstoque")
     private Estoque estoque;
-    
+
     public AjusteDeEstoque() {
     }
 
-    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade, 
-            Deposito deposito, Date emissao, OperacaoFisica operacaoFisica, Estoque estoque,
+    public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
+            Deposito deposito, Date emissao, Operacao operacao, Estoque estoque,
             BigDecimal custo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
@@ -75,14 +70,14 @@ public class AjusteDeEstoque implements Serializable {
         this.quantidade = quantidade;
         this.deposito = deposito;
         this.emissao = emissao;
-        this.operacaoFisica = operacaoFisica;
+        this.operacao = operacao;
         this.estoque = estoque;
         this.custo = custo;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "emissao", "quantidade", "deposito", "observacao", "custo", "operacaoFisica");
+        List<String> campos = Arrays.asList("item", "emissao", "quantidade", "deposito", "observacao", "custo", "operacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 
@@ -110,8 +105,8 @@ public class AjusteDeEstoque implements Serializable {
         return emissao;
     }
 
-    public OperacaoFisica getOperacaoFisica() {
-        return operacaoFisica;
+    public Operacao getOperacao() {
+        return operacao;
     }
 
     public Estoque getEstoque() {
@@ -121,14 +116,14 @@ public class AjusteDeEstoque implements Serializable {
     public BigDecimal getCusto() {
         return custo;
     }
-    
+
     public void preparaInclusaoDe(Estoque estoque) {
         if (this.estoque == null) {
             this.id = null;
             this.estoque = estoque;
         }
     }
-    
+
     public String getDataFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
@@ -151,6 +146,6 @@ public class AjusteDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao +   ", operacao=" + operacaoFisica +  ", estoque=" + estoque +  '}';
+        return "AjusteDeEstoque{" + "id=" + id + ", observacao=" + observacao + ", item=" + item + ", quantidade=" + quantidade + ", deposito=" + deposito + ", emissao=" + emissao + ", operacao=" + operacao + ", estoque=" + estoque + '}';
     }
 }

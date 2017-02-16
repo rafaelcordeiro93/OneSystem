@@ -9,11 +9,9 @@
     <ui:define name="title">#{l.Selecao_De_Depositos}</ui:define>
 
     <ui:define name="content">
-        <p:dataTable id="quantidadeDeItemBVViewData" var="quantidadeDeItemBV" value="#{quantidadeDeItemView.lista}" selectionMode="single" selection="#{quantidadeDeItemView.quantidadeDeItemSelecionada}" rowKey="#{quantidadeDeItemBV.id}"
+        <p:dataTable id="quantidadeDeItemBVViewData" var="quantidadeDeItemBV" value="#{quantidadeDeItemView.lista}" rowKey="#{quantidadeDeItemBV.id}"
                      rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      filteredValue="#{quantidadeDeItemView.listaFiltrada}" emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
-
-            <p:ajax event="cellEdit" update="quantidadeDeItemBVViewData" />
 
             <p:column headerText="#{l.Deposito}" sortBy="#{quantidadeDeItemBV.saldoDeEstoque.deposito.nome}" filterBy="#{quantidadeDeItemBV.saldoDeEstoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
                 <h:outputText value="#{quantidadeDeItemBV.saldoDeEstoque.deposito.nome}" />

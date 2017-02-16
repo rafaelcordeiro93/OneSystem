@@ -9,6 +9,8 @@ import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -16,21 +18,21 @@ import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.OperacaoFisica;
+import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class AjusteDeEstoqueView implements Serializable {
+public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements Serializable {
 
     private AjusteDeEstoqueBV ajusteDeEstoque;
     private AjusteDeEstoque ajusteDeEstoqueSelecionada;
@@ -41,16 +43,13 @@ public class AjusteDeEstoqueView implements Serializable {
 
     @PostConstruct
     public void init() {
-        limparJanela();
         inicializarConfiguracoes();
+        limparJanela();
     }
 
     private void inicializarConfiguracoes() {
         try {
             configuracao = serviceConfigurcao.buscar();
-            if (configuracao.getMoedaPadrao() == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
-            }
         } catch (EDadoInvalidoException ex) {
             ex.print();
         }
@@ -101,7 +100,7 @@ public class AjusteDeEstoqueView implements Serializable {
     }
 
     private void lancaEstoque(AjusteDeEstoque ajusteDeEstoque) throws DadoInvalidoException {
-        if (ajusteDeEstoque.getOperacaoFisica() != OperacaoFisica.SEM_ALTERACAO) {
+        for (OperacaoDeEstoque operacaoDeEstoque : ajusteDeEstoque.getOperacao().getOperacaoDeEstoque()) {
             Estoque estoque = new EstoqueBuilder().comID(ajusteDeEstoque.getEstoque()
                     != null ? ajusteDeEstoque.getEstoque().getId() : null).
                     comDeposito(ajusteDeEstoque.getDeposito()).
@@ -109,7 +108,7 @@ public class AjusteDeEstoqueView implements Serializable {
                     comEmissao(ajusteDeEstoque.getEmissao()).
                     comSaldo(ajusteDeEstoque.getQuantidade()).
                     comEmissao(ajusteDeEstoque.getEmissao()).
-                    comOperacaoFisica(ajusteDeEstoque.getOperacaoFisica()).
+                    comOperacaoDeEstoque(operacaoDeEstoque).
                     comAjusteDeEstoque(ajusteDeEstoque).construir();
             ajusteDeEstoque.preparaInclusaoDe(estoque);
         }
@@ -147,8 +146,17 @@ public class AjusteDeEstoqueView implements Serializable {
         }
     }
 
-    public List<OperacaoFisica> getOperacao() {
-        return Arrays.asList(OperacaoFisica.values());
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof Operacao) {
+            if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
+                RequestContext rc = RequestContext.getCurrentInstance();
+                rc.execute("PF('operacaoAjusteDialog').show()");
+            } else {
+                ajusteDeEstoque.setOperacao((Operacao) obj);
+            }
+        }
     }
 
     public void limparJanela() {

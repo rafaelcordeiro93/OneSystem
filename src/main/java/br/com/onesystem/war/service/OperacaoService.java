@@ -11,7 +11,7 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class OperacaoService implements Serializable {
     
-    public List<Operacao> buscarOperacao(){
+    public List<Operacao> buscar(){
         return new ArmazemDeRegistros<Operacao>(Operacao.class).listaTodosOsRegistros();
     }
     

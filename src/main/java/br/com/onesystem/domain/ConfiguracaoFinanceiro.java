@@ -58,7 +58,7 @@ public class ConfiguracaoFinanceiro implements Serializable {
 
     @Override
     public String toString() {
-        return "Configuracao{" + "id=" + id + ", contaPadrao=" + contaPadrao + '}';
+        return "ConfiguracaoFinanceiro{" + "id=" + id + ", contaPadrao=" + contaPadrao + '}';
     }
 
 }

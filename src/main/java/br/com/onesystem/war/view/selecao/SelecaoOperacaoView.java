@@ -18,7 +18,7 @@ public class SelecaoOperacaoView extends BasicCrudMBImpl<Operacao> implements Se
 
     @PostConstruct
     public void init() {
-        beans = service.buscarOperacao();
+        beans = service.buscar();
     }
 
     @Override

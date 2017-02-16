@@ -22,12 +22,14 @@ import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.domain.builder.ParcelaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.CotacaoValores;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
@@ -56,7 +58,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -66,6 +67,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -127,7 +129,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         itemEmitido = new ItemEmitidoBV();
         notaEmitida.setItensEmitidos(new ArrayList<ItemEmitido>());
         valoresAVista = new ValoresAVistaBV(configuracao.getMoedaPadrao());
-        parcelas = new ArrayList<ParcelaBV>();
+        parcelas = new ArrayList<>();
         notaEmitidaSelecionada = null;
         cheque = new ChequeBV();
         inicializaCotacoes();
@@ -145,7 +147,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     private void inicializaCotacoes() {
         cotacaoLista = service.buscarCotacoesDoDiaAtual();
-        cotacoes = new ArrayList<CotacaoValores>();
+        cotacoes = new ArrayList<>();
         for (Cotacao c : cotacaoLista) {
             cotacoes.add(new CotacaoValores(c, null, null, null, configuracao.getMoedaPadrao()));
         }
@@ -203,9 +205,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      * @throws br.com.onesystem.exception.DadoInvalidoException
      */
     public void preparaInclusaoDeParcelas() throws DadoInvalidoException {
-        List<BoletoDeCartao> cartoes = new ArrayList<BoletoDeCartao>();
-        List<Cheque> cheques = new ArrayList<Cheque>();
-        List<Titulo> titulos = new ArrayList<Titulo>();
+        List<BoletoDeCartao> cartoes = new ArrayList<>();
+        List<Cheque> cheques = new ArrayList<>();
+        List<Titulo> titulos = new ArrayList<>();
 
         //Gera as parcelas de acordo a sua modalidade.
         for (ParcelaBV p : parcelas) {
@@ -231,14 +233,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     }
 
     private List<Estoque> criarBaixaDeEstoque(List<QuantidadeDeItemBV> lista) throws DadoInvalidoException {
-        List<Estoque> estoquesBV = new ArrayList<Estoque>();
+        List<Estoque> estoquesBV = new ArrayList<>();
         for (QuantidadeDeItemBV q : lista) {
-            estoqueBV = new EstoqueBV();
-            estoqueBV.setDeposito(q.getSaldoDeEstoque().getDeposito());
-            estoqueBV.setQuantidade(q.getQuantidade());
-            estoqueBV.setTipo(OperacaoFisica.SAIDA);
-            estoqueBV.setItem(itemEmitido.getItem());
-            estoquesBV.add(estoqueBV.construir());
+            for (OperacaoDeEstoque operacaoDeEstoque : notaEmitida.getOperacao().getOperacaoDeEstoque()) {
+                estoqueBV = new EstoqueBV(q.getSaldoDeEstoque().getDeposito(), q.getQuantidade(),
+                        itemEmitido.getItem(), operacaoDeEstoque, null);
+                // Adiciona no estoque
+                estoquesBV.add(estoqueBV.construir());
+            }
         }
         return estoquesBV;
     }
@@ -301,7 +303,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      */
     public void preparaInclusaoDeRecebimentoDeValores() throws DadoInvalidoException {
         if (valoresAVista.getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
-            List<Baixa> baixas = new ArrayList<Baixa>();
+            List<Baixa> baixas = new ArrayList<>();
             for (CotacaoValores c : cotacoes) {
                 if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
                     Baixa baixa = new BaixaBuilder().cancelada(false)
@@ -531,7 +533,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         Object obj = event.getObject();
 
         if (obj instanceof Operacao) {
-            notaEmitida.setOperacao((Operacao) obj);
+            Operacao operacao = (Operacao) obj;
+            if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
+                RequestContext rc = RequestContext.getCurrentInstance();
+                rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
+            } else {
+                notaEmitida.setOperacao((Operacao) obj);
+            }
         } else if (obj instanceof Pessoa) {
             notaEmitida.setPessoa((Pessoa) obj);
         } else if (obj instanceof ListaDePreco) {
@@ -548,6 +556,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         } else if (obj instanceof Banco) {
             cheque.setBanco((Banco) obj);
         }
+
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {
@@ -630,8 +639,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         if (total.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal pAcrescimo = valoresAVista.getPorcentagemAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getPorcentagemAcrescimo();
             BigDecimal pDesconto = valoresAVista.getPorcentagemDesconto() == null ? BigDecimal.ZERO : valoresAVista.getPorcentagemDesconto();
-            BigDecimal acrescimo = BigDecimal.ZERO;
-            BigDecimal desconto = BigDecimal.ZERO;
+            BigDecimal acrescimo;
+            BigDecimal desconto;
             BigDecimal cem = new BigDecimal(100);
 
             if (pAcrescimo.compareTo(BigDecimal.ZERO) > 0) {
@@ -660,8 +669,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         if (total.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal acrescimo = valoresAVista.getAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getAcrescimo();
             BigDecimal desconto = valoresAVista.getDesconto() == null ? BigDecimal.ZERO : valoresAVista.getDesconto();
-            BigDecimal pAcrescimo = BigDecimal.ZERO;
-            BigDecimal pDesconto = BigDecimal.ZERO;
+            BigDecimal pAcrescimo;
+            BigDecimal pDesconto;
             BigDecimal cem = new BigDecimal(100);
 
             if (acrescimo.compareTo(BigDecimal.ZERO) > 0) {
@@ -696,12 +705,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void recalculaValorAFaturar() {
 
-        BigDecimal cheque = getTotalCheque() == null ? BigDecimal.ZERO : getTotalCheque();
+        BigDecimal chequeTotal = getTotalCheque() == null ? BigDecimal.ZERO : getTotalCheque();
         BigDecimal cartao = valoresAVista.getBoletoDeCartao().getValor() == null ? BigDecimal.ZERO : valoresAVista.getBoletoDeCartao().getValor();
         BigDecimal credito = valoresAVista.getCredito() == null ? BigDecimal.ZERO : valoresAVista.getCredito();
         BigDecimal dinheiro = valoresAVista.getDinheiro() == null ? BigDecimal.ZERO : valoresAVista.getDinheiro();
         BigDecimal totalParcelas = getTotalParcelas() == null ? BigDecimal.ZERO : getTotalParcelas();
-        BigDecimal soma = cheque.add(cartao).add(credito).add(totalParcelas).add(dinheiro);
+        BigDecimal soma = chequeTotal.add(cartao).add(credito).add(totalParcelas).add(dinheiro);
 
         valoresAVista.setAFaturar(getTotalNota().subtract(soma));
     }
@@ -849,7 +858,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     }
 
     public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
-        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<TipoFormaDeRecebimentoParcela>();
+        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<>();
         if (notaEmitida.getFormaDeRecebimento().isParcelaEmCartao()) {
             forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
         }

@@ -11,6 +11,7 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class ConfiguracaoService implements Serializable {
 
+
     public Configuracao buscar() throws EDadoInvalidoException {
         return new ConfiguracaoDAO().buscar();
     }

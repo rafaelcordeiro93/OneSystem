@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
 public class JPAUtil {
 
     // @PersistenceContext(unitName="homero")
-    private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("onesystem");
+    private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("minds");
     private static EntityManager manager;
 
     //Retorna o entity manager aberto ou cria um novo.

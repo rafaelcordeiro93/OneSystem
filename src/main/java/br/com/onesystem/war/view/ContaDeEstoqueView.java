@@ -91,10 +91,8 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
     private void atualizaOperacaoDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws DadoInvalidoException {
         for (OperacaoDeEstoqueBV o : listaOperacoesDeEstoqueBV) {
             try {
-
                 contaDeEstoqueExistente.getOperacaoDeEstoque().set(contaDeEstoqueExistente.getOperacaoDeEstoque().indexOf(o.construirComID()),
                         o.construirComID());
-
             } catch (ArrayIndexOutOfBoundsException aiob) {
                 contaDeEstoqueExistente.getOperacaoDeEstoque().add(o.construirComID());
                 continue;
@@ -146,6 +144,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
 
     }
 
+    @Override
     public void buscaPorId() {
         Long id = contaDeEstoque.getId();
         if (id != null) {
@@ -179,6 +178,10 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
         try {
             validaOperacaoDeEstoqueExistente(false);
             operacaoDeEstoque.setId(retornarCodigo());
+            if(contaDeEstoqueSelecionada != null){
+                operacaoDeEstoque.setContaDeEstoque(contaDeEstoqueSelecionada);
+            }
+            
             listaOperacoesDeEstoqueBV.add(operacaoDeEstoque);
             limparOperacao();
         } catch (DadoInvalidoException ex) {
