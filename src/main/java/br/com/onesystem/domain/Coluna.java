@@ -86,4 +86,9 @@ public class Coluna implements Serializable {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "Coluna{" + "id=" + id + ", key=" + key + ", nome=" + nome + ", modelo=" + modelo + '}';
+    }
+
 }

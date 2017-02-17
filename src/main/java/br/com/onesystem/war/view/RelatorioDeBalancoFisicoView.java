@@ -1,8 +1,10 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
+import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ModeloDeRelatorio;
@@ -22,6 +24,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import br.com.onesystem.reportTemplate.column.BalancoFisicoColumn;
+import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoRelatorio;
@@ -30,7 +33,9 @@ import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
 import br.com.onesystem.war.service.ColunaService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.IOException;
+import javax.persistence.PersistenceException;
 import net.sf.jasperreports.engine.JRException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -62,7 +67,7 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         limparJanela();
     }
 
-    public void addTemplateRelatorios() {
+    public void add() {
         try {
             modelo.setTipoRelatorio(TipoRelatorio.BALANCO_FISICO);
             ModeloDeRelatorio novoRegistro = modelo.construir();
@@ -91,8 +96,71 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         novoRegistro.setColunas(colunasSelecionadas);
     }
 
-    private Long retornarCodigo() {
-        return null;
+    public void update() {
+        try {
+            ModeloDeRelatorio modeloExistente = modelo.construirComID();
+            if (modeloExistente != null) {
+                if (!validaTemplateRelatoriosExistente(modeloExistente)) {
+                    atualizaColunas(modeloExistente);
+                    new AtualizaDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).atualiza(modeloExistente);
+                    deletaColunas(modeloExistente);
+                    InfoMessage.atualizado();
+                    limparJanela();
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("modelo_ja_registrada"));
+                }
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    private void atualizaColunas(ModeloDeRelatorio modeloExistente) throws DadoInvalidoException {
+        List<ColunaBV> listacoluna = new ArrayList<>();
+        for (Coluna cl : campos.getTarget()) {
+            ColunaBV colunaBV = new ColunaBV(cl);
+            colunaBV.setModeloDeRelatorio(modeloExistente);
+            listacoluna.add(colunaBV);
+        }
+        for (ColunaBV cl : listacoluna) {
+            try {
+                modeloExistente.getColunas().set(modeloExistente.getColunas().indexOf(cl.construirComID()), cl.construirComID());
+            } catch (ArrayIndexOutOfBoundsException aiob) {
+                modeloExistente.getColunas().add(cl.construirComID());
+                continue;
+            }
+        }
+    }
+
+    private void deletaColunas(ModeloDeRelatorio modeloExistente) throws PersistenceException, DadoInvalidoException {
+        List<Coluna> colunasDeletar = new ArrayList<>();
+
+        for (Coluna o : modeloExistente.getColunas()) {
+            if (!campos.getTarget().contains(o)) {
+                colunasDeletar.add(o);
+            }
+        }
+
+        for (Coluna o : colunasDeletar) {
+            modeloExistente.getColunas().remove(o);
+            new RemoveDAO<Coluna>(Coluna.class).remove(o, o.getId());
+        }
+    }
+
+    public void delete() {
+        try {
+            if (modeloSelecionado != null) {
+                new RemoveDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).remove(modeloSelecionado, modeloSelecionado.getId());
+                InfoMessage.removido();
+                limparJanela();
+            }
+        } catch (DadoInvalidoException di) {
+            di.print();
+        } catch (ConstraintViolationException pe) {
+            FatalMessage.print(pe.getMessage(), pe.getCause());
+        }
     }
 
     public void imprimir() throws ClassNotFoundException, JRException, IOException {
@@ -109,8 +177,13 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_existem_dados"));
             }
 
+            List<String> camposSelecionados = new ArrayList<>();
+            for (Coluna c : campos.getTarget()) {
+                camposSelecionados.add(c.getNome());
+            }
+
             impressora.imprimir(lista, new BundleUtil().getLabel("Relatorio_Balanco_Fisico"),
-                    new BalancoFisicoColumn().getColunas(), campos.getTarget());
+                    new BalancoFisicoColumn().getColunas(), camposSelecionados);
 
         } catch (DadoInvalidoException die) {
             die.print();
@@ -123,26 +196,6 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         return lista.isEmpty();
     }
 
-//    public void updateTemplateRelatorios() {
-//        try {
-//            if (operacaoDeEstoqueSelecionado != null) {
-//
-//                validaOperacaoDeEstoqueExistente(true);
-//                listaOperacoesDeEstoqueBV.set(listaOperacoesDeEstoqueBV.indexOf(operacaoDeEstoqueSelecionado),
-//                        operacaoDeEstoque);
-//                limparOperacao();
-//            }
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    public void deleteTemplateRelatorios() throws DadoInvalidoException {
-//        if (operacaoDeEstoqueSelecionado != null) {
-//            listaOperacoesDeEstoqueBV.remove(operacaoDeEstoqueSelecionado);
-//            limparOperacao();
-//        }
-//    }
     public void limparJanela() {
         relatorio = new RelatorioDeBalancoFisicoBV();
         modelo = new ModeloDeRelatorioBV();
@@ -178,6 +231,7 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         if (event.getObject() instanceof ModeloDeRelatorio) {
             ModeloDeRelatorio mr = (ModeloDeRelatorio) event.getObject();
             modelo = new ModeloDeRelatorioBV(mr);
+            modeloSelecionado = mr;
             atualizaCampos(mr);
         }
     }
@@ -195,12 +249,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
 
     @Override
     public void buscaPorId() {
-        Long id = relatorio.getId();
+        Long id = modelo.getId();
         if (id != null) {
             try {
-                ItemDAO dao = new ItemDAO();
-                Item i = dao.buscarItems().porId(id).resultado();
-                relatorio.setItem(i);
+                ModeloDeRelatorioDAO dao = new ModeloDeRelatorioDAO();
+                ModeloDeRelatorio i = dao.buscarModeloDeRelatorio().porId(id).resultado();
+                modelo = new ModeloDeRelatorioBV(i);
+                modeloSelecionado = i;
+                atualizaCampos(i);
             } catch (DadoInvalidoException die) {
                 relatorio = new RelatorioDeBalancoFisicoBV();
                 die.print();

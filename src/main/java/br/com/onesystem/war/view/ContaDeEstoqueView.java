@@ -23,6 +23,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.persistence.PersistenceException;
 import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.internal.util.SerializationHelper;
@@ -71,10 +72,10 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
             ContaDeEstoque contaDeEstoqueExistente = contaDeEstoque.construirComID();
             if (contaDeEstoqueSelecionada != null) {
                 if (!validaContaDeEstoqueExistente(contaDeEstoqueExistente)) {
-                    deletaOperacoesDeEstoque(contaDeEstoqueExistente); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
-                    atualizaOperacaoDeEstoque(contaDeEstoqueExistente);
 
+                    atualizaOperacaoDeEstoque(contaDeEstoqueExistente);
                     new AtualizaDAO<ContaDeEstoque>(ContaDeEstoque.class).atualiza(contaDeEstoqueExistente);
+                    deletaOperacoesDeEstoque(contaDeEstoqueExistente); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
                     InfoMessage.atualizado();
                     limparJanela();
                 } else {
@@ -89,7 +90,14 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
     }
 
     private void atualizaOperacaoDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws DadoInvalidoException {
-        for (OperacaoDeEstoqueBV o : listaOperacoesDeEstoqueBV) {
+        List<OperacaoDeEstoqueBV> listaOperacao = new ArrayList<>();
+        for (OperacaoDeEstoqueBV cl : listaOperacoesDeEstoqueBV) {
+            OperacaoDeEstoqueBV operacaoDeEstoqueBV = new OperacaoDeEstoqueBV(cl);
+            operacaoDeEstoqueBV.setContaDeEstoque(contaDeEstoqueExistente);
+            listaOperacao.add(operacaoDeEstoqueBV);
+        }
+
+        for (OperacaoDeEstoqueBV o : listaOperacao) {
             try {
 
                 contaDeEstoqueExistente.getOperacaoDeEstoque().set(contaDeEstoqueExistente.getOperacaoDeEstoque().indexOf(o.construirComID()),
@@ -102,12 +110,26 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
         }
     }
 
-    private void deletaOperacoesDeEstoque(ContaDeEstoque contaDeEstoqueExistente) {
+    private void deletaOperacoesDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws PersistenceException, DadoInvalidoException {
+        List<OperacaoDeEstoque> listaOperacao = new ArrayList<>();
+        List<Long> listaOperacoesId = new ArrayList<>();
+
+        for (OperacaoDeEstoqueBV cl : listaOperacoesDeEstoqueBV) {
+            OperacaoDeEstoqueBV operacaoDeEstoqueBV = new OperacaoDeEstoqueBV(cl);
+            listaOperacao.add(operacaoDeEstoqueBV.construir());
+        }
+
+        for (OperacaoDeEstoque op : listaOperacao) {
+            listaOperacoesId.add(op.getOperacoes().getId());
+        }
+
         for (OperacaoDeEstoque o : contaDeEstoqueExistente.getOperacaoDeEstoque()) {
-            if (!listaOperacoesDeEstoqueBV.contains(o)) {
+            if (!listaOperacoesId.contains(o.getOperacoes().getId())) {
                 contaDeEstoqueExistente.getOperacaoDeEstoque().remove(o);
+                new RemoveDAO<OperacaoDeEstoque>(OperacaoDeEstoque.class).remove(o, o.getId());
             }
         }
+
     }
 
     public void delete() {

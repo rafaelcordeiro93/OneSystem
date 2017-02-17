@@ -5,6 +5,7 @@ import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.builder.ColunaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
+import java.util.Objects;
 
 public class ColunaBV implements Serializable {
 
@@ -18,7 +19,7 @@ public class ColunaBV implements Serializable {
         this.key = colunaSelecionada.getKey();
         this.nome = colunaSelecionada.getNome();
         this.modeloDeRelatorio = colunaSelecionada.getModelo();
-   }
+    }
 
     public ColunaBV() {
     }
@@ -54,7 +55,7 @@ public class ColunaBV implements Serializable {
     public void setModeloDeRelatorio(ModeloDeRelatorio modeloDeRelatorio) {
         this.modeloDeRelatorio = modeloDeRelatorio;
     }
-    
+
     public Coluna construir() throws DadoInvalidoException {
         return new ColunaBuilder().comKey(key).comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
     }
@@ -62,4 +63,23 @@ public class ColunaBV implements Serializable {
     public Coluna construirComID() throws DadoInvalidoException {
         return new ColunaBuilder().comID(id).comKey(key).comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ColunaBV other = (ColunaBV) obj;
+        if (!Objects.equals(this.key, other.key)) {
+            return false;
+        }
+        return true;
+    }
+
 }

@@ -9,6 +9,7 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import javax.faces.el.EvaluationException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -43,9 +44,15 @@ public class AtualizaDAO<T> {
             em.getTransaction().commit();
 
         } catch (PersistenceException pe) {
-            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
+            System.out.println("PersistenceException:  " + pe);
+            try {
+
+                if (pe.getCause().getCause() instanceof ConstraintViolationException) {
+                    ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+                    throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
+                }
+            } catch (NullPointerException e) {
+                throw new FDadoInvalidoException("null pointer" + e.getCause());
             }
         } catch (StackOverflowError soe) {
             System.out.println("Verifique Lista do toString()");

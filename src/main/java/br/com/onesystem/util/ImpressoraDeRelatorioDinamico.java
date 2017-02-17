@@ -34,12 +34,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  */
 public class ImpressoraDeRelatorioDinamico {
 
-    private FastReportBuilder builder = new FastReportBuilder();
+    private FastReportBuilder builder;
 
     public ImpressoraDeRelatorioDinamico() {
     }
 
     public void imprimir(List<?> lista, String nome, List<ColunaRepository> colunas, List<?> campos) throws JRException, IOException {
+        builder = new FastReportBuilder();
         //Cria propriedades e colunas
         propriedades(nome);
         construirCampos(colunas, campos);
@@ -75,7 +76,7 @@ public class ImpressoraDeRelatorioDinamico {
                 .setUseFullPageWidth(true)
                 .setReportName(nome)
                 .setAllowDetailSplit(true)
-                .setGrandTotalLegend(new BundleUtil().getMessage("total"))
+                .setGrandTotalLegend(new BundleUtil().getLabel("Total"))
                 .setGrandTotalLegendStyle(getSubTitleStyle())
                 .setDefaultStyles(getTitleStyle(), null, getColumnHeaderStyle(), getColumnDetailsStyle());
     }

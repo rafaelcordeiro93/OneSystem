@@ -32,7 +32,7 @@ public class ModeloDeRelatorio implements Serializable {
     @Length(max = 60, message = "{nome_lenght}")
     @Column(length = 60, nullable = false)
     private String nome;
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "modelo") 
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo") 
     private List<Coluna> colunas;
     @NotNull(message = "{tipo_relatorio_not_null}")
     @Enumerated(EnumType.STRING)
@@ -94,7 +94,7 @@ public class ModeloDeRelatorio implements Serializable {
 
     @Override
     public String toString() {
-        return "TemplateRelatorios{" + "id=" + id + ", nome=" + nome + ", colunas=" + colunas + ", tipoRelatorio=" + tipoRelatorio + '}';
+        return "TemplateRelatorios{" + "id=" + id + ", nome=" + nome + ", tipoRelatorio=" + tipoRelatorio + '}';
     }
 
 }
