@@ -176,6 +176,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      */
     public void finalizar() {
         try {
+            
+            // Se valor a faturar maior que zero deve exibir diálogo de confirmação
+            if(valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0){
+                
+            }
             notaEmitida.setValoresAVista(valoresAVista.construir());
             novoRegistroNE = notaEmitida.construir();
 

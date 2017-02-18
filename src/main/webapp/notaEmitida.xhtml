@@ -347,7 +347,7 @@
 
                         <p:separator/>
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.recalculaCotacoes}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.finalizar()}" update=":conteudo"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="BrownButton"/>
 
@@ -622,6 +622,34 @@
                     </td>
                     <td>
                         <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('notaOperacaoNaoRelacionadaDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog>
+        
+        <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Valor_A_Faturar}" resizable="false" 
+                              modal="true" closable="false" closeOnEscape="false" visible="false"
+                              responsive="true" styleClass="zIndex500">
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Existe_Valor_A_Faturar}" />
                     </td>
                 </tr>
             </table>
