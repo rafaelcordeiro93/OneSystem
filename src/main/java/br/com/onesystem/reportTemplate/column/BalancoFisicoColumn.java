@@ -32,56 +32,56 @@ public class BalancoFisicoColumn {
         // Adiciona Id
         AbstractColumn colunaId = ColumnBuilder.getNew()
                 .setColumnProperty("item.id", Long.class.getName())
-                .setTitle(new BundleUtil().getMessage("id")).setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getLabel("Id")).setWidth(new Integer(75))
                 .build();
         colunas.add(new ColunaRepository(colunaId, null));
 
         // Adiciona Nome
         AbstractColumn colunaNome = ColumnBuilder.getNew()
                 .setColumnProperty("item.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("nome")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Nome")).setWidth(new Integer(100))
                 .build();
         colunas.add(new ColunaRepository(colunaNome, null));
 
         // Adiciona Saldo
         AbstractColumn colunaSaldo = ColumnBuilder.getNew()
                 .setColumnProperty("saldo", BigDecimal.class.getName()).setPattern("0.00")
-                .setTitle(new BundleUtil().getMessage("saldo")).setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getLabel("Saldo")).setWidth(new Integer(75))
                 .build();
         colunas.add(new ColunaRepository(colunaSaldo, null));
 
         // Adiciona CustoMedio
         AbstractColumn colunaCustoMedio = ColumnBuilder.getNew()
                 .setColumnProperty("custoMedio", BigDecimal.class.getName())
-                .setTitle(new BundleUtil().getMessage("custo_medio")).setWidth(new Integer(75)).setPattern(conf.getMoedaPadrao().getSigla() + " 0.00")
+                .setTitle(new BundleUtil().getLabel("Custo_Medio")).setWidth(new Integer(75)).setPattern(conf.getMoedaPadrao().getSigla() + " 0.00")
                 .build();
         colunas.add(new ColunaRepository(colunaCustoMedio, DJCalculation.SUM));
 
         // Adiciona CustoTotal
         AbstractColumn colunaCustoTotal = ColumnBuilder.getNew()
                 .setColumnProperty("custoTotal", BigDecimal.class.getName())
-                .setTitle(new BundleUtil().getMessage("custo_total")).setWidth(new Integer(75)).setPattern(conf.getMoedaPadrao().getSigla() + " 0.00")
+                .setTitle(new BundleUtil().getLabel("Custo_Total")).setWidth(new Integer(75)).setPattern(conf.getMoedaPadrao().getSigla() + " 0.00")
                 .build();
         colunas.add(new ColunaRepository(colunaCustoTotal, null));
 
         // Adiciona Marca
         AbstractColumn colunaMarca = ColumnBuilder.getNew()
                 .setColumnProperty("item.marca.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("marca")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Marca")).setWidth(new Integer(100))
                 .build();
         colunas.add(new ColunaRepository(colunaMarca, null));
 
         // Adiciona GrupoFiscal
         AbstractColumn colunaGrupoFiscal = ColumnBuilder.getNew()
                 .setColumnProperty("item.grupoFiscal.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("grupo_fiscal")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Grupo_Fiscal")).setWidth(new Integer(100))
                 .build();
         colunas.add(new ColunaRepository(colunaGrupoFiscal, null));
 
         // Adiciona Grupo
         AbstractColumn colunaGrupo = ColumnBuilder.getNew()
                 .setColumnProperty("item.grupo.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("grupo")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Grupo")).setWidth(new Integer(100))
                 .build();
         colunas.add(new ColunaRepository(colunaGrupo, null));
 

@@ -42,7 +42,7 @@ public class ImpressoraDeRelatorioItem {
                 // .addImageBanner("diretorio", 800, 50, ImageBanner.ALIGN_RIGHT)
                 .setReportName("Relatorio")
                 .setAllowDetailSplit(true)
-                .setGrandTotalLegend(new BundleUtil().getMessage("total"))
+                .setGrandTotalLegend(new BundleUtil().getLabel("Total"))
                 .setGrandTotalLegendStyle(getSubTitleStyle())
                 //.addSubreportInGroupFooter(0, subreport)
                 //nao esta funcionando o style de subtitle, quando adiciona um style o campo fica em branco
@@ -50,42 +50,42 @@ public class ImpressoraDeRelatorioItem {
 
         AbstractColumn colunaId = ColumnBuilder.getNew()
                 .setColumnProperty("item.id", Long.class.getName())
-                .setTitle(new BundleUtil().getMessage("id")).setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getLabel("Id")).setWidth(new Integer(75))
                 .build();
 
         AbstractColumn colunaNome = ColumnBuilder.getNew()
                 .setColumnProperty("item.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("nome")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Nome")).setWidth(new Integer(100))
                 .build();
 
         AbstractColumn colunaSaldo = ColumnBuilder.getNew()
                 .setColumnProperty("saldo", BigDecimal.class.getName()).setPattern("0.00")
-                .setTitle(new BundleUtil().getMessage("saldo")).setWidth(new Integer(75))
+                .setTitle(new BundleUtil().getLabel("Saldo")).setWidth(new Integer(75))
                 .build();
 
         AbstractColumn colunaCustoMedio = ColumnBuilder.getNew()
                 .setColumnProperty("custoMedio", BigDecimal.class.getName())
-                .setTitle(new BundleUtil().getMessage("custo_medio")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
+                .setTitle(new BundleUtil().getLabel("Custo_Medio")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
                 .build();
 
         AbstractColumn colunaCustoTotal = ColumnBuilder.getNew()
                 .setColumnProperty("custoTotal", BigDecimal.class.getName())
-                .setTitle(new BundleUtil().getMessage("custo_total")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
+                .setTitle(new BundleUtil().getLabel("Custo_Total")).setWidth(new Integer(75)).setPattern(siglaMoeda + " 0.00")
                 .build();
 
         AbstractColumn colunaMarca = ColumnBuilder.getNew()
                 .setColumnProperty("item.marca.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("marca")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Marca")).setWidth(new Integer(100))
                 .build();
 
         AbstractColumn colunaGrupoFiscal = ColumnBuilder.getNew()
                 .setColumnProperty("item.grupoFiscal.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("grupo_fiscal")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Grupo_Fiscal")).setWidth(new Integer(100))
                 .build();
 
         AbstractColumn colunaGrupo = ColumnBuilder.getNew()
                 .setColumnProperty("item.grupo.nome", String.class.getName())
-                .setTitle(new BundleUtil().getMessage("grupo")).setWidth(new Integer(100))
+                .setTitle(new BundleUtil().getLabel("Grupo")).setWidth(new Integer(100))
                 .build();
 //
 //        AbstractColumn colunaDeposito = ColumnBuilder.getNew()
