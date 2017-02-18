@@ -7,19 +7,15 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import static javax.management.Query.gt;
-import javax.persistence.CollectionTable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -33,12 +29,11 @@ public class ModeloDeRelatorio implements Serializable {
     @GeneratedValue(generator = "SEQ_MODELODERELATORIO", strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull(message = "{nome_not_null}")
-    @Length(min = 2, max = 40, message = "{nome_lenght}")
+    @Length(max = 60, message = "{nome_lenght}")
     @Column(length = 60, nullable = false)
     private String nome;
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "Coluna", joinColumns = @JoinColumn(name = "id"))
-    private List<String> key;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo") 
+    private List<Coluna> colunas;
     @NotNull(message = "{tipo_relatorio_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoRelatorio tipoRelatorio;
@@ -46,10 +41,10 @@ public class ModeloDeRelatorio implements Serializable {
     public ModeloDeRelatorio() {
     }
 
-    public ModeloDeRelatorio(Long id, String nome, List<String> listaDeCampos, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
+    public ModeloDeRelatorio(Long id, String nome, List<Coluna> colunas, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.key = listaDeCampos;
+        this.colunas = colunas;
         this.tipoRelatorio = tipoRelatorio;
         ehValido();
     }
@@ -67,12 +62,16 @@ public class ModeloDeRelatorio implements Serializable {
         return nome;
     }
 
-    public List<String> getKey() {
-        return key;
-    }
-
     public TipoRelatorio getTipoRelatorio() {
         return tipoRelatorio;
+    }
+
+    public List<Coluna> getColunas() {
+        return colunas;
+    }
+
+    public void setColunas(List<Coluna> colunas) {
+        this.colunas = colunas;
     }
 
     @Override
@@ -95,7 +94,7 @@ public class ModeloDeRelatorio implements Serializable {
 
     @Override
     public String toString() {
-        return "TemplateRelatorios{" + "id=" + id + ", nome=" + nome + ", listaDeCampos=" + key + ", tipoRelatorio=" + tipoRelatorio + '}';
+        return "TemplateRelatorios{" + "id=" + id + ", nome=" + nome + ", tipoRelatorio=" + tipoRelatorio + '}';
     }
 
 }

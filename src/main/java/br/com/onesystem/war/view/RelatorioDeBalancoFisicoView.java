@@ -1,8 +1,10 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
+import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ModeloDeRelatorio;
@@ -22,14 +24,18 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import br.com.onesystem.reportTemplate.column.BalancoFisicoColumn;
+import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.war.builder.ColunaBV;
 import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
+import br.com.onesystem.war.service.ColunaService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.IOException;
+import javax.persistence.PersistenceException;
 import net.sf.jasperreports.engine.JRException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.model.DualListModel;
 
 /**
@@ -38,11 +44,12 @@ import org.primefaces.model.DualListModel;
  */
 @ManagedBean
 @ViewScoped
-public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements Serializable {
+public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Serializable {
 
     private RelatorioDeBalancoFisicoBV relatorio;
     private Coluna coluna;
     private ModeloDeRelatorioBV modelo;
+    private ModeloDeRelatorio modeloSelecionado;
     private List<Item> itens;
     private ImpressoraDeRelatorioDinamico impressora;
     private DualListModel<Coluna> campos = new DualListModel<Coluna>();
@@ -58,21 +65,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
     @PostConstruct
     public void construct() {
         limparJanela();
-        criarCampos();
     }
 
-    public void addTemplateRelatorios() {
+    public void add() {
         try {
-            System.out.println(campos.getTarget());
             modelo.setTipoRelatorio(TipoRelatorio.BALANCO_FISICO);
-            List<String> keys = getKeys();
-            System.out.println("1");
-            modelo.setListaDeCampos(keys);
-
-            System.out.println(campos.getTarget());
             ModeloDeRelatorio novoRegistro = modelo.construir();
+            addColunas(novoRegistro);
 
-            System.out.println(modelo.getNome() + "" + modelo.getListaDeCampos());
             if (validaTemplateRelatoriosExistente(novoRegistro)) {
                 new AdicionaDAO<ModeloDeRelatorio>().adiciona(novoRegistro);
                 InfoMessage.adicionado();
@@ -85,28 +85,83 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
         }
     }
 
-    private List<String> getKeys() {
-        List<String> key = new ArrayList<>();
-        System.out.println("2" + campos.getTarget());
-        for (Coluna c : campos.getTarget()) {
-            System.out.println("3");
-            key.add(c.getKey());
+    private void addColunas(ModeloDeRelatorio novoRegistro) throws DadoInvalidoException {
+        List<Coluna> colunasSelecionadas = new ArrayList<>();
+        for (Coluna cl : campos.getTarget()) {
+            ColunaBV colunaBV = new ColunaBV(cl);
+            colunaBV.setModeloDeRelatorio(novoRegistro);
+            colunasSelecionadas.add(colunaBV.construir());
         }
-        System.out.println("4");
-        return null;
+
+        novoRegistro.setColunas(colunasSelecionadas);
     }
 
-//    private Long retornarCodigo() {
-//        Long id = (long) 1;
-//        if (!listaColuna.isEmpty()) {
-//            for (ColunaBV dp : listaColuna) {
-//                if (dp.getId() >= id) {
-//                    id = dp.getId() + 1;
-//                }
-//            }
-//        }
-//        return id;
-//    }
+    public void update() {
+        try {
+            ModeloDeRelatorio modeloExistente = modelo.construirComID();
+            if (modeloExistente != null) {
+                if (!validaTemplateRelatoriosExistente(modeloExistente)) {
+                    atualizaColunas(modeloExistente);
+                    new AtualizaDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).atualiza(modeloExistente);
+                    deletaColunas(modeloExistente);
+                    InfoMessage.atualizado();
+                    limparJanela();
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("modelo_ja_registrada"));
+                }
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    private void atualizaColunas(ModeloDeRelatorio modeloExistente) throws DadoInvalidoException {
+        List<ColunaBV> listacoluna = new ArrayList<>();
+        for (Coluna cl : campos.getTarget()) {
+            ColunaBV colunaBV = new ColunaBV(cl);
+            colunaBV.setModeloDeRelatorio(modeloExistente);
+            listacoluna.add(colunaBV);
+        }
+        for (ColunaBV cl : listacoluna) {
+            try {
+                modeloExistente.getColunas().set(modeloExistente.getColunas().indexOf(cl.construirComID()), cl.construirComID());
+            } catch (ArrayIndexOutOfBoundsException aiob) {
+                modeloExistente.getColunas().add(cl.construirComID());
+                continue;
+            }
+        }
+    }
+
+    private void deletaColunas(ModeloDeRelatorio modeloExistente) throws PersistenceException, DadoInvalidoException {
+        List<Coluna> colunasDeletar = new ArrayList<>();
+
+        for (Coluna o : modeloExistente.getColunas()) {
+            if (!campos.getTarget().contains(o)) {
+                colunasDeletar.add(o);
+            }
+        }
+
+        for (Coluna o : colunasDeletar) {
+            modeloExistente.getColunas().remove(o);
+            new RemoveDAO<Coluna>(Coluna.class).remove(o, o.getId());
+        }
+    }
+
+    public void delete() {
+        try {
+            if (modeloSelecionado != null) {
+                new RemoveDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).remove(modeloSelecionado, modeloSelecionado.getId());
+                InfoMessage.removido();
+                limparJanela();
+            }
+        } catch (DadoInvalidoException di) {
+            di.print();
+        } catch (ConstraintViolationException pe) {
+            FatalMessage.print(pe.getMessage(), pe.getCause());
+        }
+    }
 
     public void imprimir() throws ClassNotFoundException, JRException, IOException {
         try {
@@ -122,8 +177,13 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_existem_dados"));
             }
 
+            List<String> camposSelecionados = new ArrayList<>();
+            for (Coluna c : campos.getTarget()) {
+                camposSelecionados.add(c.getNome());
+            }
+
             impressora.imprimir(lista, new BundleUtil().getLabel("Relatorio_Balanco_Fisico"),
-                    new BalancoFisicoColumn().getColunas(), campos.getTarget());
+                    new BalancoFisicoColumn().getColunas(), camposSelecionados);
 
         } catch (DadoInvalidoException die) {
             die.print();
@@ -131,54 +191,81 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
 
     }
 
-    private void criarCampos() {
-        camposSource.add(new Coluna(new Long(1),"Id"));
-        camposSource.add(new Coluna(new Long(2),"Nome"));
-        camposSource.add(new Coluna(new Long(3),"Saldo"));
-//        camposSource.add(new Coluna("Custo_Medio"));
-//        camposSource.add(new Coluna("Custo_Total"));
-//        camposSource.add(new Coluna("Marca"));
-//        camposSource.add(new Coluna("Grupo"));
-//        camposSource.add(new Coluna("Grupo_Fiscal"));
-        campos = new DualListModel<Coluna>(camposSource, camposTarget);
-    }
-
-//    
-//     private void addOperacaoDeEstoque(TemplateRelatorios novoRegistro) throws DadoInvalidoException {
-//        for (TemplateRelatoriosBV t : listaOperacoesDeEstoqueBV) {
-//            t.setListaDeCampos(campos.getTarget());
-//            novoRegistro.getListaDeCampos().add(t.construir());
-//        }
-//    }
     private boolean validaTemplateRelatoriosExistente(ModeloDeRelatorio novoRegistro) {
         List<ModeloDeRelatorio> lista = new ModeloDeRelatorioDAO().buscarModeloDeRelatorio().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
 
-//    public void updateTemplateRelatorios() {
-//        try {
-//            if (operacaoDeEstoqueSelecionado != null) {
-//
-//                validaOperacaoDeEstoqueExistente(true);
-//                listaOperacoesDeEstoqueBV.set(listaOperacoesDeEstoqueBV.indexOf(operacaoDeEstoqueSelecionado),
-//                        operacaoDeEstoque);
-//                limparOperacao();
-//            }
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    public void deleteTemplateRelatorios() throws DadoInvalidoException {
-//        if (operacaoDeEstoqueSelecionado != null) {
-//            listaOperacoesDeEstoqueBV.remove(operacaoDeEstoqueSelecionado);
-//            limparOperacao();
-//        }
-//    }
     public void limparJanela() {
         relatorio = new RelatorioDeBalancoFisicoBV();
         modelo = new ModeloDeRelatorioBV();
+        modeloSelecionado = null;
         impressora = new ImpressoraDeRelatorioDinamico();
+        criarCampos();
+    }
+
+    private void criarCampos() {
+        try {
+            camposSource = new ArrayList<>();
+            camposTarget = new ArrayList<>();
+            camposSource.add(new Coluna(null, "Id", null));
+            camposSource.add(new Coluna(null, "Nome", null));
+            camposSource.add(new Coluna(null, "Saldo", null));
+            camposSource.add(new Coluna(null, "Custo_Medio", null));
+            camposSource.add(new Coluna(null, "Custo_Total", null));
+            camposSource.add(new Coluna(null, "Marca", null));
+            camposSource.add(new Coluna(null, "Grupo", null));
+            camposSource.add(new Coluna(null, "Grupo_Fiscal", null));
+            campos = new DualListModel<Coluna>(camposSource, camposTarget);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    @Override
+    public void selecionar(SelectEvent event) {
+        if (event.getObject() instanceof Item) {
+            Item item = (Item) event.getObject();
+            relatorio.setItem(item);
+        }
+        if (event.getObject() instanceof ModeloDeRelatorio) {
+            ModeloDeRelatorio mr = (ModeloDeRelatorio) event.getObject();
+            modelo = new ModeloDeRelatorioBV(mr);
+            modeloSelecionado = mr;
+            atualizaCampos(mr);
+        }
+    }
+
+    private void atualizaCampos(ModeloDeRelatorio mr) {
+        criarCampos();
+        ModeloDeRelatorioDAO dao = new ModeloDeRelatorioDAO();
+        List<Coluna> lista = new ArrayList<>();
+        lista = dao.buscarModeloDeRelatorio().porId(mr.getId()).porTipoRelatorio(TipoRelatorio.BALANCO_FISICO).listaDeColunas();
+        for (Coluna cl : lista) {
+            campos.getTarget().add(cl);
+            campos.getSource().remove(cl);
+        }
+    }
+
+    @Override
+    public void buscaPorId() {
+        Long id = modelo.getId();
+        if (id != null) {
+            try {
+                ModeloDeRelatorioDAO dao = new ModeloDeRelatorioDAO();
+                ModeloDeRelatorio i = dao.buscarModeloDeRelatorio().porId(id).resultado();
+                modelo = new ModeloDeRelatorioBV(i);
+                modeloSelecionado = i;
+                atualizaCampos(i);
+            } catch (DadoInvalidoException die) {
+                relatorio = new RelatorioDeBalancoFisicoBV();
+                die.print();
+            }
+        }
+    }
+
+    public void removerItem() {
+        relatorio = new RelatorioDeBalancoFisicoBV();
     }
 
     public List<Coluna> getCamposSource() {
@@ -195,45 +282,6 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
 
     public void setCamposTarget(List<Coluna> camposTarget) {
         this.camposTarget = camposTarget;
-    }
-
-    @Override
-    public void selecionar(SelectEvent event) {
-        if (event.getObject() instanceof Item) {
-            Item item = (Item) event.getObject();
-            relatorio.setId(item.getId());
-            relatorio.setItem(item);
-        }
-        if (event.getObject() instanceof ModeloDeRelatorioBV) {
-            ModeloDeRelatorioBV tr = (ModeloDeRelatorioBV) event.getObject();
-            modelo.setNome(tr.getNome());
-
-        }
-    }
-
-    public void selecionaTemplateRelatorio(SelectEvent event) {
-        ModeloDeRelatorioBV tr = (ModeloDeRelatorioBV) event.getObject();
-        modelo.setNome(tr.getNome());
-
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = relatorio.getId();
-        if (id != null) {
-            try {
-                ItemDAO dao = new ItemDAO();
-                Item i = dao.buscarItems().porId(id).resultado();
-                relatorio.setItem(i);
-            } catch (DadoInvalidoException die) {
-                relatorio = new RelatorioDeBalancoFisicoBV();
-                die.print();
-            }
-        }
-    }
-
-    public void removerItem() {
-        relatorio = new RelatorioDeBalancoFisicoBV();
     }
 
     public ImpressoraDeRelatorioDinamico getImpressora() {
@@ -296,11 +344,19 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl<Item> implements S
         this.modeloService = modeloService;
     }
 
-    public Item getBean() {
+    public ModeloDeRelatorio getModeloSelecionado() {
+        return modeloSelecionado;
+    }
+
+    public void setModeloSelecionado(ModeloDeRelatorio modeloSelecionado) {
+        this.modeloSelecionado = modeloSelecionado;
+    }
+
+    public Object getBean() {
         return bean;
     }
 
-    public void setBean(Item bean) {
+    public void setBean(Object bean) {
         this.bean = bean;
     }
 

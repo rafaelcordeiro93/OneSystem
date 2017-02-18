@@ -1,5 +1,6 @@
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoRelatorio;
@@ -9,35 +10,35 @@ import java.util.List;
  *
  * @author Rafael
  */
-public class TemplateRelatoriosBuilder {
+public class ModeloDeRelatorioBuilder {
 
     private Long id;
     private String nome;
-    private List<String> listaDeCampos;
+    private List<Coluna> colunas;
     private TipoRelatorio tipoRelatorio;
 
-    public TemplateRelatoriosBuilder comID(Long ID) {
+    public ModeloDeRelatorioBuilder comID(Long ID) {
         this.id = ID;
         return this;
     }
 
-    public TemplateRelatoriosBuilder comNome(String nome) {
+    public ModeloDeRelatorioBuilder comNome(String nome) {
         this.nome = nome;
         return this;
     }
 
-    public TemplateRelatoriosBuilder comlistaDeCampos(List<String> listaDeCampos) {
-        this.listaDeCampos = listaDeCampos;
+    public ModeloDeRelatorioBuilder comColunas(List<Coluna> colunas) {
+        this.colunas = colunas;
         return this;
     }
 
-    public TemplateRelatoriosBuilder comTipoRelatorio(TipoRelatorio tipoRelatorio) {
+    public ModeloDeRelatorioBuilder comTipoRelatorio(TipoRelatorio tipoRelatorio) {
         this.tipoRelatorio = tipoRelatorio;
         return this;
     }
 
     public ModeloDeRelatorio construir() throws DadoInvalidoException {
-        return new ModeloDeRelatorio(id, nome, listaDeCampos, tipoRelatorio);
+        return new ModeloDeRelatorio(id, nome, colunas, tipoRelatorio);
     }
 
 }

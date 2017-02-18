@@ -1,7 +1,8 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.ModeloDeRelatorio;
-import br.com.onesystem.domain.builder.TemplateRelatoriosBuilder;
+import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.io.Serializable;
@@ -12,13 +13,13 @@ public class ModeloDeRelatorioBV implements Serializable {
 
     private Long id;
     private String nome;
-    private List<String> listaDeCampos = new ArrayList<String>();
+    private List<Coluna> colunas = new ArrayList<>();
     private TipoRelatorio tipoRelatorio;
 
     public ModeloDeRelatorioBV(ModeloDeRelatorio modeloSelecionado) {
         this.id = modeloSelecionado.getId();
         this.nome = modeloSelecionado.getNome();
-        this.listaDeCampos = modeloSelecionado.getKey();
+        this.colunas = modeloSelecionado.getColunas();
         this.tipoRelatorio = modeloSelecionado.getTipoRelatorio();
     }
 
@@ -41,12 +42,12 @@ public class ModeloDeRelatorioBV implements Serializable {
         this.nome = nome;
     }
 
-    public List<String> getListaDeCampos() {
-        return listaDeCampos;
+    public List<Coluna> getColunas() {
+        return colunas;
     }
 
-    public void setListaDeCampos(List<String> listaDeCampos) {
-        this.listaDeCampos = listaDeCampos;
+    public void setColunas(List<Coluna> colunas) {
+        this.colunas = colunas;
     }
 
     public TipoRelatorio getTipoRelatorio() {
@@ -58,10 +59,10 @@ public class ModeloDeRelatorioBV implements Serializable {
     }
 
     public ModeloDeRelatorio construir() throws DadoInvalidoException {
-        return new TemplateRelatoriosBuilder().comNome(nome).comlistaDeCampos(listaDeCampos).comTipoRelatorio(tipoRelatorio).construir();
+        return new ModeloDeRelatorioBuilder().comNome(nome).comColunas(colunas).comTipoRelatorio(tipoRelatorio).construir();
     }
 
     public ModeloDeRelatorio construirComID() throws DadoInvalidoException {
-        return new TemplateRelatoriosBuilder().comID(id).comNome(nome).comlistaDeCampos(listaDeCampos).comTipoRelatorio(tipoRelatorio).construir();
+        return new ModeloDeRelatorioBuilder().comID(id).comNome(nome).comColunas(colunas).comTipoRelatorio(tipoRelatorio).construir();
     }
 }

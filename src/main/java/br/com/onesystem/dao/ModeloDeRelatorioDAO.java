@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -29,7 +30,7 @@ public class ModeloDeRelatorioDAO {
     }
 
     public ModeloDeRelatorioDAO buscarModeloDeRelatorio() {
-        consulta += "select a from TemplateRelatorios a where a.id != 0 ";
+        consulta += "select a from ModeloDeRelatorio a where a.id != 0 ";
         return this;
     }
 
@@ -67,6 +68,19 @@ public class ModeloDeRelatorioDAO {
         }
         limpar();
         return nomes;
+    }
+
+    public List<Coluna> listaDeColunas() {
+        List<Coluna> colunas = new ArrayList<>();
+        List<ModeloDeRelatorio> resultado = new ArmazemDeRegistros<ModeloDeRelatorio>(ModeloDeRelatorio.class)
+                .listaRegistrosDaConsulta(consulta, parametros);
+        for (ModeloDeRelatorio tr : resultado) {
+            for (Coluna cl : tr.getColunas()) {
+                colunas.add(cl);
+            }
+        }
+        limpar();
+        return colunas;
     }
 
     public ModeloDeRelatorio resultado() throws DadoInvalidoException {

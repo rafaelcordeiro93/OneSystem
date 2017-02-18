@@ -44,7 +44,7 @@
 
                             <p:outputLabel value="#{l.Tipo_Operacao}"/>
                             <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.operacao.tipoOperacao}" >
-                                <f:selectItems value="#{operacaoView.tipoDeOperacao}" itemLabel="#{TipoDeOperacao}" itemValue="#{TipoDeOperacao}" >
+                                <f:selectItems value="#{operacaoView.tipoDeOperacao}" var="tipoDeOperacao" itemLabel="#{tipoDeOperacao.nome}" itemValue="#{tipoDeOperacao}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 

@@ -31,4 +31,25 @@ public class ColunaRepository {
         return totalizador;
     }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ColunaRepository other = (ColunaRepository) obj;
+        if (!Objects.equals(this.coluna.getTitle(), other.coluna.getTitle())) {
+            return false;
+        }
+        return true;
+    }
+
+    
+    
 }
