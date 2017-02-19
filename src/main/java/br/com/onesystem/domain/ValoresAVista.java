@@ -137,6 +137,7 @@ public class ValoresAVista implements Serializable {
         return frete;
     }
 
+
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("dinheiro",
                 "credito", "cartao", "aFaturar", "acrescimo", "desconto",

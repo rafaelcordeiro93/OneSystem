@@ -16,6 +16,7 @@ import br.com.onesystem.war.service.CidadeService;
 import br.com.onesystem.war.service.PessoaService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.IDadoInvalidoException;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -27,7 +28,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class PessoaView implements Serializable {
+public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
 
     private Pessoa pessoaSelecionada;
     private Contato contatoSelecionado;
@@ -190,6 +191,15 @@ public class PessoaView implements Serializable {
         }
     }
 
+    @Override
+    public void selecionar(SelectEvent event) {
+        if (event.getObject() instanceof Pessoa) {
+            pessoaSelecionada = (Pessoa) event.getObject();
+            pessoa = new PessoaBV(pessoaSelecionada);
+        }
+    }
+
+    @Override
     public void buscaPorId() {
         Long id = pessoa.getId();
         if (id != null) {
@@ -209,8 +219,6 @@ public class PessoaView implements Serializable {
     public void selecionaCidade(SelectEvent e) {
         pessoa.setCidade((Cidade) e.getObject());
     }
-    
-      
 
     public void desfazer() {
         if (pessoaSelecionada != null) {
@@ -246,12 +254,6 @@ public class PessoaView implements Serializable {
     public void abrirEdicao() {
         limparJanela();
     }
-
-    public void selecionaPessoa(SelectEvent event) {
-        pessoaSelecionada = (Pessoa) event.getObject();
-        pessoa = new PessoaBV(pessoaSelecionada);
-    }
-
 
     public Pessoa getPessoaSelecionada() {
         return pessoaSelecionada;

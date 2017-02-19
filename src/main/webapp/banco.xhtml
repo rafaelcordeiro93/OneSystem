@@ -7,15 +7,20 @@
 
     <ui:define name="content">
 
+
         <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">                                 
-                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                    <div class="EmptyBox5"/>
-                    <div class="ui-fluid">
+            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-bank Fs40" style="color: #848484"/> #{l.Banco}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
@@ -36,19 +41,20 @@
                             <p:outputLabel value="#{l.Site}"/>
                             <p:inputText value="#{bancoView.banco.site}" maxlength="80" />
                         </p:panelGrid>
+
+                        <div class="EmptyBox15"/>
+
+                        <p:separator/>
                     </div>
 
-
-                    <div class="EmptyBox5"/>
-
-                    <p:separator/>
-
-                    <p:commandButton value="#{l.Adicionar}" action="#{bancoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{bancoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{bancoView.desfazer()}" styleClass="Mar2" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
-
+                    <div class="EmptyBox15"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{bancoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{bancoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Desfazer}" action="#{bancoView.desfazer()}" styleClass="Mar2" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>
