@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.DepositoBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class DepositoView implements Serializable {
+public class DepositoView extends BasicMBImpl<Deposito> implements Serializable {
 
     private DepositoBV deposito;
     private Deposito depositoSelecionada;
@@ -84,12 +85,14 @@ public class DepositoView implements Serializable {
         return lista.isEmpty();
     }
 
-    public void selecionaDeposito(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         Deposito d = (Deposito) e.getObject();
         deposito = new DepositoBV(d);
         depositoSelecionada = d;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = deposito.getId();
         if (id != null) {

@@ -14,6 +14,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.MarcaBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -24,7 +25,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class MarcaView implements Serializable {
+public class MarcaView extends BasicMBImpl<Marca> implements Serializable {
 
     private MarcaBV marca;
     private Marca marcaSelecionada;
@@ -88,12 +89,14 @@ public class MarcaView implements Serializable {
         return lista.isEmpty();
     }
 
-    public void selecionaMarca(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         Marca m = (Marca) e.getObject();
         marca = new MarcaBV(m);
         marcaSelecionada = m;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = marca.getId();
         if (id != null) {

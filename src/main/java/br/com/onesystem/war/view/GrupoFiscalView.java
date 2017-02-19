@@ -14,6 +14,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.GrupoFiscalBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -23,7 +24,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class GrupoFiscalView implements Serializable {
+public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal> implements Serializable {
 
     private GrupoFiscalBV grupoFiscal;
     private GrupoFiscal grupoFiscalSelecionada;
@@ -81,11 +82,19 @@ public class GrupoFiscalView implements Serializable {
         grupoFiscalSelecionada = null;
     }
 
-    public void selecionaGrupoFiscal(SelectEvent event) {
-        grupoFiscalSelecionada = (GrupoFiscal) event.getObject();
-        grupoFiscal = new GrupoFiscalBV(grupoFiscalSelecionada);
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof GrupoFiscal) {
+            grupoFiscalSelecionada = (GrupoFiscal) event.getObject();
+            grupoFiscal = new GrupoFiscalBV(grupoFiscalSelecionada);
+        } else if (obj instanceof IVA) {
+            IVA iva = (IVA) event.getObject();
+            grupoFiscal.setIva(iva);
+        }
     }
 
+    @Override
     public void buscaPorId() {
         Long id = grupoFiscal.getId();
         if (id != null) {
@@ -100,11 +109,6 @@ public class GrupoFiscalView implements Serializable {
                 die.print();
             }
         }
-    }
-
-    public void selecionaIVA(SelectEvent event) {
-        IVA iva = (IVA) event.getObject();
-        grupoFiscal.setIva(iva);
     }
 
     public void desfazer() {

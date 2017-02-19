@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.GrupoBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class GrupoView implements Serializable {
+public class GrupoView extends BasicMBImpl<Grupo> implements Serializable {
 
     private GrupoBV grupo;
     private Grupo grupoSelecionada;
@@ -79,12 +80,14 @@ public class GrupoView implements Serializable {
         }
     }
 
-    public void selecionaGrupo(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         Grupo g = (Grupo) e.getObject();
         grupo = new GrupoBV(g);
         grupoSelecionada = g;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = grupo.getId();
         if (id != null) {

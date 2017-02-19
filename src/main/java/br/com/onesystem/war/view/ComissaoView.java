@@ -11,6 +11,7 @@ import br.com.onesystem.war.builder.ComissaoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class ComissaoView implements Serializable {
+public class ComissaoView extends BasicMBImpl<Comissao> implements Serializable {
 
     private ComissaoBV comissao;
     private Comissao comissaoSelecionada;
@@ -84,12 +85,14 @@ public class ComissaoView implements Serializable {
         return lista.isEmpty();
     }
 
-    public void selecionaComissao(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         Comissao c = (Comissao) e.getObject();
         comissao = new ComissaoBV(c);
         comissaoSelecionada = c;
     }
 
+    @Override
         public void buscaPorId() {
         Long id = comissao.getId();
         if (id != null) {
