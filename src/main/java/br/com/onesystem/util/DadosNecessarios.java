@@ -69,12 +69,18 @@ public class DadosNecessarios implements Serializable {
 
         ConfiguracaoEstoqueService configuracaoEstoqueService = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = configuracaoEstoqueService.buscar();
-        if (conf == null | conf.getContaDeEstoqueEmpresa() == null) {
+        try {
+            if (conf.getContaDeEstoqueEmpresa() == null) {
+                bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
+                pendencias.add(bv);
+                return null;
+            }
+            return conf.getContaDeEstoqueEmpresa();
+        } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
             pendencias.add(bv);
             return null;
         }
-        return conf.getContaDeEstoqueEmpresa();
     }
 
     private Moeda getMoedaPadrao() {

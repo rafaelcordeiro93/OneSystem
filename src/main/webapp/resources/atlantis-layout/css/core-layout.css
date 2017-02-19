@@ -130,6 +130,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Wid100{ width:100%;}
 .Wid95{ width:95%;}
 .Wid90{ width:90%;}
+.Wid88{ width:88%;}
 .Wid80{ width:80%;}
 .Wid70{ width:70%;}
 .Wid65{ width:65%;}
@@ -449,6 +450,22 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     clear: both; 
 }
 
+.form-elements .ui-grc-1{
+    margin-left: 40px;
+}
+
+@media (max-width:1024px) {
+    .form-elements .ui-grc-1{
+        margin-left: 10px;
+    }
+}
+
+@media (max-width:640px) {
+    .form-elements .ui-grc-1{
+        margin-left: 0px;
+    }
+}
+
 .form-elements .ui-grc-2{
     margin-left: 80px;
 }
@@ -552,3 +569,15 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     color: #F7D100;
 }
 
+.tab{
+    background: url(https://d3cku59u20k6cj.cloudfront.net/f233ebd59f596c12ef65c2993c4e43d607f62458/images/boot/negotiation-tab.png) no-repeat right;
+    align-content: flex-end;
+    margin-right: 23px;
+    position: relative;
+    z-index: 2;
+    height: 40px;
+    margin-bottom: -40px;
+    top: 0px;
+    right: -23px;
+    display: block;
+}

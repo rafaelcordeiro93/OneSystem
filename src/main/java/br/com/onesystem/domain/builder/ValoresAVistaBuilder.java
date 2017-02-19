@@ -22,7 +22,7 @@ public class ValoresAVistaBuilder {
     private List<Cheque> cheques;
     private BoletoDeCartao boletoDeCartao;
     private BigDecimal aFaturar;
-    private NotaEmitida notaEmitida;    
+    private NotaEmitida notaEmitida;
     private BigDecimal acrescimo;
     private BigDecimal desconto;
     private BigDecimal despesaCobranca;
@@ -32,61 +32,61 @@ public class ValoresAVistaBuilder {
         this.id = ID;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comMoeda(Moeda moeda) {
         this.moeda = moeda;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comDinheiro(BigDecimal dinheiro) {
         this.dinheiro = dinheiro;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comCredito(BigDecimal credito) {
         this.credito = credito;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comCheques(List<Cheque> cheques) {
         this.cheques = cheques;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
         return this;
     }
-    
-     public ValoresAVistaBuilder comAcrescimo(BigDecimal acrescimo) {
+
+    public ValoresAVistaBuilder comAcrescimo(BigDecimal acrescimo) {
         this.acrescimo = acrescimo;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comDesconto(BigDecimal desconto) {
         this.desconto = desconto;
         return this;
     }
-    
-     public ValoresAVistaBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
+
+    public ValoresAVistaBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
         this.despesaCobranca = despesaCobranca;
         return this;
     }
-    
+
     public ValoresAVistaBuilder comFrete(BigDecimal frete) {
         this.frete = frete;
         return this;
     }
-    
-     public ValoresAVistaBuilder comAFaturar(BigDecimal aFaturar) {
+
+    public ValoresAVistaBuilder comAFaturar(BigDecimal aFaturar) {
         this.aFaturar = aFaturar;
         return this;
     }
-     
-     public ValoresAVistaBuilder comNotaEmitida(NotaEmitida notaEmitida){
-         this.notaEmitida = notaEmitida;
-         return this;
-     }
+
+    public ValoresAVistaBuilder comNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+        return this;
+    }
 
     public ValoresAVista construir() throws DadoInvalidoException {
         return new ValoresAVista(id, dinheiro, credito, boletoDeCartao, aFaturar, notaEmitida, moeda, desconto, acrescimo, despesaCobranca, frete, cheques);

@@ -279,6 +279,21 @@ public class PagamentoView implements Serializable {
         baixaDespesaEventual.setConta(contaLista.get(0));
     }
 
+    public void abrirChequeEmitido() {
+        RequestContext.getCurrentInstance().execute("PF('chequeEmitido').show()");
+        limpaBaixa();
+    }
+
+    public void abrirChequeTerceiro() {
+        RequestContext.getCurrentInstance().execute("PF('chequeTerceiro').show()");
+        limpaBaixa();
+    }
+
+    public void abrirDebitoCC() {
+        RequestContext.getCurrentInstance().execute("PF('debitoCC').show()");
+        limpaBaixa();
+    }
+
     private void limpar() {
         data = new Date();
         baixa = new BaixaBV();

@@ -261,6 +261,20 @@ public class RecebimentoView implements Serializable {
         buscarListaDeContas();
         baixaReceitaEventual.setConta(contaLista.get(0));
     }
+    
+    public void abrirCheque() {
+        RequestContext.getCurrentInstance().execute("PF('cheque').show()");
+        limpaBaixa();
+    }
+    public void abrirCartao() {
+        RequestContext.getCurrentInstance().execute("PF('cartao').show()");
+        limpaBaixa();
+    }
+    public void abrirDebito() {
+        RequestContext.getCurrentInstance().execute("PF('debitoCC').show()");
+        limpaBaixa();
+    }
+    
 
     private void limpar() {
         data = new Date();
