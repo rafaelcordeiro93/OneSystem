@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.UnidadeMedidaItemBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class UnidadeMedidaItemView implements Serializable {
+public class UnidadeMedidaItemView extends BasicMBImpl<UnidadeMedidaItem> implements Serializable {
 
     private UnidadeMedidaItemBV unidadeMedidaItem;
     private UnidadeMedidaItem unidadeMedidaItemSelecionada;
@@ -84,12 +85,14 @@ public class UnidadeMedidaItemView implements Serializable {
         return lista.isEmpty();
     }
 
-    public void selecionaUnidadeMedidaItem(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         UnidadeMedidaItem u = (UnidadeMedidaItem) e.getObject();
         unidadeMedidaItem = new UnidadeMedidaItemBV(u);
         unidadeMedidaItemSelecionada = u;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = unidadeMedidaItem.getId();
         if (id != null) {

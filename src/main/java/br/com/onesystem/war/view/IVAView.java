@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.IVABV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class IVAView implements Serializable {
+public class IVAView extends BasicMBImpl<IVA> implements Serializable {
 
     private IVABV iva;
     private IVA ivaSelecionada;
@@ -85,12 +86,14 @@ public class IVAView implements Serializable {
         return lista.isEmpty();
     }
 
-    public void selecionaIVA(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         IVA i = (IVA) e.getObject();
         iva = new IVABV(i);
         ivaSelecionada = i;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = iva.getId();
         if (id != null) {

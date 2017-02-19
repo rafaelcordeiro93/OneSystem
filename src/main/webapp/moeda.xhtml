@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -19,18 +20,11 @@
                         <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="margem" size="23" value="#{moedaView.moeda.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{moedaView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{moedaView.selecionaMoeda}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>  
+                            <a:inputNumberDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.moeda.id}" update=":conteudo"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{moedaView.moeda.nome}"/>
@@ -38,7 +32,7 @@
                             <p:outputLabel value="#{l.Sigla}"/>
                             <p:inputText value="#{moedaView.moeda.sigla}"/>
 
-                            <p:outputLabel value="#{l.Tipo_Bandeira}"/>
+                            <p:outputLabel value="#{l.Bandeira}"/>
                             <p:selectOneMenu id="advanced" value="#{moedaView.moeda.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
                                              effect="fade" var="t">
                                 <f:selectItems value="#{moedaView.bandeiras}" var="tipoBandeira" itemValue="#{tipoBandeira}" />

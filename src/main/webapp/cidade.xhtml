@@ -2,7 +2,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -19,18 +20,11 @@
                         <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="cidadeid" size="23" value="#{cidadeView.cidade.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{cidadeView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCidadeView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{cidadeView.selecionaCidade}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
-
+                            <a:inputNumberDialog id="cidadeid" dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.cidade.id}" update=":conteudo" />
+                            
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{cidadeView.cidade.nome}"/>
 

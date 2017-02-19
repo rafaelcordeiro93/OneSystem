@@ -12,6 +12,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoBandeira;
 import br.com.onesystem.war.builder.MoedaBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class MoedaView implements Serializable {
+public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
 
     private MoedaBV moeda;
     private Moeda moedaSelecionada;
@@ -81,11 +82,12 @@ public class MoedaView implements Serializable {
         }
     }
 
-    public void selecionaMoeda(SelectEvent e) {
+    public void selecionar(SelectEvent e) {
         moedaSelecionada = (Moeda) e.getObject();
         moeda = new MoedaBV(moedaSelecionada);
     }
 
+    @Override
     public void buscaPorId() {
         Long id = moeda.getId();
         if (id != null) {

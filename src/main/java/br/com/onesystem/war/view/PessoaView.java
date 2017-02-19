@@ -193,9 +193,12 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
 
     @Override
     public void selecionar(SelectEvent event) {
-        if (event.getObject() instanceof Pessoa) {
-            pessoaSelecionada = (Pessoa) event.getObject();
+        Object obj = event.getObject();
+        if (obj instanceof Pessoa) {
+            pessoaSelecionada = (Pessoa) obj;
             pessoa = new PessoaBV(pessoaSelecionada);
+        } else if (obj instanceof Cidade) {
+            pessoa.setCidade((Cidade) obj);
         }
     }
 
@@ -217,7 +220,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
     }
 
     public void selecionaCidade(SelectEvent e) {
-        pessoa.setCidade((Cidade) e.getObject());
+
     }
 
     public void desfazer() {

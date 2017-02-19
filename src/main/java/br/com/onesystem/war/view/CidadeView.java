@@ -11,6 +11,7 @@ import br.com.onesystem.war.builder.CidadeBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -21,7 +22,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class CidadeView implements Serializable {
+public class CidadeView extends BasicMBImpl<Cidade> implements Serializable {
 
     private CidadeBV cidade;
     private Cidade cidadeSelecionada;
@@ -84,6 +85,7 @@ public class CidadeView implements Serializable {
         return lista.isEmpty();
     }
 
+    @Override
     public void buscaPorId() {
         Long id = cidade.getId();
         if (id != null) {
@@ -100,7 +102,7 @@ public class CidadeView implements Serializable {
         }
     }
 
-    public void selecionaCidade(SelectEvent e) {
+    public void selecionar(SelectEvent e) {
         Cidade c = (Cidade) e.getObject();
         cidade = new CidadeBV(c);
         cidadeSelecionada = c;

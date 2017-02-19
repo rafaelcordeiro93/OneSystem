@@ -14,6 +14,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -24,7 +25,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class CotacaoView implements Serializable {
+public class CotacaoView extends BasicMBImpl<Cotacao> implements Serializable {
 
     private CotacaoBV cotacao;
     private Cotacao cotacaoSelecionada;
@@ -91,17 +92,20 @@ public class CotacaoView implements Serializable {
         }
     }
 
-    public void selecionarConta(SelectEvent event) {
-        Conta conta = (Conta) event.getObject();
-        this.cotacao.setConta(conta);
+    @Override
+    public void selecionar(SelectEvent e) {
+        Object obj = e.getObject();
+        if (obj instanceof Cotacao) {
+            Cotacao a = (Cotacao) e.getObject();
+            cotacao = new CotacaoBV(a);
+            cotacaoSelecionada = a;
+        } else if (obj instanceof Conta) {
+            Conta conta = (Conta) obj;
+            this.cotacao.setConta(conta);
+        }
     }
 
-    public void selecionaCotacao(SelectEvent e) {
-        Cotacao a = (Cotacao) e.getObject();
-        cotacao = new CotacaoBV(a);
-        cotacaoSelecionada = a;
-    }
-
+    @Override
     public void buscaPorId() {
         Long id = cotacao.getId();
         if (id != null) {

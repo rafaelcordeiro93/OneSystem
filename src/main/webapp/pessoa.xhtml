@@ -20,8 +20,8 @@
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1,ui-g-12 ui-md-3">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>                            
                             <a:inputNumberDialog id="idPessoa" mbView="#{pessoaView}" dialog="#{selecaoPessoaView}" value="#{pessoaView.pessoa.id}" update=":conteudo" styleClass="Wid60"/>
@@ -44,8 +44,8 @@
 
                         </p:panelGrid>
 
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 TexAlRight,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2">
+                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 TexAlRight,ui-g-12 ui-md-3,ui-g-12 ui-md-1,ui-g-12 ui-md-2">
 
 
                             <p:outputLabel value="#{l.Ruc}"/>
@@ -56,14 +56,14 @@
                             <p:inputText id="pessoaCI"  value="#{pessoaView.pessoa.fantasiaCI}"/>
 
                             <p:outputLabel  value="#{l.Nascimento}"/>
-                            <p:calendar style="margin-left: 8px " navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.pessoa.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.pessoa.nascimento}" /> 
+                            <p:calendar style="margin-left: 20% " navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.pessoa.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.pessoa.nascimento}" /> 
 
                             <p:outputLabel value="#{l.Conjuge}"/>
                             <p:inputText id="pessoaConjuge" disabled="#{pessoaView.pessoa.fisicaJuridica}" value="#{pessoaView.pessoa.conjuge}" />
                         </p:panelGrid>
 
                         <p:panelGrid columns="8" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid70"
-                                     columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1, ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1">
+                                     columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1, ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1">
 
                             <p:outputLabel value="#{l.Transportador}"/>
                             <p:selectBooleanCheckbox  value="#{pessoaView.pessoa.categoriaTransportador}"/>
@@ -87,7 +87,7 @@
                         <p:separator/>
 
                         <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Telefone}"/>
                             <p:inputMask mask="(99) 9999-9999?9"  value="#{pessoaView.pessoa.telefone}" />
@@ -97,10 +97,10 @@
                         </p:panelGrid>
 
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-7">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-6">
 
                             <p:outputLabel value="#{l.Email}"/>
-                            <p:inputText  styleClass="Wid88" value="#{pessoaView.pessoa.email}" />                      
+                            <p:inputText  value="#{pessoaView.pessoa.email}" style="width: 94% !important"/>                      
 
                         </p:panelGrid>
 
@@ -112,23 +112,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Endereco}"/>
-                            <p:inputText value="#{pessoaView.pessoa.direcao}" />
+                            <p:inputText value="#{pessoaView.pessoa.direcao}" style="margin-left: 5%"/>
 
                             <p:outputLabel value="#{l.Bairro}"/>
                             <p:inputText  value="#{pessoaView.pessoa.bairro}"/>
 
                             <p:outputLabel value="#{l.Cidade}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputText id="cidadeId" readonly="true" value="#{pessoaView.pessoa.cidade.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCidadeView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{pessoaView.selecionaCidade}" process="@this" update="cidadeId
-                                            :conteudo:pessoaUf
-                                            :conteudo:pessoaPais" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="cidadeId" mbView="#{pessoaView}" dialog="#{selecaoCidadeView}" value="#{pessoaView.pessoa.cidade.nome}" update=":conteudo:pessoaUf :conteudo:pessoaPais"/>
 
                             <p:outputLabel value="#{l.Uf}"/>
-                            <p:inputText id="pessoaUf" value="#{pessoaView.pessoa.cidade.uf}" readonly="true" />
+                            <p:inputText id="pessoaUf" value="#{pessoaView.pessoa.cidade.uf}" readonly="true"  style="margin-left: 5%"/>
 
                             <p:outputLabel value="#{l.Pais}"/>
                             <p:inputText id="pessoaPais" value="#{pessoaView.pessoa.cidade.pais}" readonly="true" />

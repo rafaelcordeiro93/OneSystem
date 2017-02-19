@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -11,24 +12,17 @@
             <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-eur Fs40" style="color: #848484"/> #{l.IVA}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.IVA}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="margem" size="26" value="#{iVAView.IVA.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{iVAView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoIVAView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{iVAView.selecionaIVA}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputNumberDialog id="cidadeid" dialog="#{selecaoIVAView}" mbView="#{iVAView}" value="#{iVAView.IVA.id}" update=":conteudo" />
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{iVAView.IVA.nome}" maxlength="60"/>

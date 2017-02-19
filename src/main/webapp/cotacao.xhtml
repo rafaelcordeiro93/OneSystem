@@ -4,6 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -20,38 +21,20 @@
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputNumber id="margem" size="26" value="#{cotacaoView.cotacao.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{cotacaoView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCotacaoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionaCotacao}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputNumberDialog id="cotacao" mbView="#{cotacaoView}" dialog="#{selecaoCotacaoView}" value="#{cotacaoView.cotacao.id}" update=":conteudo"/>
 
                             <p:outputLabel  value="#{l.Conta}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%" >
-                                <p:inputText id="Conta" readonly="true" size="26" value="#{cotacaoView.cotacao.conta.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{cotacaoView.selecionarConta}" process="@this" update="Conta Valor" />
-                                </p:commandButton>
-                            </h:panelGrid> 
-
+                            <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cotacaoView}" value="#{cotacaoView.cotacao.conta.nome}"/>
 
                             <p:outputLabel  value="#{l.Valor}"/>
                             <p:inputNumber id="Valor" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cotacaoView.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{cotacaoView.cotacao.valor}"/>         
 
-
                             <p:outputLabel  value="#{l.Data}" />
                             <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" />
-
-
                         </p:panelGrid>
-
-
 
                         <div class="EmptyBox15"/>
 
