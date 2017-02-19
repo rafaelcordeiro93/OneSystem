@@ -3,11 +3,11 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,6 +34,7 @@ public class ChequeBuilder {
     private String observacao;
     private ValoresAVista formaDeRecebimentoOuPagamento;
     private Cotacao cotacao;
+    private TipoLancamento tipoLancamento;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
@@ -115,13 +116,18 @@ public class ChequeBuilder {
         return this;
     }
 
+    public ChequeBuilder comTipoLancamento(TipoLancamento tipoLancamento) {
+        this.tipoLancamento = tipoLancamento;
+        return this;
+    }
+
     public ChequeBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento) {
         this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
         return this;
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento, cotacao);
+        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento, cotacao, tipoLancamento);
     }
 
 }

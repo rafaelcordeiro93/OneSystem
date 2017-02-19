@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,65 +18,44 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_BOLETODECARTAO",
-        sequenceName = "SEQ_BOLETODECARTAO")
-public class BoletoDeCartao implements Serializable {
+@DiscriminatorValue("BOLETO_DE_CARTAO")
+public class BoletoDeCartao extends FormaPagamentoRecebimento implements Serializable {
 
-    @Id
-    @GeneratedValue(generator = "SEQ_BOLETODECARTAO", strategy = GenerationType.SEQUENCE)
-    private Long id;
     @ManyToOne
     private NotaEmitida notaEmitida;
     @NotNull(message = "{cartao_not_null}")
     @ManyToOne
     private Cartao cartao;
-    @NotNull(message = "{emissao_not_null}")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = new Date();
-    @NotNull(message = "{dias_not_null}")
-    private Integer dias;
-    @NotNull(message = "{valor_not_null}")
-    private BigDecimal valor;
     @CharacterType(value = CaseType.DIGIT, message = "cod_transacao_somente_numeros")
     @NotNull(message = "{cod_transacao_not_null}")
     private String codigoTransacao;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_situacao_not_null}")
     private SituacaoDeCartao situacao;
-    @OneToOne
-    private ValoresAVista valoresAVista;
 
     public BoletoDeCartao() {
     }
 
-    public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, Integer dias, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            ValoresAVista formaDeRecebimentoOuPagamento) throws DadoInvalidoException {
-        this.id = id;
+    public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
+            ValoresAVista formaDeRecebimentoOuPagamento, String historico, Date vencimento, Cotacao cotacao) throws DadoInvalidoException {
+        super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
         this.notaEmitida = notaEmitida;
         this.cartao = cartao;
-        this.emissao = emissao;
-        this.dias = dias;
         this.valor = valor;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
-        this.valoresAVista = formaDeRecebimentoOuPagamento;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("emissao", "dias", "valor", "codigoTransacao", "dias", "situacao");
-        new ValidadorDeCampos<BoletoDeCartao>().valida(this, campos);
-    }
-
-    public Long getId() {
-        return id;
+        List<String> campos = Arrays.asList("emissao", "valor");
+        List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
+        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
+        new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
     }
 
     public NotaEmitida getNotaEmitida() {
@@ -86,18 +66,6 @@ public class BoletoDeCartao implements Serializable {
         return cartao;
     }
 
-    public Date getEmissao() {
-        return emissao;
-    }
-
-    public Integer getDias() {
-        return dias;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
     public String getCodigoTransacao() {
         return codigoTransacao;
     }
@@ -106,28 +74,9 @@ public class BoletoDeCartao implements Serializable {
         return situacao;
     }
 
-    public ValoresAVista getValoresAVista() {
-        return valoresAVista;
-    }
-
-    @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
-            return false;
-        }
-        if (!(objeto instanceof BoletoDeCartao)) {
-            return false;
-        }
-        BoletoDeCartao outro = (BoletoDeCartao) objeto;
-        if (this.id == null) {
-            return false;
-        }
-        return this.id.equals(outro.id);
-    }
-
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + id + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + emissao + ", dias=" + dias + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
+        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';
     }
 
 }

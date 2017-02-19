@@ -36,7 +36,11 @@ public class Cotacao implements Serializable {
     @ManyToOne(optional = false)
     private Conta conta;
     @OneToMany(mappedBy = "cotacao")
-    private List<Cheque> cheques;
+    private List<PerfilDeValor> perfilDePagamentos;
+    @OneToMany(mappedBy = "cotacao")
+    private List<Recepcao> recepcoes;
+    @OneToMany(mappedBy = "cotacao")
+    private List<ConhecimentoDeFrete> conhecimentoDeFretes;
 
     public Cotacao() {
     }
@@ -52,8 +56,6 @@ public class Cotacao implements Serializable {
     public Long getId() {
         return id;
     }
-
-  
 
     public BigDecimal getValor() {
         return valor;

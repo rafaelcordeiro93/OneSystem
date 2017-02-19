@@ -24,6 +24,18 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
+        Pagamento p = new Banco("Tinta Azul", "HSBC");
+        
+        Banco b = (Banco) p;
+        b.getBanco();
+        b.getNome();
+
+        System.out.println("Pagamento: " + p);
+
+        if (p instanceof Banco) {
+            System.out.println("Pagamento no Banco: " + (Banco) p);
+        }
+
     }
 
 }

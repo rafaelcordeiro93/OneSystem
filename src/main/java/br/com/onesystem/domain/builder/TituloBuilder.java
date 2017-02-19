@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
@@ -37,9 +38,10 @@ public class TituloBuilder {
     private NotaEmitida notaEmitida;
     private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
-    private Moeda moeda;
-private ConhecimentoDeFrete conhecimentoDeFrete;
-    
+    private Cotacao cotacao;
+
+    private ConhecimentoDeFrete conhecimentoDeFrete;
+
     public TituloBuilder comId(Long id) {
         this.id = id;
         return this;
@@ -69,8 +71,8 @@ private ConhecimentoDeFrete conhecimentoDeFrete;
         this.vencimento = vencimento;
         return this;
     }
-    
-     public TituloBuilder comEmissao(Date emissao) {
+
+    public TituloBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
         return this;
     }
@@ -95,6 +97,11 @@ private ConhecimentoDeFrete conhecimentoDeFrete;
         return this;
     }
 
+    public TituloBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+        return this;
+    }
+
     public TituloBuilder comBaixas(List<Baixa> baixas) {
         this.baixas = baixas;
         return this;
@@ -105,14 +112,14 @@ private ConhecimentoDeFrete conhecimentoDeFrete;
         return this;
     }
 
-    public TituloBuilder comMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public TituloBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
         return this;
     }
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, moeda, notaEmitida, conhecimentoDeFrete);
+                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, notaEmitida, conhecimentoDeFrete, baixas);
     }
 
 }

@@ -7,6 +7,7 @@ import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TransferenciaDespesaProvisionada;
+import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.TransferenciaDespesaProvisionadaBV;
@@ -15,6 +16,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,21 +80,23 @@ public class TransferenciaDespesaProvisionadaView implements Serializable {
 
     private DespesaProvisionada criarDespesa() throws DadoInvalidoException {
         try {
-            if (transferenciaDespesaProvisionada.getPessoa().equals(transferenciaDespesaProvisionada.getOrigem().getPessoa())) {
+            TransferenciaDespesaProvisionadaBV t = transferenciaDespesaProvisionada;
+            if (t.getPessoa().equals(transferenciaDespesaProvisionada.getOrigem().getPessoa())) {
                 throw new EDadoInvalidoException("A pessoa de origem deve ser diferente da pessoa de destino.");
             }
-            if (transferenciaDespesaProvisionada.getPessoa().equals(configuracaoCambio.getPessoaCaixa())) {
-                return new DespesaProvisionada(null, transferenciaDespesaProvisionada.getPessoa(), configuracaoCambio.getDespesaDivisaoLucro(), 
-                        transferenciaDespesaProvisionada.getOrigem().getValor(), null, "Divisão de Lucros", 
-                        transferenciaDespesaProvisionada.getOrigem().getCambio(), true, transferenciaDespesaProvisionada.getOrigem().getMoeda());
+            if (t.getPessoa().equals(configuracaoCambio.getPessoaCaixa())) {
+                return new DespesaProvisionadaBuilder().comPessoa(t.getPessoa()).comValor(t.getOrigem().getValor())
+                        .comDespesa(configuracaoCambio.getDespesaDivisaoLucro()).comCambio(t.getOrigem().getCambio()).comDivisaoLucroCambioCaixa(true)
+                        .comEmissao(new Date()).comHistorico("Divisão de Lucros").construir();
             } else {
-                return new DespesaProvisionada(null, transferenciaDespesaProvisionada.getPessoa(), configuracaoCambio.getDespesaDivisaoLucro(), 
-                        transferenciaDespesaProvisionada.getOrigem().getValor(), null, "Divisão de Lucros", 
-                        transferenciaDespesaProvisionada.getOrigem().getCambio(), false, transferenciaDespesaProvisionada.getOrigem().getMoeda());
+                return new DespesaProvisionadaBuilder().comPessoa(t.getPessoa()).comValor(t.getOrigem().getValor())
+                        .comDespesa(configuracaoCambio.getDespesaDivisaoLucro()).comCambio(t.getOrigem().getCambio()).comDivisaoLucroCambioCaixa(false)
+                        .comEmissao(new Date()).comHistorico("Divisão de Lucros").construir();
+
             }
         } catch (NullPointerException npe) {
             throw new EDadoInvalidoException("A origem deve ser informada!");
-        } 
+        }
     }
 
     public void update() {

@@ -47,37 +47,33 @@ public class Recepcao implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
 
-    @ManyToOne
-    private Conta conta;
-
     @OneToOne(mappedBy = "recepcao", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Titulo titulo;
 
     @OneToMany(mappedBy = "recepcao", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Baixa> baixa;
 
-    @NotNull(message = "moeda_not_null")
+    @NotNull(message = "cotacao_not_null")
     @ManyToOne(optional = false)
-    private Moeda moeda;
+    private Cotacao cotacao;
 
     public Recepcao() {
     }
 
-    public Recepcao(Long id, Pessoa pessoa, BigDecimal valor, Conta conta, Date emissao, Titulo titulo,
-            Moeda moeda) throws DadoInvalidoException {
+    public Recepcao(Long id, Pessoa pessoa, BigDecimal valor, Date emissao, Titulo titulo,
+            Cotacao cotacao) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.valor = valor;
-        this.conta = conta;
         this.emissao = emissao;
         this.titulo = titulo;
-        this.moeda = moeda;
+        this.cotacao = cotacao;
         ehValido();
     }
 
     public void gerarTitulo() throws DadoInvalidoException {
         Titulo novoTitulo = new TituloBuilder().comPessoa(pessoa).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(moeda).construir();
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).construir();
         this.titulo = novoTitulo;
     }
 
@@ -86,7 +82,7 @@ public class Recepcao implements Serializable {
             baixa = new ArrayList<Baixa>();
         }
         Baixa novaBaixa = new BaixaBuilder().comValor(valor).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.ENTRADA)
-                .comPessoa(pessoa).comConta(conta).construir();        
+                .comPessoa(pessoa).comCotacao(cotacao).construir();
         this.baixa.add(novaBaixa);
     }
 
@@ -117,16 +113,12 @@ public class Recepcao implements Serializable {
         return nf.format(valor);
     }
 
-    public Conta getConta() {
-        return conta;
-    }
-
     public Titulo getTitulo() {
         return titulo;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
     private void ehValido() throws DadoInvalidoException {

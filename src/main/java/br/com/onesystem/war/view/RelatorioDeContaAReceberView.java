@@ -90,7 +90,7 @@ public class RelatorioDeContaAReceberView implements Serializable {
             for (Object object : lista) {
                 if (object instanceof Baixa) {
                     Baixa b = (Baixa) object;
-                    if (moeda.getId().equals(b.getConta().getMoeda().getId())) {
+                    if (moeda.getId().equals(b.getCotacao().getConta().getMoeda().getId())) {
                         valor = valor.add(b.getValor());
                         passou = true;
                     }

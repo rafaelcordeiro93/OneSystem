@@ -7,63 +7,26 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
 import br.com.onesystem.valueobjects.TipoOperacao;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_TITULO",
-        sequenceName = "SEQ_TITULO")
-public class Titulo implements Serializable, RelatorioContaAbertaImpl {
-
-    @Id
-    @GeneratedValue(generator = "SEQ_TITULO", strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @ManyToOne(optional = true)
-    private Pessoa pessoa;
-
-    @Length(max = 250, min = 0, message = "{historico_length}")
-    @Column(length = 250, nullable = true)
-    private String historico;
-
-    @Min(value = 0, message = "{valor_min}")
-    @Max(value = 999999999, message = "{valor_max}")
-    @Column(nullable = false)
-    private BigDecimal valor;
+@DiscriminatorValue("TITULO")
+public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date vencimento;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = Calendar.getInstance().getTime();
 
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
@@ -74,49 +37,39 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
     private Cambio cambio;
-    
+
     @ManyToOne
     private NotaEmitida notaEmitida;
-
-    @OneToMany(mappedBy = "titulo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Baixa> baixas = new ArrayList<Baixa>();
 
     @NotNull(message = "{tipoFormaPagRec_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoFormaPagRec tipoFormaPagRec;
 
-    @NotNull(message = "moeda_not_null")
-    @ManyToOne(optional = false)
-    private Moeda moeda;
-    
     @ManyToOne
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
-        public Titulo() {
+    public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Moeda moeda, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
-        this.id = id;
-        this.pessoa = pessoa;
-        this.historico = historico;
-        this.valor = valor;
-        this.emissao = emissao;
+            Cambio cambio, Cotacao cotacao, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas) throws DadoInvalidoException {
+        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
         this.unidadeFinanceira = unidadeFinanceira;
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
-        this.moeda = moeda;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "historico", "valor", "unidadeFinanceira", "moeda");
-        new ValidadorDeCampos<Titulo>().valida(this, campos);
+        List<String> campos = Arrays.asList("pessoa", "historico", "valor", "cotacao");
+        List<String> camposTitulo = Arrays.asList("unidadeFinanceira");
+        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
+        new ValidadorDeCampos<Titulo>().valida(this, camposTitulo);
     }
 
     public void cancelarSaldoDeBaixa(BigDecimal valor) {
@@ -133,7 +86,7 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     }
 
     public void setValor(BigDecimal valor) throws EDadoInvalidoException {
-        if (saldo.compareTo(this.valor) == 0) {
+        if (saldo.compareTo(getValor()) == 0) {
             this.valor = valor;
         } else {
             throw new EDadoInvalidoException("O valor só pode ser alterado, quando não possuir recebimento ou pagamento.");
@@ -160,36 +113,8 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         return saldo;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public Date getVencimento() {
-        return vencimento;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public String getHistorico() {
-        return historico;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
     public Cambio getCambio() {
         return cambio;
-    }
-    
-    public Date getEmissao() {
-        return emissao;
     }
 
     public OperacaoFinanceira getUnidadeFinanceira() {
@@ -204,12 +129,13 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
         return cambio != null ? cambio.getId() : recepcao.getId();
     }
 
+    @Override
     public String getOrigem() {
         return cambio != null ? TipoOperacao.CAMBIO.getNome() : TipoOperacao.RECEPCAO.getNome();
     }
 
     public Moeda getMoeda() {
-        return moeda;
+        return getCotacao().getConta().getMoeda();
     }
 
     public NotaEmitida getNotaEmitida() {
@@ -219,44 +145,10 @@ public class Titulo implements Serializable, RelatorioContaAbertaImpl {
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
-    
+
     public String getSaldoFormatado() {
         NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
         return numeroFormatado.format(getSaldo());
-    }
-
-    public String getValorFormatado() {
-        NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
-        return numeroFormatado.format(getValor());
-    }
-
-    public String getVencimentoFormatadoSemHoras() {
-        SimpleDateFormat vencimentoFormadado = new SimpleDateFormat("dd/MM/yyyy");
-        return getVencimento() != null ? vencimentoFormadado.format(getVencimento().getTime()) : "";
-    }
-
-    public String getEmissaoFormatada() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public String getEmissaoFormatadaSemHoras() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
-            return false;
-        }
-        if (!(objeto instanceof Titulo)) {
-            return false;
-        }
-        Titulo outro = (Titulo) objeto;
-        if (this.id == null) {
-            return false;
-        }
-        return this.id.equals(outro.id);
     }
 
 }

@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -92,7 +93,7 @@ public class PagamentoView implements Serializable {
         Titulo titulo = (Titulo) event.getObject();
         baixa.selecionaTitulo(titulo);
         buscarListaDeContas(titulo.getMoeda());
-        baixa.setConta(contaLista.get(0));
+//        baixa.setConta(contaLista.get(0));
     }
 
     private void buscarListaDeContas(Moeda moeda) {
@@ -107,7 +108,7 @@ public class PagamentoView implements Serializable {
         DespesaProvisionada dp = (DespesaProvisionada) event.getObject();
         baixaDespesaProvisionada.selecionaDespesaProvisionada(dp);
         buscarListaDeContas(dp.getMoeda());
-        baixaDespesaProvisionada.setConta(contaLista.get(0));
+//        baixaDespesaProvisionada.setConta(contaLista.get(0));
     }
 
     public void pagar() {
@@ -127,11 +128,11 @@ public class PagamentoView implements Serializable {
     }
 
     private void ehDivisaoDeLucro(Baixa novaBaixa) throws DadoInvalidoException, ConstraintViolationException {
-        if (novaBaixa.getDespesaProvisionada() != null && confCambio != null
-                && novaBaixa.getDespesaProvisionada().isDivisaoLucroCambioCaixa()) {
+        if (novaBaixa.getPerfilDeValor() instanceof DespesaProvisionada && confCambio != null
+                && ((DespesaProvisionada) novaBaixa.getPerfilDeValor()).isDivisaoLucroCambioCaixa()) {
             BaixaBV baixaBV = new BaixaBV(novaBaixa);
-            baixaBV.setConta(confCambio.getContaCaixa());
-            baixaBV.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
+//            baixaBV.setConta(confCambio.getContaCaixa()); Verificar Possivel erro apos atualização
+            baixaBV.setNaturezaFinanceira(OperacaoFinanceira.ENTRADA);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(novaBaixa.getEmissao());
             calendar.add(Calendar.MILLISECOND, 1);
@@ -156,7 +157,7 @@ public class PagamentoView implements Serializable {
             validaBaixa();
             if (baixa.getId() == null && baixaDespesaProvisionada.getId() == null && baixaDespesaEventual.getId() == null) {
                 validaExistente();
-                Baixa novaBaixa = contruirBaixa(baixa.getTitulo() != null ? baixa : baixaDespesaEventual.getDespesa() != null ? baixaDespesaEventual : baixaDespesaProvisionada);
+                Baixa novaBaixa = contruirBaixa(baixa.getPerfilDeValor() instanceof Titulo ? baixa : baixaDespesaEventual.getDespesa() != null ? baixaDespesaEventual : baixaDespesaProvisionada);
                 baixaLista.add(novaBaixa);
                 limpaBaixa();
             } else {
@@ -170,18 +171,11 @@ public class PagamentoView implements Serializable {
     }
 
     private void validaExistente() throws EDadoInvalidoException {
-        if (baixa.getTitulo() != null) {
-            for (Baixa novaBaixa : baixaLista) {
-                if (novaBaixa.getTitulo() != null && novaBaixa.getTitulo().getId().equals(baixa.getTitulo().getId())) {
-                    throw new EDadoInvalidoException("Baixa já consta na lista!");
-                }
+        for (Baixa novaBaixa : baixaLista) {
+            if (novaBaixa.getPerfilDeValor() != null && novaBaixa.getPerfilDeValor().getId().equals(baixa.getPerfilDeValor().getId())) {
+                throw new EDadoInvalidoException("Baixa já consta na lista!");
             }
-        } else if (baixaDespesaProvisionada.getDespesaProvisionada() != null) {
-            for (Baixa novaBaixa : baixaLista) {
-                if (novaBaixa.getDespesaProvisionada() != null && novaBaixa.getDespesaProvisionada().getId().equals(baixa.getDespesaProvisionada().getId())) {
-                    throw new EDadoInvalidoException("Baixa já consta na lista!");
-                }
-            }
+
         }
     }
 
@@ -191,7 +185,7 @@ public class PagamentoView implements Serializable {
                 && (this.baixaDespesaProvisionada.getHistorico() == null || this.baixaDespesaProvisionada.getHistorico().length() == 0)
                 && (this.baixaDespesaEventual.getHistorico() == null || this.baixaDespesaEventual.getHistorico().length() == 0)) {
             String str;
-            if (baixa.getTitulo() != null) {
+            if (baixa.getPerfilDeValor() instanceof Titulo) {
                 str = " Título";
                 if (this.baixa.getPessoa() != null) {
                     this.baixa.setHistorico("Pagamento de " + str + " para " + this.baixa.getPessoa().getNome());
@@ -204,15 +198,15 @@ public class PagamentoView implements Serializable {
                 this.baixaDespesaProvisionada.setHistorico("Pagamento de " + str + this.baixaDespesaProvisionada.getPessoa() == null ? " para " + this.baixaDespesaProvisionada.getPessoa().getNome() : "");
             }
         }
-        if (this.baixa.getTitulo() != null) {
-            if (this.baixa.getValor().compareTo(this.baixa.getTitulo().getSaldo()) > 0) {
+        if (baixa.getPerfilDeValor() instanceof Titulo) {
+            if (this.baixa.getValor().compareTo(((Titulo) this.baixa.getPerfilDeValor()).getSaldo()) > 0) {
                 throw new EDadoInvalidoException("O valor deve ser menor que o saldo.");
             }
         }
     }
 
     private void validaRegistroFoiInformado() throws EDadoInvalidoException {
-        if (this.baixa.getTitulo() == null && this.baixaDespesaEventual.getDespesa() == null && this.baixaDespesaProvisionada.getDespesaProvisionada() == null) {
+        if (this.baixa.getPerfilDeValor() instanceof Titulo && this.baixaDespesaEventual.getDespesa() == null && this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
             throw new EDadoInvalidoException("Selecione um titulo ou uma despesa para pagar!");
         }
         if (this.baixa.getValor().compareTo(BigDecimal.ZERO) == 0 && this.baixaDespesaProvisionada.getValor().compareTo(BigDecimal.ZERO) == 0
@@ -224,16 +218,16 @@ public class PagamentoView implements Serializable {
     private Baixa contruirBaixa(BaixaBV baixa) throws EDadoInvalidoException, DadoInvalidoException {
         baixa.setId(retornarCodigo());
         baixa.setEmissao(data);
-        baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
+        baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
         Baixa novaBaixa = baixa.construirComID();
         total = total.add(baixa.getValor());
         return novaBaixa;
     }
 
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
-        if (baixa.getTitulo() != null) {
-            baixa.getTitulo().atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<Titulo>(Titulo.class).atualiza(baixa.getTitulo());
+        if (baixa.getPerfilDeValor() instanceof Titulo) {
+            ((Titulo) baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
+            new AtualizaDAO<PerfilDeValor>(PerfilDeValor.class).atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }
@@ -247,13 +241,13 @@ public class PagamentoView implements Serializable {
     }
 
     public void abrirBaixaComDados() {
-        if (baixaSelecionada.getTitulo() != null) {
+        if (this.baixa.getPerfilDeValor() instanceof Titulo) {
             baixa = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getConta().getMoeda());
+            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
             RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-        } else if (baixaSelecionada.getDespesaProvisionada() != null) {
+        } else if (this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
             baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getConta().getMoeda());
+            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
             RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
         } else {
             buscarListaDeContas();
@@ -276,7 +270,7 @@ public class PagamentoView implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
         limpaBaixa();
         buscarListaDeContas();
-        baixaDespesaEventual.setConta(contaLista.get(0));
+//        baixaDespesaEventual.setConta(contaLista.get(0)); Verificar possivel erro de atualização
     }
 
     private void limpar() {

@@ -60,25 +60,21 @@ public class ConhecimentoDeFrete implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = Calendar.getInstance().getTime();
 
-    @NotNull(message = "moeda_not_null")
+    @NotNull(message = "cotacao_not_null")
     @ManyToOne(optional = false)
-    private Moeda moeda;
-
-    @NotNull(message = "{origem_not_null}")
-    @ManyToOne(optional = false)
-    private Conta conta;
+    private Cotacao cotacao;
 
     @OneToMany(mappedBy = "conhecimentoDeFrete")
     private List<Baixa> baixa;
-    
-      @OneToMany(mappedBy = "conhecimentoDeFrete")
+
+    @OneToMany(mappedBy = "conhecimentoDeFrete")
     private List<Titulo> titulo;
 
     public ConhecimentoDeFrete() {
     }
 
     public ConhecimentoDeFrete(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal despesas,
-            Date data, Date emissao, Moeda moeda, Conta conta) throws DadoInvalidoException {
+            Date data, Date emissao, Cotacao cotacao) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -86,8 +82,7 @@ public class ConhecimentoDeFrete implements Serializable {
         this.outrasdespesas = despesas;
         this.data = data;
         this.emissao = emissao;
-        this.moeda = moeda;
-        this.conta = conta;
+        this.cotacao = cotacao;
 
         ehValido();
     }
@@ -124,16 +119,16 @@ public class ConhecimentoDeFrete implements Serializable {
         return baixa;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public Conta getConta() {
-        return conta;
+    public List<Titulo> getTitulo() {
+        return titulo;
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "moeda");
+        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
         new ValidadorDeCampos<ConhecimentoDeFrete>().valida(this, campos);
     }
 

@@ -63,6 +63,12 @@
         <class>br.com.onesystem.domain.ConfiguracaoEstoque</class>
         <class>br.com.onesystem.domain.Coluna</class>
         <class>br.com.onesystem.domain.ModeloDeRelatorio</class>
+        <class>br.com.onesystem.domain.PerfilDeValor</class>
+        <class>br.com.onesystem.domain.DespesaEventual</class>
+        <class>br.com.onesystem.domain.Movimento</class>
+        <class>br.com.onesystem.domain.FormaPagamentoRecebimento</class>
+        <class>br.com.onesystem.domain.DespesaEventual</class>
+        <class>br.com.onesystem.domain.ReceitaEventual</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

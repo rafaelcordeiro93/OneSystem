@@ -1,6 +1,6 @@
 package br.com.onesystem.valueobjects;
 
-public enum TipoNota {
+public enum TipoLancamento {
 
     EMITIDA,
     RECEBIDA;

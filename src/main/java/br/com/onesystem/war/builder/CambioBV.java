@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.ContratoDeCambio;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -15,7 +16,7 @@ import java.util.Locale;
 public class CambioBV implements Serializable {
 
     private Long id;
-    private Conta conta;
+    private Cotacao cotacao;
     private BigDecimal taxaEfetivada;
     private ContratoDeCambio contrato;
     private BigDecimal valorBruto;
@@ -31,7 +32,7 @@ public class CambioBV implements Serializable {
     public CambioBV(Cambio cambioSelecionado) {
         this.id = cambioSelecionado.getId();
         this.contrato = cambioSelecionado.getContrato();
-        this.conta = cambioSelecionado.getConta();
+        this.cotacao = cambioSelecionado.getCotacao();
         this.taxaEfetivada = cambioSelecionado.getTaxaEfetivada();
         this.valorBruto = cambioSelecionado.getValorBruto();
         this.porcentagemDeComissao = cambioSelecionado.getPorcentagemDeComissao();
@@ -54,12 +55,12 @@ public class CambioBV implements Serializable {
         this.id = id;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public BigDecimal getTaxaEfetivada() {
@@ -150,10 +151,10 @@ public class CambioBV implements Serializable {
     }
     
     public Cambio construir() throws DadoInvalidoException {
-        return new Cambio(null, contrato, conta, taxaEfetivada, valorBruto, valorLiquido, porcentagemDeComissao, processo, emissao, pessoaComissionada, comissaoCalculada, porcentualLucroTaxa);
+        return new Cambio(null, contrato, cotacao, taxaEfetivada, valorBruto, valorLiquido, porcentagemDeComissao, processo, emissao, pessoaComissionada, comissaoCalculada, porcentualLucroTaxa);
     }
 
     public Cambio construirComID() throws DadoInvalidoException {
-        return new Cambio(id, contrato, conta, taxaEfetivada, valorBruto, valorLiquido, porcentagemDeComissao, processo, emissao, pessoaComissionada, comissaoCalculada, porcentualLucroTaxa);
+        return new Cambio(id, contrato, cotacao, taxaEfetivada, valorBruto, valorLiquido, porcentagemDeComissao, processo, emissao, pessoaComissionada, comissaoCalculada, porcentualLucroTaxa);
     }
 }

@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -19,11 +20,12 @@ public class BoletoDeCartaoBuilder {
     private NotaEmitida venda;
     private Cartao cartao;
     private Date emissao;
-    private Integer dias;
+    private Date vencimento;
     private BigDecimal valor;
     private String codigoTransacao;
     private SituacaoDeCartao tipoSituacao;
     private ValoresAVista formaDeRecebimentoOuPagamento;
+    private Cotacao cotacao;
 
     public BoletoDeCartaoBuilder() {
     }
@@ -43,13 +45,23 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
+    public BoletoDeCartaoBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+        return this;
+    }
+
     public BoletoDeCartaoBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
         return this;
     }
 
-    public BoletoDeCartaoBuilder comDias(Integer dias) {
-        this.dias = dias;
+    public BoletoDeCartaoBuilder comVencimento(Date vencimento) {
+        this.emissao = vencimento;
+        return this;
+    }
+
+    public BoletoDeCartaoBuilder comDias(Date vencimento) {
+        this.vencimento = vencimento;
         return this;
     }
 
@@ -67,14 +79,14 @@ public class BoletoDeCartaoBuilder {
         this.tipoSituacao = tipoSituacao;
         return this;
     }
-    
-    public BoletoDeCartaoBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento){
+
+    public BoletoDeCartaoBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento) {
         this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
         return this;
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, venda, cartao, emissao, dias, valor, codigoTransacao, tipoSituacao, formaDeRecebimentoOuPagamento);
+        return new BoletoDeCartao(id, venda, cartao, emissao, valor, codigoTransacao, tipoSituacao, formaDeRecebimentoOuPagamento, codigoTransacao, vencimento, cotacao);
     }
 
 }

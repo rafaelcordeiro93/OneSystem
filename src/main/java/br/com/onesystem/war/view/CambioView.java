@@ -159,8 +159,8 @@ public class CambioView implements Serializable {
                     throw new EDadoInvalidoException("O valor deve ser maior que zero!");
                 }
                 baixa.setEmissao(new Date());
-                baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
-                baixa.setConta(cambio.getConta());
+                baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
+                baixa.setCotacao(cambio.getCotacao());
                 baixa.setId(retornarCodigo());
                 baixa.setDesconto(BigDecimal.ZERO);
                 baixa.setJuros(BigDecimal.ZERO);
@@ -321,8 +321,8 @@ public class CambioView implements Serializable {
         baixaLista = new ArrayList<Baixa>();
         calculaValor();
         try {
-            if (!contratoSelecionado.getOrigem().equals(cambio.getConta().getMoeda())) {
-                cambio.setConta(null);
+            if (!contratoSelecionado.getOrigem().equals(cambio.getCotacao().getConta().getMoeda())) {
+                cambio.setCotacao(null);
             }
         } catch (NullPointerException npe) {
         }
@@ -336,7 +336,7 @@ public class CambioView implements Serializable {
     public void selecionaConta(SelectEvent event) {
         Conta contaSelecionada = (Conta) event.getObject();
         if (contaSelecionada.getMoeda().equals(cambio.getContrato().getOrigem())) {
-            cambio.setConta(contaSelecionada);
+//          s  camsetCotacaoonta(contaSelecionada);
         } else {
             WarningMessage.print(new BundleUtil().getMessage("Conta_Mesma_Moeda_Taxa_Negociada"));
         }

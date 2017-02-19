@@ -103,7 +103,7 @@ public class BaixaView implements Serializable {
     }
 
     public void atuStatusButton() {
-        if (this.baixa.getUnidadeFinanciera().equals(OperacaoFinanceira.ENTRADA)) {
+        if (this.baixa.getNaturezaFinanceira().equals(OperacaoFinanceira.ENTRADA)) {
             statusButton = "GreenButton";
         } else {
             statusButton = "RedButton";
@@ -133,17 +133,17 @@ public class BaixaView implements Serializable {
 
     public void selecionaDespesaProvisionada(SelectEvent event) {
         DespesaProvisionada despesaSelecionada = (DespesaProvisionada) event.getObject();
-        this.baixa.setDespesaProvisionada(despesaSelecionada);
+        this.baixa.setPerfilDeValor(despesaSelecionada);
     }
 
     public void selecionaReceitaProvisionada(SelectEvent event) {
         ReceitaProvisionada receitaSelecionada = (ReceitaProvisionada) event.getObject();
-        this.baixa.setReceitaProvisionada(receitaSelecionada);
+        this.baixa.setPerfilDeValor(receitaSelecionada);
     }
 
     public void selecionaTitulo(SelectEvent event) {
         Titulo tituloSelecionado = (Titulo) event.getObject();
-        this.baixa.setTitulo(tituloSelecionado);
+        this.baixa.setPerfilDeValor(tituloSelecionado);
     }
 
     public void selecionaRecepcao(SelectEvent event) {
@@ -158,7 +158,7 @@ public class BaixaView implements Serializable {
 
     public void selecionaConta(SelectEvent event) {
         Conta contaSelecionada = (Conta) event.getObject();
-        this.baixa.setConta(contaSelecionada);
+//        this.baixa.setConta(contaSelecionada);
     }
 
     public void limparJanela() {

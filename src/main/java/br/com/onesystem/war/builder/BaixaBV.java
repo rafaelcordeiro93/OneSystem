@@ -3,11 +3,11 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
-import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -19,35 +19,30 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class BaixaBV implements Serializable {
 
     private Long id;
-    private Conta conta;
-    private Pessoa pessoa;
-    private BigDecimal valor = BigDecimal.ZERO;
-    private int numeroParcela;
-    private Despesa despesa;
-    private OperacaoFinanceira unidadeFinanciera;
-    private String historico;
-    private Date emissao = new Date();
-    private BigDecimal desconto = BigDecimal.ZERO;
-    private BigDecimal multas = BigDecimal.ZERO;
-    private BigDecimal total;
+    private Integer numeroParcela;
     private BigDecimal juros = BigDecimal.ZERO;
-    private boolean cancelada;
-    private Cambio cambio;
-    private Titulo titulo;
-    private Recepcao recepcao;
+    private BigDecimal valor = BigDecimal.ZERO;
+    private BigDecimal multas = BigDecimal.ZERO;
+    private BigDecimal desconto = BigDecimal.ZERO;
+    private String historico = "";
+    private Date emissao = Calendar.getInstance().getTime();
+    private OperacaoFinanceira naturezaFinanceira;
+    private Cotacao cotacao;
+    private PerfilDeValor perfilDeValor;
+    private Despesa despesa;
     private Receita receita;
-    private Transferencia transferencia;
-    private DespesaProvisionada despesaProvisionada;
-    private ReceitaProvisionada receitaProvisionada;
+    private Pessoa pessoa;
+    private Cambio cambio;
     private ConhecimentoDeFrete conhecimentoDeFrete;
+    private Transferencia transferencia;
+    private Recepcao recepcao;
+    private boolean cancelada = false;
     private NotaEmitida notaEmitida;
 
     public BaixaBV() {
@@ -56,35 +51,33 @@ public class BaixaBV implements Serializable {
     public BaixaBV(Baixa baixa) {
         this.id = baixa.getId();
         this.pessoa = baixa.getPessoa();
-        this.conta = baixa.getConta();
         this.numeroParcela = baixa.getNumeroParcela();
         this.cancelada = baixa.isCancelada();
         this.valor = baixa.getValor();
-        this.total = baixa.getValor();
         this.desconto = baixa.getDesconto();
         this.emissao = baixa.getEmissao();
         this.historico = baixa.getHistorico();
-        this.unidadeFinanciera = baixa.getNaturezaFinanceira();
+        this.naturezaFinanceira = baixa.getNaturezaFinanceira();
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();
-        this.titulo = baixa.getTitulo();
-        this.despesaProvisionada = baixa.getDespesaProvisionada();
-        this.receitaProvisionada = baixa.getReceitaProvisionada();
+        this.perfilDeValor = baixa.getPerfilDeValor();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
         this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
         this.notaEmitida = baixa.getNotaEmitida();
+        this.juros = baixa.getJuros();
+        this.multas = baixa.getMultas();
+        this.cotacao = baixa.getCotacao();
     }
 
     public void selecionaTitulo(Titulo titulo) {
         this.pessoa = titulo.getPessoa();
-        this.total = titulo.getSaldo();
         this.emissao = titulo.getEmissao();
         this.historico = titulo.getHistorico();
-        this.unidadeFinanciera = titulo.getUnidadeFinanceira();
+        this.naturezaFinanceira = titulo.getUnidadeFinanceira();
         this.recepcao = titulo.getRecepcao();
-        this.titulo = titulo;
+        this.perfilDeValor = titulo;
         this.valor = titulo.getSaldo();
         this.cambio = titulo.getCambio();
     }
@@ -94,7 +87,7 @@ public class BaixaBV implements Serializable {
         this.valor = despesaProvisionada.getValor();
         this.emissao = despesaProvisionada.getEmissao();
         this.historico = despesaProvisionada.getHistorico();
-        this.despesaProvisionada = despesaProvisionada;
+        this.perfilDeValor = despesaProvisionada;
         this.despesa = despesaProvisionada.getDespesa();
         this.cambio = despesaProvisionada.getCambio();
     }
@@ -104,7 +97,7 @@ public class BaixaBV implements Serializable {
         this.valor = receitaProvisionada.getValor();
         this.emissao = receitaProvisionada.getEmissao();
         this.historico = receitaProvisionada.getHistorico();
-        this.receitaProvisionada = receitaProvisionada;
+        this.perfilDeValor = receitaProvisionada;
     }
 
     public Long getId() {
@@ -115,20 +108,20 @@ public class BaixaBV implements Serializable {
         this.id = id;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Integer getNumeroParcela() {
+        return numeroParcela;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setNumeroParcela(Integer numeroParcela) {
+        this.numeroParcela = numeroParcela;
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public BigDecimal getJuros() {
+        return juros;
     }
 
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
+    public void setJuros(BigDecimal juros) {
+        this.juros = juros;
     }
 
     public BigDecimal getValor() {
@@ -139,28 +132,20 @@ public class BaixaBV implements Serializable {
         this.valor = valor;
     }
 
-    public int getNumeroParcela() {
-        return numeroParcela;
+    public BigDecimal getMultas() {
+        return multas;
     }
 
-    public void setNumeroParcela(int numeroParcela) {
-        this.numeroParcela = numeroParcela;
+    public void setMultas(BigDecimal multas) {
+        this.multas = multas;
     }
 
-    public Despesa getDespesa() {
-        return despesa;
+    public BigDecimal getDesconto() {
+        return desconto;
     }
 
-    public void setDespesa(Despesa despesa) {
-        this.despesa = despesa;
-    }
-
-    public OperacaoFinanceira getUnidadeFinanciera() {
-        return unidadeFinanciera;
-    }
-
-    public void setUnidadeFinanceira(OperacaoFinanceira unidadeFinanciera) {
-        this.unidadeFinanciera = unidadeFinanciera;
+    public void setDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
     }
 
     public String getHistorico() {
@@ -179,68 +164,36 @@ public class BaixaBV implements Serializable {
         this.emissao = emissao;
     }
 
-    public BigDecimal getDesconto() {
-        return desconto;
+    public OperacaoFinanceira getNaturezaFinanceira() {
+        return naturezaFinanceira;
     }
 
-    public void setDesconto(BigDecimal desconto) {
-        this.desconto = desconto;
+    public void setNaturezaFinanceira(OperacaoFinanceira naturezaFinanceira) {
+        this.naturezaFinanceira = naturezaFinanceira;
     }
 
-    public BigDecimal getMultas() {
-        return multas;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMultas(BigDecimal multas) {
-        this.multas = multas;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
-    public BigDecimal getTotal() {
-        return total;
+    public PerfilDeValor getPerfilDeValor() {
+        return perfilDeValor;
     }
 
-    public void setTotal(BigDecimal total) {
-        this.total = total;
+    public void setPerfilDeValor(PerfilDeValor perfilDeValor) {
+        this.perfilDeValor = perfilDeValor;
     }
 
-    public BigDecimal getJuros() {
-        return juros;
+    public Despesa getDespesa() {
+        return despesa;
     }
 
-    public void setJuros(BigDecimal juros) {
-        this.juros = juros;
-    }
-
-    public boolean isCancelada() {
-        return cancelada;
-    }
-
-    public void setCancelada(boolean cancelada) {
-        this.cancelada = cancelada;
-    }
-
-    public Cambio getCambio() {
-        return cambio;
-    }
-
-    public void setCambio(Cambio cambio) {
-        this.cambio = cambio;
-    }
-
-    public Titulo getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(Titulo titulo) {
-        this.titulo = titulo;
-    }
-
-    public Recepcao getRecepcao() {
-        return recepcao;
-    }
-
-    public void setRecepcao(Recepcao recepcao) {
-        this.recepcao = recepcao;
+    public void setDespesa(Despesa despesa) {
+        this.despesa = despesa;
     }
 
     public Receita getReceita() {
@@ -251,6 +204,30 @@ public class BaixaBV implements Serializable {
         this.receita = receita;
     }
 
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Cambio getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(Cambio cambio) {
+        this.cambio = cambio;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
+    }
+
+    public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+    }
+
     public Transferencia getTransferencia() {
         return transferencia;
     }
@@ -259,43 +236,46 @@ public class BaixaBV implements Serializable {
         this.transferencia = transferencia;
     }
 
-    public DespesaProvisionada getDespesaProvisionada() {
-        return despesaProvisionada;
+    public Recepcao getRecepcao() {
+        return recepcao;
     }
 
-    public void setDespesaProvisionada(DespesaProvisionada despesaProvisionada) {
-        this.despesaProvisionada = despesaProvisionada;
+    public void setRecepcao(Recepcao recepcao) {
+        this.recepcao = recepcao;
     }
 
-    public String getEmissaoFormatada() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return emissaoFormatada.format(getEmissao().getTime());
+    public boolean isCancelada() {
+        return cancelada;
     }
 
-    public ReceitaProvisionada getReceitaProvisionada() {
-        return receitaProvisionada;
+    public void setCancelada(boolean cancelada) {
+        this.cancelada = cancelada;
     }
 
-    public void setReceitaProvisionada(ReceitaProvisionada receitaProvisionada) {
-        this.receitaProvisionada = receitaProvisionada;
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
+    }
+
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
     }
 
     public Baixa construir() throws DadoInvalidoException {
         return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comConta(conta).comDesconto(desconto).comDespesa(despesa).comDespesaProvisionada(despesaProvisionada)
+                .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa)
                 .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
-                .comNaturezaFinanceira(unidadeFinanciera).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
-                .comPessoa(pessoa).comReceita(receita).comReceitaProvisionada(receitaProvisionada).comRecepcao(recepcao)
-                .comTitulo(titulo).comTotal(total).comTransferencia(transferencia).comValor(valor).construir();
+                .comNaturezaFinanceira(naturezaFinanceira).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
+                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
+                .comTransferencia(transferencia).comValor(valor).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
         return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comConta(conta).comDesconto(desconto).comDespesa(despesa).comDespesaProvisionada(despesaProvisionada)
-                .comEmissao(emissao).comHistorico(historico).comId(id).comJuros(juros).comMultas(multas)
-                .comNaturezaFinanceira(unidadeFinanciera).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
-                .comPessoa(pessoa).comReceita(receita).comReceitaProvisionada(receitaProvisionada).comRecepcao(recepcao)
-                .comTitulo(titulo).comTotal(total).comTransferencia(transferencia).comValor(valor).construir();
+                .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa).comId(id)
+                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
+                .comNaturezaFinanceira(naturezaFinanceira).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
+                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
+                .comTransferencia(transferencia).comValor(valor).construir();
     }
 
 }

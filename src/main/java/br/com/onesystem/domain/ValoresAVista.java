@@ -43,7 +43,7 @@ public class ValoresAVista implements Serializable {
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
     @Min(value = 0, message = "{min_cartao}")
-    @OneToOne(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToOne
     private BoletoDeCartao cartao;
     @Min(value = 0, message = "{min_aFaturar}")
     private BigDecimal aFaturar;

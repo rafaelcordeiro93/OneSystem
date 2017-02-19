@@ -48,12 +48,11 @@ public class ConhecimentoDeFreteView implements Serializable {
     private TituloBV titulos;
     private List<TituloBV> parcelas;
     private BaixaBV baixa;
-   
+
     private BigDecimal total;
     private BigDecimal numeroParcela;
     private Integer intervaloDias;
 
-    
     @ManagedProperty("#{conhecimentoDeFreteService}")
     private ConhecimentoDeFreteService service;
 
@@ -61,7 +60,7 @@ public class ConhecimentoDeFreteView implements Serializable {
     private MoedaService serviceMoeda;
 
     private List<Moeda> moedaLista;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -77,9 +76,9 @@ public class ConhecimentoDeFreteView implements Serializable {
             Titulo novoTitulo = titulos.construir();
             new AdicionaDAO<ConhecimentoDeFrete>().adiciona(novoRegistro);
             conhecimentoDeFreteLista.add(novoRegistro);
-            for(TituloBV n : parcelas){
+            for (TituloBV n : parcelas) {
                 novoTitulo = n.construir();
-               }            
+            }
             InfoMessage.print("Receita Provisionada agregado con éxito!");
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -125,26 +124,23 @@ public class ConhecimentoDeFreteView implements Serializable {
         }
     }
 
-    
- 
-
     public void CarnePagamento(BigDecimal numeroParcela, BigDecimal total) {
         parcelas = new ArrayList<TituloBV>();
         Integer count = new Integer(0);
-        
+
         this.numeroParcela = numeroParcela;
         this.total = total;
-        
+
         BigDecimal parcela = total.divide(numeroParcela);
-     
+
         for (int i = 1; i <= numeroParcela.intValue(); i++) {
             count = count + intervaloDias;
-           TituloBV dp = new TituloBV(null , conhecimentoDeFrete.getPessoa(),null,parcela, null,null,
-                        conhecimentoDeFrete.getEmissao(),null, null, null, null ,conhecimentoDeFrete.getMoeda(), conhecimentoDeFreteSelecionado);
-            parcelas.add(dp);
+//           TituloBV dp = new TituloBV(null , conhecimentoDeFrete.getPessoa(),null,parcela, null,null,
+//                        conhecimentoDeFrete.getEmissao(),null, null, null, null ,conhecimentoDeFrete.getMoeda(), conhecimentoDeFreteSelecionado);
+//            parcelas.add(dp);
         }
     }
- 
+
     private Date adicionarDiasNa(Date data, Integer dias) {
         Calendar c = Calendar.getInstance();
         c.setTime(data);
@@ -200,7 +196,6 @@ public class ConhecimentoDeFreteView implements Serializable {
         }
     }
 
-    
     public ConhecimentoDeFreteBV getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
@@ -248,11 +243,10 @@ public class ConhecimentoDeFreteView implements Serializable {
     public void setService(ConhecimentoDeFreteService service) {
         this.service = service;
     }
-    
-    
+
     public void selecionarMoeda(SelectEvent event) {
         Moeda moeda = (Moeda) event.getObject();
-        conhecimentoDeFrete.setMoeda(moeda);
+//        conhecimentoDeFrete.setMoeda(moeda);
     }
 
     public void selecionaPessoa(SelectEvent event) {
@@ -289,7 +283,6 @@ public class ConhecimentoDeFreteView implements Serializable {
         this.numeroParcela = numeroParcela;
     }
 
-
     public Integer getIntervaloDias() {
         return intervaloDias;
     }
@@ -297,8 +290,8 @@ public class ConhecimentoDeFreteView implements Serializable {
     public void setIntervaloDias(Integer intervaloDias) {
         this.intervaloDias = intervaloDias;
     }
-    
-      public List<Moeda> getMoedaLista() {
+
+    public List<Moeda> getMoedaLista() {
         return moedaLista;
     }
 
@@ -321,6 +314,5 @@ public class ConhecimentoDeFreteView implements Serializable {
     public void setServiceMoeda(MoedaService serviceMoeda) {
         this.serviceMoeda = serviceMoeda;
     }
-
 
 }

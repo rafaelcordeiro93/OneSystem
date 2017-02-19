@@ -74,7 +74,7 @@
                                         </pe:inputNumber>
 
                                         <h:panelGrid columns="2" style="margin-top: -2%">
-                                            <p:inputText id="cambioConta" readonly="true" placeholder="#{l.Conta}" value="#{cambioView.cambio.conta.nome}"/>
+                                            <p:inputText id="cambioConta" readonly="true" placeholder="#{l.Conta}" value="#{cambioView.cambio.cotacao.nome}"/>
                                             <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
                                                               update="@none">
                                                 <p:ajax event="dialogReturn" listener="#{cambioView.selecionaConta}"

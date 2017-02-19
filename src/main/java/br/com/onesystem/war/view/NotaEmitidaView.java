@@ -176,10 +176,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      */
     public void finalizar() {
         try {
-            
+
             // Se valor a faturar maior que zero deve exibir diálogo de confirmação
-            if(valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0){
-                
+            if (valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
+
             }
             notaEmitida.setValoresAVista(valoresAVista.construir());
             novoRegistroNE = notaEmitida.construir();
@@ -312,10 +312,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             for (CotacaoValores c : cotacoes) {
                 if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
                     Baixa baixa = new BaixaBuilder().cancelada(false)
-                            .comConta(c.getCotacao().getConta()).comDesconto(novoRegistroNE.getValoresAVista().getDesconto()).comEmissao(novoRegistroNE.getEmissao())
+                            .comCotacao(c.getCotacao()).comDesconto(novoRegistroNE.getValoresAVista().getDesconto()).comEmissao(novoRegistroNE.getEmissao())
                             .comNaturezaFinanceira(novoRegistroNE.getOperacao().getOperacaoFinanceira())
-                            .comPessoa(novoRegistroNE.getPessoa()).comReceita(novoRegistroNE.getOperacao().getVendaAVista()).
-                            comTotal(getTotalNota()).comValor(getTotalNota()).comNotaEmitida(novoRegistroNE).construir();
+                            .comPessoa(novoRegistroNE.getPessoa()).comReceita(novoRegistroNE.getOperacao().getVendaAVista())
+                            .comValor(getTotalNota()).comNotaEmitida(novoRegistroNE).construir();
                 }
             }
             novoRegistroNE.setBaixas(baixas);

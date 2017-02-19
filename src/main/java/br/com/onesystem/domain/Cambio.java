@@ -45,7 +45,7 @@ public class Cambio implements Serializable {
     private ContratoDeCambio contrato;
 
     @ManyToOne
-    private Conta conta;
+    private Cotacao cotacao;
 
     @NotNull(message = "{taxaEfetivada_not_null}")
     @Column(nullable = false)
@@ -92,13 +92,13 @@ public class Cambio implements Serializable {
     public Cambio() {
     }
 
-    public Cambio(Long id, ContratoDeCambio contrato, Conta conta, BigDecimal taxaEfetivada, BigDecimal valorBruto,
+    public Cambio(Long id, ContratoDeCambio contrato, Cotacao cotacao, BigDecimal taxaEfetivada, BigDecimal valorBruto,
             BigDecimal valorLiquido, BigDecimal porcentagemDeComissao, String processo,
             Date emissao, Pessoa pessoaComissionada, BigDecimal comissaoCalculada,
             BigDecimal porcentagemDeLucroEmTaxa) throws DadoInvalidoException {
         this.id = id;
         this.contrato = contrato;
-        this.conta = conta;
+        this.cotacao = cotacao;
         this.taxaEfetivada = taxaEfetivada;
         this.valorBruto = valorBruto;
         this.valorLiquido = valorLiquido;
@@ -154,7 +154,7 @@ public class Cambio implements Serializable {
 
     private void pagarBaixa() throws DadoInvalidoException {
         Baixa baixa = new BaixaBuilder().comValor(valorBruto).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.SAIDA)
-                .comPessoa(contrato.getPessoa()).comConta(conta).construir();
+                .comPessoa(contrato.getPessoa()).comCotacao(cotacao).construir();
         pagamentos.add(baixa);
     }
 
@@ -163,10 +163,12 @@ public class Cambio implements Serializable {
             BigDecimal valorDividido = valorLiquido.divide(new BigDecimal(pessoaDivisaoLucro.size()), new MathContext(20, RoundingMode.HALF_UP));
             for (Pessoa pessoa : pessoaDivisaoLucro) {
                 DespesaProvisionada despesa;
+                DespesaProvisionadaBuilder builder = new DespesaProvisionadaBuilder().comPessoa(pessoa).comDespesa(despesaDivisaoLucro).comValor(valorBruto).comCambio(this)
+                        .comCotacao(cotacao).comHistorico("Divisão de Lucros");
                 if (pessoaCaixa.getId().equals(pessoa.getId())) {
-                    despesa = new DespesaProvisionada(null, pessoa, despesaDivisaoLucro, valorDividido, null, "Divisão de Lucros", this, true, conta.getMoeda());
+                    despesa = builder.comDivisaoLucroCambioCaixa(true).construir();
                 } else {
-                    despesa = new DespesaProvisionada(null, pessoa, despesaDivisaoLucro, valorDividido, null, "Divisão de Lucros", this, false, conta.getMoeda());
+                    despesa = builder.comDivisaoLucroCambioCaixa(false).construir();
                 }
                 divisaoLucro.add(despesa);
             }
@@ -176,7 +178,7 @@ public class Cambio implements Serializable {
     private void gerarNovoTitulo(BigDecimal valor) throws DadoInvalidoException {
         Titulo novoTitulo = new TituloBuilder().comPessoa(contrato.getPessoa()).comValor(valor).
                 comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).
-                comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(conta.getMoeda()).construir();
+                comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).construir();
         this.titulos.add(novoTitulo);
     }
 
@@ -184,7 +186,7 @@ public class Cambio implements Serializable {
         if (comissaoCalculada != null && comissaoCalculada.compareTo(BigDecimal.ZERO) == 1) {
             Configuracao c = new ConfiguracaoDAO().buscar();
             comissao = new DespesaProvisionadaBuilder().comPessoa(pessoaComissionada).comValor(comissaoCalculada)
-                    .comMoeda(conta.getMoeda()).comCambio(this).comDespesa(c.getDespesaDeComissao()).construir();
+                    .comCotacao(cotacao).comCambio(this).comDespesa(c.getDespesaDeComissao()).construir();
         }
     }
 
@@ -200,8 +202,8 @@ public class Cambio implements Serializable {
         return contrato;
     }
 
-    public Conta getConta() {
-        return conta;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
     public BigDecimal getTaxaEfetivada() {

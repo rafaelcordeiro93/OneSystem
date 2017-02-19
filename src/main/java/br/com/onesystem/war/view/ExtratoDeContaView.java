@@ -142,14 +142,14 @@ public class ExtratoDeContaView implements Serializable {
     private void adicionaBaixas(Transferencia novaTransferencia) throws ConstraintViolationException, DadoInvalidoException {
         BaixaBV origemBV = new BaixaBV();
         origemBV.setValor(transferencia.getValor());
-        origemBV.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
-        origemBV.setConta(novaTransferencia.getOrigem());
+        origemBV.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
+        //origemBV.setConta(novaTransferencia.getOrigem());
         origemBV.setTransferencia(novaTransferencia);
         Baixa origem = origemBV.construir();
         BaixaBV destinoBV = new BaixaBV();
         destinoBV.setValor(transferencia.getOrigem().getMoeda().equals(transferencia.getDestino().getMoeda()) ? transferencia.getValor() : transferencia.getValorConvertido());
-        destinoBV.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
-        destinoBV.setConta(novaTransferencia.getDestino());
+        destinoBV.setNaturezaFinanceira(OperacaoFinanceira.ENTRADA);
+        //destinoBV.setConta(novaTransferencia.getDestino());
         destinoBV.setTransferencia(novaTransferencia);
         Baixa destino = destinoBV.construir();
 
@@ -183,8 +183,8 @@ public class ExtratoDeContaView implements Serializable {
                     throw new EDadoInvalidoException("O valor deve ser maior que zero!");
                 }
                 baixa.setEmissao(new Date());
-                baixa.setUnidadeFinanceira(OperacaoFinanceira.SAIDA);
-                baixa.setConta(transferencia.getOrigem());
+                baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
+                //      baixa.setConta(transferencia.getOrigem());
                 baixa.setId(retornarCodigo());
                 baixa.setDesconto(BigDecimal.ZERO);
                 baixa.setJuros(BigDecimal.ZERO);

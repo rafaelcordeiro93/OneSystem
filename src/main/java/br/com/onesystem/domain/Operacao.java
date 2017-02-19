@@ -9,7 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
-import br.com.onesystem.valueobjects.TipoNota;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -47,7 +47,7 @@ public class Operacao implements Serializable {
     private OperacaoFinanceira operacaoFinanceira;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_nota_not_null}")
-    private TipoNota tipoNota;
+    private TipoLancamento tipoNota;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_operacao_not_null}")
     private TipoOperacao tipoOperacao;
@@ -88,7 +88,7 @@ public class Operacao implements Serializable {
     public Operacao() {
     }
 
-    public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoNota tipoNota,
+    public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
             Receita servicoAPrazo, Receita receitaFrete, Despesa despesaCMV, TipoContabil contabilizarCMV,
             Despesa compraAVista, Despesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
@@ -122,7 +122,7 @@ public class Operacao implements Serializable {
         return operacaoFinanceira;
     }
 
-    public TipoNota getTipoNota() {
+    public TipoLancamento getTipoNota() {
         return tipoNota;
     }
 

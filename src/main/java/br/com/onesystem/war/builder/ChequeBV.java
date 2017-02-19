@@ -28,7 +28,7 @@ public class ChequeBV implements Serializable {
     private BigDecimal juros;
     private BigDecimal descontos;
     private String emitente;
-    private String observacao;
+    private String historico;
     private Cotacao cotacao;
 
     public ChequeBV(Cheque chequeSelecionado) {
@@ -46,7 +46,7 @@ public class ChequeBV implements Serializable {
         this.juros = chequeSelecionado.getJuros();
         this.descontos = chequeSelecionado.getDescontos();
         this.emitente = chequeSelecionado.getEmitente();
-        this.observacao = chequeSelecionado.getObservacao();
+        this.historico = chequeSelecionado.getHistorico();
         this.cotacao = chequeSelecionado.getCotacao();
     }
 
@@ -165,12 +165,12 @@ public class ChequeBV implements Serializable {
         this.emitente = emitente;
     }
 
-    public String getObservacao() {
-        return observacao;
+    public String getHistorico() {
+        return historico;
     }
 
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
+    public void setHistorico(String historico) {
+        this.historico = historico;
     }
 
     public Cotacao getCotacao() {
@@ -184,12 +184,12 @@ public class ChequeBV implements Serializable {
     public Cheque construir() throws DadoInvalidoException {
         return new ChequeBuilder().comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(observacao).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(observacao).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).construir();
     }
 }

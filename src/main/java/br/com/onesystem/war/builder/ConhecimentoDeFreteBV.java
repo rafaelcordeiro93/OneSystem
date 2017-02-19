@@ -2,9 +2,11 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.builder.ConhecimentoDeFreteBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,8 +21,10 @@ public class ConhecimentoDeFreteBV implements Serializable {
     private BigDecimal outrasdespesas;
     private Date data;
     private Date emissao;
-    private Moeda moeda;
-    private Conta conta;
+    private Cotacao cotacao;
+
+    public ConhecimentoDeFreteBV() {
+    }
 
     public ConhecimentoDeFreteBV(ConhecimentoDeFrete conhecimentoDeFreteSelecionado) {
         this.id = conhecimentoDeFreteSelecionado.getId();
@@ -30,13 +34,12 @@ public class ConhecimentoDeFreteBV implements Serializable {
         this.outrasdespesas = conhecimentoDeFreteSelecionado.getOutrasdespesas();
         this.data = conhecimentoDeFreteSelecionado.getData();
         this.emissao = conhecimentoDeFreteSelecionado.getEmissao();
-        this.moeda = conhecimentoDeFreteSelecionado.getMoeda();
-        this.conta = conhecimentoDeFreteSelecionado.getConta();
+        this.cotacao = conhecimentoDeFreteSelecionado.getCotacao();
 
     }
 
     public ConhecimentoDeFreteBV(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal outrasdespesas,
-            Date data, Date emissao, Moeda moeda, Conta conta) {
+            Date data, Date emissao, Cotacao cotacao) {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -44,8 +47,7 @@ public class ConhecimentoDeFreteBV implements Serializable {
         this.outrasdespesas = outrasdespesas;
         this.data = data;
         this.emissao = emissao;
-        this.moeda = moeda;
-        this.conta = conta;
+        this.cotacao = cotacao;
 
     }
 
@@ -105,32 +107,23 @@ public class ConhecimentoDeFreteBV implements Serializable {
         this.emissao = emissao;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMoeda(Moeda moeda) {
-        this.moeda = moeda;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-    
-    
-
-    public ConhecimentoDeFreteBV() {
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public ConhecimentoDeFrete construir() throws DadoInvalidoException {
-        return new ConhecimentoDeFrete(null, pessoa, operacao, valorFrete, outrasdespesas, data, emissao, moeda, conta);
+        return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas)
+                .comData(data).comEmissao(emissao).comCotacao(cotacao).construir();
     }
 
     public ConhecimentoDeFrete construirComID() throws DadoInvalidoException {
-        return new ConhecimentoDeFrete(id, pessoa, operacao, valorFrete, outrasdespesas, data, emissao, moeda, conta);
+        return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao).comID(id)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas)
+                .comData(data).comEmissao(emissao).comCotacao(cotacao).construir();
     }
 }

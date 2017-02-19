@@ -383,7 +383,7 @@ public class ParcelaBV implements Serializable {
 
     public BoletoDeCartao construirBoletoDeCartao(NotaEmitida notaEmitida) throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
-                comDias(getDias()).comEmissao(emissao).
+                comVencimento(vencimento).comEmissao(emissao).
                 comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comNotaEmitida(notaEmitida)
                 .construir();
     }
@@ -398,7 +398,7 @@ public class ParcelaBV implements Serializable {
 
     public Titulo construirTitulo(NotaEmitida notaEmitida) throws DadoInvalidoException {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comMoeda(moeda).comHistorico(observacao).
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).
                 comNotaEmitida(notaEmitida).construir();
     }
 

@@ -7,7 +7,7 @@ import br.com.onesystem.domain.Receita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
-import br.com.onesystem.valueobjects.TipoNota;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.List;
 
@@ -20,7 +20,7 @@ public class OperacaoBuilder {
     private Long id;
     private String nome;
     private OperacaoFinanceira operacaoFinanceira;
-    private TipoNota tipoNota;
+    private TipoLancamento tipoNota;
     private TipoOperacao tipoOperacao;
     private Receita vendaAVista;
     private Receita vendaAPrazo;
@@ -48,7 +48,7 @@ public class OperacaoBuilder {
         return this;
     }
 
-    public OperacaoBuilder comTipoNota(TipoNota tipoNota) {
+    public OperacaoBuilder comTipoNota(TipoLancamento tipoNota) {
         this.tipoNota = tipoNota;
         return this;
     }

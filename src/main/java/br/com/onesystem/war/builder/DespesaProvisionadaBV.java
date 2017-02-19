@@ -1,16 +1,18 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
-import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 public class DespesaProvisionadaBV implements Serializable {
 
@@ -22,7 +24,9 @@ public class DespesaProvisionadaBV implements Serializable {
     private Date emissao;
     private String historico;
     private boolean divisaoLucroCambioCaixa;
-    private Moeda moeda;
+    private Cotacao cotacao;
+    private Cambio cambio;
+    private List<Baixa> baixas;
 
     public DespesaProvisionadaBV(DespesaProvisionada despesaProvisionadaSelecionada) {
         this.id = despesaProvisionadaSelecionada.getId();
@@ -33,11 +37,14 @@ public class DespesaProvisionadaBV implements Serializable {
         this.emissao = despesaProvisionadaSelecionada.getEmissao();
         this.historico = despesaProvisionadaSelecionada.getHistorico();
         this.divisaoLucroCambioCaixa = despesaProvisionadaSelecionada.isDivisaoLucroCambioCaixa();
-        this.moeda = despesaProvisionadaSelecionada.getMoeda();
+        this.cotacao = despesaProvisionadaSelecionada.getCotacao();
+        this.cambio = despesaProvisionadaSelecionada.getCambio();
+        this.baixas = despesaProvisionadaSelecionada.getBaixas();
     }
 
     public DespesaProvisionadaBV(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento,
-            Date emissao, String historico, boolean divisaoLucroCambioCaixa, Moeda moeda) {
+            Date emissao, String historico, boolean divisaoLucroCambioCaixa, Cotacao cotacao,
+            Cambio cambio, List<Baixa> baixas) {
         this.id = id;
         this.pessoa = pessoa;
         this.despesa = despesa;
@@ -46,7 +53,9 @@ public class DespesaProvisionadaBV implements Serializable {
         this.emissao = emissao;
         this.historico = historico;
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
-        this.moeda = moeda;
+        this.cotacao = cotacao;
+        this.cambio = cambio;
+        this.baixas = baixas;
     }
 
     public DespesaProvisionadaBV() {
@@ -121,19 +130,40 @@ public class DespesaProvisionadaBV implements Serializable {
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
-    
+
+    public Cambio getCambio() {
+        return cambio;
+    }
+
+    public void setCambio(Cambio cambio) {
+        this.cambio = cambio;
+    }
+
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public void setBaixas(List<Baixa> baixas) {
+        this.baixas = baixas;
+    }
+
     public DespesaProvisionada construir() throws DadoInvalidoException {
-        return new DespesaProvisionada(null, pessoa, despesa, valor, vencimento, historico, null, false, moeda);
+        return new DespesaProvisionadaBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
+                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas)
+                .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
+
     }
 
     public DespesaProvisionada construirComID() throws DadoInvalidoException {
-        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, historico, null, divisaoLucroCambioCaixa, moeda);
+        return new DespesaProvisionadaBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
+                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas)
+                .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
     }
 }

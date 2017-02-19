@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -92,7 +93,7 @@ public class RecebimentoView implements Serializable {
         Titulo titulo = (Titulo) event.getObject();
         baixa.selecionaTitulo(titulo);
         buscarListaDeContas(titulo.getMoeda());
-        baixa.setConta(contaLista.get(0));
+//        baixa.setConta(contaLista.get(0)); Verificar possivel erro de atualização
     }
 
     private void buscarListaDeContas(Moeda moeda) {
@@ -107,7 +108,7 @@ public class RecebimentoView implements Serializable {
         ReceitaProvisionada dp = (ReceitaProvisionada) event.getObject();
         baixaReceitaProvisionada.selecionaReceitaProvisionada(dp);
         buscarListaDeContas(dp.getMoeda());
-        baixaReceitaProvisionada.setConta(contaLista.get(0));
+//        baixaReceitaProvisionada.setConta(contaLista.get(0)); Verificar possivel erro de atualização
     }
 
     public void receber() {
@@ -141,7 +142,7 @@ public class RecebimentoView implements Serializable {
             validaBaixa();
             if (baixa.getId() == null && baixaReceitaProvisionada.getId() == null && baixaReceitaEventual.getId() == null) {
                 validaExistente();
-                Baixa novaBaixa = contruirBaixa(baixa.getTitulo() != null ? baixa : baixaReceitaEventual.getReceita() != null ? baixaReceitaEventual : baixaReceitaProvisionada);
+                Baixa novaBaixa = contruirBaixa(baixa.getPerfilDeValor() instanceof Titulo ? baixa : baixaReceitaEventual.getReceita() != null ? baixaReceitaEventual : baixaReceitaProvisionada);
                 baixaLista.add(novaBaixa);
                 limpaBaixa();
             } else {
@@ -155,18 +156,11 @@ public class RecebimentoView implements Serializable {
     }
 
     private void validaExistente() throws EDadoInvalidoException {
-        if (baixa.getTitulo() != null) {
-            for (Baixa novaBaixa : baixaLista) {
-                if (novaBaixa.getTitulo() != null && novaBaixa.getTitulo().getId().equals(baixa.getTitulo().getId())) {
-                    throw new EDadoInvalidoException("Baixa já consta na lista!");
-                }
+        for (Baixa novaBaixa : baixaLista) {
+            if (novaBaixa.getPerfilDeValor() != null && novaBaixa.getPerfilDeValor().getId().equals(baixa.getPerfilDeValor().getId())) {
+                throw new EDadoInvalidoException("Baixa já consta na lista!");
             }
-        } else if (baixaReceitaProvisionada.getReceitaProvisionada() != null) {
-            for (Baixa novaBaixa : baixaLista) {
-                if (novaBaixa.getReceitaProvisionada() != null && novaBaixa.getReceitaProvisionada().getId().equals(baixa.getReceitaProvisionada().getId())) {
-                    throw new EDadoInvalidoException("Baixa já consta na lista!");
-                }
-            }
+
         }
     }
 
@@ -176,7 +170,7 @@ public class RecebimentoView implements Serializable {
                 && (this.baixaReceitaProvisionada.getHistorico() == null || this.baixaReceitaProvisionada.getHistorico().length() == 0)
                 && (this.baixaReceitaEventual.getHistorico() == null || this.baixaReceitaEventual.getHistorico().length() == 0)) {
             String str;
-            if (baixa.getTitulo() != null) {
+            if (baixa.getPerfilDeValor() instanceof Titulo) {
                 str = " Título";
                 if (this.baixa.getPessoa() != null) {
                     this.baixa.setHistorico("Recebimento de " + str + " para " + this.baixa.getPessoa().getNome());
@@ -189,13 +183,13 @@ public class RecebimentoView implements Serializable {
                 this.baixaReceitaProvisionada.setHistorico("Recebimento de " + str + this.baixaReceitaProvisionada.getPessoa() == null ? " para " + this.baixaReceitaProvisionada.getPessoa().getNome() : "");
             }
         }
-        if (this.baixa.getTitulo() != null && this.baixa.getValor().compareTo(this.baixa.getTitulo().getSaldo()) > 0) {
-                throw new EDadoInvalidoException("O valor deve ser menor que o saldo.");
+        if (baixa.getPerfilDeValor() instanceof Titulo && this.baixa.getValor().compareTo(((Titulo) this.baixa.getPerfilDeValor()).getSaldo()) > 0) {
+            throw new EDadoInvalidoException("O valor deve ser menor que o saldo.");
         }
     }
 
     private void validaRegistroFoiInformado() throws EDadoInvalidoException {
-        if (this.baixa.getTitulo() == null && this.baixaReceitaEventual.getReceita() == null && this.baixaReceitaProvisionada.getReceitaProvisionada() == null) {
+        if (this.baixa.getPerfilDeValor() instanceof Titulo && this.baixaReceitaEventual.getReceita() == null && this.baixa.getPerfilDeValor() instanceof ReceitaProvisionada) {
             throw new EDadoInvalidoException("Selecione um titulo ou uma Receita para receber!");
         }
         if (this.baixa.getValor().compareTo(BigDecimal.ZERO) == 0 && this.baixaReceitaProvisionada.getValor().compareTo(BigDecimal.ZERO) == 0
@@ -207,16 +201,16 @@ public class RecebimentoView implements Serializable {
     private Baixa contruirBaixa(BaixaBV baixa) throws EDadoInvalidoException, DadoInvalidoException {
         baixa.setId(retornarCodigo());
         baixa.setEmissao(data);
-        baixa.setUnidadeFinanceira(OperacaoFinanceira.ENTRADA);
+        baixa.setNaturezaFinanceira(OperacaoFinanceira.ENTRADA);
         Baixa novaBaixa = baixa.construirComID();
         total = total.add(baixa.getValor());
         return novaBaixa;
     }
 
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
-        if (baixa.getTitulo() != null) {
-            baixa.getTitulo().atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<Titulo>(Titulo.class).atualiza(baixa.getTitulo());
+        if (baixa.getPerfilDeValor() instanceof Titulo) {
+            ((Titulo) this.baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
+            new AtualizaDAO<PerfilDeValor>(PerfilDeValor.class).atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }
@@ -230,13 +224,13 @@ public class RecebimentoView implements Serializable {
     }
 
     public void abrirBaixaComDados() {
-        if (baixaSelecionada.getTitulo() != null) {
+        if (baixa.getPerfilDeValor() instanceof Titulo) {
             baixa = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getConta().getMoeda());
+            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
             RequestContext.getCurrentInstance().execute("PF('receberTitulo').show()");
-        } else if (baixaSelecionada.getReceitaProvisionada() != null) {
+        } else if (baixa.getPerfilDeValor() instanceof ReceitaProvisionada) {
             baixaReceitaProvisionada = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getConta().getMoeda());
+            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
             RequestContext.getCurrentInstance().execute("PF('receberReceitaProvisionada').show()");
         } else {
             buscarListaDeContas();
@@ -259,7 +253,7 @@ public class RecebimentoView implements Serializable {
         RequestContext.getCurrentInstance().execute("PF('receitaEventual').show()");
         limpaBaixa();
         buscarListaDeContas();
-        baixaReceitaEventual.setConta(contaLista.get(0));
+//        baixaReceitaEventual.setConta(contaLista.get(0)); Verificar possível erro de atualização
     }
 
     private void limpar() {

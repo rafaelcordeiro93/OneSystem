@@ -13,12 +13,10 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@DiscriminatorValue("PERSONA_FISICA")
+@DiscriminatorValue("PESSOA_FISICA")
 public class PessoaFisica extends Pessoa {
 
     @Column(unique = false)

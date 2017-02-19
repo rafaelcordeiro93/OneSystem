@@ -1,9 +1,10 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
+import br.com.onesystem.domain.builder.ReceitaProvisionadaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -19,7 +20,7 @@ public class ReceitaProvisionadaBV implements Serializable {
     private Date vencimento;
     private Date emissao;
     private String historico;
-    private Moeda moeda;
+    private Cotacao cotacao;
 
     public ReceitaProvisionadaBV(ReceitaProvisionada receitaProvisionadaSelecionada) {
         this.id = receitaProvisionadaSelecionada.getId();
@@ -29,11 +30,11 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.vencimento = receitaProvisionadaSelecionada.getVencimento();
         this.emissao = receitaProvisionadaSelecionada.getEmissao();
         this.historico = receitaProvisionadaSelecionada.getHistorico();
-        this.moeda = receitaProvisionadaSelecionada.getMoeda();
+        this.cotacao = receitaProvisionadaSelecionada.getCotacao();
     }
 
-    public ReceitaProvisionadaBV(Long id, Pessoa pessoa, Receita receita, BigDecimal valor, 
-            Date vencimento, Date emissao, String historico, Moeda moeda) {
+    public ReceitaProvisionadaBV(Long id, Pessoa pessoa, Receita receita, BigDecimal valor,
+            Date vencimento, Date emissao, String historico, Cotacao cotacao) {
         this.id = id;
         this.pessoa = pessoa;
         this.receita = receita;
@@ -41,9 +42,9 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.vencimento = vencimento;
         this.emissao = emissao;
         this.historico = historico;
-        this.moeda = moeda;
+        this.cotacao = cotacao;
     }
-    
+
     public ReceitaProvisionadaBV() {
     }
 
@@ -87,7 +88,7 @@ public class ReceitaProvisionadaBV implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(vencimento);
     }
-    
+
     public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
     }
@@ -108,19 +109,23 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.historico = historico;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
-    
+
     public ReceitaProvisionada construir() throws DadoInvalidoException {
-        return new ReceitaProvisionada(null, pessoa, receita, valor, vencimento, historico, moeda);
+        return new ReceitaProvisionadaBuilder().comPessoa(pessoa).comReceita(receita)
+                .comValor(valor).comVencimento(vencimento).comHistorico(historico)
+                .comCotacao(cotacao).construir();
     }
 
     public ReceitaProvisionada construirComID() throws DadoInvalidoException {
-        return new ReceitaProvisionada(id, pessoa, receita, valor, vencimento, historico, moeda);
+        return new ReceitaProvisionadaBuilder().comId(id).comPessoa(pessoa).comReceita(receita)
+                .comValor(valor).comVencimento(vencimento).comHistorico(historico)
+                .comCotacao(cotacao).construir();
     }
 }

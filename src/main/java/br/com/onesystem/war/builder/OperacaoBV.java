@@ -8,7 +8,7 @@ import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
-import br.com.onesystem.valueobjects.TipoNota;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +18,7 @@ public class OperacaoBV implements Serializable {
     private Long id;
     private String nome;
     private OperacaoFinanceira operacaoFinanceira;
-    private TipoNota tipoNota;
+    private TipoLancamento tipoNota;
     private TipoOperacao tipoOperacao;
     private Receita vendaAVista;
     private Receita vendaAPrazo;
@@ -76,11 +76,11 @@ public class OperacaoBV implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
     }
 
-    public TipoNota getTipoNota() {
+    public TipoLancamento getTipoNota() {
         return tipoNota;
     }
 
-    public void setTipoNota(TipoNota tipoNota) {
+    public void setTipoNota(TipoLancamento tipoNota) {
         this.tipoNota = tipoNota;
     }
 

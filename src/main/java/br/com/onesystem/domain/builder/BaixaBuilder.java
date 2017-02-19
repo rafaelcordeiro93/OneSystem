@@ -8,15 +8,14 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
-import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
-import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -34,21 +33,18 @@ public class BaixaBuilder {
     private Integer numeroParcela;
     private BigDecimal juros = BigDecimal.ZERO;
     private BigDecimal valor = BigDecimal.ZERO;
-    private BigDecimal total = BigDecimal.ZERO;
     private BigDecimal multas = BigDecimal.ZERO;
     private BigDecimal desconto = BigDecimal.ZERO;
     private String historico = "";
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
-    private Conta conta;
-    private DespesaProvisionada despesaProvisionada;
-    private ReceitaProvisionada receitaProvisionada;
+    private Cotacao cotacao;
+    private PerfilDeValor perfilDeValor;
     private Despesa despesa;
     private Receita receita;
     private Pessoa pessoa;
     private Cambio cambio;
     private ConhecimentoDeFrete conhecimentoDeFrete;
-    private Titulo titulo;
     private Transferencia transferencia;
     private Recepcao recepcao;
     private boolean cancelada = false;
@@ -71,11 +67,6 @@ public class BaixaBuilder {
 
     public BaixaBuilder comValor(BigDecimal valor) {
         this.valor = valor;
-        return this;
-    }
-
-    public BaixaBuilder comTotal(BigDecimal total) {
-        this.total = total;
         return this;
     }
 
@@ -104,18 +95,8 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comConta(Conta conta) {
-        this.conta = conta;
-        return this;
-    }
-
-    public BaixaBuilder comDespesaProvisionada(DespesaProvisionada despesaProvisionada) {
-        this.despesaProvisionada = despesaProvisionada;
-        return this;
-    }
-
-    public BaixaBuilder comReceitaProvisionada(ReceitaProvisionada receitaProvisionada) {
-        this.receitaProvisionada = receitaProvisionada;
+    public BaixaBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
         return this;
     }
 
@@ -144,33 +125,33 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comTitulo(Titulo titulo) {
-        this.titulo = titulo;
-        return this;
-    }
-    
     public BaixaBuilder comTransferencia(Transferencia transferencia) {
         this.transferencia = transferencia;
         return this;
     }
-    
+
     public BaixaBuilder comRecepcao(Recepcao recepcao) {
         this.recepcao = recepcao;
         return this;
     }
-    
+
     public BaixaBuilder cancelada(boolean cancelada) {
         this.cancelada = cancelada;
         return this;
     }
-    
+
     public BaixaBuilder comNotaEmitida(NotaEmitida notaEmitida) {
         this.notaEmitida = notaEmitida;
         return this;
     }
-    
-    public Baixa construir() throws DadoInvalidoException{
-        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, conta, receita, cambio, titulo, transferencia, recepcao, despesaProvisionada, receitaProvisionada, notaEmitida);
+
+    public BaixaBuilder comPerfilDeValor(PerfilDeValor perfilDeValor) {
+        this.perfilDeValor = perfilDeValor;
+        return this;
+    }
+
+    public Baixa construir() throws DadoInvalidoException {
+        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, notaEmitida);
     }
 
 }

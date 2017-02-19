@@ -9,7 +9,6 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.exception.impl.IDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
@@ -20,7 +19,6 @@ import br.com.onesystem.war.builder.DespesaProvisionadaBV;
 import br.com.onesystem.war.service.DespesaProvisionadaService;
 import br.com.onesystem.war.service.MoedaService;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -31,7 +29,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
 @ManagedBean
@@ -134,7 +131,9 @@ public class DespesaProvisionadaView implements Serializable {
                                 despesaProvisionada.getEmissao(),
                                 despesaProvisionada.getHistorico(),
                                 false,
-                                despesaProvisionada.getMoeda());
+                                despesaProvisionada.getCotacao(),
+                                null,
+                                null);
                 parcelas.add(dp);
             }
         } catch (NullPointerException npe) {
@@ -185,7 +184,7 @@ public class DespesaProvisionadaView implements Serializable {
 
     public void selecionarMoeda(SelectEvent event) {
         Moeda moeda = (Moeda) event.getObject();
-        despesaProvisionada.setMoeda(moeda);
+//        despesaProvisionada.setMoeda(moeda);
     }
 
     public void abrirEdicaoComDados() {

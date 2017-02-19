@@ -59,7 +59,7 @@ public class Main {
             BigDecimal valor = new BigDecimal(0);
             boolean passou = false;
             for (Baixa b : resultados) {
-                if (moeda.getId().equals(b.getConta().getMoeda().getId())) {
+                if (moeda.getId().equals(b.getCotacao().getConta().getMoeda().getId())) {
                     valor = valor.add(b.getValor());
                     passou = true;
                 }

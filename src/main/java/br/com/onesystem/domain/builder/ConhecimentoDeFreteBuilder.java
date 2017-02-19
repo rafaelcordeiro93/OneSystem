@@ -2,7 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -22,7 +22,7 @@ public class ConhecimentoDeFreteBuilder {
     private BigDecimal outrasdespesas;
     private Date data;
     private Date emissao;
-    private Moeda moeda;
+    private Cotacao cotacao;
     private Conta conta;
 
     public ConhecimentoDeFreteBuilder comID(Long ID) {
@@ -60,18 +60,13 @@ public class ConhecimentoDeFreteBuilder {
         return this;
     }
 
-    public ConhecimentoDeFreteBuilder comMoeda(Moeda moeda) {
-        this.moeda = moeda;
-        return this;
-    }
-
-    public ConhecimentoDeFreteBuilder comConta(Conta conta) {
-        this.conta = conta;
+    public ConhecimentoDeFreteBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
         return this;
     }
 
     public ConhecimentoDeFrete construir() throws DadoInvalidoException {
-        return new ConhecimentoDeFrete(id, pessoa, operacao, valorFrete, outrasdespesas, data, emissao, moeda, conta);
+        return new ConhecimentoDeFrete(id, pessoa, operacao, valorFrete, outrasdespesas, data, emissao, cotacao);
     }
 
 }

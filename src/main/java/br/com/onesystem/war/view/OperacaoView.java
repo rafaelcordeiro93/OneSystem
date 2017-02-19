@@ -17,7 +17,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoNota;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
@@ -165,8 +165,8 @@ public class OperacaoView implements Serializable {
         return Arrays.asList(OperacaoFinanceira.values());
     }
 
-    public List<TipoNota> getTipoNota() {
-        return Arrays.asList(TipoNota.values());
+    public List<TipoLancamento> getTipoNota() {
+        return Arrays.asList(TipoLancamento.values());
     }
 
     public List<TipoOperacao> getTipoDeOperacao() {

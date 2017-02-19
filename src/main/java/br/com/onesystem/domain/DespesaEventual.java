@@ -3,7 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
-import java.io.Serializable;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -13,19 +13,19 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
 @Entity
-@DiscriminatorValue("RECEITA_PROVISIONADA")
-public class ReceitaProvisionada extends PerfilDeValor implements Serializable, RelatorioContaAbertaImpl {
+@DiscriminatorValue("DESPESA_EVENTUAL")
+public class DespesaEventual extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Receita receita;
+    private Despesa despesa;
 
-    public ReceitaProvisionada() {
+    public DespesaEventual() {
     }
 
-    public ReceitaProvisionada(Long id, Pessoa pessoa, Receita receita, BigDecimal valor,
-            Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
-        this.receita = receita;
+    public DespesaEventual(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
+            Cotacao cotacao, List<Baixa> baixa) throws DadoInvalidoException {
+        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixa);
+        this.despesa = despesa;
         ehValido();
     }
 
@@ -34,28 +34,25 @@ public class ReceitaProvisionada extends PerfilDeValor implements Serializable, 
         new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
     }
 
-    public Receita getReceita() {
-        return receita;
+    public Despesa getDespesa() {
+        return despesa;
     }
 
-    @Override
-    public BigDecimal getSaldo() {
-        return getValor();
-    }
-
-    @Override
     public Moeda getMoeda() {
         return getCotacao().getConta().getMoeda();
     }
 
-    @Override
+    public BigDecimal getSaldo() {
+        return getValor();
+    }
+
     public BigDecimal getValorBaixado() {
         return BigDecimal.ZERO;
     }
 
     @Override
     public String getOrigem() {
-        return receita.getNome();
+        return TipoOperacao.AVULSO.getNome();
     }
 
 }

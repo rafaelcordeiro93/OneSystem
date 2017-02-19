@@ -51,7 +51,7 @@ public class ReceitaProvisionadaView implements Serializable {
     private MoedaService serviceMoeda;
 
     private List<Moeda> moedaLista;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -66,11 +66,11 @@ public class ReceitaProvisionadaView implements Serializable {
             ReceitaProvisionada novoRegistro = receitaProvisionada.construir();
             new AdicionaDAO<ReceitaProvisionada>().adiciona(novoRegistro);
             receitaProvisionadaLista.add(novoRegistro);
-            for(ReceitaProvisionadaBV n : parcelas){
+            for (ReceitaProvisionadaBV n : parcelas) {
                 novoRegistro = n.construir();
                 new AdicionaDAO<ReceitaProvisionada>().adiciona(novoRegistro);
                 receitaProvisionadaLista.add(novoRegistro);
-            }            
+            }
             InfoMessage.print("Receita Provisionada agregado con éxito!");
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -130,7 +130,7 @@ public class ReceitaProvisionadaView implements Serializable {
                                 adicionarDiasNa(receitaProvisionada.getVencimento(), count),
                                 receitaProvisionada.getEmissao(),
                                 receitaProvisionada.getHistorico(),
-                                receitaProvisionada.getMoeda());
+                                receitaProvisionada.getCotacao());
                 parcelas.add(dp);
             }
         } catch (NullPointerException npe) {
@@ -196,9 +196,9 @@ public class ReceitaProvisionadaView implements Serializable {
 
     public void selecionarMoeda(SelectEvent event) {
         Moeda moeda = (Moeda) event.getObject();
-        receitaProvisionada.setMoeda(moeda);
+//        receitaProvisionada.setMoeda(moeda);
     }
-    
+
     public ReceitaProvisionadaBV getReceitaProvisionada() {
         return receitaProvisionada;
     }
@@ -280,8 +280,8 @@ public class ReceitaProvisionadaView implements Serializable {
     public void setIntervaloDias(Integer intervaloDias) {
         this.intervaloDias = intervaloDias;
     }
-    
-      public List<Moeda> getMoedaLista() {
+
+    public List<Moeda> getMoedaLista() {
         return moedaLista;
     }
 
@@ -296,6 +296,5 @@ public class ReceitaProvisionadaView implements Serializable {
     public void setServiceMoeda(MoedaService serviceMoeda) {
         this.serviceMoeda = serviceMoeda;
     }
-
 
 }

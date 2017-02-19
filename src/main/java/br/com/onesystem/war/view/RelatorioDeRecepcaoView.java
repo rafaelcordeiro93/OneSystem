@@ -70,7 +70,7 @@ public class RelatorioDeRecepcaoView implements Serializable {
             BigDecimal valorBaixado = new BigDecimal(0);
             boolean passou = false;
             for (Recepcao b : lista) {
-                if (moeda.getId().equals(b.getConta().getMoeda().getId())) {
+                if (moeda.getId().equals(b.getCotacao().getConta().getMoeda().getId())) {
                     valor = valor.add(b.getValor());
                     passou = true;
                 }
