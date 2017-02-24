@@ -5,13 +5,14 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions"
                 xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-       
+
         <div class="ui-g">
-            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
                     <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-usd Fs40" style="color: #848484"/> #{l.Conta}</h3>
@@ -22,37 +23,20 @@
                         <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputNumber id="cidadeid" size="23" value="#{contaView.conta.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{contaView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{contaView.selecionaConta}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputNumberDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.conta.id}" update=":conteudo" />
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{contaView.conta.nome}"  maxlength="60"/>
+                            <p:inputText value="#{contaView.conta.nome}" />
 
                             <p:outputLabel value="#{l.Banco}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="contaBanco" size="23" value="#{contaView.conta.banco.nome}" readonly="true" maxlength="60"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{contaView.selecionarBanco}" process="@this" update="contaBanco" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="bancoId" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.conta.banco.nome}"/>
 
                             <p:outputLabel value="#{l.Moeda}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="contaMoeda" size="23" readonly="true" value="#{contaView.conta.moeda.nome}"/>
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{contaView.selecionarMoeda}" process="@this" update="contaMoeda" />
-                                </p:commandButton>
-                            </h:panelGrid>
- </p:panelGrid>
+                            <a:inputTextDialog id="contaMoeda" dialog="#{selecaoMoedaView}" mbView="#{contaView}" value="#{contaView.conta.moeda.nome}"/>
+                        </p:panelGrid>
 
                         <div class="EmptyBox15"/>
 
@@ -62,12 +46,12 @@
                     <div class="EmptyBox15"/>
                     <div style="padding: 0% 0% 5% 8%">
 
-                    <p:commandButton value="#{l.Adicionar}" action="#{contaView.add()}" styleClass="Mar2"  update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{contaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{contaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{contaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{contaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
-</div>
+                        <p:commandButton value="#{l.Adicionar}" action="#{contaView.add()}" styleClass="Mar2"  update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{contaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{contaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{contaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Desfazer}" action="#{contaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>

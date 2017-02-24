@@ -16,11 +16,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -60,7 +56,7 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
 
     public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
-            String historico, ValoresAVista formaDeRecebimentoOuPagamento, Cotacao cotacao, TipoLancamento tipoLancamento) throws DadoInvalidoException {
+            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento) throws DadoInvalidoException {
         super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
         this.notaEmitida = notaEmitida;
         this.banco = banco;
@@ -72,7 +68,7 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         this.juros = juros;
         this.descontos = descontos;
         this.emitente = emitente;
-        this.valoresAVista = formaDeRecebimentoOuPagamento;
+        this.valoresAVista = valoresAVista;
         this.tipoLancamento = tipoLancamento;
         ehValido();
     }
@@ -81,10 +77,10 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao");
         List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
                 "multas", "juros", "descontos", "emitente");
-        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
+        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
     }
-    
+
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
     }
@@ -94,7 +90,7 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         NumberFormat nf = NumberFormat.getCurrencyInstance(local);
 
         return nf.format(getValor());
-    }   
+    }
 
     public Banco getBanco() {
         return banco;

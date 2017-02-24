@@ -43,7 +43,7 @@ public class ValoresAVista implements Serializable {
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
     @Min(value = 0, message = "{min_cartao}")
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private BoletoDeCartao cartao;
     @Min(value = 0, message = "{min_aFaturar}")
     private BigDecimal aFaturar;
@@ -51,18 +51,14 @@ public class ValoresAVista implements Serializable {
     private NotaEmitida notaEmitida;
     @ManyToOne
     private Moeda moeda;
-    @Max(value = 9999999, message = "{valor_desconto_max}")
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
     private BigDecimal desconto;
-    @Max(value = 9999999, message = "{valor_acrescimo_max}")
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = true)
     private BigDecimal acrescimo;
-    @Max(value = 9999999, message = "{valor_despesa_cobranca_max}")
     @Min(value = 0, message = "{valor_despesa_cobranca_min}")
     private BigDecimal despesaCobranca;
-    @Max(value = 9999999, message = "{valor_frete_max}")
     @Min(value = 0, message = "{valor_frete_min}")
     private BigDecimal frete;
 
@@ -87,6 +83,13 @@ public class ValoresAVista implements Serializable {
         this.cartao = cartao;
         this.cheques = cheques;
         ehValido();
+    }
+    
+     public final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("dinheiro",
+                "credito", "cartao", "aFaturar", "acrescimo", "desconto",
+                "despesaCobranca", "frete");
+        new ValidadorDeCampos<ValoresAVista>().valida(this, campos);
     }
 
     public Long getId() {
@@ -137,13 +140,9 @@ public class ValoresAVista implements Serializable {
         return frete;
     }
 
-
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("dinheiro",
-                "credito", "cartao", "aFaturar", "acrescimo", "desconto",
-                "despesaCobranca", "frete");
-        new ValidadorDeCampos<ValoresAVista>().valida(this, campos);
-    }
+    public void setCheques(List<Cheque> cheques) {
+        this.cheques = cheques;
+    }      
 
     @Override
     public boolean equals(Object objeto) {

@@ -97,7 +97,7 @@ public class BoletoDeCartaoView implements Serializable {
 
     public void selecionaVenda(SelectEvent event) {
         NotaEmitida notaSelecionado = (NotaEmitida) event.getObject();
-        boletoDeCartao.setVenda(notaSelecionado);
+        boletoDeCartao.setNotaEmitida(notaSelecionado);
     }
 
     public void selecionaCartao(SelectEvent event) {

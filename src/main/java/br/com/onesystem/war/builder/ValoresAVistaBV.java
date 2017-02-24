@@ -10,7 +10,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,10 +29,10 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
     private BigDecimal credito;
-    private BoletoDeCartaoBV boletoDeCartao = new BoletoDeCartaoBV();
+    private BoletoDeCartao boletoDeCartao;
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
-    private List<Cheque> cheques = new ArrayList<Cheque>();
+    private List<Cheque> cheques;
 
     public ValoresAVistaBV(Moeda moeda) {
         this.moeda = moeda;
@@ -100,11 +99,11 @@ public class ValoresAVistaBV implements Serializable {
         this.credito = credito;
     }
 
-    public BoletoDeCartaoBV getBoletoDeCartao() {
+    public BoletoDeCartao getBoletoDeCartao() {
         return boletoDeCartao;
     }
 
-    public void setBoletoDeCartao(BoletoDeCartaoBV boletoDeCartao) {
+    public void setBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
     }
 
@@ -163,16 +162,16 @@ public class ValoresAVistaBV implements Serializable {
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-
+    
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir()).comCredito(credito).comDinheiro(dinheiro)
+        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }
 
     public ValoresAVista construirComID() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir())
+        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao)
                 .comCheques(cheques).comCredito(credito).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comMoeda(moeda)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)

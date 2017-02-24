@@ -13,17 +13,17 @@ import java.util.Date;
 public class BoletoDeCartaoBV implements Serializable {
     
     private Long id;
-    private NotaEmitida venda;
+    private NotaEmitida notaEmitida;
     private Cartao cartao;
-    private Date emissao = new Date();
+    private Date emissao;
     private Date vencimento;
-    private BigDecimal valor = BigDecimal.ZERO;
+    private BigDecimal valor;
     private String codigoTransacao;
     private SituacaoDeCartao situacao;
     
     public BoletoDeCartaoBV(BoletoDeCartao boletoDeCartaoSelecionada) {
         this.id = boletoDeCartaoSelecionada.getId();
-        this.venda = boletoDeCartaoSelecionada.getNotaEmitida();
+        this.notaEmitida = boletoDeCartaoSelecionada.getNotaEmitida();
         this.cartao = boletoDeCartaoSelecionada.getCartao();
         this.emissao = boletoDeCartaoSelecionada.getEmissao();
         this.vencimento = boletoDeCartaoSelecionada.getVencimento();
@@ -43,12 +43,12 @@ public class BoletoDeCartaoBV implements Serializable {
         this.id = id;
     }
     
-    public NotaEmitida getVenda() {
-        return venda;
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
     }
     
-    public void setVenda(NotaEmitida venda) {
-        this.venda = venda;
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
     }
     
     public Cartao getCartao() {
@@ -100,10 +100,10 @@ public class BoletoDeCartaoBV implements Serializable {
     }
     
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
+        return new BoletoDeCartaoBuilder().comNotaEmitida(notaEmitida).comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
     
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).comNotaEmitida(venda).comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
+        return new BoletoDeCartaoBuilder().comID(id).comNotaEmitida(notaEmitida).comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
 }

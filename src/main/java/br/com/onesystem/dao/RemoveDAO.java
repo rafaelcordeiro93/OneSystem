@@ -9,6 +9,7 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -26,7 +27,7 @@ public class RemoveDAO<T> {
         this.classe = classe;
     }
 
-    public void remove(T t, Long id) throws PersistenceException, DadoInvalidoException{
+    public void remove(T t, Long id) throws PersistenceException, DadoInvalidoException {
 
         try {
 
@@ -46,9 +47,9 @@ public class RemoveDAO<T> {
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
+                throw new FDadoInvalidoException(getMessage(cve));
             }
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new FDadoInvalidoException("<RemoveDAO> Erro de Remoção: " + ex.getMessage());
         } finally {
             // fecha a entity manager
@@ -58,15 +59,10 @@ public class RemoveDAO<T> {
     }
 
     private String getMessage(ConstraintViolationException cve) {
-        String mensagemFormatada = String.valueOf(cve.getCause())
-                .replaceFirst("\\(", "")
-                .replaceFirst("\\)", "")
-                .replaceAll("\\(", "\\'")
-                .replaceAll("\\)", "\\'")
-                .replaceAll("\\=", " com valor ")
-                .replaceAll("referenciada", "referenciado");
-        mensagemFormatada = mensagemFormatada.substring(mensagemFormatada.indexOf(" ainda"), mensagemFormatada.length());
-        return mensagemFormatada;
+        String msg = String.valueOf(cve.getCause());
+        msg = msg.substring(msg.lastIndexOf("on table") + 8, msg.lastIndexOf("Detalhe:"));
+
+        return new BundleUtil().getMessage("registro_referenciado_na_tabela") + msg;
     }
 
     private String getConstraint(ConstraintViolationException cve) {

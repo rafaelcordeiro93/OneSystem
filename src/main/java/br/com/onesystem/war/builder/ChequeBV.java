@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -30,6 +31,7 @@ public class ChequeBV implements Serializable {
     private String emitente;
     private String historico;
     private Cotacao cotacao;
+    private ValoresAVista valoresAVista;
 
     public ChequeBV(Cheque chequeSelecionado) {
         this.id = chequeSelecionado.getId();
@@ -48,6 +50,7 @@ public class ChequeBV implements Serializable {
         this.emitente = chequeSelecionado.getEmitente();
         this.historico = chequeSelecionado.getHistorico();
         this.cotacao = chequeSelecionado.getCotacao();
+        this.valoresAVista = chequeSelecionado.getValoresAVista();
     }
 
     public ChequeBV() {
@@ -181,15 +184,25 @@ public class ChequeBV implements Serializable {
         this.cotacao = cotacao;
     }
 
+    public ValoresAVista getValoresAVista() {
+        return valoresAVista;
+    }
+
+    public void setValoresAVista(ValoresAVista valoresAVista) {
+        this.valoresAVista = valoresAVista;
+    }
+    
     public Cheque construir() throws DadoInvalidoException {
         return new ChequeBuilder().comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico)
+                .comValoresAVista(valoresAVista).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
-                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).construir();
+                .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico)
+                .comValoresAVista(valoresAVista).construir();
     }
 }

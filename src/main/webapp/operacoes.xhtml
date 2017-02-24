@@ -8,17 +8,21 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">                                 
-                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                    <div class="EmptyBox30"/>
-                    <div class="ui-fluid">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Operacao}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
                                 <p:inputNumber id="operacao" size="26" value="#{operacaoView.operacao.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
                                     <p:ajax event="blur" listener="#{operacaoView.buscaPorId}" update=":conteudo"/>
                                 </p:inputNumber>
@@ -42,6 +46,12 @@
                                 </f:selectItems>
                             </p:selectOneMenu>
 
+                            <p:outputLabel value="#{l.Tipo_Contabil}"/>
+                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.operacao.contabilizarCMV}">
+                                <f:selectItems value="#{operacaoView.tipoContabil}" itemLabel="#{TipoContabil}" itemValue="#{TipoContabil}" >
+                                </f:selectItems>
+                            </p:selectOneMenu>
+
                             <p:outputLabel value="#{l.Tipo_Operacao}"/>
                             <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.operacao.tipoOperacao}" >
                                 <f:selectItems value="#{operacaoView.tipoDeOperacao}" var="tipoDeOperacao" itemLabel="#{tipoDeOperacao.nome}" itemValue="#{tipoDeOperacao}" >
@@ -49,7 +59,7 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Receita_AVista}"/>
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
                                 <p:inputText id="ReceitaAVista" size="26" readonly="true" value="#{operacaoView.operacao.vendaAVista.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaAVista}" process="@this" update="ReceitaAVista" />
@@ -57,7 +67,7 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Receita_APrazo}"/>
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
                                 <p:inputText id="ReceitaAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.vendaAPrazo.nome}"/>
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaAPrazo}" process="@this" update="ReceitaAPrazo" />
@@ -65,7 +75,7 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Servico_AVista}"/>
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
                                 <p:inputText id="ServicoAVista" size="26" readonly="true" value="#{operacaoView.operacao.servicoAVista.nome}"/>
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaServicoAVista}" process="@this" update="ServicoAVista" />
@@ -73,7 +83,7 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Servico_APrazo}"/>
-                            <h:panelGrid columns="2">
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
                                 <p:inputText id="ServicoAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.servicoAPrazo.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaServicoAPrazo}" process="@this" update="ServicoAPrazo" />
@@ -81,7 +91,7 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Receita_Frete}"/>
-                            <h:panelGrid columns="2" >
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="ReceitaFrete" size="26" readonly="true" value="#{operacaoView.operacao.receitaFrete.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaFrete}" process="@this" update="ReceitaFrete" />
@@ -89,21 +99,15 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Despesa_CMV}"/>
-                            <h:panelGrid columns="2" >
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="DespesaCMV" size="26" readonly="true" value="#{operacaoView.operacao.despesaCMV.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaDespesaCMV}" process="@this" update="DespesaCMV" />
                                 </p:commandButton>
                             </h:panelGrid>
 
-                            <p:outputLabel value="#{l.Tipo_Contabil}"/>
-                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.operacao.contabilizarCMV}">
-                                <f:selectItems value="#{operacaoView.tipoContabil}" itemLabel="#{TipoContabil}" itemValue="#{TipoContabil}" >
-                                </f:selectItems>
-                            </p:selectOneMenu>
-
                             <p:outputLabel value="#{l.Compra_AVista}"/>
-                            <h:panelGrid columns="2" >
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="CompraAVista" size="26" readonly="true" value="#{operacaoView.operacao.compraAVista.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAVista}" process="@this" update="CompraAVista" />
@@ -111,7 +115,7 @@
                             </h:panelGrid>
 
                             <p:outputLabel value="#{l.Compra_APrazo}"/>
-                            <h:panelGrid columns="2" >
+                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="CompraAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.compraAPrazo.nome}" />
                                 <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAPrazo}" process="@this" update="CompraAPrazo" />
@@ -124,15 +128,16 @@
                     <div class="EmptyBox20"/>
 
                     <p:separator/>
-                    
+
                     <div class="EmptyBox15"/>
 
-                    <p:commandButton value="#{l.Adicionar}" action="#{operacaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{operacaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{operacaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{operacaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{operacaoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
-
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{operacaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{operacaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{operacaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{operacaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Desfazer}" action="#{operacaoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>

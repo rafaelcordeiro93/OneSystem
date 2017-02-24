@@ -14,11 +14,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -31,7 +27,6 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     @ManyToOne
     private Cartao cartao;
     @CharacterType(value = CaseType.DIGIT, message = "cod_transacao_somente_numeros")
-    @NotNull(message = "{cod_transacao_not_null}")
     private String codigoTransacao;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{tipo_situacao_not_null}")
@@ -52,10 +47,10 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("emissao", "valor");
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
-        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
+        List<String> campos = Arrays.asList("valor", "emissao");
+        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
     }
 
     public NotaEmitida getNotaEmitida() {

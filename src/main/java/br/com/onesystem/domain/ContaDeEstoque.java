@@ -33,7 +33,7 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "contaDeEstoque")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "contaDeEstoque")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public ContaDeEstoque() {

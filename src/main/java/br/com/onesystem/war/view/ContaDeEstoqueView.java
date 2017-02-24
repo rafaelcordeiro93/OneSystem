@@ -13,6 +13,7 @@ import br.com.onesystem.war.builder.ContaDeEstoqueBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -24,9 +25,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.persistence.PersistenceException;
-import org.hibernate.Hibernate;
 import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.internal.util.SerializationHelper;
 import org.primefaces.event.SelectEvent;
 
 @ManagedBean
@@ -69,20 +68,24 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
 
     public void update() {
         try {
-            ContaDeEstoque contaDeEstoqueExistente = contaDeEstoque.construirComID();
             if (contaDeEstoqueSelecionada != null) {
+                ContaDeEstoque contaDeEstoqueExistente = contaDeEstoque.construirComID();
                 if (!validaContaDeEstoqueExistente(contaDeEstoqueExistente)) {
 
-                    atualizaOperacaoDeEstoque(contaDeEstoqueExistente);
+                    atualizaOperacaoDeEstoque(contaDeEstoqueExistente); // Atualiza Operacoes na lista
+                    List<OperacaoDeEstoque> deletados = buscaOperacoesDeletadas(contaDeEstoqueExistente); // Busca operacoes deletadas
+
                     new AtualizaDAO<ContaDeEstoque>(ContaDeEstoque.class).atualiza(contaDeEstoqueExistente);
-                    deletaOperacoesDeEstoque(contaDeEstoqueExistente); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
+
+                    deletaOperacoes(deletados); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
+
                     InfoMessage.atualizado();
                     limparJanela();
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("contaDeEstoque_ja_registrada"));
                 }
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -90,6 +93,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
     }
 
     private void atualizaOperacaoDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws DadoInvalidoException {
+
         List<OperacaoDeEstoqueBV> listaOperacao = new ArrayList<>();
         for (OperacaoDeEstoqueBV cl : listaOperacoesDeEstoqueBV) {
             OperacaoDeEstoqueBV operacaoDeEstoqueBV = new OperacaoDeEstoqueBV(cl);
@@ -102,32 +106,41 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
                 contaDeEstoqueExistente.getOperacaoDeEstoque().set(contaDeEstoqueExistente.getOperacaoDeEstoque().indexOf(o.construirComID()),
                         o.construirComID());
             } catch (ArrayIndexOutOfBoundsException aiob) {
-                contaDeEstoqueExistente.getOperacaoDeEstoque().add(o.construirComID());
-                continue;
+                contaDeEstoqueExistente.getOperacaoDeEstoque().add(o.construir());
             }
         }
     }
 
-    private void deletaOperacoesDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws PersistenceException, DadoInvalidoException {
-        List<OperacaoDeEstoque> listaOperacao = new ArrayList<>();
-        List<Long> listaOperacoesId = new ArrayList<>();
-
-        for (OperacaoDeEstoqueBV cl : listaOperacoesDeEstoqueBV) {
-            OperacaoDeEstoqueBV operacaoDeEstoqueBV = new OperacaoDeEstoqueBV(cl);
-            listaOperacao.add(operacaoDeEstoqueBV.construir());
+    private void deletaOperacoes(List<OperacaoDeEstoque> deletados) throws PersistenceException, DadoInvalidoException {
+        // Deleta a operação
+        for (OperacaoDeEstoque od : deletados) {
+            new RemoveDAO<OperacaoDeEstoque>(OperacaoDeEstoque.class).remove(od, od.getId());
         }
+    }
 
-        for (OperacaoDeEstoque op : listaOperacao) {
-            listaOperacoesId.add(op.getOperacoes().getId());
-        }
+    private List<OperacaoDeEstoque> buscaOperacoesDeletadas(ContaDeEstoque contaDeEstoqueExistente) throws PersistenceException, DadoInvalidoException {
+        List<OperacaoDeEstoque> deletados = new ArrayList<>();
 
+        // Busca Operações deletadas e adiciona na lista de deletados.
         for (OperacaoDeEstoque o : contaDeEstoqueExistente.getOperacaoDeEstoque()) {
-            if (!listaOperacoesId.contains(o.getOperacoes().getId())) {
-                contaDeEstoqueExistente.getOperacaoDeEstoque().remove(o);
-                new RemoveDAO<OperacaoDeEstoque>(OperacaoDeEstoque.class).remove(o, o.getId());
+            if (!listaOperacoesDeEstoqueBV.isEmpty()) {
+                if (o.getId() != null) {
+                    boolean encontrou = false;
+                    for (OperacaoDeEstoqueBV op : listaOperacoesDeEstoqueBV) {
+                        if (o.getId().equals(op.getId())) {
+                            encontrou = true;
+                            break;
+                        }
+                    }
+                    if (!encontrou) {
+                        deletados.add(o);
+                    }
+                }
+            } else {
+                deletados.add(o);
             }
         }
-
+        return deletados;
     }
 
     public void delete() {
@@ -198,16 +211,39 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
 
     public void addOperacoesNaLista() {
         try {
-            validaOperacaoDeEstoqueExistente(false);
-            operacaoDeEstoque.setId(retornarCodigo());
-            if(contaDeEstoqueSelecionada != null){
-                operacaoDeEstoque.setContaDeEstoque(contaDeEstoqueSelecionada);
+            if (operacaoDeEstoque.getOperacao() != null) {
+                validaOperacaoDeEstoqueExistente(false);
+                operacaoDeEstoque.setId(retornarCodigo());
+                if (contaDeEstoqueSelecionada != null) {
+                    operacaoDeEstoque.setContaDeEstoque(contaDeEstoqueSelecionada);
+                }
+
+                listaOperacoesDeEstoqueBV.add(operacaoDeEstoque);
+                limparOperacao();
             }
-            
-            listaOperacoesDeEstoqueBV.add(operacaoDeEstoque);
-            limparOperacao();
         } catch (DadoInvalidoException ex) {
             ex.print();
+        }
+    }
+
+    public void updateOperacoesNaLista() {
+        try {
+            if (operacaoDeEstoqueSelecionado != null) {
+
+                validaOperacaoDeEstoqueExistente(true);
+                listaOperacoesDeEstoqueBV.set(listaOperacoesDeEstoqueBV.indexOf(operacaoDeEstoqueSelecionado),
+                        operacaoDeEstoque);
+                limparOperacao();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void deleteOperacoesNaLista() throws DadoInvalidoException {
+        if (operacaoDeEstoqueSelecionado != null) {
+            listaOperacoesDeEstoqueBV.remove(operacaoDeEstoqueSelecionado);
+            limparOperacao();
         }
     }
 
@@ -235,27 +271,6 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque> implements S
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));
             }
 
-        }
-    }
-
-    public void updateOperacoesNaLista() {
-        try {
-            if (operacaoDeEstoqueSelecionado != null) {
-
-                validaOperacaoDeEstoqueExistente(true);
-                listaOperacoesDeEstoqueBV.set(listaOperacoesDeEstoqueBV.indexOf(operacaoDeEstoqueSelecionado),
-                        operacaoDeEstoque);
-                limparOperacao();
-            }
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
-    }
-
-    public void deleteOperacoesNaLista() throws DadoInvalidoException {
-        if (operacaoDeEstoqueSelecionado != null) {
-            listaOperacoesDeEstoqueBV.remove(operacaoDeEstoqueSelecionado);
-            limparOperacao();
         }
     }
 

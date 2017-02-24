@@ -24,18 +24,12 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
-        Pagamento p = new Banco("Tinta Azul", "HSBC");
+        String msg = "org.postgresql.util.PSQLException: ERROR: update or delete on table \"contadeestoque\" violates foreign key constraint \"fk_k6mib7gvwprj9rtqyffml5dct\" on table \"configuracaoestoque\"";
+
+        System.out.println("msg : " + msg.lastIndexOf("on table"));
+        System.out.println("msg 2: " + msg.length());
         
-        Banco b = (Banco) p;
-        b.getBanco();
-        b.getNome();
-
-        System.out.println("Pagamento: " + p);
-
-        if (p instanceof Banco) {
-            System.out.println("Pagamento no Banco: " + (Banco) p);
-        }
-
+        System.out.println("subs: " + msg.substring(msg.lastIndexOf("on table")+8, msg.length()));
     }
 
 }

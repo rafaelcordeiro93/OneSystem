@@ -55,12 +55,12 @@ public class Estoque implements Serializable {
     public Estoque() {
     }
 
-    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito,
+    public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemEmitido itemEmitido, AjusteDeEstoque ajusteDeEstoque,
             OperacaoDeEstoque operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
-        this.quantidade = saldo;
+        this.quantidade = quantidade;
         this.deposito = deposito;
         this.operacaoDeEstoque = operacaoDeEstoque;
         this.emissao = emissao;
