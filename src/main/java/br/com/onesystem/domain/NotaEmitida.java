@@ -52,7 +52,7 @@ public class NotaEmitida implements Serializable {
     @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private ValoresAVista valoresAVista;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Baixa> baixas;
+    private List<Baixa> baixaDinheiro;
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
     private boolean cancelada;
@@ -118,8 +118,8 @@ public class NotaEmitida implements Serializable {
         return valoresAVista;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
+    public List<Baixa> getBaixaDinheiro() {
+        return baixaDinheiro;
     }
 
     public Date getEmissao() {
@@ -154,8 +154,8 @@ public class NotaEmitida implements Serializable {
         this.titulos = titulos;
     }
 
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
+    public void setBaixaDinheiro(List<Baixa> baixaDinheiro) {
+        this.baixaDinheiro = baixaDinheiro;
     }
 
     @Override
@@ -175,7 +175,7 @@ public class NotaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", titulos=" + titulos + ", listaDePreco=" + listaDePreco + '}';
+        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", formaDeRecebimento=" + formaDeRecebimento + ", listaDePreco=" + listaDePreco + ", valoresAVista=" + valoresAVista + ", baixaDinheiro=" + baixaDinheiro + ", emissao=" + emissao + ", cancelada=" + cancelada + ", credito=" + credito + ", cheques=" + cheques + ", cartoes=" + cartoes + ", titulos=" + titulos + '}';
     }
 
 }

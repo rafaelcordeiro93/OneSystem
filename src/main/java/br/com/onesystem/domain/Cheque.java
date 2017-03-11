@@ -132,6 +132,10 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         return valoresAVista;
     }
 
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+
     @Override
     public String toString() {
         return "Cheque{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", valor=" + valor

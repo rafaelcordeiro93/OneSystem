@@ -21,7 +21,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
@@ -44,13 +43,13 @@ public class ValoresAVista implements Serializable {
     private List<Cheque> cheques;
     @Min(value = 0, message = "{min_cartao}")
     @OneToOne(cascade = CascadeType.ALL)
-    private BoletoDeCartao cartao;
+    private BoletoDeCartao boletoDeCartao;
     @Min(value = 0, message = "{min_aFaturar}")
     private BigDecimal aFaturar;
     @OneToOne
     private NotaEmitida notaEmitida;
     @ManyToOne
-    private Moeda moeda;
+    private Cotacao cotacao;
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
     private BigDecimal desconto;
@@ -67,7 +66,7 @@ public class ValoresAVista implements Serializable {
 
     public ValoresAVista(Long id,
             BigDecimal dinheiro, BigDecimal credito, BoletoDeCartao cartao,
-            BigDecimal aFaturar, NotaEmitida notaEmitida, Moeda moeda, BigDecimal desconto,
+            BigDecimal aFaturar, NotaEmitida notaEmitida, Cotacao cotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
             List<Cheque> cheques) throws DadoInvalidoException {
         this.id = id;
@@ -75,17 +74,17 @@ public class ValoresAVista implements Serializable {
         this.credito = credito;
         this.aFaturar = aFaturar;
         this.notaEmitida = notaEmitida;
-        this.moeda = moeda;
+        this.cotacao = cotacao;
         this.desconto = desconto;
         this.acrescimo = acrescimo;
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
-        this.cartao = cartao;
+        this.boletoDeCartao = cartao;
         this.cheques = cheques;
         ehValido();
     }
-    
-     public final void ehValido() throws DadoInvalidoException {
+
+    public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("dinheiro",
                 "credito", "cartao", "aFaturar", "acrescimo", "desconto",
                 "despesaCobranca", "frete");
@@ -104,8 +103,8 @@ public class ValoresAVista implements Serializable {
         return credito;
     }
 
-    public BoletoDeCartao getCartao() {
-        return cartao;
+    public BoletoDeCartao getBoletoCartao() {
+        return boletoDeCartao;
     }
 
     public BigDecimal getaFaturar() {
@@ -116,8 +115,8 @@ public class ValoresAVista implements Serializable {
         return notaEmitida;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
     public BigDecimal getDesconto() {
@@ -142,7 +141,11 @@ public class ValoresAVista implements Serializable {
 
     public void setCheques(List<Cheque> cheques) {
         this.cheques = cheques;
-    }      
+    }
+
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
 
     @Override
     public boolean equals(Object objeto) {
@@ -157,6 +160,11 @@ public class ValoresAVista implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", credito=" + credito + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + notaEmitida + ", cotacao=" + cotacao + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

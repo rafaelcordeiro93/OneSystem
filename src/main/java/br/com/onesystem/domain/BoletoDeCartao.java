@@ -69,6 +69,10 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
         return situacao;
     }
 
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+    
     @Override
     public String toString() {
         return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';

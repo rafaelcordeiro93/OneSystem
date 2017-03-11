@@ -402,7 +402,7 @@
 
             <div class="EmptyBox5"/>
 
-            <p:commandButton value="#{l.Confirmar}" onclick="PF('cotacaoVal').hide()"/>
+            <p:commandButton value="#{l.Confirmar}" onclick="PF('cotacaoVal').hide()" action="#{notaEmitidaView.geraBaixaDeCotacoes()}"/>
             <p:commandButton value="#{l.Cancelar}" onclick="PF('cotacaoVal').hide()"/>
 
         </p:dialog>

@@ -142,6 +142,10 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
         return notaEmitida;
     }
 
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
@@ -151,4 +155,9 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
         return numeroFormatado.format(getSaldo());
     }
 
+    @Override
+    public String toString() {
+        return "Titulo{" + "saldo=" + saldo + ", unidadeFinanceira=" + unidadeFinanceira + ", recepcao=" + recepcao + ", cambio=" + cambio + ", notaEmitida=" + notaEmitida + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + conhecimentoDeFrete + '}';
+    }
+    
 }

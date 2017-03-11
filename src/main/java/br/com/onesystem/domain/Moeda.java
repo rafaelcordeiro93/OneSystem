@@ -46,9 +46,7 @@ public class Moeda implements Serializable {
     private List<ContratoDeCambio> listaCambioOrigem;
     @OneToMany(mappedBy = "destino")
     private List<ContratoDeCambio> listaCambioDestino;
-    @OneToMany(mappedBy = "moeda")
-    private List<ValoresAVista> formasDeRecebimentoOuPagamento;
-
+   
     public Moeda() {
     }
 

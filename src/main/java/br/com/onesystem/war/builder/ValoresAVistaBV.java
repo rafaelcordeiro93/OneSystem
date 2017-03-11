@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.Moeda;
@@ -19,7 +20,7 @@ import java.util.List;
 public class ValoresAVistaBV implements Serializable {
 
     private Long id;
-    private Moeda moeda;
+    private Cotacao cotacao;
     private Integer parcelas;
     private BigDecimal dinheiro;
     private BigDecimal acrescimo;
@@ -34,8 +35,8 @@ public class ValoresAVistaBV implements Serializable {
     private NotaEmitida notaEmitida;
     private List<Cheque> cheques;
 
-    public ValoresAVistaBV(Moeda moeda) {
-        this.moeda = moeda;
+    public ValoresAVistaBV(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public Long getId() {
@@ -62,12 +63,12 @@ public class ValoresAVistaBV implements Serializable {
         this.id = id;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public Integer getParcelas() {
@@ -83,8 +84,8 @@ public class ValoresAVistaBV implements Serializable {
     }
 
     public String getDinheiroFormatado() {
-        NumberFormat nf = NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal());
-        return moeda != null && dinheiro.compareTo(BigDecimal.ZERO) > 0 ? nf.format(dinheiro) : nf.format(BigDecimal.ZERO);
+        NumberFormat nf = NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal());
+        return cotacao != null && dinheiro.compareTo(BigDecimal.ZERO) > 0 ? nf.format(dinheiro) : nf.format(BigDecimal.ZERO);
     }
 
     public void setDinheiro(BigDecimal dinheiro) {
@@ -165,7 +166,7 @@ public class ValoresAVistaBV implements Serializable {
     
     public ValoresAVista construir() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comCredito(credito).comDinheiro(dinheiro)
-                .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)
+                .comNotaEmitida(notaEmitida).comCotacao(cotacao).comCheques(cheques)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }
@@ -173,7 +174,7 @@ public class ValoresAVistaBV implements Serializable {
     public ValoresAVista construirComID() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao)
                 .comCheques(cheques).comCredito(credito).comDinheiro(dinheiro)
-                .comNotaEmitida(notaEmitida).comMoeda(moeda)
+                .comNotaEmitida(notaEmitida).comCotacao(cotacao)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }

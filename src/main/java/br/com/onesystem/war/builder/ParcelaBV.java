@@ -381,25 +381,25 @@ public class ParcelaBV implements Serializable {
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
     }
 
-    public BoletoDeCartao construirBoletoDeCartao(NotaEmitida notaEmitida) throws DadoInvalidoException {
+    public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
                 comVencimento(vencimento).comEmissao(emissao).
-                comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comNotaEmitida(notaEmitida)
+                comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor)
                 .construir();
     }
 
-    public Cheque construirCheque(NotaEmitida notaEmitida) throws DadoInvalidoException {
+    public Cheque construirCheque() throws DadoInvalidoException {
         return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).
                 comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
-                .comNotaEmitida(notaEmitida).construir();
+                .construir();
     }
 
-    public Titulo construirTitulo(NotaEmitida notaEmitida) throws DadoInvalidoException {
+    public Titulo construirTitulo() throws DadoInvalidoException {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).
-                comNotaEmitida(notaEmitida).construir();
+                construir();
     }
 
     public boolean equals(Object objeto) {

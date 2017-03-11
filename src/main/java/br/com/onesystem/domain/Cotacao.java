@@ -41,6 +41,8 @@ public class Cotacao implements Serializable {
     private List<Recepcao> recepcoes;
     @OneToMany(mappedBy = "cotacao")
     private List<ConhecimentoDeFrete> conhecimentoDeFretes;
+    @OneToMany(mappedBy = "cotacao")
+    private List<ValoresAVista> valoresAVista;
 
 
     public Cotacao() {

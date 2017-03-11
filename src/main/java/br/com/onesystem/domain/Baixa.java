@@ -166,19 +166,6 @@ public class Baixa implements Serializable, Movimento {
         return this.id.equals(outro.id);
     }
 
-    public String toString() {
-        return "BaixaTitulo"
-                + " - Código: " + id
-                + " - NumeroParcela: " + numeroParcela
-                + " - Cancelada: " + cancelada
-                + " - Juros: " + juros
-                + " - ValorPagRec: " + valor
-                + " - Multas: " + multas
-                + " - Desconto: " + desconto
-                + " - DataBaixa: " + emissao
-                + " - Historico: " + historico;
-    }
-
     public BigDecimal getDesconto() {
         return desconto;
     }
@@ -424,6 +411,10 @@ public class Baixa implements Serializable, Movimento {
         return multas;
     }
 
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+    
     @Override
     public Date getUltimoPagamento() {
         return emissao;
@@ -488,4 +479,9 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Baixa{" + "id=" + id + ", numeroParcela=" + numeroParcela + ", juros=" + juros + ", valor=" + valor + ", total=" + total + ", multas=" + multas + ", desconto=" + desconto + ", historico=" + historico + ", emissao=" + emissao + ", naturezaFinanceira=" + naturezaFinanceira + ", cotacao=" + cotacao + ", perfilDeValor=" + perfilDeValor + ", despesa=" + despesa + ", receita=" + receita + ", pessoa=" + pessoa + ", cambio=" + cambio + ", conhecimentoDeFrete=" + conhecimentoDeFrete + ", transferencia=" + transferencia + ", recepcao=" + recepcao + ", notaEmitida=" + notaEmitida + ", cancelada=" + cancelada + '}';
+    }
+    
 }
