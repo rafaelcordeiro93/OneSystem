@@ -2,35 +2,39 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ContaDAO;
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConfiguracaoCambio;
-import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.FormaPagamentoRecebimento;
 import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.services.Movimento;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
+import br.com.onesystem.war.builder.ChequeBV;
+import br.com.onesystem.war.builder.DespesaEventualBV;
+import br.com.onesystem.war.builder.DespesaProvisionadaBV;
+import br.com.onesystem.war.builder.TituloBV;
 import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -44,6 +48,21 @@ import org.primefaces.event.SelectEvent;
 public class PagamentoView implements Serializable {
 
     private Date data = new Date();
+    private TituloBV titulo;
+    private DespesaEventualBV despesaEventual;
+    private DespesaProvisionadaBV despesaProvisionada;
+    private PerfilDeValor perfilDeValorSelecionado;
+    private List<PerfilDeValor> listaPerfilDeValor;
+    private List<Cotacao> listaCotacao;
+    
+    private ChequeBV chequeEmitido;
+    private ChequeBV chequeTerceiro;
+    private TituloBV debitoCC;
+    private FormaPagamentoRecebimento formaPagamentoRecebimentoSelecionado;
+    private List<FormaPagamentoRecebimento> listaFormaPagamentoRecebimento;
+    
+    
+
     private BaixaBV baixa;
     private BaixaBV baixaDespesaEventual;
     private BaixaBV baixaDespesaProvisionada;
@@ -52,7 +71,6 @@ public class PagamentoView implements Serializable {
     private BigDecimal total;
     private Pessoa pessoa;
     private ConfiguracaoCambio confCambio;
-    private List<Conta> contaLista;
 
     @ManagedProperty("#{configuracaoCambioService}")
     private ConfiguracaoCambioService serviceConfCambio;
@@ -81,37 +99,50 @@ public class PagamentoView implements Serializable {
 
     public void selecionaPessoaEventual(SelectEvent event) {
         Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-        this.baixaDespesaEventual.setPessoa(pessoaSelecionada);
+        this.despesaEventual.setPessoa(pessoaSelecionada);
     }
 
-    public void selecionaDespesa(SelectEvent event) {
+    public void selecionaDespesaEventual(SelectEvent event) throws DadoInvalidoException {
         Despesa despesaSelecionada = (Despesa) event.getObject();
-        this.baixaDespesaEventual.setDespesa(despesaSelecionada);
-    }
+        this.despesaEventual.setDespesa(despesaSelecionada);
 
+    }
+    
+    
+    public void selecionaChequeEmitido(SelectEvent event) throws DadoInvalidoException {
+        Cheque c = (Cheque) event.getObject();
+        this.chequeEmitido = new ChequeBV(c);
+    }
+    
+    public void selecionaChequeTerceiro(SelectEvent event) throws DadoInvalidoException {
+        Cheque c = (Cheque) event.getObject();
+        this.chequeTerceiro = new ChequeBV(c);
+    }
+    
     public void selecionaTitulo(SelectEvent event) {
-        Titulo titulo = (Titulo) event.getObject();
-        baixa.selecionaTitulo(titulo);
-        buscarListaDeContas(titulo.getMoeda());
+        Titulo t = (Titulo) event.getObject();
+        this.titulo = new TituloBV(t);
+
 //        baixa.setConta(contaLista.get(0));
     }
 
-    private void buscarListaDeContas(Moeda moeda) {
-        contaLista = new ContaDAO().buscarContaW().ePorMoeda(moeda).listaDeResultados();
-    }
-
-    private void buscarListaDeContas() {
-        contaLista = new ContaDAO().buscarContaW().listaDeResultados();
+    public List<Cotacao> buscarListaDeCotacao() {
+        listaCotacao = new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
+        return listaCotacao;
     }
 
     public void selecionaDespesaProvisionada(SelectEvent event) {
         DespesaProvisionada dp = (DespesaProvisionada) event.getObject();
-        baixaDespesaProvisionada.selecionaDespesaProvisionada(dp);
-        buscarListaDeContas(dp.getMoeda());
+        despesaProvisionada = new DespesaProvisionadaBV(dp);
 //        baixaDespesaProvisionada.setConta(contaLista.get(0));
     }
 
     public void pagar() {
+       // Movimento movimento ; movimento.getperfildevalor
+       // if cartao {adicionadao cartao}
+       
+        
+        
         try {
             for (Baixa novaBaixa : baixaLista) {
                 new AdicionaDAO<Baixa>().adiciona(new BaixaBV(novaBaixa).construir());
@@ -145,35 +176,45 @@ public class PagamentoView implements Serializable {
         if (baixaSelecionada != null) {
             total = total.subtract(baixaSelecionada.getValor());
             baixaLista.remove(baixaSelecionada);
-            limpaBaixa();
+            limpaDialogos();
             InfoMessage.print("Registro Removido!");
         } else {
             ErrorMessage.print("Selecione um registro para remover!");
         }
     }
 
-    public void confirmar() {
+    public void addTituloNaLista() {
         try {
-            validaBaixa();
-            if (baixa.getId() == null && baixaDespesaProvisionada.getId() == null && baixaDespesaEventual.getId() == null) {
-                validaExistente();
-                Baixa novaBaixa = contruirBaixa(baixa.getPerfilDeValor() instanceof Titulo ? baixa : baixaDespesaEventual.getDespesa() != null ? baixaDespesaEventual : baixaDespesaProvisionada);
-                baixaLista.add(novaBaixa);
-                limpaBaixa();
-            } else {
-                Baixa atualizaBaixa = (baixa.getId() != null ? baixa.construirComID() : baixaDespesaEventual.getId() != null ? baixaDespesaEventual.construirComID() : baixaDespesaProvisionada.construirComID());
-                baixaLista.set(baixaLista.indexOf(baixaSelecionada), atualizaBaixa);
-                limpaBaixa();
-            }
+            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
+            listaPerfilDeValor.add(titulo.construirComID());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void addDespesaProvisonadaNaLista() {
+        try {
+            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
+            listaPerfilDeValor.add(titulo.construirComID());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void addDespesaEventualNaLista() {
+        try {
+            //retornar codigo
+            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
+            listaPerfilDeValor.add(despesaEventual.construirComID());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
 
     private void validaExistente() throws EDadoInvalidoException {
-        for (Baixa novaBaixa : baixaLista) {
-            if (novaBaixa.getPerfilDeValor() != null && novaBaixa.getPerfilDeValor().getId().equals(baixa.getPerfilDeValor().getId())) {
-                throw new EDadoInvalidoException("Baixa já consta na lista!");
+        for (PerfilDeValor novo : listaPerfilDeValor) {
+            if (novo != null && novo.getId().equals(titulo.getId())) {
+                throw new EDadoInvalidoException("Titulo já consta na lista!");
             }
 
         }
@@ -232,60 +273,75 @@ public class PagamentoView implements Serializable {
         return baixa;
     }
 
-    private void limpaBaixa() {
-        baixa = new BaixaBV();
-        baixaSelecionada = null;
-        contaLista = new ArrayList<Conta>();
-        baixaDespesaProvisionada = new BaixaBV();
-        baixaDespesaEventual = new BaixaBV();
+    private void limpaDialogos() {
+        perfilDeValorSelecionado = null;
+        // listaPerfilDeValor = new ArrayList<>();
+        titulo = new TituloBV();
+        despesaProvisionada = new DespesaProvisionadaBV();
+        despesaEventual = new DespesaEventualBV();
     }
 
-    public void abrirBaixaComDados() {
-        if (this.baixa.getPerfilDeValor() instanceof Titulo) {
-            baixa = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-        } else if (this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
-            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
-            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
+//    public void abrirBaixaComDados() {
+//        if (this.baixa.getPerfilDeValor() instanceof Titulo) {
+//            baixa = new BaixaBV(baixaSelecionada);
+//            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
+//            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
+//        } else if (this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
+//            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
+//            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
+//            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
+//        } else {
+//            buscarListaDeContas();
+//            baixaDespesaEventual = new BaixaBV(baixaSelecionada);
+//            RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
+//        }
+//    }
+    public void abrirPerfilDeValorComDados() {
+        if (this.perfilDeValorSelecionado instanceof Titulo) {
+//            baixa = new BaixaBV(baixaSelecionada);
+//            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
+//            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
+        } else if (this.perfilDeValorSelecionado instanceof DespesaProvisionada) {
+//            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
+//            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
+//            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
         } else {
-            buscarListaDeContas();
-            baixaDespesaEventual = new BaixaBV(baixaSelecionada);
-            RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
+//            buscarListaDeContas();
+//            baixaDespesaEventual = new BaixaBV(baixaSelecionada);
+//            RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
         }
     }
 
     public void abrirTitulo() {
         RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-        limpaBaixa();
+        limpaDialogos();
     }
 
     public void abrirDespesaProvisionada() {
         RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
-        limpaBaixa();
+        limpaDialogos();
     }
 
     public void abrirDespesaEventual() {
         RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
-        limpaBaixa();
-        buscarListaDeContas();
+        limpaDialogos();
+
 //        baixaDespesaEventual.setConta(contaLista.get(0)); Verificar possivel erro de atualização
     }
 
     public void abrirChequeEmitido() {
         RequestContext.getCurrentInstance().execute("PF('chequeEmitido').show()");
-        limpaBaixa();
+        limpaDialogos();
     }
 
     public void abrirChequeTerceiro() {
         RequestContext.getCurrentInstance().execute("PF('chequeTerceiro').show()");
-        limpaBaixa();
+        limpaDialogos();
     }
 
     public void abrirDebitoCC() {
         RequestContext.getCurrentInstance().execute("PF('debitoCC').show()");
-        limpaBaixa();
+        limpaDialogos();
     }
 
     private void limpar() {
@@ -296,6 +352,13 @@ public class PagamentoView implements Serializable {
         baixaLista = new ArrayList<Baixa>();
         baixaSelecionada = null;
         total = BigDecimal.ZERO;
+
+        titulo = new TituloBV();
+        despesaEventual = new DespesaEventualBV();
+        despesaProvisionada = new DespesaProvisionadaBV();
+        listaPerfilDeValor = new ArrayList<>();
+        perfilDeValorSelecionado = null;
+
     }
 
     private Long retornarCodigo() {
@@ -387,12 +450,12 @@ public class PagamentoView implements Serializable {
         this.serviceConfCambio = serviceConfCambio;
     }
 
-    public List<Conta> getContaLista() {
-        return contaLista;
+    public List<Cotacao> getListaCotacao() {
+        return listaCotacao;
     }
 
-    public void setContaLista(List<Conta> contaLista) {
-        this.contaLista = contaLista;
+    public void setListaCotacao(List<Cotacao> listaCotacao) {
+        this.listaCotacao = listaCotacao;
     }
 
     public ContaService getServiceConta() {
@@ -410,5 +473,82 @@ public class PagamentoView implements Serializable {
     public void setBaixaDespesaEventual(BaixaBV baixaDespesaEventual) {
         this.baixaDespesaEventual = baixaDespesaEventual;
     }
+
+    public TituloBV getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(TituloBV titulo) {
+        this.titulo = titulo;
+    }
+
+    public DespesaEventualBV getDespesaEventual() {
+        return despesaEventual;
+    }
+
+    public void setDespesaEventual(DespesaEventualBV despesaEventual) {
+        this.despesaEventual = despesaEventual;
+    }
+
+    public DespesaProvisionadaBV getDespesaProvisionada() {
+        return despesaProvisionada;
+    }
+
+    public void setDespesaProvisionada(DespesaProvisionadaBV despesaProvisionada) {
+        this.despesaProvisionada = despesaProvisionada;
+    }
+
+    public List<PerfilDeValor> getListaPerfilDeValor() {
+        return listaPerfilDeValor;
+    }
+
+    public void setListaPerfilDeValor(List<PerfilDeValor> listaPerfilDeValor) {
+        this.listaPerfilDeValor = listaPerfilDeValor;
+    }
+
+    public PerfilDeValor getPerfilDeValorSelecionado() {
+        return perfilDeValorSelecionado;
+    }
+
+    public void setPerfilDeValorSelecionado(PerfilDeValor perfilDeValorSelecionado) {
+        this.perfilDeValorSelecionado = perfilDeValorSelecionado;
+    }
+
+    public FormaPagamentoRecebimento getFormaPagamentoRecebimentoSelecionado() {
+        return formaPagamentoRecebimentoSelecionado;
+    }
+
+    public void setFormaPagamentoRecebimentoSelecionado(FormaPagamentoRecebimento formaPagamentoRecebimentoSelecionado) {
+        this.formaPagamentoRecebimentoSelecionado = formaPagamentoRecebimentoSelecionado;
+    }
+
+    public List<FormaPagamentoRecebimento> getListaFormaPagamentoRecebimento() {
+        return listaFormaPagamentoRecebimento;
+    }
+
+    public void setListaFormaPagamentoRecebimento(List<FormaPagamentoRecebimento> listaFormaPagamentoRecebimento) {
+        this.listaFormaPagamentoRecebimento = listaFormaPagamentoRecebimento;
+    }
+
+    public ChequeBV getChequeEmitido() {
+        return chequeEmitido;
+    }
+
+    public void setChequeEmitido(ChequeBV chequeEmitido) {
+        this.chequeEmitido = chequeEmitido;
+    }
+
+    public ChequeBV getChequeTerceiro() {
+        return chequeTerceiro;
+    }
+
+    public void setChequeTerceiro(ChequeBV chequeTerceiro) {
+        this.chequeTerceiro = chequeTerceiro;
+    }
+
+   
+    
+    
+    
 
 }

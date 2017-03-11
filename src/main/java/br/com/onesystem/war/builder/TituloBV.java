@@ -171,6 +171,10 @@ public class TituloBV implements Serializable {
         return cotacao;
     }
 
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
+    }
+
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
     }
@@ -192,7 +196,7 @@ public class TituloBV implements Serializable {
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNotaEmitida(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .construir();      
+                .construir();
     }
 
     public Titulo construirComID() throws DadoInvalidoException {
@@ -200,6 +204,6 @@ public class TituloBV implements Serializable {
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNotaEmitida(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .construir();     
+                .construir();
     }
 }

@@ -3,15 +3,15 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ChequeDAO;
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -20,6 +20,7 @@ import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +36,7 @@ public class ChequeView implements Serializable {
     private ChequeBV cheque;
     private Cheque chequeSelecionada;
     private Configuracao configuracao;
+    private List<Cotacao> listaCotacao;
 
     @ManagedProperty("#{configuracaoService}")
     private ConfiguracaoService serviceConfigurcao;
@@ -135,6 +137,11 @@ public class ChequeView implements Serializable {
         return Arrays.asList(SituacaoDeCheque.values());
     }
 
+    public List<Cotacao> buscarListaDeCotacao() {
+        listaCotacao = new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
+        return listaCotacao;
+    }
+
     public void limparJanela() {
         cheque = new ChequeBV();
         chequeSelecionada = null;
@@ -177,5 +184,15 @@ public class ChequeView implements Serializable {
     public void setServiceConfigurcao(ConfiguracaoService serviceConfigurcao) {
         this.serviceConfigurcao = serviceConfigurcao;
     }
+
+    public List<Cotacao> getListaCotacao() {
+        return listaCotacao;
+    }
+
+    public void setListaCotacao(List<Cotacao> listaCotacao) {
+        this.listaCotacao = listaCotacao;
+    }
+    
+    
 
 }

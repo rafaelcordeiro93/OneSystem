@@ -26,7 +26,7 @@ public class CotacaoConverter implements Converter {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                CotacaoService service = (CotacaoService) fc.getExternalContext().getApplicationMap().get("cotacaoService");
+                CotacaoService service = new CotacaoService();
                 List<Cotacao> lista = service.buscarCotacoes();
                 for (Cotacao conta : lista) {
                     if (conta.getId().equals(new Long(value))) {
