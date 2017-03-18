@@ -482,23 +482,23 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     }
 }
 
-.BrownButton .ui-button-text {
-    background-color: #6D4C41;
-    border-color: #6D4C41 !important;
-}
-.BrownButton.ui-state-hover .ui-button-text,
-.BrownButton.ui-state-focus .ui-button-text {
-    background-color: #8D6E63 !important;
-    border-color: #8D6E63 !important;
-}
+body .ui-button.brown-btn {
+    background-color: #6D4C41; }
+body .ui-button.brown-btn.ui-state-hover {
+    background-color: #8D6E63; }
+body .ui-button.brown-btn.ui-state-focus {
+    background-color: #8D6E63; }
+body .ui-button.brown-btn.ui-state-active {
+    background-color: #6D4C41; }
+body .ui-button.red-btn {
+    background-color: #E53935; }
+body .ui-button.red-btn.ui-state-hover {
+    background-color: #EA5753; }
+body .ui-button.red-btn.ui-state-focus {
+    background-color: #EA5753; }
+body .ui-button.red-btn.ui-state-active {
+    background-color: #6D4C41; }
 
-.red-btn .ui-button-text {
-    background-color: #E53935;
-}
-.red-btn.ui-state-hover .ui-button-text,
-.red-btn.ui-state-focus .ui-button-text {
-    background-color: #EA5753 !important;
-}
 
 /* shadow for elements*/
 .shadows {

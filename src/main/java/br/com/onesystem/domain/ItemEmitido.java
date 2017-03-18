@@ -48,7 +48,7 @@ public class ItemEmitido implements Serializable {
     @ManyToOne
     private NotaEmitida notaEmitida;
     @OneToMany(mappedBy = "itemEmitido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Estoque> estoque;
+    private List<Estoque> estoques;
 
     public ItemEmitido() {
     }
@@ -58,7 +58,7 @@ public class ItemEmitido implements Serializable {
         this.item = item;
         this.notaEmitida = notaEmitida;
         this.unitario = valorUnitario;
-        this.estoque = estoques;
+        this.estoques = estoques;
         ehValido();
     }
 
@@ -80,7 +80,7 @@ public class ItemEmitido implements Serializable {
 
     public BigDecimal getQuantidade() {
         BigDecimal quantidade = BigDecimal.ZERO;
-        for (Estoque e : estoque) {
+        for (Estoque e : estoques) {
             quantidade = quantidade.add(e.getQuantidade());
         }
         return quantidade;
@@ -90,8 +90,12 @@ public class ItemEmitido implements Serializable {
         return getQuantidade().multiply(unitario);
     }
 
-    public List<Estoque> getEstoque() {
-        return estoque;
+    public List<Estoque> getEstoques() {
+        return estoques;
+    }
+
+    public void setEstoques(List<Estoque> estoques) {
+        this.estoques = estoques;
     }
 
     public void preparaInclusao(NotaEmitida notaEmitida) {
@@ -123,7 +127,7 @@ public class ItemEmitido implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + (item == null ? null : item.getId()) + ", valorUnitario=" + unitario + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", estoques=" + estoques + '}';
     }
 
 }

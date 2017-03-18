@@ -55,12 +55,12 @@ public class Estoque implements Serializable {
     public Estoque() {
     }
 
-    public Estoque(Long id, Item item, BigDecimal saldo, Deposito deposito,
+    public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemEmitido itemEmitido, AjusteDeEstoque ajusteDeEstoque,
             OperacaoDeEstoque operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
-        this.quantidade = saldo;
+        this.quantidade = quantidade;
         this.deposito = deposito;
         this.operacaoDeEstoque = operacaoDeEstoque;
         this.emissao = emissao;
@@ -94,9 +94,10 @@ public class Estoque implements Serializable {
         return emissao;
     }
 
-    public void preparaInclusaoDe(ItemEmitido itemEmitido) {
+    public void preparaInclusaoDe(ItemEmitido itemEmitido, Date emissao) {
         if (this.itemEmitido == null) {
             this.id = null;
+            this.emissao = emissao;
             this.itemEmitido = itemEmitido;
         }
     }
@@ -130,6 +131,12 @@ public class Estoque implements Serializable {
 
     @Override
     public String toString() {
-        return "Estoque{" + "id=" + id + ", item=" + item + ", deposito=" + deposito + ", saldo=" + quantidade + ", emissao=" + emissao + '}';
+        return "Estoque{" + "id=" + id + ", item=" + (item != null ? item.getId() : null)
+                + ", deposito=" + (deposito != null ? deposito.getId() : null)
+                + ", quantidade=" + quantidade + ", emissao=" + emissao
+                + ", operacaoDeEstoque=" + (operacaoDeEstoque != null ? operacaoDeEstoque.getId() : null) + ", itemEmitido="
+                + (itemEmitido != null ? itemEmitido.getId() : null)
+                + ", ajusteDeEstoque=" + (ajusteDeEstoque != null ? ajusteDeEstoque.getId() : null) + '}';
     }
+
 }

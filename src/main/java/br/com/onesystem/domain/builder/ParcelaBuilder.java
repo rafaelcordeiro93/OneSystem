@@ -18,6 +18,7 @@ import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.ParcelaBV;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -54,12 +55,13 @@ public class ParcelaBuilder {
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
     private Integer dias;
     private Cotacao cotacao;
+    private TipoLancamento tipoLancamento;
 
     public ParcelaBuilder comID(Long ID) {
         this.id = ID;
         return this;
     }
-        
+
     public ParcelaBuilder comValor(BigDecimal valor) {
         this.valor = valor;
         return this;
@@ -175,6 +177,11 @@ public class ParcelaBuilder {
         return this;
     }
 
+    public ParcelaBuilder comTipoLancamento(TipoLancamento tipoLancamento) {
+        this.tipoLancamento = tipoLancamento;
+        return this;
+    }
+
     public ParcelaBuilder comCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
         return this;
@@ -186,7 +193,7 @@ public class ParcelaBuilder {
     }
 
     public ParcelaBV construir() {
-        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao);
+        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento);
     }
 
 }

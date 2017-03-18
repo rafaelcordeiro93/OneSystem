@@ -32,7 +32,7 @@ public class ChequeBuilder {
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
-    private ValoresAVista formaDeRecebimentoOuPagamento;
+    private ValoresAVista valoresAVista;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
 
@@ -121,13 +121,13 @@ public class ChequeBuilder {
         return this;
     }
 
-    public ChequeBuilder comFormaDeRecebimentoOuPagamento(ValoresAVista formaDeRecebimentoOuPagamento) {
-        this.formaDeRecebimentoOuPagamento = formaDeRecebimentoOuPagamento;
+    public ChequeBuilder comValoresAVista(ValoresAVista valoresAVista) {
+        this.valoresAVista = valoresAVista;
         return this;
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, formaDeRecebimentoOuPagamento, cotacao, tipoLancamento);
+        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, observacao, valoresAVista, cotacao, tipoLancamento);
     }
 
 }

@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.Moeda;
@@ -10,7 +11,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
 public class ValoresAVistaBV implements Serializable {
 
     private Long id;
-    private Moeda moeda;
+    private Cotacao cotacao;
     private Integer parcelas;
     private BigDecimal dinheiro;
     private BigDecimal acrescimo;
@@ -29,14 +29,13 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal porcentagemDesconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
-    private BigDecimal credito;
-    private BoletoDeCartaoBV boletoDeCartao = new BoletoDeCartaoBV();
+    private BoletoDeCartao boletoDeCartao;
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
-    private List<Cheque> cheques = new ArrayList<Cheque>();
+    private List<Cheque> cheques;
 
-    public ValoresAVistaBV(Moeda moeda) {
-        this.moeda = moeda;
+    public ValoresAVistaBV(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public Long getId() {
@@ -63,12 +62,12 @@ public class ValoresAVistaBV implements Serializable {
         this.id = id;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public void setMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public void setCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
     }
 
     public Integer getParcelas() {
@@ -84,27 +83,19 @@ public class ValoresAVistaBV implements Serializable {
     }
 
     public String getDinheiroFormatado() {
-        NumberFormat nf = NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal());
-        return moeda != null && dinheiro.compareTo(BigDecimal.ZERO) > 0 ? nf.format(dinheiro) : nf.format(BigDecimal.ZERO);
+        NumberFormat nf = NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal());
+        return cotacao != null && dinheiro.compareTo(BigDecimal.ZERO) > 0 ? nf.format(dinheiro) : nf.format(BigDecimal.ZERO);
     }
 
     public void setDinheiro(BigDecimal dinheiro) {
         this.dinheiro = dinheiro;
     }
 
-    public BigDecimal getCredito() {
-        return credito;
-    }
-
-    public void setCredito(BigDecimal credito) {
-        this.credito = credito;
-    }
-
-    public BoletoDeCartaoBV getBoletoDeCartao() {
+    public BoletoDeCartao getBoletoDeCartao() {
         return boletoDeCartao;
     }
 
-    public void setBoletoDeCartao(BoletoDeCartaoBV boletoDeCartao) {
+    public void setBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
     }
 
@@ -163,18 +154,18 @@ public class ValoresAVistaBV implements Serializable {
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-
+    
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir()).comCredito(credito).comDinheiro(dinheiro)
-                .comNotaEmitida(notaEmitida).comMoeda(moeda).comCheques(cheques)
+        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comDinheiro(dinheiro)
+                .comNotaEmitida(notaEmitida).comCotacao(cotacao).comCheques(cheques)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }
 
     public ValoresAVista construirComID() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao.construir())
-                .comCheques(cheques).comCredito(credito).comDinheiro(dinheiro)
-                .comNotaEmitida(notaEmitida).comMoeda(moeda)
+        return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao)
+                .comCheques(cheques).comDinheiro(dinheiro)
+                .comNotaEmitida(notaEmitida).comCotacao(cotacao)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
     }

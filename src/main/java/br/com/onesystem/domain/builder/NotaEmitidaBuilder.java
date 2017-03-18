@@ -6,6 +6,9 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.ItemEmitido;
@@ -35,6 +38,9 @@ public class NotaEmitidaBuilder {
     private boolean cancelada = false;
     private List<Baixa> baixas;
     private FormaDeRecebimento formaDeRecebimento;
+    private Credito credito;
+    private List<Cheque> cheques;
+    private List<BoletoDeCartao> boletoDeCartao;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -91,8 +97,23 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
+    public NotaEmitidaBuilder comCredito(Credito credito) {
+        this.credito = credito;
+        return this;
+    }
+
+    public NotaEmitidaBuilder comCheque(List<Cheque> cheques) {
+        this.cheques = cheques;
+        return this;
+    }
+
+    public NotaEmitidaBuilder comBoletoDeCartao(List<BoletoDeCartao> boletoDeCartao) {
+        this.boletoDeCartao = boletoDeCartao;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, listaDePreco, valoresAVista, emissao, cancelada, formaDeRecebimento);
+        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, cheques, boletoDeCartao, titulos);
     }
 
 }

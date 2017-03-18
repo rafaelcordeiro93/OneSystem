@@ -29,6 +29,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -45,22 +46,28 @@ public class Baixa implements Serializable, Movimento {
     @GeneratedValue(generator = "SEQ_BAIXA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @Min(value = 0, message = "{minimo_parcela_min}")
     @Column(nullable = true)
     private Integer numeroParcela;
 
-    @Column(nullable = false)
+    @Min(value = 0, message = "{valor_juros_min}")
+    @Column(nullable = true)
     private BigDecimal juros = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Min(value = 0, message = "{valor_min}")
+    @Column(nullable = true)
     private BigDecimal valor = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Min(value = 0, message = "{valorTotal_min}")
+    @Column(nullable = true)
     private BigDecimal total = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Min(value = 0, message = "{valor_multa_min}")
+    @Column(nullable = true)
     private BigDecimal multas = BigDecimal.ZERO;
 
-    @Column(nullable = false)
+    @Min(value = 0, message = "{valorDesconto_min}")
+    @Column(nullable = true)
     private BigDecimal desconto = BigDecimal.ZERO;
 
     @Length(min = 0, max = 255, message = "{historico_length}")
@@ -164,19 +171,6 @@ public class Baixa implements Serializable, Movimento {
             return false;
         }
         return this.id.equals(outro.id);
-    }
-
-    public String toString() {
-        return "BaixaTitulo"
-                + " - Código: " + id
-                + " - NumeroParcela: " + numeroParcela
-                + " - Cancelada: " + cancelada
-                + " - Juros: " + juros
-                + " - ValorPagRec: " + valor
-                + " - Multas: " + multas
-                + " - Desconto: " + desconto
-                + " - DataBaixa: " + emissao
-                + " - Historico: " + historico;
     }
 
     public BigDecimal getDesconto() {
@@ -390,7 +384,7 @@ public class Baixa implements Serializable, Movimento {
     public PerfilDeValor getPerfilDeValor() {
         return perfilDeValor;
     }
-    
+
     public Pessoa getPessoa() {
         return pessoa;
     }
@@ -422,6 +416,10 @@ public class Baixa implements Serializable, Movimento {
 
     public BigDecimal getMultas() {
         return multas;
+    }
+
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
     }
 
     @Override
@@ -486,6 +484,23 @@ public class Baixa implements Serializable, Movimento {
         } else {
             return getValor();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Baixa{" + "id=" + id + ", numeroParcela=" + numeroParcela
+                + ", juros=" + juros + ", valor=" + valor + ", total=" + total
+                + ", multas=" + multas + ", desconto=" + desconto + ", historico="
+                + historico + ", emissao=" + emissao + ", naturezaFinanceira="
+                + naturezaFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
+                + ", perfilDeValor=" + (perfilDeValor != null ? perfilDeValor.getId() : null)
+                + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
+                + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
+                + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="
+                + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null)
+                + ", transferencia=" + (transferencia != null ? transferencia.getId() : null)
+                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", notaEmitida="
+                + (notaEmitida != null ? notaEmitida.getId() : null) + ", cancelada=" + cancelada + '}';
     }
 
 }

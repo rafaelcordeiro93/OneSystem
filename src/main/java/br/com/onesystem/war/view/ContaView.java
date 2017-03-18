@@ -13,6 +13,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ContaBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -22,7 +23,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class ContaView implements Serializable {
+public class ContaView extends BasicMBImpl<Conta> implements Serializable {
 
     private ContaBV conta;
     private Conta contaSelecionada;
@@ -74,12 +75,23 @@ public class ContaView implements Serializable {
         }
     }
 
-    public void selecionaConta(SelectEvent e) {
-        Conta c = (Conta) e.getObject();
-        conta = new ContaBV(c);
-        contaSelecionada = c;
+    @Override
+    public void selecionar(SelectEvent e) {
+        Object obj = e.getObject();
+        if (obj instanceof Conta) {
+            Conta c = (Conta) e.getObject();
+            conta = new ContaBV(c);
+            contaSelecionada = c;
+        } else if (obj instanceof Banco) {
+            Banco banco = (Banco) obj;
+            conta.setBanco(banco);
+        } else if (obj instanceof Moeda) {
+            Moeda moeda = (Moeda) obj;
+            conta.setMoeda(moeda);
+        }
     }
 
+    @Override
     public void buscaPorId() {
         Long id = conta.getId();
         if (id != null) {
@@ -99,16 +111,6 @@ public class ContaView implements Serializable {
     public void limparJanela() {
         conta = new ContaBV();
         contaSelecionada = null;
-    }
-
-    public void selecionarBanco(SelectEvent event) {
-        Banco banco = (Banco) event.getObject();
-        conta.setBanco(banco);
-    }
-
-    public void selecionarMoeda(SelectEvent event) {
-        Moeda moeda = (Moeda) event.getObject();
-        conta.setMoeda(moeda);
     }
 
     public void desfazer() {

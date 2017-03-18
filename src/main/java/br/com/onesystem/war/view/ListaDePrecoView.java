@@ -11,6 +11,7 @@ import br.com.onesystem.war.service.ListaDePrecoService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.war.builder.ListaDePrecoBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -22,7 +23,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class ListaDePrecoView implements Serializable {
+public class ListaDePrecoView extends BasicMBImpl<ListaDePreco> implements Serializable {
 
     private ListaDePrecoBV listaDePreco;
     private ListaDePreco listaDePrecoSelecionada;
@@ -83,6 +84,7 @@ public class ListaDePrecoView implements Serializable {
         }
     }
 
+    @Override
     public void buscaPorId() {
         Long id = listaDePreco.getId();
         if (id != null) {
@@ -99,7 +101,8 @@ public class ListaDePrecoView implements Serializable {
         }
     }
 
-    public void selecionaListaDePreco(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         ListaDePreco c = (ListaDePreco) e.getObject();
         listaDePreco = new ListaDePrecoBV(c);
         listaDePrecoSelecionada = c;

@@ -21,7 +21,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 /**
@@ -38,31 +37,24 @@ public class ValoresAVista implements Serializable {
     private Long id;
     @Min(value = 0, message = "{min_dinheiro}")
     private BigDecimal dinheiro;
-    @Min(value = 0, message = "{min_credito}")
-    private BigDecimal credito;
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
-    @Min(value = 0, message = "{min_cartao}")
-    @OneToOne
-    private BoletoDeCartao cartao;
+    @OneToOne(cascade = CascadeType.ALL)
+    private BoletoDeCartao boletoDeCartao;
     @Min(value = 0, message = "{min_aFaturar}")
     private BigDecimal aFaturar;
     @OneToOne
     private NotaEmitida notaEmitida;
     @ManyToOne
-    private Moeda moeda;
-    @Max(value = 9999999, message = "{valor_desconto_max}")
+    private Cotacao cotacao;
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
     private BigDecimal desconto;
-    @Max(value = 9999999, message = "{valor_acrescimo_max}")
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = true)
     private BigDecimal acrescimo;
-    @Max(value = 9999999, message = "{valor_despesa_cobranca_max}")
     @Min(value = 0, message = "{valor_despesa_cobranca_min}")
     private BigDecimal despesaCobranca;
-    @Max(value = 9999999, message = "{valor_frete_max}")
     @Min(value = 0, message = "{valor_frete_min}")
     private BigDecimal frete;
 
@@ -70,23 +62,29 @@ public class ValoresAVista implements Serializable {
     }
 
     public ValoresAVista(Long id,
-            BigDecimal dinheiro, BigDecimal credito, BoletoDeCartao cartao,
-            BigDecimal aFaturar, NotaEmitida notaEmitida, Moeda moeda, BigDecimal desconto,
+            BigDecimal dinheiro, BoletoDeCartao boletoDeCartao,
+            BigDecimal aFaturar, NotaEmitida notaEmitida, Cotacao cotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
             List<Cheque> cheques) throws DadoInvalidoException {
         this.id = id;
         this.dinheiro = dinheiro;
-        this.credito = credito;
         this.aFaturar = aFaturar;
         this.notaEmitida = notaEmitida;
-        this.moeda = moeda;
+        this.cotacao = cotacao;
         this.desconto = desconto;
         this.acrescimo = acrescimo;
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
-        this.cartao = cartao;
+        this.boletoDeCartao = boletoDeCartao;
         this.cheques = cheques;
         ehValido();
+    }
+
+    public final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("dinheiro",
+                "aFaturar", "acrescimo", "desconto",
+                "despesaCobranca", "frete");
+        new ValidadorDeCampos<ValoresAVista>().valida(this, campos);
     }
 
     public Long getId() {
@@ -97,12 +95,8 @@ public class ValoresAVista implements Serializable {
         return dinheiro;
     }
 
-    public BigDecimal getCredito() {
-        return credito;
-    }
-
-    public BoletoDeCartao getCartao() {
-        return cartao;
+    public BoletoDeCartao getBoletoCartao() {
+        return boletoDeCartao;
     }
 
     public BigDecimal getaFaturar() {
@@ -113,8 +107,8 @@ public class ValoresAVista implements Serializable {
         return notaEmitida;
     }
 
-    public Moeda getMoeda() {
-        return moeda;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
     public BigDecimal getDesconto() {
@@ -137,12 +131,12 @@ public class ValoresAVista implements Serializable {
         return frete;
     }
 
+    public void setCheques(List<Cheque> cheques) {
+        this.cheques = cheques;
+    }
 
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("dinheiro",
-                "credito", "cartao", "aFaturar", "acrescimo", "desconto",
-                "despesaCobranca", "frete");
-        new ValidadorDeCampos<ValoresAVista>().valida(this, campos);
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
     }
 
     @Override
@@ -158,6 +152,11 @@ public class ValoresAVista implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

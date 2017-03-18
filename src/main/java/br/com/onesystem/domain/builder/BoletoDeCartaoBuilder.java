@@ -56,11 +56,6 @@ public class BoletoDeCartaoBuilder {
     }
 
     public BoletoDeCartaoBuilder comVencimento(Date vencimento) {
-        this.emissao = vencimento;
-        return this;
-    }
-
-    public BoletoDeCartaoBuilder comDias(Date vencimento) {
         this.vencimento = vencimento;
         return this;
     }

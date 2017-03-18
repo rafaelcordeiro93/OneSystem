@@ -30,7 +30,7 @@
 
                             <p:outputLabel value="#{l.Venda}"/>
                             <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="selecionaVenda" size="26" readonly="true" value="#{boletoDeCartaoView.boletoDeCartao.venda.id}"/> 
+                                <p:inputText id="selecionaVenda" size="26" readonly="true" value="#{boletoDeCartaoView.boletoDeCartao.notaEmitida.id}"/> 
                                 <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaViewView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{boletoDeCartaoView.selecionaVenda}" process="@this" update="selecionaVenda" />
                                 </p:commandButton>

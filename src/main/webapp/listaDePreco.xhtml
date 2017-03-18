@@ -3,13 +3,14 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
 
         <div class="ui-g">
-            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
                     <h3 class="BigTopic" style="padding: 5% 0% 0% 3%" ><i class="fa fa-list Fs40" style="color: #848484"/> #{l.Lista_Preco}</h3>
@@ -20,16 +21,11 @@
                         <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="listaprecoid" size="23" value="#{listaDePrecoView.listaPreco.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{listaDePrecoView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoListaDePrecoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{listaDePrecoView.selecionaListaDePreco}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
+                                <a:inputNumberDialog id="listaPrecoId" dialog="#{selecaoListaDePrecoView}" mbView="#{listaDePrecoView}" value="#{listaDePrecoView.listaPreco.id}" update=":conteudo" />
                             </h:panelGrid>     
 
                             <p:outputLabel value="#{l.Nome}"/>

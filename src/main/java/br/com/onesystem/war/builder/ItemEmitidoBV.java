@@ -36,7 +36,7 @@ public class ItemEmitidoBV {
         this.item = itemEmitidoSelecionado.getItem();
         this.notaEmitida = itemEmitidoSelecionado.getNotaEmitida();
         this.unitario = itemEmitidoSelecionado.getUnitario();
-        estoque = itemEmitidoSelecionado.getEstoque();
+        estoque = itemEmitidoSelecionado.getEstoques();
     }
 
     public Long getId() {

@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
@@ -16,9 +17,8 @@ import java.util.List;
 public class ValoresAVistaBuilder {
 
     private Long id;
-    private Moeda moeda;
+    private Cotacao cotacao;
     private BigDecimal dinheiro;
-    private BigDecimal credito;
     private List<Cheque> cheques;
     private BoletoDeCartao boletoDeCartao;
     private BigDecimal aFaturar;
@@ -33,18 +33,13 @@ public class ValoresAVistaBuilder {
         return this;
     }
 
-    public ValoresAVistaBuilder comMoeda(Moeda moeda) {
-        this.moeda = moeda;
+    public ValoresAVistaBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
         return this;
     }
 
     public ValoresAVistaBuilder comDinheiro(BigDecimal dinheiro) {
         this.dinheiro = dinheiro;
-        return this;
-    }
-
-    public ValoresAVistaBuilder comCredito(BigDecimal credito) {
-        this.credito = credito;
         return this;
     }
 
@@ -89,7 +84,7 @@ public class ValoresAVistaBuilder {
     }
 
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVista(id, dinheiro, credito, boletoDeCartao, aFaturar, notaEmitida, moeda, desconto, acrescimo, despesaCobranca, frete, cheques);
+        return new ValoresAVista(id, dinheiro, boletoDeCartao, aFaturar, notaEmitida, cotacao, desconto, acrescimo, despesaCobranca, frete, cheques);
     }
 
 }

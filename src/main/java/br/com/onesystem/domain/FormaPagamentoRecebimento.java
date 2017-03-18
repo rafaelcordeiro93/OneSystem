@@ -60,7 +60,7 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
     @Column(length = 250, nullable = true)
     private String historico;
 
-    @NotNull(message = "{emissao_not_null}")
+    @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
