@@ -6,6 +6,7 @@ import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.FormaPagamentoRecebimento;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Moeda;
@@ -43,6 +44,9 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class RecebimentoView implements Serializable {
 
+    private FormaPagamentoRecebimento formaPagamentoRecebimento; //classe abstrata para recebimento de valores
+    
+    
     private Date data = new Date();
     private BaixaBV baixa;
     private BaixaBV baixaReceitaEventual;
