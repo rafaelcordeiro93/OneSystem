@@ -136,12 +136,17 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         this.notaEmitida = notaEmitida;
     }
 
+    public TipoLancamento getTipoLancamento() {
+        return tipoLancamento;
+    }
+
     @Override
     public String toString() {
-        return "Cheque{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", valor=" + valor
+        return "Cheque{" + "id=" + getId() + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", valor=" + valor
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
-                + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico() + ", formaDeRecebimentoOuPagamento=" + valoresAVista + '}';
+                + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()
+                + ", valoresAVista=" + (valoresAVista == null ? null : valoresAVista.getId()) + '}';
     }
 
 }

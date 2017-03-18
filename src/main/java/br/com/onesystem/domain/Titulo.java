@@ -157,7 +157,7 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @Override
     public String toString() {
-        return "Titulo{" + "saldo=" + saldo + ", unidadeFinanceira=" + unidadeFinanceira + ", recepcao=" + recepcao + ", cambio=" + cambio + ", notaEmitida=" + notaEmitida + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + conhecimentoDeFrete + '}';
+        return "Titulo{" + "saldo=" + saldo + ", unidadeFinanceira=" + unidadeFinanceira + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" +  (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
     }
     
 }

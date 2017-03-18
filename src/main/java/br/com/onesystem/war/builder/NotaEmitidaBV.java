@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.ItemEmitido;
@@ -37,6 +38,7 @@ public class NotaEmitidaBV implements Serializable {
     private FormaDeRecebimento formaDeRecebimento;
     private List<Cheque> cheques;
     private List<BoletoDeCartao> cartoes;
+    private Credito credito;
 
     public NotaEmitidaBV(NotaEmitida notaEmitidaSelecionada) {
         this.id = notaEmitidaSelecionada.getId();
@@ -50,6 +52,9 @@ public class NotaEmitidaBV implements Serializable {
         this.emissao = notaEmitidaSelecionada.getEmissao();
         this.cancelada = notaEmitidaSelecionada.isCancelada();
         this.baixas = notaEmitidaSelecionada.getBaixaDinheiro();
+        this.cheques = notaEmitidaSelecionada.getCheques();
+        this.cartoes = notaEmitidaSelecionada.getCartoes();
+        this.credito = notaEmitidaSelecionada.getCredito();
     }
 
     public NotaEmitidaBV() {
@@ -158,18 +163,19 @@ public class NotaEmitidaBV implements Serializable {
     public void setCartoes(List<BoletoDeCartao> cartoes) {
         this.cartoes = cartoes;
     }
-    
+
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).
-                comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao)
-                .cancelada(cancelada).comBaixas(baixas).construir();
+                comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao).comFormaDeRecebimento(formaDeRecebimento)
+                .cancelada(cancelada).comBaixas(baixas).comCheque(cheques).comBoletoDeCartao(cartoes).comCredito(credito).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comId(id).comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
-                .comPessoa(pessoa).comTitulos(titulos)
+                .comPessoa(pessoa).comTitulos(titulos).comFormaDeRecebimento(formaDeRecebimento)
+                .comBaixas(baixas).comCheque(cheques).comBoletoDeCartao(cartoes).comCredito(credito)
                 .comEmissao(emissao).cancelada(cancelada).comBaixas(baixas).construir();
     }
 }

@@ -89,7 +89,7 @@
                             </p:panelGrid>
                         </div>
 
-                        <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{notaEmitidaView.notaEmitida.itensEmitidos}" rowKey="#{itemEmitido.id}" 
+                        <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{notaEmitidaView.itensEmitidos}" rowKey="#{itemEmitido.id}" 
                                      emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{notaEmitidaView.itemEmitidoSelecionado}">
 
                             <p:ajax event="rowSelect" process="@this" listener="#{notaEmitidaView.selecionaItemEmitido}" update=":conteudo"/>
@@ -118,7 +118,7 @@
 
                             <p:columnGroup type="footer">
                                 <p:row>
-                                    <p:column colspan="1" footerText="#{notaEmitidaView.notaEmitida.itensEmitidos.size() eq 0 ? '' : notaEmitidaView.notaEmitida.itensEmitidos.size()}" />
+                                    <p:column colspan="1" footerText="#{notaEmitidaView.itensEmitidos.size() eq 0 ? '' : notaEmitidaView.itensEmitidos.size()}" />
                                     <p:column colspan="6"/>
                                     <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
                                     <p:column colspan="2" footerText="#{notaEmitidaView.totalItensFormatado}"/>
@@ -202,8 +202,8 @@
                                     </p:inputNumber> 
 
                                     <p:outputLabel value="#{l.Credito}"/>
-                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
-                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{notaEmitidaView.valoresAVista.credito}"
+                                    <p:inputNumber id="neCredito" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{notaEmitidaView.creditoBV.valor}"
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
@@ -215,7 +215,7 @@
                                     </p:inputText> 
 
                                     <p:outputLabel value="#{l.Cartao}"/>
-                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
+                                    <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}" readonly="true"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    value="#{notaEmitidaView.boletoDeCartao.valor}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
@@ -260,7 +260,7 @@
                         <h:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements" 
                                      columnClasses="ui-g-12 ui-md-5 TexAlRight,ui-g-12 ui-md-5">
                             <p:outputLabel value="#{l.Parcelas}"/>
-                            <p:inputNumber value="#{notaEmitidaView.valoresAVista.parcelas}" disabled="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
+                            <p:inputNumber id="neNumeroParcelas" value="#{notaEmitidaView.valoresAVista.parcelas}" disabled="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
                                            maxValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue()}" minValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
                                 <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:ne:neParcelas :conteudo:ne:neAFaturar :conteudo:growl"/>
                             </p:inputNumber>
@@ -347,7 +347,7 @@
 
                         <p:separator/>
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.validaAFaturar()}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.geraItensEmitidos}" update=":conteudo"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
 
@@ -402,7 +402,7 @@
 
             <div class="EmptyBox5"/>
 
-            <p:commandButton value="#{l.Confirmar}" onclick="PF('cotacaoVal').hide()" action="#{notaEmitidaView.geraBaixaDeCotacoes()}"/>
+            <p:commandButton value="#{l.Confirmar}" onclick="PF('cotacaoVal').hide()" action="#{notaEmitidaView.geraBaixaDeCotacoes()}" update=":conteudo"/>
             <p:commandButton value="#{l.Cancelar}" onclick="PF('cotacaoVal').hide()"/>
 
         </p:dialog>
@@ -499,11 +499,12 @@
             </p:dataTable>
 
             <p:spacer height="24" width="0"/>
-            <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeEntrada').hide()" update=":conteudo:ne:chequeEntrada :conteudo:ne:neAFaturar" actionListener="#{notaEmitidaView.recalculaValorAFaturar}" />
+            <p:commandButton id="fecharDetalheChequeEntrada" value="#{l.Fechar}" onclick="PF('detalheChequeEntrada').hide()" update=":conteudo:ne:chequeEntrada :conteudo:ne:neAFaturar" actionListener="#{notaEmitidaView.recalculaValorAFaturar}" />
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheCartaoEntrada" width="400" header="#{l.Cartao}" closable="false" closeOnEscape="false" modal="true" >
+        <p:dialog widgetVar="detalheCartaoEntrada" width="400" header="#{l.Cartao}" closable="false" closeOnEscape="false" modal="true" 
+                  styleClass="zIndex500">
 
             <p:panelGrid id="panelDetCartaoEnt" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
                          columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-4">
@@ -514,12 +515,20 @@
                 <p:outputLabel value="#{l.Cod_Transacao}"/>
                 <p:inputText id="detCodigoTransacao" value="#{notaEmitidaView.boletoDeCartao.codigoTransacao}"/>  
 
+                <p:outputLabel value="#{l.Valor}"/>
+                <p:inputNumber id="boletoCartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
+                               decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
+                               value="#{notaEmitidaView.boletoDeCartao.valor}">
+                    
+                </p:inputNumber>
+
             </p:panelGrid>        
 
             <p:separator/>
 
-            <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.deleteBoletoDeCartao}" update=":conteudo:detCartao :conteudo:detCodigoTransacao"/>
-            <p:commandButton value="#{l.Fechar}" onclick="PF('detalheCartaoEntrada').hide()"/>
+            <p:commandButton value="#{l.Confirmar}" action="#{notaEmitidaView.constroiBoletoDeCartaoEntrada}" update=":conteudo:ne:cartaoValor :conteudo:ne:neAFaturar :conteudo:ne:neParcelas"/>
+            <p:commandButton value="#{l.Cancelar}" onclick="PF('detalheCartaoEntrada').hide()"/>
+            <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.deleteBoletoDeCartao}" update=":conteudo:panelDetCartaoEnt"/>
 
         </p:dialog>
 

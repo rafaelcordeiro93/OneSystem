@@ -25,6 +25,7 @@ import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -69,6 +70,7 @@ public class ParcelaBV implements Serializable {
     private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
     private Integer dias;
     private Cotacao cotacao;
+    private TipoLancamento tipoLancamento;
 
     public ParcelaBV() {
     }
@@ -100,6 +102,7 @@ public class ParcelaBV implements Serializable {
         this.tipoFormaDeRecebimentoParcela = p.getTipoFormaDeRecebimentoParcela();
         this.dias = p.getDias();
         this.cotacao = p.getCotacao();
+        this.tipoLancamento = p.getTipoLancamento();
     }
 
     public ParcelaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
@@ -110,7 +113,7 @@ public class ParcelaBV implements Serializable {
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
             Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela,
-            Integer dias, Cotacao cotacao) {
+            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento) {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -136,6 +139,7 @@ public class ParcelaBV implements Serializable {
         this.recepcao = recepcao;
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
         this.dias = dias;
+        this.tipoLancamento = tipoLancamento;
         this.cotacao = cotacao;
     }
 
@@ -181,6 +185,14 @@ public class ParcelaBV implements Serializable {
 
     public String getValorFormatado() {
         return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(valor);
+    }
+
+    public TipoLancamento getTipoLancamento() {
+        return tipoLancamento;
+    }
+
+    public void setTipoLancamento(TipoLancamento tipoLancamento) {
+        this.tipoLancamento = tipoLancamento;
     }
 
     public BigDecimal getValor() {
@@ -391,13 +403,13 @@ public class ParcelaBV implements Serializable {
     public Cheque construirCheque() throws DadoInvalidoException {
         return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
-                .comObservacao(observacao).comCotacao(cotacao).
-                comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
+                .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento)
+                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
                 .construir();
     }
 
     public Titulo construirTitulo() throws DadoInvalidoException {
-        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
+        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).
                 construir();
     }

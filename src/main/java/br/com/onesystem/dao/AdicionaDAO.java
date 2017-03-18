@@ -53,7 +53,7 @@ public class AdicionaDAO<T> {
             System.out.println("Verifique Lista do toString()");
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
-//             fecha a entity manager  --- Cordeiro&Rauber: Foi tira o fexamento de Entity Manager por nao 
+//             fecha a entity manager  --- Cordeiro&Rauber: Foi tirado o fexamento de Entity Manager por nao 
 //           carregar a sessao necessaria para a inclusao de lista ManyToMany dentro das classes.  
             em.close();
         }

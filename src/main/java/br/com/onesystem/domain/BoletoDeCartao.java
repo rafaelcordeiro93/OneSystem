@@ -49,7 +49,7 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     public final void ehValido() throws DadoInvalidoException {
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
-        List<String> campos = Arrays.asList("valor", "emissao");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "acrescimo", "desconto", "valor", "vencimento");
         new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
     }
 
@@ -75,7 +75,9 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';
+        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + 
+                ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + 
+                ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';
     }
 
 }

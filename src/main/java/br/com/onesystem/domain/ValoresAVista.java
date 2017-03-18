@@ -37,11 +37,8 @@ public class ValoresAVista implements Serializable {
     private Long id;
     @Min(value = 0, message = "{min_dinheiro}")
     private BigDecimal dinheiro;
-    @Min(value = 0, message = "{min_credito}")
-    private BigDecimal credito;
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
-    @Min(value = 0, message = "{min_cartao}")
     @OneToOne(cascade = CascadeType.ALL)
     private BoletoDeCartao boletoDeCartao;
     @Min(value = 0, message = "{min_aFaturar}")
@@ -65,13 +62,12 @@ public class ValoresAVista implements Serializable {
     }
 
     public ValoresAVista(Long id,
-            BigDecimal dinheiro, BigDecimal credito, BoletoDeCartao cartao,
+            BigDecimal dinheiro, BoletoDeCartao boletoDeCartao,
             BigDecimal aFaturar, NotaEmitida notaEmitida, Cotacao cotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
             List<Cheque> cheques) throws DadoInvalidoException {
         this.id = id;
         this.dinheiro = dinheiro;
-        this.credito = credito;
         this.aFaturar = aFaturar;
         this.notaEmitida = notaEmitida;
         this.cotacao = cotacao;
@@ -79,14 +75,14 @@ public class ValoresAVista implements Serializable {
         this.acrescimo = acrescimo;
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
-        this.boletoDeCartao = cartao;
+        this.boletoDeCartao = boletoDeCartao;
         this.cheques = cheques;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("dinheiro",
-                "credito", "cartao", "aFaturar", "acrescimo", "desconto",
+                "aFaturar", "acrescimo", "desconto",
                 "despesaCobranca", "frete");
         new ValidadorDeCampos<ValoresAVista>().valida(this, campos);
     }
@@ -97,10 +93,6 @@ public class ValoresAVista implements Serializable {
 
     public BigDecimal getDinheiro() {
         return dinheiro;
-    }
-
-    public BigDecimal getCredito() {
-        return credito;
     }
 
     public BoletoDeCartao getBoletoCartao() {
@@ -164,7 +156,7 @@ public class ValoresAVista implements Serializable {
 
     @Override
     public String toString() {
-        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", credito=" + credito + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + notaEmitida + ", cotacao=" + cotacao + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
+        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

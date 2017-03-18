@@ -127,7 +127,7 @@ public class ItemEmitido implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + (item == null ? null : item.getId()) + ", valorUnitario=" + unitario + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", estoques=" + estoques + '}';
     }
 
 }

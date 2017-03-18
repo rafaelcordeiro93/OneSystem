@@ -19,7 +19,6 @@ public class ValoresAVistaBuilder {
     private Long id;
     private Cotacao cotacao;
     private BigDecimal dinheiro;
-    private BigDecimal credito;
     private List<Cheque> cheques;
     private BoletoDeCartao boletoDeCartao;
     private BigDecimal aFaturar;
@@ -41,11 +40,6 @@ public class ValoresAVistaBuilder {
 
     public ValoresAVistaBuilder comDinheiro(BigDecimal dinheiro) {
         this.dinheiro = dinheiro;
-        return this;
-    }
-
-    public ValoresAVistaBuilder comCredito(BigDecimal credito) {
-        this.credito = credito;
         return this;
     }
 
@@ -90,7 +84,7 @@ public class ValoresAVistaBuilder {
     }
 
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVista(id, dinheiro, credito, boletoDeCartao, aFaturar, notaEmitida, cotacao, desconto, acrescimo, despesaCobranca, frete, cheques);
+        return new ValoresAVista(id, dinheiro, boletoDeCartao, aFaturar, notaEmitida, cotacao, desconto, acrescimo, despesaCobranca, frete, cheques);
     }
 
 }

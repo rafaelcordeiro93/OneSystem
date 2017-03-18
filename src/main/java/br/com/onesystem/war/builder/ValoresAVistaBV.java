@@ -29,7 +29,6 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal porcentagemDesconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
-    private BigDecimal credito;
     private BoletoDeCartao boletoDeCartao;
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
@@ -90,14 +89,6 @@ public class ValoresAVistaBV implements Serializable {
 
     public void setDinheiro(BigDecimal dinheiro) {
         this.dinheiro = dinheiro;
-    }
-
-    public BigDecimal getCredito() {
-        return credito;
-    }
-
-    public void setCredito(BigDecimal credito) {
-        this.credito = credito;
     }
 
     public BoletoDeCartao getBoletoDeCartao() {
@@ -165,7 +156,7 @@ public class ValoresAVistaBV implements Serializable {
     }
     
     public ValoresAVista construir() throws DadoInvalidoException {
-        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comCredito(credito).comDinheiro(dinheiro)
+        return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comCotacao(cotacao).comCheques(cheques)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();
@@ -173,7 +164,7 @@ public class ValoresAVistaBV implements Serializable {
 
     public ValoresAVista construirComID() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comID(id).comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao)
-                .comCheques(cheques).comCredito(credito).comDinheiro(dinheiro)
+                .comCheques(cheques).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comCotacao(cotacao)
                 .comDesconto(desconto).comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca)
                 .comFrete(frete).construir();

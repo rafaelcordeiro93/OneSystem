@@ -42,42 +42,47 @@ public class NotaEmitida implements Serializable {
     @NotNull(message = "{operacao_not_null}")
     @ManyToOne
     private Operacao operacao;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<ItemEmitido> itensEmitidos;
     @NotNull(message = "{forma_recebimento_not_null}")
     @ManyToOne
     private FormaDeRecebimento formaDeRecebimento;
     @ManyToOne
     private ListaDePreco listaDePreco;
-    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private ValoresAVista valoresAVista;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Baixa> baixaDinheiro;
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
     private boolean cancelada;
-    @OneToOne(mappedBy = "notaEmitida")
+    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
+    private ValoresAVista valoresAVista;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
+    private List<Baixa> baixaDinheiro;
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
+    private List<ItemEmitido> itensEmitidos;
+    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private Credito credito;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<Cheque> cheques;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<BoletoDeCartao> cartoes;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<Titulo> titulos;
 
     public NotaEmitida() {
     }
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, ListaDePreco listaDePreco, ValoresAVista valoresAVista,
-            Date emissao, boolean cancelada, FormaDeRecebimento formaDeRecebimento) throws DadoInvalidoException {
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos, FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada, Credito credito, List<Cheque> cheques, List<BoletoDeCartao> cartoes, List<Titulo> titulos) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
+        this.itensEmitidos = itensEmitidos;
+        this.formaDeRecebimento = formaDeRecebimento;
         this.listaDePreco = listaDePreco;
         this.valoresAVista = valoresAVista;
+        this.baixaDinheiro = baixaDinheiro;
         this.emissao = emissao;
         this.cancelada = cancelada;
-        this.formaDeRecebimento = formaDeRecebimento;
+        this.credito = credito;
+        this.cheques = cheques;
+        this.cartoes = cartoes;
+        this.titulos = titulos;
         ehValido();
     }
 
@@ -175,7 +180,17 @@ public class NotaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", itensEmitidos=" + itensEmitidos + ", formaDeRecebimento=" + formaDeRecebimento + ", listaDePreco=" + listaDePreco + ", valoresAVista=" + valoresAVista + ", baixaDinheiro=" + baixaDinheiro + ", emissao=" + emissao + ", cancelada=" + cancelada + ", credito=" + credito + ", cheques=" + cheques + ", cartoes=" + cartoes + ", titulos=" + titulos + '}';
+        return "NotaEmitida{" + "id=" + id + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
+                + ", operacao=" + (operacao != null ? operacao.getId() : null)
+                + ", emissao=" + emissao
+                + ", cancelada=" + cancelada
+                + ", credito=" + credito
+                + ", itensEmitidos=" + itensEmitidos
+                + ", formaDeRecebimento=" + (formaDeRecebimento != null ? formaDeRecebimento.getId() : null)
+                + ", listaDePreco=" + listaDePreco + ", valoresAVista=" + valoresAVista
+                + ", baixaDinheiro=" + baixaDinheiro
+                + ", cheques=" + cheques + ", cartoes=" + cartoes
+                + ", titulos=" + titulos + '}';
     }
 
 }
