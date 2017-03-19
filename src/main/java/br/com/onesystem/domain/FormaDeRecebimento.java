@@ -21,6 +21,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
@@ -54,6 +55,8 @@ public class FormaDeRecebimento implements Serializable {
     private BigDecimal porcentagemDeEntrada;
     @Enumerated(EnumType.STRING)
     private TipoFormaDeRecebimento formaPadraoDeEntrada;
+    @ManyToOne
+    private Cartao cartao;
     @NotNull(message = "{entrada_cartao_not_null}")
     @Column(nullable = false)
     private boolean entradaEmCartao = false;
@@ -75,25 +78,21 @@ public class FormaDeRecebimento implements Serializable {
     @NotNull(message = "{parcela_conta_not_null}")
     @Column(nullable = false)
     private boolean parcelaEmConta = false;
-    @NotNull(message = "{minimo_parcela_not_null}")
     @Min(value = 0, message = "{minimo_parcela_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer minimoDeParcelas;
-    @NotNull(message = "{maximo_parcela_not_null}")
     @Min(value = 0, message = "{maximo_parcela_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer maximoDeParcelas;
-    @NotNull(message = "{peridiocidade_not_null}")
     @Min(value = 0, message = "{peridiocidade_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer periodicidade;
     @NotNull(message = "{tipo_peridiocidade_not_null}")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoPeriodicidade tipoPeriodicidade;
-    @NotNull(message = "{dias_primeira_parcela_not_null}")
     @Min(value = 0, message = "{dias_primeira_parcela_min}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer diasPrimeiraParcela;
     @Enumerated(EnumType.STRING)
     private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
@@ -107,7 +106,7 @@ public class FormaDeRecebimento implements Serializable {
             TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque,
             boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas,
             Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela,
-            TipoFormaDeRecebimentoParcela formaPadraoDeParcela) throws DadoInvalidoException {
+            TipoFormaDeRecebimentoParcela formaPadraoDeParcela, Cartao cartao) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.ativo = ativo;
@@ -127,11 +126,16 @@ public class FormaDeRecebimento implements Serializable {
         this.tipoPeriodicidade = tipoPeriodicidade;
         this.diasPrimeiraParcela = diasPrimeiraParcela;
         this.formaPadraoDeParcela = formaPadraoDeParcela;
+        this.cartao = cartao;
         ehValido();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Cartao getCartao() {
+        return cartao;
     }
 
     public String getNome() {

@@ -78,6 +78,10 @@
                         <p:outputLabel value="#{l.Conta_De_Estoque_Empresa}"/>
                         <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa.nome}" />
                         <p:commandButton icon="fa fa-trash" styleClass="orange-btn" action="#{configuracaoEstoqueView.removeConta}" update=":conteudo"/>
+
+                        <p:outputLabel value="#{l.Lista_Preco_Padrao_Empresa}"/>
+                        <a:inputTextDialog id="listaPrecoEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoListaDePrecoView}" value="#{configuracaoEstoqueView.configuracaoBV.listaDePreco.nome}" />
+                        <p:commandButton icon="fa fa-trash" styleClass="orange-btn" action="#{configuracaoEstoqueView.removeListaDePreco}" update=":conteudo"/>
                     </h:panelGrid>
 
                     <div class="EmptyBox5"/>

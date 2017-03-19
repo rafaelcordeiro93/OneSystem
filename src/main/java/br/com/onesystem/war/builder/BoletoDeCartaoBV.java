@@ -123,9 +123,4 @@ public class BoletoDeCartaoBV implements Serializable {
                 comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).
                 comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
-
-    @Override
-    public String toString() {
-        return "BoletoDeCartaoBV{" + "id=" + id + ", cartao=" + cartao + ", emissao=" + emissao + ", vencimento=" + vencimento + ", valor=" + valor + ", codigoTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';
-    }
 }

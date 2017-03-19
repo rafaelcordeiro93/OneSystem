@@ -9,7 +9,6 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.faces.FacesException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -47,14 +46,15 @@ public class AdicionaDAO<T> {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
                 throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
             }
+            throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
+            System.out.println("Erro: " + ex.getMessage());
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             System.out.println("Verifique Lista do toString()");
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
-//             fecha a entity manager  --- Cordeiro&Rauber: Foi tirado o fexamento de Entity Manager por nao 
-//           carregar a sessao necessaria para a inclusao de lista ManyToMany dentro das classes.  
+
             em.close();
         }
     }

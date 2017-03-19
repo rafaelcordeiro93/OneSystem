@@ -1,5 +1,6 @@
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
@@ -32,6 +33,7 @@ public class FormaDeRecebimentoBuilder {
     TipoPeriodicidade tipoPeriodicidade;
     Integer diasPrimeiraParcela;
     private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
+    private Cartao cartao;
 
     public FormaDeRecebimentoBuilder comID(Long ID) {
         this.id = ID;
@@ -128,12 +130,17 @@ public class FormaDeRecebimentoBuilder {
         return this;
     }
 
+    public FormaDeRecebimentoBuilder comCartao(Cartao cartao) {
+        this.cartao = cartao;
+        return this;
+    }
+
     public FormaDeRecebimento construir() throws DadoInvalidoException {
         return new FormaDeRecebimento(id, nome, ativo, entrada, porcentagemDeEntrada,
                 formaPadraoDeEntrada, entradaEmCartao, entradaEmDinheiro,
                 entradaEmCheque, entradaEmCredito, parcelaEmCheque, parcelaEmCartao,
                 parcelaEmConta, minimoDeParcelas, maximoDeParcelas, periodicidade,
-                tipoPeriodicidade, diasPrimeiraParcela, formaPadraoDeRecebimentoParcela);
+                tipoPeriodicidade, diasPrimeiraParcela, formaPadraoDeRecebimentoParcela, cartao);
     }
 
 }
