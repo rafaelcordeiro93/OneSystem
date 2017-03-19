@@ -5,25 +5,18 @@
 //import java.awt.RenderingHints;
 //import java.awt.geom.Rectangle2D;
 //import java.awt.image.BufferedImage;
-import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.io.Reader;
 import java.net.Socket;
-import java.text.ParseException;
 import java.util.Properties;
-
 //
 //import com.sun.image.codec.jpeg.JPEGCodec;
 //import com.sun.image.codec.jpeg.JPEGEncodeParam;
 //import com.sun.image.codec.jpeg.JPEGImageEncoder;
+
 public class PrinterMatrix {
 
     public String impressora;
@@ -66,7 +59,7 @@ public class PrinterMatrix {
     }
 
     public void printTextLinCol(int lin, int coluna, String text) {
-        text = RemoveAcentos(text);
+        // text = RemoveAcentos(text);
         for (int i = 0; i < coluna; i++) {
             if (i == coluna - 1 && i <= 70) {
                 page[lin - 1][i] = text;
@@ -473,7 +466,7 @@ public class PrinterMatrix {
         return str;
     }
 
-    public static void main(String args[]) throws FileNotFoundException, IOException {
+    public static void main(String args[]) {
         System.out.print("");
         PrinterMatrix t = new PrinterMatrix();
         //t.p
@@ -489,34 +482,10 @@ public class PrinterMatrix {
         t.printTextLinCol(5, 11, "ATIVIDADE ATESTEAKLJ ÇLSAKJFAÇSLKDJFASLFJKASaaaaaa");
         t.printTextLinCol(6, 1, t.centralizar(70, "CENTRALIZAR"));
         //t.toFile("impresso.txt");
-        //  t.show();
+        t.show();
         //  t.toPrinterMatricial();
 
         // t.toImageFile("printermatrix.jpg");
-//        
-//        
-////        
-//        Reader reader = new FileReader(new File(ClassLoader.getSystemResource("ParametrosMatricial.json").getFile()));
-//
-//        Gson gson = new Gson();
-//
-//        String pedido = gson.fromJson(reader, String.class);
-//
-//        System.out.print("Pedido: " + pedido);;
-//
-////                + "\nId Cliente: " + pedido.getCliente().getId()
-////                + "\nNome: " + pedido.getCliente().getNome()
-////                + "\nItens: ");
-//
-//        for (Item item : pedido.getItens()) {
-//
-//            System.out.println("\n---------------------------------------"
-//                    + "\nid item: " + item.getId()
-//                    + "\nnome item: " + item.getNome()
-//                    + "\nqtde: " + item.getQtde());
-//
-//        }
-
     }
 
     private String page[][];
