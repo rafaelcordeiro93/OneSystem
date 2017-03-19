@@ -2,6 +2,8 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.builder.ConfiguracaoEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 
@@ -9,10 +11,12 @@ public class ConfiguracaoEstoqueBV implements Serializable {
 
     private Long id;
     private ContaDeEstoque contaDeEstoqueEmpresa;
+    private ListaDePreco listaDePreco;
 
     public ConfiguracaoEstoqueBV(ConfiguracaoEstoque configuracaoSelecionada) {
         this.id = configuracaoSelecionada.getId();
         this.contaDeEstoqueEmpresa = configuracaoSelecionada.getContaDeEstoqueEmpresa();
+        this.listaDePreco = configuracaoSelecionada.getListaDePreco();
     }
 
     public ConfiguracaoEstoqueBV() {
@@ -34,8 +38,17 @@ public class ConfiguracaoEstoqueBV implements Serializable {
         this.contaDeEstoqueEmpresa = contaDeEstoqueEmpresa;
     }
 
+    public ListaDePreco getListaDePreco() {
+        return listaDePreco;
+    }
+
+    public void setListaDePreco(ListaDePreco listaDePreco) {
+        this.listaDePreco = listaDePreco;
+    }
+
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
-        return new ConfiguracaoEstoque(id, contaDeEstoqueEmpresa);
+        return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa)
+                .comListaDePreco(listaDePreco).construir();
     }
 
 }

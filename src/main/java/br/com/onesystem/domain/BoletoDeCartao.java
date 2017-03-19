@@ -40,7 +40,6 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
         super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
         this.notaEmitida = notaEmitida;
         this.cartao = cartao;
-        this.valor = valor;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
         ehValido();
@@ -49,7 +48,7 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     public final void ehValido() throws DadoInvalidoException {
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "acrescimo", "desconto", "valor", "vencimento");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "acrescimo", "desconto", "valor", "vencimento", "cotacao");
         new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
     }
 
@@ -72,12 +71,13 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     public void setNotaEmitida(NotaEmitida notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-    
+
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId()) + 
-                ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + 
-                ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", situacao=" + situacao + '}';
+        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId())
+                + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + ", acrescimo=" + getAcrescimo()
+                + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", desconto=" + getDesconto()
+                + ", situacao=" + situacao + ", cotacao=" + getCotacao() + '}';
     }
 
 }

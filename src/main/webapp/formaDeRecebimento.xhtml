@@ -3,6 +3,8 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -18,14 +20,8 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="recebimentoid" size="26" value="#{formaDeRecebimentoView.formaDeRecebimento.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{formaDeRecebimentoView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoFormaDeRecebimentoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{formaDeRecebimentoView.selecionaFormaDeRecebimento}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>   
+                            <a:inputNumberDialog id="recebimentoid" value="#{formaDeRecebimentoView.formaDeRecebimento.id}" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}"
+                                                 update="conteudo"/>
 
                             <p:outputLabel value="#{l.Nome}" />
                             <p:inputText value="#{formaDeRecebimentoView.formaDeRecebimento.nome}"  maxlength="60"/>
@@ -40,10 +36,10 @@
                             <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeEntrada}">
                                 <f:selectItems value="#{formaDeRecebimentoView.formaDeRecebimentoPadrao}" var="#{l.Padrao_Entrada}" itemValue="#{formaDeRecebimentoPadrao}" />
                             </p:selectOneMenu>
-                            
+
                             <p:outputLabel value="#{l.Entrada}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
-                            
+
                             <p:outputLabel value="#{l.Entrada_Cartao}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCartao}"/>
 
@@ -88,6 +84,9 @@
 
                             <p:outputLabel value="#{l.Maximo_Parcelas}" /> 
                             <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />  
+
+                            <p:outputLabel value="#{l.Cartao}"/>
+                            <a:inputTextDialog id="formaRecCartaoParcela" value="#{formaDeRecebimentoView.formaDeRecebimento.cartao.nome}" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}"/>
 
                             <p:outputLabel value="#{l.Primeira_Parcela}" />
                             <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />

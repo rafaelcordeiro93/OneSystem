@@ -395,8 +395,8 @@ public class ParcelaBV implements Serializable {
 
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
-                comVencimento(vencimento).comEmissao(emissao).
-                comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor)
+                comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao)
+                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor)
                 .construir();
     }
 

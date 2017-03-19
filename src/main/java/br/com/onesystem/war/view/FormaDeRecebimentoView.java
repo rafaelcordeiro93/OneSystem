@@ -4,6 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.FormaDeRecebimentoDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.util.FatalMessage;
@@ -16,6 +17,7 @@ import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.FormaDeRecebimentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +30,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class FormaDeRecebimentoView implements Serializable {
+public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento> implements Serializable {
 
     private FormaDeRecebimentoBV formaDeRecebimento;
     private FormaDeRecebimento formaDeRecebimentoSelecionada;
@@ -95,12 +97,20 @@ public class FormaDeRecebimentoView implements Serializable {
         }
     }
 
-    public void selecionaFormaDeRecebimento(SelectEvent e) {
-        FormaDeRecebimento a = (FormaDeRecebimento) e.getObject();
-        formaDeRecebimento = new FormaDeRecebimentoBV(a);
-        formaDeRecebimentoSelecionada = a;
+    @Override
+    public void selecionar(SelectEvent e) {
+        Object obj = e.getObject();
+        if (obj instanceof FormaDeRecebimento) {
+            FormaDeRecebimento a = (FormaDeRecebimento) e.getObject();
+            formaDeRecebimento = new FormaDeRecebimentoBV(a);
+            formaDeRecebimentoSelecionada = a;
+        }
+        if (obj instanceof Cartao) {
+            formaDeRecebimento.setCartao((Cartao) obj);
+        }
     }
 
+    @Override
     public void buscaPorId() {
         Long id = formaDeRecebimento.getId();
         if (id != null) {

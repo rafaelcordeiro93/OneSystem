@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.builder.FormaDeRecebimentoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -15,25 +16,26 @@ import java.math.BigDecimal;
  */
 public class FormaDeRecebimentoBV implements Serializable {
 
-    Long id;
-    String nome;
-    boolean ativo;
-    boolean entrada;
-    BigDecimal porcentagemDeEntrada;
-    TipoFormaDeRecebimento formaPadraoDeEntrada;
-    boolean entradaEmCartao;
-    boolean entradaEmDinheiro;
-    boolean entradaEmCheque;
-    boolean entradaEmCredito;
-    boolean parcelaEmCheque;
-    boolean parcelaEmCartao;
-    boolean parcelaEmConta;
-    Integer minimoDeParcelas;
-    Integer maximoDeParcelas;
-    Integer periodicidade;
-    TipoPeriodicidade tipoPeriodicidade;
-    Integer diasPrimeiraParcela;
+    private Long id;
+    private String nome;
+    private boolean ativo;
+    private boolean entrada;
+    private BigDecimal porcentagemDeEntrada;
+    private TipoFormaDeRecebimento formaPadraoDeEntrada;
+    private boolean entradaEmCartao;
+    private boolean entradaEmDinheiro;
+    private boolean entradaEmCheque;
+    private boolean entradaEmCredito;
+    private boolean parcelaEmCheque;
+    private boolean parcelaEmCartao;
+    private boolean parcelaEmConta;
+    private Integer minimoDeParcelas;
+    private Integer maximoDeParcelas;
+    private Integer periodicidade;
+    private TipoPeriodicidade tipoPeriodicidade;
+    private Integer diasPrimeiraParcela;
     private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
+    private Cartao cartao;
 
     public FormaDeRecebimentoBV(FormaDeRecebimento formaDeRecebimentoSelecionada) {
         this.id = formaDeRecebimentoSelecionada.getId();
@@ -55,6 +57,7 @@ public class FormaDeRecebimentoBV implements Serializable {
         this.tipoPeriodicidade = formaDeRecebimentoSelecionada.getTipoPeriodicidade();
         this.diasPrimeiraParcela = formaDeRecebimentoSelecionada.getDiasPrimeiraParcela();
         this.formaPadraoDeRecebimentoParcela = formaDeRecebimentoSelecionada.getFormaPadraoDeParcela();
+        this.cartao = formaDeRecebimentoSelecionada.getCartao();
     }
 
     public FormaDeRecebimentoBV() {
@@ -213,11 +216,19 @@ public class FormaDeRecebimentoBV implements Serializable {
         this.formaPadraoDeRecebimentoParcela = formaPadraoDeRecebimentoParcela;
     }
 
+    public Cartao getCartao() {
+        return cartao;
+    }
+
+    public void setCartao(Cartao cartao) {
+        this.cartao = cartao;
+    }
+
     public FormaDeRecebimento construirComID() throws DadoInvalidoException {
         return new FormaDeRecebimentoBuilder().comID(id).comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela)
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao)
                 .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
 
@@ -225,7 +236,7 @@ public class FormaDeRecebimentoBV implements Serializable {
         return new FormaDeRecebimentoBuilder().comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela)
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao)
                 .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
 

@@ -56,6 +56,7 @@ import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import com.google.gson.Gson;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -196,7 +197,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void validaDinheiro() {
         // Se existir valor em dinheiro abre a janela de cotações.
-        if (valoresAVista.getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
+        if (valoresAVista.getDinheiro() != null && valoresAVista.getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
             recalculaCotacoes(); // abre a janela de cotações
         } else {
             notaEmitida.setBaixas(null);
@@ -284,6 +285,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             finalizar();
         } catch (DadoInvalidoException die) {
             ErrorMessage.print(new BundleUtil().getMessage("Erro_ao_gerar_parcelas"));
+            die.print();
         }
     }
 
@@ -308,13 +310,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             //Inclui a nota nas parcelas
             preparaInclusaoDeParcelas(ne);
 
-            System.out.println(ne);
-
             add(ne);
 
         } catch (DadoInvalidoException die) {
+            die.printConsole();
             die.print();
         } catch (ConstraintViolationException cpe) {
+            ErrorMessage.printConsole(cpe.toString());
             ErrorMessage.print(cpe.toString());
         }
     }
@@ -323,21 +325,26 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      * Prepara valor de recebimento e insere a entidade no banco de dados
      *
      * @param ne Nota Emitida pronta para ser persistida
+     * @throws br.com.onesystem.exception.DadoInvalidoException
      */
     public void add(NotaEmitida ne) throws ConstraintViolationException, DadoInvalidoException {
         new AdicionaDAO<NotaEmitida>().adiciona(ne);
         InfoMessage.adicionado();
+        System.out.println(ne);
         limparJanela();
     }
 
     /**
      * Inclui a nota nas parcelas
      */
-    private void preparaInclusaoDeParcelas(NotaEmitida ne) {
+    private void preparaInclusaoDeParcelas(NotaEmitida ne) throws EDadoInvalidoException {
 
         //Inclui a nota nos Cartoes
         if (ne.getCartoes() != null) {
             for (BoletoDeCartao b : ne.getCartoes()) {
+                if (b.getCartao() == null) {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("cartao_not_null"));
+                }
                 b.setNotaEmitida(ne);
             }
         }
@@ -383,8 +390,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
      * Inclui a nota nas cotações
      */
     private void preparaInclusaoDeCotacoes(NotaEmitida ne) {
-        for (Baixa b : ne.getBaixaDinheiro()) {
-            b.setNotaEmitida(ne);
+        if (ne.getBaixaDinheiro() != null) {
+            for (Baixa b : ne.getBaixaDinheiro()) {
+                b.setNotaEmitida(ne);
+            }
         }
     }
 
@@ -540,6 +549,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
             itensEmitidos.add(ie);
             limparItemEmitido();
+
+            recalculaValores();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -551,6 +562,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
                 itensEmitidos.set(itensEmitidos.indexOf(itemEmitidoSelecionado),
                         itemEmitido.construirComId());
                 limparItemEmitido();
+                recalculaValores();
             }
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -561,6 +573,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         if (itemEmitidoSelecionado != null) {
             itensEmitidos.remove(itemEmitidoSelecionado);
             limparItemEmitido();
+            recalculaValores();
         }
     }
 
@@ -628,8 +641,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
                     for (int i = 0; i < numParcelas; i++) {
                         parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
-                                .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela())
-                                .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira())
+                                .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
+                                .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
+                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO)
                                 .comTipoLancamento(TipoLancamento.EMITIDA).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
@@ -641,6 +655,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             }
         } catch (CurrencyMissmatchException cme) {
             ErrorMessage.print("Erro ao calcular o valor das parcelas.");
+        } catch (NullPointerException npe) {
+            ErrorMessage.print(new BundleUtil().getMessage("operacao_not_null"));
         }
     }
 
@@ -681,6 +697,17 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         }
     }
 
+    public void addCartaoQuandoSelecionadoNaParcela(ParcelaBV parcela) {
+        if (parcela.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CARTAO) {
+            for (ParcelaBV p : parcelas) {
+                if (p.getId().equals(parcela.getId())) {
+                    p.setCartao(notaEmitida.getFormaDeRecebimento().getCartao());
+                    p.setCodigoTransacao("000000");
+                }
+            }
+        }
+    }
+
     public void deleteChequeEntrada() {
         if (chequeSelecionado != null) {
             valoresAVista.getCheques().remove(valoresAVista.getCheques().indexOf(chequeSelecionado));
@@ -692,6 +719,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         chequeSelecionado = null;
         cheque = new ChequeBV();
         cheque.setCotacao(cotacao);
+    }
+
+    public void limparChequeParcelas() {
+        parcelaBV.setBanco(null);
+        parcelaBV.setAgencia(null);
+        parcelaBV.setNumeroCheque(null);
+        parcelaBV.setConta(null);
+        parcelaBV.setEmitente(null);
+        parcelaBV.setObservacao(null);
     }
 
     // ------------------------- Fim Parcelas ---------------------------------
@@ -721,6 +757,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
             notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
             calculaTotaisFormaDeRecebimento();
+            recalculaValores();
         } else if (obj instanceof Banco) {
             cheque.setBanco((Banco) obj);
         } else if (obj instanceof Cartao) {
@@ -782,8 +819,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void addDetalheParcelaCheque() {
         try {
-            parcelaBV.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
-            parcelaBV.construirCheque(); // Constroi Cheque para validar.
 
             //Seleciona o cheque na parcela
             parcelaSelecionada.setBanco(parcelaBV.getBanco());
@@ -793,8 +828,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             parcelaSelecionada.setEmitente(parcelaBV.getEmitente());
             parcelaSelecionada.setObservacao(parcelaBV.getObservacao());
             parcelas.set(parcelas.indexOf(parcelaSelecionada), parcelaSelecionada);
+            parcelaBV.construirCheque(); // Constroi Cheque para validar.
+
             parcelaBV = new ParcelaBV();
             parcelaSelecionada = null;
+
+            RequestContext r = RequestContext.getCurrentInstance();
+            r.update("conteudo:ne:neParcelas");
+            r.execute("PF('detalheChequeParcela').hide()");
+
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
