@@ -581,3 +581,9 @@ body .ui-button.red-btn.ui-state-active {
     right: -23px;
     display: block;
 }
+
+.ui-clock{
+    background: none !important;
+    border: none !important;
+    color: #efefef !important;
+}

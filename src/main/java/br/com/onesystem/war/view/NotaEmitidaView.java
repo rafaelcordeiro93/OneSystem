@@ -38,7 +38,6 @@ import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Money;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
@@ -56,7 +55,6 @@ import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import com.google.gson.Gson;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -67,8 +65,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -476,10 +472,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         for (CotacaoValores c : cotacoes) {
             if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
                 Baixa baixa = new BaixaBuilder().cancelada(false)
-                        .comCotacao(c.getCotacao()).comDesconto(valoresAVista.getDesconto()).comEmissao(notaEmitida.getEmissao())
+                        .comCotacao(c.getCotacao()).comEmissao(notaEmitida.getEmissao())
                         .comNaturezaFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira())
                         .comPessoa(notaEmitida.getPessoa()).comReceita(notaEmitida.getOperacao().getVendaAVista())
-                        .comValor(getTotalNota()).construir();
+                        .comValor(c.getValorAReceber()).construir();
                 baixas.add(baixa);
             }
         }
