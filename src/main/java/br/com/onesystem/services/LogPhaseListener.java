@@ -4,6 +4,8 @@
  */
 package br.com.onesystem.services;
 
+import br.com.onesystem.dao.UsuarioDAO;
+import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DadosNecessarios;
@@ -48,16 +50,20 @@ public class LogPhaseListener implements PhaseListener {
         if (login == null && !janela.equals("/login.xhtml")) {
             ec.redirect("/OneSystem-war/login.xhtml");
         } else if (login == null && janela.equals("/login.xhtml")) {
-
         } else if (login.equals("Anonymous") || janela.contains("selecao")) {//Adicionar funcionalidade de supervisor
             return;
         } else if (janela.contains("selecao")) {//Faz com que as janelas de Selecao nao precisem de permissoes
             return;
         } else if (janela.equals("/access.xhtml")) {
 
-        } else if (!login.equals(null) && !janela.equals("/dashboard.xhtml")) { //Verifica a permissao nas janelas que forem abertas
-            boolean privilegio = new UsuarioLogadoUtil().getPrivilegio(new BundleUtil().getLabel("Consultar"));
-            if (privilegio == false) {
+        } else if (!login.equals("Anonymous")) { //Verifica a permissao nas janelas que forem abertas
+            UsuarioLogadoUtil usuarioLogado = new UsuarioLogadoUtil();
+            Usuario usuario = new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado();
+            boolean consulta = usuarioLogado.buscaPermissoesNoBanco(new BundleUtil().getLabel("Consultar"), janela, usuario);
+
+            if (consulta) {
+                usuarioLogado.carregaPreferenciasDo(usuario);
+            } else {
                 ec.redirect("/OneSystem-war/access.xhtml");
             }
         } else {

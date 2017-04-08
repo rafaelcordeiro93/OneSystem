@@ -5,7 +5,6 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.util.MD5Util;
 import java.io.Serializable;
@@ -16,7 +15,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
-import org.primefaces.atlantis.view.GuestPreferences;
 
 /**
  *
@@ -50,7 +48,6 @@ public class LoginView implements Serializable {
                     session.setAttribute("minds.login.token", login);
                     session.setAttribute("minds.nome.token", usuarioCadastrado.getPessoa().getNome());
                     session.setAttribute("minds.GrupoPV.token", usuarioCadastrado.getGrupoDePrivilegio().getNome());
-                    Preferencias(login);
                     return "dashboard?faces-redirect=true";
                 }
             }
@@ -62,17 +59,7 @@ public class LoginView implements Serializable {
         session.setAttribute("minds.login.token", "Anonymous");
         session.setAttribute("minds.nome.token", "Anonymous");
         return "dashboard?faces-redirect=true";
-    }
-    
-     private void Preferencias(String email) {
-            GuestPreferences gp = new GuestPreferences();
-            Usuario user = new UsuarioDAO().buscarUsuarios().porEmailString(email).resultado();
-            gp.setLayout(user.getCorLayout());
-            gp.setTheme(user.getCorTema());
-            gp.setDarkMenu(user.isDarkMenu());
-            gp.setOverlayMenu(user.isOverlayMenu());
-            gp.setOrientationRTL(user.isOrientationRTL());
-    }
+    }  
 
     @PostConstruct
     public void construct() {
@@ -107,7 +94,7 @@ public class LoginView implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
+
     public String getNomeUsuario() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
@@ -115,7 +102,7 @@ public class LoginView implements Serializable {
         String username = (String) session.getAttribute("minds.nome.token");
         return username;
     }
-    
+
     public String getminhaSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
