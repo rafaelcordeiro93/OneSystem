@@ -22,7 +22,8 @@
             <li class="profile-item">
                 <a href="#">                            
                     <div class="profile-image">
-                        <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
+                        <i class="fa fa-user Fs40" style="color: white; align-content: center; padding-right: 10px" />
+                        <!-- <p:graphicImage name="images/profile-image.png" library="atlantis-layout" /> -->
                     </div>
                     <div class="profile-info">
                         <span class="topbar-item-name profile-name">#{usuarioLogadoUtil.nomeUsuario}</span>
@@ -31,14 +32,14 @@
                 </a>
 
                 <ul class="animated">
-                    
-                     <li role="menuitem">
-                        <a href="/OneSystem-war/perfilUsuario.xhtml"> <i class="fa fa-fw fa-sign-out"></i> <span>#{l.Perfil}</span> </a>
+
+                    <li role="menuitem">
+                        <a href="/OneSystem-war/perfilUsuario.xhtml"> <i class="fa fa-fw fa-user-o"></i> <span>#{l.Perfil}</span> </a>
                     </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/login.xhtml"> <i class="fa fa-fw fa-sign-out"></i> <span>#{l.Logout}</span> </a>
                     </li>
-                    
+
                 </ul>
             </li>
 

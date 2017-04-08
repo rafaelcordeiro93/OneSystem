@@ -12,7 +12,7 @@
             <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4.5%" ><i class="fa fa-building-o Fs40" style="color: #848484"/> #{l.Perfil}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5.2%" ><i class="fa fa-user Fs40" style="color: #848484"/> #{l.Perfil}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
@@ -55,18 +55,17 @@
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
                             <p:outputLabel value="#{l.Cor_Tema}"/>
-                            
-                            
-                                                      
-                            <p:commandButton  value="Blue" actionListener="#{guestPreferences.setTheme('blue')}" ajax="false" > </p:commandButton>
-                              <p:commandButton  value="Cyan" actionListener="#{perfilUsuarioView.setTheme('pink')}" ajax="false" > </p:commandButton>
+
+
+                            <p:commandButton  value="Cyan" actionListener="#{guestPreferences.setTheme('pink')}" ajax="false" > </p:commandButton>
+
 
 
                             <p:outputLabel value="#{l.Cor_Botoes}"/>
-
+                            <p:commandButton  value="Blue" actionListener="#{guestPreferences.setLayout('blue')}" ajax="false" > </p:commandButton>
 
                             <p:outputLabel value="#{l.Estilo_Menu}"/>
-
+                            <p:commandButton  value="Overlay" actionListener="#{guestPreferences.setOverlayMenu(true)}" ajax="false" > </p:commandButton>
 
                         </p:panelGrid>
 
