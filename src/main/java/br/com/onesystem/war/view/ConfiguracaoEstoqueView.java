@@ -52,11 +52,7 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque> im
             die.print();
         }
     }
-    
-    @Override
-    public void buscaPorId() {
-    }
-    
+        
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
@@ -67,14 +63,6 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque> im
             ListaDePreco lp = (ListaDePreco) obj;
             configuracaoEstoqueBV.setListaDePreco(lp);
         }
-    }
-    
-    public void removeConta() {
-        configuracaoEstoqueBV.setContaDeEstoqueEmpresa(null);
-    }
-    
-    public void removeListaDePreco() {
-        configuracaoEstoqueBV.setListaDePreco(null);
     }
     
     public ConfiguracaoEstoqueBV getConfiguracaoBV() {

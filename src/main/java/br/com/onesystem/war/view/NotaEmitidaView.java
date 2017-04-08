@@ -63,10 +63,8 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -131,6 +129,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
+        notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
         creditoBV = new CreditoBV();
         itemEmitido = new ItemEmitidoBV();
         itensEmitidos = new ArrayList<>();
@@ -328,7 +327,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     public void add(NotaEmitida ne) throws ConstraintViolationException, DadoInvalidoException {
         new AdicionaDAO<NotaEmitida>().adiciona(ne);
         InfoMessage.adicionado();
-        System.out.println(ne);
         limparJanela();
     }
 
@@ -484,23 +482,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
         notaEmitida.setBaixas(baixas);
 
         geraValoresAVista();
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = notaEmitida.getId();
-        if (id != null) {
-            try {
-                NotaEmitidaDAO dao = new NotaEmitidaDAO();
-                NotaEmitida ne = dao.buscarNotaEmitidaW().porId(id).resultado();
-                notaEmitidaSelecionada = ne;
-                notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                notaEmitida.setId(id);
-                die.print();
-            }
-        }
     }
 
     // -------------- Fim Operações para criação da entidade ------------------

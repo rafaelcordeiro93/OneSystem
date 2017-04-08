@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 8%">
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                    <h2 class="BigTopic">#{l.Consulta_De_Registro}</h2>
+                    <div class="EmptyBox20"/>
+
+                    <div class="ui-fluid">
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-3"  value="#{l.Nota_Emitida}:"/>
+                        </div>
+                        <div class="ui-g">
+                            <a:inputTextDialog id="cNotaEmitida" value="#{consultaNotaEmitidaView.notaEmitida}" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" update=":conteudo" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" styleDiv="max-width: 230px !important" style="max-width: 250px !important" styleClass="ui-g-12 ui-md-6 ui-lg-3" onlyNumber="true"/>
+                        </div>
+                        <p:separator/>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-3" value="#{l.Operacao}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-3" value="#{consultaNotaEmitidaView.notaEmitida.operacao.id} #{consultaNotaEmitidaView.notaEmitida.operacao.nome}"/>
+                        </div>
+
+                    </div>
+                </div>  
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

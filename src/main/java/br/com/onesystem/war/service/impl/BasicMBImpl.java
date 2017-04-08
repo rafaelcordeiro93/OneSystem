@@ -8,6 +8,7 @@ public abstract class BasicMBImpl<Bean> {
 
     public abstract void selecionar(SelectEvent event);
 
-    public abstract void buscaPorId();
+    @Deprecated
+    public void buscaPorId(){};
 
 }

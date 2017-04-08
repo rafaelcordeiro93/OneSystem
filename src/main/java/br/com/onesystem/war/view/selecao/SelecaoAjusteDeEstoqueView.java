@@ -36,15 +36,15 @@ public class SelecaoAjusteDeEstoqueView extends BasicCrudMBImpl<AjusteDeEstoque>
 
     @Override
     public List<AjusteDeEstoque> complete(String query) {
-        List<AjusteDeEstoque> bancosFIltrados = new ArrayList<>();
+        List<AjusteDeEstoque> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (AjusteDeEstoque a : beans) {
                 if (StringUtils.startsWithIgnoreCase(a.getId().toString(), query)) {
-                    bancosFIltrados.add(a);
+                    listaFIltrada.add(a);
                 }
             }
         }
-        return bancosFIltrados;
+        return listaFIltrada;
     }
 
     public AjusteDeEstoqueService getService() {

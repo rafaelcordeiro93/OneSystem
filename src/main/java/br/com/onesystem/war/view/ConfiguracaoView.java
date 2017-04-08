@@ -3,8 +3,11 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoBV;
@@ -14,6 +17,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +31,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class ConfiguracaoView implements Serializable {
+public class ConfiguracaoView extends BasicMBImpl<Configuracao> implements Serializable {
 
     private ConfiguracaoBV configuracaoBV;
     private Configuracao configuracao;
@@ -62,30 +66,22 @@ public class ConfiguracaoView implements Serializable {
         }
     }
 
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof Moeda) {
+            configuracaoBV.setMoedaPadrao((Moeda) obj);
+        } else if (obj instanceof Despesa) {
+            configuracaoBV.setDespesaDeComissao((Despesa) obj);
+        }
+    }
+
     public List<TipoDeFormacaoDePreco> getTipoFormacaoDePreco() {
         return Arrays.asList(TipoDeFormacaoDePreco.values());
     }
-    
+
     public List<TipoDeCalculoDeCusto> getTipoDeCalculoDeCusto() {
         return Arrays.asList(TipoDeCalculoDeCusto.values());
-    }
-
-    public void selecionaMoeda(SelectEvent event) {
-        Moeda moeda = (Moeda) event.getObject();
-        configuracaoBV.setMoedaPadrao(moeda);
-    }
-
-    public void removeMoeda() {
-        configuracaoBV.setMoedaPadrao(null);
-    }
-
-    public void selecionaDespesaDeComissao(SelectEvent event) {
-        Despesa despesa = (Despesa) event.getObject();
-        configuracaoBV.setDespesaDeComissao(despesa);
-    }
-
-    public void removeDespesaDeComissao() {
-        configuracaoBV.setMoedaPadrao(null);
     }
 
     public ConfiguracaoBV getConfiguracaoBV() {

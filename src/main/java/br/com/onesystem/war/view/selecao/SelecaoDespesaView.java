@@ -31,7 +31,7 @@ public class SelecaoDespesaView extends BasicCrudMBImpl<Despesa> implements Seri
     
     @Override
     public String abrirEdicao() {
-        return "despesa";
+        return "tipoDespesa";
     }
     
     @Override

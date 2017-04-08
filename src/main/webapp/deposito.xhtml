@@ -22,8 +22,8 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="depositoId" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" value="#{depositoView.deposito.id}" update=":conteudo" />
-
+                            <a:inputTextDialog id="depositoId" value="#{depositoView.deposito}" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" update=":conteudo" var="deposito" converter="depositoBVConverter" itemLabel="#{deposito.id}" itemValue="#{deposito}" editVisible="false" onlyNumber="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+                            
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{depositoView.deposito.nome}" maxlength="60"/>
                         </p:panelGrid>

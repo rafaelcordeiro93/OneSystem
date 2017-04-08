@@ -9,7 +9,7 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-12">
+            <div class="ui-g-10" style="margin-left: 8%">
                 <div class="card">                                 
                     <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
                     <div class="EmptyBox5"/>
@@ -19,40 +19,23 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="margem" size="26" value="#{ajusteDeEstoqueView.ajusteDeEstoque.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{ajusteDeEstoqueView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoAjusteDeEstoqueView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaAjusteDeEstoque}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
-
+                            <a:inputTextDialog id="margem" value="#{ajusteDeEstoqueView.ajusteDeEstoque}" dialog="#{selecaoAjusteDeEstoqueView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo" var="ajusteDeEstoque" converter="ajusteDeEstoqueBVConverter" itemLabel="#{ajusteDeEstoque.id}" itemValue="#{ajusteDeEstoque}" onlyNumber="true" editVisible="false"/>
+                            
                             <p:outputLabel value="#{l.Operacao}"/>
-                            <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.ajusteDeEstoque.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{ajusteDeEstoqueView}" />
-
+                            <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.ajusteDeEstoque.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+                            
                             <p:outputLabel value="#{l.Data}"/>
                             <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.ajusteDeEstoque.emissao}"/> 
 
                             <p:outputLabel value="#{l.Item}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="itemAjuste" size="26" readonly="true" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoItemView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaItem}" process="@this" update="itemAjuste,quantidadeId" />
-                                </p:commandButton>
-                            </h:panelGrid>  
-
+                            <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.ajusteDeEstoque.item}" dialog="#{selecaoItemView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
+                            
                             <p:outputLabel value="#{l.Quantidade}"/>
                             <p:inputNumber id="quantidadeId" symbol="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.ajusteDeEstoque.item.unidadeDeMedida.casasDecimais}" />
 
                             <p:outputLabel value="#{l.Deposito}"/>
-                            <h:panelGrid columns="2"  style="margin-left: -1%">
-                                <p:inputText id="depositoAjuste" size="26" readonly="true" value="#{ajusteDeEstoqueView.ajusteDeEstoque.deposito.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDepositoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaDeposito}" process="@this" update="depositoAjuste" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
+                            <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.ajusteDeEstoque.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+                            
                             <p:outputLabel value="#{l.Custo}"/>
                             <p:inputNumber symbol="#{ajusteDeEstoqueView.configuracao.moedaPadrao.sigla} " value="#{ajusteDeEstoqueView.ajusteDeEstoque.custo}" decimalPlaces="2" />
 
