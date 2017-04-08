@@ -9,13 +9,17 @@ import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BeanUtil;
 import br.com.onesystem.util.BundleUtil;
 import java.util.List;
+import javax.el.ELContext;
+import javax.el.ExpressionFactory;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.atlantis.view.GuestPreferences;
 
 @ManagedBean
 @ViewScoped
@@ -26,14 +30,19 @@ public class UsuarioLogadoUtil {
         ExternalContext ec = context.getExternalContext();
         HttpSession session = (HttpSession) ec.getSession(true);
         String login = (String) session.getAttribute("minds.login.token");
-        if(login.equals("Anonymous")) return true;
+        if (login.equals("Anonymous")) {
+            return true;
+        }
         String janela = context.getViewRoot().getViewId();
-       
-        Usuario usuario = new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado();
+
+        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
+    }
+
+    public boolean buscaPermissoesNoBanco(String tipo, String janela, Usuario usuario) throws DadoInvalidoException {
         List<Privilegio> listaPrivilegios = usuario.getGrupoDePrivilegio().getListaPrivilegios();
 
         if (tipo == new BundleUtil().getLabel("Consultar")) {
-            return getPrivilegioCulsultar(listaPrivilegios, janela);
+            return getPrivilegioConsultar(listaPrivilegios, janela);
         }
         if (tipo == new BundleUtil().getLabel("Adicionar")) {
             return getPrivilegioAdicionar(listaPrivilegios, janela);
@@ -48,7 +57,17 @@ public class UsuarioLogadoUtil {
         }
     }
 
-    private boolean getPrivilegioCulsultar(List<Privilegio> listaPrivilegios, String janela) throws DadoInvalidoException {
+    public void carregaPreferenciasDo(Usuario usuario) {
+        GuestPreferences gp = (GuestPreferences) new BeanUtil().getBeanNaSessao("guestPreferences");
+
+        gp.setLayout(usuario.getCorLayout());
+        gp.setTheme(usuario.getCorTema());
+        gp.setDarkMenu(usuario.isDarkMenu());
+        gp.setOverlayMenu(usuario.isOverlayMenu());
+        gp.setOrientationRTL(usuario.isOrientationRTL());
+    }
+
+    private boolean getPrivilegioConsultar(List<Privilegio> listaPrivilegios, String janela) throws DadoInvalidoException {
         for (Privilegio privilegioEncontrado : listaPrivilegios) {
             if (privilegioEncontrado.getJanela().getEndereco().equals(janela)) {
                 if (privilegioEncontrado.isConsultar() == true) {
