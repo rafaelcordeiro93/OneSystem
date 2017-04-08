@@ -5,6 +5,7 @@ import br.com.onesystem.util.JPAUtil;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -33,10 +34,15 @@ public class ArmazemDeRegistros<T> {
     }
 
     public T resultadoUnicoDaConsulta(String consulta, Map<String, Object> parametros) {
-        EntityManager manager = JPAUtil.getEntityManager();
-        TypedQuery<T> query = manager.createQuery(consulta, classe);
-        adicionarParametrosNaConsulta(query, parametros);
-        return query.getSingleResult();
+        try {
+            EntityManager manager = JPAUtil.getEntityManager();
+            TypedQuery<T> query = manager.createQuery(consulta, classe);
+            adicionarParametrosNaConsulta(query, parametros);
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            nre.getMessage();
+        }
+        return null;
     }
 
     private void adicionarParametrosNaConsulta(TypedQuery<T> query, Map<String, Object> parametros) {

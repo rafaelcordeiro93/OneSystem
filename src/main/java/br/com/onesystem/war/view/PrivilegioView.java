@@ -58,7 +58,7 @@ public class PrivilegioView implements Serializable {
             for (Privilegio p : privilegioLista) {
                 new AtualizaDAO<Privilegio>(Privilegio.class).atualiza(p);
             }
-            InfoMessage.print("Privilégio atualizado!");
+            InfoMessage.atualizado();
         } catch (DadoInvalidoException die) {
             die.print();
         }
