@@ -20,9 +20,8 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="recebimentoid" value="#{formaDeRecebimentoView.formaDeRecebimento.id}" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}"
-                                                 update="conteudo"/>
-
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.formaDeRecebimento}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" ItemLabelTabVisible="true" ItemLabelTab="#{formaDeRecebimento.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
+                            
                             <p:outputLabel value="#{l.Nome}" />
                             <p:inputText value="#{formaDeRecebimentoView.formaDeRecebimento.nome}"  maxlength="60"/>
 
@@ -86,8 +85,8 @@
                             <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />  
 
                             <p:outputLabel value="#{l.Cartao}"/>
-                            <a:inputTextDialog id="formaRecCartaoParcela" value="#{formaDeRecebimentoView.formaDeRecebimento.cartao.nome}" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}"/>
-
+                            <a:inputTextDialog id="formaRecCartaoParcela" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.formaDeRecebimento.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{cartao.nome}"/>
+                          
                             <p:outputLabel value="#{l.Primeira_Parcela}" />
                             <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
 

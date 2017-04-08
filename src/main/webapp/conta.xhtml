@@ -31,7 +31,7 @@
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText id="nome" value="#{contaView.conta.nome}"/>
 
-                            <p:outputLabel value="#{l.Banco}"/>
+                            <p:outputLabel value="#{l.Banco}"/> 
                             <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.conta.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{banco.nome}"/>
 
                             <p:outputLabel value="#{l.Moeda}"/>

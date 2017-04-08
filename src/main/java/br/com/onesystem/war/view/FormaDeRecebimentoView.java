@@ -151,6 +151,9 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento> impl
     }
 
     public FormaDeRecebimentoBV getFormaDeRecebimento() {
+        if(formaDeRecebimento == null){
+            limparJanela();
+        }
         return formaDeRecebimento;
     }
 
