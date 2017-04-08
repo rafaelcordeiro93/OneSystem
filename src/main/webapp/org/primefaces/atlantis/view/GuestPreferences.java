@@ -21,9 +21,10 @@ import java.util.HashMap;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class GuestPreferences implements Serializable {
     
     private Map<String,String> themeColors;
