@@ -59,7 +59,7 @@ public class LoginView implements Serializable {
         session.setAttribute("minds.login.token", "Anonymous");
         session.setAttribute("minds.nome.token", "Anonymous");
         return "dashboard?faces-redirect=true";
-    }
+    }  
 
     @PostConstruct
     public void construct() {
@@ -94,7 +94,7 @@ public class LoginView implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
+
     public String getNomeUsuario() {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
@@ -102,7 +102,7 @@ public class LoginView implements Serializable {
         String username = (String) session.getAttribute("minds.nome.token");
         return username;
     }
-    
+
     public String getminhaSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
