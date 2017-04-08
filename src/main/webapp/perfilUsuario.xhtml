@@ -38,7 +38,7 @@
                         <div class="EmptyBox20"/>
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
-                            <p:outputLabel value="#{l.Senha_Antiga}"/>
+                            <p:outputLabel value="#{l.Senha_Atual}"/>
                             <p:password value="#{perfilUsuarioView.senhaVelha}" />       
 
                             <p:outputLabel value="#{l.Senha_Nova}"/>
@@ -47,22 +47,27 @@
                             <p:outputLabel value="#{l.Senha_Confirma}"/>
                             <p:password value="#{perfilUsuarioView.senhaConfirma}" />    
                         </p:panelGrid>
-                        
-                          <div class="EmptyBox20"/>
+
+                        <div class="EmptyBox20"/>
                         <h4 style="font-size: 15px" >#{l.Aparencia_Sistema}</h4>
                         <p:separator/>
                         <div class="EmptyBox20"/>
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
                             <p:outputLabel value="#{l.Cor_Tema}"/>
-                              
+                            
+                            
+                                                      
+                            <p:commandButton  value="Blue" actionListener="#{guestPreferences.setTheme('blue')}" ajax="false" > </p:commandButton>
+                              <p:commandButton  value="Cyan" actionListener="#{perfilUsuarioView.setTheme('pink')}" ajax="false" > </p:commandButton>
+
 
                             <p:outputLabel value="#{l.Cor_Botoes}"/>
-                           
+
 
                             <p:outputLabel value="#{l.Estilo_Menu}"/>
-                           
-                            
+
+
                         </p:panelGrid>
 
                         <p:separator/>

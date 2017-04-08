@@ -32,9 +32,9 @@ public class PerfilUsuarioView implements Serializable {
     private PessoaBV pessoa;
     String senhaVelha = "";
     String senhaConfirma = "";
-    private Map<String, String> themeColors;
+    //private Map<String, String> themeColors;
     private String theme = "blue";
-    private String layout = "pink";
+    private String layout = "steel";
     private boolean overlayMenu;
     private boolean darkMenu;
     private boolean orientationRTL;
@@ -44,29 +44,29 @@ public class PerfilUsuarioView implements Serializable {
 
     @PostConstruct
     public void init() {
-        themeColors = new HashMap<String, String>();
-        themeColors.put("turquoise", "#47c5d4");
-        themeColors.put("blue", "#3192e1");
-        themeColors.put("orange", "#ff9c59");
-        themeColors.put("purple", "#985edb");
-        themeColors.put("pink", "#e42a7b");
-        themeColors.put("purple", "#985edb");
-        themeColors.put("green", "#5ea980");
-        themeColors.put("black", "#545b61");
         buscaUsuario();
+
+//        themeColors = new HashMap<String, String>();
+//        themeColors.put("turquoise", "#47c5d4");
+//        themeColors.put("blue", "#3192e1");
+//        themeColors.put("orange", "#ff9c59");
+//        themeColors.put("purple", "#985edb");
+//        themeColors.put("pink", "#e42a7b");
+//        themeColors.put("purple", "#985edb");
+//        themeColors.put("green", "#5ea980");
+//        themeColors.put("black", "#545b61");
     }
 
     public void update() {
         try {
             atualizaPessoa();
-            validaSenha(usuario.construirComID());
-            System.out.println(usuario.getPessoa());
+            validaSenha();
             Usuario usuarioExistente = usuario.construirComID();
-            
             if (usuarioExistente.getId() != null) {
+                new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(usuarioExistente.getPessoa());
                 new AtualizaDAO<Usuario>(Usuario.class).atualiza(usuarioExistente);
                 InfoMessage.atualizado();
-                limparJanela();
+                buscaUsuario();
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
             }
@@ -76,34 +76,39 @@ public class PerfilUsuarioView implements Serializable {
     }
 
     private void atualizaPessoa() throws DadoInvalidoException {
-        Pessoa ps = new PessoaFisica(usuarioSelecionada.getPessoa().getDocumento(), usuarioSelecionada.getPessoa().getNascimento(), usuarioSelecionada.getPessoa().getId(),
+        Pessoa p = new PessoaFisica(usuarioSelecionada.getPessoa().getDocumento(), usuarioSelecionada.getPessoa().getNascimento(), usuarioSelecionada.getPessoa().getId(),
                 pessoa.getNome(), TipoPessoa.PESSOA_FISICA, usuarioSelecionada.getPessoa().getRuc(), usuarioSelecionada.getPessoa().isAtivo(), usuarioSelecionada.getPessoa().getDirecao(),
                 usuarioSelecionada.getPessoa().getBairro(), usuarioSelecionada.getPessoa().isCategoriaCliente(), usuarioSelecionada.getPessoa().isCategoriaFornecedor(), usuarioSelecionada.getPessoa().isCategoriaVendedor(), usuarioSelecionada.getPessoa().isCategoriaTransportador(),
                 usuarioSelecionada.getPessoa().getConjuge(), usuarioSelecionada.getPessoa().getDesconto(), usuarioSelecionada.getPessoa().getCadastro(), usuarioSelecionada.getPessoa().getObservacao(),
                 usuarioSelecionada.getPessoa().getFiador(), usuarioSelecionada.getPessoa().getCidade(), pessoa.getTelefone(), pessoa.getEmail(), usuarioSelecionada.getPessoa().getContato());
-
-        usuario.setPessoa(ps);
+        usuario.setPessoa(p);
     }
 
-    private void validaSenha(Usuario user) throws EDadoInvalidoException, DadoInvalidoException {
-        if (user.getSenha() != null) {
-            usuario.setSenha(new MD5Util().md5Hex(usuario.getSenha()));
-        } else if (!validaUsuarioExistente(user)) {
-            Usuario buscar = new UsuarioDAO().buscarUsuarios().porId(user.getId()).resultado();
-            usuario.setSenha(buscar.getSenha());
+    private void validaSenha() throws EDadoInvalidoException, DadoInvalidoException {
+        if (usuario.getSenha() != null) {
+            if (!usuarioSelecionada.getSenha().equals(new MD5Util().md5Hex(senhaVelha))) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("senha_atual_errado"));
+            } else if (!(new MD5Util().md5Hex(usuario.getSenha())).equals(new MD5Util().md5Hex(senhaConfirma))) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("senha_confirmacao_errado"));
+            } else {
+                usuario.setSenha(new MD5Util().md5Hex(usuario.getSenha()));
+            }
+        } else if (!validaUsuarioExistente(usuario.construirComID())) {
+            usuario.setSenha(usuarioSelecionada.getSenha());
         } else {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("informar_senha"));
         }
     }
 
     private void buscaUsuario() {
-        usuario = new UsuarioBV();
-        usuarioSelecionada = null;
+        limparJanela();
         usuarioSelecionada = service.buscarUsuarioPerfil();
+
         if (usuarioSelecionada != null) {
             usuario.setId(usuarioSelecionada.getId());
             usuario.setGrupoPrivilegio(usuarioSelecionada.getGrupoDePrivilegio());
             pessoa = new PessoaBV(usuarioSelecionada.getPessoa());
+
         }
     }
 
@@ -171,10 +176,9 @@ public class PerfilUsuarioView implements Serializable {
         this.overlayMenu = value;
     }
 
-    public Map getThemeColors() {
-        return this.themeColors;
-    }
-
+//    public Map getThemeColors() {
+//        return this.themeColors;
+//    }
     public boolean isOrientationRTL() {
         return orientationRTL;
     }

@@ -27,7 +27,7 @@ public class UsuarioLogadoUtil {
         HttpSession session = (HttpSession) ec.getSession(true);
         String login = (String) session.getAttribute("minds.login.token");
         String janela = context.getViewRoot().getViewId();
-
+       
         Usuario usuario = new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado();
         List<Privilegio> listaPrivilegios = usuario.getGrupoDePrivilegio().getListaPrivilegios();
 
@@ -113,5 +113,6 @@ public class UsuarioLogadoUtil {
         HttpSession session = (HttpSession) ec.getSession(true);
         String grupo = (String) session.getAttribute("minds.GrupoPV.token");
         return grupo;
+
     }
 }

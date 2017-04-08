@@ -5,9 +5,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.Usuario;
-import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.JPAUtil;
@@ -15,9 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import org.hibernate.Hibernate;
 
 /**
  *

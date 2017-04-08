@@ -34,9 +34,10 @@ import java.util.List;
 public class DadosIniciais {
 
     public static void main(String[] args) throws DadoInvalidoException {
-
-        Pessoa pessoa = new PessoaFisica(null, null, null, "Rafael", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, null, null, null, null);
-        new AdicionaDAO<Pessoa>().adiciona(pessoa);
+        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, null, null, "rauber@rrminds.com", null);
+        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, null, null, "cordeiro@rrminds.com", null);
+        new AdicionaDAO<Pessoa>().adiciona(cordeiro);
+        new AdicionaDAO<Pessoa>().adiciona(rauber);
 
         GrupoDePrivilegio grupoDePrivilegio = new GrupoDePrivilegio(null, "Administrador");
         new AdicionaDAO<GrupoDePrivilegio>().adiciona(grupoDePrivilegio);
@@ -262,9 +263,10 @@ public class DadosIniciais {
         for (Privilegio p : listaPrivilegios) {
             daoPrivilegio.adiciona(p);
         }
-
-//        Usuario usuario = new Usuario(null, pessoa, "rafa@gmail.com", "e10adc3949ba59abbe56e057f20f883e", grupoDePrivilegio, true);
-//        new AdicionaDAO<Usuario>().adiciona(usuario);
+        Usuario usercordeiro = new Usuario(null, cordeiro, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, false, false);
+        Usuario userrauber = new Usuario(null, rauber, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, false, false);
+        new AdicionaDAO<Usuario>().adiciona(usercordeiro);
+        new AdicionaDAO<Usuario>().adiciona(userrauber);
         // -- Adiciona Grupo Financeiro
         AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
 

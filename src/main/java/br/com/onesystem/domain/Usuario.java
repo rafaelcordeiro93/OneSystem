@@ -43,17 +43,27 @@ public class Usuario implements Serializable {
     @ManyToOne(optional = false)
     private GrupoDePrivilegio grupoPrivilegio;
     private boolean supervisor = false;
+    private String corTema;
+    private String corLayout;
+    private boolean overlayMenu;
+    private boolean darkMenu;
+    private boolean orientationRTL;
 
     public Usuario() {
     }
 
     public Usuario(Long id, Pessoa pessoa, String senha, GrupoDePrivilegio grupoPrivilegio,
-            boolean supervisor) throws DadoInvalidoException {
+            boolean supervisor, String corTema, String corLayout, boolean overlayMenu, boolean darkMenu, boolean orientationRTL) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.senha = senha;
         this.grupoPrivilegio = grupoPrivilegio;
         this.supervisor = supervisor;
+        this.corTema = corTema;
+        this.corLayout = corLayout;
+        this.orientationRTL = orientationRTL;
+        this.overlayMenu = overlayMenu;
+        this.darkMenu = darkMenu;
         ehValido();
     }
 
@@ -77,6 +87,26 @@ public class Usuario implements Serializable {
         return supervisor;
     }
 
+    public String getCorTema() {
+        return corTema;
+    }
+
+    public String getCorLayout() {
+        return corLayout;
+    }
+
+    public boolean isOverlayMenu() {
+        return overlayMenu;
+    }
+
+    public boolean isDarkMenu() {
+        return darkMenu;
+    }
+
+    public boolean isOrientationRTL() {
+        return orientationRTL;
+    }
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -93,7 +123,7 @@ public class Usuario implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa","grupoPrivilegio");
+        List<String> campos = Arrays.asList("pessoa", "grupoPrivilegio");
         new ValidadorDeCampos<Usuario>().valida(this, campos);
     }
 

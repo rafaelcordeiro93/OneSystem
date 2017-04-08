@@ -16,6 +16,11 @@ public class UsuarioBuilder {
     private String senha;
     private GrupoDePrivilegio grupoPrivilegio;
     private boolean supervisor = false;
+    private String corTema;
+    private String corLayout;
+    private boolean overlayMenu;
+    private boolean darkMenu;
+    private boolean orientationRTL;
 
     public UsuarioBuilder comID(Long ID) {
         this.ID = ID;
@@ -41,9 +46,34 @@ public class UsuarioBuilder {
         this.supervisor = supervisor;
         return this;
     }
+    
+    public UsuarioBuilder comCorTema(String corTema) {
+        this.corTema = corTema;
+        return this;
+    }
+    
+    public UsuarioBuilder comCorLayout(String corLayout) {
+        this.corLayout = corLayout;
+        return this;
+    }
+    
+    public UsuarioBuilder comOverlayMenu(boolean overlayMenu) {
+        this.overlayMenu = overlayMenu;
+        return this;
+    }
+    
+    public UsuarioBuilder comDarkMenu(boolean darkMenu) {
+        this.darkMenu = darkMenu;
+        return this;
+    }
+    
+    public UsuarioBuilder comOrientationRTL(boolean orientationRTL) {
+        this.orientationRTL = orientationRTL;
+        return this;
+    }
 
     public Usuario construir() throws DadoInvalidoException {
-        return new Usuario(ID, pessoa, senha, grupoPrivilegio, supervisor);
+        return new Usuario(ID, pessoa, senha, grupoPrivilegio, supervisor, corTema, corLayout, overlayMenu, darkMenu, orientationRTL);
     }
 
 }

@@ -57,13 +57,13 @@ public class LogPhaseListener implements PhaseListener {
             ec.redirect("/OneSystem-war/login.xhtml");
         } else if (login == null && janela.equals("/login.xhtml")) {
 
-        } else if (janela.contains("selecao")) {//Adicionar funcionalidade de supervisor
+        } else if (login.equals("Anonymous") || janela.contains("selecao")) {//Adicionar funcionalidade de supervisor
             return;
         } else if (janela.contains("selecao")) {//Faz com que as janelas de Selecao nao precisem de permissoes
             return;
         } else if (janela.equals("/access.xhtml")) {
 
-        } else if (login != null && !janela.equals("/dashboard.xhtml")) { //Verifica a permissao nas janelas que forem abertas
+        } else if (!login.equals(null) && !janela.equals("/dashboard.xhtml")) { //Verifica a permissao nas janelas que forem abertas
             boolean privilegio = new UsuarioLogadoUtil().getPrivilegio(new BundleUtil().getLabel("Consultar"));
             if (privilegio == false) {
                 ec.redirect("/OneSystem-war/access.xhtml");
