@@ -26,16 +26,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.conta}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" converter="contaBVConverter" ItemLabelTabVisible="true" ItemLabelTab="#{conta.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.conta}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" converter="contaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
                             
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText id="nome" value="#{contaView.conta.nome}"/>
 
                             <p:outputLabel value="#{l.Banco}"/> 
-                            <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.conta.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{banco.nome}"/>
+                            <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.conta.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
 
                             <p:outputLabel value="#{l.Moeda}"/>
-                            <a:inputTextDialog id="contaMoeda" dialog="#{selecaoMoedaView}" mbView="#{contaView}" value="#{contaView.conta.moeda}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}" converter="moedaConverter" ItemLabelTabVisible="true" ItemLabelTab="#{moeda.nome}"/>
+                            <a:inputTextDialog id="contaMoeda" dialog="#{selecaoMoedaView}" mbView="#{contaView}" value="#{contaView.conta.moeda}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}" converter="moedaConverter" itemLabelTabVisible="true" itemLabelTab="#{moeda.nome}"/>
 
                         </p:panelGrid>
 
