@@ -23,7 +23,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-@ManagedBean
+@ManagedBean(name = "guestPreferences")
 @SessionScoped
 public class GuestPreferences implements Serializable {
     
