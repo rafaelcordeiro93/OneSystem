@@ -26,6 +26,7 @@ public class UsuarioLogadoUtil {
         ExternalContext ec = context.getExternalContext();
         HttpSession session = (HttpSession) ec.getSession(true);
         String login = (String) session.getAttribute("minds.login.token");
+        if(login.equals("Anonymous")) return true;
         String janela = context.getViewRoot().getViewId();
        
         Usuario usuario = new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado();
