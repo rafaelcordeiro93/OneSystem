@@ -15,11 +15,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -34,12 +32,9 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_USUARIO")
     private Long id;
+    @NotNull(message = "{pessoa_not_null}")
     @OneToOne(optional = false)
     private Pessoa pessoa;
-    @NotNull(message = "{email_not_null}")
-    @Email(message = "{email_invalido}")
-    @Column(nullable = false, length = 100, unique = true)
-    private String email;
     @NotNull(message = "{senha_not_null}")
     @Length(min = 8, max = 100, message = "{senha_length}")
     @Column(nullable = false)
@@ -48,18 +43,27 @@ public class Usuario implements Serializable {
     @ManyToOne(optional = false)
     private GrupoDePrivilegio grupoPrivilegio;
     private boolean supervisor = false;
+    private String corTema;
+    private String corLayout;
+    private boolean overlayMenu;
+    private boolean darkMenu;
+    private boolean orientationRTL;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, Pessoa pessoa, String email, String senha, GrupoDePrivilegio grupoDePrivilegio,
-            boolean supervisor) throws DadoInvalidoException {
+    public Usuario(Long id, Pessoa pessoa, String senha, GrupoDePrivilegio grupoPrivilegio,
+            boolean supervisor, String corTema, String corLayout, boolean overlayMenu, boolean darkMenu, boolean orientationRTL) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
-        this.email = email;
         this.senha = senha;
-        this.grupoPrivilegio = grupoDePrivilegio;
+        this.grupoPrivilegio = grupoPrivilegio;
         this.supervisor = supervisor;
+        this.corTema = corTema;
+        this.corLayout = corLayout;
+        this.orientationRTL = orientationRTL;
+        this.overlayMenu = overlayMenu;
+        this.darkMenu = darkMenu;
         ehValido();
     }
 
@@ -69,10 +73,6 @@ public class Usuario implements Serializable {
 
     public Pessoa getPessoa() {
         return pessoa;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getSenha() {
@@ -85,6 +85,26 @@ public class Usuario implements Serializable {
 
     public boolean isSupervisor() {
         return supervisor;
+    }
+
+    public String getCorTema() {
+        return corTema;
+    }
+
+    public String getCorLayout() {
+        return corLayout;
+    }
+
+    public boolean isOverlayMenu() {
+        return overlayMenu;
+    }
+
+    public boolean isDarkMenu() {
+        return darkMenu;
+    }
+
+    public boolean isOrientationRTL() {
+        return orientationRTL;
     }
 
     @Override
@@ -103,13 +123,13 @@ public class Usuario implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("grupoPrivilegio", "email", "senha");
+        List<String> campos = Arrays.asList("pessoa", "grupoPrivilegio");
         new ValidadorDeCampos<Usuario>().valida(this, campos);
     }
-    
+
     @Override
     public String toString() {
-        return "Usuário - " + "id: " + id + " - pessoa: " + pessoa.getId() + " - login: " + email + " - senha: " + senha
+        return "Usuário - " + "id: " + id + " - pessoa: " + pessoa.getId() + " - senha: " + senha
                 + " - grupo de privilégio: " + grupoPrivilegio;
     }
 }

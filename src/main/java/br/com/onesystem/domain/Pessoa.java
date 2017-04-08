@@ -51,7 +51,7 @@ public abstract class Pessoa implements Serializable {
     @Column(nullable = true)
     private String ruc;
 //    @Length(min = 12, max = 13, message = "{telefono_length}")
-    @Column(nullable = true, length = 13)
+    @Column(nullable = true, length = 20)
     private String telefone;
     @org.hibernate.validator.constraints.Email(message = "{email_invalido}")
     @Column(nullable = true, length = 100)

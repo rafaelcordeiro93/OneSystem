@@ -30,7 +30,7 @@ public final class InfoMessage {
     public static void removido() {
         print(new BundleUtil().getMessage("registro_removido"));
     }
-
+    
     // Exibe a mensagem no console
     public static void printConsole(String message) {
         System.out.println("Message: "
