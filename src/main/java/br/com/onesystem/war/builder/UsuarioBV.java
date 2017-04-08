@@ -9,7 +9,6 @@ import java.io.Serializable;
 public class UsuarioBV implements Serializable {
 
     private Long id;
-    private String email;
     private String senha;
     private Pessoa pessoa;
     private GrupoDePrivilegio grupoPrivilegio;
@@ -20,7 +19,6 @@ public class UsuarioBV implements Serializable {
         this.pessoa = usuarioSelecionada.getPessoa();
         this.grupoPrivilegio = usuarioSelecionada.getGrupoDePrivilegio();
         this.senha = usuarioSelecionada.getSenha();
-        this.email = usuarioSelecionada.getEmail();
         this.supervisor = usuarioSelecionada.isSupervisor();
     }
 
@@ -33,14 +31,6 @@ public class UsuarioBV implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getSenha() {
@@ -76,10 +66,10 @@ public class UsuarioBV implements Serializable {
     }
 
     public Usuario construir() throws DadoInvalidoException {
-        return new Usuario(null, pessoa, email, senha, grupoPrivilegio, supervisor);
+        return new Usuario(null, pessoa, senha, grupoPrivilegio, supervisor);
     }
 
     public Usuario construirComID() throws DadoInvalidoException {
-        return new Usuario(id, pessoa, email, senha, grupoPrivilegio, supervisor);
+        return new Usuario(id, pessoa, senha, grupoPrivilegio, supervisor);
     }
 }

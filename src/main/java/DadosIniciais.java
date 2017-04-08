@@ -44,124 +44,220 @@ public class DadosIniciais {
         // -- Adiciona Módulos
         AdicionaDAO<Modulo> daoModulo = new AdicionaDAO<>();
 
-        Modulo m = new Modulo(null, "Arquivo");
-        Modulo m1 = new Modulo(null, "Financeiro");
-        Modulo m2 = new Modulo(null, "Câmbio");
-        Modulo m3 = new Modulo(null, "Relatórios");
-        Modulo m4 = new Modulo(null, "Preferências");
-        Modulo m5 = new Modulo(null, "Login");
-        Modulo m6 = new Modulo(null, "Estoque");
+        Modulo arq = new Modulo(null, "Arquivo");
+        Modulo fin = new Modulo(null, "Financeiro");
+        Modulo cam = new Modulo(null, "Câmbio");
+        Modulo rela = new Modulo(null, "Relatórios");
+        Modulo pref = new Modulo(null, "Preferências");
+        Modulo login = new Modulo(null, "Login");
+        Modulo admin = new Modulo(null, "Administrativo");
+        Modulo estoque = new Modulo(null, "Estoque");
+        Modulo notas = new Modulo(null, "Notas");
 
-        daoModulo.adiciona(m);
-        daoModulo.adiciona(m1);
-        daoModulo.adiciona(m2);
-        daoModulo.adiciona(m3);
-        daoModulo.adiciona(m4);
-        daoModulo.adiciona(m5);
-        daoModulo.adiciona(m6);
+        daoModulo.adiciona(arq);
+        daoModulo.adiciona(fin);
+        daoModulo.adiciona(cam);
+        daoModulo.adiciona(rela);
+        daoModulo.adiciona(admin);
+        daoModulo.adiciona(pref);
+        daoModulo.adiciona(login);
+        daoModulo.adiciona(estoque);
+        daoModulo.adiciona(notas);
 
         // -- Adiciona Módulos
         AdicionaDAO<Janela> daoJanela = new AdicionaDAO<>();
 
-        Janela j = new Janela(null, "Cidade", "cidade.xhtml", m);
-        Janela j1 = new Janela(null, "Pessoa", "pessoa.xhtml", m);
-        Janela j2 = new Janela(null, "Receber Valores", "recebimento.xhtml", m1);
-        Janela j3 = new Janela(null, "Pagar Valores", "pagamento.xhtml", m1);
-        Janela j4 = new Janela(null, "Extrato Conta", "extratoConta.xhtml", m1);
-        Janela j5 = new Janela(null, "Banco", "banco.xhtml", m1);
-        Janela j6 = new Janela(null, "Moeda", "moeda.xhtml", m1);
-        Janela j7 = new Janela(null, "Conta", "conta.xhtml", m1);
-        Janela j8 = new Janela(null, "Tipo Receita", "tipoReceita.xhtml", m1);
-        Janela j9 = new Janela(null, "Tipo Despesa", "tipoDespesa.xhtml", m1);
-        Janela j10 = new Janela(null, "Tranferência de Lucro", "transferenciaDespesaProvisionada.xhtml", m1);
-        Janela j11 = new Janela(null, "Grupo Financeiro", "grupoFinanceiro.xhtml", m1);
-        Janela j12 = new Janela(null, "Despesa Provisionada", "despesaProvisionada.xhtml", m1);
-        Janela j13 = new Janela(null, "Receita Provisionada", "receitaProvisionada.xhtml", m1);
-        Janela j14 = new Janela(null, "Recepção", "recepcao.xhtml", m2);
-        Janela j15 = new Janela(null, "Contrato de Câmbio", "contratoDeCambio.xhtml", m2);
-        Janela j16 = new Janela(null, "Câmbio", "cambio.xhtml", m2);
-        Janela j17 = new Janela(null, "Relatório de Conta A Pagar", "relatorioDeContaAPagar.xhtml", m3);
-        Janela j18 = new Janela(null, "Relatório de Conta A Receber", "relatorioDeContaAReceber.xhtml", m3);
-        Janela j19 = new Janela(null, "Relatório de Saldo de Conta", "relatorioDeSaldoDeConta.xhtml", m3);
-        Janela j20 = new Janela(null, "Relatório de Recepção", "relatorioDeRecepcao.xhtml", m3);
-        Janela j21 = new Janela(null, "Relatório de Contrato de Câmbio", "relatorioDeContratoDeCambio.xhtml", m3);
-        Janela j22 = new Janela(null, "Relatório de Câmbio", "relatorioDeCambio.xhtml", m3);
-        Janela j23 = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "relatorioDeSaldoDeDivisaoDeLucro.xhtml", m3);
-        Janela j24 = new Janela(null, "Usuário", "usuario.xhtml", m4);
-        Janela j25 = new Janela(null, "Configuração", "configuracao.xhtml", m4);
-        Janela j26 = new Janela(null, "Contrato De Câmbio", "contratoDeCambio.xhtml", m4);
-        Janela j27 = new Janela(null, "Privilégio", "privilegio.xhtml", m4);
-        Janela j28 = new Janela(null, "Login", "login.xhtml", m5);
-        Janela j29 = new Janela(null, "Baixa", "baixa.xhtml", m1);
-        Janela j30 = new Janela(null, "Ajuste de Estoque", "ajusteDeEstoque.xhtml", m6);
-        Janela j31 = new Janela(null, "Conhecimento de Frete", "conhecimentoDeFrete.xhtml", m1);
+        //Modulo de Arquivo
+        Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
+        Janela cidade = new Janela(null, "Cidade", "/cidade.xhtml", arq);
+        Janela jpessoa = new Janela(null, "Pessoa", "/pessoa.xhtml", arq);
+        Janela jpessoaimport = new Janela(null, "Importador de Pessoas", "/importarPessoa.xhtml", arq);
 
-        daoJanela.adiciona(j);
-        daoJanela.adiciona(j1);
-        daoJanela.adiciona(j2);
-        daoJanela.adiciona(j3);
-        daoJanela.adiciona(j4);
-        daoJanela.adiciona(j5);
-        daoJanela.adiciona(j6);
-        daoJanela.adiciona(j7);
-        daoJanela.adiciona(j8);
-        daoJanela.adiciona(j9);
-        daoJanela.adiciona(j10);
-        daoJanela.adiciona(j11);
-        daoJanela.adiciona(j12);
-        daoJanela.adiciona(j13);
-        daoJanela.adiciona(j14);
-        daoJanela.adiciona(j15);
-        daoJanela.adiciona(j16);
-        daoJanela.adiciona(j17);
-        daoJanela.adiciona(j18);
-        daoJanela.adiciona(j19);
-        daoJanela.adiciona(j20);
-        daoJanela.adiciona(j21);
-        daoJanela.adiciona(j22);
-        daoJanela.adiciona(j23);
-        daoJanela.adiciona(j24);
-        daoJanela.adiciona(j25);
-        daoJanela.adiciona(j26);
-        daoJanela.adiciona(j27);
-        daoJanela.adiciona(j28);
-        daoJanela.adiciona(j29);
-        daoJanela.adiciona(j30);
+        daoJanela.adiciona(dashboard);
+        daoJanela.adiciona(cidade);
+        daoJanela.adiciona(jpessoa);
+        daoJanela.adiciona(jpessoaimport);
+
+        //Modulo de Notas
+        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", arq);
+
+        daoJanela.adiciona(notaSaida);
+
+        //Modulo de Estoque
+        Janela jitem = new Janela(null, "Item", "/item.xhtml", estoque);
+        Janela margem = new Janela(null, "Margem", "/margem.xhtml", estoque);
+        Janela conhecimentoFrete = new Janela(null, "Conhecimento de Frete", "/conhecimentoDeFrete.xhtml", estoque);
+        Janela ajusteEstoque = new Janela(null, "Ajuste de Estoque", "/ajusteDeEstoque.xhtml", estoque);
+        Janela contaEstoque = new Janela(null, "Conta de Estoque", "/contaDeEstoque.xhtml", estoque);
+        Janela unidadeMedida = new Janela(null, "Unidade de Medida", "/unidadeMedidaItem.xhtml", estoque);
+        Janela jiva = new Janela(null, "IVA", "/iva.xhtml", estoque);
+        Janela marca = new Janela(null, "Marca", "/marca.xhtml", estoque);
+        Janela depositos = new Janela(null, "Depositos", "/deposito.xhtml", estoque);
+        Janela listaPreco = new Janela(null, "Lista de Preco", "/listaDePreco.xhtml", estoque);
+        Janela comissao = new Janela(null, "Comissao", "/comissao.xhtml", estoque);
+        Janela grupo = new Janela(null, "Grupo", "/grupo.xhtml", estoque);
+        Janela jgrupoFiscal = new Janela(null, "Grupo Fiscal", "/grupoFiscal.xhtml", estoque);
+
+        daoJanela.adiciona(jitem);
+        daoJanela.adiciona(margem);
+        daoJanela.adiciona(conhecimentoFrete);
+        daoJanela.adiciona(ajusteEstoque);
+        daoJanela.adiciona(contaEstoque);
+        daoJanela.adiciona(unidadeMedida);
+        daoJanela.adiciona(jiva);
+        daoJanela.adiciona(marca);
+        daoJanela.adiciona(depositos);
+        daoJanela.adiciona(listaPreco);
+        daoJanela.adiciona(comissao);
+        daoJanela.adiciona(grupo);
+        daoJanela.adiciona(jgrupoFiscal);
+
+        //Modulo Financeiro
+        Janela receberValores = new Janela(null, "Receber Valores", "/recebimento.xhtml", fin);
+        Janela pagarValores = new Janela(null, "Pagar Valores", "/pagamento.xhtml", fin);
+        Janela extratoConta = new Janela(null, "Extrato Conta", "/extratoConta.xhtml", fin);
+        Janela cotacoes = new Janela(null, "Cotacao", "/cotacao.xhtml", fin);
+        Janela baixa = new Janela(null, "Baixa", "/baixa.xhtml", fin);
+        Janela formarecebimento = new Janela(null, "Formas de Recebimento", "/formaDeRecebimento.xhtml", fin);
+        Janela jbanco = new Janela(null, "Banco", "/banco.xhtml", fin);
+        Janela moeda = new Janela(null, "Moeda", "/moeda.xhtml", fin);
+        Janela jconta = new Janela(null, "Conta", "/conta.xhtml", fin);
+        Janela tipoReceita = new Janela(null, "Tipo Receita", "/tipoReceita.xhtml", fin);
+        Janela tipoDespesa = new Janela(null, "Tipo Despesa", "/tipoDespesa.xhtml", fin);
+        Janela transfLucro = new Janela(null, "Tranferência de Lucro", "/transferenciaDespesaProvisionada.xhtml", fin);
+        Janela grupoFinance = new Janela(null, "Grupo Financeiro", "/grupoFinanceiro.xhtml", fin);
+        Janela despProvisi = new Janela(null, "Despesa Provisionada", "/despesaProvisionada.xhtml", fin);
+        Janela receitProvisi = new Janela(null, "Receita Provisionada", "/receitaProvisionada.xhtml", fin);
+        Janela cartao = new Janela(null, "Cartao", "/cartao.xhtml", fin);
+        Janela boletoDeCartao = new Janela(null, "Boleto de Cartao", "/boletoDeCartao.xhtml", fin);
+        Janela cheque = new Janela(null, "Cheque", "/cheque.xhtml", fin);
+
+        daoJanela.adiciona(receberValores);
+        daoJanela.adiciona(pagarValores);
+        daoJanela.adiciona(extratoConta);
+        daoJanela.adiciona(cotacoes);
+        daoJanela.adiciona(baixa);
+        daoJanela.adiciona(formarecebimento);
+        daoJanela.adiciona(jbanco);
+        daoJanela.adiciona(moeda);
+        daoJanela.adiciona(jconta);
+        daoJanela.adiciona(tipoDespesa);
+        daoJanela.adiciona(tipoReceita);
+        daoJanela.adiciona(transfLucro);
+        daoJanela.adiciona(grupoFinance);
+        daoJanela.adiciona(despProvisi);
+        daoJanela.adiciona(receitProvisi);
+        daoJanela.adiciona(cartao);
+        daoJanela.adiciona(boletoDeCartao);
+        daoJanela.adiciona(cheque);
+
+        //Modulo de Cambio
+        Janela recepcao = new Janela(null, "Recepção", "/recepcao.xhtml", cam);
+        Janela contraCambio = new Janela(null, "Contrato de Câmbio", "/contratoDeCambio.xhtml", cam);
+        Janela cambio = new Janela(null, "Câmbio", "/cambio.xhtml", cam);
+
+        daoJanela.adiciona(recepcao);
+        daoJanela.adiciona(contraCambio);
+        daoJanela.adiciona(cambio);
+
+        //Modulo de Relatorios
+        Janela relContaPagar = new Janela(null, "Relatório de Conta A Pagar", "/relatorioDeContaAPagar.xhtml", rela);
+        Janela relContaReceber = new Janela(null, "Relatório de Conta A Receber", "/relatorioDeContaAReceber.xhtml", rela);
+        Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/relatorioDeSaldoDeConta.xhtml", rela);
+        Janela relRecepcao = new Janela(null, "Relatório de Recepção", "/relatorioDeRecepcao.xhtml", rela);
+        Janela relContrato = new Janela(null, "Relatório de Contrato de Câmbio", "/relatorioDeContratoDeCambio.xhtml", rela);
+        Janela relCambio = new Janela(null, "Relatório de Câmbio", "/relatorioDeCambio.xhtml", rela);
+        Janela relSaldoDivisao = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "/relatorioDeSaldoDeDivisaoDeLucro.xhtml", rela);
+
+        daoJanela.adiciona(relCambio);
+        daoJanela.adiciona(relContaPagar);
+        daoJanela.adiciona(relContaReceber);
+        daoJanela.adiciona(relContrato);
+        daoJanela.adiciona(relRecepcao);
+        daoJanela.adiciona(relSaldo);
+        daoJanela.adiciona(relSaldoDivisao);
+
+        //Modulo Administrativo
+        Janela usuario = new Janela(null, "Usuário", "/usuario.xhtml", admin);
+        Janela jconfiguracao = new Janela(null, "Configuração", "/configuracao.xhtml", admin);
+        Janela operacoes = new Janela(null, "Operacoes", "/operacoes.xhtml", admin);
+        Janela contrato = new Janela(null, "Grupo de Privilegios", "/grupoPrivilegio.xhtml", admin);
+        Janela privilegio = new Janela(null, "Privilégio", "/privilegio.xhtml", admin);
+        Janela jconfigNecessario = new Janela(null, "Configuracao Necessaria", "/configuracaoNecessaria.xhtml", admin);
+
+        daoJanela.adiciona(usuario);
+        daoJanela.adiciona(jconfiguracao);
+        daoJanela.adiciona(operacoes);
+        daoJanela.adiciona(contrato);
+        daoJanela.adiciona(privilegio);
+        daoJanela.adiciona(jconfigNecessario);
+
+        //Modulo de Preferencias
+        Janela perfilUsuario = new Janela(null, "Perfil", "/perfilUsuario.xhtml", pref);
+        daoJanela.adiciona(perfilUsuario);
+
+        //Modulo de Preferencias
+        Janela jlogin = new Janela(null, "Login", "/login.xhtml", login);
+        daoJanela.adiciona(jlogin);
 
         // -- Adiciona Privilégios
         AdicionaDAO<Privilegio> daoPrivilegio = new AdicionaDAO<>();
         List<Privilegio> listaPrivilegios = Arrays.asList(
-                new Privilegio(null, j, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j1, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j2, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j3, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j4, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j5, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j6, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j7, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j8, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j9, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j10, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j11, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j12, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j13, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j14, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j15, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j16, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j17, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j18, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j19, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j20, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j21, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j22, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j23, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j24, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j25, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j26, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j27, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j28, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j29, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, j30, true, true, true, true, grupoDePrivilegio));
+                new Privilegio(null, dashboard, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jpessoa, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, cidade, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jpessoaimport, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, notaSaida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jitem, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, margem, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, conhecimentoFrete, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, ajusteEstoque, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, contaEstoque, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, unidadeMedida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jiva, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, marca, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, depositos, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, listaPreco, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, comissao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, grupo, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jgrupoFiscal, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, receberValores, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, pagarValores, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, extratoConta, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, cotacoes, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, baixa, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, formarecebimento, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jbanco, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, moeda, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jconta, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, tipoDespesa, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, tipoReceita, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, transfLucro, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, grupoFinance, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, despProvisi, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, receitProvisi, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, cartao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, boletoDeCartao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, cheque, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, recepcao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, contraCambio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, cambio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relCambio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relContaPagar, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relContaReceber, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relContrato, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relRecepcao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relSaldo, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relSaldoDivisao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, operacoes, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, contrato, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, privilegio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, perfilUsuario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio)
+        );
 
         for (Privilegio p : listaPrivilegios) {
             daoPrivilegio.adiciona(p);

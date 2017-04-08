@@ -11,8 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
@@ -32,8 +32,8 @@ public class LoginView implements Serializable {
     public LoginView() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.removeAttribute("softone.login.token");
-        session.removeAttribute("softone.nome.token");
+        session.removeAttribute("minds.login.token");
+        session.removeAttribute("minds.nome.token");
     }
 
     public String logar() {
@@ -41,28 +41,30 @@ public class LoginView implements Serializable {
             mensagem = null;
             MD5Util criptografia = new MD5Util();
             for (Usuario usuarioCadastrado : listaDeUsuarios) {
-                if (login != null && login.equals(usuarioCadastrado.getEmail())
+                if (login != null && login.equals(usuarioCadastrado.getPessoa().getEmail())
                         && senha != null && criptografia.md5Hex(senha).equals(usuarioCadastrado.getSenha())) {
                     FacesContext context = FacesContext.getCurrentInstance();
                     HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-                    session.setAttribute("softone.login.token", login);
-                    session.setAttribute("softone.nome.token", usuarioCadastrado.getPessoa().getNome());
+                    session.setAttribute("minds.login.token", login);
+                    session.setAttribute("minds.nome.token", usuarioCadastrado.getPessoa().getNome());
+                    session.setAttribute("minds.GrupoPV.token", usuarioCadastrado.getGrupoDePrivilegio().getNome());
                     return "dashboard?faces-redirect=true";
                 }
             }
-            mensagem = "* Usuário ou senha inválidos!";
+            mensagem = "Usuário ou senha inválidos!";
             return null;
         }
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.setAttribute("softone.login.token", "Anonymous");
-        session.setAttribute("softone.nome.token", "Anonymous");
+        session.setAttribute("minds.login.token", "Anonymous");
+        session.setAttribute("minds.nome.token", "Anonymous");
         return "dashboard?faces-redirect=true";
     }
 
     @PostConstruct
     public void construct() {
-        listaDeUsuarios = new ArmazemDeRegistros<Usuario>(Usuario.class).listaTodosOsRegistros();
+        listaDeUsuarios = new ArmazemDeRegistros<Usuario>(Usuario.class
+        ).listaTodosOsRegistros();
     }
 
     public String getMensagem() {
@@ -91,5 +93,20 @@ public class LoginView implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+    
+    public String getNomeUsuario() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+        HttpSession session = (HttpSession) ec.getSession(true);
+        String username = (String) session.getAttribute("minds.nome.token");
+        return username;
+    }
+    
+    public String getminhaSession() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
+        System.out.println("" + session.getValue("minds.nome.token").toString());
+        return session.getValue("minds.nome.token").toString();
     }
 }

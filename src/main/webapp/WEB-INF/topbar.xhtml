@@ -25,15 +25,20 @@
                         <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
                     </div>
                     <div class="profile-info">
-                        <span class="topbar-item-name profile-name">#{usuarioView.usuario.pessoa.nome} </span>
-                        <span class="topbar-item-name profile-role">#{usuarioView.usuario.grupoPrivilegio.nome} </span>
+                        <span class="topbar-item-name profile-name">#{usuarioLogadoUtil.nomeUsuario}</span>
+                        <span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>
                     </div>
                 </a>
 
                 <ul class="animated">
+                    
+                     <li role="menuitem">
+                        <a href="/OneSystem-war/perfilUsuario.xhtml"> <i class="fa fa-fw fa-sign-out"></i> <span>#{l.Perfil}</span> </a>
+                    </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/login.xhtml"> <i class="fa fa-fw fa-sign-out"></i> <span>#{l.Logout}</span> </a>
                     </li>
+                    
                 </ul>
             </li>
 

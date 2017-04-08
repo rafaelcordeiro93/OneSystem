@@ -2,6 +2,7 @@
 import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.GenericLayout;
 import java.io.FileNotFoundException;
@@ -46,10 +47,8 @@ public class Teste {
 
         t.setOutSize(70, 70);
 
-        List<NotaEmitida> listaImpressao = new NotaEmitidaDAO().buscarNotaEmitidaW().porId(new Long(1)).listaDeResultados();
+        List<NotaEmitida> listaImpressao = new NotaEmitidaDAO().buscarNotaEmitidaW().porId(new Long(2)).listaDeResultados();
         for (NotaEmitida p : listaImpressao) {
-          
-            Integer linhaItens = 0;
 
             for (GenericLayout g : listaLayout) {
 
@@ -98,70 +97,75 @@ public class Teste {
                     continue;
                 }
 
+                Integer linhaItens = 0;
                 for (ItemEmitido i : p.getItensEmitidos()) {
-                    linhaItens ++;
-                    if (g.getColuna().equals("it")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), "");
+
+                    for (int j = linhaItens; j < p.getItensEmitidos().size(); j++) {
+
+                        if (g.getColuna().equals("it")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), "");
+                        }
+                        if (g.getColuna().equals("item")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), "");
+
+                        }
+                        if (g.getColuna().equals("quantidade")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getQuantidade().toString());
+
+                        }
+                        if (g.getColuna().equals("tipo")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getTipoItem().toString());
+
+                        }
+                        if (g.getColuna().equals("codigoItem")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getId().toString());
+
+                        }
+                        if (g.getColuna().equals("nomeItem")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getNome());
+
+                        }
+                        if (g.getColuna().equals("precoUnitario")) {
+                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getUnitario().toString());
+                        }
+                    }
+                    linhaItens++;
+                }
+
+                
+                    if (g.getColuna().equals("ivaIsento")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
                         continue;
                     }
-                    if (g.getColuna().equals("item")) {
-                        t.printTextLinCol(g.getTop() + linhaItens, g.getLeft(), "");
+                    if (g.getColuna().equals("iva")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
                         continue;
                     }
-                    if (g.getColuna().equals("quantidade")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), i.getQuantidade().toString());
+                    if (g.getColuna().equals("totalBruto")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
                         continue;
                     }
-                    if (g.getColuna().equals("tipo")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), i.getItem().getTipoItem().toString());
-                        continue;
-                    }
-                    if (g.getColuna().equals("codigoItem")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), i.getItem().getId().toString());
-                        continue;
-                    }
-                    if (g.getColuna().equals("nomeItem")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), i.getItem().getNome());
-                        continue;
-                    }
-                    if (g.getColuna().equals("precoUnitario")) {
-                        t.printTextLinCol(g.getTop()+ linhaItens, g.getLeft(), i.getUnitario().toString());
+                    if (g.getColuna().equals("totalIsento")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
                         continue;
                     }
 
-                }
+                    if (g.getColuna().equals("descontos")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
+                        continue;
+                    }
 
-                if (g.getColuna().equals("ivaIsento")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("iva")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("totalBruto")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("totalIsento")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
+                    if (g.getColuna().equals("totalLiquido")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
+                        continue;
+                    }
 
-                if (g.getColuna().equals("descontos")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
+                    if (g.getColuna().equals("totalIva")) {
+                        t.printTextLinCol(g.getTop(), g.getLeft(), "");
+                        continue;
+                    }
+                
 
-                if (g.getColuna().equals("totalLiquido")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-
-                if (g.getColuna().equals("totalIva")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
                 //t.printTextLinCol(6, 1, t.centralizar(70, "CENTRALIZAR"));
             }
         }
