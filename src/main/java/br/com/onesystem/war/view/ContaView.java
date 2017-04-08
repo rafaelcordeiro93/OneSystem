@@ -18,6 +18,7 @@ import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
@@ -31,7 +32,6 @@ public class ContaView extends BasicMBImpl<Conta> implements Serializable {
     @PostConstruct
     public void init() {
         limparJanela();
-
     }
 
     public void add() {
@@ -77,6 +77,9 @@ public class ContaView extends BasicMBImpl<Conta> implements Serializable {
 
     @Override
     public void selecionar(SelectEvent e) {
+        if(conta == null){
+            limparJanela();
+        }
         Object obj = e.getObject();
         if (obj instanceof Conta) {
             Conta c = (Conta) e.getObject();

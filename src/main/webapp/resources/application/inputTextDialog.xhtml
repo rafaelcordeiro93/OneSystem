@@ -5,27 +5,51 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite">
-
+    
     <composite:interface>
         <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
         <composite:attribute name="value" required="true" shortDescription="Valor exibido no InputText." />
         <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
         <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
         <composite:attribute name="update" default="" shortDescription="Atualiza componte por ajax."/>
+        <composite:attribute name="var" required="true" shortDescription="Classe do objeto a ser manipulado"/>
+        <composite:attribute name="itemValue" required="true" shortDescription="Valor que é selecionado."/>
+        <composite:attribute name="itemLabel" required="true" shortDescription="Dado que é exibido no campo."/>
+        <composite:attribute name="ItemLabelTabVisible" default="false" shortDescription="Define se o dado da segunda coluna da lista de pesquisa autocomplete é exibido."/>
+        <composite:attribute name="ItemLabelTab" default="" shortDescription="Dado que é exibido na segunda coluna da lista de pesquisa autocomplete."/>
+        <composite:attribute name="onlyNumber" default="false" shortDescription="Define se o campo somente aceitará números." />
+        <composite:attribute name="converter" required="true" shortDescription="Conversor dos dados do componente."  type="java.lang.String"/>
+        <composite:attribute name="placeholder" shortDescription="Nome exibido no campo."/>
         <composite:attribute name="style" shortDescription="Estilo CSS aplicado quando renderizado o componente."/>
+        <composite:attribute name="editVisible" required="false" default="true" shortDescription="Define se a edição será habilitada." />
         <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
     </composite:interface>
 
     <composite:implementation>
-        
+
         <f:loadBundle basename="label_messages" var="l"/>
-        
-        <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100 #{cc.attrs.styleClass}" style="#{cc.attrs.style}">
-            <p:inputText id="#{cc.attrs.id}-txt" readonly="true" value="#{cc.attrs.value}"/>
-            <p:commandButton id="#{cc.attrs.id}-btn" icon="fa fa-search" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
+
+        <div class="submit-line md-inputfield" >
+            <p:autoComplete id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" var="#{cc.attrs.var}" itemValue="#{cc.attrs.itemValue}" itemLabel="#{cc.attrs.itemLabel}" completeMethod="#{cc.attrs.dialog.complete}"  
+                            forceSelection="true"  maxResults="10" inputStyleClass="#{cc.attrs.editVisible eq false ? 'PaddingRight22px' : 'PaddingRight42px'} #{cc.attrs.styleClass}"  emptyMessage="#{l.Nao_Ha_Registros}" >
+                <f:converter converterId="#{cc.attrs.converter}"/>
+                <p:ajax event="blur" update="#{cc.attrs.update}" />
+                <p:column>
+                    <h:outputText value="#{cc.attrs.itemValue.id}" />
+                </p:column>                
+                <p:column rendered="#{cc.attrs.ItemLabelTabVisible}">
+                    <h:outputText value="#{cc.attrs.ItemLabelTab}" />
+                </p:column>
+            </p:autoComplete>
+            <p:outputLabel value="#{cc.attrs.placeholder}"/>
+            <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
                 <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update}" />
             </p:commandButton>
-        </h:panelGrid>
+            <p:button id="#{cc.attrs.id}-edit" rendered="#{cc.attrs.editVisible}" icon="fa fa-pencil-square-o" styleClass="submit-edit"  target="_blank" outcome="#{cc.attrs.dialog.abrirEdicao()}">
+            </p:button>
+        </div>
+        
+        <p:keyFilter rendered="#{cc.attrs.onlyNumber}" for="#{cc.attrs.id}-txt" mask="num" /> 
 
     </composite:implementation>
 

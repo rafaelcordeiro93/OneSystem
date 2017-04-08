@@ -5,9 +5,9 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Banco;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ContaService;
+import br.com.onesystem.war.service.BancoService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -21,31 +21,31 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "contaConverter", forClass = Conta.class)
-public class ContaConverter implements Converter, Serializable {
+@FacesConverter(value = "bancoConverter", forClass = Banco.class)
+public class BancoConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ContaService service = (ContaService) fc.getExternalContext().getApplicationMap().get("contaService");
-                List<Conta> lista = service.buscarContas();
+                BancoService service = (BancoService) fc.getExternalContext().getApplicationMap().get("bancoService");
+                List<Banco> lista = service.buscarBancos();
                 if (StringUtils.containsLetter(value)) {
-                    for (Conta conta : lista) {
-                        if (conta.getNome().equals(value)) {
-                            return conta;
+                    for (Banco banco : lista) {
+                        if (banco.getNome().equals(value)) {
+                            return banco;
                         }
                     }
                 } else {
-                    for (Conta conta : lista) {
-                        if (conta.getId().equals(new Long(value))) {
-                            return conta;
+                    for (Banco banco : lista) {
+                        if (banco.getId().equals(new Long(value))) {
+                            return banco;
                         }
                     }
                 }
                 return null;
             } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma conta válida."));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um banco válido."));
             }
         } else {
             return null;
@@ -56,7 +56,7 @@ public class ContaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((Conta) object).getNome());
+                return String.valueOf(((Banco) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

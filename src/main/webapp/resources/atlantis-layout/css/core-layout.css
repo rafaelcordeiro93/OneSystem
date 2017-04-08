@@ -195,6 +195,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .PaddingTopDown3Px{padding: 3px 0px 3px 0px !important}
 .Padding-right-Px2{padding: 0px 2px 0px 0px !important}
 .PaddingTop2Px{padding: 2px 0px 0px 0px !important}
+.PaddingRight22px{padding-right: 22px !important}
+.PaddingRight42px{padding-right: 42px !important}
 
 /* Containers */
 .Container100{ width:100%; float:left;}
@@ -586,4 +588,44 @@ body .ui-button.red-btn.ui-state-active {
     background: none !important;
     border: none !important;
     color: #efefef !important;
+}
+
+.submit-search {
+    position:absolute !important;
+    top:1px; right:20px !important;
+    z-index:10 !important;
+    border:none !important;
+    background:transparent !important;
+    outline:none !important;
+    width: 25px !important;
+    color: #9c9999 !important;
+}
+
+.submit-search:hover:enabled{
+    color: #6d6d6d !important;
+    background:transparent !important;
+}
+
+.submit-edit {
+    position:absolute !important;
+    top:1px; right:0 !important;
+    z-index:10 !important;
+    border:none !important;
+    background:transparent !important;
+    outline:none !important;
+    width: 25px !important;
+    color: #9c9999 !important;
+}
+
+.submit-edit:hover:enabled{
+    color: #6d6d6d !important;
+    background:transparent !important;
+}
+
+.submit-line {
+    position: relative !important;
+}
+
+.submit-line input {
+    width: 100% !important;
 }

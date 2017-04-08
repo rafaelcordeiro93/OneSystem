@@ -63,8 +63,10 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -758,6 +760,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
             cheque.setBanco((Banco) obj);
         } else if (obj instanceof Cartao) {
             boletoDeCartao.setCartao((Cartao) obj);
+        } else if (obj instanceof List) {
+            try {
+                List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
+                itemEmitido.setEstoque(criarBaixaDeEstoque(lista));
+            } catch (DadoInvalidoException ex) {
+                ex.print();
+            }
         }
 
     }
@@ -769,15 +778,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
 
     public void selecionaCartao(SelectEvent event) {
         parcelaBV.setCartao((Cartao) event.getObject());
-    }
-
-    public void selecionaQuantidadeDeItemBV(SelectEvent event) {
-        try {
-            List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
-            itemEmitido.setEstoque(criarBaixaDeEstoque(lista));
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     public void selecionaItemEmitido(SelectEvent event) {

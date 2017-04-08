@@ -1,9 +1,12 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.DespesaProvisionadaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -23,6 +26,24 @@ public class SelecaoDespesaProvisionadaView extends BasicCrudMBImpl<DespesaProvi
 
     public void abrirDialogo() {
         exibirNaTela("selecaoDespesaProvisionada");
+    }
+
+    @Override
+    public String abrirEdicao() {
+        return "despesaProvisionada";
+    }
+
+    @Override
+    public List<DespesaProvisionada> complete(String query) {
+        List<DespesaProvisionada> listaFIltrada = new ArrayList<>();
+        if (!StringUtils.containsLetter(query)) {
+            for (DespesaProvisionada m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
     }
 
     public DespesaProvisionadaService getService() {

@@ -12,7 +12,7 @@ public class CotacaoBV implements Serializable {
 
     private Long id;
     private Date data = DateUtil.getCurrentDateTime();
-    private Conta conta;
+    private Conta conta = new Conta();
     private BigDecimal valor;
 
     public CotacaoBV(Cotacao cotacaoSelecionada) {
@@ -56,7 +56,7 @@ public class CotacaoBV implements Serializable {
     public void setConta(Conta conta) {
         this.conta = conta;
     }
-    
+
     public Cotacao construir() throws DadoInvalidoException {
         return new Cotacao(null, valor, data, conta);
     }
