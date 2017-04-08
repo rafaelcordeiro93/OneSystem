@@ -1,9 +1,12 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.CartaoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -25,6 +28,29 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
         exibirNaTela("selecaoCartao");
     }
 
+    @Override
+    public String abrirEdicao() {
+        return "cartao";
+    }
+    
+     @Override
+    public List<Cartao> complete(String query) {
+        List<Cartao> listaFIltrada = new ArrayList<>();
+        for (Cartao b : beans) {
+            if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
+                listaFIltrada.add(b);
+            }
+        }
+        if (!StringUtils.containsLetter(query)) {
+            for (Cartao m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
+    }
+    
     public CartaoService getService() {
         return service;
     }

@@ -1,10 +1,13 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.ContratoDeCambio;
+import br.com.onesystem.domain.ContratoDeCambio;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.ContratoDeCambioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +33,24 @@ public class SelecaoContratoDeCambioView extends BasicCrudMBImpl<ContratoDeCambi
         exibirNaTela("selecaoContratoDeCambio");
     }
 
+    @Override
+    public String abrirEdicao() {
+        return "contratoDeCambio";
+    }
+    
+    @Override
+    public List<ContratoDeCambio> complete(String query) {
+        List<ContratoDeCambio> listaFIltrada = new ArrayList<>();
+        if (!StringUtils.containsLetter(query)) {
+            for (ContratoDeCambio m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
+    }
+    
     public ContratoDeCambioService getService() {
         return service;
     }

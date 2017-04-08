@@ -13,6 +13,7 @@ import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
@@ -41,6 +42,7 @@ public class NotaEmitidaBuilder {
     private Credito credito;
     private List<Cheque> cheques;
     private List<BoletoDeCartao> boletoDeCartao;
+    private Moeda moedaPadrao;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -112,8 +114,13 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
+    public NotaEmitidaBuilder comMoedaPadrao(Moeda moedaPadrao) {
+        this.moedaPadrao = moedaPadrao;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, cheques, boletoDeCartao, titulos);
+        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, cheques, boletoDeCartao, titulos, moedaPadrao);
     }
 
 }

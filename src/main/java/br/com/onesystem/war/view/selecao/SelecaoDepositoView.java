@@ -1,9 +1,13 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.DepositoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -23,6 +27,29 @@ public class SelecaoDepositoView extends BasicCrudMBImpl<Deposito> implements Se
 
     public void abrirDialogo() {
         exibirNaTela("selecaoDeposito");
+    }
+    
+    @Override
+    public String abrirEdicao() {
+        return "deposito";
+    }
+    
+    @Override
+    public List<Deposito> complete(String query) {
+        List<Deposito> listaFIltrada = new ArrayList<>();
+        for (Deposito b : beans) {
+            if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
+                listaFIltrada.add(b);
+            }
+        }
+        if (!StringUtils.containsLetter(query)) {
+            for (Deposito m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
     }
 
     public DepositoService getService() {

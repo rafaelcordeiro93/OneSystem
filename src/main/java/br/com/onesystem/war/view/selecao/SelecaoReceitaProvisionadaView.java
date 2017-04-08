@@ -1,9 +1,13 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.ReceitaProvisionada;
+import br.com.onesystem.domain.ReceitaProvisionada;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.ReceitaProvisionadaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -23,6 +27,24 @@ public class SelecaoReceitaProvisionadaView extends BasicCrudMBImpl<ReceitaProvi
 
     public void abrirDialogo() {
         exibirNaTela("selecaoReceitaProvisionada");
+    }
+
+    @Override
+    public String abrirEdicao() {
+        return "receitaProvisionada";
+    }
+    
+    @Override
+    public List<ReceitaProvisionada> complete(String query) {
+        List<ReceitaProvisionada> listaFIltrada = new ArrayList<>();
+        if (!StringUtils.containsLetter(query)) {
+            for (ReceitaProvisionada m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
     }
 
     public ReceitaProvisionadaService getService() {
