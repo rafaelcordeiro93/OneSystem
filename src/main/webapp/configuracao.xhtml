@@ -17,30 +17,18 @@
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Moeda_Padrao}</div>
                     <div class="EmptyBox10"/>
 
-                    <h:panelGrid columns="3" style="margin-top: -1%">
-                        <p:inputText id="moedaPadrao" disabled="true" value="#{configuracaoView.configuracaoBV.moedaPadrao.nome}" placeholder="#{l.Moeda_Padrao}"/>
-                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this"
-                                         update="@none">
-                            <p:ajax event="dialogReturn" listener="#{configuracaoView.selecionaMoeda}"
-                                    process="@this" update="moedaPadrao" />
-                        </p:commandButton>
-                        <p:commandButton icon="fa fa-trash Fs16 White" styleClass="RedButton" action="#{configuracaoView.removeMoeda()}" update=":conteudo"/>
-                    </h:panelGrid>
-
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Moeda_Padrao}"/>
+                        <a:inputTextDialog id="moedaPadrao" mbView="#{configuracaoView}" dialog="#{selecaoMoedaView}" value="#{configuracaoView.configuracaoBV.moedaPadrao}" var="moeda" converter="moedaConverter"  itemLabel="#{moeda.nome}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>        
+                    
                     <div class="EmptyBox5"/>
-
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Despesa_Comissao}</div>
-                    <div class="EmptyBox10"/>
 
-                    <h:panelGrid columns="3" style="margin-top: -1%">
-                        <p:inputText id="despesaDeComissao" disabled="true" value="#{configuracaoView.configuracaoBV.despesaDeComissao.nome}" placeholder="#{l.Despesa_Comissao}"/>
-                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaDeComissaoView.abrirDialogo()}" process="@this"
-                                         update="@none">
-                            <p:ajax event="dialogReturn" listener="#{configuracaoView.selecionaDespesaDeComissao}"
-                                    process="@this" update="despesaDeComissao" />
-                        </p:commandButton>
-                        <p:commandButton icon="fa fa-trash Fs16 White" styleClass="RedButton" action="#{configuracaoView.removeDespesaDeComissao()}" update=":conteudo"/>
-                    </h:panelGrid>
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Despesa_Comissao}"/>
+                        <a:inputTextDialog id="despesaDeComissao" mbView="#{configuracaoView}" dialog="#{selecaoDespesaView}" value="#{configuracaoView.configuracaoBV.despesaDeComissao}" var="despesa" converter="despesaConverter"  itemLabel="#{despesa.nome}" itemValue="#{despesa}" itemLabelTab="#{despesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
 
                     <div class="EmptyBox5"/>
 
@@ -70,19 +58,22 @@
             <div class="ui-g-12">                
                 <div class="card card-w-title">
                     <h1 class="BoldGray FontRobotoRegular">#{l.Estoque}</h1>
-                    <div class="EmptyBox10"></div>
-                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Conta_De_Estoque_Empresa}</div>
+                    
                     <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Conta_De_Estoque_Empresa}</div>
+                    
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Conta_De_Estoque_Empresa}"/>
+                        <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa}" var="contaDeEstoque" converter="contaDeEstoqueConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>                
 
-                    <h:panelGrid columns="3" style="margin-top: -1%">
-                        <p:outputLabel value="#{l.Conta_De_Estoque_Empresa}"/>
-                        <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa.nome}" />
-                        <p:commandButton icon="fa fa-trash" styleClass="orange-btn" action="#{configuracaoEstoqueView.removeConta}" update=":conteudo"/>
-
-                        <p:outputLabel value="#{l.Lista_Preco_Padrao_Empresa}"/>
-                        <a:inputTextDialog id="listaPrecoEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoListaDePrecoView}" value="#{configuracaoEstoqueView.configuracaoBV.listaDePreco.nome}" />
-                        <p:commandButton icon="fa fa-trash" styleClass="orange-btn" action="#{configuracaoEstoqueView.removeListaDePreco}" update=":conteudo"/>
-                    </h:panelGrid>
+                    <div class="EmptyBox5"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Lista_De_Preco_Padrao_Empresa}</div>
+                    
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Lista_Preco_Padrao_Empresa}"/>
+                        <a:inputTextDialog id="listaPrecoEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoListaDePrecoView}" value="#{configuracaoEstoqueView.configuracaoBV.listaDePreco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}"  editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>
 
                     <div class="EmptyBox5"/>
                     <p:separator/>

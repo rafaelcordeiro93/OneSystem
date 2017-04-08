@@ -15,6 +15,7 @@
  */
 package org.primefaces.atlantis.view;
 
+import org.primefaces.atlantis.view.*;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.HashMap;

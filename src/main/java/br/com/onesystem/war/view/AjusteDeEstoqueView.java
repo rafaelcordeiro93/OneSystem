@@ -114,48 +114,17 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements
         }
     }
 
-    public void selecionaItem(SelectEvent event) {
-        Item itemSelecionado = (Item) event.getObject();
-        ajusteDeEstoque.setItem(itemSelecionado);
-    }
-
-    public void selecionaDeposito(SelectEvent event) {
-        Deposito depositoSelecionado = (Deposito) event.getObject();
-        ajusteDeEstoque.setDeposito(depositoSelecionado);
-    }
-
-    public void selecionaAjusteDeEstoque(SelectEvent e) {
-        AjusteDeEstoque a = (AjusteDeEstoque) e.getObject();
-        ajusteDeEstoque = new AjusteDeEstoqueBV(a);
-        ajusteDeEstoqueSelecionada = a;
-    }
-
-    public void buscaPorId() {
-        Long id = ajusteDeEstoque.getId();
-        if (id != null) {
-            try {
-                AjusteDeEstoqueDAO dao = new AjusteDeEstoqueDAO();
-                AjusteDeEstoque c = dao.buscarAjustesDeEstoque().porId(id).resultado();
-                ajusteDeEstoqueSelecionada = c;
-                ajusteDeEstoque = new AjusteDeEstoqueBV(ajusteDeEstoqueSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                ajusteDeEstoque.setId(id);
-                die.print();
-            }
-        }
-    }
-
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
-        if (obj instanceof Operacao) {
-            if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
-                RequestContext rc = RequestContext.getCurrentInstance();
-                rc.execute("PF('operacaoAjusteDialog').show()");
-            } else {
-                ajusteDeEstoque.setOperacao((Operacao) obj);
-            }
+        if (obj instanceof AjusteDeEstoque) {
+            ajusteDeEstoque = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
+        } else if (obj instanceof Operacao) {
+            ajusteDeEstoque.setOperacao((Operacao) obj);
+        } else if (obj instanceof Deposito) {
+            ajusteDeEstoque.setDeposito((Deposito) event.getObject());
+        } else if (obj instanceof Item) {
+            ajusteDeEstoque.setItem((Item) event.getObject());
         }
     }
 

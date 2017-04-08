@@ -15,8 +15,8 @@
         <composite:attribute name="var" required="true" shortDescription="Classe do objeto a ser manipulado"/>
         <composite:attribute name="itemValue" required="true" shortDescription="Valor que é selecionado."/>
         <composite:attribute name="itemLabel" required="true" shortDescription="Dado que é exibido no campo."/>
-        <composite:attribute name="ItemLabelTabVisible" default="false" shortDescription="Define se o dado da segunda coluna da lista de pesquisa autocomplete é exibido."/>
-        <composite:attribute name="ItemLabelTab" default="" shortDescription="Dado que é exibido na segunda coluna da lista de pesquisa autocomplete."/>
+        <composite:attribute name="itemLabelTabVisible" default="false" shortDescription="Define se o dado da segunda coluna da lista de pesquisa autocomplete é exibido."/>
+        <composite:attribute name="itemLabelTab" default="" shortDescription="Dado que é exibido na segunda coluna da lista de pesquisa autocomplete."/>
         <composite:attribute name="onlyNumber" default="false" shortDescription="Define se o campo somente aceitará números." />
         <composite:attribute name="readonly" default="false" shortDescription="Define se o campo somente será de leitura." />
         <composite:attribute name="converter" required="true" shortDescription="Conversor dos dados do componente."  type="java.lang.String"/>
@@ -40,8 +40,8 @@
                 <p:column>
                     <h:outputText value="#{cc.attrs.itemValue.id}" />
                 </p:column>                
-                <p:column rendered="#{cc.attrs.ItemLabelTabVisible}">
-                    <h:outputText value="#{cc.attrs.ItemLabelTab}" />
+                <p:column rendered="#{cc.attrs.itemLabelTabVisible}">
+                    <h:outputText value="#{cc.attrs.itemLabelTab}" />
                 </p:column>
             </p:autoComplete>
             <p:outputLabel value="#{cc.attrs.placeholder}"/>

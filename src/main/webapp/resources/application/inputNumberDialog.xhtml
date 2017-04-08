@@ -26,9 +26,7 @@
         <f:loadBundle basename="label_messages" var="l"/>
 
         <div class="submit-line md-inputfield #{cc.attrs.styleClass}" style="#{cc.attrs.style}">
-            <p:inputNumber id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" decimalPlaces="#{cc.attrs.decimalPlaces}" decimalSeparator="#{cc.attrs.decimalSeparator}" thousandSeparator="#{cc.attrs.thousandSeparator}" readonly="#{cc.attrs.readonly}">
-                <p:ajax event="blur" listener="#{cc.attrs.mbView.buscaPorId}" update="#{cc.attrs.id}-txt #{cc.attrs.update}"/>
-            </p:inputNumber>            
+            <p:inputNumber id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" decimalPlaces="#{cc.attrs.decimalPlaces}" decimalSeparator="#{cc.attrs.decimalSeparator}" thousandSeparator="#{cc.attrs.thousandSeparator}" readonly="true"/>
             <p:outputLabel value="#{cc.attrs.placeholder}"/>
             <p:commandButton id="#{cc.attrs.id}-btn" icon="fa fa-search" styleClass="submit-edit" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
                 <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update}"/>
