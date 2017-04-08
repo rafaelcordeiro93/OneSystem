@@ -6,7 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.MoedaService;
+import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -20,7 +22,7 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "moedaConverter", forClass = Moeda.class)
-public class MoedaConverter implements Converter {
+public class MoedaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -28,14 +30,22 @@ public class MoedaConverter implements Converter {
             try {
                 MoedaService service = (MoedaService) fc.getExternalContext().getApplicationMap().get("moedaService");
                 List<Moeda> lista = service.buscarMoedas();
-                for (Moeda moeda : lista) {
-                    if (moeda.getId().equals(new Long(value))) {
-                        return moeda;
+                if (StringUtils.containsLetter(value)) {
+                    for (Moeda moeda : lista) {
+                        if (moeda.getNome().equals(value)) {
+                            return moeda;
+                        }
+                    }
+                } else {
+                    for (Moeda moeda : lista) {
+                        if (moeda.getId().equals(new Long(value))) {
+                            return moeda;
+                        }
                     }
                 }
                 return null;
             } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma moeda válida."));
             }
         } else {
             return null;
@@ -45,7 +55,11 @@ public class MoedaConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            return String.valueOf(((Moeda) object).getId());
+            try {
+                return String.valueOf(((Moeda) object).getNome());
+            } catch (ClassCastException cce) {
+                return object.toString();
+            }
         } else {
             return null;
         }

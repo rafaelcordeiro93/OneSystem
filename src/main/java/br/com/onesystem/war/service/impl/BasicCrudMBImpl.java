@@ -26,7 +26,11 @@ public abstract class BasicCrudMBImpl<Bean> {
     }
 
     public abstract void abrirDialogo();
-    
+
+    public abstract List<Bean> complete(String query);
+
+    public abstract String abrirEdicao();
+
     public void selecionar() {
         RequestContext.getCurrentInstance().closeDialog(beanSelecionado);
     }
@@ -54,5 +58,5 @@ public abstract class BasicCrudMBImpl<Bean> {
     public void setBeansFiltrados(List<Bean> beansFiltrados) {
         this.beansFiltrados = beansFiltrados;
     }
-    
+
 }

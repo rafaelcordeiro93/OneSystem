@@ -1,4 +1,3 @@
-
 import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.ItemEmitido;
 import br.com.onesystem.domain.NotaEmitida;

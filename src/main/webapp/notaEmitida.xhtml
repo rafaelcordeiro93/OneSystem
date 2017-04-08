@@ -20,21 +20,21 @@
                             <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
                                          columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
 
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Operacao}"/>
-                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}"
-                                                       update=":conteudo:growl"/>
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" ItemLabelTabVisible="true" ItemLabelTab="#{operacao.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Pessoa}"/>
-                                    <a:inputTextDialog id="nePessoa" value="#{notaEmitidaView.notaEmitida.pessoa.nome}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}"/>
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="nePessoa" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" ItemLabelTabVisible="true" ItemLabelTab="#{pessoa.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Lista_De_Preco}"/>
-                                    <a:inputTextDialog id="neListaDePreco" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}"/>
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neListaDePreco" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" ItemLabelTabVisible="true" ItemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
                                 </h:panelGrid>
+
                             </p:panelGrid> 
                         </div>
 
@@ -46,43 +46,41 @@
                                          layout="grid" style="border:0px !important; background:none;">
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Item}"/>
-                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item.nome}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" />
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" ItemLabelTabVisible="true" ItemLabelTab="#{item.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Quantidade}"/>
-                                    <h:panelGrid styleClass="Wid100" columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad">
-                                        <p:inputText value="#{notaEmitidaView.itemEmitido.quantidade}" placeholder="#{l.Item}" readonly="true"/>
-                                        <p:commandButton icon="fa fa-search" action="#{quantidadeDeItemView.abrirDialogo()}" process="@this" update="@none">
-                                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaQuantidadeDeItemBV}" process="@this" update=":conteudo" />
-                                        </p:commandButton>
-                                    </h:panelGrid>
+                                    <p:spacer/>
+                                    <a:inputNumberDialog id="neQuantidade" value="#{notaEmitidaView.itemEmitido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" readonly="true" decimalPlaces="#{notaEmitidaView.itemEmitido.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="."/>
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100 PaddingTop2Px" >
-                                    <p:outputLabel value="#{l.Valor}"/>
-                                    <p:inputNumber id="notaEmitidaItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
-                                                   symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.unitario}">
-                                        <p:ajax event="blur" update="notaItemTotal"/>
-                                    </p:inputNumber>                                
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <p:outputPanel class="md-inputfield"> 
+                                        <p:inputNumber id="notaEmitidaItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                       symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.unitario}">
+                                            <p:ajax event="blur" update="notaItemTotal"/>
+                                        </p:inputNumber>    
+                                        <p:outputLabel value="#{l.Valor}"/>                                        
+                                    </p:outputPanel>
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100 PaddingTop2Px">
-                                    <p:outputLabel value="#{l.Total}"/>
+                                <h:panelGrid columns="1" styleClass="Wid100">                                                                               
+                                    <p:outputLabel value="#{l.Total}"/>        
                                     <p:inputNumber id="notaItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.total}">
-                                    </p:inputNumber>   
+                                    </p:inputNumber>                            
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
                                     <p:spacer/>
                                     <h:panelGrid columns="3">
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{notaEmitidaView.addItemNaLista}"
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaEmitidaView.addItemNaLista}" style="width: 25px"
                                                          update=":conteudo"/>
-                                        <p:commandButton icon="fa fa-refresh Fs16 White" action="#{notaEmitidaView.updateItemNaLista}"
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaEmitidaView.updateItemNaLista}" style="width: 25px"
                                                          update=":conteudo" styleClass="green-btn"/>     
-                                        <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{notaEmitidaView.deleteItemNaLista}"
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaEmitidaView.deleteItemNaLista}" style="width: 25px"
                                                          update=":conteudo" styleClass="orange-btn"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
@@ -131,17 +129,16 @@
 
                         <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Forma_Recebimento}</div>
 
-                        <div class="ui-fluid ui-g-3">
+                        <div class="ui-fluid ui-g-12">
                             <h:panelGrid columns="1" styleClass="Wid100">
                                 <p:outputLabel value="#{l.Forma_Recebimento}"/>
-                                <a:inputTextDialog id="neFormaRec" value="#{notaEmitidaView.notaEmitida.formaDeRecebimento.nome}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{notaEmitidaView}"
-                                                   update=":conteudo"/>
+                                <a:inputTextDialog styleDiv="max-width: 326px" style="max-width: 326px" id="neFormaRec" value="#{notaEmitidaView.notaEmitida.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{notaEmitidaView}" update=":conteudo" var="formaDeRecebimento" converter="formaDeRecebimentoConverter" itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" ItemLabelTabVisible="true" ItemLabelTab="#{formaDeRecebimento.nome}" editVisible="true" readonly="true"/>
                             </h:panelGrid>
                         </div>
 
                         <p:separator styleClass="Wid100"/>
 
-                        <div class="ui-fluid">
+                        <div class="ui-fluid" >
                             <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-3"
                                          columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
 
@@ -415,14 +412,13 @@
                          columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-3, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
 
                 <p:outputLabel value="#{l.Banco}"/>
-                <a:inputTextDialog id="dcEBanco" value="#{notaEmitidaView.cheque.banco.nome}" dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}"
-                                   style="margin-left: -2px"/>
+                <a:inputTextDialog id="detbanco" style="width: 78.5% !important" dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.cheque.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{banco.nome}"/>
 
                 <p:outputLabel value="#{l.Agencia}"/>
                 <p:inputText value="#{notaEmitidaView.cheque.agencia}" />        
 
                 <p:outputLabel value="#{l.Conta}"/>
-                <p:inputText value="#{notaEmitidaView.cheque.conta}" />   
+                <p:inputText value="#{notaEmitidaView.cheque.conta}" style="width: 96% !important" />   
 
                 <p:outputLabel value="#{l.Cotacao}"/>
                 <p:selectOneMenu  id="dceCotacao" value="#{notaEmitidaView.cheque.cotacao}" converter="cotacaoConverter" >
@@ -431,14 +427,14 @@
                 </p:selectOneMenu>
 
                 <p:outputLabel value="#{l.Cheque}"/>
-                <p:inputText value="#{notaEmitidaView.cheque.numeroCheque}" />   
+                <p:inputText value="#{notaEmitidaView.cheque.numeroCheque}" style="width: 96% !important" />   
 
                 <p:outputLabel value="#{l.Valor}"/>
                 <p:inputNumber id="dceValor" maxValue="999999999999.99" symbol="#{notaEmitidaView.cheque.cotacao.conta.moeda.sigla} " minValue="0.00" value="#{notaEmitidaView.cheque.valor}"
                                decimalSeparator="," thousandSeparator="."/>
 
                 <p:outputLabel value="#{l.Vencimento}"/>
-                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{notaEmitidaView.cheque.vencimento}"/>
+                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{notaEmitidaView.cheque.vencimento}" size="7"/>
 
                 <p:outputLabel value="#{l.Emitente}"/>
                 <p:inputText value="#{notaEmitidaView.cheque.emitente}" />      
@@ -507,10 +503,10 @@
                   styleClass="zIndex500">
 
             <p:panelGrid id="panelDetCartaoEnt" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-4">
+                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-6">
 
                 <p:outputLabel value="#{l.Cartao}" />
-                <a:inputTextDialog id="detCartao" value="#{notaEmitidaView.boletoDeCartao.cartao.nome}" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}"/>
+                <a:inputTextDialog id="detCartao" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.boletoDeCartao.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{cartao.nome}" style="width: 74% !important"/>
 
                 <p:outputLabel value="#{l.Cod_Transacao}"/>
                 <p:inputText id="detCodigoTransacao" value="#{notaEmitidaView.boletoDeCartao.codigoTransacao}"/>  
@@ -532,21 +528,16 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheCartaoParcela" width="400" header="#{l.Cartao}" closable="false" closeOnEscape="false" modal="true" >
+        <p:dialog widgetVar="detalheCartaoParcela" width="325" header="#{l.Cartao}" closable="false" closeOnEscape="false" modal="true" >
 
-            <p:panelGrid id="panelDetCartaoPar" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-4">
+            <p:panelGrid id="panelDetCartaoPar" columns="2" styleClass="ui-panelgrid-blank form-group form-elements"
+                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-8">
 
                 <p:outputLabel value="#{l.Cartao}" />
-                <h:panelGrid columns="2" style="margin-left: -2px" styleClass="Wid100" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad">
-                    <p:inputText id="cartaoParcelas" readonly="true" value="#{notaEmitidaView.parcelaBV.cartao.nome}"/>
-                    <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoCartaoView.abrirDialogo()}" process="@this" update="@none">
-                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaCartao}" process="@this" update="cartaoParcelas" />
-                    </p:commandButton>
-                </h:panelGrid>
+                <a:inputTextDialog id="cartaoParcelas" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.parcelaBV.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{cartao.nome}" style="width: 74% !important"/>
 
                 <p:outputLabel value="#{l.Cod_Transacao}"/>
-                <p:inputText  value="#{notaEmitidaView.parcelaBV.codigoTransacao}"/>  
+                <p:inputText  value="#{notaEmitidaView.parcelaBV.codigoTransacao}" style="width: 94% !important"/>  
 
             </p:panelGrid>        
 
@@ -556,35 +547,30 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheChequeParcela" width="900" header="#{l.Detalhe_De_Cheque}" resizable="false" 
+        <p:dialog widgetVar="detalheChequeParcela" width="560" header="#{l.Detalhe_De_Cheque}" resizable="false" 
                   modal="true" closable="false" closeOnEscape="false" 
                   responsive="true" styleClass="zIndex500">
 
-            <p:panelGrid id="panelDetCheParcela" columns="4" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                         columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-3, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
+            <p:panelGrid id="panelDetCheParcela" columns="4" styleClass="ui-panelgrid-blank form-group form-elements"
+                         columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-4, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
 
                 <p:outputLabel value="#{l.Banco}"/>
-                <h:panelGrid columns="2" style="margin-left: -2px" styleClass="Wid100" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad">
-                    <p:inputText id="bancoParcelas" readonly="true" value="#{notaEmitidaView.parcelaBV.banco.nome}"/>
-                    <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this" update="@none">
-                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionarBanco}" process="@this" update="bancoParcelas" />
-                    </p:commandButton>
-                </h:panelGrid>
+                <a:inputTextDialog id="bancoParcelas" style="width: 72% !important"  dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.parcelaBV.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" ItemLabelTabVisible="true" ItemLabelTab="#{banco.nome}"/>
 
                 <p:outputLabel value="#{l.Agencia}"/>
                 <p:inputText value="#{notaEmitidaView.parcelaBV.agencia}" />        
 
                 <p:outputLabel value="#{l.Conta}"/>
-                <p:inputText value="#{notaEmitidaView.parcelaBV.conta}" />   
+                <p:inputText value="#{notaEmitidaView.parcelaBV.conta}" style="width: 95.5% !important"/>   
 
                 <p:outputLabel value="#{l.Cheque}"/>
                 <p:inputText value="#{notaEmitidaView.parcelaBV.numeroCheque}" />   
 
                 <p:outputLabel value="#{l.Emitente}"/>
-                <p:inputText value="#{notaEmitidaView.parcelaBV.emitente}" />      
+                <p:inputText value="#{notaEmitidaView.parcelaBV.emitente}" style="width: 95.5% !important"/>      
 
                 <p:outputLabel value="#{l.Observacao}"/>
-                <p:inputTextarea autoResize="true" rows="2" cols="26" styleClass="PaddingPx4"
+                <p:inputTextarea autoResize="true" rows="2" cols="20" styleClass="PaddingPx4"
                                  maxlength="200" value="#{notaEmitidaView.parcelaBV.observacao}">
                 </p:inputTextarea>
 

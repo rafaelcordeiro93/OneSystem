@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.EstoqueService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean
 @ViewScoped
-public class QuantidadeDeItemView implements Serializable {
+public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> implements Serializable {
 
     private QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
     private QuantidadeDeItemBV quantidadeDeItemSelecionada;
@@ -51,17 +52,14 @@ public class QuantidadeDeItemView implements Serializable {
         criaLista();
     }
 
+    @Override
     public void abrirDialogo() {
-        Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("modal", true);
-        opcoes.put("resizable", false);
-        opcoes.put("width", 950);
-        opcoes.put("draggable", false);
-        opcoes.put("height", 500);
-        opcoes.put("contentWidth", "100%");
-        opcoes.put("contentHeight", "100%");
-        opcoes.put("headerElement", "customheader");
-        RequestContext.getCurrentInstance().openDialog("dialogo/quantidadeDeItem", opcoes, null);
+        exibirNaTela("selecaoQuantidadeDeItem");
+    }
+
+    @Override
+    public String abrirEdicao() {
+        return "item";
     }
 
     public void criaLista() {
@@ -74,6 +72,7 @@ public class QuantidadeDeItemView implements Serializable {
         }
     }
 
+    @Override
     public void selecionar() {
         RequestContext.getCurrentInstance().closeDialog(lista);
     }
@@ -124,6 +123,11 @@ public class QuantidadeDeItemView implements Serializable {
 
     public void setListaFiltrada(List<QuantidadeDeItemBV> listaFiltrada) {
         this.listaFiltrada = listaFiltrada;
+    }
+
+    @Override
+    public List<QuantidadeDeItemBV> complete(String query) {
+        return null;
     }
 
 }

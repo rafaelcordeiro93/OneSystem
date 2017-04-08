@@ -53,7 +53,9 @@ public class CotacaoView extends BasicMBImpl<Cotacao> implements Serializable {
 
     public void add() {
         try {
+            System.out.println("Aqui");
             Cotacao novoRegistro = cotacao.construir();
+            System.out.println("Aqui 2");
             new AdicionaDAO<Cotacao>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();

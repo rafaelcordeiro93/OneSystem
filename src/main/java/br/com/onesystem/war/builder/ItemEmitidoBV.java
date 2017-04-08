@@ -24,7 +24,7 @@ public class ItemEmitidoBV {
 
     private Long id;
     private Item item;
-    private BigDecimal unitario = BigDecimal.ZERO;
+    private BigDecimal unitario;
     private NotaEmitida notaEmitida;
     private List<Estoque> estoque = new ArrayList<Estoque>();
 
@@ -78,17 +78,18 @@ public class ItemEmitidoBV {
     public void setEstoque(List<Estoque> estoque) {
         this.estoque = estoque;
     }
-    
-     public BigDecimal getQuantidade() {
+
+    public BigDecimal getQuantidade() {
         BigDecimal quantidade = BigDecimal.ZERO;
         for (Estoque e : estoque) {
             quantidade = quantidade.add(e.getQuantidade());
         }
-        return quantidade;
+        return quantidade.equals(BigDecimal.ZERO) ? null : quantidade;
     }
 
     public BigDecimal getTotal() {
-        return getQuantidade().multiply(unitario == null ? BigDecimal.ZERO : unitario);
+        
+        return getQuantidade() == null ? BigDecimal.ZERO: getQuantidade().multiply(unitario == null ? BigDecimal.ZERO : unitario);
     }
 
     public ItemEmitido construir() throws DadoInvalidoException {

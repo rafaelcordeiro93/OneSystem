@@ -64,11 +64,18 @@ public class NotaEmitida implements Serializable {
     private List<BoletoDeCartao> cartoes;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<Titulo> titulos;
+    @NotNull(message = "{moeda_padrao_not_null}")
+    @ManyToOne(optional = false)
+    private Moeda moedaPadrao;
 
     public NotaEmitida() {
     }
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos, FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada, Credito credito, List<Cheque> cheques, List<BoletoDeCartao> cartoes, List<Titulo> titulos) throws DadoInvalidoException {
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
+            FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
+            ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
+            Credito credito, List<Cheque> cheques, List<BoletoDeCartao> cartoes, List<Titulo> titulos,
+            Moeda moedaPadrao) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -83,11 +90,12 @@ public class NotaEmitida implements Serializable {
         this.cheques = cheques;
         this.cartoes = cartoes;
         this.titulos = titulos;
+        this.moedaPadrao = moedaPadrao;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "formaDeRecebimento");
+        List<String> campos = Arrays.asList("pessoa", "operacao", "formaDeRecebimento", "moedaPadrao");
         new ValidadorDeCampos<NotaEmitida>().valida(this, campos);
     }
 
@@ -153,6 +161,10 @@ public class NotaEmitida implements Serializable {
 
     public void setCartoes(List<BoletoDeCartao> cartoes) {
         this.cartoes = cartoes;
+    }
+
+    public Moeda getMoedaPadrao() {
+        return moedaPadrao;
     }
 
     public void setTitulos(List<Titulo> titulos) {

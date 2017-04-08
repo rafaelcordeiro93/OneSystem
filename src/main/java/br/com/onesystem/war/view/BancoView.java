@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.BancoBV;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,7 +21,7 @@ import org.primefaces.event.SelectEvent;
 
 @ManagedBean
 @ViewScoped
-public class BancoView implements Serializable {
+public class BancoView extends BasicMBImpl<Banco> implements Serializable {
 
     private BancoBV banco;
     private Banco bancoSelecionada;
@@ -82,12 +83,14 @@ public class BancoView implements Serializable {
         }
     }
 
-    public void selecionaBanco(SelectEvent e) {
+    @Override
+    public void selecionar(SelectEvent e) {
         Banco b = (Banco) e.getObject();
         banco = new BancoBV(b);
         bancoSelecionada = b;
     }
 
+    @Override
     public void buscaPorId() {
         Long id = banco.getId();
         if (id != null) {
