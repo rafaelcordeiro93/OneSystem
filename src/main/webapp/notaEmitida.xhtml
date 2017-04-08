@@ -14,27 +14,16 @@
                 <div class="ui-g-10" style="margin-left: 8%">
                     <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
                         <h2 class="BigTopic">#{l.Nota_Emitida}</h2>
-                        <div class="EmptyBox5"/>
+                        <div class="EmptyBox30"/>
 
                         <div class="ui-fluid">
                             <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
                                          columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
 
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Operacao}"/>
-                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}"
-                                                       update=":conteudo:growl"/>
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Pessoa}"/>
-                                    <a:inputTextDialog id="nePessoa" value="#{notaEmitidaView.notaEmitida.pessoa.nome}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}"/>
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="1" styleClass="Wid100">
-                                    <p:outputLabel value="#{l.Lista_De_Preco}"/>
-                                    <a:inputTextDialog id="neListaDePreco" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}"/>
-                                </h:panelGrid>
+                                <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Operacao}"/>
+                                <a:inputTextDialog id="nePessoa" value="#{notaEmitidaView.notaEmitida.pessoa.nome}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" placeholder="#{l.Pessoa}"/>
+                                <a:inputTextDialog id="neListaDePreco" value="#{notaEmitidaView.notaEmitida.listaDePreco.nome}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" placeholder="#{l.Lista_De_Preco}"/>
+                            
                             </p:panelGrid> 
                         </div>
 
@@ -52,15 +41,11 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:outputLabel value="#{l.Quantidade}"/>
-                                    <h:panelGrid styleClass="Wid100" columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad">
-                                        <p:inputText value="#{notaEmitidaView.itemEmitido.quantidade}" placeholder="#{l.Item}" readonly="true"/>
-                                        <p:commandButton icon="fa fa-search" action="#{quantidadeDeItemView.abrirDialogo()}" process="@this" update="@none">
-                                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionaQuantidadeDeItemBV}" process="@this" update=":conteudo" />
-                                        </p:commandButton>
-                                    </h:panelGrid>
+                                    <a:inputTextDialog id="neQuantidade" value="#{notaEmitidaView.itemEmitido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaEmitidaView}" 
+                                                       editRendered="false"/>
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100 PaddingTop2Px" >
+                                <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:outputLabel value="#{l.Valor}"/>
                                     <p:inputNumber id="notaEmitidaItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.unitario}">
@@ -68,7 +53,7 @@
                                     </p:inputNumber>                                
                                 </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100 PaddingTop2Px">
+                                <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:outputLabel value="#{l.Total}"/>
                                     <p:inputNumber id="notaItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{notaEmitidaView.itemEmitido.total}">
@@ -78,11 +63,11 @@
                                 <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
                                     <p:spacer/>
                                     <h:panelGrid columns="3">
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{notaEmitidaView.addItemNaLista}"
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaEmitidaView.addItemNaLista}" style="width: 25px"
                                                          update=":conteudo"/>
-                                        <p:commandButton icon="fa fa-refresh Fs16 White" action="#{notaEmitidaView.updateItemNaLista}"
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaEmitidaView.updateItemNaLista}" style="width: 25px"
                                                          update=":conteudo" styleClass="green-btn"/>     
-                                        <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{notaEmitidaView.deleteItemNaLista}"
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaEmitidaView.deleteItemNaLista}" style="width: 25px"
                                                          update=":conteudo" styleClass="orange-btn"/>
                                     </h:panelGrid>
                                 </h:panelGrid>

@@ -1,9 +1,12 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Receita;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.ReceitaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -21,8 +24,26 @@ public class SelecaoReceitaView extends BasicCrudMBImpl<Receita> implements Seri
         beans = service.buscarReceitas();
     }
 
+    @Override
+    public String abrirEdicao() {
+        return "Receita";
+    }
+
     public void abrirDialogo() {
         exibirNaTela("selecaoReceita");
+    }
+    
+    @Override
+    public List<Receita> complete(String query) {
+        List<Receita> receitasFiltradas = new ArrayList<>();
+        if (!StringUtils.containsLetter(query)) {
+            for (Receita t : beans) {
+                if (StringUtils.startsWithIgnoreCase(t.getId().toString(), query)) {
+                    receitasFiltradas.add(t);
+                }
+            }
+        }
+        return receitasFiltradas;
     }
 
     public ReceitaService getService() {

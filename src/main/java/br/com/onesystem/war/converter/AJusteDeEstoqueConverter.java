@@ -5,9 +5,9 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ContaService;
+import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -21,31 +21,25 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "contaConverter", forClass = Conta.class)
-public class ContaConverter implements Converter, Serializable {
+@FacesConverter(value = "aJusteDeEstoqueConverter", forClass = AjusteDeEstoque.class)
+public class AJusteDeEstoqueConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ContaService service = (ContaService) fc.getExternalContext().getApplicationMap().get("contaService");
-                List<Conta> lista = service.buscarContas();
-                if (StringUtils.containsLetter(value)) {
-                    for (Conta conta : lista) {
-                        if (conta.getNome().equals(value)) {
-                            return conta;
-                        }
-                    }
-                } else {
-                    for (Conta conta : lista) {
-                        if (conta.getId().equals(new Long(value))) {
-                            return conta;
+                AjusteDeEstoqueService service = (AjusteDeEstoqueService) fc.getExternalContext().getApplicationMap().get("ajusteDeEstoqueService");
+                List<AjusteDeEstoque> lista = service.buscarAjusteDeEstoques();
+                if (!StringUtils.containsLetter(value)) {
+                    for (AjusteDeEstoque ajusteDeEstoque : lista) {
+                        if (ajusteDeEstoque.getId().equals(new Long(value))) {
+                            return ajusteDeEstoque;
                         }
                     }
                 }
                 return null;
             } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma conta válida."));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um ajuste de estoque válido."));
             }
         } else {
             return null;
@@ -56,7 +50,7 @@ public class ContaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((Conta) object).getNome());
+                return String.valueOf(((AjusteDeEstoque) object).getId());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

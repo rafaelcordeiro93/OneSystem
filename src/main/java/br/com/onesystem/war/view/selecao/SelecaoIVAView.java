@@ -1,9 +1,13 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.IVA;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.IVAService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -23,6 +27,29 @@ public class SelecaoIVAView extends BasicCrudMBImpl<IVA> implements Serializable
 
     public void abrirDialogo() {
         exibirNaTela("selecaoIVA");
+    }
+    
+    @Override
+    public String abrirEdicao() {
+        return "iva";
+    }
+    
+    @Override
+    public List<IVA> complete(String query) {
+        List<IVA> listaFIltrada = new ArrayList<>();
+        for (IVA b : beans) {
+            if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
+                listaFIltrada.add(b);
+            }
+        }
+        if (!StringUtils.containsLetter(query)) {
+            for (IVA m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
+                }
+            }
+        }
+        return listaFIltrada;
     }
 
     public IVAService getService() {

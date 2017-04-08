@@ -7,6 +7,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.util.StringUtils;
+import br.com.onesystem.war.builder.ContaBV;
 import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
 import java.util.List;
@@ -21,8 +22,8 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "contaConverter", forClass = Conta.class)
-public class ContaConverter implements Converter, Serializable {
+@FacesConverter(value = "contaBVConverter", forClass = ContaBV.class)
+public class ContaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -33,22 +34,22 @@ public class ContaConverter implements Converter, Serializable {
                 if (StringUtils.containsLetter(value)) {
                     for (Conta conta : lista) {
                         if (conta.getNome().equals(value)) {
-                            return conta;
+                            return new ContaBV(conta);
                         }
                     }
                 } else {
                     for (Conta conta : lista) {
                         if (conta.getId().equals(new Long(value))) {
-                            return conta;
+                            return new ContaBV(conta);
                         }
                     }
                 }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma conta válida."));
+                return new ContaBV();
+            } catch (Exception e) {
+                return new ContaBV();
             }
         } else {
-            return null;
+            return new ContaBV();
         }
     }
 
@@ -56,12 +57,12 @@ public class ContaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((Conta) object).getNome());
+                return String.valueOf(((ContaBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }
