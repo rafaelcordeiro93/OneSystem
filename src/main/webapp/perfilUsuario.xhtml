@@ -55,17 +55,39 @@
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
                             <p:outputLabel value="#{l.Cor_Tema}"/>
+                            <p:selectOneMenu id="sonCorTema" value="#{perfilUsuarioView.usuario.corTema}" style="width:125px">
+                                <f:selectItem itemLabel="Blue" itemValue="blue" />
+                                <f:selectItem itemLabel="Cyan" itemValue="cyan" />
+                                <f:selectItem itemLabel="Green" itemValue="green" />
+                                <f:selectItem itemLabel="Orange" itemValue="orange" />
+                                <f:selectItem itemLabel="Pink" itemValue="pink" />
+                                <f:selectItem itemLabel="Purple" itemValue="purple" />
+                                <f:selectItem itemLabel="Steel" itemValue="steel" />
+                                <f:selectItem itemLabel="Turquise" itemValue="turquoise" />
+                            </p:selectOneMenu>
+                            
+                            <p:outputLabel value="#{l.Cor_Layout}"/>
 
+                            <p:selectOneMenu id="sonCorLayout" value="#{perfilUsuarioView.usuario.corLayout}" style="width:125px">
+                                <f:selectItem itemLabel="Dark" itemValue="dark" />
+                                <f:selectItem itemLabel="Cyan" itemValue="cyan" />
+                                <f:selectItem itemLabel="Blue" itemValue="blue" />
+                                <f:selectItem itemLabel="Green" itemValue="green" />
+                                <f:selectItem itemLabel="Orange" itemValue="orange" />
+                                <f:selectItem itemLabel="Pink" itemValue="pink" />
+                                <f:selectItem itemLabel="Purple" itemValue="purple" />
+                                <f:selectItem itemLabel="Steel" itemValue="steel" />
+                                <f:selectItem itemLabel="Turquise" itemValue="turquoise" />
+                            </p:selectOneMenu>
 
-                            <p:commandButton  value="Cyan" actionListener="#{guestPreferences.setTheme('pink')}" ajax="false" > </p:commandButton>
+                            <p:outputLabel value="#{l.Menu_Overlay}"/>
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.overlayMenu}" />
 
+                            <p:outputLabel value="#{l.Menu_Escuro}"/>
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.darkMenu}" />
 
-
-                            <p:outputLabel value="#{l.Cor_Botoes}"/>
-                            <p:commandButton  value="Blue" actionListener="#{guestPreferences.setLayout('blue')}" ajax="false" > </p:commandButton>
-
-                            <p:outputLabel value="#{l.Estilo_Menu}"/>
-                            <p:commandButton  value="Overlay" actionListener="#{guestPreferences.setOverlayMenu(true)}" ajax="false" > </p:commandButton>
+                            <p:outputLabel value="#{l.Menu_Inverso}"/>
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.orientationRTL}" />
 
                         </p:panelGrid>
 
@@ -75,7 +97,7 @@
 
                     <div class="EmptyBox20"/>
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Atualizar}" action="#{perfilUsuarioView.update()}" update=":conteudo" icon="fa fa-exchange Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{perfilUsuarioView.update()}" icon="fa fa-exchange Fs16 White"/>
                     </div>
                 </div>
             </div>

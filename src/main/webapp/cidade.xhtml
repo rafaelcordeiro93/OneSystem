@@ -23,7 +23,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="cidadeid" dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.cidade.id}" update=":conteudo" />
+                            <a:inputTextDialog id="cidadeId" dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.cidade}" var="cidade" itemLabel="#{cidade.id}" itemValue="#{cidade}" converter="cidadeBVConverter" itemLabelTabVisible="true" itemLabelTab="#{cidade.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
                             
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{cidadeView.cidade.nome}"/>
