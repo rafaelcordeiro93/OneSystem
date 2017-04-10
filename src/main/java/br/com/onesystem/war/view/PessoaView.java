@@ -15,7 +15,9 @@ import br.com.onesystem.war.builder.PessoaBV;
 import br.com.onesystem.war.service.CidadeService;
 import br.com.onesystem.war.service.PessoaService;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.IDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
@@ -34,9 +36,6 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
     private Contato contatoSelecionado;
     private PessoaBV pessoa;
     private ContatoBV contato;
-    private Cidade cidadeSelecionada;
-    private List<Cidade> cidadeLista;
-    private List<Cidade> cidadesFiltradas;
 
     @ManagedProperty("#{cidadeService}")
     private CidadeService serviceCidade;
@@ -47,36 +46,41 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
     @PostConstruct
     public void init() {
         limparJanela();
-        cidadeLista = serviceCidade.buscarCidades();
     }
 
     public void add() {
         try {
-            pessoaExiste(false);
             Pessoa novaPessoa = pessoa.construir();
-            new AdicionaDAO<Pessoa>().adiciona(novaPessoa);
-            InfoMessage.adicionado();
-            limparJanela();
+            if (validaPessoaExistente(novaPessoa)) {
+                new AdicionaDAO<Pessoa>().adiciona(novaPessoa);
+                InfoMessage.adicionado();
+                limparJanela();
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("ruc_existe"));
+            }
         } catch (DadoInvalidoException die) {
             die.print();
         } catch (ConstraintViolationException ex) {
-            FatalMessage.print("Erro Desconhecido: ", ex.getCause());
+            ex.getMessage();
         }
     }
 
     public void update() {
         try {
-            if (pessoaSelecionada != null) {
-                Pessoa personaActualizada = pessoa.construirComID();
-                pessoaExiste(true);
-                new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(personaActualizada);
-                InfoMessage.atualizado();
-                limparJanela();
+            Pessoa pessoaExistente = pessoa.construirComID();
+            if (pessoaExistente.getId() != null) {
+                if (!validaPessoaExistente(pessoaExistente)) {
+                    new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(pessoaExistente);
+                    InfoMessage.atualizado();
+                    limparJanela();
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("ruc_existe"));
+                }
             }
         } catch (DadoInvalidoException di) {
             di.print();
         } catch (ConstraintViolationException ex) {
-            FatalMessage.print(ex.getMessage(), ex.getCause());
+            ex.getMessage();
         }
     }
 
@@ -86,13 +90,11 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
                 new RemoveDAO<Pessoa>(Pessoa.class).remove(pessoaSelecionada, pessoaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
-            } else {
-                ErrorMessage.print("!Seleccione un registro para eliminar!");
             }
         } catch (DadoInvalidoException di) {
             di.print();
         } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
+            pe.getMessage();
         }
     }
 
@@ -145,27 +147,41 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
         }
     }
 
-    public void pessoaExiste(Boolean personaExiste) throws DadoInvalidoException {
-        String documento = pessoa.getRuc();
-        List<Pessoa> buscarPessoas = pessoaLista.buscarPessoas();
-        try {
-            if (documento != null && !documento.trim().equals("")) {
-                if (personaExiste) {
-                    for (Pessoa personaDaLista : buscarPessoas) {
-                        if (personaDaLista.getDocumento().equals(documento)
-                                && personaDaLista.getId() != pessoa.getId()) {
-                            throw new IDadoInvalidoException("¡Persona ya existe!");
-                        }
-                    }
-                } else {
-                    for (Pessoa personaDaLista : buscarPessoas) {
-                        if (personaDaLista.getRuc().equals(documento)) {
-                            throw new IDadoInvalidoException("¡Persona ya existe!");
-                        }
-                    }
-                }
+    private boolean validaPessoaExistente(Pessoa novoRegistro) {
+        List<Pessoa> lista = new PessoaDAO().buscarPessoas().porRuc(novoRegistro).listaDeResultados();
+        return lista.isEmpty();
+    }
+
+    @Override
+    public void selecionar(SelectEvent e) {
+        if (pessoa == null) {
+            limparJanela();
+        }
+        Object obj = e.getObject();
+        if (obj instanceof Pessoa) {
+            Pessoa c = (Pessoa) e.getObject();
+            pessoa = new PessoaBV(c);
+            pessoaSelecionada = c;
+        } else if (obj instanceof Cidade) {
+            Cidade cidade = (Cidade) obj;
+            pessoa.setCidade(cidade);
+        }
+    }
+
+    @Override
+    public void buscaPorId() {
+        Long id = pessoa.getId();
+        if (id != null) {
+            try {
+                PessoaDAO dao = new PessoaDAO();
+                Pessoa c = dao.buscarPessoas().porId(id).resultado();
+                pessoaSelecionada = c;
+                pessoa = new PessoaBV(pessoaSelecionada);
+            } catch (DadoInvalidoException die) {
+                limparJanela();
+                pessoa.setId(id);
+                die.print();
             }
-        } catch (NullPointerException npe) {
         }
     }
 
@@ -182,39 +198,10 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
             }
         } else {
             for (Contato contatoDaLista : pessoaSelecionada.getContatos()) {
-                System.out.println(contatoDaLista.getTelefone());
-                System.out.println(this.contato.getTelefone());
+
                 if (contatoDaLista.getTelefone().equals(this.contato.getTelefone())) {
                     throw new IDadoInvalidoException("¡Número de teléfono existente!");
                 }
-            }
-        }
-    }
-
-    @Override
-    public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof Pessoa) {
-            pessoaSelecionada = (Pessoa) obj;
-            pessoa = new PessoaBV(pessoaSelecionada);
-        } else if (obj instanceof Cidade) {
-            pessoa.setCidade((Cidade) obj);
-        }
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = pessoa.getId();
-        if (id != null) {
-            try {
-                PessoaDAO dao = new PessoaDAO();
-                Pessoa p = dao.buscarPessoas().porId(id).resultado();
-                pessoaSelecionada = p;
-                pessoa = new PessoaBV(pessoaSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                pessoa.setId(id);
-                die.print();
             }
         }
     }
@@ -239,7 +226,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
         pessoa = new PessoaBV();
         contato = new ContatoBV();
         pessoaSelecionada = null;
-        cidadeSelecionada = new Cidade();
+
     }
 
     public void fisicaJuridicaOnSelect() {
@@ -288,30 +275,6 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
 
     public void setContato(ContatoBV contato) {
         this.contato = contato;
-    }
-
-    public Cidade getCidadeSelecionada() {
-        return cidadeSelecionada;
-    }
-
-    public void setCidadeSelecionada(Cidade cidadeSelecionada) {
-        this.cidadeSelecionada = cidadeSelecionada;
-    }
-
-    public List<Cidade> getCidadeLista() {
-        return cidadeLista;
-    }
-
-    public void setCidadeLista(List<Cidade> cidadeLista) {
-        this.cidadeLista = cidadeLista;
-    }
-
-    public List<Cidade> getCidadesFiltradas() {
-        return cidadesFiltradas;
-    }
-
-    public void setCidadesFiltradas(List<Cidade> cidadesFiltradas) {
-        this.cidadesFiltradas = cidadesFiltradas;
     }
 
     public CidadeService getServiceCidade() {

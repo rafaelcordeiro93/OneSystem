@@ -14,12 +14,15 @@ import br.com.onesystem.util.MD5Util;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.builder.PessoaBV;
 import br.com.onesystem.war.service.UsuarioService;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 @ManagedBean
 @ViewScoped
@@ -39,16 +42,17 @@ public class PerfilUsuarioView implements Serializable {
         buscaUsuario();
     }
 
-    public void update() {
+    public void update() throws IOException {
         try {
             atualizaPessoa();
             validaSenha();
             Usuario usuarioExistente = usuario.construirComID();
             if (usuarioExistente.getId() != null) {
                 new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(usuarioExistente.getPessoa());
-                new AtualizaDAO<Usuario>(Usuario.class).atualiza(usuarioExistente);
-                InfoMessage.atualizado();
+                new AtualizaDAO<Usuario>(Usuario.class).atualiza(usuarioExistente);                
+                FacesContext.getCurrentInstance().getExternalContext().redirect("perfilUsuario.xhtml");//atualiza a pagina para atualizar a aparencia do sistema
                 buscaUsuario();
+                InfoMessage.atualizado();
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
             }
@@ -88,6 +92,11 @@ public class PerfilUsuarioView implements Serializable {
         if (usuarioSelecionada != null) {
             usuario.setId(usuarioSelecionada.getId());
             usuario.setGrupoPrivilegio(usuarioSelecionada.getGrupoDePrivilegio());
+            usuario.setCorTema(usuarioSelecionada.getCorTema());
+            usuario.setCorLayout(usuarioSelecionada.getCorLayout());
+            usuario.setOverlayMenu(usuarioSelecionada.isOverlayMenu());
+            usuario.setOrientationRTL(usuarioSelecionada.isOrientationRTL());
+            usuario.setDarkMenu(usuarioSelecionada.isDarkMenu());
             pessoa = new PessoaBV(usuarioSelecionada.getPessoa());
 
         }

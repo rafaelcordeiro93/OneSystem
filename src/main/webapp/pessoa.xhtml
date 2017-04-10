@@ -24,7 +24,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>                            
-                            <a:inputNumberDialog id="idPessoa" mbView="#{pessoaView}" dialog="#{selecaoPessoaView}" value="#{pessoaView.pessoa.id}" update=":conteudo" styleClass="Wid60"/>
+                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}" mbView="#{pessoaView}" value="#{pessoaView.pessoa}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
 
                         </p:panelGrid>
 
@@ -32,7 +32,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{pessoaView.pessoa.nome}"/>
+                            <p:inputText value="#{pessoaView.pessoa.nome}" maxlength="80"/>
 
                             <p:outputLabel value="#{l.Tipo}"/>
                             <p:selectOneRadio id="pessoaTipo" value="#{pessoaView.pessoa.fisicaJuridica}">
@@ -56,7 +56,7 @@
 
                             <p:outputLabel id="pessoaCILabel" value="#{pessoaView.pessoa.fantasiaCILabel}"/> 
                             <p:inputText id="pessoaCI"  value="#{pessoaView.pessoa.fantasiaCI}"/>
-                            
+
                             <p:outputLabel  value="#{l.Nascimento}"/>
                             <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.pessoa.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.pessoa.nascimento}" /> 
 

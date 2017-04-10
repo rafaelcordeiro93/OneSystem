@@ -37,6 +37,19 @@ public class UsuarioLogadoUtil {
 
         return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
     }
+    
+    public boolean getPrivilegio(String tipo, String j) throws DadoInvalidoException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        ExternalContext ec = context.getExternalContext();
+        HttpSession session = (HttpSession) ec.getSession(true);
+        String login = (String) session.getAttribute("minds.login.token");
+        if (login.equals("Anonymous")) {
+            return true;
+        }
+        String janela = j;
+
+        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
+    }
 
     public boolean buscaPermissoesNoBanco(String tipo, String janela, Usuario usuario) throws DadoInvalidoException {
         List<Privilegio> listaPrivilegios = usuario.getGrupoDePrivilegio().getListaPrivilegios();

@@ -10,18 +10,13 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.CidadeBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.services.LogPhaseListener;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
@@ -91,6 +86,19 @@ public class CidadeView extends BasicMBImpl<Cidade> implements Serializable {
     }
 
     @Override
+    public void selecionar(SelectEvent e) {
+        if (cidade == null) {
+            limparJanela();
+        }
+        Object obj = e.getObject();
+        if (obj instanceof Cidade) {
+            Cidade c = (Cidade) e.getObject();
+            cidade = new CidadeBV(c);
+            cidadeSelecionada = c;
+        }
+    }
+
+    @Override
     public void buscaPorId() {
         Long id = cidade.getId();
         if (id != null) {
@@ -105,12 +113,6 @@ public class CidadeView extends BasicMBImpl<Cidade> implements Serializable {
                 die.print();
             }
         }
-    }
-
-    public void selecionar(SelectEvent e) {
-        Cidade c = (Cidade) e.getObject();
-        cidade = new CidadeBV(c);
-        cidadeSelecionada = c;
     }
 
     public void limparJanela() {

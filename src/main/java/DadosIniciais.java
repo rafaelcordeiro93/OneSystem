@@ -80,7 +80,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jpessoaimport);
 
         //Modulo de Notas
-        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", arq);
+        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", notas);
 
         daoJanela.adiciona(notaSaida);
 
@@ -169,6 +169,7 @@ public class DadosIniciais {
         Janela relContrato = new Janela(null, "Relatório de Contrato de Câmbio", "/relatorioDeContratoDeCambio.xhtml", rela);
         Janela relCambio = new Janela(null, "Relatório de Câmbio", "/relatorioDeCambio.xhtml", rela);
         Janela relSaldoDivisao = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "/relatorioDeSaldoDeDivisaoDeLucro.xhtml", rela);
+        Janela relBalancoFisico = new Janela(null, "Relatório de Balanco Fisico", "/relatorioDeBalancoFisico.xhtml", rela);
 
         daoJanela.adiciona(relCambio);
         daoJanela.adiciona(relContaPagar);
@@ -177,19 +178,20 @@ public class DadosIniciais {
         daoJanela.adiciona(relRecepcao);
         daoJanela.adiciona(relSaldo);
         daoJanela.adiciona(relSaldoDivisao);
+        daoJanela.adiciona(relBalancoFisico);
 
         //Modulo Administrativo
         Janela usuario = new Janela(null, "Usuário", "/usuario.xhtml", admin);
         Janela jconfiguracao = new Janela(null, "Configuração", "/configuracao.xhtml", admin);
         Janela operacoes = new Janela(null, "Operacoes", "/operacoes.xhtml", admin);
-        Janela contrato = new Janela(null, "Grupo de Privilegios", "/grupoPrivilegio.xhtml", admin);
+        Janela jgrupoPrivilegio = new Janela(null, "Grupo de Privilegios", "/grupoPrivilegio.xhtml", admin);
         Janela privilegio = new Janela(null, "Privilégio", "/privilegio.xhtml", admin);
         Janela jconfigNecessario = new Janela(null, "Configuracao Necessaria", "/configuracaoNecessaria.xhtml", admin);
 
         daoJanela.adiciona(usuario);
         daoJanela.adiciona(jconfiguracao);
         daoJanela.adiciona(operacoes);
-        daoJanela.adiciona(contrato);
+        daoJanela.adiciona(jgrupoPrivilegio);
         daoJanela.adiciona(privilegio);
         daoJanela.adiciona(jconfigNecessario);
 
@@ -197,7 +199,7 @@ public class DadosIniciais {
         Janela perfilUsuario = new Janela(null, "Perfil", "/perfilUsuario.xhtml", pref);
         daoJanela.adiciona(perfilUsuario);
 
-        //Modulo de Preferencias
+        //Modulo de Login
         Janela jlogin = new Janela(null, "Login", "/login.xhtml", login);
         daoJanela.adiciona(jlogin);
 
@@ -250,11 +252,12 @@ public class DadosIniciais {
                 new Privilegio(null, relRecepcao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relSaldo, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relSaldoDivisao, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relBalancoFisico, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, operacoes, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, contrato, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jgrupoPrivilegio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, privilegio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, perfilUsuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio)

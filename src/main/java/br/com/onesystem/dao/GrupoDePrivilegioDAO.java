@@ -1,6 +1,6 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
-public class PessoaDAO {
+public class GrupoDePrivilegioDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public PessoaDAO() {
+    public GrupoDePrivilegioDAO() {
         limpar();
     }
 
@@ -25,39 +25,33 @@ public class PessoaDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public PessoaDAO buscarPessoas() {
-        consulta += "select p from Pessoa p where p.id > 0 ";
+    public GrupoDePrivilegioDAO buscarGrupos() {
+        consulta += "select g from GrupoDePrivilegio g where g.id > 0 ";
         return this;
     }
 
-    public PessoaDAO porNome(Pessoa pessoa) {
-        consulta += " and p.nome = :pNome ";
-        parametros.put("pNome", pessoa.getNome());
-        return this;
-    }
-    
-    public PessoaDAO porRuc(Pessoa pessoa) {
-        consulta += " and p.ruc = :pRuc ";
-        parametros.put("pRuc", pessoa.getRuc());
+    public GrupoDePrivilegioDAO porId(Long id) {
+        consulta += " and g.id = :gId ";
+        parametros.put("gId", id);
         return this;
     }
 
-    public PessoaDAO porId(Long id) {
-        consulta += " and p.id = :pId ";
-        parametros.put("pId", id);
+    public GrupoDePrivilegioDAO porNome(GrupoDePrivilegio grupoDePrivilegio) {
+        consulta += " and g.nome = :pNome ";
+        parametros.put("pNome", grupoDePrivilegio.getNome());
         return this;
     }
 
-    public List<Pessoa> listaDeResultados() {
-        List<Pessoa> resultado = new ArmazemDeRegistros<Pessoa>(Pessoa.class)
+    public List<GrupoDePrivilegio> listaDeResultados() {
+        List<GrupoDePrivilegio> resultado = new ArmazemDeRegistros<GrupoDePrivilegio>(GrupoDePrivilegio.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Pessoa resultado() throws DadoInvalidoException {
+    public GrupoDePrivilegio resultado() throws DadoInvalidoException {
         try {
-            Pessoa resultado = new ArmazemDeRegistros<Pessoa>(Pessoa.class)
+            GrupoDePrivilegio resultado = new ArmazemDeRegistros<GrupoDePrivilegio>(GrupoDePrivilegio.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
