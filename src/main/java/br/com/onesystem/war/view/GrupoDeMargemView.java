@@ -14,14 +14,13 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class GrupoDeMargemView extends BasicMBImpl<Margem> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class GrupoDeMargemView extends BasicMBImpl<Margem, GrupoDeMargemBV> implements Serializable {
 
     private GrupoDeMargemBV grupo;
     private Margem grupoSelecionada;
@@ -46,7 +45,7 @@ public class GrupoDeMargemView extends BasicMBImpl<Margem> implements Serializab
         try {
             if (grupoSelecionada != null) {
                 Margem grupoExistente = grupo.construirComID();
-                new AtualizaDAO<Margem>(Margem.class).atualiza(grupoExistente);
+                new AtualizaDAO<Margem>().atualiza(grupoExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -60,7 +59,7 @@ public class GrupoDeMargemView extends BasicMBImpl<Margem> implements Serializab
     public void delete() {
         try {
             if (grupoSelecionada != null) {
-                new RemoveDAO<Margem>(Margem.class).remove(grupoSelecionada, grupoSelecionada.getId());
+                new RemoveDAO<Margem>().remove(grupoSelecionada, grupoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             } else {

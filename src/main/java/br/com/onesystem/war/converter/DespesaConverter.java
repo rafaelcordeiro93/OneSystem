@@ -28,8 +28,7 @@ public class DespesaConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                DespesaService service = (DespesaService) fc.getExternalContext().getApplicationMap().get("despesaService");
-                List<Despesa> lista = service.buscarDespesas();
+                List<Despesa> lista = new DespesaService().buscarDespesas();
                 if (StringUtils.containsLetter(value)) {
                     for (Despesa despesa : lista) {
                         if (despesa.getNome().equals(value)) {

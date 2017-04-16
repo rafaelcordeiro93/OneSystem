@@ -25,14 +25,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class DespesaProvisionadaView implements Serializable {
 
     private boolean panel;
@@ -44,10 +44,10 @@ public class DespesaProvisionadaView implements Serializable {
     private Integer numeroParcelas;
     private Integer intervaloDias;
 
-    @ManagedProperty("#{despesaProvisionadaService}")
+    @Inject
     private DespesaProvisionadaService service;
 
-    @ManagedProperty("#{moedaService}")
+    @Inject
     private MoedaService serviceMoeda;
 
     private List<Moeda> moedaLista;
@@ -82,7 +82,7 @@ public class DespesaProvisionadaView implements Serializable {
         try {
             DespesaProvisionada despesaProvisionadaExistente = despesaProvisionada.construirComID();
             if (despesaProvisionadaExistente.getId() != null) {
-                new AtualizaDAO<DespesaProvisionada>(DespesaProvisionada.class).atualiza(despesaProvisionadaExistente);
+                new AtualizaDAO<DespesaProvisionada>().atualiza(despesaProvisionadaExistente);
                 despesaProvisionadaLista.set(despesaProvisionadaLista.indexOf(despesaProvisionadaExistente),
                         despesaProvisionadaExistente);
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(despesaProvisionadaExistente)) {
@@ -101,7 +101,7 @@ public class DespesaProvisionadaView implements Serializable {
     public void delete() {
         try {
             if (despesaProvisionadaLista != null && despesaProvisionadaLista.contains(despesaProvisionada.construirComID())) {
-                new RemoveDAO<DespesaProvisionada>(DespesaProvisionada.class).remove(despesaProvisionada.construirComID(), despesaProvisionada.construirComID().getId());
+                new RemoveDAO<DespesaProvisionada>().remove(despesaProvisionada.construirComID(), despesaProvisionada.construirComID().getId());
                 despesaProvisionadaLista.remove(despesaProvisionada.construirComID());
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(despesaProvisionada.construirComID())) {
                     gruposFinanceirosFiltrados.remove(despesaProvisionada.construirComID());

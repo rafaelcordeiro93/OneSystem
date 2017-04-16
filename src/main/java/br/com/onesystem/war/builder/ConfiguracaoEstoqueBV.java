@@ -5,9 +5,10 @@ import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.builder.ConfiguracaoEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 
-public class ConfiguracaoEstoqueBV implements Serializable {
+public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<ConfiguracaoEstoque> {
 
     private Long id;
     private ContaDeEstoque contaDeEstoqueEmpresa;
@@ -47,6 +48,12 @@ public class ConfiguracaoEstoqueBV implements Serializable {
     }
 
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
+        return new ConfiguracaoEstoqueBuilder().comContaDeEstoque(contaDeEstoqueEmpresa)
+                .comListaDePreco(listaDePreco).construir();
+    }
+
+    @Override
+    public ConfiguracaoEstoque construirComID() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa)
                 .comListaDePreco(listaDePreco).construir();
     }

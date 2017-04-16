@@ -1,12 +1,7 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.DepositoDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -15,17 +10,12 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class DepositoView extends BasicMBImpl<Deposito> implements Serializable {
-
-    private DepositoBV deposito;
-    private Deposito depositoSelecionada;
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements Serializable {
 
     @PostConstruct
     public void init() {
@@ -34,11 +24,9 @@ public class DepositoView extends BasicMBImpl<Deposito> implements Serializable 
 
     public void add() {
         try {
-            Deposito novoRegistro = deposito.construir();
+            Deposito novoRegistro = e.construir();
             if (validaDepositoExistente(novoRegistro)) {
-                new AdicionaDAO<Deposito>().adiciona(novoRegistro);
-                InfoMessage.adicionado();
-                limparJanela();
+                addNoBanco(novoRegistro);
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("deposito_ja_cadastrado"));
             }
@@ -49,12 +37,10 @@ public class DepositoView extends BasicMBImpl<Deposito> implements Serializable 
 
     public void update() {
         try {
-            Deposito depositoExistente = deposito.construirComID();
+            Deposito depositoExistente = e.construirComID();
             if (depositoExistente.getId() != null) {
                 if (validaDepositoExistente(depositoExistente)) {
-                    new AtualizaDAO<Deposito>(Deposito.class).atualiza(depositoExistente);
-                    InfoMessage.atualizado();
-                    limparJanela();
+                    updateNoBanco(depositoExistente);
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("deposito_ja_cadastrado"));
                 }
@@ -66,73 +52,17 @@ public class DepositoView extends BasicMBImpl<Deposito> implements Serializable 
         }
     }
 
-    public void delete() {
-        try {
-            if (depositoSelecionada != null) {
-                new RemoveDAO<Deposito>(Deposito.class).remove(depositoSelecionada, depositoSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
     private boolean validaDepositoExistente(Deposito novoRegistro) {
         List<Deposito> lista = new DepositoDAO().buscarDepositos().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
 
     @Override
-    public void selecionar(SelectEvent e) {
-        Deposito d = (Deposito) e.getObject();
-        deposito = new DepositoBV(d);
-        depositoSelecionada = d;
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = deposito.getId();
-        if (id != null) {
-            try {
-                DepositoDAO dao = new DepositoDAO();
-                Deposito c = dao.buscarDepositos().porId(id).resultado();
-                depositoSelecionada = c;
-                deposito = new DepositoBV(depositoSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                deposito.setId(id);
-                die.print();
-            }
-        }
+    public void selecionar(SelectEvent event) {
+        e = new DepositoBV((Deposito) event.getObject());
     }
 
     public void limparJanela() {
-        deposito = new DepositoBV();
-        depositoSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (depositoSelecionada != null) {
-            deposito = new DepositoBV(depositoSelecionada);
-        }
-    }
-
-    public DepositoBV getDeposito() {
-        return deposito;
-    }
-
-    public void setDeposito(DepositoBV deposito) {
-        this.deposito = deposito;
-    }
-
-    public Deposito getDepositoSelecionada() {
-        return depositoSelecionada;
-    }
-
-    public void setDepositoSelecionada(Deposito depositoSelecionada) {
-        this.depositoSelecionada = depositoSelecionada;
+        e = new DepositoBV();
     }
 }

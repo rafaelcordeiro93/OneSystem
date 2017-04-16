@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -117,6 +118,68 @@ public class ValoresAVista implements Serializable {
 
     public BigDecimal getAcrescimo() {
         return acrescimo;
+    }
+
+    public BigDecimal getTotalCheque() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Cheque i : cheques) {
+            total = total.add(i.getValor());
+        }
+        return total;
+    }
+
+    public String getTotalChequeFormatado() {
+        if (notaEmitida != null) {
+            if (cheques != null && cheques.isEmpty()) {
+                return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getTotalCheque());
+            } else {
+                return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+            }
+        } else if (cheques != null && cheques.isEmpty()) {
+            return MoedaFomatter.format(getTotalCheque());
+        } else {
+            return MoedaFomatter.format(BigDecimal.ZERO);
+        }
+    }
+
+    public String getAcrescimoFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getAcrescimo());
+        } else {
+            return MoedaFomatter.format(getAcrescimo());
+        }
+    }
+
+    public String getDinheiroFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDinheiro());
+        } else {
+            return MoedaFomatter.format(getDinheiro());
+        }
+    }
+
+    public String getDescontoFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDesconto());
+        } else {
+            return MoedaFomatter.format(getDesconto());
+        }
+    }
+
+    public String getDespesaCobrancaFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDespesaCobranca());
+        } else {
+            return MoedaFomatter.format(getDespesaCobranca());
+        }
+    }
+
+    public String getFreteFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getFrete());
+        } else {
+            return MoedaFomatter.format(getFrete());
+        }
     }
 
     public BigDecimal getDespesaCobranca() {

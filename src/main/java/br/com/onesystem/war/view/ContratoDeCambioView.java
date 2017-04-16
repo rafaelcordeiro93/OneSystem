@@ -9,7 +9,6 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ContratoDeCambioBV;
-import br.com.onesystem.war.service.PessoaService;
 import br.com.onesystem.war.service.ContratoDeCambioService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.ADadoInvalidoException;
@@ -23,18 +22,16 @@ import br.com.onesystem.war.service.TituloService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ContratoDeCambioView implements Serializable {
 
     private boolean panel;
@@ -120,7 +117,7 @@ public class ContratoDeCambioView implements Serializable {
             verificaSaldoDeMoeda();
             ContratoDeCambio contratoDeCambioExistente = contratoDeCambio.construirComID();
             if (contratoDeCambioExistente.getId() != null) {
-                new AtualizaDAO<ContratoDeCambio>(ContratoDeCambio.class).atualiza(contratoDeCambioExistente);
+                new AtualizaDAO<ContratoDeCambio>().atualiza(contratoDeCambioExistente);
                 contratoDeCambioLista.set(contratoDeCambioLista.indexOf(contratoDeCambioExistente),
                         contratoDeCambioExistente);
                 if (contratosDeCambioFiltrados != null && contratosDeCambioFiltrados.contains(contratoDeCambioExistente)) {
@@ -139,7 +136,7 @@ public class ContratoDeCambioView implements Serializable {
     public void delete() {
         try {
             if (contratoDeCambioLista != null && contratoDeCambioLista.contains(contratoDeCambioSelecionado)) {
-                new RemoveDAO<ContratoDeCambio>(ContratoDeCambio.class).remove(contratoDeCambioSelecionado, contratoDeCambioSelecionado.getId());
+                new RemoveDAO<ContratoDeCambio>().remove(contratoDeCambioSelecionado, contratoDeCambioSelecionado.getId());
                 contratoDeCambioLista.remove(contratoDeCambioSelecionado);
                 if (contratosDeCambioFiltrados != null && contratosDeCambioFiltrados.contains(contratoDeCambioSelecionado)) {
                     contratosDeCambioFiltrados.remove(contratoDeCambioSelecionado);

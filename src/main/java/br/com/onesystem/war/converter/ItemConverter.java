@@ -28,8 +28,7 @@ public class ItemConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ItemService service = (ItemService) fc.getExternalContext().getApplicationMap().get("itemService");
-                List<Item> lista = service.buscarItems();
+                List<Item> lista = new ItemService().buscarItems();
                 if (StringUtils.containsLetter(value)) {
                     for (Item item : lista) {
                         if (item.getNome().equals(value)) {

@@ -26,7 +26,7 @@ public class AjusteDeEstoqueBVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                AjusteDeEstoqueService service = (AjusteDeEstoqueService) fc.getExternalContext().getApplicationMap().get("ajusteDeEstoqueService");
+                AjusteDeEstoqueService service = new AjusteDeEstoqueService();
                 List<AjusteDeEstoque> lista = service.buscarAjusteDeEstoques();
                 for (AjusteDeEstoque ajusteDeEstoque : lista) {
                     if (ajusteDeEstoque.getId().equals(new Long(value))) {

@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -83,14 +84,7 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
 
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
-    }
-
-    public String getValorFormatado() {
-        Locale local = getCotacao().getConta().getMoeda().getBandeira().getLocal();
-        NumberFormat nf = NumberFormat.getCurrencyInstance(local);
-
-        return nf.format(getValor());
-    }
+    }  
 
     public Banco getBanco() {
         return banco;

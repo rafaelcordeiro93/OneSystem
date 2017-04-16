@@ -12,19 +12,19 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.war.builder.RelatorioDeSaldoDeDivisaoDeLucroBV;
+import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author Rafael
  */
-@ManagedBean
-@ViewScoped
-public class RelatorioDeSaldoDeDivisaoDeLucroView {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class RelatorioDeSaldoDeDivisaoDeLucroView implements Serializable {
 
     private RelatorioDeSaldoDeDivisaoDeLucroBV relatorio;
     private ImpressoraDeRelatorio impressora;

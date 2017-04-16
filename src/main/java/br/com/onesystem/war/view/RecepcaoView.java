@@ -17,15 +17,13 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.Hibernate;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecepcaoView implements Serializable {
 
     private boolean panel;
@@ -67,8 +65,8 @@ public class RecepcaoView implements Serializable {
                 Baixa baixa = new BaixaDAO().buscarBaixasW().eDeRecepcao(recepcaoExistente).eComTitulo().resultadoUnico();
                 baixa.atualizaValor(recepcaoExistente.getValor());
                 baixa.atualizaTotal(recepcaoExistente.getValor());
-                new AtualizaDAO<Recepcao>(Recepcao.class).atualiza(recepcaoExistente);
-                new AtualizaDAO<Baixa>(Baixa.class).atualiza(baixa);
+                new AtualizaDAO<Recepcao>().atualiza(recepcaoExistente);
+                new AtualizaDAO<Baixa>().atualiza(baixa);
                 recepcaoLista.set(recepcaoLista.indexOf(recepcaoSelecionada),
                         recepcaoExistente);
                 if (recepcoesFiltradas != null && recepcoesFiltradas.contains(recepcaoExistente)) {
@@ -87,7 +85,7 @@ public class RecepcaoView implements Serializable {
     public void delete() {
         try {
             if (recepcaoLista != null && recepcaoLista.contains(recepcaoSelecionada)) {
-                new RemoveDAO<Recepcao>(Recepcao.class).remove(recepcaoSelecionada, recepcaoSelecionada.getId());
+                new RemoveDAO<Recepcao>().remove(recepcaoSelecionada, recepcaoSelecionada.getId());
                 recepcaoLista.remove(recepcaoSelecionada);
                 if (recepcoesFiltradas != null && recepcoesFiltradas.contains(recepcaoSelecionada)) {
                     recepcoesFiltradas.remove(recepcaoSelecionada);

@@ -20,15 +20,14 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class PessoaView extends BasicMBImpl<Pessoa,PessoaBV> implements Serializable {
 
     private Pessoa pessoaSelecionada;
     private Contato contatoSelecionado;
@@ -69,7 +68,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
             if (pessoaSelecionada != null) {
                 Pessoa personaActualizada = pessoa.construirComID();
                 pessoaExiste(true);
-                new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(personaActualizada);
+                new AtualizaDAO<Pessoa>().atualiza(personaActualizada);
                 InfoMessage.atualizado();
                 limparJanela();
             }
@@ -83,7 +82,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
     public void delete() {
         try {
             if (pessoaSelecionada != null) {
-                new RemoveDAO<Pessoa>(Pessoa.class).remove(pessoaSelecionada, pessoaSelecionada.getId());
+                new RemoveDAO<Pessoa>().remove(pessoaSelecionada, pessoaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             } else {
@@ -117,7 +116,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
         try {
             contatoExiste(true);
             Contato contatoExistente = this.contato.construir();
-            new AtualizaDAO<Contato>(Contato.class).atualiza(contatoExistente);
+            new AtualizaDAO<Contato>().atualiza(contatoExistente);
             pessoaSelecionada.getContatos().set(pessoaSelecionada.getContatos().indexOf(contatoSelecionado),
                     contatoExistente);
             InfoMessage.print("¡Telefono '" + contatoExistente.getTelefone() + "' actualizado con éxito!");
@@ -131,7 +130,7 @@ public class PessoaView extends BasicMBImpl<Pessoa> implements Serializable {
     public void deleteContato() {
         try {
             if (contatoSelecionado != null) {
-                new RemoveDAO<Contato>(Contato.class).remove(contatoSelecionado, contatoSelecionado.getID());
+                new RemoveDAO<Contato>().remove(contatoSelecionado, contatoSelecionado.getID());
                 pessoaSelecionada.getContatos().remove(contatoSelecionado);
                 InfoMessage.print("¡Telefono '" + contatoSelecionado.getTelefone() + "' eliminado con éxito!");
                 limparContato();

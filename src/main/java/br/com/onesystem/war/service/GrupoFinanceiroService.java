@@ -5,11 +5,7 @@ import br.com.onesystem.dao.GrupoFinanceiroDAO;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "grupoFinanceiroService")
-@ApplicationScoped
 public class GrupoFinanceiroService implements Serializable {
     
     public List<GrupoFinanceiro> buscarGruposFinanceiros(){

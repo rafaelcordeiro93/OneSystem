@@ -3,13 +3,10 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.GrupoFinanceiroDAO;
-import br.com.onesystem.dao.GrupoFinanceiroDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.GrupoFinanceiroBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
@@ -19,13 +16,12 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class GrupoFinanceiroView implements Serializable {
 
     private GrupoFinanceiroBV grupoFinanceiro;
@@ -51,7 +47,7 @@ public class GrupoFinanceiroView implements Serializable {
         try {
             if (grupoFinanceiroSelecionado != null) {
                 GrupoFinanceiro grupoFinanceiroExistente = grupoFinanceiro.construirComID();
-                new AtualizaDAO<GrupoFinanceiro>(GrupoFinanceiro.class).atualiza(grupoFinanceiroExistente);
+                new AtualizaDAO<GrupoFinanceiro>().atualiza(grupoFinanceiroExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -65,7 +61,7 @@ public class GrupoFinanceiroView implements Serializable {
     public void delete() {
         try {
             if (grupoFinanceiroSelecionado != null) {
-                new RemoveDAO<GrupoFinanceiro>(GrupoFinanceiro.class).remove(grupoFinanceiroSelecionado, grupoFinanceiroSelecionado.getId());
+                new RemoveDAO<GrupoFinanceiro>().remove(grupoFinanceiroSelecionado, grupoFinanceiroSelecionado.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

@@ -7,8 +7,10 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -88,6 +90,22 @@ public class ItemEmitido implements Serializable {
 
     public BigDecimal getTotal() {
         return getQuantidade().multiply(unitario);
+    }
+
+    public String getTotalFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getTotal());
+        } else {
+            return NumberFormat.getNumberInstance().format(getTotal());
+        }
+    }
+    
+    public String getUnitarioFormatado(){
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getUnitario());
+        } else {
+            return NumberFormat.getNumberInstance().format(getUnitario());
+        }
     }
 
     public List<Estoque> getEstoques() {

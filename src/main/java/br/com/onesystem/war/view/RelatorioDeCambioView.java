@@ -6,23 +6,17 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.war.builder.RelatorioDeCambioBV;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import net.sf.jasperreports.engine.JRException;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RelatorioDeCambioView implements Serializable {
 
     private RelatorioDeCambioBV relatorio;

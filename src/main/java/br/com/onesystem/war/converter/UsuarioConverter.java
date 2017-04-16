@@ -28,8 +28,7 @@ public class UsuarioConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                UsuarioService service = (UsuarioService) fc.getExternalContext().getApplicationMap().get("usuarioService");
-                List<Usuario> lista = service.buscarUsuarios();
+                List<Usuario> lista = new UsuarioService().buscarUsuarios();
                 if (StringUtils.containsLetter(value)) {
                     for (Usuario usuario : lista) {
                         if (usuario.getPessoa().getEmail().equals(value)) {

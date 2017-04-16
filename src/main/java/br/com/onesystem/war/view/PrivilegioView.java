@@ -18,17 +18,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author Rafael
  */
-@ViewScoped
-@ManagedBean
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class PrivilegioView implements Serializable {
 
     private boolean panel;
@@ -56,7 +55,7 @@ public class PrivilegioView implements Serializable {
     public void save() {
         try {
             for (Privilegio p : privilegioLista) {
-                new AtualizaDAO<Privilegio>(Privilegio.class).atualiza(p);
+                new AtualizaDAO<Privilegio>().atualiza(p);
             }
             InfoMessage.atualizado();
         } catch (DadoInvalidoException die) {

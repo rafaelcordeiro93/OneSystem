@@ -1,9 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AjusteDeEstoqueDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Deposito;
@@ -12,33 +8,25 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.context.RequestContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEstoqueBV> implements Serializable {
 
-    private AjusteDeEstoqueBV ajusteDeEstoque;
-    private AjusteDeEstoque ajusteDeEstoqueSelecionada;
     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -57,12 +45,9 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements
 
     public void add() {
         try {
-
-            AjusteDeEstoque novoRegistro = ajusteDeEstoque.construir();
-            lancaEstoque(novoRegistro);
-            new AdicionaDAO<AjusteDeEstoque>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
+            AjusteDeEstoque t = e.construir();
+            lancaEstoque(t);
+            addNoBanco(t);
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -70,15 +55,12 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements
 
     public void update() {
         try {
-
-            if (ajusteDeEstoqueSelecionada != null) {
-                AjusteDeEstoque ajusteDeEstoqueExistente = ajusteDeEstoque.construirComID();
-                lancaEstoque(ajusteDeEstoqueExistente);
-                new AtualizaDAO<AjusteDeEstoque>(AjusteDeEstoque.class).atualiza(ajusteDeEstoqueExistente);
-                InfoMessage.atualizado();
-                limparJanela();
+            if (e != null && e.getId() != null) {
+                AjusteDeEstoque t = e.construirComID();
+                lancaEstoque(t);
+                updateNoBanco(t);
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("ajuste_estoque_nao_encontrado"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -87,15 +69,11 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements
 
     public void delete() {
         try {
-            if (ajusteDeEstoqueSelecionada != null) {
-                new RemoveDAO<AjusteDeEstoque>(AjusteDeEstoque.class).remove(ajusteDeEstoqueSelecionada, ajusteDeEstoqueSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
+            if (e != null && e.getId() != null) {
+                deleteNoBanco(e.construirComID(), e.getId());
             }
         } catch (DadoInvalidoException di) {
             di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
         }
     }
 
@@ -118,41 +96,18 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque> implements
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof AjusteDeEstoque) {
-            ajusteDeEstoque = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
+            e = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
         } else if (obj instanceof Operacao) {
-            ajusteDeEstoque.setOperacao((Operacao) obj);
+            e.setOperacao((Operacao) obj);
         } else if (obj instanceof Deposito) {
-            ajusteDeEstoque.setDeposito((Deposito) event.getObject());
+            e.setDeposito((Deposito) event.getObject());
         } else if (obj instanceof Item) {
-            ajusteDeEstoque.setItem((Item) event.getObject());
+            e.setItem((Item) event.getObject());
         }
     }
 
     public void limparJanela() {
-        ajusteDeEstoque = new AjusteDeEstoqueBV();
-        ajusteDeEstoqueSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (ajusteDeEstoqueSelecionada != null) {
-            ajusteDeEstoque = new AjusteDeEstoqueBV(ajusteDeEstoqueSelecionada);
-        }
-    }
-
-    public AjusteDeEstoqueBV getAjusteDeEstoque() {
-        return ajusteDeEstoque;
-    }
-
-    public void setAjusteDeEstoque(AjusteDeEstoqueBV ajusteDeEstoque) {
-        this.ajusteDeEstoque = ajusteDeEstoque;
-    }
-
-    public AjusteDeEstoque getAjusteDeEstoqueSelecionada() {
-        return ajusteDeEstoqueSelecionada;
-    }
-
-    public void setAjusteDeEstoqueSelecionada(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
-        this.ajusteDeEstoqueSelecionada = ajusteDeEstoqueSelecionada;
+        e = new AjusteDeEstoqueBV();
     }
 
     public Configuracao getConfiguracao() {

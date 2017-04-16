@@ -2,10 +2,11 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class IVABV implements Serializable {
+public class IVABV implements Serializable, BuilderView<IVA> {
 
     private Long id;
     private String nome;   

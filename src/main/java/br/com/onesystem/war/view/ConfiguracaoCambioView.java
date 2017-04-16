@@ -16,14 +16,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ConfiguracaoCambioView implements Serializable {
 
     private ConfiguracaoCambioBV configuracaoCambioBV;
@@ -88,7 +87,7 @@ public class ConfiguracaoCambioView implements Serializable {
                 validarDados();
                 deleteCambio();
                 addCambio(conf);
-                new AtualizaDAO<ConfiguracaoCambio>(ConfiguracaoCambio.class).atualiza(configuracaoCambioBV.construir());
+                new AtualizaDAO<ConfiguracaoCambio>().atualiza(configuracaoCambioBV.construir());
                 atualizarLista();
             }
             InfoMessage.print("Configurações de Câmbio gravadas com sucesso!");
@@ -122,7 +121,7 @@ public class ConfiguracaoCambioView implements Serializable {
         for (Pessoa pessoa : pessoasDivisaoLucro) {
             if (!configuracaoCambioBV.getPessoaDivisaoLucro().contains(pessoa)) {
                 pessoa.setConfiguracaoCambio(null);
-                new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(pessoa);
+                new AtualizaDAO<Pessoa>().atualiza(pessoa);
             }
         }
     }
@@ -130,7 +129,7 @@ public class ConfiguracaoCambioView implements Serializable {
     private void addCambio(ConfiguracaoCambio conf) throws ConstraintViolationException, DadoInvalidoException {
         for (Pessoa pessoa : configuracaoCambioBV.getPessoaDivisaoLucro()) {
             pessoa.setConfiguracaoCambio(conf);
-            new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(pessoa);
+            new AtualizaDAO<Pessoa>().atualiza(pessoa);
         }
     }
 

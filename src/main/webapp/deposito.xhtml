@@ -22,10 +22,10 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="depositoId" value="#{depositoView.deposito}" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" update=":conteudo" var="deposito" converter="depositoBVConverter" itemLabel="#{deposito.id}" itemValue="#{deposito}" editVisible="false" onlyNumber="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
-                            
+                            <a:inputTextDialog id="depositoId" value="#{depositoView.e}" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" update=":conteudo" var="deposito" converter="depositoBVConverter" itemLabel="#{deposito.id}" itemValue="#{deposito}" editVisible="false" onlyNumber="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{depositoView.deposito.nome}" maxlength="60"/>
+                            <p:inputText value="#{depositoView.e.nome}" maxlength="60"/>
                         </p:panelGrid>
 
                         <div class="EmptyBox15"/>
@@ -39,7 +39,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{depositoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{depositoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{depositoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{depositoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

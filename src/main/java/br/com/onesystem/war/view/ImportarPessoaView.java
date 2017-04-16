@@ -13,8 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.inject.Named;
 import org.apache.commons.io.FileUtils;
 
 import org.primefaces.event.FileUploadEvent;
@@ -23,7 +23,8 @@ import org.primefaces.event.FileUploadEvent;
  *
  * @author Rafael
  */
-@ManagedBean
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ImportarPessoaView implements Serializable {
 
     ImportadorRUC importador = new ImportadorRUC();

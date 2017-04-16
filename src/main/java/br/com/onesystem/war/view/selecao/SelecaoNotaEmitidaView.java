@@ -8,15 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.enterprise.context.RequestScoped
 public class SelecaoNotaEmitidaView extends BasicCrudMBImpl<NotaEmitida> implements Serializable {
 
-    @ManagedProperty("#{notaEmitidaService}")
+    @Inject
     private NotaEmitidaService service;
 
     @PostConstruct
