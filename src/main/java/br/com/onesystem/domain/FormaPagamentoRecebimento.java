@@ -5,10 +5,13 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -129,6 +132,10 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
 
     public void setMovimento(Movimento movimento) {
         this.movimento = movimento;
+    }
+    
+      public String getValorFormatado() {
+        return MoedaFomatter.format(getCotacao().getConta().getMoeda(),getValor());
     }
 
     @Override

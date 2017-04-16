@@ -3,11 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.ConfiguracaoEstoque;
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoBV;
@@ -21,22 +17,19 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class ConfiguracaoView extends BasicMBImpl<Configuracao> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> implements Serializable {
 
     private ConfiguracaoBV configuracaoBV;
     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService service;
 
     @PostConstruct
@@ -53,12 +46,12 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao> implements Seria
 
     public void update() {
         try {
-            Configuracao conf = configuracaoBV.construir();
+            Configuracao conf = configuracaoBV.construirComID();
             if (configuracao == null) {
-                new AdicionaDAO<Configuracao>().adiciona(conf);
+                new AdicionaDAO<>().adiciona(conf);
                 configuracao = conf;
             } else {
-                new AtualizaDAO<Configuracao>(Configuracao.class).atualiza(conf);
+                new AtualizaDAO<>().atualiza(conf);
             }
             InfoMessage.print(new BundleUtil().getMessage("Configuracao_gravada"));
         } catch (DadoInvalidoException die) {
@@ -106,6 +99,11 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao> implements Seria
 
     public void setService(ConfiguracaoService service) {
         this.service = service;
+    }
+
+    @Override
+    public void limparJanela() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

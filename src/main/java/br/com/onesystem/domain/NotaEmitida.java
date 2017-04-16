@@ -7,7 +7,9 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -173,6 +175,22 @@ public class NotaEmitida implements Serializable {
 
     public void setBaixaDinheiro(List<Baixa> baixaDinheiro) {
         this.baixaDinheiro = baixaDinheiro;
+    }
+
+    public BigDecimal getTotalItens() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (ItemEmitido i : itensEmitidos) {
+            total = total.add(i.getTotal());
+        }
+        return total;
+    }
+
+    public String getTotalItensFormatado() {
+        if (itensEmitidos.isEmpty()) {
+            return "";
+        } else {
+            return MoedaFomatter.format(moedaPadrao, getTotalItens());
+        }
     }
 
     @Override

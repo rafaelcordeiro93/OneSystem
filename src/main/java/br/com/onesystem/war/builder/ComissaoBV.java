@@ -3,10 +3,11 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.domain.builder.ComissaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class ComissaoBV implements Serializable {
+public class ComissaoBV implements Serializable,BuilderView<Comissao> {
 
     private Long id;
     private String nome;   

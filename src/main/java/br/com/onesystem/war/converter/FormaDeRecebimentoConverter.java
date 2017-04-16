@@ -28,8 +28,7 @@ public class FormaDeRecebimentoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                FormaDeRecebimentoService service = (FormaDeRecebimentoService) fc.getExternalContext().getApplicationMap().get("formaDeRecebimentoService");
-                List<FormaDeRecebimento> lista = service.buscarFormasDeRecebimento();
+                List<FormaDeRecebimento> lista = new FormaDeRecebimentoService().buscarFormasDeRecebimento();
                 if (StringUtils.containsLetter(value)) {
                     for (FormaDeRecebimento formaDeRecebimento : lista) {
                         if (formaDeRecebimento.getNome().equals(value)) {

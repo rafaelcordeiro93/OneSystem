@@ -28,8 +28,7 @@ public class CidadeConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                CidadeService service = (CidadeService) fc.getExternalContext().getApplicationMap().get("cidadeService");
-                List<Cidade> lista = service.buscarCidades();
+                List<Cidade> lista = new CidadeService().buscarCidades();
                 if (StringUtils.containsLetter(value)) {
                     for (Cidade cidade : lista) {
                         if (cidade.getNome().equals(value)) {

@@ -93,4 +93,9 @@ public class Banco implements Serializable {
         return this.id.equals(outro.id);
     }
 
+    @Override
+    public String toString() {
+        return "Banco{" + "id=" + id + ", codigo=" + codigo + ", nome=" + nome + ", site=" + site + '}';
+    }      
+
 }

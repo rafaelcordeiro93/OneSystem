@@ -23,10 +23,10 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="marcaId" dialog="#{selecaoMarcaView}" mbView="#{marcaView}" value="#{marcaView.marca.id}" update=":conteudo" />
+                            <a:inputTextDialog id="marcaId" dialog="#{selecaoMarcaView}" mbView="#{marcaView}" value="#{marcaView.e}" var="marca" itemLabel="#{marca.id}" itemValue="#{marca}" converter="marcaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{marca.nome}" update=":conteudo" editVisible="false" onlyNumber="true" />
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{marcaView.marca.nome}" maxlength="60"/>
+                            <p:inputText value="#{marcaView.e.nome}" maxlength="60"/>
 
                         </p:panelGrid>
 
@@ -42,7 +42,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{marcaView.update()}" styleClass="Mar2"  update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{marcaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{marcaView.limparJanela()}" styleClass="Mar2"  update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{marcaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
 
                     </div>
                 </div>

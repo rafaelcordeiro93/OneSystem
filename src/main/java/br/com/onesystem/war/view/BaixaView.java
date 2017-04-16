@@ -26,9 +26,8 @@ import br.com.onesystem.war.service.BaixaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -37,8 +36,8 @@ import org.primefaces.event.SelectEvent;
  *
  * @author Rafael
  */
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class BaixaView implements Serializable {
 
     private boolean panel;
@@ -48,7 +47,7 @@ public class BaixaView implements Serializable {
     private List<Baixa> baixasFiltradas;
     private String statusButton = "RedButton";
 
-    @ManagedProperty("#{baixaService}")
+    @Inject
     private BaixaService service;
 
     @PostConstruct
@@ -69,7 +68,7 @@ public class BaixaView implements Serializable {
 
     private void atualizaNoBanco(Baixa baixaExistente) throws ConstraintViolationException, DadoInvalidoException {
         if (baixaExistente.getId() != null) {
-            new AtualizaDAO<Baixa>(Baixa.class).atualiza(baixaExistente);
+            new AtualizaDAO<>().atualiza(baixaExistente);
             baixaLista.set(baixaLista.indexOf(baixaSelecionada),
                     baixaExistente);
             if (baixasFiltradas != null && baixasFiltradas.contains(baixaExistente)) {

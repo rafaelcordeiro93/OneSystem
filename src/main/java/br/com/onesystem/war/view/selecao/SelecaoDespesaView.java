@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.Despesa;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.DespesaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -9,15 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.enterprise.context.RequestScoped
 public class SelecaoDespesaView extends BasicCrudMBImpl<Despesa> implements Serializable {
 
-    @ManagedProperty("#{despesaService}")
+    @Inject
     private DespesaService service;
 
     @PostConstruct

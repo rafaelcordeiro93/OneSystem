@@ -1,15 +1,8 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.FormaDeRecebimentoDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
@@ -22,21 +15,17 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, FormaDeRecebimentoBV> implements Serializable {
 
-    private FormaDeRecebimentoBV formaDeRecebimento;
-    private FormaDeRecebimento formaDeRecebimentoSelecionada;
-    private Configuracao configuracao;
+     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -56,74 +45,14 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento> impl
         }
     }
 
-    public void add() {
-        try {
-            FormaDeRecebimento novoRegistro = formaDeRecebimento.construir();
-            new AdicionaDAO<FormaDeRecebimento>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void update() {
-        try {
-
-            if (formaDeRecebimentoSelecionada != null) {
-                FormaDeRecebimento formaDeRecebimentoExistente = formaDeRecebimento.construirComID();
-                new AtualizaDAO<FormaDeRecebimento>(FormaDeRecebimento.class).atualiza(formaDeRecebimentoExistente);
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("forma_recebimento_nao_encontrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void delete() {
-        try {
-            if (formaDeRecebimentoSelecionada != null) {
-                new RemoveDAO<FormaDeRecebimento>(FormaDeRecebimento.class).remove(formaDeRecebimentoSelecionada, formaDeRecebimentoSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
     @Override
-    public void selecionar(SelectEvent e) {
-        Object obj = e.getObject();
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
         if (obj instanceof FormaDeRecebimento) {
-            FormaDeRecebimento a = (FormaDeRecebimento) e.getObject();
-            formaDeRecebimento = new FormaDeRecebimentoBV(a);
-            formaDeRecebimentoSelecionada = a;
+            e = new FormaDeRecebimentoBV((FormaDeRecebimento) event.getObject());
         }
         if (obj instanceof Cartao) {
-            formaDeRecebimento.setCartao((Cartao) obj);
-        }
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = formaDeRecebimento.getId();
-        if (id != null) {
-            try {
-                FormaDeRecebimentoDAO dao = new FormaDeRecebimentoDAO();
-                FormaDeRecebimento c = dao.buscarFormasDeRecebimento().porId(id).resultado();
-                formaDeRecebimentoSelecionada = c;
-                formaDeRecebimento = new FormaDeRecebimentoBV(formaDeRecebimentoSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                formaDeRecebimento.setId(id);
-                die.print();
-            }
+            e.setCartao((Cartao) obj);
         }
     }
 
@@ -140,33 +69,7 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento> impl
     }
 
     public void limparJanela() {
-        formaDeRecebimento = new FormaDeRecebimentoBV();
-        formaDeRecebimentoSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (formaDeRecebimentoSelecionada != null) {
-            formaDeRecebimento = new FormaDeRecebimentoBV(formaDeRecebimentoSelecionada);
-        }
-    }
-
-    public FormaDeRecebimentoBV getFormaDeRecebimento() {
-        if(formaDeRecebimento == null){
-            limparJanela();
-        }
-        return formaDeRecebimento;
-    }
-
-    public void setFormaDeRecebimento(FormaDeRecebimentoBV formaDeRecebimento) {
-        this.formaDeRecebimento = formaDeRecebimento;
-    }
-
-    public FormaDeRecebimento getFormaDeRecebimentoSelecionada() {
-        return formaDeRecebimentoSelecionada;
-    }
-
-    public void setFormaDeRecebimentoSelecionada(FormaDeRecebimento formaDeRecebimentoSelecionada) {
-        this.formaDeRecebimentoSelecionada = formaDeRecebimentoSelecionada;
+        e = new FormaDeRecebimentoBV();
     }
 
     public Configuracao getConfiguracao() {

@@ -23,14 +23,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ChequeView implements Serializable {
 
     private ChequeBV cheque;
@@ -38,7 +37,7 @@ public class ChequeView implements Serializable {
     private Configuracao configuracao;
     private List<Cotacao> listaCotacao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -62,7 +61,7 @@ public class ChequeView implements Serializable {
         try {
             Cheque novoRegistro = cheque.construir();
 
-            new AdicionaDAO<Cheque>().adiciona(novoRegistro);
+            new AdicionaDAO<>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -76,7 +75,7 @@ public class ChequeView implements Serializable {
             if (chequeSelecionada != null) {
                 Cheque chequeExistente = cheque.construirComID();
 
-                new AtualizaDAO<Cheque>(Cheque.class).atualiza(chequeExistente);
+                new AtualizaDAO<>().atualiza(chequeExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -90,7 +89,7 @@ public class ChequeView implements Serializable {
     public void delete() {
         try {
             if (chequeSelecionada != null) {
-                new RemoveDAO<Cheque>(Cheque.class).remove(chequeSelecionada, chequeSelecionada.getId());
+                new RemoveDAO<>().remove(chequeSelecionada, chequeSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

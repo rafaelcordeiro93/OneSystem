@@ -6,11 +6,7 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "usuarioService")
-@ApplicationScoped
 public class UsuarioService implements Serializable {
 
     public List<Usuario> buscarUsuarios() {

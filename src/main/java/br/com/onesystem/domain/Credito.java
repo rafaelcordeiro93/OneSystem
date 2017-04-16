@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.TipoContabil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -97,4 +98,13 @@ public class Credito implements Serializable {
     public TipoContabil getTipoContabil() {
         return tipoContabil;
     }
+    
+     public String getValorFormatado() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getValor());
+        } else {
+            return MoedaFomatter.format(getValor());
+        }
+    }
+    
 }

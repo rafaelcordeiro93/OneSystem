@@ -15,14 +15,13 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class GrupoView extends BasicMBImpl<Grupo> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class GrupoView extends BasicMBImpl<Grupo, GrupoBV> implements Serializable {
 
     private GrupoBV grupo;
     private Grupo grupoSelecionada;
@@ -52,7 +51,7 @@ public class GrupoView extends BasicMBImpl<Grupo> implements Serializable {
             if (grupoSelecionada != null) {
                 Grupo grupoExistente = grupo.construirComID();
                 if (validaGrupoExistente(grupoExistente)) {
-                    new AtualizaDAO<Grupo>(Grupo.class).atualiza(grupoExistente);
+                    new AtualizaDAO<Grupo>().atualiza(grupoExistente);
                     InfoMessage.atualizado();
                     limparJanela();
                 } else {
@@ -69,7 +68,7 @@ public class GrupoView extends BasicMBImpl<Grupo> implements Serializable {
     public void delete() {
         try {
             if (grupoSelecionada != null) {
-                new RemoveDAO<Grupo>(Grupo.class).remove(grupoSelecionada, grupoSelecionada.getId());
+                new RemoveDAO<Grupo>().remove(grupoSelecionada, grupoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

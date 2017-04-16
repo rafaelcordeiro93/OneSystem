@@ -4,9 +4,10 @@ import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 
-public class UsuarioBV implements Serializable {
+public class UsuarioBV implements Serializable, BuilderView<Usuario> {
 
     private Long id;
     private String senha;

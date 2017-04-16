@@ -1,12 +1,7 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.MoedaDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -17,17 +12,12 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
-
-    private MoedaBV moeda;
-    private Moeda moedaSelecionada;
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class MoedaView extends BasicMBImpl<Moeda, MoedaBV> implements Serializable {
 
     @PostConstruct
     public void init() {
@@ -36,11 +26,9 @@ public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
 
     public void add() {
         try {
-            Moeda novoRegistro = moeda.construir();
+            Moeda novoRegistro = e.construir();
             if (validaMoedaExistente(novoRegistro)) {
-                new AdicionaDAO<Moeda>().adiciona(novoRegistro);
-                InfoMessage.adicionado();
-                limparJanela();
+                addNoBanco(novoRegistro);
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_existe"));
             }
@@ -51,12 +39,10 @@ public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
 
     public void update() {
         try {
-            Moeda moedaExistente = moeda.construirComID();
-            if (moedaSelecionada != null) {
+            Moeda moedaExistente = e.construirComID();
+            if (moedaExistente != null && moedaExistente.getId() != null) {
                 if (validaMoedaExistente(moedaExistente)) {
-                    new AtualizaDAO<Moeda>(Moeda.class).atualiza(moedaExistente);
-                    InfoMessage.atualizado();
-                    limparJanela();
+                    updateNoBanco(moedaExistente);
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_existe"));
                 }
@@ -68,40 +54,8 @@ public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
         }
     }
 
-    public void delete() {
-        try {
-            if (moedaSelecionada != null) {
-                new RemoveDAO<Moeda>(Moeda.class).remove(moedaSelecionada, moedaSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
-    public void selecionar(SelectEvent e) {
-        moedaSelecionada = (Moeda) e.getObject();
-        moeda = new MoedaBV(moedaSelecionada);
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = moeda.getId();
-        if (id != null) {
-            try {
-                MoedaDAO dao = new MoedaDAO();
-                Moeda c = dao.buscarMoedas().porId(id).resultado();
-                moedaSelecionada = c;
-                moeda = new MoedaBV(moedaSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                moeda.setId(id);
-                die.print();
-            }
-        }
+    public void selecionar(SelectEvent event) {
+        e = new MoedaBV((Moeda) event.getObject());
     }
 
     public List<TipoBandeira> getBandeiras() {
@@ -110,38 +64,15 @@ public class MoedaView extends BasicMBImpl<Moeda> implements Serializable {
 
     private boolean validaMoedaExistente(Moeda novoRegistro) {
         List<Moeda> lista = new MoedaDAO().buscarMoedas().porNome(novoRegistro).porSigla(novoRegistro).listaDeResultados();
-        if (moeda.getId() != null) {
-            return moeda.getId().compareTo(lista.get(0).getId()) == 0;
+        if (novoRegistro.getId() != null && !lista.isEmpty()) {
+            return novoRegistro.getId().compareTo(lista.get(0).getId()) == 0;
         } else {
             return lista.isEmpty();
         }
     }
 
-    public void desfazer() {
-        if (moedaSelecionada != null) {
-            moeda = new MoedaBV(moedaSelecionada);
-        }
-    }
-
     public void limparJanela() {
-        moeda = new MoedaBV();
-        moedaSelecionada = null;
-    }
-
-    public MoedaBV getMoeda() {
-        return moeda;
-    }
-
-    public void setMoeda(MoedaBV moeda) {
-        this.moeda = moeda;
-    }
-
-    public Moeda getMoedaSelecionada() {
-        return moedaSelecionada;
-    }
-
-    public void setMoedaSelecionada(Moeda moedaSelecionada) {
-        this.moedaSelecionada = moedaSelecionada;
+        e = new MoedaBV();
     }
 
 }

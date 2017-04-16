@@ -21,17 +21,16 @@ import br.com.onesystem.war.service.JanelaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author Rafael
  */
-@ViewScoped
-@ManagedBean
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class GrupoPrivilegioView implements Serializable {
 
     private boolean panel;
@@ -83,7 +82,7 @@ public class GrupoPrivilegioView implements Serializable {
         try {
             GrupoDePrivilegio grupoExistente = grupoPrivilegioBV.construirComId();
             if (grupoExistente.getId() != null) {
-                new AtualizaDAO<GrupoDePrivilegio>(GrupoDePrivilegio.class).atualiza(grupoExistente);
+                new AtualizaDAO<GrupoDePrivilegio>().atualiza(grupoExistente);
                 grupoLista.set(grupoLista.indexOf(grupoExistente),
                         grupoExistente);
                 if (gruposFiltrados != null && gruposFiltrados.contains(grupoExistente)) {
@@ -102,7 +101,7 @@ public class GrupoPrivilegioView implements Serializable {
     public void delete() {
         try {
             if (grupoLista != null && grupoLista.contains(grupoSelecionado)) {
-                new RemoveDAO<GrupoDePrivilegio>(GrupoDePrivilegio.class).remove(grupoSelecionado, grupoSelecionado.getId());
+                new RemoveDAO<GrupoDePrivilegio>().remove(grupoSelecionado, grupoSelecionado.getId());
                 grupoLista.remove(grupoSelecionado);
                 if (gruposFiltrados != null && gruposFiltrados.contains(grupoSelecionado)) {
                     gruposFiltrados.remove(grupoSelecionado);

@@ -24,24 +24,19 @@ import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecebimentoView implements Serializable {
 
     private FormaPagamentoRecebimento formaPagamentoRecebimento; //classe abstrata para recebimento de valores
@@ -214,7 +209,7 @@ public class RecebimentoView implements Serializable {
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
         if (baixa.getPerfilDeValor() instanceof Titulo) {
             ((Titulo) this.baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<PerfilDeValor>(PerfilDeValor.class).atualiza(baixa.getPerfilDeValor());
+            new AtualizaDAO<PerfilDeValor>().atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }

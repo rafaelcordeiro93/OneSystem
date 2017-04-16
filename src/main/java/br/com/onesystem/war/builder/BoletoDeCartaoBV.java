@@ -6,12 +6,13 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BoletoDeCartaoBV implements Serializable {
+public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCartao> {
 
     private Long id;
     private NotaEmitida notaEmitida;

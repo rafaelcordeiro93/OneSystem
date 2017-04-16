@@ -14,13 +14,12 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.ReceitaBV;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ReceitaView implements Serializable {
 
     private ReceitaBV receita;
@@ -47,7 +46,7 @@ public class ReceitaView implements Serializable {
         try {
             Receita receitaExistente = receita.construirComID();
             if (receitaExistente.getId() != null) {
-                new AtualizaDAO<Receita>(Receita.class).atualiza(receitaExistente);
+                new AtualizaDAO<Receita>().atualiza(receitaExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -61,7 +60,7 @@ public class ReceitaView implements Serializable {
     public void delete() {
         try {
             if (receitaSelecionada != null) {
-                new RemoveDAO<Receita>(Receita.class).remove(receitaSelecionada, receitaSelecionada.getId());
+                new RemoveDAO<Receita>().remove(receitaSelecionada, receitaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

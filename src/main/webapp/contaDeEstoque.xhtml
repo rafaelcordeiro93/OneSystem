@@ -20,7 +20,7 @@
 
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="neId" value="#{contaDeEstoqueView.contaDeEstoque.id}" dialog="#{selecaoContaDeEstoqueView}" mbView="#{contaDeEstoqueView}" update=":conteudo"/>
+                            <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{contaDeEstoqueView.contaDeEstoque}" update=":conteudo" var="contaDeEstoque" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{contaDeEstoqueView.contaDeEstoque.nome}" maxlength="60"/>
@@ -32,26 +32,24 @@
 
                     <p:separator/>
 
-                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                                 columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1">
-
+                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                 columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ,ui-g-12 ui-md-2,ui-g-12 ui-md-2">
                         <p:outputLabel value="#{l.Operacao}"/>
-                        <a:inputTextDialog id="neOperacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacao.nome}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}"/> 
+                        <a:inputTextDialog id="neOpera" value="#{contaDeEstoqueView.operacaoDeEstoque.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
 
                         <p:outputLabel value="#{l.Operacao_Fisica}"/>
-                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}" styleClass="Wid90">
+                        <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}">
                             <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="#{l.Operacao_Fisica}" itemValue="#{Operacao_Fisica}" >
                             </f:selectItems>
                         </p:selectOneMenu>
-
 
                         <h:panelGrid columns="3" style="margin-top: -2px">
                             <p:commandButton icon="fa fa-plus Fs16 White" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
                             <p:commandButton icon="fa fa-refresh Fs16 White" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn"/>     
                             <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn"/>
                         </h:panelGrid>
-
                     </p:panelGrid>
+
                     <div class="EmptyBox10"/>
 
 

@@ -6,38 +6,35 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author rauber
  */
-@ManagedBean
-@ViewScoped
-public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
 
     private NotaEmitida notaEmitida;
-    
+
     @PostConstruct
-    public void construir(){
-   }
+    public void construir() {
+    }
 
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
-        System.out.println("1");
         if (obj instanceof NotaEmitida) {
             notaEmitida = (NotaEmitida) obj;
         }
-    }
-
-    public void limpar() {
-        notaEmitida = null;
     }
 
     public NotaEmitida getNotaEmitida() {
@@ -46,5 +43,18 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida> implements
 
     public void setNotaEmitida(NotaEmitida notaEmitida) {
         this.notaEmitida = notaEmitida;
+    }
+
+    public String getZero() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+        } else {
+            return "";
+        }
+    }
+
+    @Override
+    public void limparJanela() {
+        notaEmitida = null;
     }
 }

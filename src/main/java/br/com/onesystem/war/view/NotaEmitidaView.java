@@ -7,7 +7,6 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
@@ -66,10 +65,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
@@ -79,9 +77,9 @@ import org.primefaces.event.SelectEvent;
  *
  * @author Rafael Fernando Rauber
  */
-@ManagedBean
-@ViewScoped
-public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
 
     private ValoresAVistaBV valoresAVista;
     private CreditoBV creditoBV;
@@ -105,10 +103,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida> implements Seriali
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService configuracaoService;
 
-    @ManagedProperty("#{cotacaoService}")
+    @Inject
     private CotacaoService service;
 
     // ---------------------- Inicializa Janela -------------------------------

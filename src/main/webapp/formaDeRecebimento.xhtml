@@ -20,36 +20,36 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.formaDeRecebimento}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
                             
                             <p:outputLabel value="#{l.Nome}" />
-                            <p:inputText value="#{formaDeRecebimentoView.formaDeRecebimento.nome}"  maxlength="60"/>
+                            <p:inputText value="#{formaDeRecebimentoView.e.nome}"  maxlength="60"/>
 
                             <p:outputLabel value="#{l.Ativo}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoAtiva" value="#{formaDeRecebimentoView.formaDeRecebimento.ativo}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoAtiva" value="#{formaDeRecebimentoView.e.ativo}"/>
 
                             <p:outputLabel value="#{l.Percentual_Entrada}" />
-                            <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.porcentagemDeEntrada}" maxValue="100" minValue="0"/>
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.porcentagemDeEntrada}" maxValue="100" minValue="0"/>
 
                             <p:outputLabel value="#{l.Forma_Recebimento}" />
-                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeEntrada}">
+                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.e.formaPadraoDeEntrada}">
                                 <f:selectItems value="#{formaDeRecebimentoView.formaDeRecebimentoPadrao}" var="#{l.Padrao_Entrada}" itemValue="#{formaDeRecebimentoPadrao}" />
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Entrada}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.formaDeRecebimento.entrada}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.e.entrada}"/>
 
                             <p:outputLabel value="#{l.Entrada_Cartao}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCartao}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" value="#{formaDeRecebimentoView.e.entradaEmCartao}"/>
 
                             <p:outputLabel value="#{l.Entrada_Dinheiro}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemDinheiro" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmDinheiro}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemDinheiro" value="#{formaDeRecebimentoView.e.entradaEmDinheiro}"/>
 
                             <p:outputLabel value="#{l.Entrada_Cheque}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCheque}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" value="#{formaDeRecebimentoView.e.entradaEmCheque}"/>
 
                             <p:outputLabel value="#{l.Entrada_Credito}" />
-                            <p:selectBooleanCheckbox disabled="true" id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.formaDeRecebimento.entradaEmCredito}"/>
+                            <p:selectBooleanCheckbox disabled="true" id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.e.entradaEmCredito}"/>
 
                         </p:panelGrid>
                     </div>
@@ -64,37 +64,37 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Parcela_Cheque}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCheque}"/>
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.e.parcelaEmCheque}"/>
 
                             <p:outputLabel value="#{l.Parcela_Cartao}" />
-                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemCartao" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmCartao}"/>
+                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemCartao" value="#{formaDeRecebimentoView.e.parcelaEmCartao}"/>
 
                             <p:outputLabel value="#{l.Parcela_Conta}" />
-                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemConta" value="#{formaDeRecebimentoView.formaDeRecebimento.parcelaEmConta}"/>
+                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemConta" value="#{formaDeRecebimentoView.e.parcelaEmConta}"/>
 
                             <p:outputLabel value="#{l.Forma_Recebimento}" />
-                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeParcela" value="#{formaDeRecebimentoView.formaDeRecebimento.formaPadraoDeRecebimentoParcela}">
+                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeParcela" value="#{formaDeRecebimentoView.e.formaPadraoDeRecebimentoParcela}">
                                 <f:selectItems value="#{formaDeRecebimentoView.tipoFormaDeRecebimentoPadraoParcela}" var="#{l.Padrao_Parcela}" itemValue="#{tipoFormaDeRecebimentoParcela}"/> >
 
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Minimo_Parcelas}" />
-                            <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.minimoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.minimoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
 
                             <p:outputLabel value="#{l.Maximo_Parcelas}" /> 
-                            <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.maximoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />  
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.maximoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />  
 
                             <p:outputLabel value="#{l.Cartao}"/>
-                            <a:inputTextDialog id="formaRecCartaoParcela" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.formaDeRecebimento.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}"/>
+                            <a:inputTextDialog id="formaRecCartaoParcela" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}"/>
                           
                             <p:outputLabel value="#{l.Primeira_Parcela}" />
-                            <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
 
                             <p:outputLabel value="#{l.Periodicidade}" />
-                            <p:inputNumber  value="#{formaDeRecebimentoView.formaDeRecebimento.periodicidade}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />   
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.periodicidade}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />   
 
                             <p:outputLabel value="#{l.Tipo_Periodicidade}" />  
-                            <p:selectOneMenu id="formaDeRecebimentoTipoPeriodicidade" value="#{formaDeRecebimentoView.formaDeRecebimento.tipoPeriodicidade}">
+                            <p:selectOneMenu id="formaDeRecebimentoTipoPeriodicidade" value="#{formaDeRecebimentoView.e.tipoPeriodicidade}">
                                 <f:selectItems value="#{formaDeRecebimentoView.tipoPeriodicidade}" var="#{l.Tipo_Periodicidade}"  itemValue="#{TipoPeriodicidade}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
@@ -110,8 +110,6 @@
                     <p:commandButton value="#{l.Atualizar}" action="#{formaDeRecebimentoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                     <p:commandButton value="#{l.Remover}" action="#{formaDeRecebimentoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                     <p:commandButton value="#{l.Limpar}" action="#{formaDeRecebimentoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{formaDeRecebimentoView.desfazer()}" styleClass="Mar2 orange-btn"  update=":conteudo" icon="fa fa-repeat Fs16 White" />
-
                 </div>
             </div>
         </div>

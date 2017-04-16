@@ -5,11 +5,9 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.GrupoFiscalDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.GrupoFiscalBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -17,14 +15,13 @@ import br.com.onesystem.war.builder.GrupoFiscalBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal, GrupoFiscalBV> implements Serializable {
 
     private GrupoFiscalBV grupoFiscal;
     private GrupoFiscal grupoFiscalSelecionada;
@@ -50,7 +47,7 @@ public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal> implements Seriali
         try {
             if (grupoFiscalSelecionada != null) {
                 GrupoFiscal grupoFiscalExistente = grupoFiscal.construirComID();
-                new AtualizaDAO<GrupoFiscal>(GrupoFiscal.class).atualiza(grupoFiscalExistente);
+                new AtualizaDAO<GrupoFiscal>().atualiza(grupoFiscalExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -64,7 +61,7 @@ public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal> implements Seriali
     public void delete() {
         try {
             if (grupoFiscalSelecionada != null) {
-                new RemoveDAO<GrupoFiscal>(GrupoFiscal.class).remove(grupoFiscalSelecionada, grupoFiscalSelecionada.getId());
+                new RemoveDAO<GrupoFiscal>().remove(grupoFiscalSelecionada, grupoFiscalSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             } else {

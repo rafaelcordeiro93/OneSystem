@@ -16,7 +16,6 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -24,14 +23,13 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class OperacaoView implements Serializable {
 
     private OperacaoBV operacao;
@@ -74,7 +72,7 @@ public class OperacaoView implements Serializable {
 
             if (operacaoSelecionada != null) {
                 Operacao operacaoExistente = operacao.construirComID();
-                new AtualizaDAO<Operacao>(Operacao.class).atualiza(operacaoExistente);
+                new AtualizaDAO<Operacao>().atualiza(operacaoExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -88,7 +86,7 @@ public class OperacaoView implements Serializable {
     public void delete() {
         try {
             if (operacaoSelecionada != null) {
-                new RemoveDAO<Operacao>(Operacao.class).remove(operacaoSelecionada, operacaoSelecionada.getId());
+                new RemoveDAO<Operacao>().remove(operacaoSelecionada, operacaoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

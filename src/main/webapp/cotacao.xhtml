@@ -25,16 +25,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="cotacao" mbView="#{cotacaoView}" dialog="#{selecaoCotacaoView}" value="#{cotacaoView.cotacao.id}" update=":conteudo"/>
+                            <a:inputTextDialog id="cotacao" value="#{cotacaoView.e}" dialog="#{selecaoCotacaoView}" mbView="#{cotacaoView}" update=":conteudo" var="cotacao" converter="cotacaoBVConverter" itemLabel="#{cotacao.id}" itemValue="#{cotacao}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel  value="#{l.Conta}"/>
-                            <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cotacaoView}" value="#{cotacaoView.cotacao.conta}" update=":conteudo:Valor" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+                            <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cotacaoView}" value="#{cotacaoView.e.conta}" update=":conteudo:Valor" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
 
                             <p:outputLabel  value="#{l.Valor}"/>
-                            <p:inputNumber id="Valor" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cotacaoView.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{cotacaoView.cotacao.valor}"/>         
+                            <p:inputNumber id="Valor" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cotacaoView.e.conta.moeda.sigla}" decimalPlaces="2" value="#{cotacaoView.e.valor}"/>         
 
                             <p:outputLabel  value="#{l.Data}" />
-                            <p:calendar value="#{cotacaoView.cotacao.data}" pattern="dd/MM/yyyy HH:mm:ss" />
+                            <p:calendar value="#{cotacaoView.e.data}" pattern="dd/MM/yyyy HH:mm:ss" />
                         </p:panelGrid>
 
                         <div class="EmptyBox15"/>
@@ -48,7 +48,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{cotacaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{cotacaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{cotacaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{cotacaoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

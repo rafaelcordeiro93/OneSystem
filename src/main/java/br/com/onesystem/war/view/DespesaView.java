@@ -14,13 +14,12 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.DespesaBV;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class DespesaView implements Serializable {
 
     private DespesaBV despesa;
@@ -46,7 +45,7 @@ public class DespesaView implements Serializable {
         try {
             Despesa despesaExistente = despesa.construirComID();
             if (despesaExistente.getId() != null) {
-                new AtualizaDAO<Despesa>(Despesa.class).atualiza(despesaExistente);
+                new AtualizaDAO<Despesa>().atualiza(despesaExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -60,7 +59,7 @@ public class DespesaView implements Serializable {
     public void delete() {
         try {
             if (despesaSelecionada != null) {
-                new RemoveDAO<Despesa>(Despesa.class).remove(despesaSelecionada, despesaSelecionada.getId());
+                new RemoveDAO<Despesa>().remove(despesaSelecionada, despesaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

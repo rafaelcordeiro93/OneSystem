@@ -8,7 +8,6 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.FormaPagamentoRecebimento;
 import br.com.onesystem.domain.PerfilDeValor;
@@ -16,7 +15,6 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.services.Movimento;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -36,15 +34,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class PagamentoView implements Serializable {
 
     private Date data = new Date();
@@ -268,7 +265,7 @@ public class PagamentoView implements Serializable {
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
         if (baixa.getPerfilDeValor() instanceof Titulo) {
             ((Titulo) baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<PerfilDeValor>(PerfilDeValor.class).atualiza(baixa.getPerfilDeValor());
+            new AtualizaDAO<PerfilDeValor>().atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }

@@ -26,16 +26,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.conta}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" converter="contaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
-                            
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.e}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" converter="contaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
+
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText id="nome" value="#{contaView.conta.nome}"/>
+                            <p:inputText id="nome" value="#{contaView.e.nome}"/>
 
                             <p:outputLabel value="#{l.Banco}"/> 
-                            <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.conta.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+                            <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{contaView}" value="#{contaView.e.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
 
                             <p:outputLabel value="#{l.Moeda}"/>
-                            <a:inputTextDialog id="contaMoeda" dialog="#{selecaoMoedaView}" mbView="#{contaView}" value="#{contaView.conta.moeda}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}" converter="moedaConverter" itemLabelTabVisible="true" itemLabelTab="#{moeda.nome}"/>
+                            <a:inputTextDialog id="contaMoeda" dialog="#{selecaoMoedaView}" mbView="#{contaView}" value="#{contaView.e.moeda}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}" converter="moedaConverter" itemLabelTabVisible="true" itemLabelTab="#{moeda.nome}"/>
 
                         </p:panelGrid>
 
@@ -51,7 +51,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{contaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{contaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{contaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{contaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

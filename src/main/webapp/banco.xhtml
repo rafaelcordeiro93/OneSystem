@@ -24,16 +24,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="bancoId" dialog="#{selecaoBancoView}" mbView="#{bancoView}" value="#{bancoView.banco.id}" update=":conteudo" />
+                            <a:inputTextDialog id="bancoId" value="#{bancoView.e}" dialog="#{selecaoBancoView}" mbView="#{bancoView}" var="banco" converter="bancoBVConverter" itemLabel="#{banco.id}" itemValue="#{banco}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Codigo}"/>
-                            <p:inputText value="#{bancoView.banco.codigo}" maxlength="80" />
+                            <p:inputText value="#{bancoView.e.codigo}" maxlength="80" />
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{bancoView.banco.nome}" maxlength="80" />
+                            <p:inputText value="#{bancoView.e.nome}" maxlength="80" />
 
                             <p:outputLabel value="#{l.Site}"/>
-                            <p:inputText value="#{bancoView.banco.site}" maxlength="80" />
+                            <p:inputText value="#{bancoView.e.site}" maxlength="80" />
                         </p:panelGrid>
 
                         <div class="EmptyBox15"/>
@@ -47,7 +47,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{bancoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{bancoView.desfazer()}" styleClass="Mar2" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

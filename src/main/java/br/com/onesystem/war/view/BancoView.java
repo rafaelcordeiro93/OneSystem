@@ -1,126 +1,23 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.BancoDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Banco;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.BancoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class BancoView extends BasicMBImpl<Banco> implements Serializable {
-
-    private BancoBV banco;
-    private Banco bancoSelecionada;
-
-    @PostConstruct
-    public void init() {
-        limparJanela();
-    }
-
-    public void add() {
-        try {
-            Banco novoRegistro = banco.construir();
-            new AdicionaDAO<Banco>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void update() {
-        try {
-
-            if (bancoSelecionada.getId() != null) {
-                Banco bancoExistente = banco.construirComID();
-                new AtualizaDAO<Banco>(Banco.class).atualiza(bancoExistente);
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("banco_nao_encontrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void delete() {
-        try {
-            if (bancoSelecionada != null) {
-                new RemoveDAO<Banco>(Banco.class).remove(bancoSelecionada, bancoSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class BancoView extends BasicMBImpl<Banco, BancoBV> implements Serializable {
 
     public void limparJanela() {
-        banco = new BancoBV();
-        bancoSelecionada = null;
+        e = new BancoBV();
     }
 
-    public void desfazer() {
-        if (bancoSelecionada != null) {
-            banco = new BancoBV(bancoSelecionada);
-        }
+    public void selecionar(SelectEvent obj) {
+        Banco b = (Banco) obj.getObject();
+        System.out.println("B: " + b);
+        e = new BancoBV(b);
     }
-
-    @Override
-    public void selecionar(SelectEvent e) {
-        Banco b = (Banco) e.getObject();
-        banco = new BancoBV(b);
-        bancoSelecionada = b;
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = banco.getId();
-        if (id != null) {
-            try {
-                BancoDAO dao = new BancoDAO();
-                Banco c = dao.buscarBancos().porId(id).resultado();
-                bancoSelecionada = c;
-                banco = new BancoBV(bancoSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                banco.setId(id);
-                die.print();
-            }
-        }
-    }
-
-    public BancoBV getBanco() {
-        return banco;
-    }
-
-    public void setBanco(BancoBV banco) {
-        this.banco = banco;
-    }
-
-    public Banco getBancoSelecionada() {
-        return bancoSelecionada;
-    }
-
-    public void setBancoSelecionada(Banco bancoSelecionada) {
-        this.bancoSelecionada = bancoSelecionada;
-    }
-
 }
