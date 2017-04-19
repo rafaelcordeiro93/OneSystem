@@ -53,7 +53,6 @@ public abstract class BasicMBImpl<T, E> {
 
     public void update() {
         try {
-            System.out.println("E: " + e);
             BuilderView b = (BuilderView) e;
             if (e != null && b.getId() != null) {
                 updateNoBanco((T) b.construirComID());
