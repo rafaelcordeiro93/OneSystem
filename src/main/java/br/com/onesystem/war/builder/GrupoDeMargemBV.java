@@ -1,7 +1,6 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Margem;
-import br.com.onesystem.domain.builder.GrupoBuilder;
 import br.com.onesystem.domain.builder.GrupoDeMargemBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
