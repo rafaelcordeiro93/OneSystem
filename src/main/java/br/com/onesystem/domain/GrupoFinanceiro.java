@@ -49,10 +49,10 @@ public class GrupoFinanceiro implements Serializable {
     private NaturezaFinanceira naturezaFinanceira;
 
     @OneToMany(mappedBy = "grupoFinanceiro")
-    private List<Despesa> listaDeDespesas;
+    private List<TipoDespesa> listaDeDespesas;
     
     @OneToMany(mappedBy = "grupoFinanceiro")
-    private List<Despesa> listaDeReceitas;
+    private List<TipoDespesa> listaDeReceitas;
 
     @NotNull(message = "{classificacao_financeira_not_null}")
     @Enumerated(EnumType.STRING)
@@ -70,7 +70,7 @@ public class GrupoFinanceiro implements Serializable {
         ehValido();
     }
 
-    public List<Despesa> getListaDeDespesas() {
+    public List<TipoDespesa> getListaDeDespesas() {
         return listaDeDespesas;
     }
 
@@ -90,7 +90,7 @@ public class GrupoFinanceiro implements Serializable {
         return classificacaoFinanceira;
     }
 
-    public List<Despesa> getListaDeReceitas() {
+    public List<TipoDespesa> getListaDeReceitas() {
         return listaDeReceitas;
     }
     

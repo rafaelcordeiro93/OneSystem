@@ -97,7 +97,7 @@
 
                                             <h:panelGrid columns="2" styleClass="Wid100">
                                                 <p:inputText id="baixaDespesa" readonly="true" placeholder="#{l.Despesa}" styleClass="Wid95"/>
-                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
                                                                  disabled="true" update="@none">
                                                     <p:ajax event="dialogReturn" listener="#{baixaView.selecionaDespesa}"
                                                             process="@this" update="baixaDespesa" />

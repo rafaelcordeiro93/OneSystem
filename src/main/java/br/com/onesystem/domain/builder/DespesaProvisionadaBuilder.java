@@ -3,7 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -27,7 +27,7 @@ public class DespesaProvisionadaBuilder {
     private Cambio cambio;
     private List<Baixa> baixas;
     private Cotacao cotacao;
-    private Despesa despesa;
+    private TipoDespesa despesa;
     private boolean divisaoLucroCambioCaixa;
 
     public DespesaProvisionadaBuilder comId(Long id) {
@@ -60,7 +60,7 @@ public class DespesaProvisionadaBuilder {
         return this;
     }
 
-    public DespesaProvisionadaBuilder comDespesa(Despesa despesa) {
+    public DespesaProvisionadaBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }

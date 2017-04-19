@@ -158,7 +158,7 @@ public class Cambio implements Serializable {
         pagamentos.add(baixa);
     }
 
-    public void dividirLucros(Despesa despesaDivisaoLucro, List<Pessoa> pessoaDivisaoLucro, Pessoa pessoaCaixa) throws DadoInvalidoException {
+    public void dividirLucros(TipoDespesa despesaDivisaoLucro, List<Pessoa> pessoaDivisaoLucro, Pessoa pessoaCaixa) throws DadoInvalidoException {
         if (valorLiquido.compareTo(BigDecimal.ZERO) == 1) {
             BigDecimal valorDividido = valorLiquido.divide(new BigDecimal(pessoaDivisaoLucro.size()), new MathContext(20, RoundingMode.HALF_UP));
             for (Pessoa pessoa : pessoaDivisaoLucro) {

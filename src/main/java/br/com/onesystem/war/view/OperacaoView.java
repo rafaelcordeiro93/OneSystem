@@ -6,7 +6,7 @@ import br.com.onesystem.dao.OperacaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -123,17 +123,17 @@ public class OperacaoView implements Serializable {
     }
 
     public void selecionaDespesaCMV(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setDespesaCMV(despesaSelecionada);
     }
 
     public void selecionaCompraAVista(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setCompraAVista(despesaSelecionada);
     }
 
     public void selecionaCompraAPrazo(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setCompraAPrazo(despesaSelecionada);
     }
 

@@ -12,11 +12,11 @@ public class GrupoFinanceiroService implements Serializable {
         return new ArmazemDeRegistros<GrupoFinanceiro>(GrupoFinanceiro.class).listaTodosOsRegistros();
     }
     
-    public List<GrupoFinanceiro> buscarGruposDeReceitas(){
+    public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoReceitas(){
         return new GrupoFinanceiroDAO().buscarGruposDeReceitas();
     }
     
-    public List<GrupoFinanceiro> buscarGruposDeDespesas(){
+    public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoDespesas(){
         return new GrupoFinanceiroDAO().buscarGruposDeDespesas();
     }
     

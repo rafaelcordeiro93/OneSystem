@@ -9,7 +9,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
@@ -116,7 +116,7 @@ public class BaixaView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.baixa.setDespesa(despesaSelecionada);
     }
 

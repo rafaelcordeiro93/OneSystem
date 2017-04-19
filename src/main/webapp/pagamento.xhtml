@@ -246,7 +246,7 @@
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="margin-left: -1%">
                     <p:inputText id="pagamentoDespesaDespesa" readonly="true" placeholder="#{l.Despesa}" value="#{pagamentoView.despesaEventual.despesa.nome}"/>
-                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
                                      update="@none" styleClass="RedButton">
                         <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaDespesaEventual}"
                                 process="@this" update="pagamentoDespesaDespesa" />

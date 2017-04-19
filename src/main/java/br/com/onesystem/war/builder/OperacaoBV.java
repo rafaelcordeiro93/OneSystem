@@ -1,7 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.OperacaoDeEstoque;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.builder.OperacaoBuilder;
@@ -25,10 +25,10 @@ public class OperacaoBV implements Serializable {
     private Receita servicoAVista;
     private Receita servicoAPrazo;
     private Receita receitaFrete;
-    private Despesa despesaCMV;
+    private TipoDespesa despesaCMV;
     private TipoContabil contabilizarCMV;
-    private Despesa compraAVista;
-    private Despesa compraAPrazo;
+    private TipoDespesa compraAVista;
+    private TipoDespesa compraAPrazo;
     private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public OperacaoBV(Operacao operacaoSelecionada) {
@@ -132,11 +132,11 @@ public class OperacaoBV implements Serializable {
         this.receitaFrete = receitaFrete;
     }
 
-    public Despesa getDespesaCMV() {
+    public TipoDespesa getDespesaCMV() {
         return despesaCMV;
     }
 
-    public void setDespesaCMV(Despesa despesaCMV) {
+    public void setDespesaCMV(TipoDespesa despesaCMV) {
         this.despesaCMV = despesaCMV;
     }
 
@@ -148,19 +148,19 @@ public class OperacaoBV implements Serializable {
         this.contabilizarCMV = contabilizarCMV;
     }
 
-    public Despesa getCompraAVista() {
+    public TipoDespesa getCompraAVista() {
         return compraAVista;
     }
 
-    public void setCompraAVista(Despesa compraAVista) {
+    public void setCompraAVista(TipoDespesa compraAVista) {
         this.compraAVista = compraAVista;
     }
 
-    public Despesa getCompraAPrazo() {
+    public TipoDespesa getCompraAPrazo() {
         return compraAPrazo;
     }
 
-    public void setCompraAPrazo(Despesa compraAPrazo) {
+    public void setCompraAPrazo(TipoDespesa compraAPrazo) {
         this.compraAPrazo = compraAPrazo;
     }
 

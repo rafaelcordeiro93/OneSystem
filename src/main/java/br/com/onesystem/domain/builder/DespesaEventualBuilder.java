@@ -2,7 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -25,7 +25,7 @@ public class DespesaEventualBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private List<Baixa> baixas;
     private Cotacao cotacao;
-    private Despesa despesa;
+    private TipoDespesa despesa;
 
     public DespesaEventualBuilder comId(Long id) {
         this.id = id;
@@ -57,7 +57,7 @@ public class DespesaEventualBuilder {
         return this;
     }
 
-    public DespesaEventualBuilder comDespesa(Despesa despesa) {
+    public DespesaEventualBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }

@@ -4,7 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -134,7 +134,7 @@ public class ConfiguracaoCambioView implements Serializable {
     }
 
     public void selecionaDespesaDivisaoLucro(SelectEvent event) {
-        Despesa moeda = (Despesa) event.getObject();
+        TipoDespesa moeda = (TipoDespesa) event.getObject();
         configuracaoCambioBV.setDespesaDivisaoLucro(moeda);
     }
 

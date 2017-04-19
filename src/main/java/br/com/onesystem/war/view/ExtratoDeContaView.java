@@ -4,7 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.ConfiguracaoFinanceiro;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -207,7 +207,7 @@ public class ExtratoDeContaView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         baixa.setDespesa(despesaSelecionada);
     }
 

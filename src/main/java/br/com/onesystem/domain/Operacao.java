@@ -68,16 +68,16 @@ public class Operacao implements Serializable {
     private Receita receitaFrete;
     @NotNull(message = "{despesa_CMV_not_null}")
     @ManyToOne
-    private Despesa despesaCMV;
+    private TipoDespesa despesaCMV;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{contabilizar_CMV_not_null}")
     private TipoContabil contabilizarCMV;
     @NotNull(message = "{compra_vista_not_null}")
     @ManyToOne
-    private Despesa compraAVista;
+    private TipoDespesa compraAVista;
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
-    private Despesa compraAPrazo;
+    private TipoDespesa compraAPrazo;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "operacoes")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
     @OneToMany(mappedBy = "operacao")
@@ -90,8 +90,8 @@ public class Operacao implements Serializable {
 
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
-            Receita servicoAPrazo, Receita receitaFrete, Despesa despesaCMV, TipoContabil contabilizarCMV,
-            Despesa compraAVista, Despesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
+            Receita servicoAPrazo, Receita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,
+            TipoDespesa compraAVista, TipoDespesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.operacaoFinanceira = operacaoFinanceira;
@@ -150,7 +150,7 @@ public class Operacao implements Serializable {
         return receitaFrete;
     }
 
-    public Despesa getDespesaCMV() {
+    public TipoDespesa getDespesaCMV() {
         return despesaCMV;
     }
 
@@ -158,11 +158,11 @@ public class Operacao implements Serializable {
         return contabilizarCMV;
     }
 
-    public Despesa getCompraAVista() {
+    public TipoDespesa getCompraAVista() {
         return compraAVista;
     }
 
-    public Despesa getCompraAPrazo() {
+    public TipoDespesa getCompraAPrazo() {
         return compraAPrazo;
     }
 

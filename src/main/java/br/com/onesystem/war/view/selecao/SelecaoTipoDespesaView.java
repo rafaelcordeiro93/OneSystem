@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.DespesaService;
+import br.com.onesystem.war.service.TipoDespesaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,18 +13,18 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoDespesaView extends BasicCrudMBImpl<Despesa> implements Serializable {
+public class SelecaoTipoDespesaView extends BasicCrudMBImpl<TipoDespesa> implements Serializable {
 
     @Inject
-    private DespesaService service;
+    private TipoDespesaService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarDespesas();
+        beans = service.buscarTiposDeDespesa();
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoDespesa");
+        exibirNaTela("selecaoTipoDespesa");
     }
     
     @Override
@@ -33,15 +33,15 @@ public class SelecaoDespesaView extends BasicCrudMBImpl<Despesa> implements Seri
     }
     
     @Override
-    public List<Despesa> complete(String query) {
-        List<Despesa> listaFIltrada = new ArrayList<>();
-        for (Despesa b : beans) {
+    public List<TipoDespesa> complete(String query) {
+        List<TipoDespesa> listaFIltrada = new ArrayList<>();
+        for (TipoDespesa b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);
             }
         }
         if (!StringUtils.containsLetter(query)) {
-            for (Despesa m : beans) {
+            for (TipoDespesa m : beans) {
                 if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
                     listaFIltrada.add(m);
                 }
@@ -50,11 +50,11 @@ public class SelecaoDespesaView extends BasicCrudMBImpl<Despesa> implements Seri
         return listaFIltrada;
     }
 
-    public DespesaService getService() {
+    public TipoDespesaService getService() {
         return service;
     }
 
-    public void setService(DespesaService service) {
+    public void setService(TipoDespesaService service) {
         this.service = service;
     }
 }

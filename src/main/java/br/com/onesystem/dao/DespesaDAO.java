@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -39,7 +39,7 @@ public class DespesaDAO {
         return this;
     }
 
-    public DespesaDAO ePorMoeda(Despesa despesa) {
+    public DespesaDAO ePorMoeda(TipoDespesa despesa) {
         consulta += "and d.nome = :dNome ";
         parametros.put("dNome", despesa.getNome());
         return this;
@@ -51,16 +51,16 @@ public class DespesaDAO {
         return this;
     }
 
-    public List<Despesa> listaDeResultados() {
-        List<Despesa> resultado = new ArmazemDeRegistros<Despesa>(Despesa.class)
+    public List<TipoDespesa> listaDeResultados() {
+        List<TipoDespesa> resultado = new ArmazemDeRegistros<TipoDespesa>(TipoDespesa.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Despesa resultado() throws DadoInvalidoException {
+    public TipoDespesa resultado() throws DadoInvalidoException {
         try {
-            Despesa resultado = new ArmazemDeRegistros<Despesa>(Despesa.class)
+            TipoDespesa resultado = new ArmazemDeRegistros<TipoDespesa>(TipoDespesa.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;

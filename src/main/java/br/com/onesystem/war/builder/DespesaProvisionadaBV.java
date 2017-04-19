@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
@@ -18,7 +18,7 @@ public class DespesaProvisionadaBV implements Serializable {
 
     private Long id;
     private Pessoa pessoa;
-    private Despesa despesa;
+    private TipoDespesa despesa;
     private BigDecimal valor;
     private Date vencimento;
     private Date emissao;
@@ -42,7 +42,7 @@ public class DespesaProvisionadaBV implements Serializable {
         this.baixas = despesaProvisionadaSelecionada.getBaixas();
     }
 
-    public DespesaProvisionadaBV(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento,
+    public DespesaProvisionadaBV(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento,
             Date emissao, String historico, boolean divisaoLucroCambioCaixa, Cotacao cotacao,
             Cambio cambio, List<Baixa> baixas) {
         this.id = id;
@@ -77,11 +77,11 @@ public class DespesaProvisionadaBV implements Serializable {
         this.pessoa = pessoa;
     }
 
-    public Despesa getDespesa() {
+    public TipoDespesa getDespesa() {
         return despesa;
     }
 
-    public void setDespesa(Despesa despesa) {
+    public void setDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
     }
 

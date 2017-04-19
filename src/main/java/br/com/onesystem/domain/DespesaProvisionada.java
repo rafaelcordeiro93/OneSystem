@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 public class DespesaProvisionada extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Despesa despesa;
+    private TipoDespesa despesa;
 
     @ManyToOne
     private Cambio cambio;
@@ -27,7 +27,7 @@ public class DespesaProvisionada extends PerfilDeValor implements RelatorioConta
     public DespesaProvisionada() {
     }
 
-    public DespesaProvisionada(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
+    public DespesaProvisionada(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
             Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa) throws DadoInvalidoException {
         super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixa);
         this.despesa = despesa;
@@ -41,7 +41,7 @@ public class DespesaProvisionada extends PerfilDeValor implements RelatorioConta
         new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
     }
 
-    public Despesa getDespesa() {
+    public TipoDespesa getDespesa() {
         return despesa;
     }
 

@@ -20,7 +20,7 @@ public class SelecaoGrupoFinanceiroReceitaView extends BasicCrudMBImpl<GrupoFina
 
     @PostConstruct
     public void init() {
-        beans = service.buscarGruposDeReceitas();
+        beans = service.buscarGruposFInanceirosDoTipoReceitas();
     }
 
     public void abrirDialogo() {

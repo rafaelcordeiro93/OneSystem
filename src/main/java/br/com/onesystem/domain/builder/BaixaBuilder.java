@@ -9,7 +9,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.PerfilDeValor;
 import br.com.onesystem.domain.Pessoa;
@@ -40,7 +40,7 @@ public class BaixaBuilder {
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
     private PerfilDeValor perfilDeValor;
-    private Despesa despesa;
+    private TipoDespesa despesa;
     private Receita receita;
     private Pessoa pessoa;
     private Cambio cambio;
@@ -100,7 +100,7 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comDespesa(Despesa despesa) {
+    public BaixaBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }

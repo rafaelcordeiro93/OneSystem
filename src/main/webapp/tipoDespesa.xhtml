@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -19,30 +20,18 @@
                         <p:separator/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputNumber id="cidadeid" size="26" value="#{despesaView.despesa.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{despesaView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{despesaView.selecionaDespesa}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputTextDialog id="tipoDespesaID" value="#{tipoDespesaView.e}" dialog="#{selecaoTipoDespesaView}" mbView="#{tipoDespesaView}" var="tipoDespesa" converter="tipoDespesaBVConverter" itemLabel="#{tipoDespesa.id}" itemValue="#{tipoDespesa}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{despesaView.despesa.nome}" maxlength="60"/>
+                            <p:inputText value="#{tipoDespesaView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Grupo_Financeiro}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="despesaGrupoFinanceiro" size="26" value="#{despesaView.despesa.grupoFinanceiro.nome}" readonly="true" maxlength="60"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoFinanceiroDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{despesaView.selecionaGrupoFinanceiro}" process="@this" update="despesaGrupoFinanceiro" />
-                                </p:commandButton>
+                            <a:inputTextDialog id="tipoDespesaGrupoFinanceiro" value="#{tipoDespesaView.e.grupoFinanceiro}" dialog="#{selecaoGrupoFinanceiroDespesaView}" mbView="#{tipoDespesaView}" var="grupoFinanceiro" converter="grupoFinanceiroConverter" itemLabel="#{grupoFinanceiro.id}" itemLabelTabVisible="true" itemLabelTab="#{grupoFinanceiro.nome}" itemValue="#{grupoFinanceiro}"/>
 
-                            </h:panelGrid>
- </p:panelGrid>
+                        </p:panelGrid>
 
                         <div class="EmptyBox15"/>
 
@@ -52,12 +41,11 @@
                     <div class="EmptyBox15"/>
                     <div style="padding: 0% 0% 5% 8%">
 
-                    <p:commandButton value="#{l.Adicionar}" action="#{despesaView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{despesaView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{despesaView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{despesaView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{despesaView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
- </div>
+                        <p:commandButton value="#{l.Adicionar}" action="#{tipoDespesaView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{tipoDespesaView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{tipoDespesaView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{tipoDespesaView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>

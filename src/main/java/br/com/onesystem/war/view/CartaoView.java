@@ -7,7 +7,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -120,12 +120,12 @@ public class CartaoView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionado = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
         cartao.setDespesa(despesaSelecionado);
     }
 
     public void selecionaJuros(SelectEvent event) {
-        Despesa despesaSelecionado = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
         cartao.setJuros(despesaSelecionado);
     }
 
