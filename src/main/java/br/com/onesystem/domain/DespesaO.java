@@ -21,7 +21,7 @@ public abstract class DespesaO {
     
     private Pessoa pessoa;
     
-    private Despesa tipoDespesa;
+    private TipoDespesa tipoDespesa;
     
     private Cotacao cotacao;
     

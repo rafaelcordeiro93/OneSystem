@@ -7,7 +7,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.FormaPagamentoRecebimento;
 import br.com.onesystem.domain.PerfilDeValor;
@@ -100,7 +100,7 @@ public class PagamentoView implements Serializable {
     }
 
     public void selecionaDespesaEventual(SelectEvent event) throws DadoInvalidoException {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.despesaEventual.setDespesa(despesaSelecionada);
 
     }

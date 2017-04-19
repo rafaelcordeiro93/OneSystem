@@ -36,17 +36,17 @@ public class Cartao implements Serializable {
     private Conta conta;
     @NotNull(message = "{despesa_not_null}")
     @ManyToOne
-    private Despesa despesa;
+    private TipoDespesa despesa;
     @NotNull(message = "{juros_not_null}")
     @ManyToOne
-    private Despesa juros;
+    private TipoDespesa juros;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "cartao")
     private List<TaxaDeAdministracao> taxaDeAdministracao;
 
     public Cartao() {
     }
 
-    public Cartao(Long id, String nome, Conta conta, Despesa despesa, Despesa juros, List<TaxaDeAdministracao> taxaDeAdministracao) throws DadoInvalidoException {
+    public Cartao(Long id, String nome, Conta conta, TipoDespesa despesa, TipoDespesa juros, List<TaxaDeAdministracao> taxaDeAdministracao) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.conta = conta;
@@ -73,11 +73,11 @@ public class Cartao implements Serializable {
         return conta;
     }
 
-    public Despesa getDespesa() {
+    public TipoDespesa getDespesa() {
         return despesa;
     }
 
-    public Despesa getJuros() {
+    public TipoDespesa getJuros() {
         return juros;
     }
 

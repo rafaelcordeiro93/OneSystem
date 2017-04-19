@@ -1,7 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
@@ -13,7 +13,7 @@ public class ConfiguracaoBV implements Serializable, BuilderView<Configuracao> {
     
     private Long id;
     private Moeda moedaPadrao;
-    private Despesa despesaDeComissao;
+    private TipoDespesa despesaDeComissao;
     private TipoDeFormacaoDePreco tipoDeFormacaoDePreco;
     private TipoDeCalculoDeCusto tipoDeCalculoDeCusto;
     
@@ -40,11 +40,11 @@ public class ConfiguracaoBV implements Serializable, BuilderView<Configuracao> {
         return moedaPadrao;
     }
     
-    public Despesa getDespesaDeComissao() {
+    public TipoDespesa getDespesaDeComissao() {
         return despesaDeComissao;
     }
     
-    public void setDespesaDeComissao(Despesa despesaDeComissao) {
+    public void setDespesaDeComissao(TipoDespesa despesaDeComissao) {
         this.despesaDeComissao = despesaDeComissao;
     }
     

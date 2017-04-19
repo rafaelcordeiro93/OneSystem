@@ -26,7 +26,7 @@ public class Configuracao implements Serializable {
     private Long id;
 
     @OneToOne
-    private Despesa despesaDeComissao;
+    private TipoDespesa despesaDeComissao;
 
     @OneToOne
     private Moeda moedaPadrao;
@@ -40,7 +40,7 @@ public class Configuracao implements Serializable {
     public Configuracao() {
     }
 
-    public Configuracao(Long id, Despesa despesaDeComissao, Moeda moedaPadrao,
+    public Configuracao(Long id, TipoDespesa despesaDeComissao, Moeda moedaPadrao,
             TipoDeFormacaoDePreco tipoDeFormacaoDePreco, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) {
         this.id = id;
         this.despesaDeComissao = despesaDeComissao;
@@ -53,7 +53,7 @@ public class Configuracao implements Serializable {
         return id;
     }
 
-    public Despesa getDespesaDeComissao() {
+    public TipoDespesa getDespesaDeComissao() {
         return despesaDeComissao;
     }
 

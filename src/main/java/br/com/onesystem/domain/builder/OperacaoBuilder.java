@@ -1,7 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.OperacaoDeEstoque;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -27,10 +27,10 @@ public class OperacaoBuilder {
     private Receita servicoAVista;
     private Receita servicoAPrazo;
     private Receita receitaFrete;
-    private Despesa despesaCMV;
+    private TipoDespesa despesaCMV;
     private TipoContabil contabilizarCMV;
-    private Despesa compraAVista;
-    private Despesa compraAPrazo;
+    private TipoDespesa compraAVista;
+    private TipoDespesa compraAPrazo;
     private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public OperacaoBuilder comID(Long ID) {
@@ -83,7 +83,7 @@ public class OperacaoBuilder {
         return this;
     }
 
-    public OperacaoBuilder comDespesaCMV(Despesa despesaCMV) {
+    public OperacaoBuilder comDespesaCMV(TipoDespesa despesaCMV) {
         this.despesaCMV = despesaCMV;
         return this;
     }
@@ -93,12 +93,12 @@ public class OperacaoBuilder {
         return this;
     }
 
-    public OperacaoBuilder comCompraAVista(Despesa compraAVista) {
+    public OperacaoBuilder comCompraAVista(TipoDespesa compraAVista) {
         this.compraAVista = compraAVista;
         return this;
     }
 
-    public OperacaoBuilder comCompraAPrazo(Despesa compraAPrazo) {
+    public OperacaoBuilder comCompraAPrazo(TipoDespesa compraAPrazo) {
         this.compraAPrazo = compraAPrazo;
         return this;
     }

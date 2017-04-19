@@ -5,9 +5,9 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.DespesaService;
+import br.com.onesystem.war.service.TipoDespesaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -21,22 +21,22 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "despesaConverter", forClass = Despesa.class)
-public class DespesaConverter implements Converter, Serializable {
+@FacesConverter(value = "tipoDespesaConverter", forClass = TipoDespesa.class)
+public class TipoDespesaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Despesa> lista = new DespesaService().buscarDespesas();
+                List<TipoDespesa> lista = new TipoDespesaService().buscarTiposDeDespesa();
                 if (StringUtils.containsLetter(value)) {
-                    for (Despesa despesa : lista) {
+                    for (TipoDespesa despesa : lista) {
                         if (despesa.getNome().equals(value)) {
                             return despesa;
                         }
                     }
                 } else {
-                    for (Despesa despesa : lista) {
+                    for (TipoDespesa despesa : lista) {
                         if (despesa.getId().equals(new Long(value))) {
                             return despesa;
                         }
@@ -55,7 +55,7 @@ public class DespesaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((Despesa) object).getNome());
+                return String.valueOf(((TipoDespesa) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

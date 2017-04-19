@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ConfiguracaoCambioBV implements Serializable {
 
     private Long id;
-    private Despesa despesaDivisaoLucro;
+    private TipoDespesa despesaDivisaoLucro;
     private List<Pessoa> pessoaDivisaoLucro = new ArrayList<Pessoa>();
     private boolean ativo = false;
     private Pessoa pessoaCaixa;
@@ -38,11 +38,11 @@ public class ConfiguracaoCambioBV implements Serializable {
         this.id = id;
     }
 
-    public Despesa getDespesaDivisaoLucro() {
+    public TipoDespesa getDespesaDivisaoLucro() {
         return despesaDivisaoLucro;
     }
 
-    public void setDespesaDivisaoLucro(Despesa despesaDivisaoLucro) {
+    public void setDespesaDivisaoLucro(TipoDespesa despesaDivisaoLucro) {
         this.despesaDivisaoLucro = despesaDivisaoLucro;
     }
 

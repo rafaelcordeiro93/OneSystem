@@ -2,7 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.util.List;
@@ -16,8 +16,8 @@ public class CartaoBuilder {
     private Long id;
     private String nome;
     private Conta conta;
-    private Despesa despesa;
-    private Despesa juros;
+    private TipoDespesa despesa;
+    private TipoDespesa juros;
     private List<TaxaDeAdministracao> taxaDeAdministracao;
 
     public CartaoBuilder comID(Long ID) {
@@ -35,12 +35,12 @@ public class CartaoBuilder {
         return this;
     }
 
-    public CartaoBuilder comDespesa(Despesa despesa) {
+    public CartaoBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }
 
-    public CartaoBuilder comJuros(Despesa juros) {
+    public CartaoBuilder comJuros(TipoDespesa juros) {
         this.juros = juros;
         return this;
     }

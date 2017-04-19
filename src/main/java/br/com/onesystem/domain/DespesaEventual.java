@@ -17,12 +17,12 @@ import javax.persistence.ManyToOne;
 public class DespesaEventual extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Despesa despesa;
+    private TipoDespesa despesa;
 
     public DespesaEventual() {
     }
 
-    public DespesaEventual(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
+    public DespesaEventual(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
             Cotacao cotacao, List<Baixa> baixa) throws DadoInvalidoException {
         super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixa);
         this.despesa = despesa;
@@ -34,7 +34,7 @@ public class DespesaEventual extends PerfilDeValor implements RelatorioContaAber
         new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
     }
 
-    public Despesa getDespesa() {
+    public TipoDespesa getDespesa() {
         return despesa;
     }
 

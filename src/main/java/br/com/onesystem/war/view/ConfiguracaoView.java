@@ -3,7 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoBV;
@@ -64,8 +64,8 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> 
         Object obj = event.getObject();
         if (obj instanceof Moeda) {
             configuracaoBV.setMoedaPadrao((Moeda) obj);
-        } else if (obj instanceof Despesa) {
-            configuracaoBV.setDespesaDeComissao((Despesa) obj);
+        } else if (obj instanceof TipoDespesa) {
+            configuracaoBV.setDespesaDeComissao((TipoDespesa) obj);
         }
     }
 

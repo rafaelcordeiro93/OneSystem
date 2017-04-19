@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.builder.CartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -15,8 +15,8 @@ public class CartaoBV implements Serializable {
     private Long id;
     private String nome;
     private Conta conta;
-    private Despesa despesa;
-    private Despesa juros;
+    private TipoDespesa despesa;
+    private TipoDespesa juros;
    private List<TaxaDeAdministracao> taxaDeAdministracao = new ArrayList<TaxaDeAdministracao>();
 
     public CartaoBV(Cartao cartaoSelecionada) {
@@ -56,19 +56,19 @@ public class CartaoBV implements Serializable {
         this.conta = conta;
     }
 
-    public Despesa getDespesa() {
+    public TipoDespesa getDespesa() {
         return despesa;
     }
 
-    public void setDespesa(Despesa despesa) {
+    public void setDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
     }
 
-    public Despesa getJuros() {
+    public TipoDespesa getJuros() {
         return juros;
     }
 
-    public void setJuros(Despesa juros) {
+    public void setJuros(TipoDespesa juros) {
         this.juros = juros;
     }
 
