@@ -36,7 +36,7 @@ public class Cotacao implements Serializable {
     @ManyToOne(optional = false)
     private Conta conta;
     @OneToMany(mappedBy = "cotacao")
-    private List<PerfilDeValor> perfilDePagamentos;
+    private List<Transacao> perfilDePagamentos;
     @OneToMany(mappedBy = "cotacao")
     private List<Recepcao> recepcoes;
     @OneToMany(mappedBy = "cotacao")

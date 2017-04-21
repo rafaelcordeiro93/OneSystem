@@ -10,7 +10,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.FormaPagamentoRecebimento;
-import br.com.onesystem.domain.PerfilDeValor;
+import br.com.onesystem.domain.Transacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -48,8 +48,8 @@ public class PagamentoView implements Serializable {
     private TituloBV titulo;
     private DespesaEventualBV despesaEventual;
     private DespesaProvisionadaBV despesaProvisionada;
-    private PerfilDeValor perfilDeValorSelecionado;
-    private List<PerfilDeValor> listaPerfilDeValor;
+    private Transacao perfilDeValorSelecionado;
+    private List<Transacao> listaPerfilDeValor;
     private List<Cotacao> listaCotacao;
     
     private ChequeBV chequeEmitido;
@@ -209,7 +209,7 @@ public class PagamentoView implements Serializable {
     }
 
     private void validaExistente() throws EDadoInvalidoException {
-        for (PerfilDeValor novo : listaPerfilDeValor) {
+        for (Transacao novo : listaPerfilDeValor) {
             if (novo != null && novo.getId().equals(titulo.getId())) {
                 throw new EDadoInvalidoException("Titulo já consta na lista!");
             }
@@ -265,7 +265,7 @@ public class PagamentoView implements Serializable {
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
         if (baixa.getPerfilDeValor() instanceof Titulo) {
             ((Titulo) baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<PerfilDeValor>().atualiza(baixa.getPerfilDeValor());
+            new AtualizaDAO<Transacao>().atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }
@@ -495,19 +495,19 @@ public class PagamentoView implements Serializable {
         this.despesaProvisionada = despesaProvisionada;
     }
 
-    public List<PerfilDeValor> getListaPerfilDeValor() {
+    public List<Transacao> getListaPerfilDeValor() {
         return listaPerfilDeValor;
     }
 
-    public void setListaPerfilDeValor(List<PerfilDeValor> listaPerfilDeValor) {
+    public void setListaPerfilDeValor(List<Transacao> listaPerfilDeValor) {
         this.listaPerfilDeValor = listaPerfilDeValor;
     }
 
-    public PerfilDeValor getPerfilDeValorSelecionado() {
+    public Transacao getPerfilDeValorSelecionado() {
         return perfilDeValorSelecionado;
     }
 
-    public void setPerfilDeValorSelecionado(PerfilDeValor perfilDeValorSelecionado) {
+    public void setPerfilDeValorSelecionado(Transacao perfilDeValorSelecionado) {
         this.perfilDeValorSelecionado = perfilDeValorSelecionado;
     }
 

@@ -33,7 +33,7 @@ public class Movimento implements Serializable {
     private Long id;
 
     @OneToMany(mappedBy = "movimento", cascade = CascadeType.ALL)
-    private List<PerfilDeValor> perfilsDeValores;
+    private List<Transacao> perfilsDeValores;
 
     @OneToMany(mappedBy = "movimento", cascade = CascadeType.ALL)
     private List<FormaPagamentoRecebimento> formasPagamentosRecebimentos;
@@ -45,7 +45,7 @@ public class Movimento implements Serializable {
     public Movimento() {
     }
 
-    public Movimento(Long id, List<PerfilDeValor> perfilsDeValores, List<FormaPagamentoRecebimento> formasPagamentosRecebimentos, OperacaoFinanceira operacaoFinanceira) {
+    public Movimento(Long id, List<Transacao> perfilsDeValores, List<FormaPagamentoRecebimento> formasPagamentosRecebimentos, OperacaoFinanceira operacaoFinanceira) {
         this.id = id;
         this.perfilsDeValores = perfilsDeValores;
         this.formasPagamentosRecebimentos = formasPagamentosRecebimentos;
@@ -56,7 +56,7 @@ public class Movimento implements Serializable {
         return id;
     }
 
-    public List<PerfilDeValor> getPerfilsDeValores() {
+    public List<Transacao> getPerfilsDeValores() {
         return perfilsDeValores;
     }
 

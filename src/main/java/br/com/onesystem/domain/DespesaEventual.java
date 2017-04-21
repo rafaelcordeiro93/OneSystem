@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_EVENTUAL")
-public class DespesaEventual extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class DespesaEventual extends Transacao implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private TipoDespesa despesa;
@@ -31,7 +31,7 @@ public class DespesaEventual extends PerfilDeValor implements RelatorioContaAber
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public TipoDespesa getDespesa() {

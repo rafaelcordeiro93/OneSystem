@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("TITULO")
-public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;
@@ -68,7 +68,7 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("pessoa", "historico", "valor", "cotacao");
         List<String> camposTitulo = Arrays.asList("unidadeFinanceira");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
         new ValidadorDeCampos<Titulo>().valida(this, camposTitulo);
     }
 

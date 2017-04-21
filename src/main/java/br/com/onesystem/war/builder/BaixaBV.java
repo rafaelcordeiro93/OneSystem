@@ -7,7 +7,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.PerfilDeValor;
+import br.com.onesystem.domain.Transacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -34,7 +34,7 @@ public class BaixaBV implements Serializable {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private PerfilDeValor perfilDeValor;
+    private Transacao perfilDeValor;
     private TipoDespesa despesa;
     private Receita receita;
     private Pessoa pessoa;
@@ -180,11 +180,11 @@ public class BaixaBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public PerfilDeValor getPerfilDeValor() {
+    public Transacao getPerfilDeValor() {
         return perfilDeValor;
     }
 
-    public void setPerfilDeValor(PerfilDeValor perfilDeValor) {
+    public void setPerfilDeValor(Transacao perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
     }
 
