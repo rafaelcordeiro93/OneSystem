@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("CHEQUE")
-public class Cheque extends FormaPagamentoRecebimento implements Serializable {
+public class Cheque extends Transacao implements Serializable {
 
     @ManyToOne
     private NotaEmitida notaEmitida;
@@ -57,8 +57,8 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
 
     public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
-            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento) throws DadoInvalidoException {
-        super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
+            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
+        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
         this.notaEmitida = notaEmitida;
         this.banco = banco;
         this.agencia = agencia;
@@ -79,7 +79,7 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
-        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public NotaEmitida getNotaEmitida() {

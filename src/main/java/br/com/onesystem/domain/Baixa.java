@@ -85,7 +85,7 @@ public class Baixa implements Serializable, Movimento {
     private Cotacao cotacao;
 
     @ManyToOne
-    private PerfilDeValor perfilDeValor;
+    private Transacao perfilDeValor;
 
     @ManyToOne
     private TipoDespesa despesa;
@@ -121,7 +121,7 @@ public class Baixa implements Serializable, Movimento {
             BigDecimal desconto, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, Receita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, PerfilDeValor perfilDeValor, NotaEmitida notaEmitida) throws DadoInvalidoException {
+            Recepcao recepcao, Transacao perfilDeValor, NotaEmitida notaEmitida) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
         this.cancelada = cancelada;
@@ -381,7 +381,7 @@ public class Baixa implements Serializable, Movimento {
         return naturezaFinanceira;
     }
 
-    public PerfilDeValor getPerfilDeValor() {
+    public Transacao getPerfilDeValor() {
         return perfilDeValor;
     }
 

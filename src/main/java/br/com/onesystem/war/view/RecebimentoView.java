@@ -10,7 +10,7 @@ import br.com.onesystem.domain.FormaPagamentoRecebimento;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.PerfilDeValor;
+import br.com.onesystem.domain.Transacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -209,7 +209,7 @@ public class RecebimentoView implements Serializable {
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
         if (baixa.getPerfilDeValor() instanceof Titulo) {
             ((Titulo) this.baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<PerfilDeValor>().atualiza(baixa.getPerfilDeValor());
+            new AtualizaDAO<Transacao>().atualiza(baixa.getPerfilDeValor());
         }
         return baixa;
     }

@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("RECEITA_EVENTUAL")
-public class ReceitaEventual extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class ReceitaEventual extends Transacao implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private Receita receita;
@@ -31,7 +31,7 @@ public class ReceitaEventual extends PerfilDeValor implements RelatorioContaAber
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public Receita getReceita() {

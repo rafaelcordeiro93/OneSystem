@@ -11,7 +11,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.PerfilDeValor;
+import br.com.onesystem.domain.Transacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -39,7 +39,7 @@ public class BaixaBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private PerfilDeValor perfilDeValor;
+    private Transacao perfilDeValor;
     private TipoDespesa despesa;
     private Receita receita;
     private Pessoa pessoa;
@@ -145,7 +145,7 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comPerfilDeValor(PerfilDeValor perfilDeValor) {
+    public BaixaBuilder comPerfilDeValor(Transacao perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
         return this;
     }

@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("RECEITA_PROVISIONADA")
-public class ReceitaProvisionada extends PerfilDeValor implements Serializable, RelatorioContaAbertaImpl {
+public class ReceitaProvisionada extends Transacao implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
     private Receita receita;
@@ -31,7 +31,7 @@ public class ReceitaProvisionada extends PerfilDeValor implements Serializable, 
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public Receita getReceita() {

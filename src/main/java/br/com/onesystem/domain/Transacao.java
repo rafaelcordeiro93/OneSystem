@@ -37,7 +37,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "PERFILDEVALOR_CLASSE_NOME")
-public abstract class PerfilDeValor implements Serializable {
+public abstract class Transacao implements Serializable {
 
     @Id
     @SequenceGenerator(name = "SEQ_PERFILDEVALOR", sequenceName = "SEQ_PERFILDEVALOR",
@@ -72,10 +72,10 @@ public abstract class PerfilDeValor implements Serializable {
     @ManyToOne
     private Movimento movimento;
 
-    public PerfilDeValor() {
+    public Transacao() {
     }
 
-    public PerfilDeValor(Long id, BigDecimal valor, Date vencimento, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixa) {
+    public Transacao(Long id, BigDecimal valor, Date vencimento, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixa) {
         this.id = id;
         this.valor = valor;
         this.vencimento = vencimento;
@@ -151,10 +151,10 @@ public abstract class PerfilDeValor implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof PerfilDeValor)) {
+        if (!(objeto instanceof Transacao)) {
             return false;
         }
-        PerfilDeValor outro = (PerfilDeValor) objeto;
+        Transacao outro = (Transacao) objeto;
         if (this.id == null) {
             return false;
         }

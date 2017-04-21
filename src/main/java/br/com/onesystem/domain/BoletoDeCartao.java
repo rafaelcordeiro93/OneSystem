@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("BOLETO_DE_CARTAO")
-public class BoletoDeCartao extends FormaPagamentoRecebimento implements Serializable {
+public class BoletoDeCartao extends Transacao implements Serializable {
 
     @ManyToOne
     private NotaEmitida notaEmitida;
@@ -36,8 +36,8 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
     }
 
     public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            ValoresAVista formaDeRecebimentoOuPagamento, String historico, Date vencimento, Cotacao cotacao) throws DadoInvalidoException {
-        super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
+            ValoresAVista formaDeRecebimentoOuPagamento, String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
+        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
         this.notaEmitida = notaEmitida;
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
@@ -49,7 +49,7 @@ public class BoletoDeCartao extends FormaPagamentoRecebimento implements Seriali
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "acrescimo", "desconto", "valor", "vencimento", "cotacao");
-        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public NotaEmitida getNotaEmitida() {
