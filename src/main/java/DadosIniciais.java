@@ -563,6 +563,8 @@ public class DadosIniciais {
                 grupoFiscal, unidade, null, null, null, null, null, null);
         new AdicionaDAO<Item>().adiciona(item);
 
+        
+        System.out.println("Dados criados com sucesso.");
     }
 
 }

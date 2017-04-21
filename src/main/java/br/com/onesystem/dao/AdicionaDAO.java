@@ -19,8 +19,10 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class AdicionaDAO<T> {
 
-    private EntityManager em = JPAUtil.getEntityManager();;
+    private EntityManager em = JPAUtil.getEntityManager();
 
+    ;
+  
     public AdicionaDAO() {
     }
 
@@ -55,8 +57,8 @@ public class AdicionaDAO<T> {
             em.getTransaction().rollback();
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
-            em.close();
-        } 
+//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
+        }
     }
 
     private String getMessage(ConstraintViolationException cve) {
