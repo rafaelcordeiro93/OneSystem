@@ -55,7 +55,7 @@ public class AtualizaDAO<T> {
             throw new FDadoInvalidoException("<AtualizaDAO> Erro de Gravação: " + ex.getMessage());
         } finally {
             // fecha a entity manager
-            em.close();
+//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
         }
 
     }
