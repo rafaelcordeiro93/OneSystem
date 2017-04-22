@@ -9,7 +9,7 @@ import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Transacao;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -36,7 +36,7 @@ public class BaixaBV implements Serializable {
     private Cotacao cotacao;
     private Transacao perfilDeValor;
     private TipoDespesa despesa;
-    private Receita receita;
+    private TipoReceita receita;
     private Pessoa pessoa;
     private Cambio cambio;
     private ConhecimentoDeFrete conhecimentoDeFrete;
@@ -61,7 +61,7 @@ public class BaixaBV implements Serializable {
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();
-        this.perfilDeValor = baixa.getPerfilDeValor();
+        this.perfilDeValor = baixa.getTransacao();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
         this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
@@ -75,7 +75,7 @@ public class BaixaBV implements Serializable {
         this.pessoa = titulo.getPessoa();
         this.emissao = titulo.getEmissao();
         this.historico = titulo.getHistorico();
-        this.naturezaFinanceira = titulo.getUnidadeFinanceira();
+        this.naturezaFinanceira = titulo.getOperacaoFinanceira();
         this.recepcao = titulo.getRecepcao();
         this.perfilDeValor = titulo;
         this.valor = titulo.getSaldo();
@@ -196,11 +196,11 @@ public class BaixaBV implements Serializable {
         this.despesa = despesa;
     }
 
-    public Receita getReceita() {
+    public TipoReceita getReceita() {
         return receita;
     }
 
-    public void setReceita(Receita receita) {
+    public void setReceita(TipoReceita receita) {
         this.receita = receita;
     }
 

@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.ReceitaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -13,7 +13,7 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoReceitaView extends BasicCrudMBImpl<Receita> implements Serializable {
+public class SelecaoReceitaView extends BasicCrudMBImpl<TipoReceita> implements Serializable {
 
     @Inject
     private ReceitaService service;
@@ -33,10 +33,10 @@ public class SelecaoReceitaView extends BasicCrudMBImpl<Receita> implements Seri
     }
     
     @Override
-    public List<Receita> complete(String query) {
-        List<Receita> receitasFiltradas = new ArrayList<>();
+    public List<TipoReceita> complete(String query) {
+        List<TipoReceita> receitasFiltradas = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
-            for (Receita t : beans) {
+            for (TipoReceita t : beans) {
                 if (StringUtils.startsWithIgnoreCase(t.getId().toString(), query)) {
                     receitasFiltradas.add(t);
                 }

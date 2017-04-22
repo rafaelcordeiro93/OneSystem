@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
@@ -35,7 +36,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
     private List<QuantidadeDeItemBV> listaFiltrada;
     private List<SaldoDeEstoque> listaDeEstoque;
 
-    @ManagedProperty("#{estoqueService}")
+    @Inject
     private EstoqueService serviceEstoque;
 
     @PostConstruct

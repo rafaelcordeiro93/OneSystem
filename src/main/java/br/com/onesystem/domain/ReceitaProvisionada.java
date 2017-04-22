@@ -1,11 +1,10 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
@@ -17,25 +16,19 @@ import javax.persistence.ManyToOne;
 public class ReceitaProvisionada extends Transacao implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Receita receita;
+    private TipoReceita tipoReceita;
 
     public ReceitaProvisionada() {
     }
 
-    public ReceitaProvisionada(Long id, Pessoa pessoa, Receita receita, BigDecimal valor,
+    public ReceitaProvisionada(Long id, Pessoa pessoa, TipoReceita tipoReceita, BigDecimal valor, OperacaoFinanceira operacaoFinanceira,
             Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
-        this.receita = receita;
-        ehValido();
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
+        this.tipoReceita = tipoReceita;
     }
 
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<Transacao>().valida(this, campos);
-    }
-
-    public Receita getReceita() {
-        return receita;
+    public TipoReceita getReceita() {
+        return tipoReceita;
     }
 
     @Override
@@ -55,7 +48,7 @@ public class ReceitaProvisionada extends Transacao implements Serializable, Rela
 
     @Override
     public String getOrigem() {
-        return receita.getNome();
+        return tipoReceita.getNome();
     }
 
 }

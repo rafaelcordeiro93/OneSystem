@@ -273,6 +273,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
 
             // Inclui as parcelas dentro da nota emitida.
+            
             notaEmitida.setCartoes(cartoes.isEmpty() ? null : cartoes);
             notaEmitida.setCheques(cheques.isEmpty() ? null : cheques);
             notaEmitida.setTitulos(titulos.isEmpty() ? null : titulos);
@@ -620,7 +621,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
-                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO)
+                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
                                 .comTipoLancamento(TipoLancamento.EMITIDA).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
@@ -645,6 +646,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Prepara e constroi cheque
             cheque.setId(getIdCheque());
+            cheque.setPessoa(notaEmitida.getPessoa());
+            cheque.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
             cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
             cheque.setTipoLancamento(TipoLancamento.EMITIDA);
             Cheque c = cheque.construirComID();
@@ -712,7 +715,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
-
+        String idComponent = event.getComponent().getId();
         if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
             if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
@@ -727,16 +730,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             notaEmitida.setListaDePreco((ListaDePreco) obj);
         } else if (obj instanceof Item) {
             itemEmitido.setItem((Item) obj);
-            FacesContext context = FacesContext.getCurrentInstance();
-            HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-            session.setAttribute("onesystem.item.token", itemEmitido.getItem());
+            atribuiItemASessao();
         } else if (obj instanceof FormaDeRecebimento) {
             FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
             notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
             calculaTotaisFormaDeRecebimento();
             recalculaValores();
-        } else if (obj instanceof Banco) {
+        } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
             cheque.setBanco((Banco) obj);
+        } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
+            parcelaBV.setBanco((Banco) obj);
         } else if (obj instanceof Cartao) {
             boletoDeCartao.setCartao((Cartao) obj);
         } else if (obj instanceof List) {
@@ -748,6 +751,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
         }
 
+    }
+
+    public void atribuiItemASessao() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {
@@ -900,6 +909,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             boletoDeCartao.setCotacao(cotacao);
             boletoDeCartao.setSituacao(SituacaoDeCartao.ABERTO);
             boletoDeCartao.setEmissao(notaEmitida.getEmissao());
+            boletoDeCartao.setPessoa(notaEmitida.getPessoa());
+            boletoDeCartao.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
 
             if (boletoDeCartao.getCartao() != null) {
                 if (boletoDeCartao.getValor() == null || boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {

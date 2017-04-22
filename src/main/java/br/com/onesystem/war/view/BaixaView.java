@@ -12,7 +12,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -121,7 +121,7 @@ public class BaixaView implements Serializable {
     }
 
     public void selecionaReceita(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.baixa.setReceita(receitaSelecionada);
     }
 

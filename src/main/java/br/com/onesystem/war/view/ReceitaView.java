@@ -4,7 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ReceitaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -23,7 +23,7 @@ import org.primefaces.event.SelectEvent;
 public class ReceitaView implements Serializable {
 
     private ReceitaBV receita;
-    private Receita receitaSelecionada;
+    private TipoReceita receitaSelecionada;
 
     @PostConstruct
     public void init() {
@@ -33,8 +33,8 @@ public class ReceitaView implements Serializable {
 
     public void add() {
         try {
-            Receita novoRegistro = receita.construir();
-            new AdicionaDAO<Receita>().adiciona(novoRegistro);
+            TipoReceita novoRegistro = receita.construir();
+            new AdicionaDAO<TipoReceita>().adiciona(novoRegistro);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -44,9 +44,9 @@ public class ReceitaView implements Serializable {
 
     public void update() {
         try {
-            Receita receitaExistente = receita.construirComID();
+            TipoReceita receitaExistente = receita.construirComID();
             if (receitaExistente.getId() != null) {
-                new AtualizaDAO<Receita>().atualiza(receitaExistente);
+                new AtualizaDAO<TipoReceita>().atualiza(receitaExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -60,7 +60,7 @@ public class ReceitaView implements Serializable {
     public void delete() {
         try {
             if (receitaSelecionada != null) {
-                new RemoveDAO<Receita>().remove(receitaSelecionada, receitaSelecionada.getId());
+                new RemoveDAO<TipoReceita>().remove(receitaSelecionada, receitaSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }
@@ -72,7 +72,7 @@ public class ReceitaView implements Serializable {
     }
 
     public void selecionaReceita(SelectEvent e) {
-        Receita r = (Receita) e.getObject();
+        TipoReceita r = (TipoReceita) e.getObject();
         receita = new ReceitaBV(r);
         receitaSelecionada = r;
     }
@@ -82,7 +82,7 @@ public class ReceitaView implements Serializable {
         if (id != null) {
             try {
                 ReceitaDAO dao = new ReceitaDAO();
-                Receita c = dao.buscarReceitaW().porId(id).resultado();
+                TipoReceita c = dao.buscarReceitaW().porId(id).resultado();
                 receitaSelecionada = c;
                 receita = new ReceitaBV(receitaSelecionada);
             } catch (DadoInvalidoException die) {
@@ -95,7 +95,7 @@ public class ReceitaView implements Serializable {
 
     public void limparJanela() {
         receita = new ReceitaBV();
-        receitaSelecionada = new Receita();
+        receitaSelecionada = new TipoReceita();
     }
 
     public void selecionaGrupoFinanceiro(SelectEvent event) {
@@ -116,11 +116,11 @@ public class ReceitaView implements Serializable {
         this.receita = receita;
     }
 
-    public Receita getReceitaSelecionada() {
+    public TipoReceita getReceitaSelecionada() {
         return receitaSelecionada;
     }
 
-    public void setReceitaSelecionada(Receita receitaSelecionada) {
+    public void setReceitaSelecionada(TipoReceita receitaSelecionada) {
         this.receitaSelecionada = receitaSelecionada;
     }
 

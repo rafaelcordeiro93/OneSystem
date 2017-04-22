@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -30,7 +30,7 @@ public class ConfiguracaoCambioView implements Serializable {
     private List<Pessoa> pessoasDivisaoLucro = new ArrayList<Pessoa>();
     private Pessoa pessoaDivisaoLucro;
 
-    @ManagedProperty("#{configuracaoCambioService}")
+    @Inject
     private ConfiguracaoCambioService service;
 
     @PostConstruct

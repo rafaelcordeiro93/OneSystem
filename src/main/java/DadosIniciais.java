@@ -16,7 +16,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.Privilegio;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -382,11 +382,11 @@ public class DadosIniciais {
         daoDespesa.adiciona(new TipoDespesa(null, "Compras p/ Recebimento Futuro", ope));
 
         // -- Adiciona Receitas
-        AdicionaDAO<Receita> daoReceita = new AdicionaDAO<>();
+        AdicionaDAO<TipoReceita> daoReceita = new AdicionaDAO<>();
 
-        daoReceita.adiciona(new Receita(null, "Ajuste de Saldo Inicial", aje));
-        daoReceita.adiciona(new Receita(null, "Venda a Vista", imp));
-        daoReceita.adiciona(new Receita(null, "Venda a Prazo", imp));
+        daoReceita.adiciona(new TipoReceita(null, "Ajuste de Saldo Inicial", aje));
+        daoReceita.adiciona(new TipoReceita(null, "Venda a Vista", imp));
+        daoReceita.adiciona(new TipoReceita(null, "Venda a Prazo", imp));
 
         // -- Adiciona Bancos
         AdicionaDAO<Banco> daoBanco = new AdicionaDAO<>();

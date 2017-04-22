@@ -4,6 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.CaseType;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -36,8 +39,8 @@ public class BoletoDeCartao extends Transacao implements Serializable {
     }
 
     public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            ValoresAVista formaDeRecebimentoOuPagamento, String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
+            String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
         this.notaEmitida = notaEmitida;
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
@@ -48,7 +51,7 @@ public class BoletoDeCartao extends Transacao implements Serializable {
     public final void ehValido() throws DadoInvalidoException {
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "acrescimo", "desconto", "valor", "vencimento", "cotacao");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "valor", "cotacao");
         new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
@@ -75,8 +78,8 @@ public class BoletoDeCartao extends Transacao implements Serializable {
     @Override
     public String toString() {
         return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId())
-                + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao() + ", acrescimo=" + getAcrescimo()
-                + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", desconto=" + getDesconto()
+                + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao()
+                + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", desconto="
                 + ", situacao=" + situacao + ", cotacao=" + getCotacao() + '}';
     }
 

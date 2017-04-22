@@ -47,7 +47,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true"/>
+                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                        <p:ajax event="blur" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
+                                    </a:inputTextDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
@@ -412,7 +414,7 @@
                          columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-3, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
 
                 <p:outputLabel value="#{l.Banco}"/>
-                <a:inputTextDialog id="detbanco" style="width: 78.5% !important" dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.cheque.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+                <a:inputTextDialog id="detbanco" style="width: 100% !important" dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.cheque.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
 
                 <p:outputLabel value="#{l.Agencia}"/>
                 <p:inputText value="#{notaEmitidaView.cheque.agencia}" />        
@@ -506,7 +508,7 @@
                          columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-6">
 
                 <p:outputLabel value="#{l.Cartao}" />
-                <a:inputTextDialog id="detCartao" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.boletoDeCartao.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}" style="width: 74% !important"/>
+                <a:inputTextDialog id="detCartao" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.boletoDeCartao.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}" style="width: 100% !important"/>
 
                 <p:outputLabel value="#{l.Cod_Transacao}"/>
                 <p:inputText id="detCodigoTransacao" value="#{notaEmitidaView.boletoDeCartao.codigoTransacao}"/>  
@@ -555,7 +557,7 @@
                          columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-4, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
 
                 <p:outputLabel value="#{l.Banco}"/>
-                <a:inputTextDialog id="bancoParcelas" style="width: 72% !important"  dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.parcelaBV.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+                <a:inputTextDialog id="bancoParcelas" style="width: 100% !important"  dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.parcelaBV.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
 
                 <p:outputLabel value="#{l.Agencia}"/>
                 <p:inputText value="#{notaEmitidaView.parcelaBV.agencia}" />        

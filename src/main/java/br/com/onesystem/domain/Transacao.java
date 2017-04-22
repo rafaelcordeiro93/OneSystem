@@ -5,10 +5,14 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +20,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,9 +55,7 @@ public abstract class Transacao implements Serializable {
     @Column(nullable = false)
     protected BigDecimal valor;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date vencimento;
-
+    @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
@@ -66,24 +70,37 @@ public abstract class Transacao implements Serializable {
     @Column(length = 250, nullable = true)
     private String historico;
 
-    @OneToMany(mappedBy = "perfilDeValor", cascade = {CascadeType.ALL})
-    private List<Baixa> baixa;
-    
-    @ManyToOne
-    private Movimento movimento;
+    @OneToMany(mappedBy = "transacao", cascade = {CascadeType.ALL})
+    private List<Baixa> baixas;
+
+    @NotNull(message = "{unidadeFinanceira_not_null}")
+    @Enumerated(EnumType.STRING)
+    private OperacaoFinanceira operacaoFinanceira;
+
+    @NotNull(message = "{vencimento_not_null}")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date vencimento;
 
     public Transacao() {
     }
 
-    public Transacao(Long id, BigDecimal valor, Date vencimento, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixa) {
+    public Transacao(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
-        this.vencimento = vencimento;
         this.emissao = emissao;
         this.pessoa = pessoa;
         this.cotacao = cotacao;
         this.historico = historico;
-        this.baixa = baixa;
+        this.operacaoFinanceira = operacaoFinanceira;
+        this.baixas = baixas;
+        this.vencimento = vencimento;
+        ehAbstracaoValida();
+    }
+
+    private final void ehAbstracaoValida() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao", "operacaoFinanceira");
+        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public Long getId() {
@@ -92,10 +109,6 @@ public abstract class Transacao implements Serializable {
 
     public BigDecimal getValor() {
         return valor;
-    }
-
-    public Date getVencimento() {
-        return vencimento;
     }
 
     public Date getEmissao() {
@@ -114,14 +127,28 @@ public abstract class Transacao implements Serializable {
         return historico;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixa;
+    public Date getVencimento() {
+        return vencimento;
     }
 
-    public Movimento getMovimento() {
-        return movimento;
+    public String getVencimentoFormatado() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
     }
-    
+
+    public String getVencimentoFormatadoSemHoras() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
+    }
+
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
     public String getValorFormatado() {
         NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
         return numeroFormatado.format(getValor());
@@ -135,15 +162,6 @@ public abstract class Transacao implements Serializable {
     public String getEmissaoFormatadaSemHoras() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public String getVencimentoFormatadoSemHoras() {
-        SimpleDateFormat vencimentoFormadado = new SimpleDateFormat("dd/MM/yyyy");
-        return getVencimento() != null ? vencimentoFormadado.format(getVencimento().getTime()) : "";
-    }
-
-    public void setMovimento(Movimento movimento) {
-        this.movimento = movimento;
     }
 
     @Override

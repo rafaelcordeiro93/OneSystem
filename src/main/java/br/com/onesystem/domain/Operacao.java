@@ -53,19 +53,19 @@ public class Operacao implements Serializable {
     private TipoOperacao tipoOperacao;
     @NotNull(message = "{receita_venda_vista_not_null}")
     @ManyToOne
-    private Receita vendaAVista;
+    private TipoReceita vendaAVista;
     @NotNull(message = "{receita_venda_prazo_not_null}")
     @ManyToOne
-    private Receita vendaAPrazo;
+    private TipoReceita vendaAPrazo;
     @NotNull(message = "{receita_servico_vista_not_null}")
     @ManyToOne
-    private Receita servicoAVista;
+    private TipoReceita servicoAVista;
     @NotNull(message = "{receita_servico_prazo_not_null}")
     @ManyToOne
-    private Receita servicoAPrazo;
+    private TipoReceita servicoAPrazo;
     @NotNull(message = "{receita_frete_not_null}")
     @ManyToOne
-    private Receita receitaFrete;
+    private TipoReceita receitaFrete;
     @NotNull(message = "{despesa_CMV_not_null}")
     @ManyToOne
     private TipoDespesa despesaCMV;
@@ -89,8 +89,8 @@ public class Operacao implements Serializable {
     }
 
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
-            TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
-            Receita servicoAPrazo, Receita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,
+            TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
+            TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,
             TipoDespesa compraAVista, TipoDespesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
@@ -130,23 +130,23 @@ public class Operacao implements Serializable {
         return tipoOperacao;
     }
 
-    public Receita getVendaAVista() {
+    public TipoReceita getVendaAVista() {
         return vendaAVista;
     }
 
-    public Receita getVendaAPrazo() {
+    public TipoReceita getVendaAPrazo() {
         return vendaAPrazo;
     }
 
-    public Receita getServicoAVista() {
+    public TipoReceita getServicoAVista() {
         return servicoAVista;
     }
 
-    public Receita getServicoAPrazo() {
+    public TipoReceita getServicoAPrazo() {
         return servicoAPrazo;
     }
 
-    public Receita getReceitaFrete() {
+    public TipoReceita getReceitaFrete() {
         return receitaFrete;
     }
 

@@ -18,7 +18,6 @@ public class TesteRauber {
     public static void main(String[] args) throws DadoInvalidoException {
 
         BancoBV bv = new BancoBV();
-        bv.setNome("testando");
         
         BuilderView b = (BuilderView) bv;
         Banco construir = (Banco) b.construir();

@@ -156,8 +156,8 @@ public class PagamentoView implements Serializable {
     }
 
     private void ehDivisaoDeLucro(Baixa novaBaixa) throws DadoInvalidoException, ConstraintViolationException {
-        if (novaBaixa.getPerfilDeValor() instanceof DespesaProvisionada && confCambio != null
-                && ((DespesaProvisionada) novaBaixa.getPerfilDeValor()).isDivisaoLucroCambioCaixa()) {
+        if (novaBaixa.getTransacao() instanceof DespesaProvisionada && confCambio != null
+                && ((DespesaProvisionada) novaBaixa.getTransacao()).isDivisaoLucroCambioCaixa()) {
             BaixaBV baixaBV = new BaixaBV(novaBaixa);
 //            baixaBV.setConta(confCambio.getContaCaixa()); Verificar Possivel erro apos atualização
             baixaBV.setNaturezaFinanceira(OperacaoFinanceira.ENTRADA);
@@ -263,9 +263,9 @@ public class PagamentoView implements Serializable {
     }
 
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
-        if (baixa.getPerfilDeValor() instanceof Titulo) {
-            ((Titulo) baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<Transacao>().atualiza(baixa.getPerfilDeValor());
+        if (baixa.getTransacao() instanceof Titulo) {
+            ((Titulo) baixa.getTransacao()).atualizaSaldo(baixa.getValor());
+            new AtualizaDAO<Transacao>().atualiza(baixa.getTransacao());
         }
         return baixa;
     }
@@ -279,11 +279,11 @@ public class PagamentoView implements Serializable {
     }
 
 //    public void abrirBaixaComDados() {
-//        if (this.baixa.getPerfilDeValor() instanceof Titulo) {
+//        if (this.baixa.getTransacao() instanceof Titulo) {
 //            baixa = new BaixaBV(baixaSelecionada);
 //            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
 //            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-//        } else if (this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
+//        } else if (this.baixa.getTransacao() instanceof DespesaProvisionada) {
 //            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
 //            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
 //            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");

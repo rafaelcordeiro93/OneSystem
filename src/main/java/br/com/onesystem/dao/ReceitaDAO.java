@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -39,7 +39,7 @@ public class ReceitaDAO {
         return this;
     }
 
-    public ReceitaDAO ePorMoeda(Receita receita) {
+    public ReceitaDAO ePorMoeda(TipoReceita receita) {
         consulta += "and r.nome = :rNome ";
         parametros.put("rNome", receita.getNome());
         return this;
@@ -51,16 +51,16 @@ public class ReceitaDAO {
         return this;
     }
 
-    public List<Receita> listaDeResultados() {
-        List<Receita> resultado = new ArmazemDeRegistros<Receita>(Receita.class)
+    public List<TipoReceita> listaDeResultados() {
+        List<TipoReceita> resultado = new ArmazemDeRegistros<TipoReceita>(TipoReceita.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Receita resultado() throws DadoInvalidoException {
+    public TipoReceita resultado() throws DadoInvalidoException {
         try {
-            Receita resultado = new ArmazemDeRegistros<Receita>(Receita.class)
+            TipoReceita resultado = new ArmazemDeRegistros<TipoReceita>(TipoReceita.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;

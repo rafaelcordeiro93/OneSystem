@@ -1,7 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
@@ -12,7 +12,7 @@ public class ReceitaBV implements Serializable {
     private String nome;
     private GrupoFinanceiro grupoFinanceiro;
 
-    public ReceitaBV(Receita receitaSelecionada) {
+    public ReceitaBV(TipoReceita receitaSelecionada) {
         this.id = receitaSelecionada.getId();
         this.nome = receitaSelecionada.getNome();
         this.grupoFinanceiro = receitaSelecionada.getGrupoFinanceiro();
@@ -45,11 +45,11 @@ public class ReceitaBV implements Serializable {
         this.grupoFinanceiro = grupoFinanceiro;
     }
 
-    public Receita construir() throws DadoInvalidoException {
-        return new Receita(null, nome, grupoFinanceiro);
+    public TipoReceita construir() throws DadoInvalidoException {
+        return new TipoReceita(null, nome, grupoFinanceiro);
     }
 
-    public Receita construirComID() throws DadoInvalidoException {
-        return new Receita(id, nome, grupoFinanceiro);
+    public TipoReceita construirComID() throws DadoInvalidoException {
+        return new TipoReceita(id, nome, grupoFinanceiro);
     }
 }

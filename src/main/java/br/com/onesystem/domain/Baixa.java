@@ -85,13 +85,13 @@ public class Baixa implements Serializable, Movimento {
     private Cotacao cotacao;
 
     @ManyToOne
-    private Transacao perfilDeValor;
+    private Transacao transacao;
 
     @ManyToOne
     private TipoDespesa despesa;
 
     @ManyToOne
-    private Receita receita;
+    private TipoReceita receita;
 
     @ManyToOne
     private Pessoa pessoa;
@@ -120,7 +120,7 @@ public class Baixa implements Serializable, Movimento {
             BigDecimal juros, BigDecimal valor, BigDecimal multas,
             BigDecimal desconto, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
-            Cotacao cotacao, Receita receita, Cambio cambio, Transferencia transferencia,
+            Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
             Recepcao recepcao, Transacao perfilDeValor, NotaEmitida notaEmitida) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
@@ -141,7 +141,7 @@ public class Baixa implements Serializable, Movimento {
         this.cambio = cambio;
         this.transferencia = transferencia;
         this.recepcao = recepcao;
-        this.perfilDeValor = perfilDeValor;
+        this.transacao = perfilDeValor;
         this.notaEmitida = notaEmitida;
         ehValido();
     }
@@ -225,13 +225,13 @@ public class Baixa implements Serializable, Movimento {
         BundleUtil msg = new BundleUtil();
         if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
 
-            if (cambio != null && !(perfilDeValor instanceof DespesaProvisionada)) {
+            if (cambio != null && !(transacao instanceof DespesaProvisionada)) {
                 return geraMovimentacaoSaidaCambio(msg);
             } else if (recepcao != null) {
                 return geraMovimentacaoSaidaRecepcao(msg);
             } else if (transferencia != null && despesa == null) {
                 return geraMovimentacaoSaidaTransferencia(msg);
-            } else if (perfilDeValor instanceof DespesaProvisionada) {
+            } else if (transacao instanceof DespesaProvisionada) {
                 geraMovimentacaoDespesaProvisionada(msg);
             } else {
                 return geraMovimentacaoDespesa(msg);
@@ -243,9 +243,9 @@ public class Baixa implements Serializable, Movimento {
                 return geraMovimentacaoEntradaNotaEmitida(msg);
             } else if (transferencia != null) {
                 return geraMovimentacaoEntradaTransferencia(msg);
-//            } else if (perfilDeValor instanceof DespesaProvisionada) {
+//            } else if (transacao instanceof DespesaProvisionada) {
 //                return geraMovimentacaoEntradaDespesaProvisionada(msg);
-            } else if (perfilDeValor instanceof ReceitaProvisionada) {
+            } else if (transacao instanceof ReceitaProvisionada) {
                 return geraMovimentacaoReceitaProvisionada(msg);
             } else {
                 return geraMovimentacaoReceita(msg);
@@ -258,8 +258,8 @@ public class Baixa implements Serializable, Movimento {
         if (getCambio() != null) {
             throw new EDadoInvalidoException("Baixas com referências de câmbio não podem ser canceladas!");
         }
-        if (perfilDeValor instanceof Titulo) {
-            ((Titulo) perfilDeValor).cancelarSaldoDeBaixa(valor);
+        if (transacao instanceof Titulo) {
+            ((Titulo) transacao).cancelarSaldoDeBaixa(valor);
         }
         this.cancelada = true;
     }
@@ -291,7 +291,7 @@ public class Baixa implements Serializable, Movimento {
         if (historico != null) {
             historicoFormatado = historico.length() > 25 ? historico.substring(0, 24) : historico;
         }
-        return ((DespesaProvisionada) perfilDeValor).getDespesa().getNome() + " - " + historicoFormatado;
+        return ((DespesaProvisionada) transacao).getDespesa().getNome() + " - " + historicoFormatado;
     }
 
     private String geraMovimentacaoDespesa(BundleUtil msg) {
@@ -310,7 +310,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     private String geraMovimentacaoEntradaDespesaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Entrada_Lucro") + " de câmbio " + ((DespesaProvisionada) perfilDeValor).getCambio().getId();
+        return msg.getMessage("Entrada_Lucro") + " de câmbio " + ((DespesaProvisionada) transacao).getCambio().getId();
     }
 
     private String geraMovimentacaoSaidaRecepcao(BundleUtil msg) {
@@ -319,19 +319,19 @@ public class Baixa implements Serializable, Movimento {
     }
 
     private String geraMovimentacaoReceitaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Recebimento_Receita_Provisionada") + " de " + ((ReceitaProvisionada) perfilDeValor).getPessoa().getNome();
+        return msg.getMessage("Recebimento_Receita_Provisionada") + " de " + ((ReceitaProvisionada) transacao).getPessoa().getNome();
     }
 
     private String geraMovimentacaoSaidaCambio(BundleUtil msg) {
-        if (perfilDeValor instanceof Titulo) {
+        if (transacao instanceof Titulo) {
             List<Titulo> titulos = new TituloDAO().buscarTitulos().wAPagar().ePorCambio(cambio).listaDeResultados();
             for (Titulo t : titulos) {
-                if (((Titulo) perfilDeValor).getValor().equals(t.getValor())) {
+                if (((Titulo) transacao).getValor().equals(t.getValor())) {
                     return msg.getMessage("Pagamento_Comissao") + " " + cambio.getId();
                 }
             }
-        } else if (perfilDeValor instanceof DespesaProvisionada) {
-            return msg.getMessage("Pagamento_Despesa_Provisionada") + " de " + ((DespesaProvisionada) perfilDeValor).getDespesa().getNome()
+        } else if (transacao instanceof DespesaProvisionada) {
+            return msg.getMessage("Pagamento_Despesa_Provisionada") + " de " + ((DespesaProvisionada) transacao).getDespesa().getNome()
                     + " para " + pessoa.getNome();
         }
         String str = despesa != null ? despesa.getNome() : historico;
@@ -381,8 +381,8 @@ public class Baixa implements Serializable, Movimento {
         return naturezaFinanceira;
     }
 
-    public Transacao getPerfilDeValor() {
-        return perfilDeValor;
+    public Transacao getTransacao() {
+        return transacao;
     }
 
     public Pessoa getPessoa() {
@@ -397,7 +397,7 @@ public class Baixa implements Serializable, Movimento {
         return numeroParcela;
     }
 
-    public Receita getReceita() {
+    public TipoReceita getReceita() {
         return receita;
     }
 
@@ -430,10 +430,10 @@ public class Baixa implements Serializable, Movimento {
     public Long getDocumentoOriginal() {
         if (cambio != null) {
             return this.cambio.getId();
-        } else if (recepcao != null && perfilDeValor instanceof Titulo) {
+        } else if (recepcao != null && transacao instanceof Titulo) {
             return this.recepcao.getId();
-        } else if (recepcao != null && !(perfilDeValor instanceof Titulo)) {
-            return ((Titulo) perfilDeValor).getId();
+        } else if (recepcao != null && !(transacao instanceof Titulo)) {
+            return ((Titulo) transacao).getId();
         } else {
             return this.id;
         }
@@ -449,8 +449,8 @@ public class Baixa implements Serializable, Movimento {
             return despesa.getId();
         } else if (receita != null) {
             return receita.getId();
-        } else if (perfilDeValor != null) {
-            return perfilDeValor.getId();
+        } else if (transacao != null) {
+            return transacao.getId();
         } else {
             return getId();
         }
@@ -466,12 +466,12 @@ public class Baixa implements Serializable, Movimento {
             return despesa.getNome();
         } else if (receita != null) {
             return receita.getNome();
-        } else if (perfilDeValor instanceof Titulo) {
+        } else if (transacao instanceof Titulo) {
             return TipoOperacao.TITULO.getNome();
-        } else if (perfilDeValor instanceof DespesaProvisionada) {
-            return ((DespesaProvisionada) perfilDeValor).getDespesa().getNome();
-        } else if (perfilDeValor instanceof ReceitaProvisionada) {
-            return ((ReceitaProvisionada) perfilDeValor).getPessoa().getNome();
+        } else if (transacao instanceof DespesaProvisionada) {
+            return ((DespesaProvisionada) transacao).getDespesa().getNome();
+        } else if (transacao instanceof ReceitaProvisionada) {
+            return ((ReceitaProvisionada) transacao).getPessoa().getNome();
         } else {
             return TipoOperacao.AVULSO.getNome();
         }
@@ -479,8 +479,8 @@ public class Baixa implements Serializable, Movimento {
 
     @Override
     public BigDecimal getValorBaixado() {
-        if (perfilDeValor instanceof Titulo) {
-            return ((Titulo) perfilDeValor).getValorBaixado();
+        if (transacao instanceof Titulo) {
+            return ((Titulo) transacao).getValorBaixado();
         } else {
             return getValor();
         }
@@ -493,7 +493,7 @@ public class Baixa implements Serializable, Movimento {
                 + ", multas=" + multas + ", desconto=" + desconto + ", historico="
                 + historico + ", emissao=" + emissao + ", naturezaFinanceira="
                 + naturezaFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
-                + ", perfilDeValor=" + (perfilDeValor != null ? perfilDeValor.getId() : null)
+                + ", perfilDeValor=" + (transacao != null ? transacao.getId() : null)
                 + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
                 + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
                 + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="

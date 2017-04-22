@@ -17,13 +17,16 @@
                     <div class="ui-fluid">
 
                         <div id="nota" class="ui-g">
-                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2"  value="#{l.Nota_Emitida}:"/>
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Emitida}:"/>
                         </div>
-                        <p:panel id="consultaNotaID" class="ui-g NoPadding" style="border: 0px">
-                            <a:inputTextDialog id="cNotaEmitida" value="#{consultaNotaEmitidaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" styleDiv="max-width: 230px !important" style="max-width: 250px !important" styleClass="ui-g-12 ui-md-6 ui-lg-3" onlyNumber="true"/>
-                        </p:panel>
+                        <div class="ui-g">
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{consultaNotaEmitidaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                        </div>
+                        <div class="ui-g" style="padding-bottom: 2px">
+                            <p:outputLabel class="ui-g-4 ui-md-2 ui-lg-1"  value="#{l.Cancelada}:"/>
+                            <p:selectBooleanCheckbox class="ui-g-2 ui-md-1 ui-lg-1" style="margin-top: 2px"/>
+                        </div>
                         <p:separator/>
-
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
@@ -124,8 +127,8 @@
                                      paginatorAlwaysVisible="false" rows="12" paginator="true"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
-                            
-                              <f:facet name="header">
+
+                            <f:facet name="header">
                                 #{l.Parcelas}
                             </f:facet>
 
@@ -203,7 +206,7 @@
                         </p:dataTable>
 
                         <p:spacer/>
-                        
+
                     </div>
                 </div>  
             </div>
