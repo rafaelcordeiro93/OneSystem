@@ -71,9 +71,6 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
     @ManyToOne(optional = false)
     private Cotacao cotacao;
 
-    @ManyToOne
-    private Movimento movimento;
-
     public FormaPagamentoRecebimento() {
     }
 
@@ -121,17 +118,9 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
         return cotacao;
     }
 
-    public Movimento getMovimento() {
-        return movimento;
-    }
-
     public String getVencimentoFormatado() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(getVencimento());
-    }
-
-    public void setMovimento(Movimento movimento) {
-        this.movimento = movimento;
     }
     
       public String getValorFormatado() {

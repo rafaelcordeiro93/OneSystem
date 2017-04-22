@@ -3,7 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
@@ -22,11 +22,11 @@ public class OperacaoBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private TipoLancamento tipoNota;
     private TipoOperacao tipoOperacao;
-    private Receita vendaAVista;
-    private Receita vendaAPrazo;
-    private Receita servicoAVista;
-    private Receita servicoAPrazo;
-    private Receita receitaFrete;
+    private TipoReceita vendaAVista;
+    private TipoReceita vendaAPrazo;
+    private TipoReceita servicoAVista;
+    private TipoReceita servicoAPrazo;
+    private TipoReceita receitaFrete;
     private TipoDespesa despesaCMV;
     private TipoContabil contabilizarCMV;
     private TipoDespesa compraAVista;
@@ -58,27 +58,27 @@ public class OperacaoBuilder {
         return this;
     }
 
-    public OperacaoBuilder comVendaAVista(Receita vendaAVista) {
+    public OperacaoBuilder comVendaAVista(TipoReceita vendaAVista) {
         this.vendaAVista = vendaAVista;
         return this;
     }
 
-    public OperacaoBuilder comVendaAPrazo(Receita vendaAPrazo) {
+    public OperacaoBuilder comVendaAPrazo(TipoReceita vendaAPrazo) {
         this.vendaAPrazo = vendaAPrazo;
         return this;
     }
 
-    public OperacaoBuilder comServicoAVista(Receita servicoAVista) {
+    public OperacaoBuilder comServicoAVista(TipoReceita servicoAVista) {
         this.servicoAVista = servicoAVista;
         return this;
     }
 
-    public OperacaoBuilder comServicoAPrazo(Receita servicoAPrazo) {
+    public OperacaoBuilder comServicoAPrazo(TipoReceita servicoAPrazo) {
         this.servicoAPrazo = servicoAPrazo;
         return this;
     }
 
-    public OperacaoBuilder comReceitaFrete(Receita receitaFrete) {
+    public OperacaoBuilder comReceitaFrete(TipoReceita receitaFrete) {
         this.receitaFrete = receitaFrete;
         return this;
     }

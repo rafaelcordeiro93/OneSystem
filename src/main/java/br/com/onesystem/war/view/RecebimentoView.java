@@ -7,7 +7,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.FormaPagamentoRecebimento;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Transacao;
@@ -84,7 +84,7 @@ public class RecebimentoView implements Serializable {
     }
 
     public void selecionaReceita(SelectEvent event) {
-        Receita ReceitaSelecionada = (Receita) event.getObject();
+        TipoReceita ReceitaSelecionada = (TipoReceita) event.getObject();
         this.baixaReceitaEventual.setReceita(ReceitaSelecionada);
     }
 
@@ -156,7 +156,7 @@ public class RecebimentoView implements Serializable {
 
     private void validaExistente() throws EDadoInvalidoException {
         for (Baixa novaBaixa : baixaLista) {
-            if (novaBaixa.getPerfilDeValor() != null && novaBaixa.getPerfilDeValor().getId().equals(baixa.getPerfilDeValor().getId())) {
+            if (novaBaixa.getTransacao() != null && novaBaixa.getTransacao().getId().equals(baixa.getPerfilDeValor().getId())) {
                 throw new EDadoInvalidoException("Baixa já consta na lista!");
             }
 
@@ -207,9 +207,9 @@ public class RecebimentoView implements Serializable {
     }
 
     private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
-        if (baixa.getPerfilDeValor() instanceof Titulo) {
+        if (baixa.getTransacao() instanceof Titulo) {
             ((Titulo) this.baixa.getPerfilDeValor()).atualizaSaldo(baixa.getValor());
-            new AtualizaDAO<Transacao>().atualiza(baixa.getPerfilDeValor());
+            new AtualizaDAO<Transacao>().atualiza(baixa.getTransacao());
         }
         return baixa;
     }

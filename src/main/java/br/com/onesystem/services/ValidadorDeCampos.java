@@ -20,25 +20,26 @@ import javax.validation.ValidatorFactory;
  * @author Rafael-Pc
  */
 public class ValidadorDeCampos<T> {
-    
+
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
-    
+
     public boolean valida(T t, List<String> campos) throws DadoInvalidoException {
         for (String campo : campos) {
             valida(campo, t);
         }
         return true;
     }
-    
+
     private boolean valida(String atributo, T t) throws DadoInvalidoException {
-        
+
         try {
             Set<ConstraintViolation<T>> violationContraint = validator.validateProperty(t, atributo);
-            
+
             if (violationContraint.size() > 0) {
                 for (ConstraintViolation<T> constraint : violationContraint) {
-                    throw new EDadoInvalidoException(constraint.getMessage());
+                    throw new EDadoInvalidoException("{" + t.getClass().toString().substring(t.getClass().toString().lastIndexOf(".") + 1, t.getClass().toString().length()) + "} "
+                            + constraint.getMessage());
                 }
             }
             return true;

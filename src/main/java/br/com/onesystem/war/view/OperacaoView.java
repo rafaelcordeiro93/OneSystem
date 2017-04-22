@@ -7,7 +7,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.OperacaoBV;
@@ -23,7 +23,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -36,7 +36,7 @@ public class OperacaoView implements Serializable {
     private Operacao operacaoSelecionada;
     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -98,27 +98,27 @@ public class OperacaoView implements Serializable {
     }
 
     public void selecionaReceitaAVista(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setVendaAVista(receitaSelecionada);
     }
 
     public void selecionaReceitaAPrazo(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setVendaAPrazo(receitaSelecionada);
     }
 
     public void selecionaServicoAVista(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setServicoAVista(receitaSelecionada);
     }
 
     public void selecionaServicoAPrazo(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setServicoAPrazo(receitaSelecionada);
     }
 
     public void selecionaReceitaFrete(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setReceitaFrete(receitaSelecionada);
     }
 

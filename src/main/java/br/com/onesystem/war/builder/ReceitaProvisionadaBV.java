@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.builder.ReceitaProvisionadaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -15,7 +15,7 @@ public class ReceitaProvisionadaBV implements Serializable {
 
     private Long id;
     private Pessoa pessoa;
-    private Receita receita;
+    private TipoReceita receita;
     private BigDecimal valor;
     private Date vencimento;
     private Date emissao;
@@ -33,7 +33,7 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.cotacao = receitaProvisionadaSelecionada.getCotacao();
     }
 
-    public ReceitaProvisionadaBV(Long id, Pessoa pessoa, Receita receita, BigDecimal valor,
+    public ReceitaProvisionadaBV(Long id, Pessoa pessoa, TipoReceita receita, BigDecimal valor,
             Date vencimento, Date emissao, String historico, Cotacao cotacao) {
         this.id = id;
         this.pessoa = pessoa;
@@ -64,11 +64,11 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.pessoa = pessoa;
     }
 
-    public Receita getReceita() {
+    public TipoReceita getReceita() {
         return receita;
     }
 
-    public void setReceita(Receita receita) {
+    public void setReceita(TipoReceita receita) {
         this.receita = receita;
     }
 

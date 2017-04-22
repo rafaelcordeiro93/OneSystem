@@ -2,22 +2,22 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,6 +25,7 @@ import javax.validation.constraints.NotNull;
 public class Cheque extends Transacao implements Serializable {
 
     @ManyToOne
+
     private NotaEmitida notaEmitida;
     @NotNull(message = "{banco_not_null}")
     @ManyToOne
@@ -56,9 +57,9 @@ public class Cheque extends Transacao implements Serializable {
     }
 
     public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
-            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
+            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
             String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
         this.notaEmitida = notaEmitida;
         this.banco = banco;
         this.agencia = agencia;
@@ -75,16 +76,14 @@ public class Cheque extends Transacao implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao");
         List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
-        new ValidadorDeCampos<Transacao>().valida(this, campos);
     }
 
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
-    }  
+    }
 
     public Banco getBanco() {
         return banco;

@@ -4,7 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -252,7 +252,7 @@ public class ReceitaProvisionadaView implements Serializable {
     }
 
     public void selecionaReceita(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         receitaProvisionada.setReceita(receitaSelecionada);
     }
 

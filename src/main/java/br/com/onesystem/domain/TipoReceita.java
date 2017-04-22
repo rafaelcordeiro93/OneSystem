@@ -24,7 +24,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_RECEITA",
         name = "SEQ_RECEITA")
-public class Receita implements Serializable {
+public class TipoReceita implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_RECEITA")
@@ -37,7 +37,7 @@ public class Receita implements Serializable {
     private GrupoFinanceiro grupoFinanceiro;
     @OneToMany(mappedBy = "receita")
     private List<Baixa> receitas;
-    @OneToMany(mappedBy = "receita")
+    @OneToMany(mappedBy = "tipoReceita")
     private List<ReceitaProvisionada> receitasProvisionadas;
     @OneToMany(mappedBy = "vendaAVista")
     private List<Operacao> vendasAVista;
@@ -52,10 +52,10 @@ public class Receita implements Serializable {
     @OneToMany(mappedBy = "receita")
     private List<ReceitaEventual> receitasEventuais;
 
-    public Receita() {
+    public TipoReceita() {
     }
 
-    public Receita(Long id, String nome, GrupoFinanceiro grupoFinanceiro) throws DadoInvalidoException {
+    public TipoReceita(Long id, String nome, GrupoFinanceiro grupoFinanceiro) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.grupoFinanceiro = grupoFinanceiro;
@@ -80,7 +80,7 @@ public class Receita implements Serializable {
 
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "grupoFinanceiro");
-        new ValidadorDeCampos<Receita>().valida(this, campos);
+        new ValidadorDeCampos<TipoReceita>().valida(this, campos);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class Receita implements Serializable {
         if (!(objeto instanceof Conta)) {
             return false;
         }
-        Receita outro = (Receita) objeto;
+        TipoReceita outro = (TipoReceita) objeto;
         if (this.id == null) {
             return false;
         }

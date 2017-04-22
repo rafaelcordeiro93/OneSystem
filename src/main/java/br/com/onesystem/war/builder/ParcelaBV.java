@@ -14,6 +14,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
@@ -71,6 +72,7 @@ public class ParcelaBV implements Serializable {
     private Integer dias;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
+    private Pessoa pessoa;
 
     public ParcelaBV() {
     }
@@ -103,6 +105,7 @@ public class ParcelaBV implements Serializable {
         this.dias = p.getDias();
         this.cotacao = p.getCotacao();
         this.tipoLancamento = p.getTipoLancamento();
+        this.pessoa = p.getPessoa();
     }
 
     public ParcelaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
@@ -113,7 +116,7 @@ public class ParcelaBV implements Serializable {
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
             Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela,
-            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento) {
+            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa) {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -141,6 +144,7 @@ public class ParcelaBV implements Serializable {
         this.dias = dias;
         this.tipoLancamento = tipoLancamento;
         this.cotacao = cotacao;
+        this.pessoa = pessoa;
     }
 
     public Long getId() {
@@ -385,6 +389,14 @@ public class ParcelaBV implements Serializable {
         this.recepcao = recepcao;
     }
 
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
     public TipoFormaDeRecebimentoParcela getTipoFormaDeRecebimentoParcela() {
         return tipoFormaDeRecebimentoParcela;
     }
@@ -395,13 +407,13 @@ public class ParcelaBV implements Serializable {
 
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
-                comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao)
-                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor)
+                comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa)
+                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(unidadeFinanceira)
                 .construir();
     }
 
     public Cheque construirCheque() throws DadoInvalidoException {
-        return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta)
+        return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(unidadeFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento)
                 .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
@@ -409,8 +421,8 @@ public class ParcelaBV implements Serializable {
     }
 
     public Titulo construirTitulo() throws DadoInvalidoException {
-        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).
+        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira).comPessoa(pessoa)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento).
                 construir();
     }
 

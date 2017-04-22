@@ -87,7 +87,6 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
 
     @Override
     public void limparJanela() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
