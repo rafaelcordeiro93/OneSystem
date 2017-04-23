@@ -6,8 +6,9 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.domain.MovimentoFixo;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.Transacao;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -34,7 +35,7 @@ public class BaixaBV implements Serializable {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private Transacao perfilDeValor;
+    private Parcela perfilDeValor;
     private TipoDespesa despesa;
     private TipoReceita receita;
     private Pessoa pessoa;
@@ -44,6 +45,7 @@ public class BaixaBV implements Serializable {
     private Recepcao recepcao;
     private boolean cancelada = false;
     private NotaEmitida notaEmitida;
+    private MovimentoFixo movimentoFixo;
 
     public BaixaBV() {
     }
@@ -61,7 +63,7 @@ public class BaixaBV implements Serializable {
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();
-        this.perfilDeValor = baixa.getTransacao();
+        this.perfilDeValor = baixa.getParcela();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
         this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
@@ -87,8 +89,8 @@ public class BaixaBV implements Serializable {
         this.valor = despesaProvisionada.getValor();
         this.emissao = despesaProvisionada.getEmissao();
         this.historico = despesaProvisionada.getHistorico();
-        this.perfilDeValor = despesaProvisionada;
-        this.despesa = despesaProvisionada.getDespesa();
+        this.movimentoFixo = despesaProvisionada;
+        this.despesa = despesaProvisionada.getTipoDespesa();
         this.cambio = despesaProvisionada.getCambio();
     }
 
@@ -97,7 +99,7 @@ public class BaixaBV implements Serializable {
         this.valor = receitaProvisionada.getValor();
         this.emissao = receitaProvisionada.getEmissao();
         this.historico = receitaProvisionada.getHistorico();
-        this.perfilDeValor = receitaProvisionada;
+        this.movimentoFixo = receitaProvisionada;
     }
 
     public Long getId() {
@@ -168,6 +170,14 @@ public class BaixaBV implements Serializable {
         return naturezaFinanceira;
     }
 
+    public MovimentoFixo getMovimentoFixo() {
+        return movimentoFixo;
+    }
+
+    public void setMovimentoFixo(MovimentoFixo movimentoFixo) {
+        this.movimentoFixo = movimentoFixo;
+    }
+
     public void setNaturezaFinanceira(OperacaoFinanceira naturezaFinanceira) {
         this.naturezaFinanceira = naturezaFinanceira;
     }
@@ -180,11 +190,11 @@ public class BaixaBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public Transacao getPerfilDeValor() {
+    public Parcela getPerfilDeValor() {
         return perfilDeValor;
     }
 
-    public void setPerfilDeValor(Transacao perfilDeValor) {
+    public void setParcela(Parcela perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
     }
 
@@ -265,14 +275,14 @@ public class BaixaBV implements Serializable {
                 .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa)
                 .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
                 .comNaturezaFinanceira(naturezaFinanceira).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
-                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
+                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor).comMovimentoFixo(movimentoFixo)
                 .comTransferencia(transferencia).comValor(valor).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
         return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
                 .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa).comId(id)
-                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
+                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas).comMovimentoFixo(movimentoFixo)
                 .comNaturezaFinanceira(naturezaFinanceira).comNotaEmitida(notaEmitida).comNumeroParcela(numeroParcela)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
                 .comTransferencia(transferencia).comValor(valor).construir();

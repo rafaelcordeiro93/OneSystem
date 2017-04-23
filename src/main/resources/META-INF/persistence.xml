@@ -67,8 +67,9 @@
     <class>br.com.onesystem.domain.DespesaEventual</class>
     <class>br.com.onesystem.domain.ReceitaEventual</class>
     <class>br.com.onesystem.domain.TipoDespesa</class>
-    <class>br.com.onesystem.domain.Transacao</class>
     <class>br.com.onesystem.domain.TipoReceita</class>
+    <class>br.com.onesystem.domain.Parcela</class>
+    <class>br.com.onesystem.domain.MovimentoFixo</class>
     <properties>
       <!--  Propriedades JDBC  -->
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

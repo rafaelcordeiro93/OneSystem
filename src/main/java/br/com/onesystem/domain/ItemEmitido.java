@@ -87,7 +87,7 @@ public class ItemEmitido implements Serializable {
         }
         return quantidade;
     }
-
+    
     public BigDecimal getTotal() {
         return getQuantidade().multiply(unitario);
     }

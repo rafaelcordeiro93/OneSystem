@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("RECEITA_PROVISIONADA")
-public class ReceitaProvisionada extends Transacao implements Serializable, RelatorioContaAbertaImpl {
+public class ReceitaProvisionada extends MovimentoFixo implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
     private TipoReceita tipoReceita;
@@ -27,7 +27,7 @@ public class ReceitaProvisionada extends Transacao implements Serializable, Rela
         this.tipoReceita = tipoReceita;
     }
 
-    public TipoReceita getReceita() {
+    public TipoReceita getTipoReceita() {
         return tipoReceita;
     }
 
@@ -49,6 +49,11 @@ public class ReceitaProvisionada extends Transacao implements Serializable, Rela
     @Override
     public String getOrigem() {
         return tipoReceita.getNome();
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoReceita().getNome();
     }
 
 }

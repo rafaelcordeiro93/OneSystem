@@ -37,27 +37,27 @@ public class ValoresAVista implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_VALORESAVISTA")
     private Long id;
     @Min(value = 0, message = "{min_dinheiro}")
-    private BigDecimal dinheiro;
+    private BigDecimal dinheiro = BigDecimal.ZERO;
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
     @OneToOne(cascade = CascadeType.ALL)
     private BoletoDeCartao boletoDeCartao;
     @Min(value = 0, message = "{min_aFaturar}")
-    private BigDecimal aFaturar;
+    private BigDecimal aFaturar = BigDecimal.ZERO;
     @OneToOne
     private NotaEmitida notaEmitida;
     @ManyToOne
     private Cotacao cotacao;
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
-    private BigDecimal desconto;
+    private BigDecimal desconto = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = true)
-    private BigDecimal acrescimo;
+    private BigDecimal acrescimo = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_despesa_cobranca_min}")
-    private BigDecimal despesaCobranca;
+    private BigDecimal despesaCobranca = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_frete_min}")
-    private BigDecimal frete;
+    private BigDecimal frete = BigDecimal.ZERO;
 
     public ValoresAVista() {
     }

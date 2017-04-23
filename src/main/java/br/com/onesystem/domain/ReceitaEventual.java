@@ -13,10 +13,10 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("RECEITA_EVENTUAL")
-public class ReceitaEventual extends Transacao implements RelatorioContaAbertaImpl {
+public class ReceitaEventual extends MovimentoFixo implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private TipoReceita receita;
+    private TipoReceita tipoReceita;
 
     public ReceitaEventual() {
     }
@@ -24,11 +24,11 @@ public class ReceitaEventual extends Transacao implements RelatorioContaAbertaIm
     public ReceitaEventual(Long id, Pessoa pessoa, TipoReceita receita, BigDecimal valor, Date emissao, String historico,
             Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao);
-        this.receita = receita;
+        this.tipoReceita = receita;
     }
 
-    public TipoReceita getReceita() {
-        return receita;
+    public TipoReceita getTipoReceita() {
+        return tipoReceita;
     }
 
     @Override
@@ -49,6 +49,11 @@ public class ReceitaEventual extends Transacao implements RelatorioContaAbertaIm
     @Override
     public String getOrigem() {
         return TipoOperacao.AVULSO.getNome();
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoReceita().getNome();
     }
 
 }

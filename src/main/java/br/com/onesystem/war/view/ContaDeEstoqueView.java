@@ -168,33 +168,15 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             ContaDeEstoque conta = (ContaDeEstoque) obj;
             this.contaDeEstoqueSelecionada = conta;
             this.contaDeEstoque = new ContaDeEstoqueBV(conta);
-            for (OperacaoDeEstoque op : conta.getOperacaoDeEstoque()) {
-                this.listaOperacoesDeEstoqueBV.add(new OperacaoDeEstoqueBV(op));
-            }
+            selecionaOperacoes();
         } else if (obj instanceof Operacao) {
             this.operacaoDeEstoque.setOperacao((Operacao) obj);
         }
-
     }
 
-    @Override
-    public void buscaPorId() {
-        Long id = contaDeEstoque.getId();
-        if (id != null) {
-            try {
-                limparJanela();
-                ContaDeEstoqueDAO dao = new ContaDeEstoqueDAO();
-                ContaDeEstoque c = dao.buscarContaDeEstoqueW().porId(id).resultado();
-                contaDeEstoqueSelecionada = c;
-                contaDeEstoque = new ContaDeEstoqueBV(contaDeEstoqueSelecionada);
-                for (OperacaoDeEstoque op : c.getOperacaoDeEstoque()) {
-                    this.listaOperacoesDeEstoqueBV.add(new OperacaoDeEstoqueBV(op));
-                }
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                contaDeEstoque.setId(id);
-                die.print();
-            }
+    public void selecionaOperacoes() {
+        for (OperacaoDeEstoque op : contaDeEstoque.getOperacaoDeEstoque()) {
+            this.listaOperacoesDeEstoqueBV.add(new OperacaoDeEstoqueBV(op));
         }
     }
 

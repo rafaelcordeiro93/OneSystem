@@ -7,11 +7,16 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,13 +47,13 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "PERFILDEVALOR_CLASSE_NOME")
-public abstract class Transacao implements Serializable {
+@DiscriminatorColumn(name = "PARCELA_CLASSE_NOME")
+public abstract class Parcela implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "SEQ_PERFILDEVALOR", sequenceName = "SEQ_PERFILDEVALOR",
+    @SequenceGenerator(name = "SEQ_PARCELA", sequenceName = "SEQ_PARCELA",
             initialValue = 1, allocationSize = 1)
-    @GeneratedValue(generator = "SEQ_PERFILDEVALOR", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_PARCELA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Min(value = 0, message = "{valor_min}")
@@ -70,7 +75,7 @@ public abstract class Transacao implements Serializable {
     @Column(length = 250, nullable = true)
     private String historico;
 
-    @OneToMany(mappedBy = "transacao", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "parcela", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
     @NotNull(message = "{unidadeFinanceira_not_null}")
@@ -81,11 +86,14 @@ public abstract class Transacao implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
-    public Transacao() {
+    @ManyToOne
+    private NotaEmitida notaEmitida;
+
+    public Parcela() {
     }
 
-    public Transacao(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento) throws DadoInvalidoException {
+    public Parcela(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, NotaEmitida notaEmitida) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -95,13 +103,16 @@ public abstract class Transacao implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
         this.vencimento = vencimento;
+        this.notaEmitida = notaEmitida;
         ehAbstracaoValida();
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao", "operacaoFinanceira");
-        new ValidadorDeCampos<Transacao>().valida(this, campos);
+        new ValidadorDeCampos<Parcela>().valida(this, campos);
     }
+
+    public abstract String getDetalhes();
 
     public Long getId() {
         return id;
@@ -131,6 +142,25 @@ public abstract class Transacao implements Serializable {
         return vencimento;
     }
 
+    public NotaEmitida getNotaEmitida() {
+        return notaEmitida;
+    }
+
+    public void setNotaEmitida(NotaEmitida notaEmitida) {
+        this.notaEmitida = notaEmitida;
+    }
+
+    public Long getDias() {
+        LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate e = emissao.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return ChronoUnit.DAYS.between(e, v);
+    }
+
+    public DayOfWeek getDiaDaSemana() {
+        LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return v.getDayOfWeek();
+    }
+
     public String getVencimentoFormatado() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
@@ -150,8 +180,7 @@ public abstract class Transacao implements Serializable {
     }
 
     public String getValorFormatado() {
-        NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
-        return numeroFormatado.format(getValor());
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
     public String getEmissaoFormatada() {
@@ -169,10 +198,10 @@ public abstract class Transacao implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Transacao)) {
+        if (!(objeto instanceof Parcela)) {
             return false;
         }
-        Transacao outro = (Transacao) objeto;
+        Parcela outro = (Parcela) objeto;
         if (this.id == null) {
             return false;
         }

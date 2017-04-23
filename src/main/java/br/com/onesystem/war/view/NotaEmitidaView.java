@@ -25,6 +25,7 @@ import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.domain.builder.ParcelaBuilder;
@@ -246,26 +247,23 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     /**
      * Gera as parcelas para persistência.
      *
-     * @throws br.com.onesystem.exception.DadoInvalidoException
      */
     public void geraParcelas() {
         try {
-            List<BoletoDeCartao> cartoes = new ArrayList<>();
-            List<Cheque> cheques = new ArrayList<>();
-            List<Titulo> titulos = new ArrayList<>();
+            List<Parcela> parcelasBV = new ArrayList<>();
 
             //Gera as parcelas de acordo a sua modalidade.
             for (ParcelaBV p : parcelas) {
                 p.setEmissao(notaEmitida.getEmissao());
                 switch (p.getTipoFormaDeRecebimentoParcela()) {
                     case CARTAO:
-                        cartoes.add(p.construirBoletoDeCartao());
+                        parcelasBV.add(p.construirBoletoDeCartao());
                         break;
                     case CHEQUE:
-                        cheques.add(p.construirCheque());
+                        parcelasBV.add(p.construirCheque());
                         break;
                     case TITULO:
-                        titulos.add(p.construirTitulo());
+                        parcelasBV.add(p.construirTitulo());
                         break;
                     default:
                         break;
@@ -273,11 +271,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
 
             // Inclui as parcelas dentro da nota emitida.
-            
-            notaEmitida.setCartoes(cartoes.isEmpty() ? null : cartoes);
-            notaEmitida.setCheques(cheques.isEmpty() ? null : cheques);
-            notaEmitida.setTitulos(titulos.isEmpty() ? null : titulos);
-
+            notaEmitida.setParcelas(parcelasBV.isEmpty() ? null : parcelasBV);
             finalizar();
         } catch (DadoInvalidoException die) {
             ErrorMessage.print(new BundleUtil().getMessage("Erro_ao_gerar_parcelas"));
@@ -335,26 +329,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private void preparaInclusaoDeParcelas(NotaEmitida ne) throws EDadoInvalidoException {
 
         //Inclui a nota nos Cartoes
-        if (ne.getCartoes() != null) {
-            for (BoletoDeCartao b : ne.getCartoes()) {
-                if (b.getCartao() == null) {
-                    throw new EDadoInvalidoException(new BundleUtil().getMessage("cartao_not_null"));
+        if (ne.getParcelas() != null) {
+            for (Parcela t : ne.getParcelas()) {
+                if (t instanceof BoletoDeCartao) {
+                    if (((BoletoDeCartao) t).getCartao() == null) {
+                        throw new EDadoInvalidoException(new BundleUtil().getMessage("cartao_not_null"));
+                    }
+                    ((BoletoDeCartao) t).setNotaEmitida(ne);
+                } else if (t instanceof Cheque) {
+                    ((Cheque) t).setNotaEmitida(ne);
+                } else if (t instanceof Titulo) {
+                    ((Titulo) t).setNotaEmitida(ne);
                 }
-                b.setNotaEmitida(ne);
-            }
-        }
-
-        //Inclui a nota nos Cheques
-        if (ne.getCheques() != null) {
-            for (Cheque c : ne.getCheques()) {
-                c.setNotaEmitida(ne);
-            }
-        }
-
-        //Inclui a nota nos Titulos
-        if (ne.getTitulos() != null) {
-            for (Titulo t : ne.getTitulos()) {
-                t.setNotaEmitida(ne);
             }
         }
     }

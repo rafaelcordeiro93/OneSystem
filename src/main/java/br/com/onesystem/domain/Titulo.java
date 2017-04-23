@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("TITULO")
-public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
+public class Titulo extends Parcela implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;
@@ -33,9 +33,6 @@ public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private Cambio cambio;
-
-    @ManyToOne
-    private NotaEmitida notaEmitida;
 
     @NotNull(message = "{tipoFormaPagRec_not_null}")
     @Enumerated(EnumType.STRING)
@@ -50,12 +47,11 @@ public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
             Cambio cambio, Cotacao cotacao, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, notaEmitida);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
-        this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         ehValido();
     }
@@ -127,14 +123,6 @@ public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
         return getCotacao().getConta().getMoeda();
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
-    }
-
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
-    }
-
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
@@ -146,7 +134,11 @@ public class Titulo extends Transacao implements RelatorioContaAbertaImpl {
 
     @Override
     public String toString() {
-        return "Titulo{" + "saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+        return "Titulo{" + "saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", notaEmitida=" + (getNotaEmitida() != null ? getNotaEmitida().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+    }
+
+    public String getDetalhes() {
+        return "Título: " + getId();
     }
 
 }

@@ -31,7 +31,7 @@ public class DespesaProvisionadaBV implements Serializable {
     public DespesaProvisionadaBV(DespesaProvisionada despesaProvisionadaSelecionada) {
         this.id = despesaProvisionadaSelecionada.getId();
         this.pessoa = despesaProvisionadaSelecionada.getPessoa();
-        this.despesa = despesaProvisionadaSelecionada.getDespesa();
+        this.despesa = despesaProvisionadaSelecionada.getTipoDespesa();
         this.valor = despesaProvisionadaSelecionada.getValor();
         this.vencimento = despesaProvisionadaSelecionada.getVencimento();
         this.emissao = despesaProvisionadaSelecionada.getEmissao();

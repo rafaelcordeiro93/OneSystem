@@ -15,6 +15,11 @@ import java.math.BigDecimal;
  */
 public class MoedaFomatter {
 
+    public static String format(Moeda moeda, Double valor) {
+        Double v = valor == null ? 0 : valor == 0 ? 0 : valor;
+        return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(v);
+    }
+
     public static String format(Moeda moeda, BigDecimal valor) {
         BigDecimal v = valor == null ? BigDecimal.ZERO : valor.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : valor;
         return NumberFormat.getCurrencyInstance(moeda.getBandeira().getLocal()).format(v);
@@ -22,6 +27,11 @@ public class MoedaFomatter {
 
     public static String format(BigDecimal valor) {
         BigDecimal v = valor == null ? BigDecimal.ZERO : valor.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : valor;
+        return NumberFormat.getCurrencyInstance().format(v);
+    }
+
+    public static String format(Double valor) {
+        Double v = valor == null ? 0 : valor == 0 ? 0 : valor;
         return NumberFormat.getCurrencyInstance().format(v);
     }
 

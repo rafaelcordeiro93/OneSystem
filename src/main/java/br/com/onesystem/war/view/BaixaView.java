@@ -132,17 +132,17 @@ public class BaixaView implements Serializable {
 
     public void selecionaDespesaProvisionada(SelectEvent event) {
         DespesaProvisionada despesaSelecionada = (DespesaProvisionada) event.getObject();
-        this.baixa.setPerfilDeValor(despesaSelecionada);
+        this.baixa.setMovimentoFixo(despesaSelecionada);
     }
 
     public void selecionaReceitaProvisionada(SelectEvent event) {
         ReceitaProvisionada receitaSelecionada = (ReceitaProvisionada) event.getObject();
-        this.baixa.setPerfilDeValor(receitaSelecionada);
+        this.baixa.setMovimentoFixo(receitaSelecionada);
     }
 
     public void selecionaTitulo(SelectEvent event) {
         Titulo tituloSelecionado = (Titulo) event.getObject();
-        this.baixa.setPerfilDeValor(tituloSelecionado);
+        this.baixa.setParcela(tituloSelecionado);
     }
 
     public void selecionaRecepcao(SelectEvent event) {

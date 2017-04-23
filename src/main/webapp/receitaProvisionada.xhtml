@@ -35,8 +35,8 @@
                                     <p:column headerText="#{l.Pessoa}" sortBy="#{receitaProvisionada.pessoa.nome}" filterBy="#{receitaProvisionada.pessoa.nome}" footerText="#{l.Pessoa}" >
                                         <h:outputText value="#{receitaProvisionada.pessoa.nome}" />
                                     </p:column>
-                                    <p:column headerText="#{l.Receita}" sortBy="#{receitaProvisionada.receita.nome}" filterBy="#{receitaProvisionada.receita.nome}" footerText="#{l.Receita}" >
-                                        <h:outputText value="#{receitaProvisionada.receita.nome}" />
+                                    <p:column headerText="#{l.Receita}" sortBy="#{receitaProvisionada.tipoReceita.nome}" filterBy="#{receitaProvisionada.tipoReceita.nome}" footerText="#{l.Receita}" >
+                                        <h:outputText value="#{receitaProvisionada.tipoReceita.nome}" />
                                     </p:column>
                                     <p:column headerText="#{l.Valor}" sortBy="#{receitaProvisionada.valor}" filterBy="#{receitaProvisionada.valor}" footerText="#{l.Valor}" >
                                         <h:outputText value="#{despesaProvisionada.moeda.sigla} #{receitaProvisionada.valor}" />
