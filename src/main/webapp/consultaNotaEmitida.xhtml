@@ -129,8 +129,8 @@
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.valoresAVista.boletoCartao.valor eq null ? consultaNotaEmitidaView.zero : consultaNotaEmitidaView.notaEmitida.valoresAVista.boletoCartao.valor}" />    
                                 </div>                           
 
-                                <p:dataTable var="transacao" value="#{consultaNotaEmitidaView.notaEmitida.parcelas}" 
-                                             styleClass="ui-g-2" rowKey="#{transacao.id}"
+                                <p:dataTable var="parcela" value="#{consultaNotaEmitidaView.notaEmitida.parcelas}" 
+                                             styleClass="ui-g-2" rowKey="#{parcela.id}"
                                              paginatorAlwaysVisible="false" rows="12" paginator="true"
                                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                              emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
@@ -140,30 +140,30 @@
                                     </f:facet>
 
                                     <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
-                                        <h:outputText value="#{transacao.id}" />
+                                        <h:outputText value="#{parcela.id}" />
                                     </p:column>
                                     <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
-                                        <h:outputText value="#{consultaNotaEmitidaView.getOrigem(transacao)}"/>
+                                        <h:outputText value="#{consultaNotaEmitidaView.getOrigem(parcela)}"/>
                                     </p:column>
                                     <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                  
-                                        <h:outputText value="#{transacao.vencimentoFormatadoSemHoras}"/>
+                                        <h:outputText value="#{parcela.vencimentoFormatadoSemHoras}"/>
                                     </p:column>
                                     <p:column headerText="#{l.Valor}" width="12%">
-                                        <h:outputText value="#{transacao.valorFormatado}"/>                               
+                                        <h:outputText value="#{parcela.valorFormatado}"/>                               
                                     </p:column>                                   
                                     <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
-                                        <h:outputText value="#{transacao.detalhes}"/>
+                                        <h:outputText value="#{parcela.detalhes}"/>
                                     </p:column>
                                     <p:column headerText="#{l.Dias}">                                
-                                        <h:outputText value="#{transacao.dias}"/>
+                                        <h:outputText value="#{parcela.dias}"/>
                                     </p:column>
                                     <p:column headerText="#{l.Dia_Semana}">
-                                        <h:outputText value="#{transacao.diaDaSemana}"/>
+                                        <h:outputText value="#{parcela.diaDaSemana}"/>
                                     </p:column>
 
                                     <p:column headerText="+" width="5%" style="text-align: center;">
                                         <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
-                                                         action="#{consultaNotaEmitidaView.consultaParcela(transacao)}" update="@form">
+                                                         action="#{consultaNotaEmitidaView.consultaParcela(parcela)}" update="@form">
                                         </p:commandButton>
                                     </p:column>
 
