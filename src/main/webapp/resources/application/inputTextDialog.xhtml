@@ -26,6 +26,7 @@
         <composite:attribute name="editVisible" required="false" default="true" shortDescription="Define se a edição será habilitada." />
         <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
         <composite:attribute name="styleClassDiv" shortDescription="Estilo CSS aplicado  com classes a div renderizado para o componente."/>
+        <composite:clientBehavior event="change" targets="#{cc.attrs.id}-txt" name="change"/>
         <composite:clientBehavior event="itemSelect" targets="#{cc.attrs.id}-txt" name="itemSelect"/>
     </composite:interface>
 
@@ -37,7 +38,7 @@
             <p:autoComplete id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" var="#{cc.attrs.var}" itemValue="#{cc.attrs.itemValue}" itemLabel="#{cc.attrs.itemLabel}" completeMethod="#{cc.attrs.dialog.complete}" 
                             forceSelection="true"  maxResults="10" inputStyleClass="#{cc.attrs.editVisible eq false ? 'PaddingRight22px' : 'PaddingRight42px'} #{cc.attrs.styleClass}"  inputStyle="#{cc.attrs.style}" emptyMessage="#{l.Nao_Ha_Registros}" readonly="#{cc.attrs.readonly}" >
                 <f:converter converterId="#{cc.attrs.converter}"/>
-                <p:ajax event="itemSelect" update="#{cc.attrs.update}"/>
+                <p:ajax event="change" update="#{cc.attrs.update}"/>
                 <p:column>
                     <h:outputText value="#{cc.attrs.itemValue.id}" />
                 </p:column>                
