@@ -142,7 +142,9 @@ public abstract class Nota implements Serializable {
     }
 
     public List<Parcela> getParcelas() {
-        parcelas.sort(Comparator.comparingLong(Parcela::getDias));
+        if (parcelas != null) {
+            parcelas.sort(Comparator.comparingLong(Parcela::getDias));
+        }
         return parcelas;
     }
 
@@ -155,7 +157,11 @@ public abstract class Nota implements Serializable {
     }
 
     public BigDecimal getTotalParcelas() {
+        if (parcelas != null) {
         return parcelas.stream().map(Parcela::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }else{
+            return BigDecimal.ZERO;
+        }
     }
 
     public void setParcelas(List<Parcela> parcelas) {
@@ -173,7 +179,11 @@ public abstract class Nota implements Serializable {
     }
 
     public BigDecimal getTotalNota() {
-        return getTotalItens().add(valoresAVista.getAcrescimo().add(valoresAVista.getFrete().add(valoresAVista.getDespesaCobranca()))).subtract(valoresAVista.getDesconto());
+        BigDecimal a = valoresAVista.getAcrescimo() == null ? BigDecimal.ZERO : valoresAVista.getAcrescimo();
+        BigDecimal f = valoresAVista.getFrete() == null ? BigDecimal.ZERO : valoresAVista.getFrete();
+        BigDecimal c = valoresAVista.getDespesaCobranca() == null ? BigDecimal.ZERO : valoresAVista.getDespesaCobranca();
+        BigDecimal d = valoresAVista.getDesconto() == null ? BigDecimal.ZERO : valoresAVista.getDesconto();
+        return getTotalItens().add(a.add(f.add(c))).subtract(d);
     }
 
     @Override
