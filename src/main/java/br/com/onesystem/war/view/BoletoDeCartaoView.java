@@ -3,6 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -47,7 +48,7 @@ public class BoletoDeCartaoView extends BasicMBImpl<BoletoDeCartao, BoletoDeCart
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof NotaEmitida) {
-            e.setNotaEmitida((NotaEmitida) event.getObject());
+            e.setNota((Nota) event.getObject());
         } else if (obj instanceof Cartao) {
             e.setCartao((Cartao) event.getObject());
         } else if (obj instanceof BoletoDeCartao) {

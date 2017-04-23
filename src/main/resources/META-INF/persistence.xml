@@ -43,9 +43,12 @@
     <class>br.com.onesystem.domain.AjusteDeEstoque</class>
     <class>br.com.onesystem.domain.Estoque</class>
     <class>br.com.onesystem.domain.ContaDeEstoque</class>
+    <class>br.com.onesystem.domain.Nota</class>
     <class>br.com.onesystem.domain.NotaEmitida</class>
+    <class>br.com.onesystem.domain.NotaRecebida</class>
     <class>br.com.onesystem.domain.ListaDePreco</class>
     <class>br.com.onesystem.domain.ItemEmitido</class>
+    <class>br.com.onesystem.domain.ItemRecebido</class>
     <class>br.com.onesystem.domain.PrecoDeItem</class>
     <class>br.com.onesystem.domain.Configuracao</class>
     <class>br.com.onesystem.domain.TabelaDeComissao</class>

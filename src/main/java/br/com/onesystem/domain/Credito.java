@@ -53,19 +53,19 @@ public class Credito implements Serializable {
     @Column(nullable = false)
     private BigDecimal valor;
     @OneToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     @Enumerated(EnumType.STRING)
     private TipoContabil tipoContabil;
 
     public Credito() {
     }
 
-    public Credito(Long id, Date emissao, Pessoa pessoa, BigDecimal valor, NotaEmitida notaEmitida, TipoContabil tipoContabil) throws DadoInvalidoException {
+    public Credito(Long id, Date emissao, Pessoa pessoa, BigDecimal valor, Nota nota, TipoContabil tipoContabil) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.pessoa = pessoa;
         this.valor = valor;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         this.tipoContabil = tipoContabil;
         ehValido();
     }
@@ -91,8 +91,8 @@ public class Credito implements Serializable {
         return valor;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
     public TipoContabil getTipoContabil() {
@@ -100,8 +100,8 @@ public class Credito implements Serializable {
     }
     
      public String getValorFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getValor());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getValor());
         } else {
             return MoedaFomatter.format(getValor());
         }

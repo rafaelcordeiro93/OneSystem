@@ -3,7 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.builder.ChequeBuilder;
@@ -18,7 +18,7 @@ import java.util.Date;
 public class ChequeBV implements Serializable {
 
     private Long id;
-    private NotaEmitida venda;
+    private Nota nota;
     private BigDecimal valor;
     private Date emissao = new Date();
     private Date vencimento = new Date();
@@ -40,7 +40,7 @@ public class ChequeBV implements Serializable {
 
     public ChequeBV(Cheque c) {
         this.id = c.getId();
-        this.venda = c.getNotaEmitida();
+        this.nota = c.getNota();
         this.valor = c.getValor();
         this.emissao = c.getEmissao();
         this.vencimento = c.getVencimento();
@@ -72,8 +72,8 @@ public class ChequeBV implements Serializable {
         this.id = id;
     }
 
-    public NotaEmitida getVenda() {
-        return venda;
+    public Nota getVenda() {
+        return nota;
     }
 
     public TipoLancamento getTipoLancamento() {
@@ -84,8 +84,8 @@ public class ChequeBV implements Serializable {
         this.tipoLancamento = tipoLancamento;
     }
 
-    public void setVenda(NotaEmitida venda) {
-        this.venda = venda;
+    public void setVenda(Nota venda) {
+        this.nota = venda;
     }
 
     public BigDecimal getValor() {
@@ -225,14 +225,14 @@ public class ChequeBV implements Serializable {
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new ChequeBuilder().comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
+        return new ChequeBuilder().comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
                 .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
-        return new ChequeBuilder().comID(id).comNotaEmitida(venda).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
+        return new ChequeBuilder().comID(id).comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
                 .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).construir();

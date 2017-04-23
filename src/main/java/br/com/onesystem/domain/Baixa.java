@@ -112,7 +112,7 @@ public class Baixa implements Serializable, Movimento {
     private Recepcao recepcao;
 
     @ManyToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
 
     private boolean cancelada = false;
 
@@ -124,7 +124,7 @@ public class Baixa implements Serializable, Movimento {
             BigDecimal desconto, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, Parcela parcela, NotaEmitida notaEmitida, MovimentoFixo movimentoFixo) throws DadoInvalidoException {
+            Recepcao recepcao, Parcela parcela, Nota nota, MovimentoFixo movimentoFixo) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
         this.cancelada = cancelada;
@@ -145,7 +145,7 @@ public class Baixa implements Serializable, Movimento {
         this.transferencia = transferencia;
         this.recepcao = recepcao;
         this.parcela = parcela;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         this.movimentoFixo = movimentoFixo;
         ehValido();
     }
@@ -205,8 +205,8 @@ public class Baixa implements Serializable, Movimento {
         return conhecimentoDeFrete;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
     public String getSaldoFormatado(BigDecimal saldoAtual) {
@@ -247,8 +247,8 @@ public class Baixa implements Serializable, Movimento {
         } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             if (recepcao != null) {
                 return geraMovimentacaoEntradaRecepcao(msg);
-            } else if (notaEmitida != null) {
-                return geraMovimentacaoEntradaNotaEmitida(msg);
+            } else if (nota != null) {
+                return geraMovimentacaoEntradaNota(msg);
             } else if (transferencia != null) {
                 return geraMovimentacaoEntradaTransferencia(msg);
 //            } else if (parcela instanceof DespesaProvisionada) {
@@ -281,8 +281,8 @@ public class Baixa implements Serializable, Movimento {
         return this.receita.getNome() + " - " + str;
     }
 
-    private String geraMovimentacaoEntradaNotaEmitida(BundleUtil msg) {
-        return msg.getMessage("Nota_Emitida") + " - " + notaEmitida.getId() + " - " + this.getPessoa();
+    private String geraMovimentacaoEntradaNota(BundleUtil msg) {
+        return msg.getMessage("Nota_Emitida") + " - " + nota.getId() + " - " + this.getPessoa();
     }
 
     private String geraMovimentacaoEntradaTransferencia(BundleUtil msg) {
@@ -426,8 +426,8 @@ public class Baixa implements Serializable, Movimento {
         return multas;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     @Override
@@ -507,8 +507,8 @@ public class Baixa implements Serializable, Movimento {
                 + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="
                 + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null)
                 + ", transferencia=" + (transferencia != null ? transferencia.getId() : null)
-                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", notaEmitida="
-                + (notaEmitida != null ? notaEmitida.getId() : null) + ", cancelada=" + cancelada + '}';
+                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", nota="
+                + (nota != null ? nota.getId() : null) + ", cancelada=" + cancelada + '}';
     }
 
 }

@@ -20,31 +20,31 @@ import javax.persistence.SequenceGenerator;
  * @author Rafael
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_NOTAEMITIDA",
-        sequenceName = "SEQ_NOTAEMITIDA")
-public class NotaEmitida extends Nota implements Serializable {
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_NOTARECEBIDA",
+        sequenceName = "SEQ_NOTARECEBIDA")
+public class NotaRecebida extends Nota implements Serializable {
 
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<ItemEmitido> itensEmitidos;
+    @OneToMany(mappedBy = "notaRecebida", cascade = {CascadeType.ALL})
+    private List<ItemRecebido> itensRecebidos;
 
-    public NotaEmitida() {
+    public NotaRecebida() {
     }
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
+    public NotaRecebida(Long id, Pessoa pessoa, Operacao operacao, List<ItemRecebido> itensRecebidos,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
             Credito credito, List<Parcela> parcelas, Moeda moedaPadrao) throws DadoInvalidoException {
         super(id, pessoa, operacao, formaDeRecebimento, listaDePreco, valoresAVista, baixaDinheiro, emissao, cancelada, credito, parcelas, moedaPadrao);
-        this.itensEmitidos = itensEmitidos;
+        this.itensRecebidos = itensRecebidos;
     }
 
-    public List<ItemEmitido> getItensEmitidos() {
-        return itensEmitidos;
+    public List<ItemRecebido> getItensRecebidos() {
+        return itensRecebidos;
     }
 
     @Override
     public BigDecimal getTotalItens() {
-        return itensEmitidos.stream().map(ItemEmitido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return itensRecebidos.stream().map(ItemRecebido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class NotaEmitida extends Nota implements Serializable {
                 + ", emissao=" + getEmissao()
                 + ", cancelada=" + isCancelada()
                 + ", credito=" + getCredito()
-                + ", itensEmitidos=" + getItensEmitidos()
+                + ", itensRecebidos=" + getItensRecebidos()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
                 + ", listaDePreco=" + getListaDePreco() + ", valoresAVista=" + getValoresAVista()
                 + ", baixaDinheiro=" + getBaixaDinheiro()

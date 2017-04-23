@@ -97,7 +97,7 @@ public class FormaDeRecebimento implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
     @OneToMany(mappedBy = "formaDeRecebimento")
-    private List<NotaEmitida> notasEmitidas;
+    private List<Nota> notas;
 
     public FormaDeRecebimento() {
     }
@@ -198,8 +198,8 @@ public class FormaDeRecebimento implements Serializable {
         return periodicidade;
     }
 
-    public List<NotaEmitida> getNotasEmitidas() {
-        return notasEmitidas;
+    public List<Nota> getNotas() {
+        return notas;
     }
 
     public TipoPeriodicidade getTipoPeriodicidade() {

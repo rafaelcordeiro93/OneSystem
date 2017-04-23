@@ -81,7 +81,7 @@ public class Operacao implements Serializable {
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "operacoes")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
     @OneToMany(mappedBy = "operacao")
-    private List<NotaEmitida> notasEmitidas;
+    private List<Nota> notas;
     @OneToMany(mappedBy = "operacao")
     private List<AjusteDeEstoque> ajustes;
 

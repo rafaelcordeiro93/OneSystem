@@ -87,13 +87,13 @@ public abstract class Parcela implements Serializable {
     private Date vencimento;
 
     @ManyToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
 
     public Parcela() {
     }
 
     public Parcela(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, NotaEmitida notaEmitida) throws DadoInvalidoException {
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -103,7 +103,7 @@ public abstract class Parcela implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
         this.vencimento = vencimento;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         ehAbstracaoValida();
     }
 
@@ -142,12 +142,12 @@ public abstract class Parcela implements Serializable {
         return vencimento;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     public Long getDias() {

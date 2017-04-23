@@ -5,7 +5,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ValoresAVista;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ChequeBuilder {
 
     private Long id;
-    private NotaEmitida venda;
+    private Nota venda;
     private BigDecimal valor;
     private Date emissao = new Date();
     private Date vencimento = new Date();
@@ -48,7 +48,7 @@ public class ChequeBuilder {
         return this;
     }
 
-    public ChequeBuilder comNotaEmitida(NotaEmitida venda) {
+    public ChequeBuilder comNota(Nota venda) {
         this.venda = venda;
         return this;
     }

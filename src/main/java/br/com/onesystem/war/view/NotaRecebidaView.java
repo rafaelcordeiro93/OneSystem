@@ -17,9 +17,9 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemRecebido;
 import br.com.onesystem.domain.ListaDePreco;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Pessoa;
@@ -48,8 +48,8 @@ import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.ValoresAVistaBV;
-import br.com.onesystem.war.builder.ItemEmitidoBV;
-import br.com.onesystem.war.builder.NotaEmitidaBV;
+import br.com.onesystem.war.builder.ItemRecebidoBV;
+import br.com.onesystem.war.builder.NotaRecebidaBV;
 import br.com.onesystem.war.builder.ParcelaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -80,21 +80,21 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
+public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> implements Serializable {
 
     private ValoresAVistaBV valoresAVista;
     private CreditoBV creditoBV;
-    private NotaEmitida notaEmitidaSelecionada;
-    private NotaEmitidaBV notaEmitida;
-    private ItemEmitidoBV itemEmitido;
-    private ItemEmitido itemEmitidoSelecionado;
+    private NotaRecebida notaRecebidaSelecionada;
+    private NotaRecebidaBV notaRecebida;
+    private ItemRecebidoBV itemRecebido;
+    private ItemRecebido itemRecebidoSelecionado;
     private EstoqueBV estoqueBV;
     private Configuracao configuracao;
     private CotacaoValores cotacaoValoresSelecionado;
     private List<Cotacao> cotacaoLista;
     private List<CotacaoValores> cotacoes;
     private List<ParcelaBV> parcelas;
-    private List<ItemEmitido> itensEmitidos;
+    private List<ItemRecebido> itensRecebidos;
     private ParcelaBV parcelaSelecionada;
     private ParcelaBV parcelaBV;
     private BoletoDeCartaoBV boletoDeCartao;
@@ -127,15 +127,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     public void limparJanela() {
-        notaEmitida = new NotaEmitidaBV();
-        notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
+        notaRecebida = new NotaRecebidaBV();
+        notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
         creditoBV = new CreditoBV();
-        itemEmitido = new ItemEmitidoBV();
-        itensEmitidos = new ArrayList<>();
+        itemRecebido = new ItemRecebidoBV();
+        itensRecebidos = new ArrayList<>();
         valoresAVista = new ValoresAVistaBV(cotacao);
         boletoDeCartao = new BoletoDeCartaoBV();
         parcelas = new ArrayList<>();
-        notaEmitidaSelecionada = null;
+        notaRecebidaSelecionada = null;
         cheque = new ChequeBV();
         inicializaCotacoes();
         limparChequeEntrada();
@@ -161,14 +161,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     // --------------------- Fim Inicializa Janela ----------------------------
     // -------------- Operações para criação da entidade ----------------------   
-    public void geraItensEmitidos() {
+    public void geraItensRecebidos() {
         try {
-            if (!itensEmitidos.isEmpty()) {
-                notaEmitida.setItensEmitidos(new ArrayList<ItemEmitido>());
-                notaEmitida.setEmissao(new Date());
-                for (ItemEmitido ie : itensEmitidos) {
-                    ItemEmitidoBV ieBV = new ItemEmitidoBV(ie);
-                    notaEmitida.getItensEmitidos().add(ieBV.construir());
+            if (!itensRecebidos.isEmpty()) {
+                notaRecebida.setItensRecebidos(new ArrayList<ItemRecebido>());
+                notaRecebida.setEmissao(new Date());
+                for (ItemRecebido ie : itensRecebidos) {
+                    ItemRecebidoBV ieBV = new ItemRecebidoBV(ie);
+                    notaRecebida.getItensRecebidos().add(ieBV.construir());
                 }
                 validaAFaturar();
             } else {
@@ -196,7 +196,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         if (valoresAVista.getDinheiro() != null && valoresAVista.getDinheiro().compareTo(BigDecimal.ZERO) > 0) {
             recalculaCotacoes(); // abre a janela de cotações
         } else {
-            notaEmitida.setBaixas(null);
+            notaRecebida.setBaixas(null);
             geraValoresAVista();
         }
     }
@@ -235,7 +235,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
 
             //Add ValoresAVista a nota emitida
-            notaEmitida.setValoresAVista(v);
+            notaRecebida.setValoresAVista(v);
             geraParcelas();
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -254,7 +254,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
             //Gera as parcelas de acordo a sua modalidade.
             for (ParcelaBV p : parcelas) {
-                p.setEmissao(notaEmitida.getEmissao());
+                p.setEmissao(notaRecebida.getEmissao());
                 switch (p.getTipoFormaDeRecebimentoParcela()) {
                     case CARTAO:
                         parcelasBV.add(p.construirBoletoDeCartao());
@@ -271,7 +271,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
 
             // Inclui as parcelas dentro da nota emitida.
-            notaEmitida.setParcelas(parcelasBV.isEmpty() ? null : parcelasBV);
+            notaRecebida.setParcelas(parcelasBV.isEmpty() ? null : parcelasBV);
             finalizar();
         } catch (DadoInvalidoException die) {
             ErrorMessage.print(new BundleUtil().getMessage("Erro_ao_gerar_parcelas"));
@@ -286,10 +286,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
 
             //Constroi a nota
-            NotaEmitida ne = notaEmitida.construirComID();
+            NotaRecebida ne = notaRecebida.construirComID();
 
             //Inclui a nota nos itens
-            preparaInclusaoDeItemEmitido(ne);
+            preparaInclusaoDeItemRecebido(ne);
 
             //Inclui a nota nas cotacoes
             preparaInclusaoDeCotacoes(ne);
@@ -314,11 +314,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     /**
      * Prepara valor de recebimento e insere a entidade no banco de dados
      *
-     * @param ne Nota Emitida pronta para ser persistida
+     * @param ne Nota Recebida pronta para ser persistida
      * @throws br.com.onesystem.exception.DadoInvalidoException
      */
-    public void add(NotaEmitida ne) throws ConstraintViolationException, DadoInvalidoException {
-        new AdicionaDAO<NotaEmitida>().adiciona(ne);
+    public void add(NotaRecebida ne) throws ConstraintViolationException, DadoInvalidoException {
+        new AdicionaDAO<NotaRecebida>().adiciona(ne);
         InfoMessage.adicionado();
         limparJanela();
     }
@@ -326,7 +326,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     /**
      * Inclui a nota nas parcelas
      */
-    private void preparaInclusaoDeParcelas(NotaEmitida ne) throws EDadoInvalidoException {
+    private void preparaInclusaoDeParcelas(NotaRecebida ne) throws EDadoInvalidoException {
 
         //Inclui a nota nos Cartoes
         if (ne.getParcelas() != null) {
@@ -348,7 +348,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     /**
      * Inclui a nota nos valores a vista
      */
-    private void preparaInclusaoDeValoresAVista(NotaEmitida ne) {
+    private void preparaInclusaoDeValoresAVista(NotaRecebida ne) {
         //Inclui a nota no valor a vista
         if (ne.getValoresAVista() != null) {
             ne.getValoresAVista().setNota(ne);
@@ -370,7 +370,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     /**
      * Inclui a nota nas cotações
      */
-    private void preparaInclusaoDeCotacoes(NotaEmitida ne) {
+    private void preparaInclusaoDeCotacoes(NotaRecebida ne) {
         if (ne.getBaixaDinheiro() != null) {
             for (Baixa b : ne.getBaixaDinheiro()) {
                 b.setNota(ne);
@@ -379,7 +379,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     /**
-     * Prepara inclusão do ItemEmitido na tabela e prepara a inclusão dos dados
+     * Prepara inclusão do ItemRecebido na tabela e prepara a inclusão dos dados
      * no estoque.
      *
      * Obs: Essa preparação deve excluir o id de cada entidade para que o
@@ -387,11 +387,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      * a entidade PAI no cadastro para que o hibernate faça o relacionamento
      * automático das entidades.
      */
-    private void preparaInclusaoDeItemEmitido(NotaEmitida ne) throws ConstraintViolationException, DadoInvalidoException {
-        for (ItemEmitido ie : ne.getItensEmitidos()) {
-            ie.preparaInclusao(ne); // Informa a Nota Emitida.
+    private void preparaInclusaoDeItemRecebido(NotaRecebida ne) throws ConstraintViolationException, DadoInvalidoException {
+        for (ItemRecebido ie : ne.getItensRecebidos()) {
+            ie.preparaInclusao(ne); // Informa a Nota Recebida.
             for (Estoque estoque : ie.getEstoques()) {
-                estoque.preparaInclusaoDe(ie, notaEmitida.getEmissao()); // Exclui ID do Estoque e informa o Item Emitido.
+                estoque.preparaInclusaoDe(ie, notaRecebida.getEmissao()); // Exclui ID do Estoque e informa o Item Recebido.
             }
         }
     }
@@ -400,9 +400,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         List<Estoque> estoquesBV = new ArrayList<>();
         try {
             for (QuantidadeDeItemBV q : lista) {
-                for (OperacaoDeEstoque operacaoDeEstoque : notaEmitida.getOperacao().getOperacaoDeEstoque()) {
+                for (OperacaoDeEstoque operacaoDeEstoque : notaRecebida.getOperacao().getOperacaoDeEstoque()) {
                     estoqueBV = new EstoqueBV(q.getSaldoDeEstoque().getDeposito(), q.getQuantidade(),
-                            itemEmitido.getItem(), operacaoDeEstoque, null, notaEmitida.getEmissao(), null);
+                            itemRecebido.getItem(), operacaoDeEstoque, null, notaRecebida.getEmissao(), null);
                     // Adiciona no estoque
                     estoquesBV.add(estoqueBV.construir());
                 }
@@ -457,14 +457,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         for (CotacaoValores c : cotacoes) {
             if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
                 Baixa baixa = new BaixaBuilder().cancelada(false)
-                        .comCotacao(c.getCotacao()).comEmissao(notaEmitida.getEmissao())
-                        .comNaturezaFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira())
-                        .comPessoa(notaEmitida.getPessoa()).comReceita(notaEmitida.getOperacao().getVendaAVista())
+                        .comCotacao(c.getCotacao()).comEmissao(notaRecebida.getEmissao())
+                        .comNaturezaFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira())
+                        .comPessoa(notaRecebida.getPessoa()).comReceita(notaRecebida.getOperacao().getVendaAVista())
                         .comValor(c.getValorAReceber()).construir();
                 baixas.add(baixa);
             }
         }
-        notaEmitida.setBaixas(baixas);
+        notaRecebida.setBaixas(baixas);
 
         geraValoresAVista();
     }
@@ -472,7 +472,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Fim Operações para criação da entidade ------------------
     // ---------------------- Forma de Recebimento ----------------------------
     private void calculaTotaisFormaDeRecebimento() {
-        FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
+        FormaDeRecebimento formaDeRecebimento = notaRecebida.getFormaDeRecebimento();
         if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
                 && getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal cem = new BigDecimal(100);
@@ -483,7 +483,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     private void incluiValorDeFormaDeRecebimento(BigDecimal resultado) {
-        switch (notaEmitida.getFormaDeRecebimento().getFormaPadraoDeEntrada()) {
+        switch (notaRecebida.getFormaDeRecebimento().getFormaPadraoDeEntrada()) {
             case DINHEIRO:
                 valoresAVista.setDinheiro(resultado);
                 break;
@@ -508,11 +508,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // ----------------------------- Itens ------------------------------------
     public void addItemNaLista() {
         try {
-            itemEmitido.setId(getCodigoItem());
-            ItemEmitido ie = itemEmitido.construirComId();
+            itemRecebido.setId(getCodigoItem());
+            ItemRecebido ie = itemRecebido.construirComId();
 
-            itensEmitidos.add(ie);
-            limparItemEmitido();
+            itensRecebidos.add(ie);
+            limparItemRecebido();
 
             recalculaValores();
         } catch (DadoInvalidoException ex) {
@@ -522,10 +522,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void updateItemNaLista() {
         try {
-            if (itemEmitidoSelecionado != null) {
-                itensEmitidos.set(itensEmitidos.indexOf(itemEmitidoSelecionado),
-                        itemEmitido.construirComId());
-                limparItemEmitido();
+            if (itemRecebidoSelecionado != null) {
+                itensRecebidos.set(itensRecebidos.indexOf(itemRecebidoSelecionado),
+                        itemRecebido.construirComId());
+                limparItemRecebido();
                 recalculaValores();
             }
         } catch (DadoInvalidoException ex) {
@@ -534,20 +534,20 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     public void deleteItemNaLista() {
-        if (itemEmitidoSelecionado != null) {
-            itensEmitidos.remove(itemEmitidoSelecionado);
-            limparItemEmitido();
+        if (itemRecebidoSelecionado != null) {
+            itensRecebidos.remove(itemRecebidoSelecionado);
+            limparItemRecebido();
             recalculaValores();
         }
     }
 
-    public void limparItemEmitido() {
-        itemEmitido = new ItemEmitidoBV();
-        itemEmitidoSelecionado = null;
+    public void limparItemRecebido() {
+        itemRecebido = new ItemRecebidoBV();
+        itemRecebidoSelecionado = null;
     }
 
     public String getTotalItensFormatado() {
-        if (itensEmitidos.isEmpty()) {
+        if (itensRecebidos.isEmpty()) {
             return "";
         } else {
             return configuracao.getMoedaPadrao().getSigla() + " " + NumberFormat.getNumberInstance().format(getTotalItens());
@@ -556,7 +556,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     private BigDecimal getTotalItens() {
         BigDecimal total = BigDecimal.ZERO;
-        for (ItemEmitido i : itensEmitidos) {
+        for (ItemRecebido i : itensRecebidos) {
             total = total.add(i.getTotal());
         }
         return total;
@@ -589,8 +589,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             if (valoresAVista.getAFaturar() != null && (valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0
                     || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0)) {
                 Integer numParcelas = valoresAVista.getParcelas(); //Número de parcelas
-                TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
-                Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
+                TipoPeriodicidade tipoPeridiocidade = notaRecebida.getFormaDeRecebimento().getTipoPeriodicidade();
+                Integer periodicidade = notaRecebida.getFormaDeRecebimento().getPeriodicidade();
 
                 if (numParcelas != null && numParcelas > 0) {
 
@@ -604,10 +604,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     parcelas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
                         parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
-                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
-                                .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
-                                .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
-                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
+                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaRecebida.getEmissao())
+                                .comTipoFormaDeRecebimentoParcela(notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
+                                .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
+                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comTipoLancamento(TipoLancamento.EMITIDA).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
@@ -632,8 +632,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Prepara e constroi cheque
             cheque.setId(getIdCheque());
-            cheque.setPessoa(notaEmitida.getPessoa());
-            cheque.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
+            cheque.setPessoa(notaRecebida.getPessoa());
+            cheque.setOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira());
             cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
             cheque.setTipoLancamento(TipoLancamento.EMITIDA);
             Cheque c = cheque.construirComID();
@@ -667,7 +667,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         if (parcela.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CARTAO) {
             for (ParcelaBV p : parcelas) {
                 if (p.getId().equals(parcela.getId())) {
-                    p.setCartao(notaEmitida.getFormaDeRecebimento().getCartao());
+                    p.setCartao(notaRecebida.getFormaDeRecebimento().getCartao());
                     p.setCodigoTransacao("000000");
                 }
             }
@@ -708,18 +708,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 RequestContext rc = RequestContext.getCurrentInstance();
                 rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
             } else {
-                notaEmitida.setOperacao((Operacao) obj);
+                notaRecebida.setOperacao((Operacao) obj);
             }
         } else if (obj instanceof Pessoa) {
-            notaEmitida.setPessoa((Pessoa) obj);
+            notaRecebida.setPessoa((Pessoa) obj);
         } else if (obj instanceof ListaDePreco) {
-            notaEmitida.setListaDePreco((ListaDePreco) obj);
+            notaRecebida.setListaDePreco((ListaDePreco) obj);
         } else if (obj instanceof Item) {
-            itemEmitido.setItem((Item) obj);
+            itemRecebido.setItem((Item) obj);
             atribuiItemASessao();
         } else if (obj instanceof FormaDeRecebimento) {
             FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
-            notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
+            notaRecebida.setFormaDeRecebimento(formaDeRecebimento);
             calculaTotaisFormaDeRecebimento();
             recalculaValores();
         } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
@@ -731,7 +731,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         } else if (obj instanceof List) {
             try {
                 List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
-                itemEmitido.setEstoque(criarBaixaDeEstoque(lista));
+                itemRecebido.setEstoque(criarBaixaDeEstoque(lista));
             } catch (DadoInvalidoException ex) {
                 ex.print();
             }
@@ -742,7 +742,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void atribuiItemASessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.setAttribute("onesystem.item.token", itemEmitido.getItem());
+        session.setAttribute("onesystem.item.token", itemRecebido.getItem());
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {
@@ -754,9 +754,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         parcelaBV.setCartao((Cartao) event.getObject());
     }
 
-    public void selecionaItemEmitido(SelectEvent event) {
-        this.itemEmitidoSelecionado = (ItemEmitido) event.getObject();
-        this.itemEmitido = new ItemEmitidoBV(itemEmitidoSelecionado);
+    public void selecionaItemRecebido(SelectEvent event) {
+        this.itemRecebidoSelecionado = (ItemRecebido) event.getObject();
+        this.itemRecebido = new ItemRecebidoBV(itemRecebidoSelecionado);
     }
 
     public void selecionarBanco(SelectEvent event) {
@@ -894,9 +894,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             boletoDeCartao.setCotacao(cotacao);
             boletoDeCartao.setSituacao(SituacaoDeCartao.ABERTO);
-            boletoDeCartao.setEmissao(notaEmitida.getEmissao());
-            boletoDeCartao.setPessoa(notaEmitida.getPessoa());
-            boletoDeCartao.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
+            boletoDeCartao.setEmissao(notaRecebida.getEmissao());
+            boletoDeCartao.setPessoa(notaRecebida.getPessoa());
+            boletoDeCartao.setOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira());
 
             if (boletoDeCartao.getCartao() != null) {
                 if (boletoDeCartao.getValor() == null || boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
@@ -1036,8 +1036,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     private Long getCodigoItem() {
         Long id = (long) 1;
-        if (!itensEmitidos.isEmpty()) {
-            for (ItemEmitido dp : itensEmitidos) {
+        if (!itensRecebidos.isEmpty()) {
+            for (ItemRecebido dp : itensRecebidos) {
                 if (dp.getId() >= id) {
                     id = dp.getId() + 1;
                 }
@@ -1079,50 +1079,50 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         this.valoresAVista = valoresAVista;
     }
 
-    public NotaEmitida getNotaEmitidaSelecionada() {
-        return notaEmitidaSelecionada;
+    public NotaRecebida getNotaRecebidaSelecionada() {
+        return notaRecebidaSelecionada;
     }
 
-    public void setNotaSelecionada(NotaEmitida notaEmitidaSelecionada) {
-        this.notaEmitidaSelecionada = notaEmitidaSelecionada;
+    public void setNotaSelecionada(NotaRecebida notaRecebidaSelecionada) {
+        this.notaRecebidaSelecionada = notaRecebidaSelecionada;
     }
 
-    public NotaEmitidaBV getNotaEmitida() {
-        return notaEmitida;
+    public NotaRecebidaBV getNotaRecebida() {
+        return notaRecebida;
     }
 
     public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
         List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<>();
-        if (notaEmitida.getFormaDeRecebimento().isParcelaEmCartao()) {
+        if (notaRecebida.getFormaDeRecebimento().isParcelaEmCartao()) {
             forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
         }
-        if (notaEmitida.getFormaDeRecebimento().isParcelaEmCheque()) {
+        if (notaRecebida.getFormaDeRecebimento().isParcelaEmCheque()) {
             forma.add(TipoFormaDeRecebimentoParcela.CHEQUE);
         }
-        if (notaEmitida.getFormaDeRecebimento().isParcelaEmConta()) {
+        if (notaRecebida.getFormaDeRecebimento().isParcelaEmConta()) {
             forma.add(TipoFormaDeRecebimentoParcela.TITULO);
         }
         return forma;
     }
 
-    public void setNota(NotaEmitidaBV notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(NotaRecebidaBV notaRecebida) {
+        this.notaRecebida = notaRecebida;
     }
 
-    public ItemEmitidoBV getItemEmitido() {
-        return itemEmitido;
+    public ItemRecebidoBV getItemRecebido() {
+        return itemRecebido;
     }
 
-    public void setItemEmitido(ItemEmitidoBV itemEmitido) {
-        this.itemEmitido = itemEmitido;
+    public void setItemRecebido(ItemRecebidoBV itemRecebido) {
+        this.itemRecebido = itemRecebido;
     }
 
-    public ItemEmitido getItemEmitidoSelecionado() {
-        return itemEmitidoSelecionado;
+    public ItemRecebido getItemRecebidoSelecionado() {
+        return itemRecebidoSelecionado;
     }
 
-    public void setItemEmitidoSelecionado(ItemEmitido itemEmitidoSelecionado) {
-        this.itemEmitidoSelecionado = itemEmitidoSelecionado;
+    public void setItemRecebidoSelecionado(ItemRecebido itemRecebidoSelecionado) {
+        this.itemRecebidoSelecionado = itemRecebidoSelecionado;
     }
 
     public EstoqueBV getEstoqueBV() {
@@ -1245,12 +1245,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         this.creditoBV = creditoBV;
     }
 
-    public List<ItemEmitido> getItensEmitidos() {
-        return itensEmitidos;
+    public List<ItemRecebido> getItensRecebidos() {
+        return itensRecebidos;
     }
 
-    public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
-        this.itensEmitidos = itensEmitidos;
+    public void setItensRecebidos(List<ItemRecebido> itensRecebidos) {
+        this.itensRecebidos = itensRecebidos;
     }
 
     //------------------- Fim Getters and Setters -----------------------------
