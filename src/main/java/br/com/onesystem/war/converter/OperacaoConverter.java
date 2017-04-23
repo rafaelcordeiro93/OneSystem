@@ -28,8 +28,7 @@ public class OperacaoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                OperacaoService service = (OperacaoService) fc.getExternalContext().getApplicationMap().get("operacaoService");
-                List<Operacao> lista = service.buscar();
+                List<Operacao> lista = new OperacaoService().buscar();
                 if (StringUtils.containsLetter(value)) {
                     for (Operacao operacao : lista) {
                         if (operacao.getNome().equals(value)) {

@@ -28,8 +28,7 @@ public class ListaDePrecoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ListaDePrecoService service = (ListaDePrecoService) fc.getExternalContext().getApplicationMap().get("listaDePrecoService");
-                List<ListaDePreco> lista = service.buscarListaPrecos();
+                List<ListaDePreco> lista = new ListaDePrecoService().buscarListaPrecos();
                 if (StringUtils.containsLetter(value)) {
                     for (ListaDePreco listaDePreco : lista) {
                         if (listaDePreco.getNome().equals(value)) {

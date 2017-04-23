@@ -2,14 +2,11 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.builder.CidadeBuilder;
-import br.com.onesystem.services.CharacterType;
-import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 
-public class CidadeBV implements Serializable {
+public class CidadeBV implements Serializable, BuilderView<Cidade> {
 
     private Long id;
     private String nome;   

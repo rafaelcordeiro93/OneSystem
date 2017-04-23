@@ -28,8 +28,7 @@ public class PessoaConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                PessoaService service = (PessoaService) fc.getExternalContext().getApplicationMap().get("pessoaService");
-                List<Pessoa> lista = service.buscarPessoas();
+                List<Pessoa> lista = new PessoaService().buscarPessoas();
                 if (StringUtils.containsLetter(value)) {
                     for (Pessoa pessoa : lista) {
                         if (pessoa.getNome().equals(value)) {

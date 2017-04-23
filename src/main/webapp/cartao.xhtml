@@ -41,7 +41,7 @@
                             <p:outputLabel value="#{l.Despesa}"/>
                             <h:panelGrid columns="2" style="margin-left: -1%">
                                 <p:inputText id="selecionaDespesa" size="23" readonly="true" value="#{cartaoView.cartao.despesa.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaDespesa}" process="@this" update="selecionaDespesa" />
                                 </p:commandButton>
                             </h:panelGrid>
@@ -49,7 +49,7 @@
                             <p:outputLabel value="#{l.Juros}"/>
                             <h:panelGrid columns="2" style="margin-left: -1%">
                                 <p:inputText id="selecionaJuros" size="23" readonly="true" value="#{cartaoView.cartao.juros.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{cartaoView.selecionaJuros}" process="@this" update="selecionaJuros" />
                                 </p:commandButton>
                             </h:panelGrid>

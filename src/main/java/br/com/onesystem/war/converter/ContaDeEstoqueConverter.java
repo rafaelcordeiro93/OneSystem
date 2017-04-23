@@ -28,8 +28,7 @@ public class ContaDeEstoqueConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ContaDeEstoqueService service = (ContaDeEstoqueService) fc.getExternalContext().getApplicationMap().get("contaDeEstoqueService");
-                List<ContaDeEstoque> lista = service.buscarContaDeEstoque();
+                List<ContaDeEstoque> lista = new ContaDeEstoqueService().buscarContaDeEstoque();
                 if (StringUtils.containsLetter(value)) {
                     for (ContaDeEstoque contaDeEstoque : lista) {
                         if (contaDeEstoque.getNome().equals(value)) {

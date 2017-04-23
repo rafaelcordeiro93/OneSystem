@@ -12,7 +12,7 @@
             <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.IVA}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.e}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
@@ -22,13 +22,13 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="cidadeid" dialog="#{selecaoIVAView}" mbView="#{iVAView}" value="#{iVAView.IVA.id}" update=":conteudo" />
+                            <a:inputTextDialog id="ivaID" value="#{iVAView.e}" dialog="#{selecaoIVAView}" mbView="#{iVAView}" update=":conteudo" var="iVA" converter="ivaBVConverter" itemLabel="#{iVA.id}" itemValue="#{iVA}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{iVAView.IVA.nome}" maxlength="60"/>
+                            <p:inputText value="#{iVAView.e.nome}" maxlength="60"/>
 
-                            <p:outputLabel value="#{l.IVA}"/>
-                            <p:inputText value="#{iVAView.IVA.iva}" maxlength="2"/>
+                            <p:outputLabel value="#{l.e}"/>
+                            <p:inputText value="#{iVAView.e.iva}" maxlength="2"/>
                         </p:panelGrid>
                         <div class="EmptyBox15"/>
 
@@ -42,7 +42,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{iVAView.update()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{iVAView.delete()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{iVAView.limparJanela()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{iVAView.desfazer()}"  styleClass="Mar2 orange-btn"  update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
 
                 </div>

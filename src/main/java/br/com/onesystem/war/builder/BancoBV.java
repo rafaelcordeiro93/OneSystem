@@ -3,17 +3,20 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.builder.BancoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 
-public class BancoBV implements Serializable {
+public class BancoBV implements Serializable, BuilderView<Banco> {
+
     private static final long serialVersionUID = -1361062802747818014L;
-                                                 
+
     private Long id;
     private String nome;
     private String site;
     private String codigo;
 
     public BancoBV(Banco bancoSelecionado) {
+        System.out.println("Banco: " + bancoSelecionado);
         this.id = bancoSelecionado.getId();
         this.nome = bancoSelecionado.getNome();
         this.codigo = bancoSelecionado.getCodigo();
@@ -23,6 +26,7 @@ public class BancoBV implements Serializable {
     public BancoBV() {
     }
 
+    @Override
     public Long getId() {
         return id;
     }
@@ -46,7 +50,7 @@ public class BancoBV implements Serializable {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-    
+
     public String getSite() {
         return site;
     }
@@ -61,5 +65,10 @@ public class BancoBV implements Serializable {
 
     public Banco construirComID() throws DadoInvalidoException {
         return new BancoBuilder().comID(id).comNome(nome).comSite(site).comCodigo(codigo).construir();
+    }
+
+    @Override
+    public String toString() {
+        return "BancoBV{" + "id=" + id + ", nome=" + nome + ", site=" + site + ", codigo=" + codigo + '}';
     }
 }

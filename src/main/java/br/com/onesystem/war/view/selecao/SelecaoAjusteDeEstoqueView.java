@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
-import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -9,15 +8,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@RequestScoped
 public class SelecaoAjusteDeEstoqueView extends BasicCrudMBImpl<AjusteDeEstoque> implements Serializable {
 
-    @ManagedProperty("#{ajusteDeEstoqueService}")
+    @Inject
     private AjusteDeEstoqueService service;
 
     @PostConstruct

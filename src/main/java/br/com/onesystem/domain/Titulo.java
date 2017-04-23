@@ -23,23 +23,16 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("TITULO")
-public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class Titulo extends Parcela implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;
-
-    @NotNull(message = "{unidadeFinanceira_not_null}")
-    @Enumerated(EnumType.STRING)
-    private OperacaoFinanceira unidadeFinanceira;
 
     @OneToOne
     private Recepcao recepcao;
 
     @ManyToOne
     private Cambio cambio;
-
-    @ManyToOne
-    private NotaEmitida notaEmitida;
 
     @NotNull(message = "{tipoFormaPagRec_not_null}")
     @Enumerated(EnumType.STRING)
@@ -52,24 +45,20 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
-            OperacaoFinanceira unidadeFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Cotacao cotacao, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
-        this.unidadeFinanceira = unidadeFinanceira;
+            OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
+            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
-        this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "historico", "valor", "cotacao");
-        List<String> camposTitulo = Arrays.asList("unidadeFinanceira");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
-        new ValidadorDeCampos<Titulo>().valida(this, camposTitulo);
+        List<String> camposTitulo = Arrays.asList("tipoFormaPagRec");
+        new ValidadorDeCampos<>().valida(this, camposTitulo);
     }
 
     public void cancelarSaldoDeBaixa(BigDecimal valor) {
@@ -117,10 +106,6 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
         return cambio;
     }
 
-    public OperacaoFinanceira getUnidadeFinanceira() {
-        return unidadeFinanceira;
-    }
-
     public TipoFormaPagRec getTipoFormaPagRec() {
         return tipoFormaPagRec;
     }
@@ -138,14 +123,6 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
         return getCotacao().getConta().getMoeda();
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
-    }
-
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
-    }
-
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
@@ -157,7 +134,11 @@ public class Titulo extends PerfilDeValor implements RelatorioContaAbertaImpl {
 
     @Override
     public String toString() {
-        return "Titulo{" + "saldo=" + saldo + ", unidadeFinanceira=" + unidadeFinanceira + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" +  (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+        return "Titulo{" + "saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
     }
-    
+
+    public String getDetalhes() {
+        return "Título: " + getId();
+    }
+
 }

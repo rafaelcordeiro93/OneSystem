@@ -11,19 +11,18 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BeanUtil;
 import br.com.onesystem.util.BundleUtil;
+import java.io.Serializable;
 import java.util.List;
-import javax.el.ELContext;
-import javax.el.ExpressionFactory;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.view.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.primefaces.atlantis.view.GuestPreferences;
 
-@ManagedBean
-@ViewScoped
-public class UsuarioLogadoUtil {
+@Named
+@ViewScoped //javax.faces.view.ViewScoped;
+public class UsuarioLogadoUtil implements Serializable{
 
     public boolean getPrivilegio(String tipo) throws DadoInvalidoException {
         FacesContext context = FacesContext.getCurrentInstance();

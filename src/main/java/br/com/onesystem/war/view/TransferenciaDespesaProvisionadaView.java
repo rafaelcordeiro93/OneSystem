@@ -2,13 +2,11 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TransferenciaDespesaProvisionada;
 import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
-import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.TransferenciaDespesaProvisionadaBV;
 import br.com.onesystem.war.service.TransferenciaDespesaProvisionadaService;
@@ -18,17 +16,13 @@ import br.com.onesystem.war.service.ConfiguracaoCambioService;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class TransferenciaDespesaProvisionadaView implements Serializable {
 
     private boolean panel;
@@ -103,7 +97,7 @@ public class TransferenciaDespesaProvisionadaView implements Serializable {
         try {
             TransferenciaDespesaProvisionada transferenciaDespesaProvisionadaExistente = transferenciaDespesaProvisionada.construirComID();
             if (transferenciaDespesaProvisionadaExistente.getId() != null) {
-                new AtualizaDAO<TransferenciaDespesaProvisionada>(TransferenciaDespesaProvisionada.class).atualiza(transferenciaDespesaProvisionadaExistente);
+                new AtualizaDAO<TransferenciaDespesaProvisionada>().atualiza(transferenciaDespesaProvisionadaExistente);
                 transferenciaDespesaProvisionadaLista.set(transferenciaDespesaProvisionadaLista.indexOf(transferenciaDespesaProvisionadaExistente),
                         transferenciaDespesaProvisionadaExistente);
                 if (transferenciaDespesaProvisionadasFiltradas != null && transferenciaDespesaProvisionadasFiltradas.contains(transferenciaDespesaProvisionadaExistente)) {

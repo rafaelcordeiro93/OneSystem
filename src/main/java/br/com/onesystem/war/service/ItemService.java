@@ -6,13 +6,8 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Item;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "itemService")
-@ApplicationScoped
 public class ItemService implements Serializable {
 
     public List<Item> buscarItems() {

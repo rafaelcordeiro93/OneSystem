@@ -3,18 +3,21 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class BoletoDeCartaoBV implements Serializable {
+public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCartao> {
 
     private Long id;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     private Cartao cartao;
     private Date emissao;
     private Date vencimento;
@@ -22,17 +25,21 @@ public class BoletoDeCartaoBV implements Serializable {
     private String codigoTransacao;
     private SituacaoDeCartao situacao;
     private Cotacao cotacao;
+    private Pessoa pessoa;
+    private OperacaoFinanceira operacaoFinanceira;
 
-    public BoletoDeCartaoBV(BoletoDeCartao boletoDeCartaoSelecionada) {
-        this.id = boletoDeCartaoSelecionada.getId();
-        this.notaEmitida = boletoDeCartaoSelecionada.getNotaEmitida();
-        this.cartao = boletoDeCartaoSelecionada.getCartao();
-        this.emissao = boletoDeCartaoSelecionada.getEmissao();
-        this.vencimento = boletoDeCartaoSelecionada.getVencimento();
-        this.valor = boletoDeCartaoSelecionada.getValor();
-        this.codigoTransacao = boletoDeCartaoSelecionada.getCodigoTransacao();
-        this.situacao = boletoDeCartaoSelecionada.getSituacao();
-        this.cotacao = boletoDeCartaoSelecionada.getCotacao();
+    public BoletoDeCartaoBV(BoletoDeCartao b) {
+        this.id = b.getId();
+        this.nota = b.getNota();
+        this.cartao = b.getCartao();
+        this.emissao = b.getEmissao();
+        this.vencimento = b.getVencimento();
+        this.valor = b.getValor();
+        this.codigoTransacao = b.getCodigoTransacao();
+        this.situacao = b.getSituacao();
+        this.cotacao = b.getCotacao();
+        this.pessoa = b.getPessoa();
+        this.operacaoFinanceira = b.getOperacaoFinanceira();
     }
 
     public BoletoDeCartaoBV() {
@@ -46,12 +53,12 @@ public class BoletoDeCartaoBV implements Serializable {
         this.id = id;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     public Cartao getCartao() {
@@ -110,16 +117,32 @@ public class BoletoDeCartaoBV implements Serializable {
         this.situacao = situacao;
     }
 
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+    }
+
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comNotaEmitida(notaEmitida).
-                comCartao(cartao).comEmissao(emissao).
+        return new BoletoDeCartaoBuilder().comNota(nota).
+                comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comVencimento(vencimento).comValor(valor).comCotacao(cotacao).
                 comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comID(id).
-                comNotaEmitida(notaEmitida).comCotacao(cotacao).
+                comNota(nota).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).
                 comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }

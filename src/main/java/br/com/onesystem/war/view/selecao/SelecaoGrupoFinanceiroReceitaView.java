@@ -8,20 +8,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.enterprise.context.RequestScoped
 public class SelecaoGrupoFinanceiroReceitaView extends BasicCrudMBImpl<GrupoFinanceiro> implements Serializable {
 
-    @ManagedProperty("#{grupoFinanceiroService}")
+    @Inject
     private GrupoFinanceiroService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarGruposDeReceitas();
+        beans = service.buscarGruposFInanceirosDoTipoReceitas();
     }
 
     public void abrirDialogo() {

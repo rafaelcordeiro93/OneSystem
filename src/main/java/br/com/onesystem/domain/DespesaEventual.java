@@ -1,11 +1,10 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
@@ -14,28 +13,22 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_EVENTUAL")
-public class DespesaEventual extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class DespesaEventual extends MovimentoFixo implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Despesa despesa;
+    private TipoDespesa tipoDespesa;
 
     public DespesaEventual() {
     }
 
-    public DespesaEventual(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
-            Cotacao cotacao, List<Baixa> baixa) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixa);
-        this.despesa = despesa;
-        ehValido();
+    public DespesaEventual(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date emissao, String historico,
+            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao);
+        this.tipoDespesa = tipoDespesa;
     }
 
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
-    }
-
-    public Despesa getDespesa() {
-        return despesa;
+    public TipoDespesa getTipoDespesa() {
+        return tipoDespesa;
     }
 
     public Moeda getMoeda() {
@@ -48,6 +41,11 @@ public class DespesaEventual extends PerfilDeValor implements RelatorioContaAber
 
     public BigDecimal getValorBaixado() {
         return BigDecimal.ZERO;
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoDespesa().getNome();
     }
 
     @Override

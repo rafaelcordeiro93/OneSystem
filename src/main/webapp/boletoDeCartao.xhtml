@@ -4,6 +4,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -19,45 +20,28 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputNumber id="boletocartaoid" size="26" value="#{boletoDeCartaoView.boletoDeCartao.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{boletoDeCartaoView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoBoletoDeCartaoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{boletoDeCartaoView.selecionaBoletoDeCartao}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputTextDialog id="boletocartaoid" value="#{boletoDeCartaoView.e}" dialog="#{selecaoBoletoDeCartaoView}" mbView="#{boletoDeCartaoView}" update=":conteudo" var="boletoDeCartao" converter="boletoDeCartaoBVConverter" itemLabel="#{boletoDeCartao.id}" itemValue="#{boletoDeCartao}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Venda}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="selecionaVenda" size="26" readonly="true" value="#{boletoDeCartaoView.boletoDeCartao.notaEmitida.id}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoContaViewView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{boletoDeCartaoView.selecionaVenda}" process="@this" update="selecionaVenda" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="selecionaNotaEmitida" value="#{boletoDeCartaoView.e.notaEmitida}" dialog="#{selecaoNotaEmitidaView}" mbView="#{boletoDeCartaoView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}"/>
 
                             <p:outputLabel value="#{l.Cartao}"/>
-                            <h:panelGrid columns="2" style="margin-left: -1%">
-                                <p:inputText id="selecionaCartao" size="26" readonly="true" value="#{boletoDeCartaoView.boletoDeCartao.cartao.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoCartaoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{boletoDeCartaoView.selecionaCartao}" process="@this" update="selecionaCartao" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="selecionaCartao" value="#{boletoDeCartaoView.e.cartao}" dialog="#{selecaoCartaoView}" mbView="#{boletoDeCartaoView}" var="cartao" converter="cartaoConverter" itemLabel="#{cartao.nome}" itemValue="#{cartao}"/>
 
                             <p:outputLabel value="#{l.Emissao}"/>
-                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 "  value="#{boletoDeCartaoView.boletoDeCartao.emissao}"/> 
+                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 "  value="#{boletoDeCartaoView.e.emissao}"/> 
 
                             <p:outputLabel value="#{l.Numero_Dias}"/>
-                            <pe:inputNumber id="boletoDeCartaoNumeroDias" maxValue="999" minValue="0"  decimalPlaces="0" value="#{boletoDeCartaoView.boletoDeCartao.dias}"/>
+                            <pe:inputNumber id="boletoDeCartaoNumeroDias" maxValue="999" minValue="0"  decimalPlaces="0" value="#{boletoDeCartaoView.e.dias}"/>
 
                             <p:outputLabel value="#{l.Valor}"/>
-                            <p:inputNumber id="boletoDeCartaoValor" maxValue="99999999.99" minValue="0.00" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{boletoDeCartaoView.boletoDeCartao.valor}"/>
+                            <p:inputNumber id="boletoDeCartaoValor" maxValue="99999999.99" minValue="0.00" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{boletoDeCartaoView.e.valor}"/>
 
                             <p:outputLabel value="#{l.Cod_Transacao}"/>
-                            <p:inputText  value="#{boletoDeCartaoView.boletoDeCartao.codigoTransacao}"/> 
+                            <p:inputText  value="#{boletoDeCartaoView.e.codigoTransacao}"/> 
 
                             <p:outputLabel value="#{l.Tipo_Situacao}"/>
-                            <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.boletoDeCartao.situacao}">
+                            <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.e.situacao}">
                                 <f:selectItems value="#{boletoDeCartaoView.tipoSituacao}" var="#{l.Tipo_Sitiacao}" itemValue="#{TipoSituacao}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
@@ -72,8 +56,6 @@
                     <p:commandButton value="#{l.Atualizar}" action="#{boletoDeCartaoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                     <p:commandButton value="#{l.Remover}" action="#{boletoDeCartaoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                     <p:commandButton value="#{l.Limpar}" action="#{boletoDeCartaoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    <p:commandButton value="#{l.Desfazer}" action="#{boletoDeCartaoView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />   
-
 
                 </div>
             </div>

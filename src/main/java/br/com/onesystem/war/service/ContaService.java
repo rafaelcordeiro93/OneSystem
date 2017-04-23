@@ -6,11 +6,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Moeda;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "contaService")
-@ApplicationScoped
 public class ContaService implements Serializable {
     
     public List<Conta> buscarContas(){

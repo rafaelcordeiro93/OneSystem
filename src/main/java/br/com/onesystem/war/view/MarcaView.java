@@ -1,15 +1,7 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.MarcaDAO;
-import br.com.onesystem.dao.MarcaDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Marca;
-import br.com.onesystem.domain.Marca;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.MarcaBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -18,17 +10,13 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
-import org.hibernate.exception.ConstraintViolationException;
+import javax.faces.view.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class MarcaView extends BasicMBImpl<Marca> implements Serializable {
-
-    private MarcaBV marca;
-    private Marca marcaSelecionada;
+@Named
+@ViewScoped //javax.faces.view.ViewScoped;
+public class MarcaView extends BasicMBImpl<Marca, MarcaBV> implements Serializable {
 
     @PostConstruct
     public void init() {
@@ -37,11 +25,9 @@ public class MarcaView extends BasicMBImpl<Marca> implements Serializable {
 
     public void add() {
         try {
-            Marca novoRegistro = marca.construir();
+            Marca novoRegistro = e.construir();
             if (validaMarcaExistente(novoRegistro)) {
-                new AdicionaDAO<Marca>().adiciona(novoRegistro);
-                InfoMessage.adicionado();
-                limparJanela();
+                addNoBanco(novoRegistro);
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("marca_ja_cadastrado"));
             }
@@ -52,13 +38,10 @@ public class MarcaView extends BasicMBImpl<Marca> implements Serializable {
 
     public void update() {
         try {
-            Marca marcaExistente = marca.construirComID();
+            Marca marcaExistente = e.construirComID();
             if (marcaExistente.getId() != null) {
                 if (validaMarcaExistente(marcaExistente)) {
-                    new AtualizaDAO<Marca>(Marca.class).atualiza(marcaExistente);
-
-                    InfoMessage.atualizado();
-                    limparJanela();
+                    updateNoBanco(marcaExistente);
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("marca_ja_cadastrado"));
                 }
@@ -70,74 +53,18 @@ public class MarcaView extends BasicMBImpl<Marca> implements Serializable {
         }
     }
 
-    public void delete() {
-        try {
-            if (marcaSelecionada != null) {
-                new RemoveDAO<Marca>(Marca.class).remove(marcaSelecionada, marcaSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
     private boolean validaMarcaExistente(Marca novoRegistro) {
         List<Marca> lista = new MarcaDAO().buscarMarcas().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
 
     @Override
-    public void selecionar(SelectEvent e) {
-        Marca m = (Marca) e.getObject();
-        marca = new MarcaBV(m);
-        marcaSelecionada = m;
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = marca.getId();
-        if (id != null) {
-            try {
-                MarcaDAO dao = new MarcaDAO();
-                Marca c = dao.buscarMarcas().porId(id).resultado();
-                marcaSelecionada = c;
-                marca = new MarcaBV(marcaSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                marca.setId(id);
-                die.print();
-            }
-        }
+    public void selecionar(SelectEvent event) {
+        e = new MarcaBV((Marca) event.getObject());
     }
 
     public void limparJanela() {
-        marca = new MarcaBV();
-        marcaSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (marcaSelecionada != null) {
-            marca = new MarcaBV(marcaSelecionada);
-        }
-    }
-
-    public MarcaBV getMarca() {
-        return marca;
-    }
-
-    public void setMarca(MarcaBV marca) {
-        this.marca = marca;
-    }
-
-    public Marca getMarcaSelecionada() {
-        return marcaSelecionada;
-    }
-
-    public void setMarcaSelecionada(Marca marcaSelecionada) {
-        this.marcaSelecionada = marcaSelecionada;
+        e = new MarcaBV();
     }
 
 }

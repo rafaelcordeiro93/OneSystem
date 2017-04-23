@@ -5,10 +5,13 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -68,9 +71,6 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
     @ManyToOne(optional = false)
     private Cotacao cotacao;
 
-    @ManyToOne
-    private Movimento movimento;
-
     public FormaPagamentoRecebimento() {
     }
 
@@ -118,17 +118,13 @@ public abstract class FormaPagamentoRecebimento implements Serializable {
         return cotacao;
     }
 
-    public Movimento getMovimento() {
-        return movimento;
-    }
-
     public String getVencimentoFormatado() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(getVencimento());
     }
-
-    public void setMovimento(Movimento movimento) {
-        this.movimento = movimento;
+    
+      public String getValorFormatado() {
+        return MoedaFomatter.format(getCotacao().getConta().getMoeda(),getValor());
     }
 
     @Override

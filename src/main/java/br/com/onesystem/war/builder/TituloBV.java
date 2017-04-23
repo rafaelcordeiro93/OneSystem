@@ -41,7 +41,7 @@ public class TituloBV implements Serializable {
         this.saldo = tituloSelecionado.getSaldo();
         this.vencimento = tituloSelecionado.getVencimento();
         this.emissao = tituloSelecionado.getEmissao();
-        this.unidadeFinanceira = tituloSelecionado.getUnidadeFinanceira();
+        this.unidadeFinanceira = tituloSelecionado.getOperacaoFinanceira();
         this.recepcao = tituloSelecionado.getRecepcao();
         this.cambio = tituloSelecionado.getCambio();
         this.tipoFormaPagRec = tituloSelecionado.getTipoFormaPagRec();

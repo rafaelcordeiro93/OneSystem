@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.TipoContabil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -52,19 +53,19 @@ public class Credito implements Serializable {
     @Column(nullable = false)
     private BigDecimal valor;
     @OneToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     @Enumerated(EnumType.STRING)
     private TipoContabil tipoContabil;
 
     public Credito() {
     }
 
-    public Credito(Long id, Date emissao, Pessoa pessoa, BigDecimal valor, NotaEmitida notaEmitida, TipoContabil tipoContabil) throws DadoInvalidoException {
+    public Credito(Long id, Date emissao, Pessoa pessoa, BigDecimal valor, Nota nota, TipoContabil tipoContabil) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.pessoa = pessoa;
         this.valor = valor;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         this.tipoContabil = tipoContabil;
         ehValido();
     }
@@ -90,11 +91,20 @@ public class Credito implements Serializable {
         return valor;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
     public TipoContabil getTipoContabil() {
         return tipoContabil;
     }
+    
+     public String getValorFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getValor());
+        } else {
+            return MoedaFomatter.format(getValor());
+        }
+    }
+    
 }

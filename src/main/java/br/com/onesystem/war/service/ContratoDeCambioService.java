@@ -5,11 +5,7 @@ import br.com.onesystem.dao.ContratoDeCambioDAO;
 import br.com.onesystem.domain.ContratoDeCambio;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "contratoDeCambioService")
-@ApplicationScoped
 public class ContratoDeCambioService implements Serializable {
 
     public List<ContratoDeCambio> buscarContratosDeCambio() {

@@ -26,8 +26,7 @@ public class ModeloDeRelatorioConverter implements Converter {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ModeloDeRelatorioService service = (ModeloDeRelatorioService) fc.getExternalContext().getApplicationMap().get("modeloDeRelatorioService");
-                List<ModeloDeRelatorio> lista = service.buscarModeloDeRelatorio();
+                List<ModeloDeRelatorio> lista = new ModeloDeRelatorioService().buscarModeloDeRelatorio();
                 for (ModeloDeRelatorio mdr : lista) {
                     if (mdr.getId().equals(new Long(value))) {
                         return mdr;

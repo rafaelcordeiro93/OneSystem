@@ -5,24 +5,23 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.util.DadosNecessarios;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
-@ManagedBean
-@ViewScoped
-public class ConfiguracaoNecessariaView {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class ConfiguracaoNecessariaView implements Serializable {
 
     private List<DadosNecessariosBV> configuracoes;
 

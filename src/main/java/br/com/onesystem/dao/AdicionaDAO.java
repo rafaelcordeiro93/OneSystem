@@ -19,17 +19,16 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class AdicionaDAO<T> {
 
-    private EntityManager em;
+    private EntityManager em = JPAUtil.getEntityManager();
 
+    ;
+  
     public AdicionaDAO() {
     }
 
     public void adiciona(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {
-
-            // consegue a entity manager
-            em = JPAUtil.getEntityManager();
 
             // abre transacao
             em.getTransaction().begin();
@@ -44,18 +43,21 @@ public class AdicionaDAO<T> {
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+                em.getTransaction().rollback();
                 throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
             }
+            em.getTransaction().rollback();
             throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
             System.out.println("Erro: " + ex.getMessage());
+            em.getTransaction().rollback();
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             System.out.println("Verifique Lista do toString()");
+            em.getTransaction().rollback();
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
-
-            em.close();
+//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
         }
     }
 

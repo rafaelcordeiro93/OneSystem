@@ -2,29 +2,28 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("CHEQUE")
-public class Cheque extends FormaPagamentoRecebimento implements Serializable {
+public class Cheque extends Parcela implements Serializable {
 
-    @ManyToOne
-    private NotaEmitida notaEmitida;
     @NotNull(message = "{banco_not_null}")
     @ManyToOne
     private Banco banco;
@@ -54,11 +53,10 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
     public Cheque() {
     }
 
-    public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
-            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente,
-            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento) throws DadoInvalidoException {
-        super(id, emissao, valor, BigDecimal.ZERO, BigDecimal.ZERO, historico, vencimento, cotacao);
-        this.notaEmitida = notaEmitida;
+    public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
+            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
+            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
@@ -74,22 +72,9 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao");
         List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
-        new ValidadorDeCampos<FormaPagamentoRecebimento>().valida(this, campos);
-    }
-
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
-    }
-
-    public String getValorFormatado() {
-        Locale local = getCotacao().getConta().getMoeda().getBandeira().getLocal();
-        NumberFormat nf = NumberFormat.getCurrencyInstance(local);
-
-        return nf.format(getValor());
     }
 
     public Banco getBanco() {
@@ -132,17 +117,17 @@ public class Cheque extends FormaPagamentoRecebimento implements Serializable {
         return valoresAVista;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
-    }
-
     public TipoLancamento getTipoLancamento() {
         return tipoLancamento;
     }
 
+    public String getDetalhes() {
+        return banco == null ? "" : banco.getNome() + " / " + agencia + " / " + conta + " Nº " + numeroCheque;
+    }
+
     @Override
     public String toString() {
-        return "Cheque{" + "id=" + getId() + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", valor=" + valor
+        return "Cheque{" + "id=" + getId() + ", nota=" + (getNota() == null ? null : getNota().getId()) + ", valor=" + valor
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
                 + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()

@@ -6,8 +6,8 @@ import br.com.onesystem.dao.OperacaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoDespesa;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.OperacaoBV;
@@ -16,7 +16,6 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -24,21 +23,20 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class OperacaoView implements Serializable {
 
     private OperacaoBV operacao;
     private Operacao operacaoSelecionada;
     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -74,7 +72,7 @@ public class OperacaoView implements Serializable {
 
             if (operacaoSelecionada != null) {
                 Operacao operacaoExistente = operacao.construirComID();
-                new AtualizaDAO<Operacao>(Operacao.class).atualiza(operacaoExistente);
+                new AtualizaDAO<Operacao>().atualiza(operacaoExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -88,7 +86,7 @@ public class OperacaoView implements Serializable {
     public void delete() {
         try {
             if (operacaoSelecionada != null) {
-                new RemoveDAO<Operacao>(Operacao.class).remove(operacaoSelecionada, operacaoSelecionada.getId());
+                new RemoveDAO<Operacao>().remove(operacaoSelecionada, operacaoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }
@@ -100,42 +98,42 @@ public class OperacaoView implements Serializable {
     }
 
     public void selecionaReceitaAVista(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setVendaAVista(receitaSelecionada);
     }
 
     public void selecionaReceitaAPrazo(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setVendaAPrazo(receitaSelecionada);
     }
 
     public void selecionaServicoAVista(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setServicoAVista(receitaSelecionada);
     }
 
     public void selecionaServicoAPrazo(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setServicoAPrazo(receitaSelecionada);
     }
 
     public void selecionaReceitaFrete(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.operacao.setReceitaFrete(receitaSelecionada);
     }
 
     public void selecionaDespesaCMV(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setDespesaCMV(despesaSelecionada);
     }
 
     public void selecionaCompraAVista(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setCompraAVista(despesaSelecionada);
     }
 
     public void selecionaCompraAPrazo(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.operacao.setCompraAPrazo(despesaSelecionada);
     }
 

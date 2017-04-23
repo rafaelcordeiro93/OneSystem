@@ -27,7 +27,7 @@
 
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Despesa_Comissao}"/>
-                        <a:inputTextDialog id="despesaDeComissao" mbView="#{configuracaoView}" dialog="#{selecaoDespesaView}" value="#{configuracaoView.configuracaoBV.despesaDeComissao}" var="despesa" converter="despesaConverter"  itemLabel="#{despesa.nome}" itemValue="#{despesa}" itemLabelTab="#{despesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                        <a:inputTextDialog id="despesaDeComissao" mbView="#{configuracaoView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoView.configuracaoBV.despesaDeComissao}" var="despesa" converter="tipoDespesaConverter"  itemLabel="#{despesa.nome}" itemValue="#{despesa}" itemLabelTab="#{despesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
                     </div>    
 
                     <div class="EmptyBox5"/>
@@ -64,7 +64,7 @@
                     
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Conta_De_Estoque_Empresa}"/>
-                        <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa}" var="contaDeEstoque" converter="contaDeEstoqueConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                        <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa}" var="contaDeEstoque" converter="contaDeEstoqueConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div>                
 
                     <div class="EmptyBox5"/>
@@ -118,7 +118,7 @@
                     <div class="EmptyBox10"/>
                     <h:panelGrid columns="2" style="margin-left: -1%" styleClass="Wid50">
                         <p:inputText disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" id="configuracaoDespesaDivisaoLucroCambio" styleClass="Wid95" readonly="true" placeholder="#{l.Despesa}" style="margin-top: -3%" value="#{configuracaoCambioView.configuracaoCambioBV.despesaDivisaoLucro.nome}"/>
-                        <p:commandButton disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                        <p:commandButton disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
                                          update="@none">
                             <p:ajax event="dialogReturn" listener="#{configuracaoCambioView.selecionaDespesaDivisaoLucro}"
                                     process="@this" update="configuracaoDespesaDivisaoLucroCambio" />

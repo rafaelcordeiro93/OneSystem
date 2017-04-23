@@ -1,31 +1,22 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ContratoDeCambioDAO;
 import br.com.onesystem.domain.ContratoDeCambio;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.ResumoDeMoeda;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.war.builder.RelatorioDeContratoDeCambioBV;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RelatorioDeContratoDeCambioView implements Serializable {
 
     private RelatorioDeContratoDeCambioBV relatorio;

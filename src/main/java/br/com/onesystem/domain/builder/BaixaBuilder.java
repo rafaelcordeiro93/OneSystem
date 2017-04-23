@@ -9,11 +9,12 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
-import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.PerfilDeValor;
+import br.com.onesystem.domain.MovimentoFixo;
+import br.com.onesystem.domain.TipoDespesa;
+import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Transferencia;
@@ -39,16 +40,17 @@ public class BaixaBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private PerfilDeValor perfilDeValor;
-    private Despesa despesa;
-    private Receita receita;
+    private Parcela perfilDeValor;
+    private TipoDespesa despesa;
+    private TipoReceita receita;
     private Pessoa pessoa;
     private Cambio cambio;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
     private boolean cancelada = false;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
+    private MovimentoFixo movimentoFixo;
 
     public BaixaBuilder comId(Long id) {
         this.id = id;
@@ -100,12 +102,12 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comDespesa(Despesa despesa) {
+    public BaixaBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }
 
-    public BaixaBuilder comReceita(Receita receita) {
+    public BaixaBuilder comReceita(TipoReceita receita) {
         this.receita = receita;
         return this;
     }
@@ -140,18 +142,23 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public BaixaBuilder comNota(Nota nota) {
+        this.nota = nota;
         return this;
     }
 
-    public BaixaBuilder comPerfilDeValor(PerfilDeValor perfilDeValor) {
+    public BaixaBuilder comPerfilDeValor(Parcela perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
         return this;
     }
 
+    public BaixaBuilder comMovimentoFixo(MovimentoFixo movimentoFixo) {
+        this.movimentoFixo = movimentoFixo;
+        return this;
+    }
+
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, notaEmitida);
+        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, nota, movimentoFixo);
     }
 
 }

@@ -15,15 +15,14 @@
  */
 package org.primefaces.atlantis.view;
 
-import org.primefaces.atlantis.view.*;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.HashMap;
 import java.io.Serializable;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 
-@ManagedBean(name = "guestPreferences")
+@Named(value = "guestPreferences")
 @SessionScoped
 public class GuestPreferences implements Serializable {
     

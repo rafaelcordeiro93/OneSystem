@@ -24,16 +24,16 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="comissaoId" dialog="#{selecaoComissaoView}" mbView="#{comissaoView}" value="#{comissaoView.comissao.id}" update=":conteudo" />
-                            
+                            <a:inputTextDialog id="comissaoId" value="#{comissaoView.e}" dialog="#{selecaoComissaoView}" mbView="#{comissaoView}" update=":conteudo" var="comissao" converter="comissaoBVConverter" itemLabel="#{comissao.id}" itemValue="#{comissao}" onlyNumber="true" editVisible="false"/>
+                          
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{comissaoView.comissao.nome}" maxlength="60"/>
+                            <p:inputText value="#{comissaoView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Comissao_Vendedor}"/>
-                            <p:inputNumber  value="#{comissaoView.comissao.comissaoVendedor}" decimalPlaces="0"/>
+                            <p:inputNumber  value="#{comissaoView.e.comissaoVendedor}" decimalPlaces="0"/>
 
                             <p:outputLabel value="#{l.Comissao_Representante}"/>
-                            <p:inputNumber  value="#{comissaoView.comissao.comissaoRepresentante}" decimalPlaces="0" />
+                            <p:inputNumber  value="#{comissaoView.e.comissaoRepresentante}" decimalPlaces="0" />
 
                         </p:panelGrid>
 
@@ -48,7 +48,6 @@
                         <p:commandButton value=" #{l.Atualizar}" action="#{comissaoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value=" #{l.Remover}" action="#{comissaoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value=" #{l.Limpar}" action="#{comissaoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value=" #{l.Desfazer}" action="#{comissaoView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

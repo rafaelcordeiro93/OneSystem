@@ -24,16 +24,16 @@
 
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.moeda.id}" update=":conteudo"/>
-
+                            <a:inputTextDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.e}" update=":conteudo" var="moeda" itemLabel="#{moeda.id}" itemValue="#{moeda}" converter="moedaBVConverter" itemLabelTabVisible="false" editVisible="false" onlyNumber="true"/>
+                            
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{moedaView.moeda.nome}"/>
+                            <p:inputText value="#{moedaView.e.nome}"/>
 
                             <p:outputLabel value="#{l.Sigla}"/>
-                            <p:inputText value="#{moedaView.moeda.sigla}"/>
+                            <p:inputText value="#{moedaView.e.sigla}"/>
 
                             <p:outputLabel value="#{l.Bandeira}"/>
-                            <p:selectOneMenu id="advanced" value="#{moedaView.moeda.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
+                            <p:selectOneMenu id="advanced" value="#{moedaView.e.bandeira}" converter="bandeiraConverter" panelStyle="width:180px"
                                              effect="fade" var="t">
                                 <f:selectItems value="#{moedaView.bandeiras}" var="tipoBandeira" itemValue="#{tipoBandeira}" />
                                 <p:column style="width:10%">
@@ -55,7 +55,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{moedaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{moedaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{moedaView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" immediate="true" />
                     </div>
 
                 </div>

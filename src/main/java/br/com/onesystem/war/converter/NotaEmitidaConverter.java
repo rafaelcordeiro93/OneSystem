@@ -26,8 +26,8 @@ public class NotaEmitidaConverter implements Converter, Serializable {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-            try {
-                NotaEmitidaService service = (NotaEmitidaService) fc.getExternalContext().getApplicationMap().get("notaEmitidaService");
+            try {                
+                NotaEmitidaService service = new NotaEmitidaService();
                 List<NotaEmitida> lista = service.buscarNotasEmitidas();
                 for (NotaEmitida notaEmitida : lista) {
                     if (notaEmitida.getId().equals(new Long(value))) {

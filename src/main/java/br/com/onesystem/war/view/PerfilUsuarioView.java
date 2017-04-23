@@ -18,14 +18,11 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class PerfilUsuarioView implements Serializable {
 
     private UsuarioBV usuario;
@@ -48,9 +45,9 @@ public class PerfilUsuarioView implements Serializable {
             validaSenha();
             Usuario usuarioExistente = usuario.construirComID();
             if (usuarioExistente.getId() != null) {
-                new AtualizaDAO<Pessoa>(Pessoa.class).atualiza(usuarioExistente.getPessoa());
-                new AtualizaDAO<Usuario>(Usuario.class).atualiza(usuarioExistente);                
-                FacesContext.getCurrentInstance().getExternalContext().redirect("perfilUsuario.xhtml");//atualiza a pagina para atualizar a aparencia do sistema
+                new AtualizaDAO<Pessoa>().atualiza(usuarioExistente.getPessoa());
+                new AtualizaDAO<Usuario>().atualiza(usuarioExistente);
+                InfoMessage.atualizado();
                 buscaUsuario();
                 InfoMessage.atualizado();
             } else {

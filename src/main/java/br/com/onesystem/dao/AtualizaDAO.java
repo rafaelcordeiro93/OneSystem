@@ -9,7 +9,6 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.faces.el.EvaluationException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -20,18 +19,13 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class AtualizaDAO<T> {
 
-    private final Class<T> classe;
-    private EntityManager em;
+    private EntityManager em = JPAUtil.getEntityManager();
 
-    public AtualizaDAO(Class<T> classe) {
-        this.classe = classe;
-    }
-
+    ;
+    
     public void atualiza(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {
-            // consegue a entity manager
-            em = new JPAUtil().getEntityManager();
 
             // abre transacao
             em.getTransaction().begin();
@@ -61,7 +55,7 @@ public class AtualizaDAO<T> {
             throw new FDadoInvalidoException("<AtualizaDAO> Erro de Gravação: " + ex.getMessage());
         } finally {
             // fecha a entity manager
-            em.close();
+//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
         }
 
     }

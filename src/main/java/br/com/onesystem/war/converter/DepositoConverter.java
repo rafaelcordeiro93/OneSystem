@@ -28,8 +28,7 @@ public class DepositoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                DepositoService service = (DepositoService) fc.getExternalContext().getApplicationMap().get("depositoService");
-                List<Deposito> lista = service.buscarDepositos();
+                List<Deposito> lista = new DepositoService().buscarDepositos();
                 if (StringUtils.containsLetter(value)) {
                     for (Deposito deposito : lista) {
                         if (deposito.getNome().equals(value)) {

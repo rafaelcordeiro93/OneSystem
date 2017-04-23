@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -36,40 +37,40 @@ public class ValoresAVista implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_VALORESAVISTA")
     private Long id;
     @Min(value = 0, message = "{min_dinheiro}")
-    private BigDecimal dinheiro;
+    private BigDecimal dinheiro = BigDecimal.ZERO;
     @OneToMany(mappedBy = "valoresAVista", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cheque> cheques;
     @OneToOne(cascade = CascadeType.ALL)
     private BoletoDeCartao boletoDeCartao;
     @Min(value = 0, message = "{min_aFaturar}")
-    private BigDecimal aFaturar;
+    private BigDecimal aFaturar = BigDecimal.ZERO;
     @OneToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     @ManyToOne
     private Cotacao cotacao;
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
-    private BigDecimal desconto;
+    private BigDecimal desconto = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_acrescimo_min}")
     @Column(nullable = true)
-    private BigDecimal acrescimo;
+    private BigDecimal acrescimo = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_despesa_cobranca_min}")
-    private BigDecimal despesaCobranca;
+    private BigDecimal despesaCobranca = BigDecimal.ZERO;
     @Min(value = 0, message = "{valor_frete_min}")
-    private BigDecimal frete;
+    private BigDecimal frete = BigDecimal.ZERO;
 
     public ValoresAVista() {
     }
 
     public ValoresAVista(Long id,
             BigDecimal dinheiro, BoletoDeCartao boletoDeCartao,
-            BigDecimal aFaturar, NotaEmitida notaEmitida, Cotacao cotacao, BigDecimal desconto,
+            BigDecimal aFaturar, Nota nota, Cotacao cotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
             List<Cheque> cheques) throws DadoInvalidoException {
         this.id = id;
         this.dinheiro = dinheiro;
         this.aFaturar = aFaturar;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         this.cotacao = cotacao;
         this.desconto = desconto;
         this.acrescimo = acrescimo;
@@ -103,8 +104,8 @@ public class ValoresAVista implements Serializable {
         return aFaturar;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
     public Cotacao getCotacao() {
@@ -117,6 +118,68 @@ public class ValoresAVista implements Serializable {
 
     public BigDecimal getAcrescimo() {
         return acrescimo;
+    }
+
+    public BigDecimal getTotalCheque() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (Cheque i : cheques) {
+            total = total.add(i.getValor());
+        }
+        return total;
+    }
+
+    public String getTotalChequeFormatado() {
+        if (nota != null) {
+            if (cheques != null && cheques.isEmpty()) {
+                return MoedaFomatter.format(nota.getMoedaPadrao(), getTotalCheque());
+            } else {
+                return MoedaFomatter.format(nota.getMoedaPadrao(), BigDecimal.ZERO);
+            }
+        } else if (cheques != null && cheques.isEmpty()) {
+            return MoedaFomatter.format(getTotalCheque());
+        } else {
+            return MoedaFomatter.format(BigDecimal.ZERO);
+        }
+    }
+
+    public String getAcrescimoFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getAcrescimo());
+        } else {
+            return MoedaFomatter.format(getAcrescimo());
+        }
+    }
+
+    public String getDinheiroFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDinheiro());
+        } else {
+            return MoedaFomatter.format(getDinheiro());
+        }
+    }
+
+    public String getDescontoFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDesconto());
+        } else {
+            return MoedaFomatter.format(getDesconto());
+        }
+    }
+
+    public String getDespesaCobrancaFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDespesaCobranca());
+        } else {
+            return MoedaFomatter.format(getDespesaCobranca());
+        }
+    }
+
+    public String getFreteFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getFrete());
+        } else {
+            return MoedaFomatter.format(getFrete());
+        }
     }
 
     public BigDecimal getDespesaCobranca() {
@@ -135,8 +198,8 @@ public class ValoresAVista implements Serializable {
         this.cheques = cheques;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     @Override
@@ -156,7 +219,7 @@ public class ValoresAVista implements Serializable {
 
     @Override
     public String toString() {
-        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
+        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", nota=" + (nota != null ? nota.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

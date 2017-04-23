@@ -10,19 +10,18 @@ import br.com.onesystem.war.service.ConfiguracaoFinanceiroService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ConfiguracaoFinanceiroView implements Serializable {
 
     private ConfiguracaoFinanceiroBV configuracaoFinanceiroBV;
     private ConfiguracaoFinanceiro configuracao;
 
-    @ManagedProperty("#{configuracaoFinanceiroService}")
+    @Inject
     private ConfiguracaoFinanceiroService service;
 
     @PostConstruct
@@ -42,7 +41,7 @@ public class ConfiguracaoFinanceiroView implements Serializable {
                 new AdicionaDAO<ConfiguracaoFinanceiro>().adiciona(conf);
                 configuracao = conf;
             } else {
-                new AtualizaDAO<ConfiguracaoFinanceiro>(ConfiguracaoFinanceiro.class).atualiza(conf);
+                new AtualizaDAO<ConfiguracaoFinanceiro>().atualiza(conf);
             }
             InfoMessage.print("Configurações gravadas com sucesso!");
         } catch (DadoInvalidoException die) {

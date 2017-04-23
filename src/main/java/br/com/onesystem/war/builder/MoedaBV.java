@@ -3,13 +3,11 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.builder.MoedaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.TipoBandeira;
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
-public class MoedaBV implements Serializable {
+public class MoedaBV implements Serializable, BuilderView<Moeda> {
 
     private Long id;
     private String nome;

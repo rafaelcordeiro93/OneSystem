@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.war.builder.DialogoPagamentoRecebimentoVariasMoedasBuilder;
@@ -13,14 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class DialogoPagamentoRecebimentoVariasMoedasView implements Serializable {
 
     private Conta contaDeOrigem;

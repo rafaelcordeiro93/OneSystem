@@ -25,11 +25,11 @@
 
                             <p:outputLabel value="#{l.Id}"/>
                             <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <a:inputNumberDialog id="listaPrecoId" dialog="#{selecaoListaDePrecoView}" mbView="#{listaDePrecoView}" value="#{listaDePrecoView.listaPreco.id}" update=":conteudo" />
+                                <a:inputNumberDialog id="listaPrecoId" dialog="#{selecaoListaDePrecoView}" mbView="#{listaDePrecoView}" value="#{listaDePrecoView.e.id}" update=":conteudo" />
                             </h:panelGrid>     
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{listaDePrecoView.listaPreco.nome}"/>
+                            <p:inputText value="#{listaDePrecoView.e.nome}"/>
 
                         </p:panelGrid>
 
@@ -43,8 +43,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{listaDePrecoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{listaDePrecoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{listaDePrecoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{listaDePrecoView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
-
                     </div>
                 </div>
             </div>

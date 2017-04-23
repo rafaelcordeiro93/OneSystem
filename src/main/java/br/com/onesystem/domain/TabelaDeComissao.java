@@ -42,6 +42,9 @@ public class TabelaDeComissao implements Serializable {
     @Column(nullable = false)
     private BigDecimal porcentagemDeComissao;
 
+    public TabelaDeComissao(){
+    }
+    
     public TabelaDeComissao(Long id, BigDecimal porcentagemDeDesconto, BigDecimal porcentagemDeComissao) throws DadoInvalidoException {
         this.id = id;
         this.porcentagemDeDesconto = porcentagemDeDesconto;

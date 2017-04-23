@@ -3,10 +3,11 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,8 +28,9 @@ public class DespesaProvisionadaBuilder {
     private Cambio cambio;
     private List<Baixa> baixas;
     private Cotacao cotacao;
-    private Despesa despesa;
+    private TipoDespesa despesa;
     private boolean divisaoLucroCambioCaixa;
+    private OperacaoFinanceira operacaoFinanceira;
 
     public DespesaProvisionadaBuilder comId(Long id) {
         this.id = id;
@@ -60,7 +62,7 @@ public class DespesaProvisionadaBuilder {
         return this;
     }
 
-    public DespesaProvisionadaBuilder comDespesa(Despesa despesa) {
+    public DespesaProvisionadaBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }
@@ -85,8 +87,13 @@ public class DespesaProvisionadaBuilder {
         return this;
     }
 
+    public DespesaProvisionadaBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+        return this;
+    }
+
     public DespesaProvisionada construir() throws DadoInvalidoException {
-        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas);
+        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira);
     }
 
 }

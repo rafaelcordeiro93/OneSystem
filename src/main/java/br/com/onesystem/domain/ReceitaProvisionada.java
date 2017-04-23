@@ -1,11 +1,10 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
@@ -14,28 +13,22 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("RECEITA_PROVISIONADA")
-public class ReceitaProvisionada extends PerfilDeValor implements Serializable, RelatorioContaAbertaImpl {
+public class ReceitaProvisionada extends MovimentoFixo implements Serializable, RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Receita receita;
+    private TipoReceita tipoReceita;
 
     public ReceitaProvisionada() {
     }
 
-    public ReceitaProvisionada(Long id, Pessoa pessoa, Receita receita, BigDecimal valor,
+    public ReceitaProvisionada(Long id, Pessoa pessoa, TipoReceita tipoReceita, BigDecimal valor, OperacaoFinanceira operacaoFinanceira,
             Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixas);
-        this.receita = receita;
-        ehValido();
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
+        this.tipoReceita = tipoReceita;
     }
 
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
-    }
-
-    public Receita getReceita() {
-        return receita;
+    public TipoReceita getTipoReceita() {
+        return tipoReceita;
     }
 
     @Override
@@ -55,7 +48,12 @@ public class ReceitaProvisionada extends PerfilDeValor implements Serializable, 
 
     @Override
     public String getOrigem() {
-        return receita.getNome();
+        return tipoReceita.getNome();
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoReceita().getNome();
     }
 
 }
