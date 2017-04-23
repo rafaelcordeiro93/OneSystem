@@ -5,15 +5,8 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "tituloService")
-@ApplicationScoped
 public class TituloService implements Serializable {
 
     public List<Titulo> buscarTitulos(){

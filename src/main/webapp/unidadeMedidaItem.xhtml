@@ -23,16 +23,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="unidadeMedidaItem" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{unidadeMedidaItemView}" value="#{unidadeMedidaItemView.unidadeMedidaItem.id}" update=":conteudo" />                            
+                            <a:inputNumberDialog id="unidadeMedidaItem" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{unidadeMedidaItemView}" value="#{unidadeMedidaItemView.e.id}" update=":conteudo" />                            
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.nome}"/>
+                            <p:inputText value="#{unidadeMedidaItemView.e.nome}"/>
 
                             <p:outputLabel value="#{l.Sigla}"/>
-                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.sigla}" maxlength="3" />
+                            <p:inputText value="#{unidadeMedidaItemView.e.sigla}" maxlength="3" />
 
                             <p:outputLabel value="#{l.Casas_Decimais}"/>
-                            <p:inputText value="#{unidadeMedidaItemView.unidadeMedidaItem.casasDecimais}" maxlength="1"/>
+                            <p:inputText value="#{unidadeMedidaItemView.e.casasDecimais}" maxlength="1"/>
                         </p:panelGrid>
 
 
@@ -49,7 +49,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{unidadeMedidaItemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{unidadeMedidaItemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{unidadeMedidaItemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{unidadeMedidaItemView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
                     </div>
                 </div>
             </div>

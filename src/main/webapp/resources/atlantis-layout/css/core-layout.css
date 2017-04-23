@@ -131,6 +131,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Wid95{ width:95%;}
 .Wid90{ width:90%;}
 .Wid88{ width:88%;}
+.Wid86{ width:86%;}
 .Wid80{ width:80%;}
 .Wid70{ width:70%;}
 .Wid65{ width:65%;}
@@ -628,4 +629,41 @@ body .ui-button.red-btn.ui-state-active {
 
 .submit-line input {
     width: 100% !important;
+}
+
+.label{
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.label label-primary {
+    background-color: #337ab7;
+}
+
+.label label-info{
+    background-color: #5bc0de;
+}
+
+.label label-success {
+    background-color: #5cb85c;
+}
+
+.label label-default {
+    background-color: #777;
+}
+
+.label label-warning {
+    background-color: #f0ad4e;
+}
+
+.label label-danger {
+    background-color: #d9534f;
 }

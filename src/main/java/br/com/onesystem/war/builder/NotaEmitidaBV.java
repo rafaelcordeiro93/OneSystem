@@ -1,8 +1,6 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ValoresAVista;
@@ -12,17 +10,15 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
-import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class NotaEmitidaBV implements Serializable {
+public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     private static final long serialVersionUID = 6686124108160060627L;
 
@@ -30,15 +26,13 @@ public class NotaEmitidaBV implements Serializable {
     private Pessoa pessoa;
     private Operacao operacao;
     private List<ItemEmitido> itensEmitidos;
-    private List<Titulo> titulos;
+    private List<Parcela> parcelas;
     private List<Baixa> baixas;
     private ListaDePreco listaDePreco;
     private ValoresAVista valoresAVista;
     private Date emissao = new Date();
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private List<Cheque> cheques;
-    private List<BoletoDeCartao> cartoes;
     private Credito credito;
     private Moeda moedaPadrao;
 
@@ -46,7 +40,7 @@ public class NotaEmitidaBV implements Serializable {
         this.id = notaEmitidaSelecionada.getId();
         this.pessoa = notaEmitidaSelecionada.getPessoa();
         this.operacao = notaEmitidaSelecionada.getOperacao();
-        this.titulos = notaEmitidaSelecionada.getTitulos();
+        this.parcelas = notaEmitidaSelecionada.getParcelas();
         this.itensEmitidos = notaEmitidaSelecionada.getItensEmitidos();
         this.listaDePreco = notaEmitidaSelecionada.getListaDePreco();
         this.valoresAVista = notaEmitidaSelecionada.getValoresAVista();
@@ -54,8 +48,6 @@ public class NotaEmitidaBV implements Serializable {
         this.emissao = notaEmitidaSelecionada.getEmissao();
         this.cancelada = notaEmitidaSelecionada.isCancelada();
         this.baixas = notaEmitidaSelecionada.getBaixaDinheiro();
-        this.cheques = notaEmitidaSelecionada.getCheques();
-        this.cartoes = notaEmitidaSelecionada.getCartoes();
         this.credito = notaEmitidaSelecionada.getCredito();
         this.moedaPadrao = notaEmitidaSelecionada.getMoedaPadrao();
     }
@@ -119,14 +111,6 @@ public class NotaEmitidaBV implements Serializable {
         this.itensEmitidos = itensEmitidos;
     }
 
-    public List<Titulo> getTitulos() {
-        return titulos;
-    }
-
-    public void setTitulos(List<Titulo> titulos) {
-        this.titulos = titulos;
-    }
-
     public FormaDeRecebimento getFormaDeRecebimento() {
         return formaDeRecebimento;
     }
@@ -167,35 +151,27 @@ public class NotaEmitidaBV implements Serializable {
         this.baixas = baixas;
     }
 
-    public List<Cheque> getCheques() {
-        return cheques;
+    public List<Parcela> getParcelas() {
+        return parcelas;
     }
 
-    public void setCheques(List<Cheque> cheques) {
-        this.cheques = cheques;
-    }
-
-    public List<BoletoDeCartao> getCartoes() {
-        return cartoes;
-    }
-
-    public void setCartoes(List<BoletoDeCartao> cartoes) {
-        this.cartoes = cartoes;
+    public void setParcelas(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).
-                comPessoa(pessoa).comTitulos(titulos).comEmissao(emissao).comFormaDeRecebimento(formaDeRecebimento)
-                .cancelada(cancelada).comBaixas(baixas).comCheque(cheques).comBoletoDeCartao(cartoes).comCredito(credito)
+                comPessoa(pessoa).comParcelas(parcelas).comEmissao(emissao).comFormaDeRecebimento(formaDeRecebimento)
+                .cancelada(cancelada).comBaixas(baixas).comCredito(credito)
                 .comMoedaPadrao(moedaPadrao).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comId(id).comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
-                .comPessoa(pessoa).comTitulos(titulos).comFormaDeRecebimento(formaDeRecebimento)
-                .comBaixas(baixas).comCheque(cheques).comBoletoDeCartao(cartoes).comCredito(credito)
+                .comPessoa(pessoa).comParcelas(parcelas).comFormaDeRecebimento(formaDeRecebimento)
+                .comBaixas(baixas).comCredito(credito)
                 .comEmissao(emissao).cancelada(cancelada).comBaixas(baixas).comMoedaPadrao(moedaPadrao)
                 .construir();
     }

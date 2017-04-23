@@ -12,15 +12,13 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 
@@ -28,8 +26,8 @@ import org.primefaces.context.RequestContext;
  *
  * @author Rafael Fernando Rauber
  */
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> implements Serializable {
 
     private QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
@@ -38,7 +36,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
     private List<QuantidadeDeItemBV> listaFiltrada;
     private List<SaldoDeEstoque> listaDeEstoque;
 
-    @ManagedProperty("#{estoqueService}")
+    @Inject
     private EstoqueService serviceEstoque;
 
     @PostConstruct

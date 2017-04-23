@@ -1,7 +1,7 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.util.JPAUtil;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -9,7 +9,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-public class ArmazemDeRegistros<T> {
+public class ArmazemDeRegistros<T> implements Serializable {
+
+    private EntityManager em = JPAUtil.getEntityManager();
 
     private final Class<T> classe;
 
@@ -18,25 +20,22 @@ public class ArmazemDeRegistros<T> {
     }
 
     public List<T> listaTodosOsRegistros() {
-        EntityManager entityManager = JPAUtil.getEntityManager();
-        CriteriaQuery<T> query = entityManager.getCriteriaBuilder().createQuery(classe);
+        CriteriaQuery<T> query = em.getCriteriaBuilder().createQuery(classe);
         query.select(query.from(classe));
-        List<T> lista = entityManager.createQuery(query).getResultList();
+        List<T> lista = em.createQuery(query).getResultList();
 
         return lista;
     }
 
     public List<T> listaRegistrosDaConsulta(String consulta, Map<String, Object> parametros) {
-        EntityManager manager = JPAUtil.getEntityManager();
-        TypedQuery<T> query = manager.createQuery(consulta, classe);
+        TypedQuery<T> query = em.createQuery(consulta, classe);
         adicionarParametrosNaConsulta(query, parametros);
         return query.getResultList();
     }
 
     public T resultadoUnicoDaConsulta(String consulta, Map<String, Object> parametros) {
         try {
-            EntityManager manager = JPAUtil.getEntityManager();
-            TypedQuery<T> query = manager.createQuery(consulta, classe);
+            TypedQuery<T> query = em.createQuery(consulta, classe);
             adicionarParametrosNaConsulta(query, parametros);
             return query.getSingleResult();
         } catch (NoResultException nre) {
@@ -52,8 +51,7 @@ public class ArmazemDeRegistros<T> {
     }
 
     public T find(T objeto) {
-        EntityManager entityManager = JPAUtil.getEntityManager();
-        return entityManager.find(classe, objeto);
+        return em.find(classe, objeto);
     }
 
 }

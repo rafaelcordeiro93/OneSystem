@@ -28,8 +28,7 @@ public class GrupoDePrivilegioConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                GrupoPrivilegioService service = (GrupoPrivilegioService) fc.getExternalContext().getApplicationMap().get("grupoPrivilegioService");
-                List<GrupoDePrivilegio> lista = service.buscarGrupoDePrivilegio();
+                List<GrupoDePrivilegio> lista = new GrupoPrivilegioService().buscarGrupoDePrivilegio();
                 if (StringUtils.containsLetter(value)) {
                     for (GrupoDePrivilegio grupoDePrivilegio : lista) {
                         if (grupoDePrivilegio.getNome().equals(value)) {

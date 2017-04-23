@@ -4,15 +4,12 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Receita;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
@@ -30,14 +27,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ConhecimentoDeFreteView implements Serializable {
 
     private boolean panel;
@@ -90,7 +86,7 @@ public class ConhecimentoDeFreteView implements Serializable {
         try {
             ConhecimentoDeFrete conhecimentoDeFreteExistente = conhecimentoDeFrete.construirComID();
             if (conhecimentoDeFreteExistente.getId() != null) {
-                new AtualizaDAO<ConhecimentoDeFrete>(ConhecimentoDeFrete.class).atualiza(conhecimentoDeFreteExistente);
+                new AtualizaDAO<ConhecimentoDeFrete>().atualiza(conhecimentoDeFreteExistente);
                 conhecimentoDeFreteLista.set(conhecimentoDeFreteLista.indexOf(conhecimentoDeFreteExistente),
                         conhecimentoDeFreteExistente);
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(conhecimentoDeFreteExistente)) {
@@ -109,7 +105,7 @@ public class ConhecimentoDeFreteView implements Serializable {
     public void delete() {
         try {
             if (conhecimentoDeFreteLista != null && conhecimentoDeFreteLista.contains(conhecimentoDeFrete.construirComID())) {
-                new RemoveDAO<ConhecimentoDeFrete>(ConhecimentoDeFrete.class).remove(conhecimentoDeFrete.construirComID(), conhecimentoDeFrete.construirComID().getId());
+                new RemoveDAO<ConhecimentoDeFrete>().remove(conhecimentoDeFrete.construirComID(), conhecimentoDeFrete.construirComID().getId());
                 conhecimentoDeFreteLista.remove(conhecimentoDeFrete.construirComID());
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(conhecimentoDeFrete.construirComID())) {
                     gruposFinanceirosFiltrados.remove(conhecimentoDeFrete.construirComID());

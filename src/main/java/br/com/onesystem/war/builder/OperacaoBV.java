@@ -1,9 +1,9 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.OperacaoDeEstoque;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -20,15 +20,15 @@ public class OperacaoBV implements Serializable {
     private OperacaoFinanceira operacaoFinanceira;
     private TipoLancamento tipoNota;
     private TipoOperacao tipoOperacao;
-    private Receita vendaAVista;
-    private Receita vendaAPrazo;
-    private Receita servicoAVista;
-    private Receita servicoAPrazo;
-    private Receita receitaFrete;
-    private Despesa despesaCMV;
+    private TipoReceita vendaAVista;
+    private TipoReceita vendaAPrazo;
+    private TipoReceita servicoAVista;
+    private TipoReceita servicoAPrazo;
+    private TipoReceita receitaFrete;
+    private TipoDespesa despesaCMV;
     private TipoContabil contabilizarCMV;
-    private Despesa compraAVista;
-    private Despesa compraAPrazo;
+    private TipoDespesa compraAVista;
+    private TipoDespesa compraAPrazo;
     private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public OperacaoBV(Operacao operacaoSelecionada) {
@@ -92,51 +92,51 @@ public class OperacaoBV implements Serializable {
         this.tipoOperacao = tipoOperacao;
     }
 
-    public Receita getVendaAVista() {
+    public TipoReceita getVendaAVista() {
         return vendaAVista;
     }
 
-    public void setVendaAVista(Receita vendaAVista) {
+    public void setVendaAVista(TipoReceita vendaAVista) {
         this.vendaAVista = vendaAVista;
     }
 
-    public Receita getVendaAPrazo() {
+    public TipoReceita getVendaAPrazo() {
         return vendaAPrazo;
     }
 
-    public void setVendaAPrazo(Receita vendaAPrazo) {
+    public void setVendaAPrazo(TipoReceita vendaAPrazo) {
         this.vendaAPrazo = vendaAPrazo;
     }
 
-    public Receita getServicoAVista() {
+    public TipoReceita getServicoAVista() {
         return servicoAVista;
     }
 
-    public void setServicoAVista(Receita servicoAVista) {
+    public void setServicoAVista(TipoReceita servicoAVista) {
         this.servicoAVista = servicoAVista;
     }
 
-    public Receita getServicoAPrazo() {
+    public TipoReceita getServicoAPrazo() {
         return servicoAPrazo;
     }
 
-    public void setServicoAPrazo(Receita servicoAPrazo) {
+    public void setServicoAPrazo(TipoReceita servicoAPrazo) {
         this.servicoAPrazo = servicoAPrazo;
     }
 
-    public Receita getReceitaFrete() {
+    public TipoReceita getReceitaFrete() {
         return receitaFrete;
     }
 
-    public void setReceitaFrete(Receita receitaFrete) {
+    public void setReceitaFrete(TipoReceita receitaFrete) {
         this.receitaFrete = receitaFrete;
     }
 
-    public Despesa getDespesaCMV() {
+    public TipoDespesa getDespesaCMV() {
         return despesaCMV;
     }
 
-    public void setDespesaCMV(Despesa despesaCMV) {
+    public void setDespesaCMV(TipoDespesa despesaCMV) {
         this.despesaCMV = despesaCMV;
     }
 
@@ -148,19 +148,19 @@ public class OperacaoBV implements Serializable {
         this.contabilizarCMV = contabilizarCMV;
     }
 
-    public Despesa getCompraAVista() {
+    public TipoDespesa getCompraAVista() {
         return compraAVista;
     }
 
-    public void setCompraAVista(Despesa compraAVista) {
+    public void setCompraAVista(TipoDespesa compraAVista) {
         this.compraAVista = compraAVista;
     }
 
-    public Despesa getCompraAPrazo() {
+    public TipoDespesa getCompraAPrazo() {
         return compraAPrazo;
     }
 
-    public void setCompraAPrazo(Despesa compraAPrazo) {
+    public void setCompraAPrazo(TipoDespesa compraAPrazo) {
         this.compraAPrazo = compraAPrazo;
     }
 

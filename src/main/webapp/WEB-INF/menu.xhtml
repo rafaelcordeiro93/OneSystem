@@ -17,12 +17,16 @@
                         <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/pessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/pessoa.xhtml')}" />   
                         <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/importarPessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/importarPessoa.xhtml')}" />    
                     </p:submenu>
-                    <p:submenu label="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart">
-                        <p:menuitem value="#{l.Notas_de_Saida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
+                    <p:submenu label="#{l.Vendas}" icon="fa fa-shopping-cart">
+                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
+                        <p:submenu label="#{l.Consultar}" icon="fa fa-book">
+                            <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
+                        </p:submenu>
                     </p:submenu>
 
                     <p:submenu label="#{l.Estoque}" icon="fa fa-table">              
                         <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
+                        <p:menuitem value="#{l.Nota_Recebida}" icon="icon-attach_money" outcome="/notaRecebida" />
                         <p:menuitem value="#{l.Margem}" icon="icon-attach_money" outcome="/margem" /> 
                         <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
                         <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="icon-edit" outcome="/ajusteDeEstoque" />
@@ -35,7 +39,10 @@
                             <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaDePreco" />
                             <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/comissao" />
                             <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/grupo" />
-                            <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />
+                            <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />                            
+                        </p:submenu>
+                        <p:submenu label="#{l.Consultar}" icon="fa fa-book">
+                            <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaRecebida" />
                         </p:submenu>
                     </p:submenu>
 

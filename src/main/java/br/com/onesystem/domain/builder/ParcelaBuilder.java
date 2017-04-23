@@ -13,6 +13,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
@@ -56,6 +57,7 @@ public class ParcelaBuilder {
     private Integer dias;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
+    private Pessoa pessoa;
 
     public ParcelaBuilder comID(Long ID) {
         this.id = ID;
@@ -192,8 +194,13 @@ public class ParcelaBuilder {
         return this;
     }
 
+    public ParcelaBuilder comPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
+        return this;
+    }
+
     public ParcelaBV construir() {
-        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento);
+        return new ParcelaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa);
     }
 
 }

@@ -33,14 +33,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ItemView implements Serializable {
 
     private ItemBV item;
@@ -54,13 +53,13 @@ public class ItemView implements Serializable {
     private List<PrecoDeItem> precos;
     private boolean tab = true;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
-    @ManagedProperty("#{estoqueService}")
+    @Inject
     private EstoqueService serviceEstoque;
 
-    @ManagedProperty("#{precoDeItemService}")
+    @Inject
     private PrecoDeItemService servicePrecoDeItem;
 
     @PostConstruct
@@ -114,7 +113,7 @@ public class ItemView implements Serializable {
         try {
             if (itemSelecionada != null) {
                 Item itemExistente = item.construirComID();
-                new AtualizaDAO<Item>(Item.class).atualiza(itemExistente);
+                new AtualizaDAO<Item>().atualiza(itemExistente);
                 InfoMessage.atualizado();
                 limparJanela();
             } else {
@@ -128,7 +127,7 @@ public class ItemView implements Serializable {
     public void delete() {
         try {
             if (itemSelecionada != null) {
-                new RemoveDAO<Item>(Item.class).remove(itemSelecionada, itemSelecionada.getId());
+                new RemoveDAO<Item>().remove(itemSelecionada, itemSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }

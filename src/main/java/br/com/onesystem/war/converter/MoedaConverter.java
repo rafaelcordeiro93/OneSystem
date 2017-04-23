@@ -28,8 +28,7 @@ public class MoedaConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                MoedaService service = (MoedaService) fc.getExternalContext().getApplicationMap().get("moedaService");
-                List<Moeda> lista = service.buscarMoedas();
+                List<Moeda> lista = new MoedaService().buscarMoedas();
                 if (StringUtils.containsLetter(value)) {
                     for (Moeda moeda : lista) {
                         if (moeda.getNome().equals(value)) {

@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Comissao;
-import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.ComissaoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -9,15 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.enterprise.context.RequestScoped
 public class SelecaoComissaoView extends BasicCrudMBImpl<Comissao> implements Serializable {
 
-    @ManagedProperty("#{comissaoService}")
+    @Inject
     private ComissaoService service;
 
     @PostConstruct

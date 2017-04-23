@@ -9,10 +9,9 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConfiguracaoCambio;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.ContratoDeCambio;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
@@ -27,22 +26,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class CambioView implements Serializable {
 
     private boolean panel;
@@ -113,12 +107,12 @@ public class CambioView implements Serializable {
         try {
             Cambio cambioExistente = cambio.construirComID();
             if (cambioExistente.getId() != null) {
-                new AtualizaDAO<Cambio>(Cambio.class).atualiza(cambioExistente);
+                new AtualizaDAO<>().atualiza(cambioExistente);
                 cambioLista.set(cambioLista.indexOf(cambioExistente),
                         cambioExistente);
                 if (baixaLista.size() > 0) {
                     for (Baixa baixaAtualiza : baixaLista) {
-                        new AtualizaDAO<Baixa>(Baixa.class).atualiza(new BaixaBV(baixaAtualiza).construirComID());
+                        new AtualizaDAO<>().atualiza(new BaixaBV(baixaAtualiza).construirComID());
                     }
                 }
                 if (cambiosFiltrados != null && cambiosFiltrados.contains(cambioExistente)) {
@@ -137,7 +131,7 @@ public class CambioView implements Serializable {
     public void delete() {
         try {
             if (cambioLista != null && cambioLista.contains(cambioSelecionado)) {
-                new RemoveDAO<Cambio>(Cambio.class).remove(cambioSelecionado, cambioSelecionado.getId());
+                new RemoveDAO<>().remove(cambioSelecionado, cambioSelecionado.getId());
                 cambioLista.remove(cambioSelecionado);
                 if (cambiosFiltrados != null && cambiosFiltrados.contains(cambioSelecionado)) {
                     cambiosFiltrados.remove(cambioSelecionado);
@@ -311,7 +305,7 @@ public class CambioView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         baixa.setDespesa(despesaSelecionada);
     }
 

@@ -2,7 +2,6 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Coluna;
@@ -19,9 +18,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
 import org.primefaces.event.SelectEvent;
 import br.com.onesystem.reportTemplate.column.BalancoFisicoColumn;
 import br.com.onesystem.util.FatalMessage;
@@ -30,9 +26,10 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.war.builder.ColunaBV;
 import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
-import br.com.onesystem.war.service.ColunaService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.IOException;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import net.sf.jasperreports.engine.JRException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -42,8 +39,8 @@ import org.primefaces.model.DualListModel;
  *
  * @author Rafael
  */
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Serializable {
 
     private RelatorioDeBalancoFisicoBV relatorio;
@@ -56,10 +53,10 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
     private List<Coluna> camposSource = new ArrayList<Coluna>();
     private List<Coluna> camposTarget = new ArrayList<Coluna>();
 
-    @ManagedProperty("#{itemService}")
+    @Inject
     private ItemService service;
 
-    @ManagedProperty("#{modeloDeRelatorioService}")
+    @Inject
     private ModeloDeRelatorioService modeloService;
 
     @PostConstruct
@@ -102,7 +99,7 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
             if (modeloExistente != null) {
                 if (!validaTemplateRelatoriosExistente(modeloExistente)) {
                     atualizaColunas(modeloExistente);
-                    new AtualizaDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).atualiza(modeloExistente);
+                    new AtualizaDAO<ModeloDeRelatorio>().atualiza(modeloExistente);
                     deletaColunas(modeloExistente);
                     InfoMessage.atualizado();
                     limparJanela();
@@ -145,14 +142,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
 
         for (Coluna o : colunasDeletar) {
             modeloExistente.getColunas().remove(o);
-            new RemoveDAO<Coluna>(Coluna.class).remove(o, o.getId());
+            new RemoveDAO<Coluna>().remove(o, o.getId());
         }
     }
 
     public void delete() {
         try {
             if (modeloSelecionado != null) {
-                new RemoveDAO<ModeloDeRelatorio>(ModeloDeRelatorio.class).remove(modeloSelecionado, modeloSelecionado.getId());
+                new RemoveDAO<ModeloDeRelatorio>().remove(modeloSelecionado, modeloSelecionado.getId());
                 InfoMessage.removido();
                 limparJanela();
             }
@@ -350,14 +347,6 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
 
     public void setModeloSelecionado(ModeloDeRelatorio modeloSelecionado) {
         this.modeloSelecionado = modeloSelecionado;
-    }
-
-    public Object getBean() {
-        return bean;
-    }
-
-    public void setBean(Object bean) {
-        this.bean = bean;
     }
 
 }

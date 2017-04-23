@@ -37,7 +37,7 @@ public class ConfiguracaoCambio implements Serializable {
     private Pessoa pessoaCaixa;
 
     @OneToOne
-    private Despesa despesaDivisaoLucro;
+    private TipoDespesa despesaDivisaoLucro;
 
     @OneToMany(mappedBy = "configuracaoCambio", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private List<Pessoa> pessoaDivisaoLucro;
@@ -45,7 +45,7 @@ public class ConfiguracaoCambio implements Serializable {
     public ConfiguracaoCambio() {
     }
 
-    public ConfiguracaoCambio(Long id, Despesa despesaDivisaoLucro, boolean ativo, Pessoa pessoaCaixa, Conta contaCaixa) {
+    public ConfiguracaoCambio(Long id, TipoDespesa despesaDivisaoLucro, boolean ativo, Pessoa pessoaCaixa, Conta contaCaixa) {
         this.id = id;
         this.despesaDivisaoLucro = despesaDivisaoLucro;
         this.ativo = ativo;
@@ -57,7 +57,7 @@ public class ConfiguracaoCambio implements Serializable {
         return id;
     }
 
-    public Despesa getDespesaDivisaoLucro() {
+    public TipoDespesa getDespesaDivisaoLucro() {
         return despesaDivisaoLucro;
     }
 

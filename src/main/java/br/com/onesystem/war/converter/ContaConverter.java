@@ -28,8 +28,7 @@ public class ContaConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                ContaService service = (ContaService) fc.getExternalContext().getApplicationMap().get("contaService");
-                List<Conta> lista = service.buscarContas();
+                List<Conta> lista = new ContaService().buscarContas();
                 if (StringUtils.containsLetter(value)) {
                     for (Conta conta : lista) {
                         if (conta.getNome().equals(value)) {

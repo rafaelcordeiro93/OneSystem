@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemRecebido;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
@@ -23,6 +24,7 @@ public class EstoqueBuilder {
     private OperacaoDeEstoque operacaoDeEstoque;
     private Date emissao = new Date();
     private ItemEmitido itemEmitido;
+    private ItemRecebido itemRecebido;
     private AjusteDeEstoque ajusteDeEstoque;
 
     public EstoqueBuilder comID(Long ID) {
@@ -44,30 +46,34 @@ public class EstoqueBuilder {
         this.saldo = saldo;
         return this;
     }
+
     public EstoqueBuilder comOperacaoDeEstoque(OperacaoDeEstoque operacaoDeEstoque) {
         this.operacaoDeEstoque = operacaoDeEstoque;
         return this;
     }
-    
-    public EstoqueBuilder comEmissao(Date emissao){
+
+    public EstoqueBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
         return this;
     }
-    
-    public EstoqueBuilder comItemEmitido(ItemEmitido itemEmitido){
+
+    public EstoqueBuilder comItemEmitido(ItemEmitido itemEmitido) {
         this.itemEmitido = itemEmitido;
         return this;
     }
-    
+
     public EstoqueBuilder comAjusteDeEstoque(AjusteDeEstoque ajusteDeEstoque) {
         this.ajusteDeEstoque = ajusteDeEstoque;
         return this;
     }
-    
-    public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, emissao, itemEmitido, ajusteDeEstoque, operacaoDeEstoque);
+
+    public EstoqueBuilder comItemRecebido(ItemRecebido itemRecebido) {
+        this.itemRecebido = itemRecebido;
+        return this;
     }
 
-    
+    public Estoque construir() throws DadoInvalidoException {
+        return new Estoque(id, item, saldo, deposito, emissao, itemEmitido, itemRecebido, ajusteDeEstoque, operacaoDeEstoque);
+    }
 
 }

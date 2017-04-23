@@ -4,10 +4,10 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
-import java.math.BigDecimal;
 
-public class ContaBV implements Serializable {
+public class ContaBV implements Serializable, BuilderView<Conta> {
 
     private Long id;
     private String nome;

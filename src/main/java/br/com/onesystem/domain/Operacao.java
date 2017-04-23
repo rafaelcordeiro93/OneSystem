@@ -53,35 +53,35 @@ public class Operacao implements Serializable {
     private TipoOperacao tipoOperacao;
     @NotNull(message = "{receita_venda_vista_not_null}")
     @ManyToOne
-    private Receita vendaAVista;
+    private TipoReceita vendaAVista;
     @NotNull(message = "{receita_venda_prazo_not_null}")
     @ManyToOne
-    private Receita vendaAPrazo;
+    private TipoReceita vendaAPrazo;
     @NotNull(message = "{receita_servico_vista_not_null}")
     @ManyToOne
-    private Receita servicoAVista;
+    private TipoReceita servicoAVista;
     @NotNull(message = "{receita_servico_prazo_not_null}")
     @ManyToOne
-    private Receita servicoAPrazo;
+    private TipoReceita servicoAPrazo;
     @NotNull(message = "{receita_frete_not_null}")
     @ManyToOne
-    private Receita receitaFrete;
+    private TipoReceita receitaFrete;
     @NotNull(message = "{despesa_CMV_not_null}")
     @ManyToOne
-    private Despesa despesaCMV;
+    private TipoDespesa despesaCMV;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{contabilizar_CMV_not_null}")
     private TipoContabil contabilizarCMV;
     @NotNull(message = "{compra_vista_not_null}")
     @ManyToOne
-    private Despesa compraAVista;
+    private TipoDespesa compraAVista;
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
-    private Despesa compraAPrazo;
+    private TipoDespesa compraAPrazo;
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "operacoes")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
     @OneToMany(mappedBy = "operacao")
-    private List<NotaEmitida> notasEmitidas;
+    private List<Nota> notas;
     @OneToMany(mappedBy = "operacao")
     private List<AjusteDeEstoque> ajustes;
 
@@ -89,9 +89,9 @@ public class Operacao implements Serializable {
     }
 
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
-            TipoOperacao tipoOperacao, Receita vendaAVista, Receita vendaAPrazo, Receita servicoAVista,
-            Receita servicoAPrazo, Receita receitaFrete, Despesa despesaCMV, TipoContabil contabilizarCMV,
-            Despesa compraAVista, Despesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
+            TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
+            TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,
+            TipoDespesa compraAVista, TipoDespesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.operacaoFinanceira = operacaoFinanceira;
@@ -130,27 +130,27 @@ public class Operacao implements Serializable {
         return tipoOperacao;
     }
 
-    public Receita getVendaAVista() {
+    public TipoReceita getVendaAVista() {
         return vendaAVista;
     }
 
-    public Receita getVendaAPrazo() {
+    public TipoReceita getVendaAPrazo() {
         return vendaAPrazo;
     }
 
-    public Receita getServicoAVista() {
+    public TipoReceita getServicoAVista() {
         return servicoAVista;
     }
 
-    public Receita getServicoAPrazo() {
+    public TipoReceita getServicoAPrazo() {
         return servicoAPrazo;
     }
 
-    public Receita getReceitaFrete() {
+    public TipoReceita getReceitaFrete() {
         return receitaFrete;
     }
 
-    public Despesa getDespesaCMV() {
+    public TipoDespesa getDespesaCMV() {
         return despesaCMV;
     }
 
@@ -158,11 +158,11 @@ public class Operacao implements Serializable {
         return contabilizarCMV;
     }
 
-    public Despesa getCompraAVista() {
+    public TipoDespesa getCompraAVista() {
         return compraAVista;
     }
 
-    public Despesa getCompraAPrazo() {
+    public TipoDespesa getCompraAPrazo() {
         return compraAPrazo;
     }
 

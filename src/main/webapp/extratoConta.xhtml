@@ -152,7 +152,7 @@
 
                                 <h:panelGrid columns="2">
                                     <p:inputText id="pgTarifa" readonly="true" placeholder="#{l.Despesa}" style="margin-top: -1%" value="#{extratoDeContaView.baixa.despesa.nome}"/>
-                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                         <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionaDespesa}" process="@this" update="pgTarifa" />
                                     </p:commandButton>
                                 </h:panelGrid>

@@ -23,16 +23,16 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="cidadeId" dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.cidade}" var="cidade" itemLabel="#{cidade.id}" itemValue="#{cidade}" converter="cidadeBVConverter" itemLabelTabVisible="true" itemLabelTab="#{cidade.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
-                            
+                            <a:inputTextDialog id="cidadeid" value="#{cidadeView.e}" dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" update=":conteudo" var="cidade" converter="cidadeBVConverter" itemLabel="#{cidade.id}" itemValue="#{cidade}" onlyNumber="true" editVisible="false"/>
+                              
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{cidadeView.cidade.nome}"/>
+                            <p:inputText value="#{cidadeView.e.nome}"/>
 
                             <p:outputLabel value="#{l.Uf}"/>
-                            <p:inputText value="#{cidadeView.cidade.UF}"/>
+                            <p:inputText value="#{cidadeView.e.UF}"/>
 
                             <p:outputLabel value="#{l.Pais}"/>
-                            <p:inputText value="#{cidadeView.cidade.pais}"/>
+                            <p:inputText value="#{cidadeView.e.pais}"/>
 
                         </p:panelGrid>
 
@@ -47,7 +47,6 @@
                         <p:commandButton value=" #{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{cidadeView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value=" #{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{cidadeView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value=" #{l.Limpar}" action="#{cidadeView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value=" #{l.Desfazer}" action="#{cidadeView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
                     </div>
                 </div>
             </div>

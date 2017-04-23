@@ -6,23 +6,14 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
-import java.util.Arrays;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -31,42 +22,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_NOTAEMITIDA",
         sequenceName = "SEQ_NOTAEMITIDA")
-public class NotaEmitida implements Serializable {
+public class NotaEmitida extends Nota implements Serializable {
 
-    @Id
-    @GeneratedValue(generator = "SEQ_NOTAEMITIDA", strategy = GenerationType.SEQUENCE)
-    private Long id;
-    @NotNull(message = "{pessoa_not_null}")
-    @ManyToOne
-    private Pessoa pessoa;
-    @NotNull(message = "{operacao_not_null}")
-    @ManyToOne
-    private Operacao operacao;
-    @NotNull(message = "{forma_recebimento_not_null}")
-    @ManyToOne
-    private FormaDeRecebimento formaDeRecebimento;
-    @ManyToOne
-    private ListaDePreco listaDePreco;
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao;
-    private boolean cancelada;
-    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private ValoresAVista valoresAVista;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<Baixa> baixaDinheiro;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<ItemEmitido> itensEmitidos;
-    @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private Credito credito;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<Cheque> cheques;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<BoletoDeCartao> cartoes;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<Titulo> titulos;
-    @NotNull(message = "{moeda_padrao_not_null}")
-    @ManyToOne(optional = false)
-    private Moeda moedaPadrao;
 
     public NotaEmitida() {
     }
@@ -74,135 +33,32 @@ public class NotaEmitida implements Serializable {
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
-            Credito credito, List<Cheque> cheques, List<BoletoDeCartao> cartoes, List<Titulo> titulos,
-            Moeda moedaPadrao) throws DadoInvalidoException {
-        this.id = id;
-        this.pessoa = pessoa;
-        this.operacao = operacao;
+            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao) throws DadoInvalidoException {
+        super(id, pessoa, operacao, formaDeRecebimento, listaDePreco, valoresAVista, baixaDinheiro, emissao, cancelada, credito, parcelas, moedaPadrao);
         this.itensEmitidos = itensEmitidos;
-        this.formaDeRecebimento = formaDeRecebimento;
-        this.listaDePreco = listaDePreco;
-        this.valoresAVista = valoresAVista;
-        this.baixaDinheiro = baixaDinheiro;
-        this.emissao = emissao;
-        this.cancelada = cancelada;
-        this.credito = credito;
-        this.cheques = cheques;
-        this.cartoes = cartoes;
-        this.titulos = titulos;
-        this.moedaPadrao = moedaPadrao;
-        ehValido();
-    }
-
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "formaDeRecebimento", "moedaPadrao");
-        new ValidadorDeCampos<NotaEmitida>().valida(this, campos);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public Operacao getOperacao() {
-        return operacao;
-    }
-
-    public FormaDeRecebimento getFormaDeRecebimento() {
-        return formaDeRecebimento;
     }
 
     public List<ItemEmitido> getItensEmitidos() {
         return itensEmitidos;
     }
 
-    public List<Titulo> getTitulos() {
-        return titulos;
-    }
-
-    public ListaDePreco getListaDePreco() {
-        return listaDePreco;
-    }
-
-    public ValoresAVista getValoresAVista() {
-        return valoresAVista;
-    }
-
-    public List<Baixa> getBaixaDinheiro() {
-        return baixaDinheiro;
-    }
-
-    public Date getEmissao() {
-        return emissao;
-    }
-
-    public boolean isCancelada() {
-        return cancelada;
-    }
-
-    public Credito getCredito() {
-        return credito;
-    }
-
-    public List<Cheque> getCheques() {
-        return cheques;
-    }
-
-    public List<BoletoDeCartao> getCartoes() {
-        return cartoes;
-    }
-
-    public void setCheques(List<Cheque> cheques) {
-        this.cheques = cheques;
-    }
-
-    public void setCartoes(List<BoletoDeCartao> cartoes) {
-        this.cartoes = cartoes;
-    }
-
-    public Moeda getMoedaPadrao() {
-        return moedaPadrao;
-    }
-
-    public void setTitulos(List<Titulo> titulos) {
-        this.titulos = titulos;
-    }
-
-    public void setBaixaDinheiro(List<Baixa> baixaDinheiro) {
-        this.baixaDinheiro = baixaDinheiro;
-    }
-
     @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
-            return false;
-        }
-        if (!(objeto instanceof NotaEmitida)) {
-            return false;
-        }
-        NotaEmitida outro = (NotaEmitida) objeto;
-        if (this.id == null) {
-            return false;
-        }
-        return this.id.equals(outro.id);
+    public BigDecimal getTotalItens() {
+        return itensEmitidos.stream().map(ItemEmitido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     @Override
     public String toString() {
-        return "NotaEmitida{" + "id=" + id + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
-                + ", operacao=" + (operacao != null ? operacao.getId() : null)
-                + ", emissao=" + emissao
-                + ", cancelada=" + cancelada
-                + ", credito=" + credito
-                + ", itensEmitidos=" + itensEmitidos
-                + ", formaDeRecebimento=" + (formaDeRecebimento != null ? formaDeRecebimento.getId() : null)
-                + ", listaDePreco=" + listaDePreco + ", valoresAVista=" + valoresAVista
-                + ", baixaDinheiro=" + baixaDinheiro
-                + ", cheques=" + cheques + ", cartoes=" + cartoes
-                + ", titulos=" + titulos + '}';
+        return "NotaEmitida{" + "id=" + getId() + ", pessoa=" + (getPessoa() != null ? getPessoa().getId() : null)
+                + ", operacao=" + (getOperacao() != null ? getOperacao().getId() : null)
+                + ", emissao=" + getEmissao()
+                + ", cancelada=" + isCancelada()
+                + ", credito=" + getCredito()
+                + ", itensEmitidos=" + getItensEmitidos()
+                + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
+                + ", listaDePreco=" + getListaDePreco() + ", valoresAVista=" + getValoresAVista()
+                + ", baixaDinheiro=" + getBaixaDinheiro()
+                + ", parcelas=" + getParcelas() + '}';
     }
 
 }

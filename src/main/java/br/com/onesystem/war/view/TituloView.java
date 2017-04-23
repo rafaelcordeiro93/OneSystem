@@ -9,7 +9,6 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.exception.impl.IDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
@@ -19,22 +18,19 @@ import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.TituloBV;
 import br.com.onesystem.war.service.TituloService;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class TituloView implements Serializable {
 
     private boolean panel;
@@ -78,7 +74,7 @@ public class TituloView implements Serializable {
         try {
             Titulo tituloExistente = titulo.construirComID();
             if (tituloExistente.getId() != null) {
-                new AtualizaDAO<Titulo>(Titulo.class).atualiza(tituloExistente);
+                new AtualizaDAO<Titulo>().atualiza(tituloExistente);
                 tituloLista.set(tituloLista.indexOf(tituloExistente),
                         tituloExistente);
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(tituloExistente)) {
@@ -97,7 +93,7 @@ public class TituloView implements Serializable {
     public void delete() {
         try {
             if (tituloLista != null && tituloLista.contains(titulo.construirComID())) {
-                new RemoveDAO<Titulo>(Titulo.class).remove(titulo.construirComID(), titulo.construirComID().getId());
+                new RemoveDAO<Titulo>().remove(titulo.construirComID(), titulo.construirComID().getId());
                 tituloLista.remove(titulo.construirComID());
                 if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(titulo.construirComID())) {
                     gruposFinanceirosFiltrados.remove(titulo.construirComID());

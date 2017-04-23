@@ -7,7 +7,6 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.GrupoDePrivilegioDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.Janela;
@@ -17,75 +16,82 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.GrupoDePrivilegioBV;
+import br.com.onesystem.war.service.GrupoPrivilegioService;
 import br.com.onesystem.war.service.JanelaService;
-import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author Rafael
  */
-@ViewScoped
-@ManagedBean
-public class GrupoPrivilegioView extends BasicMBImpl<GrupoDePrivilegio> implements Serializable {
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class GrupoPrivilegioView implements Serializable {
 
-    private GrupoDePrivilegioBV grupoPrivilegio;
+    private boolean panel;
+    private GrupoDePrivilegioBV grupoPrivilegioBV;
     private GrupoDePrivilegio grupoSelecionado;
+    private List<GrupoDePrivilegio> grupoLista;
+    private List<GrupoDePrivilegio> gruposFiltrados;
+
+    @ManagedProperty("#{grupoPrivilegioService}")
+    private GrupoPrivilegioService service;
 
     @ManagedProperty("#{janelaService}")
-    private JanelaService janelaService;
+    private JanelaService serviceJanela;
 
     @PostConstruct
     public void init() {
         limparJanela();
+        panel = false;
+        grupoPrivilegioBV = new GrupoDePrivilegioBV();
+        grupoLista = service.buscarGrupoDePrivilegio();
     }
 
     public void add() {
         try {
-            GrupoDePrivilegio novoRegistro = grupoPrivilegio.construir();
-            if (validaGrupoExistente(novoRegistro)) {
-                new AdicionaDAO<GrupoDePrivilegio>().adiciona(novoRegistro);
-                geraJanelasdoPrivilegio(novoRegistro);
-                InfoMessage.adicionado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("!La grupo ja se encontra registrada!");
-            }
+            GrupoDePrivilegio novoRegistro = grupoPrivilegioBV.construir();
+            new AdicionaDAO<GrupoDePrivilegio>().adiciona(novoRegistro);
+            geraPrivilegio(novoRegistro);
+            grupoLista.add(novoRegistro);
+            InfoMessage.print("¡GrupoDePrivilegio '" + novoRegistro.getNome() + "' agregado con éxito!");
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void geraJanelasdoPrivilegio(GrupoDePrivilegio grupo) {
-        List<Janela> janelas = janelaService.buscarJanelas();
+    public void geraPrivilegio(GrupoDePrivilegio grupo) {
+        List<Janela> janelas = serviceJanela.buscarJanelas();
         for (Janela j : janelas) {
             try {
                 new AdicionaDAO<Privilegio>().adiciona(new Privilegio(null, j, false, false, false, false, grupo));
             } catch (DadoInvalidoException die) {
                 die.print();
-                break;
+                break;                
             }
         }
     }
 
     public void update() {
         try {
-            GrupoDePrivilegio grupoExistente = grupoPrivilegio.construirComId();
+            GrupoDePrivilegio grupoExistente = grupoPrivilegioBV.construirComId();
             if (grupoExistente.getId() != null) {
-                if (validaGrupoExistente(grupoExistente)) {
-                    new AtualizaDAO<GrupoDePrivilegio>(GrupoDePrivilegio.class).atualiza(grupoExistente);
-                    InfoMessage.atualizado();
-                    limparJanela();
-                } else {
-                    throw new EDadoInvalidoException("!La grupo no se encontra registrada!");
+                new AtualizaDAO<GrupoDePrivilegio>().atualiza(grupoExistente);
+                grupoLista.set(grupoLista.indexOf(grupoExistente),
+                        grupoExistente);
+                if (gruposFiltrados != null && gruposFiltrados.contains(grupoExistente)) {
+                    gruposFiltrados.set(gruposFiltrados.indexOf(grupoExistente), grupoExistente);
                 }
+                InfoMessage.print("¡GrupoDePrivilegio '" + grupoExistente.getNome() + "' cambiado con éxito!");
+                limparJanela();
+            } else {
+                throw new EDadoInvalidoException("!La grupo no se encontra registrada!");
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -93,11 +99,14 @@ public class GrupoPrivilegioView extends BasicMBImpl<GrupoDePrivilegio> implemen
     }
 
     public void delete() {
-        grupoSelecionado = grupoPrivilegio.construirComId();
         try {
-            if (grupoSelecionado != null) {
-                new RemoveDAO<GrupoDePrivilegio>(GrupoDePrivilegio.class).remove(grupoSelecionado, grupoSelecionado.getId());
-                InfoMessage.removido();
+            if (grupoLista != null && grupoLista.contains(grupoSelecionado)) {
+                new RemoveDAO<GrupoDePrivilegio>().remove(grupoSelecionado, grupoSelecionado.getId());
+                grupoLista.remove(grupoSelecionado);
+                if (gruposFiltrados != null && gruposFiltrados.contains(grupoSelecionado)) {
+                    gruposFiltrados.remove(grupoSelecionado);
+                }
+                InfoMessage.print("GrupoDePrivilegio '" + this.grupoPrivilegioBV.getNome() + "' eliminada con éxito!");
                 limparJanela();
             }
         } catch (DadoInvalidoException di) {
@@ -107,58 +116,45 @@ public class GrupoPrivilegioView extends BasicMBImpl<GrupoDePrivilegio> implemen
         }
     }
 
-    private boolean validaGrupoExistente(GrupoDePrivilegio novoRegistro) {
-        List<GrupoDePrivilegio> lista = new GrupoDePrivilegioDAO().buscarGrupos().porNome(novoRegistro).listaDeResultados();
-        return lista.isEmpty();
-    }
-
-    @Override
-    public void selecionar(SelectEvent e) {
-        if (grupoPrivilegio == null) {
-            limparJanela();
-        }
-        Object obj = e.getObject();
-        if (obj instanceof GrupoDePrivilegio) {
-            GrupoDePrivilegio c = (GrupoDePrivilegio) e.getObject();
-            grupoPrivilegio = new GrupoDePrivilegioBV(c);
-            grupoSelecionado = c;
-        }
-    }
-
-    @Override
-    public void buscaPorId() {
-        Long id = grupoPrivilegio.getId();
-        if (id != null) {
-            try {
-                GrupoDePrivilegioDAO dao = new GrupoDePrivilegioDAO();
-                GrupoDePrivilegio c = dao.buscarGrupos().porId(id).resultado();
-                grupoPrivilegio = new GrupoDePrivilegioBV(c);
-                grupoSelecionado = c;
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                grupoPrivilegio.setId(id);
-                die.print();
-            }
-        }
-    }
-
     public void limparJanela() {
-        grupoPrivilegio = new GrupoDePrivilegioBV();
-        grupoSelecionado = null;
+        grupoPrivilegioBV = new GrupoDePrivilegioBV();
+        grupoSelecionado = new GrupoDePrivilegio();
+    }
+
+    public void abrirEdicao() {
+        limparJanela();
+        panel = true;
+    }
+
+    public void abrirEdicaoComDados() {
+        panel = true;
+        grupoPrivilegioBV = new GrupoDePrivilegioBV(grupoSelecionado);
+    }
+
+    public void fecharEdicao() {
+        panel = false;
     }
 
     public void desfazer() {
         if (grupoSelecionado != null) {
-            grupoPrivilegio = new GrupoDePrivilegioBV(grupoSelecionado);
+            grupoPrivilegioBV = new GrupoDePrivilegioBV(grupoSelecionado);
         }
     }
 
-    public GrupoDePrivilegioBV getGrupoPrivilegio() {
-        return grupoPrivilegio;
+    public boolean isPanel() {
+        return panel;
     }
 
-    public void setGrupoPrivilegio(GrupoDePrivilegioBV grupoPrivilegio) {
-        this.grupoPrivilegio = grupoPrivilegio;
+    public void setPanel(boolean panel) {
+        this.panel = panel;
+    }
+
+    public GrupoDePrivilegioBV getGrupoPrivilegioBV() {
+        return grupoPrivilegioBV;
+    }
+
+    public void setGrupoPrivilegioBV(GrupoDePrivilegioBV grupoPrivilegioBV) {
+        this.grupoPrivilegioBV = grupoPrivilegioBV;
     }
 
     public GrupoDePrivilegio getGrupoSelecionado() {
@@ -169,12 +165,36 @@ public class GrupoPrivilegioView extends BasicMBImpl<GrupoDePrivilegio> implemen
         this.grupoSelecionado = grupoSelecionado;
     }
 
-    public JanelaService getJanelaService() {
-        return janelaService;
+    public List<GrupoDePrivilegio> getGrupoLista() {
+        return grupoLista;
     }
 
-    public void setJanelaService(JanelaService janelaService) {
-        this.janelaService = janelaService;
+    public void setGrupoLista(List<GrupoDePrivilegio> grupoLista) {
+        this.grupoLista = grupoLista;
     }
 
+    public List<GrupoDePrivilegio> getGruposFiltrados() {
+        return gruposFiltrados;
+    }
+
+    public void setGruposFiltrados(List<GrupoDePrivilegio> gruposFiltrados) {
+        this.gruposFiltrados = gruposFiltrados;
+    }
+
+    public GrupoPrivilegioService getService() {
+        return service;
+    }
+
+    public void setService(GrupoPrivilegioService service) {
+        this.service = service;
+    }
+
+    public JanelaService getServiceJanela() {
+        return serviceJanela;
+    }
+
+    public void setServiceJanela(JanelaService serviceJanela) {
+        this.serviceJanela = serviceJanela;
+    }
+    
 }

@@ -137,7 +137,7 @@
                                         <div class="EmptyBox30"/>
                                         <h:panelGrid columns="2" style="margin-left: -1%">
                                             <p:inputText id="cambioDespesa" value="#{cambioView.baixa.despesa.nome}" readonly="true" placeholder="#{l.Despesa}"/>
-                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this"
+                                            <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
                                                              update="@none" styleClass="MarLeft5">
                                                 <p:ajax event="dialogReturn" listener="#{cambioView.selecionaDespesa}"
                                                         process="@this" update="cambioDespesa" />

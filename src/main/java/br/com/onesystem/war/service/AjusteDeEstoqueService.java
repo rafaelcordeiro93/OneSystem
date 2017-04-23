@@ -3,17 +3,12 @@ package br.com.onesystem.war.service;
 import br.com.onesystem.dao.AjusteDeEstoqueDAO;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.AjusteDeEstoque;
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "ajusteDeEstoqueService")
-@ApplicationScoped
 public class AjusteDeEstoqueService implements Serializable {
 
     public List<AjusteDeEstoque> buscarAjusteDeEstoques() {

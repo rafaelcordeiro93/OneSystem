@@ -9,10 +9,10 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Receita;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -26,9 +26,8 @@ import br.com.onesystem.war.service.BaixaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -37,8 +36,8 @@ import org.primefaces.event.SelectEvent;
  *
  * @author Rafael
  */
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class BaixaView implements Serializable {
 
     private boolean panel;
@@ -48,7 +47,7 @@ public class BaixaView implements Serializable {
     private List<Baixa> baixasFiltradas;
     private String statusButton = "RedButton";
 
-    @ManagedProperty("#{baixaService}")
+    @Inject
     private BaixaService service;
 
     @PostConstruct
@@ -69,7 +68,7 @@ public class BaixaView implements Serializable {
 
     private void atualizaNoBanco(Baixa baixaExistente) throws ConstraintViolationException, DadoInvalidoException {
         if (baixaExistente.getId() != null) {
-            new AtualizaDAO<Baixa>(Baixa.class).atualiza(baixaExistente);
+            new AtualizaDAO<>().atualiza(baixaExistente);
             baixaLista.set(baixaLista.indexOf(baixaSelecionada),
                     baixaExistente);
             if (baixasFiltradas != null && baixasFiltradas.contains(baixaExistente)) {
@@ -117,12 +116,12 @@ public class BaixaView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionada = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
         this.baixa.setDespesa(despesaSelecionada);
     }
 
     public void selecionaReceita(SelectEvent event) {
-        Receita receitaSelecionada = (Receita) event.getObject();
+        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
         this.baixa.setReceita(receitaSelecionada);
     }
 
@@ -133,17 +132,17 @@ public class BaixaView implements Serializable {
 
     public void selecionaDespesaProvisionada(SelectEvent event) {
         DespesaProvisionada despesaSelecionada = (DespesaProvisionada) event.getObject();
-        this.baixa.setPerfilDeValor(despesaSelecionada);
+        this.baixa.setMovimentoFixo(despesaSelecionada);
     }
 
     public void selecionaReceitaProvisionada(SelectEvent event) {
         ReceitaProvisionada receitaSelecionada = (ReceitaProvisionada) event.getObject();
-        this.baixa.setPerfilDeValor(receitaSelecionada);
+        this.baixa.setMovimentoFixo(receitaSelecionada);
     }
 
     public void selecionaTitulo(SelectEvent event) {
         Titulo tituloSelecionado = (Titulo) event.getObject();
-        this.baixa.setPerfilDeValor(tituloSelecionado);
+        this.baixa.setParcela(tituloSelecionado);
     }
 
     public void selecionaRecepcao(SelectEvent event) {

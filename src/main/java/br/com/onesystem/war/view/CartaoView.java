@@ -5,14 +5,12 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CartaoDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.war.builder.CartaoBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -23,15 +21,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class CartaoView implements Serializable {
 
     private CartaoBV cartao;
@@ -41,7 +38,7 @@ public class CartaoView implements Serializable {
     private List<TaxaDeAdministracao> listaTaxaDeletada;
     private Configuracao configuracao;
 
-    @ManagedProperty("#{configuracaoService}")
+    @Inject
     private ConfiguracaoService serviceConfigurcao;
 
     @PostConstruct
@@ -85,7 +82,7 @@ public class CartaoView implements Serializable {
             if (cartaoSelecionada != null) {
                 Cartao cartaoExistente = cartao.construirComID();
                 preparaParaInclusaoDeTaxa(cartaoExistente);
-                new AtualizaDAO<Cartao>(Cartao.class).atualiza(cartaoExistente);
+                new AtualizaDAO<>().atualiza(cartaoExistente);
                 deletarTaxas();
                 InfoMessage.atualizado();
                 limparJanela();
@@ -99,14 +96,14 @@ public class CartaoView implements Serializable {
 
     private void deletarTaxas() throws PersistenceException, DadoInvalidoException {
         for (TaxaDeAdministracao lista : listaTaxaDeletada) {
-            new RemoveDAO<TaxaDeAdministracao>(TaxaDeAdministracao.class).remove(lista, lista.getId());
+            new RemoveDAO<>().remove(lista, lista.getId());
         }
     }
 
     public void delete() {
         try {
             if (cartaoSelecionada != null) {
-                new RemoveDAO<Cartao>(Cartao.class).remove(cartaoSelecionada, cartaoSelecionada.getId());
+                new RemoveDAO<>().remove(cartaoSelecionada, cartaoSelecionada.getId());
                 InfoMessage.removido();
                 limparJanela();
             }
@@ -123,12 +120,12 @@ public class CartaoView implements Serializable {
     }
 
     public void selecionaDespesa(SelectEvent event) {
-        Despesa despesaSelecionado = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
         cartao.setDespesa(despesaSelecionado);
     }
 
     public void selecionaJuros(SelectEvent event) {
-        Despesa despesaSelecionado = (Despesa) event.getObject();
+        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
         cartao.setJuros(despesaSelecionado);
     }
 

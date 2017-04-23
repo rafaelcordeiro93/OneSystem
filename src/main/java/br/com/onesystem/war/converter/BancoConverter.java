@@ -28,7 +28,7 @@ public class BancoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                BancoService service = (BancoService) fc.getExternalContext().getApplicationMap().get("bancoService");
+                BancoService service = new BancoService();
                 List<Banco> lista = service.buscarBancos();
                 if (StringUtils.containsLetter(value)) {
                     for (Banco banco : lista) {

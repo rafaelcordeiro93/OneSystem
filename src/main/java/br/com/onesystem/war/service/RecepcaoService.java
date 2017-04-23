@@ -6,11 +6,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.bean.ApplicationScoped;
-import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "recepcaoService")
-@ApplicationScoped
 public class RecepcaoService implements Serializable {
     
     public List<Recepcao> buscarRecepcoes(){

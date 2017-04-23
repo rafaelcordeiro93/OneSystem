@@ -1,11 +1,10 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
@@ -14,10 +13,10 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_PROVISIONADA")
-public class DespesaProvisionada extends PerfilDeValor implements RelatorioContaAbertaImpl {
+public class DespesaProvisionada extends MovimentoFixo implements RelatorioContaAbertaImpl {
 
     @ManyToOne
-    private Despesa despesa;
+    private TipoDespesa tipoDespesa;
 
     @ManyToOne
     private Cambio cambio;
@@ -27,22 +26,16 @@ public class DespesaProvisionada extends PerfilDeValor implements RelatorioConta
     public DespesaProvisionada() {
     }
 
-    public DespesaProvisionada(Long id, Pessoa pessoa, Despesa despesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
-            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa) throws DadoInvalidoException {
-        super(id, valor, vencimento, emissao, pessoa, cotacao, historico, baixa);
-        this.despesa = despesa;
+    public DespesaProvisionada(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
+            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento);
+        this.tipoDespesa = tipoDespesa;
         this.cambio = cambio;
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
-        ehValido();
     }
 
-    public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
-        new ValidadorDeCampos<PerfilDeValor>().valida(this, campos);
-    }
-
-    public Despesa getDespesa() {
-        return despesa;
+    public TipoDespesa getTipoDespesa() {
+        return tipoDespesa;
     }
 
     public Cambio getCambio() {
@@ -71,6 +64,11 @@ public class DespesaProvisionada extends PerfilDeValor implements RelatorioConta
 
     public boolean isDivisaoLucroCambioCaixa() {
         return divisaoLucroCambioCaixa;
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoDespesa().getNome();
     }
 
 }

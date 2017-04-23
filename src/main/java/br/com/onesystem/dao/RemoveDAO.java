@@ -20,19 +20,11 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class RemoveDAO<T> {
 
-    private final Class<T> classe;
-    private EntityManager em;
-
-    public RemoveDAO(Class<T> classe) {
-        this.classe = classe;
-    }
+    private EntityManager em = JPAUtil.getEntityManager();
 
     public void remove(T t, Long id) throws PersistenceException, DadoInvalidoException {
 
         try {
-
-            // consegue a entity manager
-            em = new JPAUtil().getEntityManager();
 
             // abre transacao
             em.getTransaction().begin();
@@ -53,7 +45,7 @@ public class RemoveDAO<T> {
             throw new FDadoInvalidoException("<RemoveDAO> Erro de Remoção: " + ex.getMessage());
         } finally {
             // fecha a entity manager
-            em.close();
+//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
         }
 
     }

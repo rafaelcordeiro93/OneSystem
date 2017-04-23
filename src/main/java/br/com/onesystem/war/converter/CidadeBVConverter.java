@@ -11,11 +11,9 @@ import br.com.onesystem.war.builder.CidadeBV;
 import br.com.onesystem.war.service.CidadeService;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -29,15 +27,8 @@ public class CidadeBVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                CidadeService service = (CidadeService) fc.getExternalContext().getApplicationMap().get("cidadeService");
-                List<Cidade> lista = service.buscarCidades();
-                if (StringUtils.containsLetter(value)) {
-                    for (Cidade cidade : lista) {
-                        if (cidade.getNome().equals(value)) {
-                            return new CidadeBV(cidade);
-                        }
-                    }
-                } else {
+                List<Cidade> lista =  new CidadeService().buscarCidades();
+                if (!StringUtils.containsLetter(value)) {
                     for (Cidade cidade : lista) {
                         if (cidade.getId().equals(new Long(value))) {
                             return new CidadeBV(cidade);

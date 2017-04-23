@@ -101,7 +101,7 @@
                             <p:outputLabel value="#{l.Despesa_CMV}"/>
                             <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="DespesaCMV" size="26" readonly="true" value="#{operacaoView.operacao.despesaCMV.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaDespesaCMV}" process="@this" update="DespesaCMV" />
                                 </p:commandButton>
                             </h:panelGrid>
@@ -109,7 +109,7 @@
                             <p:outputLabel value="#{l.Compra_AVista}"/>
                             <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="CompraAVista" size="26" readonly="true" value="#{operacaoView.operacao.compraAVista.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAVista}" process="@this" update="CompraAVista" />
                                 </p:commandButton>
                             </h:panelGrid>
@@ -117,18 +117,17 @@
                             <p:outputLabel value="#{l.Compra_APrazo}"/>
                             <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
                                 <p:inputText id="CompraAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.compraAPrazo.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAPrazo}" process="@this" update="CompraAPrazo" />
                                 </p:commandButton>
                             </h:panelGrid>
 
                         </p:panelGrid>
-                        <p:separator/>
                     </div>
 
                     <div class="EmptyBox20"/>
 
-
+                    <p:separator/>
 
                     <div class="EmptyBox15"/>
 

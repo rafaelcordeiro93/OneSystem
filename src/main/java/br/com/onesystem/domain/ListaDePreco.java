@@ -33,7 +33,7 @@ public class ListaDePreco implements Serializable {
     @OneToMany(mappedBy = "listaDePreco")
     private List<PrecoDeItem> precos;
     @OneToMany(mappedBy = "listaDePreco")
-    private List<NotaEmitida> notasEmitidas;
+    private List<Nota> notas;
 
     public ListaDePreco() {
     }

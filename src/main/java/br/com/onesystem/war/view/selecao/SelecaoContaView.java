@@ -8,17 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@ManagedBean
-@ViewScoped
+@Named
+@javax.enterprise.context.RequestScoped
 public class SelecaoContaView extends BasicCrudMBImpl<Conta> implements Serializable {
 
-    @ManagedProperty("#{contaService}")
+    @Inject
     private ContaService service;
 
     @PostConstruct

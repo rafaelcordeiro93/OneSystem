@@ -28,8 +28,7 @@ public class CartaoConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                CartaoService service = (CartaoService) fc.getExternalContext().getApplicationMap().get("cartaoService");
-                List<Cartao> lista = service.buscarCartaos();
+                List<Cartao> lista = new CartaoService().buscarCartaos();
                 if (StringUtils.containsLetter(value)) {
                     for (Cartao cartao : lista) {
                         if (cartao.getNome().equals(value)) {
@@ -45,7 +44,7 @@ public class CartaoConverter implements Converter, Serializable {
                 }
                 return null;
             } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma cartao válida."));
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um cartao válido."));
             }
         } else {
             return null;

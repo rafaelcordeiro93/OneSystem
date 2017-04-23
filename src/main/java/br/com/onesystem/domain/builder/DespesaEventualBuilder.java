@@ -2,10 +2,11 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Despesa;
+import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,7 +26,8 @@ public class DespesaEventualBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private List<Baixa> baixas;
     private Cotacao cotacao;
-    private Despesa despesa;
+    private TipoDespesa despesa;
+    private OperacaoFinanceira operacaoFinanceira;
 
     public DespesaEventualBuilder comId(Long id) {
         this.id = id;
@@ -57,7 +59,7 @@ public class DespesaEventualBuilder {
         return this;
     }
 
-    public DespesaEventualBuilder comDespesa(Despesa despesa) {
+    public DespesaEventualBuilder comDespesa(TipoDespesa despesa) {
         this.despesa = despesa;
         return this;
     }
@@ -72,8 +74,13 @@ public class DespesaEventualBuilder {
         return this;
     }
 
+    public DespesaEventualBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+        return this;
+    }
+
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventual(id, pessoa, despesa, valor, vencimento, emissao, historico, cotacao, baixas);
+        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira);
     }
 
 }

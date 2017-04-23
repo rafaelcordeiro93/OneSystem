@@ -12,11 +12,13 @@ public class CriarBanco {
 
             EntityManager manager = JPAUtil.getEntityManager();
 
-            String consulta = "select r from Recepcao r";
+            String consulta = "select r from Pessoa r";
 
             Query query = manager.createQuery(consulta);
 
             query.getResultList();
+            
+            System.out.println("Banco criado com sucesso");
         } catch (Exception die) {
             System.out.println(die.getMessage());
         }

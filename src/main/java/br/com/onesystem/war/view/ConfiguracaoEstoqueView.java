@@ -1,33 +1,30 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
-import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoEstoqueBV;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Inject;
+import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
-@ManagedBean
-@ViewScoped
-public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque> implements Serializable {
-    
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, ConfiguracaoEstoqueBV> implements Serializable {
+
     private ConfiguracaoEstoqueBV configuracaoEstoqueBV;
     private ConfiguracaoEstoque configuracao;
-    
-    @ManagedProperty("#{configuracaoEstoqueService}")
+
+    @Inject
     private ConfiguracaoEstoqueService service;
-    
+
     @PostConstruct
     public void init() {
         configuracao = service.buscar();
@@ -37,22 +34,21 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque> im
             configuracaoEstoqueBV = new ConfiguracaoEstoqueBV(configuracao);
         }
     }
-    
+
     public void update() {
         try {
             ConfiguracaoEstoque conf = configuracaoEstoqueBV.construir();
             if (configuracao == null) {
-                new AdicionaDAO<ConfiguracaoEstoque>().adiciona(conf);
-                configuracao = conf;
+                addNoBanco(conf);
             } else {
-                new AtualizaDAO<ConfiguracaoEstoque>(ConfiguracaoEstoque.class).atualiza(conf);
+                updateNoBanco(conf);
             }
-            InfoMessage.print("Configurações gravadas com sucesso!");
+            InfoMessage.print(new BundleUtil().getLabel("Configuracoes_Gravadas"));
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
-        
+
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
@@ -64,29 +60,33 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque> im
             configuracaoEstoqueBV.setListaDePreco(lp);
         }
     }
-    
+
     public ConfiguracaoEstoqueBV getConfiguracaoBV() {
         return configuracaoEstoqueBV;
     }
-    
+
     public void setConfiguracaoBV(ConfiguracaoEstoqueBV configuracaoBV) {
         this.configuracaoEstoqueBV = configuracaoBV;
     }
-    
+
     public ConfiguracaoEstoque getConfiguracao() {
         return configuracao;
     }
-    
+
     public void setConfiguracao(ConfiguracaoEstoque configuracao) {
         this.configuracao = configuracao;
     }
-    
+
     public ConfiguracaoEstoqueService getService() {
         return service;
     }
-    
+
     public void setService(ConfiguracaoEstoqueService service) {
         this.service = service;
     }
-    
+
+    @Override
+    public void limparJanela() {
+    }
+
 }
