@@ -16,16 +16,12 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("BOLETO_DE_CARTAO")
-public class BoletoDeCartao extends Transacao implements Serializable {
+public class BoletoDeCartao extends Parcela implements Serializable {
 
-    @ManyToOne
-    private NotaEmitida notaEmitida;
     @NotNull(message = "{cartao_not_null}")
     @ManyToOne
     private Cartao cartao;
@@ -40,8 +36,7 @@ public class BoletoDeCartao extends Transacao implements Serializable {
 
     public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
             String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
-        this.notaEmitida = notaEmitida;
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, notaEmitida);
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
@@ -52,11 +47,7 @@ public class BoletoDeCartao extends Transacao implements Serializable {
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "valor", "cotacao");
-        new ValidadorDeCampos<Transacao>().valida(this, campos);
-    }
-
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+        new ValidadorDeCampos<Parcela>().valida(this, campos);
     }
 
     public Cartao getCartao() {
@@ -71,13 +62,13 @@ public class BoletoDeCartao extends Transacao implements Serializable {
         return situacao;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public String getDetalhes() {
+        return cartao == null ? "" : cartao.getNome() + " Nº " + codigoTransacao;
     }
 
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (notaEmitida == null ? null : notaEmitida.getId())
+        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (getNotaEmitida() == null ? null : getNotaEmitida().getId())
                 + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao()
                 + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", desconto="
                 + ", situacao=" + situacao + ", cotacao=" + getCotacao() + '}';

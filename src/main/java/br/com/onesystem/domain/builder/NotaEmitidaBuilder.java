@@ -18,6 +18,7 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +33,6 @@ public class NotaEmitidaBuilder {
     private Pessoa pessoa;
     private Operacao operacao;
     private List<ItemEmitido> itensEmitidos;
-    private List<Titulo> titulos;
     private ListaDePreco listaDePreco;
     private ValoresAVista valoresAVista;
     private Date emissao;
@@ -40,8 +40,7 @@ public class NotaEmitidaBuilder {
     private List<Baixa> baixas;
     private FormaDeRecebimento formaDeRecebimento;
     private Credito credito;
-    private List<Cheque> cheques;
-    private List<BoletoDeCartao> boletoDeCartao;
+    private List<Parcela> parcelas;
     private Moeda moedaPadrao;
 
     public NotaEmitidaBuilder comId(Long id) {
@@ -61,11 +60,6 @@ public class NotaEmitidaBuilder {
 
     public NotaEmitidaBuilder comItensEmitidos(List<ItemEmitido> itensEmitidos) {
         this.itensEmitidos = itensEmitidos;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comTitulos(List<Titulo> titulos) {
-        this.titulos = titulos;
         return this;
     }
 
@@ -104,13 +98,8 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
-    public NotaEmitidaBuilder comCheque(List<Cheque> cheques) {
-        this.cheques = cheques;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comBoletoDeCartao(List<BoletoDeCartao> boletoDeCartao) {
-        this.boletoDeCartao = boletoDeCartao;
+    public NotaEmitidaBuilder comCheque(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
         return this;
     }
 
@@ -119,8 +108,13 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
+    public NotaEmitidaBuilder comParcelas(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, cheques, boletoDeCartao, titulos, moedaPadrao);
+        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, parcelas, moedaPadrao);
     }
 
 }

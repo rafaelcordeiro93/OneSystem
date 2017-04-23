@@ -22,11 +22,8 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("CHEQUE")
-public class Cheque extends Transacao implements Serializable {
+public class Cheque extends Parcela implements Serializable {
 
-    @ManyToOne
-
-    private NotaEmitida notaEmitida;
     @NotNull(message = "{banco_not_null}")
     @ManyToOne
     private Banco banco;
@@ -59,8 +56,7 @@ public class Cheque extends Transacao implements Serializable {
     public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
             String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento);
-        this.notaEmitida = notaEmitida;
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, notaEmitida);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
@@ -79,10 +75,6 @@ public class Cheque extends Transacao implements Serializable {
         List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
-    }
-
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
     }
 
     public Banco getBanco() {
@@ -125,17 +117,17 @@ public class Cheque extends Transacao implements Serializable {
         return valoresAVista;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
-    }
-
     public TipoLancamento getTipoLancamento() {
         return tipoLancamento;
     }
 
+    public String getDetalhes() {
+        return banco == null ? "" : banco.getNome() + " / " + agencia + " / " + conta + " Nº " + numeroCheque;
+    }
+
     @Override
     public String toString() {
-        return "Cheque{" + "id=" + getId() + ", notaEmitida=" + (notaEmitida == null ? null : notaEmitida.getId()) + ", valor=" + valor
+        return "Cheque{" + "id=" + getId() + ", notaEmitida=" + (getNotaEmitida() == null ? null : getNotaEmitida().getId()) + ", valor=" + valor
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
                 + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()

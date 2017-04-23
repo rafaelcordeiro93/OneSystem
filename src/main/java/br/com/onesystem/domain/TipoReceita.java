@@ -49,7 +49,7 @@ public class TipoReceita implements Serializable {
     private List<Operacao> servicosAPrazo;
     @OneToMany(mappedBy = "receitaFrete")
     private List<Operacao> receitasFretes;
-    @OneToMany(mappedBy = "receita")
+    @OneToMany(mappedBy = "tipoReceita")
     private List<ReceitaEventual> receitasEventuais;
 
     public TipoReceita() {

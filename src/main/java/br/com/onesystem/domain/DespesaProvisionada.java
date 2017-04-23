@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_PROVISIONADA")
-public class DespesaProvisionada extends Transacao implements RelatorioContaAbertaImpl {
+public class DespesaProvisionada extends MovimentoFixo implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private TipoDespesa tipoDespesa;
@@ -34,7 +34,7 @@ public class DespesaProvisionada extends Transacao implements RelatorioContaAber
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
     }
 
-    public TipoDespesa getDespesa() {
+    public TipoDespesa getTipoDespesa() {
         return tipoDespesa;
     }
 
@@ -64,6 +64,11 @@ public class DespesaProvisionada extends Transacao implements RelatorioContaAber
 
     public boolean isDivisaoLucroCambioCaixa() {
         return divisaoLucroCambioCaixa;
+    }
+
+    @Override
+    public String getDetalhes() {
+        return getTipoDespesa().getNome();
     }
 
 }

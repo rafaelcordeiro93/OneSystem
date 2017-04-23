@@ -25,7 +25,7 @@ public class ReceitaProvisionadaBV implements Serializable {
     public ReceitaProvisionadaBV(ReceitaProvisionada receitaProvisionadaSelecionada) {
         this.id = receitaProvisionadaSelecionada.getId();
         this.pessoa = receitaProvisionadaSelecionada.getPessoa();
-        this.receita = receitaProvisionadaSelecionada.getReceita();
+        this.receita = receitaProvisionadaSelecionada.getTipoReceita();
         this.valor = receitaProvisionadaSelecionada.getValor();
         this.vencimento = receitaProvisionadaSelecionada.getVencimento();
         this.emissao = receitaProvisionadaSelecionada.getEmissao();

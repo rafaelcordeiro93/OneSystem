@@ -48,7 +48,7 @@
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
                                     <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
-                                        <p:ajax event="blur" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
+                                        <p:ajax event="itemSelect" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 

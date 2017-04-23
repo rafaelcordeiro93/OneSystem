@@ -10,9 +10,12 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -61,11 +64,7 @@ public class NotaEmitida implements Serializable {
     @OneToOne(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private Credito credito;
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<Cheque> cheques;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<BoletoDeCartao> cartoes;
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<Titulo> titulos;
+    private List<Parcela> parcelas;
     @NotNull(message = "{moeda_padrao_not_null}")
     @ManyToOne(optional = false)
     private Moeda moedaPadrao;
@@ -76,8 +75,7 @@ public class NotaEmitida implements Serializable {
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
-            Credito credito, List<Cheque> cheques, List<BoletoDeCartao> cartoes, List<Titulo> titulos,
-            Moeda moedaPadrao) throws DadoInvalidoException {
+            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -89,9 +87,7 @@ public class NotaEmitida implements Serializable {
         this.emissao = emissao;
         this.cancelada = cancelada;
         this.credito = credito;
-        this.cheques = cheques;
-        this.cartoes = cartoes;
-        this.titulos = titulos;
+        this.parcelas = parcelas;
         this.moedaPadrao = moedaPadrao;
         ehValido();
     }
@@ -121,10 +117,6 @@ public class NotaEmitida implements Serializable {
         return itensEmitidos;
     }
 
-    public List<Titulo> getTitulos() {
-        return titulos;
-    }
-
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
     }
@@ -149,28 +141,29 @@ public class NotaEmitida implements Serializable {
         return credito;
     }
 
-    public List<Cheque> getCheques() {
-        return cheques;
-    }
-
-    public List<BoletoDeCartao> getCartoes() {
-        return cartoes;
-    }
-
-    public void setCheques(List<Cheque> cheques) {
-        this.cheques = cheques;
-    }
-
-    public void setCartoes(List<BoletoDeCartao> cartoes) {
-        this.cartoes = cartoes;
-    }
-
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
     }
 
-    public void setTitulos(List<Titulo> titulos) {
-        this.titulos = titulos;
+    public List<Parcela> getParcelas() {
+        parcelas.sort(Comparator.comparingLong(Parcela::getDias));
+        return parcelas;
+    }
+
+    public String getTotalItensFormatado() {
+        return MoedaFomatter.format(moedaPadrao, getTotalItens());
+    }
+
+    public String getTotalParcelasFormatado() {
+        return MoedaFomatter.format(moedaPadrao, getTotalParcelas());
+    }
+
+    public BigDecimal getTotalParcelas() {
+        return parcelas.stream().map(Parcela::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void setParcelas(List<Parcela> parcelas) {
+        this.parcelas = parcelas;
     }
 
     public void setBaixaDinheiro(List<Baixa> baixaDinheiro) {
@@ -178,19 +171,15 @@ public class NotaEmitida implements Serializable {
     }
 
     public BigDecimal getTotalItens() {
-        BigDecimal total = BigDecimal.ZERO;
-        for (ItemEmitido i : itensEmitidos) {
-            total = total.add(i.getTotal());
-        }
-        return total;
+        return itensEmitidos.stream().map(ItemEmitido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public String getTotalItensFormatado() {
-        if (itensEmitidos.isEmpty()) {
-            return "";
-        } else {
-            return MoedaFomatter.format(moedaPadrao, getTotalItens());
-        }
+    public String getTotalNotaFormatado() {
+        return MoedaFomatter.format(moedaPadrao, getTotalNota());
+    }
+
+    public BigDecimal getTotalNota() {
+        return getTotalItens().add(valoresAVista.getAcrescimo().add(valoresAVista.getFrete().add(valoresAVista.getDespesaCobranca()))).subtract(valoresAVista.getDesconto());
     }
 
     @Override
@@ -219,8 +208,7 @@ public class NotaEmitida implements Serializable {
                 + ", formaDeRecebimento=" + (formaDeRecebimento != null ? formaDeRecebimento.getId() : null)
                 + ", listaDePreco=" + listaDePreco + ", valoresAVista=" + valoresAVista
                 + ", baixaDinheiro=" + baixaDinheiro
-                + ", cheques=" + cheques + ", cartoes=" + cartoes
-                + ", titulos=" + titulos + '}';
+                + ", parcelas=" + parcelas + '}';
     }
 
 }

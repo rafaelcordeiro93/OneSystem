@@ -28,7 +28,7 @@ public class DespesaEventualBV implements Serializable {
     public DespesaEventualBV(DespesaEventual despesaEventualSelecionada) {
         this.id = despesaEventualSelecionada.getId();
         this.pessoa = despesaEventualSelecionada.getPessoa();
-        this.despesa = despesaEventualSelecionada.getDespesa();
+        this.despesa = despesaEventualSelecionada.getTipoDespesa();
         this.valor = despesaEventualSelecionada.getValor();
         this.vencimento = despesaEventualSelecionada.getVencimento();
         this.emissao = despesaEventualSelecionada.getEmissao();

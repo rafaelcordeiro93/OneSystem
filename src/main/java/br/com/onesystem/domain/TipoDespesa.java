@@ -45,6 +45,8 @@ public class TipoDespesa implements Serializable {
     private List<Operacao> comprasAVista;
     @OneToMany(mappedBy = "compraAPrazo")
     private List<Operacao> comprasAPrazo;
+    @OneToMany(mappedBy = "tipoDespesa")
+    private List<DespesaEventual> despesasEventuals;
 
     public TipoDespesa() {
     }
