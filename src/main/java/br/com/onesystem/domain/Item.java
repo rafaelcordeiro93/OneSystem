@@ -3,7 +3,6 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.war.service.EstoqueService;
@@ -16,7 +15,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -79,6 +77,8 @@ public class Item implements Serializable {
     private List<AjusteDeEstoque> listaDeAjustes;
     @OneToMany(mappedBy = "item")
     private List<ItemEmitido> itensEmitidos;
+    @OneToMany(mappedBy = "item")
+    private List<ItemRecebido> itensRecebidos;
     @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
     @ManyToOne

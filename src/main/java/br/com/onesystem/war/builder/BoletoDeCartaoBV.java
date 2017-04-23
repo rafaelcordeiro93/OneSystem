@@ -3,7 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -17,7 +17,7 @@ import java.util.Date;
 public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCartao> {
 
     private Long id;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     private Cartao cartao;
     private Date emissao;
     private Date vencimento;
@@ -30,7 +30,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
 
     public BoletoDeCartaoBV(BoletoDeCartao b) {
         this.id = b.getId();
-        this.notaEmitida = b.getNotaEmitida();
+        this.nota = b.getNota();
         this.cartao = b.getCartao();
         this.emissao = b.getEmissao();
         this.vencimento = b.getVencimento();
@@ -53,12 +53,12 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.id = id;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     public Cartao getCartao() {
@@ -134,7 +134,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comNotaEmitida(notaEmitida).
+        return new BoletoDeCartaoBuilder().comNota(nota).
                 comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comVencimento(vencimento).comValor(valor).comCotacao(cotacao).
                 comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
@@ -142,7 +142,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comID(id).
-                comNotaEmitida(notaEmitida).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
+                comNota(nota).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).
                 comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }

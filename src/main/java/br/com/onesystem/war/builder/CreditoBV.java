@@ -1,9 +1,7 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Credito;
-import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoContabil;
@@ -17,7 +15,7 @@ public class CreditoBV implements Serializable {
     private Date emissao;
     private Pessoa pessoa;
     private BigDecimal valor;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     private TipoContabil tipoContabil;
 
     public CreditoBV(Credito creditoSelecionado) {
@@ -25,7 +23,7 @@ public class CreditoBV implements Serializable {
         this.emissao = creditoSelecionado.getEmissao();
         this.pessoa = creditoSelecionado.getPessoa();
         this.valor = creditoSelecionado.getValor();
-        this.notaEmitida = creditoSelecionado.getNotaEmitida();
+        this.nota = creditoSelecionado.getNota();
         this.tipoContabil = creditoSelecionado.getTipoContabil();
     }
 
@@ -64,12 +62,12 @@ public class CreditoBV implements Serializable {
         this.valor = valor;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     public TipoContabil getTipoContabil() {
@@ -81,10 +79,10 @@ public class CreditoBV implements Serializable {
     }
 
     public Credito construir() throws DadoInvalidoException {
-        return new Credito(null, emissao, pessoa, valor, notaEmitida, tipoContabil);
+        return new Credito(null, emissao, pessoa, valor, nota, tipoContabil);
     }
 
     public Credito construirComID() throws DadoInvalidoException {
-        return new Credito(id, emissao, pessoa, valor, notaEmitida, tipoContabil);
+        return new Credito(id, emissao, pessoa, valor, nota, tipoContabil);
     }
 }

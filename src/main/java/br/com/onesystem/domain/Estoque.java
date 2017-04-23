@@ -49,6 +49,8 @@ public class Estoque implements Serializable {
     private OperacaoDeEstoque operacaoDeEstoque;
     @ManyToOne
     private ItemEmitido itemEmitido;
+    @ManyToOne
+    private ItemRecebido itemRecebido;
     @OneToOne
     private AjusteDeEstoque ajusteDeEstoque;
 
@@ -56,7 +58,7 @@ public class Estoque implements Serializable {
     }
 
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
-            Date emissao, ItemEmitido itemEmitido, AjusteDeEstoque ajusteDeEstoque,
+            Date emissao, ItemEmitido itemEmitido, ItemRecebido itemRecebido, AjusteDeEstoque ajusteDeEstoque,
             OperacaoDeEstoque operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
@@ -65,8 +67,13 @@ public class Estoque implements Serializable {
         this.operacaoDeEstoque = operacaoDeEstoque;
         this.emissao = emissao;
         this.itemEmitido = itemEmitido;
+        this.itemRecebido = itemRecebido;
         this.ajusteDeEstoque = ajusteDeEstoque;
         ehValido();
+    }
+
+    public ItemRecebido getItemRecebido() {
+        return itemRecebido;
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -99,6 +106,14 @@ public class Estoque implements Serializable {
             this.id = null;
             this.emissao = emissao;
             this.itemEmitido = itemEmitido;
+        }
+    }
+
+    public void preparaInclusaoDe(ItemRecebido itemRecebido, Date emissao) {
+        if (this.itemRecebido == null) {
+            this.id = null;
+            this.emissao = emissao;
+            this.itemRecebido = itemRecebido;
         }
     }
 

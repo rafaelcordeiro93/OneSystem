@@ -11,7 +11,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.MovimentoFixo;
 import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
@@ -49,7 +49,7 @@ public class BaixaBuilder {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private boolean cancelada = false;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     private MovimentoFixo movimentoFixo;
 
     public BaixaBuilder comId(Long id) {
@@ -142,8 +142,8 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public BaixaBuilder comNota(Nota nota) {
+        this.nota = nota;
         return this;
     }
 
@@ -158,7 +158,7 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, notaEmitida, movimentoFixo);
+        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, nota, movimentoFixo);
     }
 
 }

@@ -53,10 +53,10 @@ public class Cheque extends Parcela implements Serializable {
     public Cheque() {
     }
 
-    public Cheque(Long id, NotaEmitida notaEmitida, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
+    public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
             String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, notaEmitida);
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
@@ -127,7 +127,7 @@ public class Cheque extends Parcela implements Serializable {
 
     @Override
     public String toString() {
-        return "Cheque{" + "id=" + getId() + ", notaEmitida=" + (getNotaEmitida() == null ? null : getNotaEmitida().getId()) + ", valor=" + valor
+        return "Cheque{" + "id=" + getId() + ", nota=" + (getNota() == null ? null : getNota().getId()) + ", valor=" + valor
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
                 + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()

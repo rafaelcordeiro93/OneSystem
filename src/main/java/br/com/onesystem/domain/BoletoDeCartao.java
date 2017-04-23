@@ -34,9 +34,9 @@ public class BoletoDeCartao extends Parcela implements Serializable {
     public BoletoDeCartao() {
     }
 
-    public BoletoDeCartao(Long id, NotaEmitida notaEmitida, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
+    public BoletoDeCartao(Long id, Nota nota, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
             String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, notaEmitida);
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota);
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;
@@ -68,7 +68,7 @@ public class BoletoDeCartao extends Parcela implements Serializable {
 
     @Override
     public String toString() {
-        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (getNotaEmitida() == null ? null : getNotaEmitida().getId())
+        return "BoletoDeCartao{" + "id=" + getId() + ", venda=" + (getNota() == null ? null : getNota().getId())
                 + ", cartao=" + (cartao == null ? null : cartao.getId()) + ", emissao=" + getEmissao()
                 + ", vencimento=" + getVencimento() + ", valor=" + valor + ", codTransacao=" + codigoTransacao + ", desconto="
                 + ", situacao=" + situacao + ", cotacao=" + getCotacao() + '}';

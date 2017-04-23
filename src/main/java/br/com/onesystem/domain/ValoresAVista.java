@@ -45,7 +45,7 @@ public class ValoresAVista implements Serializable {
     @Min(value = 0, message = "{min_aFaturar}")
     private BigDecimal aFaturar = BigDecimal.ZERO;
     @OneToOne
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     @ManyToOne
     private Cotacao cotacao;
     @Min(value = 0, message = "{valorDesconto_min}")
@@ -64,13 +64,13 @@ public class ValoresAVista implements Serializable {
 
     public ValoresAVista(Long id,
             BigDecimal dinheiro, BoletoDeCartao boletoDeCartao,
-            BigDecimal aFaturar, NotaEmitida notaEmitida, Cotacao cotacao, BigDecimal desconto,
+            BigDecimal aFaturar, Nota nota, Cotacao cotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
             List<Cheque> cheques) throws DadoInvalidoException {
         this.id = id;
         this.dinheiro = dinheiro;
         this.aFaturar = aFaturar;
-        this.notaEmitida = notaEmitida;
+        this.nota = nota;
         this.cotacao = cotacao;
         this.desconto = desconto;
         this.acrescimo = acrescimo;
@@ -104,8 +104,8 @@ public class ValoresAVista implements Serializable {
         return aFaturar;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public Nota getNota() {
+        return nota;
     }
 
     public Cotacao getCotacao() {
@@ -129,11 +129,11 @@ public class ValoresAVista implements Serializable {
     }
 
     public String getTotalChequeFormatado() {
-        if (notaEmitida != null) {
+        if (nota != null) {
             if (cheques != null && cheques.isEmpty()) {
-                return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getTotalCheque());
+                return MoedaFomatter.format(nota.getMoedaPadrao(), getTotalCheque());
             } else {
-                return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+                return MoedaFomatter.format(nota.getMoedaPadrao(), BigDecimal.ZERO);
             }
         } else if (cheques != null && cheques.isEmpty()) {
             return MoedaFomatter.format(getTotalCheque());
@@ -143,40 +143,40 @@ public class ValoresAVista implements Serializable {
     }
 
     public String getAcrescimoFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getAcrescimo());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getAcrescimo());
         } else {
             return MoedaFomatter.format(getAcrescimo());
         }
     }
 
     public String getDinheiroFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDinheiro());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDinheiro());
         } else {
             return MoedaFomatter.format(getDinheiro());
         }
     }
 
     public String getDescontoFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDesconto());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDesconto());
         } else {
             return MoedaFomatter.format(getDesconto());
         }
     }
 
     public String getDespesaCobrancaFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getDespesaCobranca());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getDespesaCobranca());
         } else {
             return MoedaFomatter.format(getDespesaCobranca());
         }
     }
 
     public String getFreteFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getFrete());
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getFrete());
         } else {
             return MoedaFomatter.format(getFrete());
         }
@@ -198,8 +198,8 @@ public class ValoresAVista implements Serializable {
         this.cheques = cheques;
     }
 
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     @Override
@@ -219,7 +219,7 @@ public class ValoresAVista implements Serializable {
 
     @Override
     public String toString() {
-        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
+        return "ValoresAVista{" + "id=" + id + ", dinheiro=" + dinheiro + ", cheques=" + cheques + ", boletoDeCartao=" + boletoDeCartao + ", aFaturar=" + aFaturar + ", nota=" + (nota != null ? nota.getId() : null) + ", cotacao=" + (cotacao != null ? cotacao.getId() : null) + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

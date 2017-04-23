@@ -31,12 +31,12 @@ import javax.validation.constraints.NotNull;
  * @author Rafael
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_ITEMEMITIDO",
-        sequenceName = "SEQ_ITEMEMITIDO")
-public class ItemEmitido implements Serializable {
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_ITEMRECEBIDO",
+        sequenceName = "SEQ_ITEMRECEBIDO")
+public class ItemRecebido implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMEMITIDO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMRECEBIDO")
     private Long id;
     @NotNull(message = "{item_not_null}")
     @ManyToOne
@@ -47,17 +47,17 @@ public class ItemEmitido implements Serializable {
     @Column(nullable = false)
     private BigDecimal unitario = BigDecimal.ZERO;
     @ManyToOne
-    private NotaEmitida notaEmitida;
-    @OneToMany(mappedBy = "itemEmitido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    private NotaRecebida notaRecebida;
+    @OneToMany(mappedBy = "itemRecebido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Estoque> estoques;
 
-    public ItemEmitido() {
+    public ItemRecebido() {
     }
 
-    public ItemEmitido(Long id, Item item, BigDecimal valorUnitario, NotaEmitida notaEmitida, List<Estoque> estoques) throws DadoInvalidoException {
+    public ItemRecebido(Long id, Item item, BigDecimal valorUnitario, NotaRecebida notaRecebida, List<Estoque> estoques) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
-        this.notaEmitida = notaEmitida;
+        this.notaRecebida = notaRecebida;
         this.unitario = valorUnitario;
         this.estoques = estoques;
         ehValido();
@@ -75,8 +75,8 @@ public class ItemEmitido implements Serializable {
         return unitario;
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
+    public NotaRecebida getNotaRecebida() {
+        return notaRecebida;
     }
 
     public BigDecimal getQuantidade() {
@@ -92,16 +92,16 @@ public class ItemEmitido implements Serializable {
     }
 
     public String getTotalFormatado() {
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getTotal());
+        if (notaRecebida != null) {
+            return MoedaFomatter.format(notaRecebida.getMoedaPadrao(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
     }
     
     public String getUnitarioFormatado(){
-        if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), getUnitario());
+        if (notaRecebida != null) {
+            return MoedaFomatter.format(notaRecebida.getMoedaPadrao(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }
@@ -115,16 +115,16 @@ public class ItemEmitido implements Serializable {
         this.estoques = estoques;
     }
 
-    public void preparaInclusao(NotaEmitida notaEmitida) {
-        if (this.notaEmitida == null) {
+    public void preparaInclusao(NotaRecebida notaRecebida) {
+        if (this.notaRecebida == null) {
             this.id = null;
-            this.notaEmitida = notaEmitida;
+            this.notaRecebida = notaRecebida;
         }
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "notaEmitida", "unitario");
-        new ValidadorDeCampos<ItemEmitido>().valida(this, campos);
+        List<String> campos = Arrays.asList("item", "notaRecebida", "unitario");
+        new ValidadorDeCampos<ItemRecebido>().valida(this, campos);
     }
 
     @Override
@@ -132,10 +132,10 @@ public class ItemEmitido implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof ItemEmitido)) {
+        if (!(objeto instanceof ItemRecebido)) {
             return false;
         }
-        ItemEmitido outro = (ItemEmitido) objeto;
+        ItemRecebido outro = (ItemRecebido) objeto;
         if (this.id == null) {
             return false;
         }
@@ -144,7 +144,7 @@ public class ItemEmitido implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", notaEmitida=" + (notaEmitida != null ? notaEmitida.getId() : null) + ", estoques=" + estoques + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", notaRecebida=" + (notaRecebida != null ? notaRecebida.getId() : null) + ", estoques=" + estoques + '}';
     }
 
 }
