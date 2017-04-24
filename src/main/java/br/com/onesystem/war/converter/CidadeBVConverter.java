@@ -27,8 +27,14 @@ public class CidadeBVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Cidade> lista =  new CidadeService().buscarCidades();
-                if (!StringUtils.containsLetter(value)) {
+                List<Cidade> lista = new CidadeService().buscarCidades();
+                if (StringUtils.containsLetter(value)) {
+                    for (Cidade cidade : lista) {
+                        if (cidade.getNome().equals(value)) {
+                            return new CidadeBV(cidade);
+                        }
+                    }
+                } else {
                     for (Cidade cidade : lista) {
                         if (cidade.getId().equals(new Long(value))) {
                             return new CidadeBV(cidade);
