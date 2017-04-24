@@ -46,7 +46,7 @@ public class PessoaView extends BasicMBImpl<Pessoa,PessoaBV> implements Serializ
     @PostConstruct
     public void init() {
         limparJanela();
-        cidadeLista = serviceCidade.buscarCidades();
+//        cidadeLista = serviceCidade.buscarCidades();
     }
 
     public void add() {
