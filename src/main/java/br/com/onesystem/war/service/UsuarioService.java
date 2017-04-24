@@ -15,7 +15,6 @@ public class UsuarioService implements Serializable {
 
     public Usuario buscarUsuarioPerfil() {
        String user = new UsuarioLogadoUtil().getEmailUsuario();
-        System.out.println("" + user);
         if (user != null) {
             return new UsuarioDAO().buscarUsuarios().porEmailString(user).resultado();
         } 

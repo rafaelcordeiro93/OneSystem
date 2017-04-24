@@ -5,7 +5,6 @@ import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.Usuario;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.UsuarioBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -18,7 +17,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
@@ -31,7 +31,7 @@ public class PerfilUsuarioView implements Serializable {
     String senhaVelha = "";
     String senhaConfirma = "";
 
-    @ManagedProperty("#{usuarioService}")
+    @Inject
     private UsuarioService service;
 
     @PostConstruct
@@ -47,9 +47,8 @@ public class PerfilUsuarioView implements Serializable {
             if (usuarioExistente.getId() != null) {
                 new AtualizaDAO<Pessoa>().atualiza(usuarioExistente.getPessoa());
                 new AtualizaDAO<Usuario>().atualiza(usuarioExistente);
-                InfoMessage.atualizado();
+                refresh();
                 buscaUsuario();
-                InfoMessage.atualizado();
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
             }
@@ -95,8 +94,11 @@ public class PerfilUsuarioView implements Serializable {
             usuario.setOrientationRTL(usuarioSelecionada.isOrientationRTL());
             usuario.setDarkMenu(usuarioSelecionada.isDarkMenu());
             pessoa = new PessoaBV(usuarioSelecionada.getPessoa());
-
         }
+    }
+
+    public void refresh() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("perfilUsuario.xhtml");//atualiza a pagina para atualizar a aparencia do sistema
     }
 
     private boolean validaUsuarioExistente(Usuario novoRegistro) {
