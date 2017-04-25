@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 8%">
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                    <h2 class="BigTopic">#{l.Consulta_De_Registro}</h2>
+                    <div class="EmptyBox20"/>
+
+                    <div class="ui-fluid">
+
+                        <div id="nota" class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Emitida}:"/>
+                        </div>
+                        <div class="ui-g">
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.e}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaBVConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                        </div>
+                        <div class="ui-g" style="padding-bottom: 2px">
+                            <p:outputLabel class="ui-g-4 ui-md-2 ui-lg-1"  value="#{l.Cancelada}:"/>
+                            <p:selectBooleanCheckbox class="ui-g-2 ui-md-1 ui-lg-1" style="margin-top: 2px"/>
+                        </div>
+                        <p:separator/>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{desdobramentoDeVendaView.e.pessoa.id} #{desdobramentoDeVendaView.e.pessoa ne null ? '-' : ''}  #{desdobramentoDeVendaView.e.pessoa.nome}"/>
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Operacao}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{desdobramentoDeVendaView.e.operacao.id} #{desdobramentoDeVendaView.e.operacao ne null ? '-' : ''}  #{desdobramentoDeVendaView.e.operacao.nome}"/>
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{desdobramentoDeVendaView.e.listaDePreco.id} #{desdobramentoDeVendaView.e.listaDePreco ne null ? '-' : ''}  #{desdobramentoDeVendaView.e.listaDePreco.nome}"/>
+                        </div>
+
+                     
+
+                        
+
+                                <div class="ui-g">
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Forma_Recebimento}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{desdobramentoDeVendaView.e.formaDeRecebimento.id} #{desdobramentoDeVendaView.e.pessoa ne null ? '-' : ''}  #{desdobramentoDeVendaView.e.formaDeRecebimento.nome}"/>
+                                </div>
+
+                                <p:separator/>
+
+                                <div class="ui-g">
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.acrescimoFormatado}" />                             
+
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Dinheiro}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.dinheiroFormatado}" />    
+
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Nota}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.totalNotaFormatado}" />    
+                                </div>
+
+                                <div class="ui-g">
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.descontoFormatado}" />
+
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Credito}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.credito.valorFormatado eq null ? desdobramentoDeVendaView.zero : desdobramentoDeVendaView.e.credito.valorFormatado}" />    
+                                </div>
+
+                                <div class="ui-g">
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.despesaCobrancaFormatado}" />
+
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cheque}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.totalChequeFormatado}" />    
+                                </div>
+
+                                <div class="ui-g">
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.freteFormatado}" />
+
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cartao}:"/> 
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{desdobramentoDeVendaView.e.valoresAVista.boletoCartao.valor eq null ? desdobramentoDeVendaView.zero : desdobramentoDeVendaView.e.valoresAVista.boletoCartao.valor}" />    
+                                </div>                           
+
+                                <p:dataTable var="parcela" value="#{desdobramentoDeVendaView.e.parcelas}" 
+                                             styleClass="ui-g-2" rowKey="#{parcela.id}"
+                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                    <f:facet name="header">
+                                        #{l.Parcelas}
+                                    </f:facet>
+
+                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                        <h:outputText value="#{parcela.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
+                                        <h:outputText value="#{desdobramentoDeVendaView.getOrigem(parcela)}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                  
+                                        <h:outputText value="#{parcela.vencimentoFormatadoSemHoras}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Valor}" width="12%">
+                                        <h:outputText value="#{parcela.valorFormatado}"/>                               
+                                    </p:column>                                   
+                                    <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
+                                        <h:outputText value="#{parcela.detalhes}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Dias}">                                
+                                        <h:outputText value="#{parcela.dias}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Dia_Semana}">
+                                        <h:outputText value="#{parcela.diaDaSemana}"/>
+                                    </p:column>
+
+                                    <p:column headerText="+" width="5%" style="text-align: center;">
+                                        <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
+                                                         action="#{desdobramentoDeVendaView.consultaParcela(parcela)}" update="@form">
+                                        </p:commandButton>
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="3" style="text-align:right" footerText="#{l.Total}" />
+                                            <p:column footerText="#{desdobramentoDeVendaView.e.totalParcelasFormatado}"/>
+                                            <p:column colspan="4"/>
+                                        </p:row>                                  
+                                    </p:columnGroup>
+
+                                </p:dataTable>
+
+                                <p:spacer width="1px"/>
+
+
+                    </div>
+                </div>  
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
