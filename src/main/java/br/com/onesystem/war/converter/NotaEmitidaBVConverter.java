@@ -5,15 +5,17 @@
  */
 package br.com.onesystem.war.converter;
 
+
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.NotaEmitidaService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -26,21 +28,20 @@ public class NotaEmitidaBVConverter implements Converter, Serializable {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-            try {
-                List<NotaEmitida> lista = new NotaEmitidaService().buscarNotasEmitidas();
-
+            try {                
+                NotaEmitidaService service = new NotaEmitidaService();
+                List<NotaEmitida> lista = service.buscarNotasEmitidas();
                 for (NotaEmitida notaEmitida : lista) {
                     if (notaEmitida.getId().equals(new Long(value))) {
-                        return new NotaEmitidaBV(notaEmitida);
+                        return notaEmitida;
                     }
                 }
-
-                return new NotaEmitidaBV();
-            } catch (Exception e) {
-                return new NotaEmitidaBV();
+                return null;
+            } catch (NumberFormatException e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma notaEmitida válida."));
             }
         } else {
-            return new NotaEmitidaBV();
+            return null;
         }
     }
 
@@ -53,7 +54,7 @@ public class NotaEmitidaBVConverter implements Converter, Serializable {
                 return object.toString();
             }
         } else {
-            return "";
+            return null;
         }
     }
 }
