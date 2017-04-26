@@ -38,6 +38,7 @@ import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Money;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
@@ -695,6 +696,18 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         parcelaBV.setObservacao(null);
     }
 
+    public void consultaParcela(Parcela parcela) {
+        if (parcela instanceof Cheque) {
+           
+        } else if (parcela instanceof BoletoDeCartao) {
+          
+        } else if (parcela instanceof Titulo) {
+            
+        } else {
+          
+        }
+    }
+    
     // ------------------------- Fim Parcelas ---------------------------------
     // ----------------------------- Selecao ----------------------------------
     @Override
@@ -705,8 +718,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         if (obj instanceof NotaEmitida) {
             notaEmitidaSelecionada = (NotaEmitida) obj;
             ValoresAVista vl = notaEmitidaSelecionada.getValoresAVista();
-            
-            
+
             notaEmitida.setId(notaEmitidaSelecionada.getId());
             notaEmitida.setBaixas(notaEmitidaSelecionada.getBaixaDinheiro());
             notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
@@ -716,16 +728,25 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
             notaEmitida.setFormaDeRecebimento(notaEmitidaSelecionada.getFormaDeRecebimento());
             notaEmitida.setItensEmitidos(notaEmitidaSelecionada.getItensEmitidos());
-           
+
             valoresAVista.setAFaturar(vl.getaFaturar());
             valoresAVista.setPorcentagemAcrescimo(vl.getAcrescimo());
-            
-            
-         
-           
-            
-            
-            System.out.println("" + notaEmitida.getId() + notaEmitida.getFormaDeRecebimento().getNome());          
+
+            for (Parcela p : notaEmitidaSelecionada.getParcelas()) {
+
+                if (p instanceof Cheque) {
+
+                } else if (p instanceof BoletoDeCartao) {
+
+                } else if (p instanceof Titulo) {
+
+                } else {
+
+                }
+
+            }
+
+            System.out.println("" + notaEmitida.getId() + notaEmitida.getFormaDeRecebimento().getNome());
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
             if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
@@ -739,7 +760,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
             calculaTotaisFormaDeRecebimento();
             recalculaValores();
-            System.out.println("" + notaEmitida.getId());  
+            System.out.println("" + notaEmitida.getId());
         } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
             cheque.setBanco((Banco) obj);
         } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
@@ -1271,6 +1292,5 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         this.itensEmitidos = itensEmitidos;
     }
 
-    
     //------------------- Fim Getters and Setters -----------------------------
 }

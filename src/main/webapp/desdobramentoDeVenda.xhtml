@@ -244,6 +244,60 @@
                         </p:dataTable>
 
                         <p:separator/>
+                        
+                        
+                         <p:dataTable var="parcela" value="#{desdobramentoDeVendaView.notaEmitida.parcelas}" 
+                                             styleClass="ui-g-2" rowKey="#{parcela.id}"
+                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                    <f:facet name="header">
+                                        #{l.Parcelas}
+                                    </f:facet>
+
+                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                        <h:outputText value="#{parcela.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
+                                        <h:outputText value="#{consultaNotaEmitidaView.getOrigem(parcela)}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                  
+                                        <h:outputText value="#{parcela.vencimentoFormatadoSemHoras}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Valor}" width="12%">
+                                        <h:outputText value="#{parcela.valorFormatado}"/>                               
+                                    </p:column>                                   
+                                    <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
+                                        <h:outputText value="#{parcela.detalhes}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Dias}">                                
+                                        <h:outputText value="#{parcela.dias}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Dia_Semana}">
+                                        <h:outputText value="#{parcela.diaDaSemana}"/>
+                                    </p:column>
+
+                                    <p:column headerText="+" width="5%" style="text-align: center;">
+                                        <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
+                                                         action="#{consultaNotaEmitidaView.consultaParcela(parcela)}" update="@form">
+                                        </p:commandButton>
+                                    </p:column>
+
+                                    <p:columnGroup type="footer">
+                                        <p:row>
+                                            <p:column colspan="3" style="text-align:right" footerText="#{l.Total}" />
+                                            <p:column footerText="#{consultaNotaEmitidaView.notaEmitida.totalParcelasFormatado}"/>
+                                            <p:column colspan="4"/>
+                                        </p:row>                                  
+                                    </p:columnGroup>
+
+                                </p:dataTable>
+
+                        
+                        
+                        
+                        
 
                         <p:commandButton value="#{l.Finalizar}" action="#{desdobramentoDeVendaView.geraItensEmitidos}" update=":conteudo"/>
 
