@@ -16,6 +16,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
 
     private Long id;
     private Pessoa pessoa;
-    private List<ItemOrcado> itensOrcados;
+    private List<ItemOrcado> itensOrcados = new ArrayList<>();
     private ListaDePreco listaDePreco;
     private FormaDeRecebimento formaDeRecebimento;
     private Cotacao cotacao;
@@ -37,6 +38,8 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     private BigDecimal desconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
+    private BigDecimal porcentagemAcrescimo;
+    private BigDecimal porcentagemDesconto;
 
     public Long getId() {
         return id;
@@ -100,6 +103,54 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
 
     public void setHistorico(String historico) {
         this.historico = historico;
+    }
+
+    public BigDecimal getAcrescimo() {
+        return acrescimo;
+    }
+
+    public void setAcrescimo(BigDecimal acrescimo) {
+        this.acrescimo = acrescimo;
+    }
+
+    public BigDecimal getDesconto() {
+        return desconto;
+    }
+
+    public void setDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
+    }
+
+    public BigDecimal getDespesaCobranca() {
+        return despesaCobranca;
+    }
+
+    public void setDespesaCobranca(BigDecimal despesaCobranca) {
+        this.despesaCobranca = despesaCobranca;
+    }
+
+    public BigDecimal getFrete() {
+        return frete;
+    }
+
+    public void setFrete(BigDecimal frete) {
+        this.frete = frete;
+    }
+
+    public BigDecimal getPorcentagemAcrescimo() {
+        return porcentagemAcrescimo;
+    }
+
+    public void setPorcentagemAcrescimo(BigDecimal porcentagemAcrescimo) {
+        this.porcentagemAcrescimo = porcentagemAcrescimo;
+    }
+
+    public BigDecimal getPorcentagemDesconto() {
+        return porcentagemDesconto;
+    }
+
+    public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
+        this.porcentagemDesconto = porcentagemDesconto;
     }
 
     public Orcamento construir() throws DadoInvalidoException {

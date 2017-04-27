@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.GerenciadorDeOrcamentos;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,10 +58,11 @@ public class Orcamento implements Serializable {
     @ManyToOne
     private Cotacao cotacao;
     @OneToMany(mappedBy = "orcamento", cascade = {CascadeType.ALL})
-    private List<ItemOrcado> itemOrcado;
+    private List<ItemOrcado> itensOrcados;
     @Temporal(TemporalType.TIMESTAMP)
     private Date validade;
-    @Length(max = 250, min = 0, message = "{observacao_lenght}")
+    @Length(max = 1000, min = 0, message = "{observacao_lenght}")
+    @Column(length = 1000)
     private String observacao;
     @Enumerated(EnumType.STRING)
     private EstadoDeOrcamento estado;
@@ -95,7 +97,7 @@ public class Orcamento implements Serializable {
         this.frete = frete;
         this.emissao = new Date();
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
-        this.itemOrcado = itemOrcado;
+        this.itensOrcados = itemOrcado;
         geraItensOrcados(itemOrcado);
         ehValido();
     }
@@ -159,8 +161,16 @@ public class Orcamento implements Serializable {
         return cotacao;
     }
 
-    public List<ItemOrcado> getItemOrcado() {
-        return itemOrcado;
+    public List<ItemOrcado> getItensOrcados() {
+        return itensOrcados;
+    }
+
+    public BigDecimal getTotalItens() {
+        return itensOrcados.stream().map(ItemOrcado::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalItensFormatado() {
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     public Date getValidade() {
