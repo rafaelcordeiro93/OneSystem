@@ -10,10 +10,12 @@ import br.com.onesystem.services.GerenciadorDeOrcamentos;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -25,6 +27,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -61,13 +64,24 @@ public class Orcamento implements Serializable {
     private String observacao;
     @Enumerated(EnumType.STRING)
     private EstadoDeOrcamento estado;
+    @Min(value = 0, message = "{valorDesconto_min}")
+    @Column(nullable = true)
+    private BigDecimal desconto;
+    @Min(value = 0, message = "{valor_acrescimo_min}")
+    @Column(nullable = true)
+    private BigDecimal acrescimo;
+    @Min(value = 0, message = "{valor_despesa_cobranca_min}")
+    private BigDecimal despesaCobranca;
+    @Min(value = 0, message = "{valor_frete_min}")
+    private BigDecimal frete;
 
     public Orcamento() {
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
     }
 
     public Orcamento(Long id, Pessoa pessoa, FormaDeRecebimento formaDeRecebimento,
-            ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itemOrcado, Date validade, String observacao) throws DadoInvalidoException {
+            ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itemOrcado, Date validade, String observacao,
+            BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.formaDeRecebimento = formaDeRecebimento;
@@ -75,15 +89,25 @@ public class Orcamento implements Serializable {
         this.cotacao = cotacao;
         this.validade = validade;
         this.observacao = observacao;
+        this.desconto = desconto;
+        this.acrescimo = acrescimo;
+        this.despesaCobranca = despesaCobranca;
+        this.frete = frete;
         this.emissao = new Date();
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
         this.itemOrcado = itemOrcado;
-        itemOrcado.forEach(i -> {i.setOrcamento(this);});
+        geraItensOrcados(itemOrcado);
         ehValido();
     }
 
+    private void geraItensOrcados(List<ItemOrcado> itemOrcado1) {
+        itemOrcado1.forEach(i -> {
+            i.setOrcamento(this);
+        });
+    }
+
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "formaDeRecebimento", "observacao","cotacao");
+        List<String> campos = Arrays.asList("pessoa", "formaDeRecebimento", "observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -153,6 +177,42 @@ public class Orcamento implements Serializable {
 
     public void setEstado(EstadoDeOrcamento estado) {
         this.estado = estado;
+    }
+
+    public BigDecimal getDesconto() {
+        return desconto;
+    }
+
+    public BigDecimal getAcrescimo() {
+        return acrescimo;
+    }
+
+    public BigDecimal getDespesaCobranca() {
+        return despesaCobranca;
+    }
+
+    public BigDecimal getFrete() {
+        return frete;
+    }
+
+    @Override
+    public boolean equals(Object objeto) {
+        if (objeto == null) {
+            return false;
+        }
+        if (!(objeto instanceof Orcamento)) {
+            return false;
+        }
+        Orcamento outro = (Orcamento) objeto;
+        if (this.id == null) {
+            return false;
+        }
+        return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Orcamento{" + "id=" + id + ", pessoa=" + pessoa + ", formaDeRecebimento=" + formaDeRecebimento + ", listaDePreco=" + listaDePreco + ", emissao=" + emissao + ", cotacao=" + cotacao + ", validade=" + validade + ", observacao=" + observacao + ", estado=" + estado + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

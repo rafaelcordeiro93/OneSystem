@@ -12,6 +12,7 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +30,10 @@ public class OrcamentoBuilder {
     private Cotacao cotacao;
     private Date vencimento;
     private String historico;
+    private BigDecimal acrescimo;
+    private BigDecimal desconto;
+    private BigDecimal despesaCobranca;
+    private BigDecimal frete;
 
     public OrcamentoBuilder comId(Long id) {
         this.id = id;
@@ -70,8 +75,28 @@ public class OrcamentoBuilder {
         return this;
     }
 
+    public OrcamentoBuilder comAcrescimo(BigDecimal acrescimo) {
+        this.acrescimo = acrescimo;
+        return this;
+    }
+
+    public OrcamentoBuilder comDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
+        return this;
+    }
+
+    public OrcamentoBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
+        this.despesaCobranca = despesaCobranca;
+        return this;
+    }
+
+    public OrcamentoBuilder comFrete(BigDecimal frete) {
+        this.frete = frete;
+        return this;
+    }
+
     public Orcamento construir() throws DadoInvalidoException {
-        return new Orcamento(id, pessoa, formaDeRecebimento, listaDePreco, cotacao, itensOrcados, vencimento, historico);
+        return new Orcamento(id, pessoa, formaDeRecebimento, listaDePreco, cotacao, itensOrcados, vencimento, historico, desconto, acrescimo, despesaCobranca, frete);
     }
 
 }
