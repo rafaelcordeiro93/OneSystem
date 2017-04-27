@@ -36,8 +36,8 @@ public class Estoque implements Serializable {
     @NotNull(message = "{deposito_not_null}")
     @ManyToOne
     private Deposito deposito;
-    @NotNull(message = "{saldo_not_null}")
-    @Min(value = 0, message = "{saldo_min}")
+    @NotNull(message = "{quantidade_not_null}")
+    @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
     private BigDecimal quantidade;
     @Enumerated(EnumType.STRING)

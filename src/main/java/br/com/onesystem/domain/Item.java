@@ -80,6 +80,8 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item")
     private List<ItemRecebido> itensRecebidos;
     @OneToMany(mappedBy = "item")
+    private List<ItemOrcado> itensOrcados;
+    @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
     @ManyToOne
     private Margem margem;
