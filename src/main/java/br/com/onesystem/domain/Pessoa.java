@@ -107,6 +107,8 @@ public abstract class Pessoa implements Serializable {
     private List<Nota> notas;
     @OneToMany(mappedBy = "pessoa")
     private List<Credito> creditos;
+    @OneToMany(mappedBy = "pessoa")
+    private List<Orcamento> orcamentos;
 
     public Pessoa() {
     }
