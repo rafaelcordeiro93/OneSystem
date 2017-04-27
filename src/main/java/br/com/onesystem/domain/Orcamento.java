@@ -137,6 +137,38 @@ public class Orcamento implements Serializable {
         new GerenciadorDeOrcamentos().efetiva(this);
     }
 
+    public String getAcrescimoFormatado() {
+        if (cotacao != null) {
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getAcrescimo());
+        } else {
+            return MoedaFomatter.format(getAcrescimo());
+        }
+    }
+
+    public String getDescontoFormatado() {
+        if (cotacao != null) {
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getDesconto());
+        } else {
+            return MoedaFomatter.format(getDesconto());
+        }
+    }
+
+    public String getDespesaCobrancaFormatado() {
+        if (cotacao != null) {
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getDespesaCobranca());
+        } else {
+            return MoedaFomatter.format(getDespesaCobranca());
+        }
+    }
+
+    public String getFreteFormatado() {
+        if (cotacao != null) {
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getFrete());
+        } else {
+            return MoedaFomatter.format(getFrete());
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -171,6 +203,18 @@ public class Orcamento implements Serializable {
 
     public String getTotalItensFormatado() {
         return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+    }
+
+    public String getTotalOrcamentoFormatado() {
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalOrcamento());
+    }
+
+    public BigDecimal getTotalOrcamento() {
+        BigDecimal a = getAcrescimo() == null ? BigDecimal.ZERO : getAcrescimo();
+        BigDecimal f = getFrete() == null ? BigDecimal.ZERO : getFrete();
+        BigDecimal c = getDespesaCobranca() == null ? BigDecimal.ZERO : getDespesaCobranca();
+        BigDecimal d = getDesconto() == null ? BigDecimal.ZERO : getDesconto();
+        return getTotalItens().add(a.add(f.add(c))).subtract(d);
     }
 
     public Date getValidade() {
