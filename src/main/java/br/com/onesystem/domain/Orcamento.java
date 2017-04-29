@@ -12,7 +12,10 @@ import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -76,14 +79,18 @@ public class Orcamento implements Serializable {
     private BigDecimal despesaCobranca;
     @Min(value = 0, message = "{valor_frete_min}")
     private BigDecimal frete;
+    @OneToMany(mappedBy = "orcamento", cascade = CascadeType.ALL)
+    private List<HistoricoDeOrcamento> historicosDeOrcamento;
 
     public Orcamento() {
+        this.historicosDeOrcamento = new ArrayList<>();
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
     }
 
     public Orcamento(Long id, Pessoa pessoa, FormaDeRecebimento formaDeRecebimento,
             ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itemOrcado, Date validade, String observacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
+        this.historicosDeOrcamento = new ArrayList<>();
         this.id = id;
         this.pessoa = pessoa;
         this.formaDeRecebimento = formaDeRecebimento;
@@ -102,8 +109,8 @@ public class Orcamento implements Serializable {
         ehValido();
     }
 
-    private void geraItensOrcados(List<ItemOrcado> itemOrcado1) {
-        itemOrcado1.forEach(i -> {
+    private void geraItensOrcados(List<ItemOrcado> itemOrcado) {
+        itemOrcado.forEach(i -> {
             i.setOrcamento(this);
         });
     }
@@ -113,28 +120,41 @@ public class Orcamento implements Serializable {
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
-    public void redefinir() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().redefinir(this);
+    public void redefinir(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().redefinir(this, historico);
     }
 
-    public void enviaParaAprovacao() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().enviarParaAprovacao(this);
+    public void enviaParaAprovacao(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().enviarParaAprovacao(this, historico);
     }
 
-    public void aprova() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().aprova(this);
+    public void aprova(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().aprova(this, historico);
     }
 
-    public void reprova() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().reprova(this);
+    public void reprova(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().reprova(this, historico);
     }
 
-    public void cancela() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().cancela(this);
+    public void cancela(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().cancela(this, historico);
     }
 
-    public void efetiva() throws DadoInvalidoException {
-        new GerenciadorDeOrcamentos().efetiva(this);
+    public void efetiva(String historico) throws DadoInvalidoException {
+        new GerenciadorDeOrcamentos().efetiva(this, historico);
+    }
+
+    public List<HistoricoDeOrcamento> getHistoricosDeOrcamento() {
+        if (historicosDeOrcamento != null) {
+            return Collections.unmodifiableList(historicosDeOrcamento);
+        } else {
+            return null;
+        }
+    }
+
+    public void adiciona(HistoricoDeOrcamento historicoDeOrcamento) {
+        historicosDeOrcamento.add(historicoDeOrcamento);
+        estado = historicoDeOrcamento.getEstado();
     }
 
     public String getAcrescimoFormatado() {
@@ -227,10 +247,6 @@ public class Orcamento implements Serializable {
 
     public EstadoDeOrcamento getEstado() {
         return estado;
-    }
-
-    public void setEstado(EstadoDeOrcamento estado) {
-        this.estado = estado;
     }
 
     public BigDecimal getDesconto() {

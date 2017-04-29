@@ -36,8 +36,7 @@ public class LogPhaseListener implements PhaseListener {
             HttpSession session = (HttpSession) ec.getSession(true);
             String login = (String) session.getAttribute("minds.login.token");
             String janela = context.getViewRoot().getViewId();
-            validaAcesso(login, janela, ec);
-            carregaDados(janela, session, ec);
+            validaAcesso(login, janela, ec, session);
         } catch (IOException ex) {
             System.out.println("Falha ao redirecionar a página.");
         } catch (DadoInvalidoException ex) {
@@ -46,11 +45,14 @@ public class LogPhaseListener implements PhaseListener {
 
     }
 
-    private void validaAcesso(String login, String janela, ExternalContext ec) throws IOException, DadoInvalidoException {
+    private void validaAcesso(String login, String janela, ExternalContext ec, HttpSession session) throws IOException, DadoInvalidoException {
         if (login == null && !janela.equals("/login.xhtml")) {
             ec.redirect("/OneSystem-war/login.xhtml");
         } else if (login == null && janela.equals("/login.xhtml")) {
-        } else if (login.equals("Anonymous") || janela.contains("selecao")) {//Adicionar funcionalidade de supervisor
+        } else if (login.equals("Anonymous")) {//Adicionar funcionalidade de supervisor
+            carregaDados(janela, session, ec);
+            return;
+        } else if (janela.contains("selecao")) {
             return;
         } else if (janela.contains("selecao")) {//Faz com que as janelas de Selecao nao precisem de permissoes
             return;
@@ -63,11 +65,10 @@ public class LogPhaseListener implements PhaseListener {
 
             if (consulta) {
                 usuarioLogado.carregaPreferenciasDo(usuario);
+                carregaDados(janela, session, ec);
             } else {
                 ec.redirect("/OneSystem-war/access.xhtml");
             }
-        } else {
-
         }
     }
 

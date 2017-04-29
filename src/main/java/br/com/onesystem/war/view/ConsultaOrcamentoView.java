@@ -5,15 +5,13 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Orcamento;
-import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.domain.Parcela;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -21,6 +19,7 @@ import java.math.BigDecimal;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -33,6 +32,8 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
 
     @Inject
     private BundleUtil msg;
+    private String historico;
+    private EstadoDeOrcamento estadoDesejado;
 
     private Orcamento orcamento;
 
@@ -64,8 +65,89 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
         }
     }
 
+    public void aprova() {
+        estadoDesejado = EstadoDeOrcamento.APROVADO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void redefinir() {
+        estadoDesejado = EstadoDeOrcamento.EM_DEFINICAO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void reprova() {
+        estadoDesejado = EstadoDeOrcamento.REPROVADO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void cancela() {
+        estadoDesejado = EstadoDeOrcamento.CANCELADO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void efetiva() {
+        estadoDesejado = EstadoDeOrcamento.EFETIVADO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void enviaParaAprovacao() {
+        estadoDesejado = EstadoDeOrcamento.EM_APROVACAO;
+        RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+    }
+
+    public void gravar() {
+        try {
+            switch (estadoDesejado) {
+                case APROVADO:
+                    orcamento.aprova(historico);
+                    break;
+                case REPROVADO:
+                    orcamento.reprova(historico);
+                    break;
+                case EFETIVADO:
+                    orcamento.efetiva(historico);
+                    break;
+                case CANCELADO:
+                    orcamento.cancela(historico);
+                    break;
+                case EM_APROVACAO:
+                    orcamento.enviaParaAprovacao(historico);
+                    break;
+                case EM_DEFINICAO:
+                    orcamento.redefinir(historico);
+            }
+            new AtualizaDAO<>().atualiza(orcamento);
+            InfoMessage.atualizado();
+            limparHistorico();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
     @Override
     public void limparJanela() {
         orcamento = null;
+        limparHistorico();
+    }
+
+    private void limparHistorico() {
+        estadoDesejado = null;
+        historico = "";
+    }
+
+    public String getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(String historico) {
+        this.historico = historico;
+    }
+
+    public EstadoDeOrcamento getEstadoDesejado() {
+        return estadoDesejado;
+    }
+
+    public void setEstadoDesejado(EstadoDeOrcamento estadoDesejado) {
+        this.estadoDesejado = estadoDesejado;
     }
 }
