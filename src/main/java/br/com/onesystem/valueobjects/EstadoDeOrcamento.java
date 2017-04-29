@@ -5,17 +5,29 @@
  */
 package br.com.onesystem.valueobjects;
 
+import br.com.onesystem.util.BundleUtil;
+
 /**
  *
  * @author rauber
  */
 public enum EstadoDeOrcamento {
     
-    EM_DEFINICAO,
-    EM_APROVACAO,
-    APROVADO,
-    REPROVADO,
-    CANCELADO,
-    EFETIVADO
+    EM_DEFINICAO(new BundleUtil().getLabel("EM_DEFINICAO")),
+    EM_APROVACAO(new BundleUtil().getLabel("EM_APROVACAO")),
+    APROVADO(new BundleUtil().getLabel("APROVADO")),
+    REPROVADO(new BundleUtil().getLabel("REPROVADO")),
+    CANCELADO(new BundleUtil().getLabel("CANCELADO")),
+    EFETIVADO(new BundleUtil().getLabel("EFETIVADO"));
+    
+    private final String nome;
+
+    private EstadoDeOrcamento(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNome() {
+        return nome;
+    }
     
 }

@@ -20,11 +20,30 @@
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Orcamento}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cOrcamento" value="#{consultaOrcamentoView.orcamento}" update=":conteudo" dialog="#{selecaoOrcamentoView}" mbView="#{consultaOrcamentoView}" var="orcamento" converter="orcamentoConverter" itemLabel="#{orcamento.id}" itemValue="#{orcamento}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cOrcamento" value="#{consultaOrcamentoView.orcamento}" update=":conteudo" dialog="#{selecaoOrcamentoView}" mbView="#{consultaOrcamentoView}" var="orcamento" converter="orcamentoConverter" itemLabel="#{orcamento.id}" itemValue="#{orcamento}" editVisible="false" onlyNumber="true"/>
+                            <p:menuButton class="ui-g-12 ui-md-4 ui-lg-2" rendered="#{consultaOrcamentoView.orcamento.estado ne null ? (consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : (consultaOrcamentoView.orcamento.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}" value="#{l.Atualizar_Estado}" style="padding: 2px !important">
+                                <p:menuitem value="#{l.Enviar_Para_Aprovacao}" actionListener="#{consultaOrcamentoView.enviaParaAprovacao}"  icon="ui-icon-disk"
+                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_DEFINICAO' ? 'true' : 'false'}" update="@form"/>
+                                <p:menuitem value="#{l.Aprovar}" actionListener="#{consultaOrcamentoView.aprova}"  icon="ui-icon-arrowrefresh-1-w"
+                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
+                                <p:menuitem value="#{l.Reprovar}" actionListener="#{consultaOrcamentoView.reprova}" ajax="false" icon="ui-icon-close"
+                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
+                                <p:menuitem value="#{l.Redefinir}" actionListener="#{consultaOrcamentoView.redefinir}" ajax="false" icon="ui-icon-close"
+                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 
+                                                        consultaOrcamentoView.orcamento.estado eq 'REPROVADO' ? 'true' : 'false'}"/>
+                                <p:menuitem value="#{l.Cancelar}" actionListener="#{consultaOrcamentoView.cancela}" ajax="false" icon="ui-icon-close"
+                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : 'true'}"/>                 
+                            </p:menuButton>
                         </div>
-                        <div class="ui-g" style="padding-bottom: 2px">
-                            <p:outputLabel class="ui-g-4 ui-md-2 ui-lg-1"  value="#{l.Cancelada}:"/>
-                            <p:selectBooleanCheckbox class="ui-g-2 ui-md-1 ui-lg-1" style="margin-top: 2px"/>
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel  value="#{l.Estado}: "/>
+                            <p:outputLabel class="#{consultaOrcamentoView.orcamento.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'label label-info' : 
+                                                    consultaOrcamentoView.orcamento.estado eq 'APROVADO' ? 'label label-primary': 
+                                                    consultaOrcamentoView.orcamento.estado eq 'REPROVADO' ? 'label label-danger' : 
+                                                    consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaOrcamentoView.orcamento.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaOrcamentoView.orcamento.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 
@@ -118,9 +137,55 @@
 
                             </p:tab>
 
+                            <p:tab title="#{l.Historico}">
+
+                                <p:dataTable var="historicoDeOrcamento" value="#{consultaOrcamentoView.orcamento.historicosDeOrcamento}" emptyMessage="#{l.Nao_Ha_Registros}"
+                                             rowKey="#{historicoDeOrcamento.id}" reflow="true" style="border: none" >
+
+                                    <p:column headerText="#{l.Id}" >
+                                        <h:outputText value="#{historicoDeOrcamento.id}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Estado}">
+                                        <h:outputText value="#{historicoDeOrcamento.estado.nome}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Historico}" colspan="3" >
+                                        <h:outputText value="#{historicoDeOrcamento.historico}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Usuario}" >
+                                        <h:outputText value="#{historicoDeOrcamento.usuario.pessoa.nome}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+
+                            </p:tab>
+
                         </p:tabView>
 
                     </div>
+
+                    <p:dialog widgetVar="historicoDeOrcamento" width="500px"  height="180px" header="#{l.Historico_De_Orcamento}" closable="true" modal="true" resizable="false" responsive="true">
+
+                        <p:outputLabel  value="#{l.Estado_Desejado}: "/>
+                        <p:outputLabel id="estadoDesejado" class="#{consultaOrcamentoView.estadoDesejado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                                    consultaOrcamentoView.estadoDesejado eq 'EM_APROVACAO' ? 'label label-info' : 
+                                                                    consultaOrcamentoView.estadoDesejado eq 'APROVADO' ? 'label label-primary': 
+                                                                    consultaOrcamentoView.estadoDesejado eq 'REPROVADO' ? 'label label-danger' : 
+                                                                    consultaOrcamentoView.estadoDesejado eq 'EFETIVADO' ? 'label label-success' :
+                                                                    consultaOrcamentoView.estadoDesejado eq 'CANCELADO' ? 'label label-warning' :
+                                                                    ''}"> #{consultaOrcamentoView.estadoDesejado.nome}</p:outputLabel>
+                        <p:spacer width="100%" height="1px"/>
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Historico}:"/>
+                            <p:inputTextarea styleClass="ui-g-12 ui-md-8 ui-lg-9" style="margin-left: 4px" rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{consultaOrcamentoView.historico}"/>
+                            <p:spacer class="ui-g-12 ui-md-3 ui-lg-2"  style="margin-left: 4px"/>
+                            <p:outputLabel id="display"/>
+                        </div>
+                        <p:separator />
+                        <p:commandButton action="#{consultaOrcamentoView.gravar}" value="#{l.Atualizar}" update=":conteudo"/>
+                        <p:commandButton onclick="PF('historicoDeOrcamento').hide()" value="#{l.Cancelar}"/>
+
+                    </p:dialog>
+
                 </div>  
             </div>
         </div>

@@ -515,61 +515,61 @@ body .ui-button.red-btn.ui-state-active {
 }
 /* text colors */
 .White {
-    color: #ffffff;
+    color: #ffffff !important;
 }
 .WhiteBlue {
-    color: #E1F5FE;
+    color: #E1F5FE !important;
 }
 .SoftBlue {
-    color: #03A9F4;
+    color: #03A9F4 !important;
 }
 .Blue {
-    color: #0288D1;
+    color: #0288D1 !important;
 }
 .Turquoise {
-    color: #26C6DA;
+    color: #26C6DA !important;
 }
 .SoftGray {
-    color: #ECEFF1;
+    color: #ECEFF1 !important;
 }
 .Gray {
-    color: #90A4AE;
+    color: #90A4AE !important;
 }
 .BoldGray {
-    color: #546E7A;
+    color: #546E7A !important;
 }
 .SoftOrange {
-    color: #FFCC80;
+    color: #FFCC80 !important;
 }
 .Orange {
-    color: #FB8C00;
+    color: #FB8C00 !important;
 }
 .SoftGreen {
-    color: #A5D6A7;
+    color: #A5D6A7 !important;
 }
 .Green {
-    color: #43A047;
+    color: #43A047 !important;
 }
 .LeadenGreen {
-    color: #26A69A;
+    color: #26A69A !important;
 }
 .SoftRed {
-    color: #EF9A9A;
+    color: #EF9A9A !important;
 }
 .Red {
-    color: #E53935;
+    color: #E53935 !important;
 }
 .Pink {
-    color: #FF4081;
+    color: #FF4081 !important;
 }
 .SoftPurple {
-    color: #CE93D8;
+    color: #CE93D8 !important;
 }
 .Purple {
-    color: #8E24AA;
+    color: #8E24AA !important;
 }
 .Yellow {
-    color: #F7D100;
+    color: #F7D100 !important;
 }
 
 .tab{
@@ -644,26 +644,26 @@ body .ui-button.red-btn.ui-state-active {
     border-radius: .25em;
 }
 
-.label label-primary {
-    background-color: #337ab7;
+.label-primary {
+    background-color: #337ab7 !important;
 }
 
-.label label-info{
-    background-color: #5bc0de;
+.label-info{
+    background-color: #5bc0de  !important;
 }
 
-.label label-success {
-    background-color: #5cb85c;
+.label-success {
+    background-color: #5cb85c  !important;
 }
 
-.label label-default {
-    background-color: #777;
+.label-default {
+    background-color: #777  !important;
 }
 
-.label label-warning {
-    background-color: #f0ad4e;
+.label-warning {
+    background-color: #f0ad4e  !important;
 }
 
-.label label-danger {
-    background-color: #d9534f;
+.label-danger {
+    background-color: #d9534f  !important;
 }

@@ -161,8 +161,6 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     }
 
     public String getTotalItensFormatado() {
-        System.out.println("C: " + cotacao);
-        System.out.println("T: " + getTotalItens());
         return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 

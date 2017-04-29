@@ -75,6 +75,7 @@
         <class>br.com.onesystem.domain.MovimentoFixo</class>
         <class>br.com.onesystem.domain.Orcamento</class>
         <class>br.com.onesystem.domain.ItemOrcado</class>
+        <class>br.com.onesystem.domain.HistoricoDeOrcamento</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

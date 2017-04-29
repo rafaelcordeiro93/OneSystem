@@ -7,6 +7,7 @@
 
     <composite:interface>
         <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
+        <composite:attribute name="rowStyleClass" shortDescription="Estilo das linhas da tabela." default=""/>
         <composite:attribute name="managedBeanName" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true"
                              shortDescription="Nome do managedBean do componente" />
     </composite:interface>
@@ -14,7 +15,7 @@
     <composite:implementation>
         <h:form>
             <p:dataTable id="#{cc.attrs.id}" var="bean" value="#{cc.attrs.managedBeanName.beans}" selectionMode="single" selection="#{cc.attrs.managedBeanName.beanSelecionado}" rowKey="#{bean.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowStyleClass="#{cc.attrs.rowStyleClass}"
                          filteredValue="#{cc.attrs.managedBeanName.beansFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{cc.attrs.managedBeanName.selecionar()}" />
