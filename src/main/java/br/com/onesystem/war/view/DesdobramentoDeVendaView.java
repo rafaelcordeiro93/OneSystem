@@ -111,6 +111,9 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     @Inject
     private CotacaoService service;
 
+    @Inject
+    private BundleUtil msg;
+
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
@@ -698,16 +701,16 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
 
     public void consultaParcela(Parcela parcela) {
         if (parcela instanceof Cheque) {
-           
+
         } else if (parcela instanceof BoletoDeCartao) {
-          
+
         } else if (parcela instanceof Titulo) {
-            
+
         } else {
-          
+
         }
     }
-    
+
     // ------------------------- Fim Parcelas ---------------------------------
     // ----------------------------- Selecao ----------------------------------
     @Override
@@ -716,37 +719,30 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         String idComponent = event.getComponent().getId();
 
         if (obj instanceof NotaEmitida) {
+            limparJanela();
             notaEmitidaSelecionada = (NotaEmitida) obj;
+
+//            notaEmitida.setId(notaEmitidaSelecionada.getId());
+//            notaEmitida.setBaixas(notaEmitidaSelecionada.getBaixaDinheiro());
+//            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
+//            notaEmitida.setOperacao(notaEmitidaSelecionada.getOperacao());
+//            notaEmitida.setValoresAVista(notaEmitidaSelecionada.getValoresAVista());
+//            notaEmitida.setParcelas(notaEmitidaSelecionada.getParcelas());
+//            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
+//            notaEmitida.setFormaDeRecebimento(notaEmitidaSelecionada.getFormaDeRecebimento());
+//            notaEmitida.setItensEmitidos(notaEmitidaSelecionada.getItensEmitidos());
+            
+            notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
+
             ValoresAVista vl = notaEmitidaSelecionada.getValoresAVista();
-
-            notaEmitida.setId(notaEmitidaSelecionada.getId());
-            notaEmitida.setBaixas(notaEmitidaSelecionada.getBaixaDinheiro());
-            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
-            notaEmitida.setOperacao(notaEmitidaSelecionada.getOperacao());
-            notaEmitida.setValoresAVista(notaEmitidaSelecionada.getValoresAVista());
-            notaEmitida.setParcelas(notaEmitidaSelecionada.getParcelas());
-            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
-            notaEmitida.setFormaDeRecebimento(notaEmitidaSelecionada.getFormaDeRecebimento());
-            notaEmitida.setItensEmitidos(notaEmitidaSelecionada.getItensEmitidos());
-
-            valoresAVista.setAFaturar(vl.getaFaturar());
-            valoresAVista.setPorcentagemAcrescimo(vl.getAcrescimo());
+            valoresAVista = new ValoresAVistaBV(vl);
+            
+            boletoDeCartao = new BoletoDeCartaoBV(notaEmitidaSelecionada.getValoresAVista().getBoletoCartao());
 
             for (Parcela p : notaEmitidaSelecionada.getParcelas()) {
-
-                if (p instanceof Cheque) {
-
-                } else if (p instanceof BoletoDeCartao) {
-
-                } else if (p instanceof Titulo) {
-
-                } else {
-
-                }
-
+                parcelas.add(new ParcelaBV(p));
             }
 
-            System.out.println("" + notaEmitida.getId() + notaEmitida.getFormaDeRecebimento().getNome());
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
             if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {

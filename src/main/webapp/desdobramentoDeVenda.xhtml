@@ -18,7 +18,7 @@
 
 
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitidaSelecionada}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
                         </div>
 
 
@@ -155,14 +155,7 @@
 
                         <p:separator/>
 
-                        <h:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements" 
-                                     columnClasses="ui-g-12 ui-md-5 TexAlRight,ui-g-12 ui-md-5">
-                            <p:outputLabel value="#{l.Parcelas}"/>
-                            <p:inputNumber id="neNumeroParcelas" value="#{desdobramentoDeVendaView.valoresAVista.parcelas}" disabled="#{desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.maximoDeParcelas eq null ? true : desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
-                                           maxValue="#{desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue()}" minValue="#{desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
-                                <p:ajax event="blur" listener="#{desdobramentoDeVendaView.criaParcelas}" update=":conteudo:ne:neParcelas :conteudo:ne:neAFaturar :conteudo:growl"/>
-                            </p:inputNumber>
-                        </h:panelGrid>                        
+                                        
 
                         <p:dataTable id="neParcelas" var="parcelaBV" value="#{desdobramentoDeVendaView.parcelas}" editMode="cell" editable="true"
                                      styleClass="ui-g-2" rowKey="#{parcelaBV.id}"
@@ -246,58 +239,7 @@
                         <p:separator/>
                         
                         
-                         <p:dataTable var="parcela" value="#{desdobramentoDeVendaView.notaEmitida.parcelas}" 
-                                             styleClass="ui-g-2" rowKey="#{parcela.id}"
-                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
-                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
-
-                                    <f:facet name="header">
-                                        #{l.Parcelas}
-                                    </f:facet>
-
-                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
-                                        <h:outputText value="#{parcela.id}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
-                                        <h:outputText value="#{consultaNotaEmitidaView.getOrigem(parcela)}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                  
-                                        <h:outputText value="#{parcela.vencimentoFormatadoSemHoras}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Valor}" width="12%">
-                                        <h:outputText value="#{parcela.valorFormatado}"/>                               
-                                    </p:column>                                   
-                                    <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
-                                        <h:outputText value="#{parcela.detalhes}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Dias}">                                
-                                        <h:outputText value="#{parcela.dias}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Dia_Semana}">
-                                        <h:outputText value="#{parcela.diaDaSemana}"/>
-                                    </p:column>
-
-                                    <p:column headerText="+" width="5%" style="text-align: center;">
-                                        <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
-                                                         action="#{consultaNotaEmitidaView.consultaParcela(parcela)}" update="@form">
-                                        </p:commandButton>
-                                    </p:column>
-
-                                    <p:columnGroup type="footer">
-                                        <p:row>
-                                            <p:column colspan="3" style="text-align:right" footerText="#{l.Total}" />
-                                            <p:column footerText="#{consultaNotaEmitidaView.notaEmitida.totalParcelasFormatado}"/>
-                                            <p:column colspan="4"/>
-                                        </p:row>                                  
-                                    </p:columnGroup>
-
-                                </p:dataTable>
-
-                        
-                        
-                        
-                        
+                       
 
                         <p:commandButton value="#{l.Finalizar}" action="#{desdobramentoDeVendaView.geraItensEmitidos}" update=":conteudo"/>
 
