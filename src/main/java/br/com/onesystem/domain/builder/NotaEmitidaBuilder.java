@@ -6,8 +6,6 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ValoresAVista;
@@ -17,7 +15,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.util.Date;
@@ -42,6 +40,7 @@ public class NotaEmitidaBuilder {
     private Credito credito;
     private List<Parcela> parcelas;
     private Moeda moedaPadrao;
+    private Orcamento orcamento;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -107,6 +106,11 @@ public class NotaEmitidaBuilder {
         this.moedaPadrao = moedaPadrao;
         return this;
     }
+    
+    public NotaEmitidaBuilder comOrcamento(Orcamento orcamento) {
+        this.orcamento = orcamento;
+        return this;
+    }
 
     public NotaEmitidaBuilder comParcelas(List<Parcela> parcelas) {
         this.parcelas = parcelas;
@@ -114,7 +118,7 @@ public class NotaEmitidaBuilder {
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, parcelas, moedaPadrao);
+        return new NotaEmitida(id, pessoa, operacao, itensEmitidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, parcelas, moedaPadrao, orcamento);
     }
 
 }

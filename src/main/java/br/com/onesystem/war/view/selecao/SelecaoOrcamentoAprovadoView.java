@@ -2,6 +2,7 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.util.StringUtils;
+import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.war.service.OrcamentoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
@@ -13,19 +14,19 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoOrcamentoView extends BasicCrudMBImpl<Orcamento> implements Serializable {
+public class SelecaoOrcamentoAprovadoView extends BasicCrudMBImpl<Orcamento> implements Serializable {
 
     @Inject
     private OrcamentoService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarOrcamentos();
+        beans = service.buscarOrcamentosNo(EstadoDeOrcamento.APROVADO);
     }    
     
     @Override
     public void abrirDialogo() {  
-        exibirNaTela("selecaoOrcamento");
+        exibirNaTela("selecaoOrcamentoAprovado");
     }
 
     @Override

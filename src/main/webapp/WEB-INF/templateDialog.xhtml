@@ -18,7 +18,8 @@
     <h:body styleClass="main-body">
         <f:loadBundle basename="label_messages" var="l"/>
 
-        <h:form>
+        <h:form id="tempDialog">
+            <p:messages id="msg" showDetail="true" closable="true" showSummary="true" />
             <ui:insert name="content"/>
         </h:form>
 

@@ -22,16 +22,16 @@
                         <div class="ui-g">
                             <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cOrcamento" value="#{consultaOrcamentoView.orcamento}" update=":conteudo" dialog="#{selecaoOrcamentoView}" mbView="#{consultaOrcamentoView}" var="orcamento" converter="orcamentoConverter" itemLabel="#{orcamento.id}" itemValue="#{orcamento}" editVisible="false" onlyNumber="true"/>
                             <p:menuButton class="ui-g-12 ui-md-4 ui-lg-2" rendered="#{consultaOrcamentoView.orcamento.estado ne null ? (consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : (consultaOrcamentoView.orcamento.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}" value="#{l.Atualizar_Estado}" style="padding: 2px !important">
-                                <p:menuitem value="#{l.Enviar_Para_Aprovacao}" actionListener="#{consultaOrcamentoView.enviaParaAprovacao}"  icon="ui-icon-disk"
+                                <p:menuitem value="#{l.Enviar_Para_Aprovacao}" actionListener="#{consultaOrcamentoView.enviaParaAprovacao}"  icon="fa fa-share-square-o"
                                             rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_DEFINICAO' ? 'true' : 'false'}" update="@form"/>
-                                <p:menuitem value="#{l.Aprovar}" actionListener="#{consultaOrcamentoView.aprova}"  icon="ui-icon-arrowrefresh-1-w"
+                                <p:menuitem value="#{l.Aprovar}" actionListener="#{consultaOrcamentoView.aprova}"  icon="fa fa-check"
                                             rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
-                                <p:menuitem value="#{l.Reprovar}" actionListener="#{consultaOrcamentoView.reprova}" ajax="false" icon="ui-icon-close"
+                                <p:menuitem value="#{l.Reprovar}" actionListener="#{consultaOrcamentoView.reprova}" ajax="false" icon="fa fa-times"
                                             rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
-                                <p:menuitem value="#{l.Redefinir}" actionListener="#{consultaOrcamentoView.redefinir}" ajax="false" icon="ui-icon-close"
+                                <p:menuitem value="#{l.Redefinir}" actionListener="#{consultaOrcamentoView.redefinir}" ajax="false" icon="fa fa-refresh "
                                             rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 
                                                         consultaOrcamentoView.orcamento.estado eq 'REPROVADO' ? 'true' : 'false'}"/>
-                                <p:menuitem value="#{l.Cancelar}" actionListener="#{consultaOrcamentoView.cancela}" ajax="false" icon="ui-icon-close"
+                                <p:menuitem value="#{l.Cancelar}" actionListener="#{consultaOrcamentoView.cancela}" ajax="false" icon="fa fa-ban"
                                             rendered="#{consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : 'true'}"/>                 
                             </p:menuButton>
                         </div>
@@ -144,6 +144,9 @@
 
                                     <p:column headerText="#{l.Id}" >
                                         <h:outputText value="#{historicoDeOrcamento.id}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Data}">
+                                        <h:outputText value="#{historicoDeOrcamento.emissaoFormatada}"/>
                                     </p:column>
                                     <p:column headerText="#{l.Estado}">
                                         <h:outputText value="#{historicoDeOrcamento.estado.nome}"/>

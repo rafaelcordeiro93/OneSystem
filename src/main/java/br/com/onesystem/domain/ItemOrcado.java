@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,7 +50,7 @@ public class ItemOrcado implements Serializable {
     @NotNull(message = "{quantidade_not_null}")
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
-    private BigDecimal quantidade;    
+    private BigDecimal quantidade;
 
     public ItemOrcado() {
     }

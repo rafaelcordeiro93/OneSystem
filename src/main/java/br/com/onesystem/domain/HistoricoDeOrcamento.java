@@ -7,6 +7,8 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +18,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -39,6 +43,8 @@ public class HistoricoDeOrcamento implements Serializable {
     private Usuario usuario;
     @ManyToOne
     private Orcamento orcamento;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date emissao;
 
     public HistoricoDeOrcamento() {
     }
@@ -49,6 +55,7 @@ public class HistoricoDeOrcamento implements Serializable {
         this.historico = historico;
         this.usuario = usuario;
         this.orcamento = orcamento;
+        this.emissao = new Date();
     }
 
     public Long getId() {
@@ -69,6 +76,15 @@ public class HistoricoDeOrcamento implements Serializable {
 
     public Orcamento getOrcamento() {
         return orcamento;
+    }
+
+    public Date getEmissao() {
+        return emissao;
+    }
+
+    public String getEmissaoFormatada() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(emissao);
     }
 
 }

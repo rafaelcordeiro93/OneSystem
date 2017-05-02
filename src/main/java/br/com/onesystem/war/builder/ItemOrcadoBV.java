@@ -7,9 +7,14 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemOrcado;
+import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.builder.ItemOrcadoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.MoedaFomatter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,6 +26,8 @@ public class ItemOrcadoBV {
     private Item item;
     private BigDecimal unitario;
     private BigDecimal quantidade;
+    private List<QuantidadeDeItemBV> quantidadePorDeposito = new ArrayList<>();
+    private Orcamento orcamento;
 
     public ItemOrcadoBV() {
     }
@@ -30,6 +37,7 @@ public class ItemOrcadoBV {
         this.item = item.getItem();
         this.unitario = item.getUnitario();
         this.quantidade = item.getQuantidade();
+        this.orcamento = item.getOrcamento();
     }
 
     public Long getId() {
@@ -63,6 +71,46 @@ public class ItemOrcadoBV {
 
     public void setQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getTotalFormatado() {
+        if (orcamento != null) {
+            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getTotal());
+        } else {
+            return NumberFormat.getNumberInstance().format(getTotal());
+        }
+    }
+
+    public String getUnitarioFormatado() {
+        if (orcamento != null) {
+            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getUnitario());
+        } else {
+            return NumberFormat.getNumberInstance().format(getUnitario());
+        }
+    }
+
+    public List<QuantidadeDeItemBV> getQuantidadePorDeposito() {
+        return quantidadePorDeposito;
+    }
+
+    public Orcamento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(Orcamento orcamento) {
+        this.orcamento = orcamento;
+    }
+
+    public void setQuantidadePorDeposito(List<QuantidadeDeItemBV> quantidadePorDeposito) {
+        this.quantidadePorDeposito = quantidadePorDeposito;
+    }
+    
+    public int getQuantidadeDeFaturamento(){
+        BigDecimal b = BigDecimal.ZERO;
+        for(QuantidadeDeItemBV q : quantidadePorDeposito){
+            b = b.add(q.getQuantidade());
+        }
+        return quantidade.compareTo(b);
     }
 
     public BigDecimal getTotal() {

@@ -52,9 +52,7 @@ public class LogPhaseListener implements PhaseListener {
         } else if (login.equals("Anonymous")) {//Adicionar funcionalidade de supervisor
             carregaDados(janela, session, ec);
             return;
-        } else if (janela.contains("selecao")) {
-            return;
-        } else if (janela.contains("selecao")) {//Faz com que as janelas de Selecao nao precisem de permissoes
+        } else if (janela.contains("selecao") || janela.contains("dialogo")) {//Faz com que as janelas de Selecao nao precisem de permissoes
             return;
         } else if (janela.equals("/access.xhtml")) {
 
