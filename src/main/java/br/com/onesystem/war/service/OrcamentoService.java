@@ -13,8 +13,8 @@ public class OrcamentoService implements Serializable {
         return new ArmazemDeRegistros<>(Orcamento.class).listaTodosOsRegistros();
     }
 
-    public List<Orcamento> buscaOrcamentosEmAprovacao() {
-        return new OrcamentoDAO().porEstado(EstadoDeOrcamento.EM_APROVACAO).listaDeResultados();
+    public List<Orcamento> buscarOrcamentosNo(EstadoDeOrcamento estadoDeOrcamento) {
+        return new OrcamentoDAO().porEstado(estadoDeOrcamento).listaDeResultados();
     }
-
+    
 }

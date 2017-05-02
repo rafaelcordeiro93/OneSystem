@@ -21,14 +21,9 @@ public class OrcamentoDAO {
     }
 
     private void limpar() {
-        consulta = "";
+        consulta = "select o from Orcamento o where o.id > 0 ";
         msg = new BundleUtil();
         parametros = new HashMap<String, Object>();
-    }
-
-    public OrcamentoDAO buscarOrcamento() {
-        consulta += "select o from Orcamento o where o.id > 0 ";
-        return this;
     }
 
     public OrcamentoDAO porId(Long id) {
@@ -39,7 +34,7 @@ public class OrcamentoDAO {
 
     public OrcamentoDAO porEstado(EstadoDeOrcamento estado) {
         consulta += " and o.estado = :oEstado ";
-        parametros.put("oEstado", estado);
+        parametros.put("oEstado", EstadoDeOrcamento.APROVADO);
         return this;
     }
 

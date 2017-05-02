@@ -12,7 +12,9 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.ExternalContext;
@@ -26,13 +28,13 @@ import org.primefaces.context.RequestContext;
  *
  * @author Rafael Fernando Rauber
  */
-@Named
+@Named(value = "quantidadeDeItemView")
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> implements Serializable {
 
     private QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
     private QuantidadeDeItemBV quantidadeDeItemSelecionada;
-    private List<QuantidadeDeItemBV> lista = new ArrayList<QuantidadeDeItemBV>();
+    private List<QuantidadeDeItemBV> lista;
     private List<QuantidadeDeItemBV> listaFiltrada;
     private List<SaldoDeEstoque> listaDeEstoque;
 
@@ -45,14 +47,31 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
         ExternalContext ec = context.getExternalContext();
         HttpSession session = (HttpSession) ec.getSession(true);
 
-        Item item = (Item) session.getAttribute("onesystem.item.token");
-        listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item, null);
-        criaLista();
+        lista = (List<QuantidadeDeItemBV>) session.getAttribute("onesystem.quantidadeLista.token");
+        if (lista.isEmpty() || lista == null) {
+            Item item = (Item) session.getAttribute("onesystem.item.token");
+            listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item, null);
+            criaLista();
+        }
     }
 
     @Override
     public void abrirDialogo() {
         exibirNaTela("selecaoQuantidadeDeItem");
+    }
+
+    public void exibirNaTela(String selecao) {
+        Map<String, Object> opcoes = new HashMap<>();
+        opcoes.put("modal", true);
+        opcoes.put("resizable", true);
+        opcoes.put("width", 400);
+        opcoes.put("draggable", true);
+        opcoes.put("contentWidth", "100%");
+        opcoes.put("contentHeight", "100%");
+        opcoes.put("closable", false);
+        opcoes.put("headerElement", "customheader");
+
+        RequestContext.getCurrentInstance().openDialog("/selecao/" + selecao, opcoes, null);
     }
 
     @Override

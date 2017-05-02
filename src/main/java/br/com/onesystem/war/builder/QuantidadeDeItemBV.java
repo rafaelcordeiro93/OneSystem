@@ -13,6 +13,12 @@ public class QuantidadeDeItemBV implements Serializable {
     public QuantidadeDeItemBV() {
     }
 
+    public QuantidadeDeItemBV(Long id, SaldoDeEstoque saldoDeEstoque, BigDecimal quantidade) {
+        this.id = id;
+        this.saldoDeEstoque = saldoDeEstoque;
+        this.quantidade = quantidade;
+    }
+
     public SaldoDeEstoque getSaldoDeEstoque() {
         return saldoDeEstoque;
     }
@@ -41,5 +47,5 @@ public class QuantidadeDeItemBV implements Serializable {
     public String toString() {
         return "QuantidadeDeItemBV{" + "id=" + id + ", saldoDeEstoque=" + saldoDeEstoque + ", quantidade=" + quantidade + '}';
     }
-    
+
 }

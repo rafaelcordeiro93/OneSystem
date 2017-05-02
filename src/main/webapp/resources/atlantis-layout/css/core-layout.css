@@ -146,6 +146,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .Wid25{ width:25%;}
 .Wid20{ width:20%;}
 .Wid14{ width:14.66%;}
+.Wid13{ width:13.66%;}
 .Wid12{ width:12.66%;}
 .Wid10{ width:10%;}
 
@@ -666,4 +667,15 @@ body .ui-button.red-btn.ui-state-active {
 
 .label-danger {
     background-color: #d9534f  !important;
+}
+
+.rowRed{
+    background-color: #FF7A67 !important;
+}
+.rowGreen{
+    background-color: #73FFB4 !important;
+}
+.rowYellow
+{
+    background-color: #E8D669 !important;    
 }

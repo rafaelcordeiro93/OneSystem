@@ -6,6 +6,7 @@
 package br.com.onesystem.reportTemplate;
 
 import br.com.onesystem.domain.Deposito;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 
@@ -13,7 +14,7 @@ import java.util.HashSet;
  *
  * @author Rafael Fernando Rauber
  */
-public class SaldoDeEstoque {
+public class SaldoDeEstoque implements Serializable {
 
     private Long id;
     private Deposito deposito;
@@ -53,10 +54,10 @@ public class SaldoDeEstoque {
             return false;
         }
         SaldoDeEstoque outro = (SaldoDeEstoque) objeto;
-        if (this.id == null) {
+        if (this.deposito.getId() == null) {
             return false;
         }
-        return this.id.equals(outro.id);
+        return this.deposito.getId().equals(outro.deposito.getId());
     }
 
     @Override

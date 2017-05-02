@@ -13,6 +13,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -24,6 +25,9 @@ import javax.persistence.SequenceGenerator;
         sequenceName = "SEQ_NOTAEMITIDA")
 public class NotaEmitida extends Nota implements Serializable {
 
+    @OneToOne(cascade = {CascadeType.ALL})
+    private Orcamento orcamento;
+
     @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
     private List<ItemEmitido> itensEmitidos;
 
@@ -33,9 +37,10 @@ public class NotaEmitida extends Nota implements Serializable {
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
-            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao) throws DadoInvalidoException {
+            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao, Orcamento orcamento) throws DadoInvalidoException {
         super(id, pessoa, operacao, formaDeRecebimento, listaDePreco, valoresAVista, baixaDinheiro, emissao, cancelada, credito, parcelas, moedaPadrao);
         this.itensEmitidos = itensEmitidos;
+        this.orcamento = orcamento;
     }
 
     public List<ItemEmitido> getItensEmitidos() {
@@ -45,6 +50,10 @@ public class NotaEmitida extends Nota implements Serializable {
     @Override
     public BigDecimal getTotalItens() {
         return itensEmitidos.stream().map(ItemEmitido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public Orcamento getOrcamento() {
+        return orcamento;
     }
 
     @Override
@@ -58,7 +67,8 @@ public class NotaEmitida extends Nota implements Serializable {
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
                 + ", listaDePreco=" + getListaDePreco() + ", valoresAVista=" + getValoresAVista()
                 + ", baixaDinheiro=" + getBaixaDinheiro()
-                + ", parcelas=" + getParcelas() + '}';
+                + ", parcelas=" + getParcelas()
+                + ",orcamento=" + getOrcamento() + '}';
     }
 
 }

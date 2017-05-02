@@ -9,6 +9,7 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
@@ -35,6 +36,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private FormaDeRecebimento formaDeRecebimento;
     private Credito credito;
     private Moeda moedaPadrao;
+    private Orcamento orcamento;
 
     public NotaEmitidaBV(NotaEmitida notaEmitidaSelecionada) {
         this.id = notaEmitidaSelecionada.getId();
@@ -50,6 +52,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.baixas = notaEmitidaSelecionada.getBaixaDinheiro();
         this.credito = notaEmitidaSelecionada.getCredito();
         this.moedaPadrao = notaEmitidaSelecionada.getMoedaPadrao();
+        this.orcamento = notaEmitidaSelecionada.getOrcamento();
     }
 
     public NotaEmitidaBV() {
@@ -159,11 +162,19 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.parcelas = parcelas;
     }
 
+    public Orcamento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(Orcamento orcamento) {
+        this.orcamento = orcamento;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao).
                 comPessoa(pessoa).comParcelas(parcelas).comEmissao(emissao).comFormaDeRecebimento(formaDeRecebimento)
-                .cancelada(cancelada).comBaixas(baixas).comCredito(credito)
+                .cancelada(cancelada).comBaixas(baixas).comCredito(credito).comOrcamento(orcamento)
                 .comMoedaPadrao(moedaPadrao).construir();
     }
 
@@ -171,7 +182,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return new NotaEmitidaBuilder().comId(id).comValoresAVista(valoresAVista)
                 .comItensEmitidos(itensEmitidos).comListaDePreco(listaDePreco).comOperacao(operacao)
                 .comPessoa(pessoa).comParcelas(parcelas).comFormaDeRecebimento(formaDeRecebimento)
-                .comBaixas(baixas).comCredito(credito)
+                .comBaixas(baixas).comCredito(credito).comOrcamento(orcamento)
                 .comEmissao(emissao).cancelada(cancelada).comBaixas(baixas).comMoedaPadrao(moedaPadrao)
                 .construir();
     }
