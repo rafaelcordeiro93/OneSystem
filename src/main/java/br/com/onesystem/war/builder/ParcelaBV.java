@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cambio;
@@ -13,7 +14,9 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Parcela;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -37,6 +40,7 @@ import java.time.ZoneId;
 import java.time.format.TextStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -48,7 +52,7 @@ public class ParcelaBV implements Serializable {
     private Long id;
     private NotaEmitida notaEmitida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
-    private OperacaoFinanceira unidadeFinanceira;
+    private OperacaoFinanceira operacaoFinanceira;
     private BigDecimal valor;
     private Date emissao;
     private Date vencimento;
@@ -73,6 +77,9 @@ public class ParcelaBV implements Serializable {
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
+    private Nota nota;
+    private String historico;
+    private List<Baixa> baixas;
 
     public ParcelaBV() {
     }
@@ -81,7 +88,7 @@ public class ParcelaBV implements Serializable {
         this.id = p.getId();
         this.notaEmitida = p.getNotaEmitida();
         this.conhecimentoDeFrete = p.getConhecimentoDeFrete();
-        this.unidadeFinanceira = p.getUnidadeFinanceira();
+        this.operacaoFinanceira = p.getOperacaoFinanceira();
         this.valor = p.getValor();
         this.emissao = p.getEmissao();
         this.vencimento = p.getVencimento();
@@ -120,7 +127,7 @@ public class ParcelaBV implements Serializable {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
-        this.unidadeFinanceira = unidadeFinanceira;
+        this.operacaoFinanceira = unidadeFinanceira;
         this.valor = valor;
         this.emissao = emissao;
         this.vencimento = vencimento;
@@ -145,6 +152,70 @@ public class ParcelaBV implements Serializable {
         this.tipoLancamento = tipoLancamento;
         this.cotacao = cotacao;
         this.pessoa = pessoa;
+    }
+
+    public ParcelaBV(Parcela p) {
+
+        this.id = p.getId();
+        this.valor = p.getValor();
+        this.emissao = p.getEmissao();
+        this.vencimento = p.getVencimento();
+        this.pessoa = p.getPessoa();
+        this.cotacao = p.getCotacao();
+        this.historico = p.getHistorico();
+        this.operacaoFinanceira = p.getOperacaoFinanceira();
+        this.baixas = p.getBaixas();
+        this.nota = p.getNota();
+        //  this.agencia = p.get();
+        // this.conta = p.getCotacao().getConta();
+        //  this.numeroCheque = p.getNumeroCheque();
+        //  this.situacaoDeCheque = p.getSituacaoDeCheque();
+//        this.multas = p.getMultas();
+//        this.juros = p.getJuros();
+//        this.descontos = p.getDescontos();
+//        this.emitente = p.getEmitente();
+//        this.observacao = ;
+//        this.cartao = p.getCartao();
+//        this.codigoTransacao = p.getCodigoTransacao();
+//        this.situacaoDeCartao = p.getSituacaoDeCartao();
+
+//        this.recepcao = p.getRecepcao();
+        //this.dias = p.parseLong(conta)();
+        // this.cambio 
+        this.moeda = p.getCotacao().getConta().getMoeda();
+        this.dias = p.getDias().intValue();
+
+        this.banco = p.getCotacao().getConta().getBanco();
+
+        
+        if (p instanceof Cheque) {
+            this.agencia = ((Cheque) p).getAgencia();
+            this.conta = ((Cheque) p).getConta();
+            this.numeroCheque = ((Cheque) p).getNumeroCheque();
+            this.situacaoDeCheque = ((Cheque) p).getTipoSituacao();
+            this.multas = ((Cheque) p).getMultas();
+            this.juros = ((Cheque) p).getJuros();
+            this.descontos = ((Cheque) p).getDescontos();
+            this.emitente = ((Cheque) p).getEmitente();
+            this.tipoLancamento = ((Cheque) p).getTipoLancamento();
+            this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CHEQUE;
+        
+            this.observacao = p.getHistorico(); //conferir depois
+
+        } else if (p instanceof BoletoDeCartao) {
+            this.observacao = p.getHistorico();
+            this.cartao = ((BoletoDeCartao) p).getCartao();
+            this.codigoTransacao = ((BoletoDeCartao) p).getCodigoTransacao();
+            this.situacaoDeCartao = ((BoletoDeCartao) p).getSituacao();
+              this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CARTAO;
+
+        } else if (p instanceof Titulo) {
+            this.recepcao = ((Titulo) p).getRecepcao();
+              this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.TITULO;
+        } else {
+
+        }
+
     }
 
     public Long getId() {
@@ -179,12 +250,12 @@ public class ParcelaBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public OperacaoFinanceira getUnidadeFinanceira() {
-        return unidadeFinanceira;
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
     }
 
-    public void setUnidadeFinanceira(OperacaoFinanceira unidadeFinanceira) {
-        this.unidadeFinanceira = unidadeFinanceira;
+    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
     }
 
     public String getValorFormatado() {
@@ -284,6 +355,31 @@ public class ParcelaBV implements Serializable {
     public BigDecimal getJuros() {
         return juros;
     }
+
+    public Nota getNota() {
+        return nota;
+    }
+
+    public void setNota(Nota nota) {
+        this.nota = nota;
+    }
+
+    public String getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(String historico) {
+        this.historico = historico;
+    }
+
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public void setBaixas(List<Baixa> baixas) {
+        this.baixas = baixas;
+    }
+    
 
     public void setJuros(BigDecimal juros) {
         this.juros = juros;
@@ -408,12 +504,12 @@ public class ParcelaBV implements Serializable {
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
                 comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa)
-                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(unidadeFinanceira)
+                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira)
                 .construir();
     }
 
     public Cheque construirCheque() throws DadoInvalidoException {
-        return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(unidadeFinanceira).comPessoa(pessoa)
+        return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento)
                 .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
@@ -421,7 +517,7 @@ public class ParcelaBV implements Serializable {
     }
 
     public Titulo construirTitulo() throws DadoInvalidoException {
-        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira).comPessoa(pessoa)
+        return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento).
                 construir();
     }
