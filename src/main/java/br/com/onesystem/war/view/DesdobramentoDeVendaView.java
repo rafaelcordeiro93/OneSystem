@@ -129,7 +129,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             ex.print();
         }
     }
-
+    
     public void limparJanela() {
         notaEmitida = new NotaEmitidaBV();
         notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
@@ -303,7 +303,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             //Inclui a nota nas parcelas
             preparaInclusaoDeParcelas(ne);
 
-            add(ne);
+           // add(ne);
 
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -320,11 +320,12 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
      * @param ne Nota Emitida pronta para ser persistida
      * @throws br.com.onesystem.exception.DadoInvalidoException
      */
-    public void add(NotaEmitida ne) throws ConstraintViolationException, DadoInvalidoException {
-        new AdicionaDAO<NotaEmitida>().adiciona(ne);
-        InfoMessage.adicionado();
-        limparJanela();
-    }
+//    public void update() { 
+//        NotaEmitida ne = notaEmitida.construirComID();
+//        new AdicionaDAO<NotaEmitida>().adiciona(ne);
+//        InfoMessage.adicionado();
+//        limparJanela();
+//    }
 
     /**
      * Inclui a nota nas parcelas
@@ -573,6 +574,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     public void detalharParcela() {
         parcelaBV = new ParcelaBV(parcelaSelecionada);
         RequestContext req = RequestContext.getCurrentInstance();
+        System.out.println(parcelaBV.getValor() + "teste" + parcelaSelecionada.getTipoFormaDeRecebimentoParcela() + " selecionada" + parcelaSelecionada.getValor());
         if (parcelaSelecionada.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CHEQUE) {
             req.execute("PF('detalheChequeParcela').show()");
             req.update("conteudo:panelDetCheParcela");
@@ -700,10 +702,15 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     }
 
     public void consultaParcela(Parcela parcela) {
+      //  parcelaBV = new ParcelaBV(parcela);
+       // RequestContext req = RequestContext.getCurrentInstance();
+        System.out.println(""+ parcela + "  " + parcela.getDetalhes());
         if (parcela instanceof Cheque) {
-
+          //  req.execute("PF('detalheChequeParcela').show()");
+           // req.update("content:ne:detalheChequeParcela");
         } else if (parcela instanceof BoletoDeCartao) {
-
+          //  req.execute("PF('detalheCartaoParcela').show()");
+          //  req.update("conteudo:panelDetCartaoPar");
         } else if (parcela instanceof Titulo) {
 
         } else {
@@ -721,27 +728,22 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         if (obj instanceof NotaEmitida) {
             limparJanela();
             notaEmitidaSelecionada = (NotaEmitida) obj;
-
-//            notaEmitida.setId(notaEmitidaSelecionada.getId());
-//            notaEmitida.setBaixas(notaEmitidaSelecionada.getBaixaDinheiro());
-//            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
-//            notaEmitida.setOperacao(notaEmitidaSelecionada.getOperacao());
-//            notaEmitida.setValoresAVista(notaEmitidaSelecionada.getValoresAVista());
-//            notaEmitida.setParcelas(notaEmitidaSelecionada.getParcelas());
-//            notaEmitida.setCredito(notaEmitidaSelecionada.getCredito());
-//            notaEmitida.setFormaDeRecebimento(notaEmitidaSelecionada.getFormaDeRecebimento());
-//            notaEmitida.setItensEmitidos(notaEmitidaSelecionada.getItensEmitidos());
-            
+            notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaEmitida = new NotaEmitidaBV(notaEmitidaSelecionada);
-
             ValoresAVista vl = notaEmitidaSelecionada.getValoresAVista();
             valoresAVista = new ValoresAVistaBV(vl);
-            
             boletoDeCartao = new BoletoDeCartaoBV(notaEmitidaSelecionada.getValoresAVista().getBoletoCartao());
 
-            for (Parcela p : notaEmitidaSelecionada.getParcelas()) {
-                parcelas.add(new ParcelaBV(p));
-            }
+            notaEmitidaSelecionada.getParcelas().forEach(i -> {
+                parcelas.add(new ParcelaBV(i));
+            });
+
+            // itemEmitido = new ItemEmitidoBV();
+            creditoBV = new CreditoBV();
+
+            itensEmitidos = notaEmitidaSelecionada.getItensEmitidos();
+
+            cheque = new ChequeBV();
 
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
