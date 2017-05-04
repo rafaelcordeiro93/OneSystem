@@ -37,6 +37,7 @@ public class ChequeBV implements Serializable {
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
     private OperacaoFinanceira operacaoFinanceira;
+    private Boolean entrada;
 
     public ChequeBV(Cheque c) {
         this.id = c.getId();
@@ -224,17 +225,25 @@ public class ChequeBV implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
     }
 
+    public Boolean isEntrada() {
+        return entrada;
+    }
+
+    public void setEntrada(Boolean entrada) {
+        this.entrada = entrada;
+    }      
+
     public Cheque construir() throws DadoInvalidoException {
         return new ChequeBuilder().comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).construir();
+                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).construir();
+                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
     }
 }

@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -143,9 +144,22 @@ public abstract class Nota implements Serializable {
 
     public List<Parcela> getParcelas() {
         if (parcelas != null) {
-            parcelas.sort(Comparator.comparingLong(Parcela::getDias));
+            List<Parcela> parcelamento = this.parcelas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
+            parcelamento.sort(Comparator.comparingLong(Parcela::getDias));
+            return parcelamento;
+        } else {
+            return null;
         }
-        return parcelas;
+    }
+
+    public List<Parcela> getEntradas() {
+        if (parcelas != null) {
+            List<Parcela> entradas = parcelas.stream().filter(p -> p.getEntrada() == true).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(Parcela::getDias));
+            return entradas;
+        } else {
+            return null;
+        }
     }
 
     public String getTotalItensFormatado() {
@@ -158,8 +172,8 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getTotalParcelas() {
         if (parcelas != null) {
-        return parcelas.stream().map(Parcela::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-        }else{
+            return parcelas.stream().map(Parcela::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
             return BigDecimal.ZERO;
         }
     }

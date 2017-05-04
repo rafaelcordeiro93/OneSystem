@@ -89,11 +89,13 @@ public abstract class Parcela implements Serializable {
     @ManyToOne
     private Nota nota;
 
+    private Boolean entrada;
+
     public Parcela() {
     }
 
     public Parcela(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota) throws DadoInvalidoException {
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota, Boolean entrada) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -104,6 +106,7 @@ public abstract class Parcela implements Serializable {
         this.baixas = baixas;
         this.vencimento = vencimento;
         this.nota = nota;
+        this.entrada = entrada;
         ehAbstracaoValida();
     }
 
@@ -149,6 +152,10 @@ public abstract class Parcela implements Serializable {
     public void setNota(Nota nota) {
         this.nota = nota;
     }
+
+    public Boolean getEntrada() {
+        return entrada;
+    }      
 
     public Long getDias() {
         LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

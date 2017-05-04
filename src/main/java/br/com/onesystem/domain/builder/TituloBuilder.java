@@ -41,6 +41,7 @@ public class TituloBuilder {
     private Cotacao cotacao;
 
     private ConhecimentoDeFrete conhecimentoDeFrete;
+    private Boolean entrada;
 
     public TituloBuilder comId(Long id) {
         this.id = id;
@@ -117,9 +118,14 @@ public class TituloBuilder {
         return this;
     }
 
+    public TituloBuilder comEntrada(Boolean entrada) {
+        this.entrada = entrada;
+        return this;
+    }
+
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, notaEmitida, conhecimentoDeFrete, baixas);
+                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, notaEmitida, conhecimentoDeFrete, baixas, entrada);
     }
 
 }

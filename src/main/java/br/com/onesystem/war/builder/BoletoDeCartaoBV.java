@@ -27,6 +27,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
     private Cotacao cotacao;
     private Pessoa pessoa;
     private OperacaoFinanceira operacaoFinanceira;
+    private Boolean entrada;
 
     public BoletoDeCartaoBV(BoletoDeCartao b) {
         this.id = b.getId();
@@ -133,17 +134,25 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.operacaoFinanceira = operacaoFinanceira;
     }
 
+    public Boolean isEntrada() {
+        return entrada;
+    }
+
+    public void setEntrada(Boolean entrada) {
+        this.entrada = entrada;
+    }
+    
     public BoletoDeCartao construir() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comNota(nota).
                 comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
-                comVencimento(vencimento).comValor(valor).comCotacao(cotacao).
+                comVencimento(vencimento).comValor(valor).comCotacao(cotacao).comEntrada(entrada).
                 comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comID(id).
                 comNota(nota).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
-                comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).
+                comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comEntrada(entrada).
                 comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
     }
 }
