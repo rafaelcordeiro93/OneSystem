@@ -89,7 +89,7 @@ public class Orcamento implements Serializable {
     }
 
     public Orcamento(Long id, Pessoa pessoa, FormaDeRecebimento formaDeRecebimento,
-            ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itemOrcado, Date validade, String observacao,
+            ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itensOrcados, Date validade, String observacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
         this.historicosDeOrcamento = new ArrayList<>();
         this.id = id;
@@ -105,13 +105,13 @@ public class Orcamento implements Serializable {
         this.frete = frete;
         this.emissao = new Date();
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
-        this.itensOrcados = itemOrcado;
-        geraItensOrcados(itemOrcado);
+        this.itensOrcados = itensOrcados;
+        geraItensOrcados(itensOrcados);
         ehValido();
     }
 
-    private void geraItensOrcados(List<ItemOrcado> itemOrcado) {
-        itemOrcado.forEach(i -> {
+    private void geraItensOrcados(List<ItemOrcado> itensOrcados) {
+        itensOrcados.forEach(i -> {
             i.setOrcamento(this);
         });
     }

@@ -48,7 +48,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
         HttpSession session = (HttpSession) ec.getSession(true);
 
         lista = (List<QuantidadeDeItemBV>) session.getAttribute("onesystem.quantidadeLista.token");
-        if (lista.isEmpty() || lista == null) {
+        if (lista == null || lista.isEmpty()) {
             Item item = (Item) session.getAttribute("onesystem.item.token");
             listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item, null);
             criaLista();
