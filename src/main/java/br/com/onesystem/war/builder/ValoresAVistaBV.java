@@ -33,9 +33,32 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
     private List<Cheque> cheques;
+    
+     public ValoresAVistaBV() {
+       
+    }
 
     public ValoresAVistaBV(Cotacao cotacao) {
         this.cotacao = cotacao;
+    }
+
+    public ValoresAVistaBV(ValoresAVista valoresAVista) {
+        this.id = valoresAVista.getId();
+        this.cotacao = valoresAVista.getCotacao();
+        //this.parcelas = valoresAVista.get();
+        this.dinheiro = valoresAVista.getDinheiro();
+        this.acrescimo = valoresAVista.getAcrescimo();
+        this.desconto = valoresAVista.getDesconto();
+        // this.porcentagemAcrescimo = valoresAVista.get();
+        // this.porcentagemDesconto = valoresAVista.getCotacao();
+        this.despesaCobranca = valoresAVista.getDespesaCobranca();
+        this.frete = valoresAVista.getFrete();
+        this.boletoDeCartao = valoresAVista.getBoletoCartao();
+        this.AFaturar = valoresAVista.getaFaturar();
+        //this.notaEmitida = valoresAVista.getNota();
+        this.cheques = valoresAVista.getCheques();
+       
+        
     }
 
     public Long getId() {
@@ -154,7 +177,7 @@ public class ValoresAVistaBV implements Serializable {
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-    
+
     public ValoresAVista construir() throws DadoInvalidoException {
         return new ValoresAVistaBuilder().comAFaturar(AFaturar).comBoletoDeCartao(boletoDeCartao).comDinheiro(dinheiro)
                 .comNotaEmitida(notaEmitida).comCotacao(cotacao).comCheques(cheques)
