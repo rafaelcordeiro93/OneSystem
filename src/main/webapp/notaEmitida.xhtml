@@ -694,7 +694,7 @@
             <table>
                 <tr>
                     <td>
-                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" action="#{notaEmitidaView.validaDinheiro}" onclick="PF('existeValorAFaturar').hide()"/>
+                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" action="#{notaEmitidaView.validaDinheiro}" onclick="PF('existeValorAFaturar').hide()" update=":conteudo"/>
                     </td>
                     <td>
                         <p:commandButton value="#{l.Nao}" icon="fa fa-repeat" onclick="PF('existeValorAFaturar').hide()"/>

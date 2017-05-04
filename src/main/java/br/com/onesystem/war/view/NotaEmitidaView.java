@@ -180,13 +180,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
-    public void validaAFaturar() {
+    public void validaAFaturar() throws DadoInvalidoException{
         // Se valor a faturar maior que zero deve exibir diálogo de confirmação
         if (valoresAVista.getAFaturar() != null && valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
             RequestContext c = RequestContext.getCurrentInstance();
             c.execute("PF('existeValorAFaturar').show()");
         } else if (valoresAVista.getAFaturar() != null && valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
-            ErrorMessage.print(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
         } else {
             validaDinheiro();
         }
@@ -751,7 +751,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 importaItensDe((NotaEmitida) obj);
             } else if (obj instanceof Orcamento) {
                 importa((Orcamento) obj);
-            } else if (obj instanceof List && "neQuantidade-search".equals(idComponent)) {
+            } else if (obj instanceof List && "neQuantidade-btn".equals(idComponent)) {
                 List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
                 itemEmitido.setEstoque(criarBaixaDeEstoque(lista, itemEmitido.getItem()));
             } else if (obj instanceof List) {

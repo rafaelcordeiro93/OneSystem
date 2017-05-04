@@ -115,7 +115,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void preparaInclusaoDeItemOrcado() throws DadoInvalidoException {
         for (ItemOrcado i : itensOrcados) {
-            e.getItensOrcados().add(new ItemOrcadoBV(i).setId(null).construir());
+            e.getItensOrcados().add(new ItemOrcadoBV(i).construir());
         }
     }
 
