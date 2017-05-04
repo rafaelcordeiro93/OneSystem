@@ -1,0 +1,33 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_Orcamento}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="orcamentoDT" managedBeanName="#{selecaoOrcamentoView}" >
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.pessoa.nome}" filterBy="#{bean.pessoa.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.pessoa.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Emissao}" filterMatchMode="contains">
+                <h:outputText value="#{bean.emissao}" />
+            </p:column>
+            <p:column headerText="#{l.Estado}" sortBy="#{bean.estado.nome}" filterBy="#{bean.estado.nome}" footerText="#{l.Estado}" filterMatchMode="contains" styleClass="#{bean.estado eq 'EM_DEFINICAO' ? 'Gray' : bean.estado eq 'EM_APROVACAO' ? 'SoftBlue' : 
+                                    bean.estado eq 'APROVADO' ? 'Blue': bean.estado eq 'REPROVADO' ? 'Red' : 
+                                    bean.estado eq 'EFETIVADO' ? 'Green' : bean.estado eq 'CANCELADO' ? 'Orange' : ''}">
+                <h:outputText value="#{bean.estado.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Total}" sortBy="#{bean.totalOrcamentoFormatado}" filterBy="#{bean.totalOrcamentoFormatado}" footerText="#{l.Total}" filterMatchMode="contains">
+                <h:outputText value="#{bean.totalOrcamentoFormatado}" />
+            </p:column>
+        </a:dataTable>
+
+    </ui:define>
+</ui:composition>

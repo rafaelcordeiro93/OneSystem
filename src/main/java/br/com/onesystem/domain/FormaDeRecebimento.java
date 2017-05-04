@@ -98,6 +98,8 @@ public class FormaDeRecebimento implements Serializable {
     private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
     @OneToMany(mappedBy = "formaDeRecebimento")
     private List<Nota> notas;
+    @OneToMany(mappedBy = "formaDeRecebimento")
+    private List<Orcamento> orcamentos;
 
     public FormaDeRecebimento() {
     }

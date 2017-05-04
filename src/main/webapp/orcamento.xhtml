@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="ne">
+            <div class="ui-g">
+                <div class="ui-g-10" style="margin-left: 8%">
+                    <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                        <h2 class="BigTopic">#{l.Orcamento}</h2>
+                        <div class="EmptyBox5"/>
+
+                        <p:outputLabel>#{l.Situacao}: </p:outputLabel>
+                                    <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
+                        
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="nePessoa" value="#{orcamentoView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true"/>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neListaDePreco" value="#{orcamentoView.e.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                </h:panelGrid>
+
+                            </p:panelGrid> 
+                        </div>
+
+                        <p:separator/>
+
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"
+                                         layout="grid" style="border:0px !important; background:none;">
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neItem" value="#{orcamentoView.itemOrcado.item}" dialog="#{selecaoItemView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                        <p:ajax event="itemSelect" listener="#{orcamentoView.atribuiItemASessao()}"/>
+                                    </a:inputTextDialog>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputNumberDialog id="neQuantidade" value="#{orcamentoView.itemOrcado.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" readonly="true" decimalPlaces="#{orcamentoView.itemOrcado.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="."/>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <p:outputPanel class="md-inputfield"> 
+                                        <p:inputNumber id="orcamentoItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                       symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{orcamentoView.itemOrcado.unitario}">
+                                            <p:ajax event="blur" update="orcamentoItemTotal"/>
+                                        </p:inputNumber>    
+                                        <p:outputLabel value="#{l.Valor}"/>                                        
+                                    </p:outputPanel>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">                                                                               
+                                    <p:outputLabel value="#{l.Total}"/>        
+                                    <p:inputNumber id="orcamentoItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
+                                                   symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{orcamentoView.itemOrcado.total}">
+                                    </p:inputNumber>                            
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
+                                    <p:spacer/>
+                                    <h:panelGrid columns="3">
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{orcamentoView.addItemNaLista}" style="width: 25px"
+                                                         update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{orcamentoView.updateItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="green-btn"/>     
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{orcamentoView.deleteItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="orange-btn"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:dataTable id="itensOrcadosNota" var="itemOrcado" value="#{orcamentoView.itensOrcados}" rowKey="#{itemOrcado.id}" 
+                                     emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{orcamentoView.itemOrcadoSelecionado}">
+
+                            <p:ajax event="rowSelect" process="@this" listener="#{orcamentoView.selecionaItemOrcado}" update=":conteudo"/>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{itemOrcado.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Id}" sortBy="#{itemOrcado.item.id}"  colspan="1">
+                                <h:outputText value="#{itemOrcado.item.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" sortBy="#{itemOrcado.item.nome}" colspan="3">
+                                <h:outputText value="#{itemOrcado.item.nome}" />
+                            </p:column>
+                            <p:column headerText="#{l.UN}" sortBy="#{itemOrcado.item.unidadeDeMedida.sigla}" colspan="1">
+                                <h:outputText value="#{itemOrcado.item.unidadeDeMedida.sigla}" />
+                            </p:column>
+                            <p:column headerText="#{l.QTDE}" sortBy="#{itemOrcado.quantidade}" >
+                                <h:outputText value="#{itemOrcado.quantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Unitario}" sortBy="#{itemOrcado.unitario}">
+                                <h:outputText value="#{itemOrcado.unitario}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemOrcado.total}" colspan="2" >
+                                <h:outputText value="#{itemOrcado.total}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="1" footerText="#{orcamentoView.itensOrcados.size() eq 0 ? '' : orcamentoView.itensOrcados.size()}" />
+                                    <p:column colspan="6"/>
+                                    <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
+                                    <p:column colspan="2" footerText="#{orcamentoView.totalItensFormatado}"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+
+                        <p:separator/>
+
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Forma_Recebimento}</div>
+
+                        <div class="ui-fluid ui-g-12">
+                            <h:panelGrid columns="1" styleClass="Wid100">
+                                <p:outputLabel value="#{l.Forma_Recebimento}"/>
+                                <a:inputTextDialog styleDiv="max-width: 326px" style="max-width: 326px" id="neFormaRec" value="#{orcamentoView.e.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{orcamentoView}" update=":conteudo" var="formaDeRecebimento" converter="formaDeRecebimentoConverter" itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" editVisible="true" readonly="true"/>
+                            </h:panelGrid>
+                        </div>
+
+                        <p:separator styleClass="Wid100"/>
+
+                        <div class="ui-fluid" >
+                            <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-6"
+                                         columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+
+                                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4">
+
+                                    <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
+                                    <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
+                                                   value="#{orcamentoView.e.porcentagemAcrescimo}">
+                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto totalOrcamento" 
+                                                listener="#{orcamentoView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+                                    <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} "
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{orcamentoView.e.acrescimo}">
+                                        <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto totalOrcamento" listener="#{orcamentoView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber>
+
+                                    <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
+                                    <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{orcamentoView.e.porcentagemDesconto}">
+                                        <p:ajax event="change" update="neDesconto totalOrcamento" listener="#{orcamentoView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber>                                     
+                                    <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                   symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} "
+                                                   styleClass="Wid90" value="#{orcamentoView.e.desconto}">
+                                        <p:ajax event="change" update="nePDesconto totalOrcamento" listener="#{orcamentoView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Despesa_Cobranca}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{orcamentoView.e.despesaCobranca}"
+                                                   symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalOrcamento"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Frete}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{orcamentoView.e.frete}" symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalOrcamento"/>
+                                    </p:inputNumber>    
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-8">
+
+                                    <p:outputLabel value="#{l.Total_Orcamento}"/>
+                                    <p:inputNumber id="totalOrcamento" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{orcamentoView.totalOrcamento}" symbol="#{orcamentoView.configuracao.moedaPadrao.sigla} " styleClass="ui-g-12 ui-md-6 NoPadding"/>
+
+                                    <p:outputLabel value="#{l.Observacao}"/>
+                                    <p:inputTextarea rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{orcamentoView.e.historico}"/>
+                                    <p:spacer/>
+                                    <p:outputLabel id="display"/>
+
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:separator/>
+
+                        <p:commandButton value="#{l.Finalizar}" action="#{orcamentoView.finalizar}" update=":conteudo"/>
+
+                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

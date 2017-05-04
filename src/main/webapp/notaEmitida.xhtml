@@ -7,6 +7,17 @@
                 xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="head">
+        <h:outputScript>
+            function importaItemNotaEmitida() {
+            document.getElementById("conteudo:ne:importaItemNotaEmitida-btn").click();
+            }
+            function importaOrcamento(){
+            document.getElementById("conteudo:ne:importaOrcamento-btn").click();
+            }
+        </h:outputScript>
+    </ui:define>
+
     <ui:define name="content">
 
         <h:form id="ne">
@@ -16,13 +27,35 @@
                         <h2 class="BigTopic">#{l.Nota_Emitida}</h2>
                         <div class="EmptyBox5"/>
 
+                        <p:spacer height="1px" width="100%"/>
+
+
+                        <p:commandButton id="importaItemNotaEmitida-btn" action="#{selecaoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo:ne:itensEmitidosNota"/>
+                        </p:commandButton>
+
+                        <p:commandButton id="importaOrcamento-btn" action="#{selecaoOrcamentoAprovadoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
+
+                        <p:commandButton id="exibeOrcamento-btn" action="#{dialogoOrcamentoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo"/>
+                        </p:commandButton>
+
+                        <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid13" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
+                            <p:menuitem value="#{l.Itens_Nota_Emitida}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()"/>
+                            <p:menuitem value="#{l.Orcamento}"  icon="fa fa-random" onclick="importaOrcamento()"/>
+                        </p:menuButton>
+
                         <div class="ui-fluid">
+
+
                             <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
                                          columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:menuButtonImport" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
@@ -34,6 +67,8 @@
                                     <p:spacer/>
                                     <a:inputTextDialog id="neListaDePreco" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
                                 </h:panelGrid>
+
+
 
                             </p:panelGrid> 
                         </div>
@@ -659,13 +694,29 @@
             <table>
                 <tr>
                     <td>
-                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" action="#{notaEmitidaView.validaDinheiro}" onclick="PF('existeValorAFaturar').hide()"/>
+                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" action="#{notaEmitidaView.validaDinheiro}" onclick="PF('existeValorAFaturar').hide()" update=":conteudo"/>
                     </td>
                     <td>
                         <p:commandButton value="#{l.Nao}" icon="fa fa-repeat" onclick="PF('existeValorAFaturar').hide()"/>
                     </td>
                 </tr>
             </table>
+
+        </p:dialog>
+
+        <p:dialog widgetVar="historicoDeOrcamento" width="500px"  height="180px" header="#{l.Historico_De_Orcamento}" closable="false" modal="true" resizable="false" responsive="true">
+
+            <p:outputLabel  value="#{l.Estado_Desejado}: "/>
+            <p:outputLabel id="estadoDesejado" class="label label-success"> #{notaEmitidaView.estadoDeOrcamento.nome}</p:outputLabel>
+            <p:spacer width="100%" height="1px"/>
+            <div class="ui-g">
+                <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Historico}:"/>
+                <p:inputTextarea styleClass="ui-g-12 ui-md-8 ui-lg-9" style="margin-left: 4px" rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{notaEmitidaView.historico}"/>
+                <p:spacer class="ui-g-12 ui-md-3 ui-lg-2"  style="margin-left: 4px"/>
+                <p:outputLabel id="display"/>
+            </div>
+            <p:separator />
+            <p:commandButton value="#{l.Atualizar}" action="#{notaEmitidaView.finalizar()}" update=":conteudo"/>
 
         </p:dialog>
 

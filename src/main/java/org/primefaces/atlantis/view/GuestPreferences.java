@@ -15,6 +15,7 @@
  */
 package org.primefaces.atlantis.view;
 
+import br.com.onesystem.domain.Usuario;
 import javax.annotation.PostConstruct;
 import java.util.Map;
 import java.util.HashMap;
@@ -25,24 +26,25 @@ import javax.inject.Named;
 @Named(value = "guestPreferences")
 @SessionScoped
 public class GuestPreferences implements Serializable {
-    
-    private Map<String,String> themeColors;
-    
+
+    private Map<String, String> themeColors;
+
     private String theme = "blue";
-        
+
     private String layout = "dark";
-    
+
     private boolean overlayMenu;
-    
+
     private boolean darkMenu;
-    
+
     private boolean orientationRTL;
-        
+
     @PostConstruct
     public void init() {
-        themeColors = new HashMap<String,String>();
+        themeColors = new HashMap<String, String>();
         themeColors.put("turquoise", "#47c5d4");
         themeColors.put("blue", "#3192e1");
+        themeColors.put("clean", "#2d6891");
         themeColors.put("orange", "#ff9c59");
         themeColors.put("purple", "#985edb");
         themeColors.put("pink", "#e42a7b");
@@ -50,39 +52,39 @@ public class GuestPreferences implements Serializable {
         themeColors.put("green", "#5ea980");
         themeColors.put("black", "#545b61");
     }
-    
-	public String getTheme() {		
-		return theme;
-	}
-    
-	public void setTheme(String theme) {
-		this.theme = theme;
-	}
-    
+
+    public String getTheme() {
+        return theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = theme;
+    }
+
     public String getLayout() {
         return this.layout;
     }
-    
+
     public void setLayout(String layout) {
         this.layout = layout;
     }
-    
+
     public boolean isDarkMenu() {
         return this.darkMenu;
     }
-    
+
     public void setDarkMenu(boolean value) {
         this.darkMenu = value;
     }
-    
+
     public boolean isOverlayMenu() {
         return this.overlayMenu;
     }
-    
+
     public void setOverlayMenu(boolean value) {
         this.overlayMenu = value;
     }
-    
+
     public Map getThemeColors() {
         return this.themeColors;
     }
@@ -94,4 +96,5 @@ public class GuestPreferences implements Serializable {
     public void setOrientationRTL(boolean orientationRTL) {
         this.orientationRTL = orientationRTL;
     }
+
 }

@@ -28,13 +28,6 @@ public class LoginView implements Serializable {
     private List<Usuario> listaDeUsuarios;
     private String mensagem = null;
 
-    public LoginView() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.removeAttribute("minds.login.token");
-        session.removeAttribute("minds.nome.token");
-    }
-
     public String logar() {
         if (!listaDeUsuarios.isEmpty()) {
             mensagem = null;
@@ -58,12 +51,15 @@ public class LoginView implements Serializable {
         session.setAttribute("minds.login.token", "Anonymous");
         session.setAttribute("minds.nome.token", "Anonymous");
         return "dashboard?faces-redirect=true";
-    }  
+    }
 
     @PostConstruct
     public void construct() {
-        listaDeUsuarios = new ArmazemDeRegistros<Usuario>(Usuario.class
-        ).listaTodosOsRegistros();
+        listaDeUsuarios = new ArmazemDeRegistros<Usuario>(Usuario.class).listaTodosOsRegistros();
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.removeAttribute("minds.login.token");
+        session.removeAttribute("minds.nome.token");
     }
 
     public String getMensagem() {

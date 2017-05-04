@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.ListaDePreco;
 
 /**
@@ -18,6 +19,7 @@ public class ConfiguracaoEstoqueBuilder {
     private Long id;
     private ContaDeEstoque contaDeEstoque;
     private ListaDePreco listaDePreco;
+    private Deposito depositoPadrao;
 
     public ConfiguracaoEstoqueBuilder comId(Long id) {
         this.id = id;
@@ -29,13 +31,18 @@ public class ConfiguracaoEstoqueBuilder {
         return this;
     }
 
+    public ConfiguracaoEstoqueBuilder comDepositoPadrao(Deposito depositoPadrao) {
+        this.depositoPadrao = depositoPadrao;
+        return this;
+    }
+
     public ConfiguracaoEstoqueBuilder comListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
         return this;
     }
 
     public ConfiguracaoEstoque construir() {
-        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco);
+        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco, depositoPadrao);
     }
 
 }

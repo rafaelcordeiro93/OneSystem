@@ -25,14 +25,17 @@ public class ConfiguracaoEstoque implements Serializable {
     private ContaDeEstoque contaDeEstoqueEmpresa;
     @OneToOne
     private ListaDePreco listaDePreco;
+    @OneToOne
+    private Deposito depositoPadrao;
 
     public ConfiguracaoEstoque() {
     }
 
-    public ConfiguracaoEstoque(Long id, ContaDeEstoque contaDeEstoque, ListaDePreco listaDePreco) {
+    public ConfiguracaoEstoque(Long id, ContaDeEstoque contaDeEstoque, ListaDePreco listaDePreco, Deposito depositoPadrao) {
         this.id = id;
         this.contaDeEstoqueEmpresa = contaDeEstoque;
         this.listaDePreco = listaDePreco;
+        this.depositoPadrao = depositoPadrao;
     }
 
     public Long getId() {
@@ -45,6 +48,10 @@ public class ConfiguracaoEstoque implements Serializable {
 
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
+    }
+
+    public Deposito getDepositoPadrao() {
+        return depositoPadrao;
     }
 
     @Override

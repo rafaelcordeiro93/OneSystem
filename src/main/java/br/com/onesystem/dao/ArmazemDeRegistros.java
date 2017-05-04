@@ -50,8 +50,8 @@ public class ArmazemDeRegistros<T> implements Serializable {
         }
     }
 
-    public T find(T objeto) {
-        return em.find(classe, objeto);
+    public T find(Long id) {
+        return em.find(classe, id);
     }
 
 }
