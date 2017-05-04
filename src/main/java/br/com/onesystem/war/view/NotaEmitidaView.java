@@ -626,7 +626,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
-                                .comTipoLancamento(TipoLancamento.EMITIDA).construir());
+                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -654,6 +654,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             cheque.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
             cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
             cheque.setTipoLancamento(TipoLancamento.EMITIDA);
+            cheque.setEntrada(true);
             Cheque c = cheque.construirComID();
 
             //Adiciona cheque a lista
@@ -963,6 +964,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             boletoDeCartao.setEmissao(notaEmitida.getEmissao());
             boletoDeCartao.setPessoa(notaEmitida.getPessoa());
             boletoDeCartao.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
+            boletoDeCartao.setEntrada(true);
 
             if (boletoDeCartao.getCartao() != null) {
                 if (boletoDeCartao.getValor() == null || boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
