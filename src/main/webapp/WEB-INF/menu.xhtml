@@ -13,9 +13,9 @@
                     <p:menuitem id="om_dashboard" value="Dashboard" icon="fa fa-fw fa-home" outcome="/dashboard"/>
 
                     <p:submenu label="#{l.Arquivo}" icon="fa fa-files-o">
-                        <p:menuitem value="#{l.Cidade}" icon="fa fa-building-o" outcome="/cidade" />
-                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/pessoa" />   
-                        <p:menuitem value="#{l.Importar_Pessoas}" icon="icon-people" outcome="/importarPessoa" />    
+                        <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/cidade" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/cidade.xhtml')}" />
+                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/pessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/pessoa.xhtml')}" />   
+                        <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/importarPessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/importarPessoa.xhtml')}" />    
                     </p:submenu>
                     <p:submenu label="#{l.Vendas}" icon="fa fa-shopping-cart">
                         <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />

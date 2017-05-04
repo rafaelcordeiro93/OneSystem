@@ -14,9 +14,9 @@ public class UsuarioService implements Serializable {
     }
 
     public Usuario buscarUsuarioPerfil() {
-        UsuarioLogadoUtil user = new UsuarioLogadoUtil();
-        if (user.getEmailUsuario() != null) {
-            return new UsuarioDAO().buscarUsuarios().porEmailString(user.getEmailUsuario()).resultado();
+       String user = new UsuarioLogadoUtil().getEmailUsuario();
+        if (user != null) {
+            return new UsuarioDAO().buscarUsuarios().porEmailString(user).resultado();
         } 
         else return null;
     }
