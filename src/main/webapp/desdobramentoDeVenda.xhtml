@@ -18,7 +18,7 @@
 
 
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaBVConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
                         </div>
 
 
@@ -30,12 +30,12 @@
                             <h:panelGrid columns="2" styleClass="Wid30">
                                 <p:outputLabel value="#{l.Forma_Recebimento} :"/>
                                 <p:outputLabel value="#{desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.nome}"> </p:outputLabel>
-                                
-                               </h:panelGrid>
+
+                            </h:panelGrid>
                         </div>
-                        
-                        
-                        
+
+
+
 
                         <p:separator styleClass="Wid100"/>
 
@@ -146,7 +146,7 @@
 
                                     <p:outputLabel value="#{l.Total_Nota}"/>
                                     <p:inputNumber id="totalNota" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.notaEmitida.totalNota}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
+                                                   value="#{desdobramentoDeVendaView.totalNota}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                     </p:inputNumber> 
 
                                 </p:panelGrid>
@@ -155,7 +155,7 @@
 
                         <p:separator/>
 
-                                        
+
 
                         <p:dataTable id="neParcelas" var="parcelaBV" value="#{desdobramentoDeVendaView.parcelas}" editMode="cell" editable="true"
                                      styleClass="ui-g-2" rowKey="#{parcelaBV.id}"
@@ -221,10 +221,18 @@
 
                             <p:column headerText="+" width="5%" style="text-align: center;">
                                 <p:commandButton id="detParButton" icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
-                                                 action="#{desdobramentoDeVendaView.detalharParcela}" update=":conteudo:ne:neParcelas">
+                                                 action="#{desdobramentoDeVendaView.detalharParcela}" update="neParcelas">
                                     <f:setPropertyActionListener value="#{parcelaBV}" target="#{desdobramentoDeVendaView.parcelaSelecionada}" />
                                 </p:commandButton>
                             </p:column>
+
+                            <p:column headerText="+" width="5%" style="text-align: center;">
+                                <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
+                                                 action="#{desdobramentoDeVendaView.consultaParcela(parcelaBV)}" update="neParcelas">
+                                </p:commandButton>
+                            </p:column>
+
+
 
                             <p:columnGroup type="footer">
                                 <p:row>
@@ -237,11 +245,11 @@
                         </p:dataTable>
 
                         <p:separator/>
-                        
-                        
-                       
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{desdobramentoDeVendaView.geraItensEmitidos}" update=":conteudo"/>
+
+
+
+                        <p:commandButton value="#{l.Finalizar}" action="#{desdobramentoDeVendaView.update()}" update=":conteudo"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
 

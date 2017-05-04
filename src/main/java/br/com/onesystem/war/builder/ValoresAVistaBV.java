@@ -33,6 +33,10 @@ public class ValoresAVistaBV implements Serializable {
     private BigDecimal AFaturar;
     private NotaEmitida notaEmitida;
     private List<Cheque> cheques;
+    
+     public ValoresAVistaBV() {
+       
+    }
 
     public ValoresAVistaBV(Cotacao cotacao) {
         this.cotacao = cotacao;
