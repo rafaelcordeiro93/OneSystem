@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
@@ -22,6 +23,7 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
+import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.Titulo;
@@ -38,6 +40,7 @@ import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Money;
+import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
@@ -49,11 +52,13 @@ import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.ValoresAVistaBV;
 import br.com.onesystem.war.builder.ItemEmitidoBV;
+import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.builder.ParcelaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -99,6 +104,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private ParcelaBV parcelaBV;
     private BoletoDeCartaoBV boletoDeCartao;
     private Cotacao cotacao;
+    private Orcamento orcamento;
+    private String historico;
 
     //Variáveis para criação de Cheques
     private ChequeBV cheque;
@@ -109,6 +116,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     @Inject
     private CotacaoService service;
+
+    @Inject
+    private EstoqueService serviceEstoque;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -140,15 +150,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         inicializaCotacoes();
         limparChequeEntrada();
         parcelaBV = new ParcelaBV();
-        limpaSessao();
-    }
-
-    private void limpaSessao() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        if (session.getAttribute("onesystem.item.token") != null) {
-            session.removeAttribute("onesystem.item.token");
-        }
     }
 
     private void inicializaCotacoes() {
@@ -179,13 +180,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
-    public void validaAFaturar() {
+    public void validaAFaturar() throws DadoInvalidoException{
         // Se valor a faturar maior que zero deve exibir diálogo de confirmação
         if (valoresAVista.getAFaturar() != null && valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
             RequestContext c = RequestContext.getCurrentInstance();
             c.execute("PF('existeValorAFaturar').show()");
         } else if (valoresAVista.getAFaturar() != null && valoresAVista.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
-            ErrorMessage.print(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
         } else {
             validaDinheiro();
         }
@@ -272,10 +273,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
             // Inclui as parcelas dentro da nota emitida.
             notaEmitida.setParcelas(parcelasBV.isEmpty() ? null : parcelasBV);
-            finalizar();
+            geraOrcamento();
         } catch (DadoInvalidoException die) {
             ErrorMessage.print(new BundleUtil().getMessage("Erro_ao_gerar_parcelas"));
             die.print();
+        }
+    }
+
+    public void geraOrcamento() {
+        if (notaEmitida.getOrcamento() != null) {
+            RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
+        } else {
+            finalizar();
         }
     }
 
@@ -300,6 +309,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             //Inclui a nota nas parcelas
             preparaInclusaoDeParcelas(ne);
 
+            //Efetiva Orçamento
+            preparaOrcamento(ne);
+
             add(ne);
 
         } catch (DadoInvalidoException die) {
@@ -308,6 +320,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         } catch (ConstraintViolationException cpe) {
             ErrorMessage.printConsole(cpe.toString());
             ErrorMessage.print(cpe.toString());
+        }
+    }
+
+    private void preparaOrcamento(NotaEmitida ne) throws DadoInvalidoException {
+        if (ne.getOrcamento() != null) {
+            notaEmitida.getOrcamento().efetiva(historico);
         }
     }
 
@@ -396,13 +414,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
-    private List<Estoque> criarBaixaDeEstoque(List<QuantidadeDeItemBV> lista) throws DadoInvalidoException {
+    private List<Estoque> criarBaixaDeEstoque(List<QuantidadeDeItemBV> lista, Item item) throws DadoInvalidoException {
         List<Estoque> estoquesBV = new ArrayList<>();
         try {
             for (QuantidadeDeItemBV q : lista) {
                 for (OperacaoDeEstoque operacaoDeEstoque : notaEmitida.getOperacao().getOperacaoDeEstoque()) {
                     estoqueBV = new EstoqueBV(q.getSaldoDeEstoque().getDeposito(), q.getQuantidade(),
-                            itemEmitido.getItem(), operacaoDeEstoque, null, notaEmitida.getEmissao(), null);
+                            item, operacaoDeEstoque, null, notaEmitida.getEmissao(), null);
                     // Adiciona no estoque
                     estoquesBV.add(estoqueBV.construir());
                 }
@@ -700,49 +718,97 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // ----------------------------- Selecao ----------------------------------
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        String idComponent = event.getComponent().getId();
-        if (obj instanceof Operacao) {
-            Operacao operacao = (Operacao) obj;
-            if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
-                RequestContext rc = RequestContext.getCurrentInstance();
-                rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
-            } else {
-                notaEmitida.setOperacao((Operacao) obj);
-            }
-        } else if (obj instanceof Pessoa) {
-            notaEmitida.setPessoa((Pessoa) obj);
-        } else if (obj instanceof ListaDePreco) {
-            notaEmitida.setListaDePreco((ListaDePreco) obj);
-        } else if (obj instanceof Item) {
-            itemEmitido.setItem((Item) obj);
-            atribuiItemASessao();
-        } else if (obj instanceof FormaDeRecebimento) {
-            FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
-            notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
-            calculaTotaisFormaDeRecebimento();
-            recalculaValores();
-        } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
-            cheque.setBanco((Banco) obj);
-        } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
-            parcelaBV.setBanco((Banco) obj);
-        } else if (obj instanceof Cartao) {
-            boletoDeCartao.setCartao((Cartao) obj);
-        } else if (obj instanceof List) {
-            try {
+        try {
+            Object obj = event.getObject();
+            String idComponent = event.getComponent().getId();
+            if (obj instanceof Operacao) {
+                Operacao operacao = (Operacao) obj;
+                if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
+                    RequestContext rc = RequestContext.getCurrentInstance();
+                    rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
+                } else {
+                    notaEmitida.setOperacao((Operacao) obj);
+                }
+            } else if (obj instanceof Pessoa) {
+                notaEmitida.setPessoa((Pessoa) obj);
+            } else if (obj instanceof ListaDePreco) {
+                notaEmitida.setListaDePreco((ListaDePreco) obj);
+            } else if (obj instanceof Item) {
+                itemEmitido.setItem((Item) obj);
+                atribuiItemASessao();
+            } else if (obj instanceof FormaDeRecebimento) {
+                FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
+                notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
+                calculaTotaisFormaDeRecebimento();
+                recalculaValores();
+            } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
+                cheque.setBanco((Banco) obj);
+            } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
+                parcelaBV.setBanco((Banco) obj);
+            } else if (obj instanceof Cartao) {
+                boletoDeCartao.setCartao((Cartao) obj);
+            } else if (obj instanceof NotaEmitida) {
+                importaItensDe((NotaEmitida) obj);
+            } else if (obj instanceof Orcamento) {
+                importa((Orcamento) obj);
+            } else if (obj instanceof List && "neQuantidade-btn".equals(idComponent)) {
                 List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
-                itemEmitido.setEstoque(criarBaixaDeEstoque(lista));
-            } catch (DadoInvalidoException ex) {
-                ex.print();
-            }
-        }
+                itemEmitido.setEstoque(criarBaixaDeEstoque(lista, itemEmitido.getItem()));
+            } else if (obj instanceof List) {
+                List<ItemOrcadoBV> lista = (List<ItemOrcadoBV>) event.getObject();
+                for (ItemOrcadoBV i : lista) {
+                    itemEmitido.setItem(i.getItem());
+                    itemEmitido.setUnitario(i.getUnitario());
+                    itemEmitido.setEstoque(criarBaixaDeEstoque(i.getQuantidadePorDeposito(), i.getItem()));
+                    addItemNaLista();
 
+                }
+                atribuiOrcamentoANota();
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    private void importaItensDe(NotaEmitida nota) throws DadoInvalidoException {
+        for (ItemEmitido ie : (nota).getItensEmitidos()) {
+            itemEmitido.setItem(ie.getItem());
+            itemEmitido.setUnitario(ie.getUnitario());
+            for (Estoque estoqueDeItemEmitido : ie.getEstoques()) {
+                EstoqueBV ebv = new EstoqueBV(estoqueDeItemEmitido);
+                itemEmitido.getEstoque().add(ebv.construir());
+            }
+            addItemNaLista();
+        }
+    }
+
+    private void atribuiOrcamentoANota() {
+        notaEmitida.setOrcamento(orcamento);
+        notaEmitida.setPessoa(orcamento.getPessoa());
+        notaEmitida.setListaDePreco(orcamento.getListaDePreco());
+        notaEmitida.setFormaDeRecebimento(orcamento.getFormaDeRecebimento());
+        calculaTotaisFormaDeRecebimento();
+        recalculaValores();
+    }
+
+    private void importa(Orcamento orcamento) throws DadoInvalidoException {
+        this.orcamento = orcamento;
+        atribuiOrcamentoASessao(orcamento);
+        RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeOrcamento-btn\").click();");
     }
 
     public void atribuiItemASessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.removeAttribute("onesystem.item.token");
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
+    }
+
+    public void atribuiOrcamentoASessao(Orcamento orcamento) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.removeAttribute("onesystem.orcamento.token");
+        session.setAttribute("onesystem.orcamento.token", orcamento);
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {
@@ -1251,6 +1317,34 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void setItensEmitidos(List<ItemEmitido> itensEmitidos) {
         this.itensEmitidos = itensEmitidos;
+    }
+
+    public Orcamento getOrcamento() {
+        return orcamento;
+    }
+
+    public void setOrcamento(Orcamento orcamento) {
+        this.orcamento = orcamento;
+    }
+
+    public String getHistorico() {
+        return historico;
+    }
+
+    public void setHistorico(String historico) {
+        this.historico = historico;
+    }
+
+    public EstoqueService getServiceEstoque() {
+        return serviceEstoque;
+    }
+
+    public void setServiceEstoque(EstoqueService serviceEstoque) {
+        this.serviceEstoque = serviceEstoque;
+    }
+
+    public EstadoDeOrcamento getEstadoDeOrcamento() {
+        return EstadoDeOrcamento.EFETIVADO;
     }
 
     //------------------- Fim Getters and Setters -----------------------------

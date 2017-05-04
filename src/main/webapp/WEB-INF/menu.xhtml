@@ -19,8 +19,10 @@
                     </p:submenu>
                     <p:submenu label="#{l.Vendas}" icon="fa fa-shopping-cart">
                         <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
+                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/orcamento" />
                         <p:submenu label="#{l.Consultar}" icon="fa fa-book">
                             <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
+                            <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaOrcamento" />
                         </p:submenu>
                     </p:submenu>
 

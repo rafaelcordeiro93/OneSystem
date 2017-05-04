@@ -15,6 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -42,6 +43,8 @@ public class Usuario implements Serializable {
     @NotNull(message = "{grupo_privilegio_not_null}")
     @ManyToOne(optional = false)
     private GrupoDePrivilegio grupoPrivilegio;
+    @OneToMany(mappedBy = "usuario")
+    private List<HistoricoDeOrcamento> historicoOrcamentos;
     private boolean supervisor = false;
     private String corTema;
     private String corLayout;

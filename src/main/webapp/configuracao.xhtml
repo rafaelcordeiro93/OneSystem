@@ -60,6 +60,14 @@
                     <h1 class="BoldGray FontRobotoRegular">#{l.Estoque}</h1>
                     
                     <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Deposito_Padrao_Empresa}</div>
+                    
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Deposito_Padrao_Empresa}"/>
+                        <a:inputTextDialog id="depositoPadrao" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoDepositoView}" value="#{configuracaoEstoqueView.configuracaoBV.depositoPadrao}" var="deposito" converter="depositoConverter"  itemLabel="#{deposito.nome}" itemValue="#{deposito}" itemLabelTab="#{deposito.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
+                    </div>     
+                    
+                    <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Conta_De_Estoque_Empresa}</div>
                     
                     <div class="ui-g ui-fluid">

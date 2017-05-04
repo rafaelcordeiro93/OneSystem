@@ -80,9 +80,15 @@ public class DadosIniciais {
         daoJanela.adiciona(jpessoaimport);
 
         //Modulo de Notas
-        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", notas);
+        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", arq);
+        Janela consultaNotaSaida = new Janela(null, "Consulta Nota de Saida", "/consultaNotaEmitida.xhtml", arq);
+        Janela orcamento = new Janela(null, "Orçamento", "/orcamento.xhtml", arq);
+        Janela consultaOrcamento = new Janela(null, "Consulta Orçamento", "/consultaOrcamento.xhtml", arq);
 
         daoJanela.adiciona(notaSaida);
+        daoJanela.adiciona(consultaNotaSaida);
+        daoJanela.adiciona(orcamento);
+        daoJanela.adiciona(consultaOrcamento);
 
         //Modulo de Estoque
         Janela jitem = new Janela(null, "Item", "/item.xhtml", estoque);
@@ -98,6 +104,8 @@ public class DadosIniciais {
         Janela comissao = new Janela(null, "Comissao", "/comissao.xhtml", estoque);
         Janela grupo = new Janela(null, "Grupo", "/grupo.xhtml", estoque);
         Janela jgrupoFiscal = new Janela(null, "Grupo Fiscal", "/grupoFiscal.xhtml", estoque);
+        Janela notaRecebida = new Janela(null, "Nota Recebida", "/notaRecebida.xhtml", estoque);
+        Janela consultaNotaRecebida = new Janela(null, "Consulta Nota Recebida", "/consultaNotaRecebida.xhtml", estoque);
 
         daoJanela.adiciona(jitem);
         daoJanela.adiciona(margem);
@@ -112,6 +120,8 @@ public class DadosIniciais {
         daoJanela.adiciona(comissao);
         daoJanela.adiciona(grupo);
         daoJanela.adiciona(jgrupoFiscal);
+        daoJanela.adiciona(notaRecebida);
+        daoJanela.adiciona(consultaNotaRecebida);
 
         //Modulo Financeiro
         Janela receberValores = new Janela(null, "Receber Valores", "/recebimento.xhtml", fin);
@@ -211,7 +221,12 @@ public class DadosIniciais {
                 new Privilegio(null, cidade, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoaimport, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, notaSaida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaNotaSaida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, orcamento, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaOrcamento, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jitem, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, notaRecebida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaNotaRecebida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, margem, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, conhecimentoFrete, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, ajusteEstoque, true, true, true, true, grupoDePrivilegio),
@@ -566,7 +581,6 @@ public class DadosIniciais {
                 grupoFiscal, unidade, null, null, null, null, null, null);
         new AdicionaDAO<Item>().adiciona(item);
 
-        
         System.out.println("Dados criados com sucesso.");
     }
 

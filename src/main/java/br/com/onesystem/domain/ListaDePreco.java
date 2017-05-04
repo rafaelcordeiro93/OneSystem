@@ -34,6 +34,8 @@ public class ListaDePreco implements Serializable {
     private List<PrecoDeItem> precos;
     @OneToMany(mappedBy = "listaDePreco")
     private List<Nota> notas;
+    @OneToMany(mappedBy = "listaDePreco")
+    private List<Orcamento> orcamentos;
 
     public ListaDePreco() {
     }

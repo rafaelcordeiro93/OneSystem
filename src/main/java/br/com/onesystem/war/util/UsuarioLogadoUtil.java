@@ -22,7 +22,7 @@ import org.primefaces.atlantis.view.GuestPreferences;
 
 @Named
 @ViewScoped //javax.faces.view.ViewScoped;
-public class UsuarioLogadoUtil implements Serializable{
+public class UsuarioLogadoUtil implements Serializable {
 
     public boolean getPrivilegio(String tipo) throws DadoInvalidoException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -121,6 +121,10 @@ public class UsuarioLogadoUtil implements Serializable{
             }
         }
         return false;
+    }
+
+    public Usuario getUsuario() {
+        return new UsuarioDAO().buscarUsuarios().porEmailString(getEmailUsuario()).resultado();
     }
 
     public String getNomeUsuario() {

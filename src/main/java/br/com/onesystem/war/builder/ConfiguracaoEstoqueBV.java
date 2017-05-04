@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.builder.ConfiguracaoEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -13,11 +14,13 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
     private Long id;
     private ContaDeEstoque contaDeEstoqueEmpresa;
     private ListaDePreco listaDePreco;
+    private Deposito depositoPadrao;
 
     public ConfiguracaoEstoqueBV(ConfiguracaoEstoque configuracaoSelecionada) {
         this.id = configuracaoSelecionada.getId();
         this.contaDeEstoqueEmpresa = configuracaoSelecionada.getContaDeEstoqueEmpresa();
         this.listaDePreco = configuracaoSelecionada.getListaDePreco();
+        this.depositoPadrao = configuracaoSelecionada.getDepositoPadrao();
     }
 
     public ConfiguracaoEstoqueBV() {
@@ -47,6 +50,14 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
         this.listaDePreco = listaDePreco;
     }
 
+    public Deposito getDepositoPadrao() {
+        return depositoPadrao;
+    }
+
+    public void setDepositoPadrao(Deposito depositoPadrao) {
+        this.depositoPadrao = depositoPadrao;
+    }
+
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comContaDeEstoque(contaDeEstoqueEmpresa)
                 .comListaDePreco(listaDePreco).construir();
@@ -54,7 +65,7 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
 
     @Override
     public ConfiguracaoEstoque construirComID() throws DadoInvalidoException {
-        return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa)
+        return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa).comDepositoPadrao(depositoPadrao)
                 .comListaDePreco(listaDePreco).construir();
     }
 
