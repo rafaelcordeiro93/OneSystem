@@ -20,7 +20,7 @@ import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
-import br.com.onesystem.war.builder.QuantidadeDeItemBV;
+import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -181,8 +181,8 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
             FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
             e.setFormaDeRecebimento(formaDeRecebimento);
         } else if (obj instanceof List) {
-            List<QuantidadeDeItemBV> lista = (List<QuantidadeDeItemBV>) event.getObject();
-            itemOrcado.setQuantidade(lista.stream().map(QuantidadeDeItemBV::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+            List<QuantidadeDeItemPorDeposito> lista = (List<QuantidadeDeItemPorDeposito>) event.getObject();
+            itemOrcado.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
         }
     }
 

@@ -43,7 +43,7 @@
 
                             <p:tab id="item" title="#{l.Itens}">
 
-                                <p:dataTable id="itensRecebidosNota" var="itemRecebido" value="#{consultaNotaRecebidaView.notaRecebida.itensRecebidos}" rowKey="#{itemRecebido.id}" 
+                                <p:dataTable id="itensRecebidosNota" var="itemRecebido" value="#{consultaNotaRecebidaView.notaRecebida.itens}" rowKey="#{itemRecebido.id}" 
                                              emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
 
                                     <f:facet name="header">
@@ -74,7 +74,7 @@
 
                                     <p:columnGroup type="footer">
                                         <p:row>
-                                            <p:column colspan="1" footerText="#{consultaNotaRecebidaView.notaRecebida.itensRecebidos.size() eq 0 ? '' : consultaNotaRecebidaView.notaRecebida.itensRecebidos.size()}" />
+                                            <p:column colspan="1" footerText="#{consultaNotaRecebidaView.notaRecebida.itens.size() eq 0 ? '' : consultaNotaRecebidaView.notaRecebida.itens.size()}" />
                                             <p:column colspan="6"/>
                                             <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
                                             <p:column colspan="2" footerText="#{consultaNotaRecebidaView.notaRecebida.totalItensFormatado}"/>
@@ -96,10 +96,10 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.acrescimoFormatado}" />                             
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.acrescimoFormatado}" />                             
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Dinheiro}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.dinheiroFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.totalEmDinheiroFormatado}" />    
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Nota}:"/> 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.totalNotaFormatado}" />    
@@ -107,7 +107,7 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.descontoFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.descontoFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Credito}:"/> 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.credito.valorFormatado eq null ? consultaNotaRecebidaView.zero : consultaNotaRecebidaView.notaRecebida.credito.valorFormatado}" />    
@@ -115,18 +115,18 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.despesaCobrancaFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.despesaCobrancaFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cheque}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.totalChequeFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.totalChequeDeEntradaFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.freteFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.freteFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cartao}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.valoresAVista.boletoCartao.valor eq null ? consultaNotaRecebidaView.zero : consultaNotaRecebidaView.notaRecebida.valoresAVista.boletoCartao.valor}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaRecebidaView.notaRecebida.totalCartaoDeEntradaFormatado eq null ? consultaNotaRecebidaView.zero : consultaNotaRecebidaView.notaRecebida.totalCartaoDeEntradaFormatado}" />    
                                 </div>                           
 
                                 <p:dataTable var="parcela" value="#{consultaNotaRecebidaView.notaRecebida.parcelas}" 

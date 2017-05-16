@@ -26,7 +26,7 @@ public class ItemOrcadoBV {
     private Item item;
     private BigDecimal unitario;
     private BigDecimal quantidade;
-    private List<QuantidadeDeItemBV> quantidadePorDeposito = new ArrayList<>();
+    private List<QuantidadeDeItemPorDeposito> quantidadePorDeposito = new ArrayList<>();
     private Orcamento orcamento;
 
     public ItemOrcadoBV() {
@@ -89,7 +89,7 @@ public class ItemOrcadoBV {
         }
     }
 
-    public List<QuantidadeDeItemBV> getQuantidadePorDeposito() {
+    public List<QuantidadeDeItemPorDeposito> getQuantidadePorDeposito() {
         return quantidadePorDeposito;
     }
 
@@ -101,13 +101,13 @@ public class ItemOrcadoBV {
         this.orcamento = orcamento;
     }
 
-    public void setQuantidadePorDeposito(List<QuantidadeDeItemBV> quantidadePorDeposito) {
+    public void setQuantidadePorDeposito(List<QuantidadeDeItemPorDeposito> quantidadePorDeposito) {
         this.quantidadePorDeposito = quantidadePorDeposito;
     }
     
     public int getQuantidadeDeFaturamento(){
         BigDecimal b = BigDecimal.ZERO;
-        for(QuantidadeDeItemBV q : quantidadePorDeposito){
+        for(QuantidadeDeItemPorDeposito q : quantidadePorDeposito){
             b = b.add(q.getQuantidade());
         }
         return quantidade.compareTo(b);

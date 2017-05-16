@@ -1,7 +1,6 @@
 import br.com.onesystem.dao.NotaEmitidaDAO;
-import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.GenericLayout;
 import java.io.FileNotFoundException;
@@ -97,9 +96,9 @@ public class Teste {
                 }
 
                 Integer linhaItens = 0;
-                for (ItemEmitido i : p.getItensEmitidos()) {
+                for (ItemDeNota i : p.getItens()) {
 
-                    for (int j = linhaItens; j < p.getItensEmitidos().size(); j++) {
+                    for (int j = linhaItens; j < p.getItens().size(); j++) {
 
                         if (g.getColuna().equals("it")) {
                             t.printTextLinCol(g.getTop() + j, g.getLeft(), "");

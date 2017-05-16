@@ -16,7 +16,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.Parcela;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -24,6 +24,7 @@ import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -47,7 +48,7 @@ import java.util.Locale;
  *
  * @author Rafael Fernando Rauber
  */
-public class ParcelaBV implements Serializable {
+public class CobrancaBV implements Serializable {
 
     private Long id;
     private NotaEmitida notaEmitida;
@@ -82,10 +83,11 @@ public class ParcelaBV implements Serializable {
     private List<Baixa> baixas;
     private Boolean entrada;
 
-    public ParcelaBV() {
+    public CobrancaBV() {
+        entrada = false;
     }
 
-    public ParcelaBV(ParcelaBV p) {
+    public CobrancaBV(CobrancaBV p) {
         this.id = p.getId();
         this.notaEmitida = p.getNotaEmitida();
         this.conhecimentoDeFrete = p.getConhecimentoDeFrete();
@@ -117,7 +119,7 @@ public class ParcelaBV implements Serializable {
         this.entrada = p.getEntrada();
     }
 
-    public ParcelaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
+    public CobrancaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
             OperacaoFinanceira unidadeFinanceira, BigDecimal valor,
             Date emissao, Date vencimento, Banco banco, String agencia, String conta,
             String numeroCheque, SituacaoDeCheque situacaoDeCheque, BigDecimal multas,
@@ -154,9 +156,10 @@ public class ParcelaBV implements Serializable {
         this.tipoLancamento = tipoLancamento;
         this.cotacao = cotacao;
         this.pessoa = pessoa;
+        this.entrada = entrada;
     }
 
-    public ParcelaBV(Parcela p) {
+    public CobrancaBV(Cobranca p) {
 
         this.id = p.getId();
         this.valor = p.getValor();
@@ -168,6 +171,7 @@ public class ParcelaBV implements Serializable {
         this.operacaoFinanceira = p.getOperacaoFinanceira();
         this.baixas = p.getBaixas();
         this.nota = p.getNota();
+        this.entrada = p.getEntrada();
         //  this.agencia = p.get();
         // this.conta = p.getCotacao().getConta();
         //  this.numeroCheque = p.getNumeroCheque();
@@ -298,7 +302,7 @@ public class ParcelaBV implements Serializable {
 
     public String getDiaDaSemana() {
         DayOfWeek diaDaSemana = vencimento.toInstant().atZone(ZoneId.systemDefault()).getDayOfWeek();
-        return diaDaSemana.getDisplayName(TextStyle.FULL, Locale.US);
+        return new BundleUtil().getLabel(diaDaSemana.getDisplayName(TextStyle.FULL, Locale.US));
     }
 
     public void setVencimento(Date vencimento) {
@@ -534,10 +538,10 @@ public class ParcelaBV implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof ParcelaBV)) {
+        if (!(objeto instanceof CobrancaBV)) {
             return false;
         }
-        ParcelaBV outro = (ParcelaBV) objeto;
+        CobrancaBV outro = (CobrancaBV) objeto;
         if (this.id == null) {
             return false;
         }

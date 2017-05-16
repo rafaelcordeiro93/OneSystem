@@ -44,14 +44,10 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
     public void add() {
         try {
             ContaDeEstoque novoRegistro = contaDeEstoque.construir();
-            if (validaContaDeEstoqueExistente(novoRegistro)) {
-                addOperacaoDeEstoque(novoRegistro);
-                new AdicionaDAO<ContaDeEstoque>().adiciona(novoRegistro);
-                InfoMessage.adicionado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("contaDeEstoque_ja_registrada"));
-            }
+            addOperacaoDeEstoque(novoRegistro);
+            new AdicionaDAO<ContaDeEstoque>().adiciona(novoRegistro);
+            InfoMessage.adicionado();
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -68,20 +64,15 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         try {
             if (contaDeEstoqueSelecionada != null) {
                 ContaDeEstoque contaDeEstoqueExistente = contaDeEstoque.construirComID();
-                if (!validaContaDeEstoqueExistente(contaDeEstoqueExistente)) {
+                atualizaOperacaoDeEstoque(contaDeEstoqueExistente); // Atualiza Operacoes na lista
+                List<OperacaoDeEstoque> deletados = buscaOperacoesDeletadas(contaDeEstoqueExistente); // Busca operacoes deletadas
 
-                    atualizaOperacaoDeEstoque(contaDeEstoqueExistente); // Atualiza Operacoes na lista
-                    List<OperacaoDeEstoque> deletados = buscaOperacoesDeletadas(contaDeEstoqueExistente); // Busca operacoes deletadas
+                new AtualizaDAO<ContaDeEstoque>().atualiza(contaDeEstoqueExistente);
 
-                    new AtualizaDAO<ContaDeEstoque>().atualiza(contaDeEstoqueExistente);
+                deletaOperacoes(deletados); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
 
-                    deletaOperacoes(deletados); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
-
-                    InfoMessage.atualizado();
-                    limparJanela();
-                } else {
-                    throw new EDadoInvalidoException(new BundleUtil().getMessage("contaDeEstoque_ja_registrada"));
-                }
+                InfoMessage.atualizado();
+                limparJanela();
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
@@ -153,11 +144,6 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         } catch (ConstraintViolationException pe) {
             FatalMessage.print(pe.getMessage(), pe.getCause());
         }
-    }
-
-    private boolean validaContaDeEstoqueExistente(ContaDeEstoque novoRegistro) {
-        List<ContaDeEstoque> lista = new ContaDeEstoqueDAO().buscarContaDeEstoqueW().PorNome(novoRegistro).listaDeResultados();
-        return lista.isEmpty();
     }
 
     @Override

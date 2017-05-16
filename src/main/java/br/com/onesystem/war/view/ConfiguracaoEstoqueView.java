@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoEstoqueBV;
@@ -37,11 +38,12 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
 
     public void update() {
         try {
-            ConfiguracaoEstoque conf = configuracaoEstoqueBV.construir();
-            if (configuracao == null) {
-                addNoBanco(conf);
+            if (configuracaoEstoqueBV.getId() == null) {
+                ConfiguracaoEstoque c = configuracaoEstoqueBV.construir();
+                addNoBanco(c);
+                configuracaoEstoqueBV.setId(c.getId());
             } else {
-                updateNoBanco(conf);
+                updateNoBanco(configuracaoEstoqueBV.construirComID());
             }
             InfoMessage.print(new BundleUtil().getLabel("Configuracoes_Gravadas"));
         } catch (DadoInvalidoException die) {
@@ -58,6 +60,8 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
         } else if (obj instanceof ListaDePreco) {
             ListaDePreco lp = (ListaDePreco) obj;
             configuracaoEstoqueBV.setListaDePreco(lp);
+        } else if (obj instanceof Deposito) {
+            configuracaoEstoqueBV.setDepositoPadrao((Deposito) obj);
         }
     }
 

@@ -1465,6 +1465,34 @@ body .ui-inputfield {
     font-size: 13px; }
 body .ui-inputfield.ui-state-hover {
     border: 1px solid #b3b3b3; }
+body .md-inputfield {
+    display: block;
+    position: relative; }
+body .md-inputfield input:focus ~ label,
+body .md-inputfield input.ui-state-filled ~ label,
+body .md-inputfield textarea:focus ~ label,
+body .md-inputfield textarea.ui-state-filled ~ label,
+body .md-inputfield .md-inputwrapper-focus ~ label,
+body .md-inputfield .md-inputwrapper-filled ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: #1976d2; }
+body .md-inputfield input:-webkit-autofill ~ label {
+    top: -20px;
+    font-size: 12px;
+    color: #1976d2; }
+body .md-inputfield label {
+    color: #999;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 5px;
+    transition: 0.3s ease all;
+    -moz-transition: 0.3s ease all;
+    -webkit-transition: 0.3s ease all; }
+body .md-inputfield input.ui-state-error ~ label {
+    color: #e62a10; }
 body .ui-inputfield.ui-state-focus {
     border: 1px solid #ff9c59;
     background-color: #f1be9f;

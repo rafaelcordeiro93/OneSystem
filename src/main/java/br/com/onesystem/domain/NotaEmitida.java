@@ -12,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -28,28 +27,18 @@ public class NotaEmitida extends Nota implements Serializable {
     @OneToOne(cascade = {CascadeType.ALL})
     private Orcamento orcamento;
 
-    @OneToMany(mappedBy = "notaEmitida", cascade = {CascadeType.ALL})
-    private List<ItemEmitido> itensEmitidos;
-
     public NotaEmitida() {
+        emissao = new Date();
     }
 
-    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemEmitido> itensEmitidos,
+    public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
-            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao, Orcamento orcamento) throws DadoInvalidoException {
-        super(id, pessoa, operacao, formaDeRecebimento, listaDePreco, valoresAVista, baixaDinheiro, emissao, cancelada, credito, parcelas, moedaPadrao);
-        this.itensEmitidos = itensEmitidos;
+            boolean cancelada, Credito credito, List<Cobranca> cobrancas,
+            Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
+            BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
+            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
         this.orcamento = orcamento;
-    }
-
-    public List<ItemEmitido> getItensEmitidos() {
-        return itensEmitidos;
-    }
-
-    @Override
-    public BigDecimal getTotalItens() {
-        return itensEmitidos.stream().map(ItemEmitido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public Orcamento getOrcamento() {
@@ -63,10 +52,9 @@ public class NotaEmitida extends Nota implements Serializable {
                 + ", emissao=" + getEmissao()
                 + ", cancelada=" + isCancelada()
                 + ", credito=" + getCredito()
-                + ", itensEmitidos=" + getItensEmitidos()
+                + ", itensEmitidos=" + getItens()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
-                + ", listaDePreco=" + getListaDePreco() + ", valoresAVista=" + getValoresAVista()
-                + ", baixaDinheiro=" + getBaixaDinheiro()
+                + ", listaDePreco=" + getListaDePreco()
                 + ", parcelas=" + getParcelas()
                 + ",orcamento=" + getOrcamento() + '}';
     }

@@ -8,11 +8,8 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -24,27 +21,16 @@ import javax.persistence.SequenceGenerator;
         sequenceName = "SEQ_NOTARECEBIDA")
 public class NotaRecebida extends Nota implements Serializable {
 
-    @OneToMany(mappedBy = "notaRecebida", cascade = {CascadeType.ALL})
-    private List<ItemRecebido> itensRecebidos;
-
     public NotaRecebida() {
     }
 
-    public NotaRecebida(Long id, Pessoa pessoa, Operacao operacao, List<ItemRecebido> itensRecebidos,
+    public NotaRecebida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            ValoresAVista valoresAVista, List<Baixa> baixaDinheiro, Date emissao, boolean cancelada,
-            Credito credito, List<Parcela> parcelas, Moeda moedaPadrao) throws DadoInvalidoException {
-        super(id, pessoa, operacao, formaDeRecebimento, listaDePreco, valoresAVista, baixaDinheiro, emissao, cancelada, credito, parcelas, moedaPadrao);
-        this.itensRecebidos = itensRecebidos;
-    }
-
-    public List<ItemRecebido> getItensRecebidos() {
-        return itensRecebidos;
-    }
-
-    @Override
-    public BigDecimal getTotalItens() {
-        return itensRecebidos.stream().map(ItemRecebido::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+            boolean cancelada, Credito credito, List<Cobranca> cobrancas,
+            Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
+            BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
+            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
     }
 
     @Override
@@ -54,10 +40,9 @@ public class NotaRecebida extends Nota implements Serializable {
                 + ", emissao=" + getEmissao()
                 + ", cancelada=" + isCancelada()
                 + ", credito=" + getCredito()
-                + ", itensRecebidos=" + getItensRecebidos()
+                + ", itensRecebidos=" + getItens()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
-                + ", listaDePreco=" + getListaDePreco() + ", valoresAVista=" + getValoresAVista()
-                + ", baixaDinheiro=" + getBaixaDinheiro()
+                + ", listaDePreco=" + getListaDePreco()
                 + ", parcelas=" + getParcelas() + '}';
     }
 

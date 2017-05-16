@@ -11,7 +11,7 @@
 
     <ui:define name="content">
 
-        <a:dataTable id="operacaoDT" managedBeanName="#{selecaoOperacaoView}">            
+        <a:dataTable id="operacaoDT" managedBeanName="#{selecaoOperacaoNotaEmitidaView}">            
             <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                 <h:outputText value="#{bean.id}" />
             </p:column>

@@ -10,11 +10,13 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MD5Util;
+import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.builder.PessoaBV;
 import br.com.onesystem.war.service.UsuarioService;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -41,6 +43,7 @@ public class PerfilUsuarioView implements Serializable {
 
     public void update() throws IOException {
         try {
+            System.out.println("Cor Menu: " + usuario.getCorMenu());
             atualizaPessoa();
             validaSenha();
             Usuario usuarioExistente = usuario.construirComID();
@@ -92,7 +95,7 @@ public class PerfilUsuarioView implements Serializable {
             usuario.setCorLayout(usuarioSelecionada.getCorLayout());
             usuario.setOverlayMenu(usuarioSelecionada.isOverlayMenu());
             usuario.setOrientationRTL(usuarioSelecionada.isOrientationRTL());
-            usuario.setDarkMenu(usuarioSelecionada.isDarkMenu());
+            usuario.setCorMenu(usuarioSelecionada.getCorMenu());
             pessoa = new PessoaBV(usuarioSelecionada.getPessoa());
         }
     }
@@ -123,6 +126,10 @@ public class PerfilUsuarioView implements Serializable {
 
     public void setUsuario(UsuarioBV usuario) {
         this.usuario = usuario;
+    }
+
+    public List<TipoCorMenu> getCoresDeMenu() {
+        return Arrays.asList(TipoCorMenu.values());
     }
 
     public Usuario getUsuarioSelecionada() {

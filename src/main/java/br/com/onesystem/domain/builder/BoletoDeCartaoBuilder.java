@@ -4,7 +4,6 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -21,7 +20,7 @@ import java.util.List;
 public class BoletoDeCartaoBuilder {
 
     private Long id;
-    private Nota venda;
+    private Nota nota;
     private Cartao cartao;
     private Date emissao;
     private Date vencimento;
@@ -43,7 +42,7 @@ public class BoletoDeCartaoBuilder {
     }
 
     public BoletoDeCartaoBuilder comNota(Nota nota) {
-        this.venda = nota;
+        this.nota = nota;
         return this;
     }
 
@@ -103,7 +102,7 @@ public class BoletoDeCartaoBuilder {
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, venda, cartao, emissao, valor, codigoTransacao, tipoSituacao, codigoTransacao, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, codigoTransacao, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada);
     }
 
 }

@@ -23,6 +23,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.TipoBandeira;
+import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.valueobjects.TipoItem;
@@ -281,8 +282,8 @@ public class DadosIniciais {
         for (Privilegio p : listaPrivilegios) {
             daoPrivilegio.adiciona(p);
         }
-        Usuario usercordeiro = new Usuario(null, cordeiro, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, false, false);
-        Usuario userrauber = new Usuario(null, rauber, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, false, false);
+        Usuario usercordeiro = new Usuario(null, cordeiro, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, TipoCorMenu.CINZA, false);
+        Usuario userrauber = new Usuario(null, rauber, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, TipoCorMenu.CINZA, false);
         new AdicionaDAO<Usuario>().adiciona(usercordeiro);
         new AdicionaDAO<Usuario>().adiciona(userrauber);
         // -- Adiciona Grupo Financeiro

@@ -6,11 +6,14 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.TipoCorMenu;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,14 +52,15 @@ public class Usuario implements Serializable {
     private String corTema;
     private String corLayout;
     private boolean overlayMenu;
-    private boolean darkMenu;
+    @Enumerated(EnumType.STRING)
+    private TipoCorMenu corMenu;
     private boolean orientationRTL;
 
     public Usuario() {
     }
 
     public Usuario(Long id, Pessoa pessoa, String senha, GrupoDePrivilegio grupoPrivilegio,
-            boolean supervisor, String corTema, String corLayout, boolean overlayMenu, boolean darkMenu, boolean orientationRTL) throws DadoInvalidoException {
+            boolean supervisor, String corTema, String corLayout, boolean overlayMenu, TipoCorMenu corMenu, boolean orientationRTL) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.senha = senha;
@@ -66,7 +70,7 @@ public class Usuario implements Serializable {
         this.corLayout = corLayout;
         this.orientationRTL = orientationRTL;
         this.overlayMenu = overlayMenu;
-        this.darkMenu = darkMenu;
+        this.corMenu = corMenu;
         ehValido();
     }
 
@@ -98,13 +102,13 @@ public class Usuario implements Serializable {
         return corLayout;
     }
 
-    public boolean isOverlayMenu() {
-        return overlayMenu;
+    public TipoCorMenu getCorMenu() {
+        return corMenu;
     }
 
-    public boolean isDarkMenu() {
-        return darkMenu;
-    }
+    public boolean isOverlayMenu() {
+        return overlayMenu;
+    }   
 
     public boolean isOrientationRTL() {
         return orientationRTL;

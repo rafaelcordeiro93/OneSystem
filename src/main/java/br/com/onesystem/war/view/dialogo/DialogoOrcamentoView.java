@@ -6,7 +6,7 @@ import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
-import br.com.onesystem.war.builder.QuantidadeDeItemBV;
+import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -48,7 +48,7 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
             orcamento.getItensOrcados().forEach((io) -> {
                 ItemOrcadoBV iobv = new ItemOrcadoBV(io);
                 List<SaldoDeEstoque> listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(iobv.getItem(), null);
-                List<QuantidadeDeItemBV> lista = criaLista(listaDeEstoque, iobv);
+                List<QuantidadeDeItemPorDeposito> lista = criaLista(listaDeEstoque, iobv);
                 iobv.setQuantidadePorDeposito(lista);
                 itensOrcados.add(iobv);
             });
@@ -77,8 +77,8 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof List) {
-            List<QuantidadeDeItemBV> list = (List<QuantidadeDeItemBV>) event.getObject();
-            itemOrcadoBV.setQuantidadePorDeposito((List<QuantidadeDeItemBV>) event.getObject());
+            List<QuantidadeDeItemPorDeposito> list = (List<QuantidadeDeItemPorDeposito>) event.getObject();
+            itemOrcadoBV.setQuantidadePorDeposito((List<QuantidadeDeItemPorDeposito>) event.getObject());
         }
     }
 
@@ -92,15 +92,13 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
         abrirJanelaQuantidade();
     }
 
-    public List<QuantidadeDeItemBV> criaLista(List<SaldoDeEstoque> listaDeEstoque, ItemOrcadoBV itemOrcado) {
+    public List<QuantidadeDeItemPorDeposito> criaLista(List<SaldoDeEstoque> listaDeEstoque, ItemOrcadoBV itemOrcado) {
         BigDecimal quantidade = itemOrcado.getQuantidade();
 
-        List<QuantidadeDeItemBV> lista = new ArrayList<QuantidadeDeItemBV>();
+        List<QuantidadeDeItemPorDeposito> lista = new ArrayList<QuantidadeDeItemPorDeposito>();
         for (SaldoDeEstoque saldo : listaDeEstoque) {
             if (saldo.getDeposito().getId() == serviceConfiguracaoEstoque.buscar().getDepositoPadrao().getId()) {
-                QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
-                quantidadeDeItem.setSaldoDeEstoque(saldo);
-                quantidadeDeItem.setId(new Long(lista.size() + 1));
+                QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, BigDecimal.ZERO);
                 if (saldo.getSaldo().compareTo(quantidade) >= 0) {
                     quantidadeDeItem.setQuantidade(quantidade);
                     quantidade = BigDecimal.ZERO;
@@ -115,10 +113,7 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
         }
         if (quantidade.compareTo(BigDecimal.ZERO) > 0) {
             for (SaldoDeEstoque saldo : listaDeEstoque) {
-                QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
-                quantidadeDeItem.setSaldoDeEstoque(saldo);
-                quantidadeDeItem.setId(new Long(lista.size() + 1));
-                quantidadeDeItem.setQuantidade(itemOrcado.getQuantidade());
+                QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, itemOrcado.getQuantidade());
                 lista.add(quantidadeDeItem);
             }
         }

@@ -10,5 +10,5 @@ public class OperacaoService implements Serializable {
     public List<Operacao> buscar(){
         return new ArmazemDeRegistros<Operacao>(Operacao.class).listaTodosOsRegistros();
     }
-    
+        
 }

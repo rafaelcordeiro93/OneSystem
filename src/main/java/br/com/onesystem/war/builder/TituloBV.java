@@ -195,7 +195,7 @@ public class TituloBV implements Serializable {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
-                .comCambio(cambio).comCotacao(cotacao).comNotaEmitida(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
+                .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
                 .construir();
     }
 
@@ -203,7 +203,7 @@ public class TituloBV implements Serializable {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor).comId(id)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
-                .comCambio(cambio).comCotacao(cotacao).comNotaEmitida(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
+                .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
                 .construir();
     }
 }

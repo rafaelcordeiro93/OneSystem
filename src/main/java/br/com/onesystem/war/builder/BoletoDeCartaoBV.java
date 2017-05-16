@@ -40,7 +40,8 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.situacao = b.getSituacao();
         this.cotacao = b.getCotacao();
         this.pessoa = b.getPessoa();
-        this.operacaoFinanceira = b.getOperacaoFinanceira();
+        this.operacaoFinanceira = b.getOperacaoFinanceira();        
+        this.entrada = b.getEntrada();
     }
 
     public BoletoDeCartaoBV() {

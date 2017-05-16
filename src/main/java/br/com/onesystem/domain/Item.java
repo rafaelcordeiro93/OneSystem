@@ -76,9 +76,7 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item")
     private List<AjusteDeEstoque> listaDeAjustes;
     @OneToMany(mappedBy = "item")
-    private List<ItemEmitido> itensEmitidos;
-    @OneToMany(mappedBy = "item")
-    private List<ItemRecebido> itensRecebidos;
+    private List<ItemDeNota> itensEmitidos;
     @OneToMany(mappedBy = "item")
     private List<ItemOrcado> itensOrcados;
     @OneToMany(mappedBy = "item")

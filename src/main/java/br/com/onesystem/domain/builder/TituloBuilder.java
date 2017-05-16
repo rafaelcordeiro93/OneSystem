@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
@@ -35,7 +36,7 @@ public class TituloBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private Recepcao recepcao;
     private Cambio cambio;
-    private NotaEmitida notaEmitida;
+    private Nota nota;
     private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
     private Cotacao cotacao;
@@ -93,8 +94,8 @@ public class TituloBuilder {
         return this;
     }
 
-    public TituloBuilder comNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
+    public TituloBuilder comNota(Nota nota) {
+        this.nota = nota;
         return this;
     }
 
@@ -125,7 +126,7 @@ public class TituloBuilder {
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, notaEmitida, conhecimentoDeFrete, baixas, entrada);
+                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada);
     }
 
 }

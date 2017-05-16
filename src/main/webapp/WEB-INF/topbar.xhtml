@@ -11,7 +11,7 @@
             <p:graphicImage name="images/logo.png" library="atlantis-layout" />
         </div>
 
-        <p:graphicImage name="images/appname.png" library="atlantis-layout" styleClass="app-name"/>
+        <p:graphicImage name="#{guestPreferences.layout ne 'white' ? 'images/appname.png' : 'images/appname-black.png'}" library="atlantis-layout" styleClass="app-name"/>
 
         <a id="topbar-menu-button" href="#">
             <i class="fa fa-bars"></i>
