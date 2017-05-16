@@ -1,4 +1,4 @@
-package org.primefaces.atlantis.view;
+package br.com.onesystem.util;
 
 import br.com.onesystem.valueobjects.TipoCorMenu;
 import javax.annotation.PostConstruct;
@@ -8,9 +8,9 @@ import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;  
 import javax.inject.Named;
 
-@Named(value = "guestPreferences") 
+@Named(value = "preferenciasDeUsuario") 
 @SessionScoped 
-public class GuestPreferences implements Serializable {
+public class PreferenciasDeUsuario implements Serializable {
 
     private Map<String, String> themeColors;
 
@@ -18,7 +18,7 @@ public class GuestPreferences implements Serializable {
 
     private String layout = "dark"; 
   
-    private boolean overlayMenu;
+    private boolean overlayMenu; 
 
     private TipoCorMenu corMenu = TipoCorMenu.CINZA;
 

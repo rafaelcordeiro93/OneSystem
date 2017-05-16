@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
@@ -25,6 +26,7 @@ import br.com.onesystem.domain.builder.ParcelaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
@@ -547,15 +549,20 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     private void importaItensDe(NotaEmitida nota) throws DadoInvalidoException {
-//        for (ItemDeNota ie : (nota).getItens()) {
-//            itemEmitido.setItem(ie.getItem());
-//            itemEmitido.setUnitario(ie.getUnitario());
-//            for (Estoque estoqueDeItemDeNota : ie.getEstoques()) {
-//                EstoqueBV ebv = new EstoqueBV(estoqueDeItemDeNota);
-//                itemEmitido.getEstoque().add(ebv.construir());
-//            }
-//            addItemNaLista();
-//        }
+        for (ItemDeNota ie : nota.getItens()) {
+            itemEmitido.setItem(ie.getItem());
+            itemEmitido.setUnitario(ie.getUnitario());
+            itemEmitido.setQuantidade(ie.getQuantidade());
+            List<SaldoDeEstoque> saldos = new EstoqueService().buscaListaDeSaldoDeEstoque(ie.getItem(), new Date());
+            for (Estoque e : ie.getEstoques()) {
+                for (SaldoDeEstoque s : saldos) {
+                    if (e.getDeposito().equals(s.getDeposito())) {
+                        itemEmitido.getListaDeQuantidade().add(new QuantidadeDeItemPorDeposito(null, s, ie.getQuantidade()));
+                    }
+                }
+            }
+            addItemNaLista();
+        }
     }
 
     private void atribuiOrcamentoANota() {

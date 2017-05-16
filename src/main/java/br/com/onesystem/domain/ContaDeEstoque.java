@@ -33,7 +33,7 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "contaDeEstoque")
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "contaDeEstoque")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
 
     public ContaDeEstoque() {
@@ -52,6 +52,10 @@ public class ContaDeEstoque implements Serializable {
 
     public String getNome() {
         return nome;
+    }
+
+    public void remove(OperacaoDeEstoque operacaoDeEstoque) {
+        this.operacaoDeEstoque.remove(operacaoDeEstoque);
     }
 
     public List<OperacaoDeEstoque> getOperacaoDeEstoque() {
