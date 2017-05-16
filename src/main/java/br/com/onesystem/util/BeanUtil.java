@@ -8,7 +8,6 @@ package br.com.onesystem.util;
 import javax.el.ELContext;
 import javax.el.ExpressionFactory;
 import javax.faces.context.FacesContext;
-import org.primefaces.atlantis.view.GuestPreferences;
 
 /**
  *
