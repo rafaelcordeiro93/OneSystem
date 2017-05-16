@@ -21,7 +21,7 @@
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>atlantis-#{guestPreferences.theme}</param-value>
+        <param-value>atlantis-#{preferenciasDeUsuario.theme}</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.FONT_AWESOME</param-name>
