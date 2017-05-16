@@ -6,7 +6,7 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:pa="http://primefaces.org/atlantis">
 
-    <div class="layout-sidebar #{guestPreferences.corMenuCSS}">
+    <div class="layout-sidebar #{preferenciasDeUsuario.corMenuCSS}">
         <pa:tabMenu>
             <pa:tab icon="fa fa-connectdevelop" title="Minds">
                 <pa:menu widgetVar="mat">
@@ -101,34 +101,34 @@
                         <p:menuitem id="om_dashboard" value="Dashboard" icon="fa fa-fw fa-home" outcome="/dashboard"/>
                         <p:submenu id="um_customization2" label="Menu Modes" icon="fa fa-fw fa-bars">
 
-                            <p:menuitem id="menu3" value="Inline Menu" icon="fa fa-fw fa-bars" actionListener="#{guestPreferences.setOverlayMenu(false)}" ajax="false"/>
-                            <p:menuitem id="menu4" value="Overlay Menu" icon="fa fa-fw fa-bars" actionListener="#{guestPreferences.setOverlayMenu(true)}" ajax="false"/>
+                            <p:menuitem id="menu3" value="Inline Menu" icon="fa fa-fw fa-bars" actionListener="#{preferenciasDeUsuario.setOverlayMenu(false)}" ajax="false"/>
+                            <p:menuitem id="menu4" value="Overlay Menu" icon="fa fa-fw fa-bars" actionListener="#{preferenciasDeUsuario.setOverlayMenu(true)}" ajax="false"/>
                         </p:submenu>
                         <p:submenu id="om_orientation" label="Orientation" icon="fa fa-fw fa-align-right">
-                            <p:menuitem id="om_rtl" value="RTL" icon="fa fa-fw fa-align-right" actionListener="#{guestPreferences.setOrientationRTL(true)}" ajax="false" />
-                            <p:menuitem id="om_ltr" value="LTR" icon="fa fa-fw fa-align-left" actionListener="#{guestPreferences.setOrientationRTL(false)}" ajax="false" />
+                            <p:menuitem id="om_rtl" value="RTL" icon="fa fa-fw fa-align-right" actionListener="#{preferenciasDeUsuario.setOrientationRTL(true)}" ajax="false" />
+                            <p:menuitem id="om_ltr" value="LTR" icon="fa fa-fw fa-align-left" actionListener="#{preferenciasDeUsuario.setOrientationRTL(false)}" ajax="false" />
                         </p:submenu>
                         <p:submenu id="um_customization1" label="Layout Colors" icon="fa fa-fw fa-paint-brush">
-                            <p:menuitem id="layout-color0" value="White" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('white')}" ajax="false"/>
-                            <p:menuitem id="layout-color1" value="Dark" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('dark')}" ajax="false"/>
-                            <p:menuitem id="layout-color2" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('blue')}" ajax="false"/>
-                            <p:menuitem id="layout-color3" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('pink')}" ajax="false"/>
-                            <p:menuitem id="layout-color4" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('steel')}" ajax="false"/>
-                            <p:menuitem id="layout-color5" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('orange')}" ajax="false"/>
-                            <p:menuitem id="layout-color6" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('green')}" ajax="false"/>
-                            <p:menuitem id="layout-color7" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('turquoise')}" ajax="false"/>
-                            <p:menuitem id="layout-color8" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('purple')}" ajax="false"/>
-                            <p:menuitem id="layout-color9" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setLayout('cyan')}" ajax="false"/>
+                            <p:menuitem id="layout-color0" value="White" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('white')}" ajax="false"/>
+                            <p:menuitem id="layout-color1" value="Dark" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('dark')}" ajax="false"/>
+                            <p:menuitem id="layout-color2" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('blue')}" ajax="false"/>
+                            <p:menuitem id="layout-color3" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('pink')}" ajax="false"/>
+                            <p:menuitem id="layout-color4" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('steel')}" ajax="false"/>
+                            <p:menuitem id="layout-color5" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('orange')}" ajax="false"/>
+                            <p:menuitem id="layout-color6" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('green')}" ajax="false"/>
+                            <p:menuitem id="layout-color7" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('turquoise')}" ajax="false"/>
+                            <p:menuitem id="layout-color8" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('purple')}" ajax="false"/>
+                            <p:menuitem id="layout-color9" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('cyan')}" ajax="false"/>
                         </p:submenu>
                         <p:submenu id="um_themes" label="Themes" icon="fa fa-fw fa-paint-brush">
-                            <p:menuitem id="theme1" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('blue')}" ajax="false" />
-                            <p:menuitem id="theme2" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('pink')}" ajax="false" />
-                            <p:menuitem id="theme3" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('steel')}" ajax="false" />
-                            <p:menuitem id="theme4" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('orange')}" ajax="false" />
-                            <p:menuitem id="theme5" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('green')}" ajax="false" />
-                            <p:menuitem id="theme6" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('turquoise')}" ajax="false" />
-                            <p:menuitem id="theme7" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('purple')}" ajax="false" />
-                            <p:menuitem id="theme8" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{guestPreferences.setTheme('cyan')}" ajax="false" />
+                            <p:menuitem id="theme1" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('blue')}" ajax="false" />
+                            <p:menuitem id="theme2" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('pink')}" ajax="false" />
+                            <p:menuitem id="theme3" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('steel')}" ajax="false" />
+                            <p:menuitem id="theme4" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('orange')}" ajax="false" />
+                            <p:menuitem id="theme5" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('green')}" ajax="false" />
+                            <p:menuitem id="theme6" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('turquoise')}" ajax="false" />
+                            <p:menuitem id="theme7" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('purple')}" ajax="false" />
+                            <p:menuitem id="theme8" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('cyan')}" ajax="false" />
                         </p:submenu>
                         <p:submenu id="om_components" label="Components" icon="fa fa-fw fa-sitemap">
                             <p:menuitem id="om_sample" value="Sample Page" icon="fa fa-fw fa-columns" outcome="/sample" />

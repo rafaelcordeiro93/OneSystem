@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.util;
 
+import br.com.onesystem.util.PreferenciasDeUsuario;
 import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.Usuario;
@@ -18,7 +19,6 @@ import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
-import org.primefaces.atlantis.view.GuestPreferences;
 
 @Named
 @ViewScoped //javax.faces.view.ViewScoped;
@@ -70,7 +70,7 @@ public class UsuarioLogadoUtil implements Serializable {
     }
 
     public void carregaPreferenciasDo(Usuario usuario) {
-        GuestPreferences gp = (GuestPreferences) new BeanUtil().getBeanNaSessao("guestPreferences");
+        PreferenciasDeUsuario gp = (PreferenciasDeUsuario) new BeanUtil().getBeanNaSessao("preferenciasDeUsuario");
 
         gp.setLayout(usuario.getCorLayout());        
         gp.setCorMenu(usuario.getCorMenu());
