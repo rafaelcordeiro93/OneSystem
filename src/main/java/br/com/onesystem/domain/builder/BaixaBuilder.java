@@ -12,17 +12,19 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.MovimentoFixo;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.Parcela;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Transferencia;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -40,7 +42,7 @@ public class BaixaBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private Parcela perfilDeValor;
+    private Cobranca perfilDeValor;
     private TipoDespesa despesa;
     private TipoReceita receita;
     private Pessoa pessoa;
@@ -49,8 +51,8 @@ public class BaixaBuilder {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private boolean cancelada = false;
-    private Nota nota;
     private MovimentoFixo movimentoFixo;
+    private ValorPorCotacao valorPorCotacao;
 
     public BaixaBuilder comId(Long id) {
         this.id = id;
@@ -142,12 +144,7 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comNota(Nota nota) {
-        this.nota = nota;
-        return this;
-    }
-
-    public BaixaBuilder comPerfilDeValor(Parcela perfilDeValor) {
+    public BaixaBuilder comPerfilDeValor(Cobranca perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
         return this;
     }
@@ -157,8 +154,13 @@ public class BaixaBuilder {
         return this;
     }
 
+    public BaixaBuilder comValorPorCotacao(ValorPorCotacao valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+        return this;
+    }
+
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, nota, movimentoFixo);
+        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, movimentoFixo, valorPorCotacao);
     }
 
 }

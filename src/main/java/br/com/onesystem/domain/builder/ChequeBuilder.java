@@ -4,7 +4,6 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -22,7 +21,6 @@ import java.util.List;
 public class ChequeBuilder {
 
     private Long id;
-    private Nota venda;
     private BigDecimal valor;
     private Date emissao = new Date();
     private Date vencimento = new Date();
@@ -36,21 +34,21 @@ public class ChequeBuilder {
     private BigDecimal descontos;
     private String emitente;
     private String observacao;
-    private ValoresAVista valoresAVista;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
     private List<Baixa> baixas;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
+    private Nota nota;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
         return this;
     }
 
-    public ChequeBuilder comNota(Nota venda) {
-        this.venda = venda;
+    public ChequeBuilder comNota(Nota nota) {
+        this.nota = nota;
         return this;
     }
 
@@ -129,11 +127,6 @@ public class ChequeBuilder {
         return this;
     }
 
-    public ChequeBuilder comValoresAVista(ValoresAVista valoresAVista) {
-        this.valoresAVista = valoresAVista;
-        return this;
-    }
-
     public ChequeBuilder comPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
         return this;
@@ -155,7 +148,7 @@ public class ChequeBuilder {
     }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, venda, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, observacao, valoresAVista, cotacao, tipoLancamento, pessoa, baixas, entrada);
+        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, observacao, cotacao, tipoLancamento, pessoa, baixas, entrada);
     }
 
 }

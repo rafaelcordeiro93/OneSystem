@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("TITULO")
-public class Titulo extends Parcela implements RelatorioContaAbertaImpl {
+public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;

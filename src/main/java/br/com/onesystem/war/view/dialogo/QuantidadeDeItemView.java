@@ -7,10 +7,11 @@ package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.war.builder.QuantidadeDeItemBV;
+import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,12 +31,12 @@ import org.primefaces.context.RequestContext;
  */
 @Named(value = "quantidadeDeItemView")
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> implements Serializable {
+public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDeposito> implements Serializable {
 
-    private QuantidadeDeItemBV quantidadeDeItem = new QuantidadeDeItemBV();
-    private QuantidadeDeItemBV quantidadeDeItemSelecionada;
-    private List<QuantidadeDeItemBV> lista;
-    private List<QuantidadeDeItemBV> listaFiltrada;
+    private QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito();
+    private QuantidadeDeItemPorDeposito quantidadeDeItemSelecionada;
+    private List<QuantidadeDeItemPorDeposito> lista;
+    private List<QuantidadeDeItemPorDeposito> listaFiltrada;
     private List<SaldoDeEstoque> listaDeEstoque;
 
     @Inject
@@ -47,7 +48,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
         ExternalContext ec = context.getExternalContext();
         HttpSession session = (HttpSession) ec.getSession(true);
 
-        lista = (List<QuantidadeDeItemBV>) session.getAttribute("onesystem.quantidadeLista.token");
+        lista = (List<QuantidadeDeItemPorDeposito>) session.getAttribute("onesystem.quantidadeLista.token");
         if (lista == null || lista.isEmpty()) {
             Item item = (Item) session.getAttribute("onesystem.item.token");
             listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(item, null);
@@ -80,11 +81,9 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
     }
 
     public void criaLista() {
-        lista = new ArrayList<QuantidadeDeItemBV>();
+        lista = new ArrayList<QuantidadeDeItemPorDeposito>();
         for (SaldoDeEstoque saldo : listaDeEstoque) {
-            quantidadeDeItem = new QuantidadeDeItemBV();
-            quantidadeDeItem.setSaldoDeEstoque(saldo);
-            quantidadeDeItem.setId(new Long(lista.size() + 1));
+            quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, BigDecimal.ZERO);
             lista.add(quantidadeDeItem);
         }
     }
@@ -94,19 +93,19 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
         RequestContext.getCurrentInstance().closeDialog(lista);
     }
 
-    public QuantidadeDeItemBV getQuantidadeDeItem() {
+    public QuantidadeDeItemPorDeposito getQuantidadeDeItem() {
         return quantidadeDeItem;
     }
 
-    public void setQuantidadeDeItem(QuantidadeDeItemBV quantidadeDeItem) {
+    public void setQuantidadeDeItem(QuantidadeDeItemPorDeposito quantidadeDeItem) {
         this.quantidadeDeItem = quantidadeDeItem;
     }
 
-    public List<QuantidadeDeItemBV> getLista() {
+    public List<QuantidadeDeItemPorDeposito> getLista() {
         return lista;
     }
 
-    public void setLista(List<QuantidadeDeItemBV> lista) {
+    public void setLista(List<QuantidadeDeItemPorDeposito> lista) {
         this.lista = lista;
     }
 
@@ -126,24 +125,24 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemBV> im
         this.serviceEstoque = serviceEstoque;
     }
 
-    public QuantidadeDeItemBV getQuantidadeDeItemSelecionada() {
+    public QuantidadeDeItemPorDeposito getQuantidadeDeItemSelecionada() {
         return quantidadeDeItemSelecionada;
     }
 
-    public void setQuantidadeDeItemSelecionada(QuantidadeDeItemBV quantidadeDeItemSelecionada) {
+    public void setQuantidadeDeItemSelecionada(QuantidadeDeItemPorDeposito quantidadeDeItemSelecionada) {
         this.quantidadeDeItemSelecionada = quantidadeDeItemSelecionada;
     }
 
-    public List<QuantidadeDeItemBV> getListaFiltrada() {
+    public List<QuantidadeDeItemPorDeposito> getListaFiltrada() {
         return listaFiltrada;
     }
 
-    public void setListaFiltrada(List<QuantidadeDeItemBV> listaFiltrada) {
+    public void setListaFiltrada(List<QuantidadeDeItemPorDeposito> listaFiltrada) {
         this.listaFiltrada = listaFiltrada;
     }
 
     @Override
-    public List<QuantidadeDeItemBV> complete(String query) {
+    public List<QuantidadeDeItemPorDeposito> complete(String query) {
         return null;
     }
 

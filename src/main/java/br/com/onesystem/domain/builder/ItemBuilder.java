@@ -10,7 +10,7 @@ import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.PrecoDeItem;
@@ -41,7 +41,7 @@ public class ItemBuilder {
     private BigDecimal estoqueMinimo;
     private BigDecimal estoqueMaximo;
     private List<AjusteDeEstoque> listaDeAjustes;
-    private List<ItemEmitido> itensEmitidos;
+    private List<ItemDeNota> itensEmitidos;
     private List<PrecoDeItem> precos;
     private Margem margem;
     private Comissao comissao;

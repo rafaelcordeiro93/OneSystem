@@ -20,7 +20,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("BOLETO_DE_CARTAO")
-public class BoletoDeCartao extends Parcela implements Serializable {
+public class BoletoDeCartao extends Cobranca implements Serializable {
 
     @NotNull(message = "{cartao_not_null}")
     @ManyToOne
@@ -47,7 +47,7 @@ public class BoletoDeCartao extends Parcela implements Serializable {
         List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "valor", "cotacao");
-        new ValidadorDeCampos<Parcela>().valida(this, campos);
+        new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
     public Cartao getCartao() {

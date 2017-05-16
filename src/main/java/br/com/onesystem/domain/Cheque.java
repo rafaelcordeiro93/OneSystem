@@ -22,7 +22,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("CHEQUE")
-public class Cheque extends Parcela implements Serializable {
+public class Cheque extends Cobranca implements Serializable {
 
     @NotNull(message = "{banco_not_null}")
     @ManyToOne
@@ -47,15 +47,13 @@ public class Cheque extends Parcela implements Serializable {
     private BigDecimal descontos;
     @Column(nullable = true)
     private String emitente;
-    @ManyToOne
-    private ValoresAVista valoresAVista;
 
     public Cheque() {
     }
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, ValoresAVista valoresAVista, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada) throws DadoInvalidoException {
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
         this.banco = banco;
         this.agencia = agencia;
@@ -66,7 +64,6 @@ public class Cheque extends Parcela implements Serializable {
         this.juros = juros;
         this.descontos = descontos;
         this.emitente = emitente;
-        this.valoresAVista = valoresAVista;
         this.tipoLancamento = tipoLancamento;
         ehValido();
     }
@@ -113,10 +110,6 @@ public class Cheque extends Parcela implements Serializable {
         return emitente;
     }
 
-    public ValoresAVista getValoresAVista() {
-        return valoresAVista;
-    }
-
     public TipoLancamento getTipoLancamento() {
         return tipoLancamento;
     }
@@ -131,7 +124,7 @@ public class Cheque extends Parcela implements Serializable {
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
                 + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
                 + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()
-                + ", valoresAVista=" + (valoresAVista == null ? null : valoresAVista.getId()) + '}';
+                + '}';
     }
 
 }

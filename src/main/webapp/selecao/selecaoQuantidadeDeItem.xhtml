@@ -9,19 +9,19 @@
     <ui:define name="title">#{l.Selecao_De_Depositos}</ui:define>
 
     <ui:define name="content">
-        <p:dataTable id="quantidadeDeItemBVViewData" var="quantidadeDeItemBV" value="#{quantidadeDeItemView.lista}" rowKey="#{quantidadeDeItemBV.id}"
+        <p:dataTable id="quantidadeDeItemPorDepositoViewData" var="quantidadeDeItemPorDeposito" value="#{quantidadeDeItemView.lista}" rowKey="#{quantidadeDeItemPorDeposito.id}"
                      emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
 
             <p:column headerText="#{l.Deposito}" footerText="#{l.Deposito}" style="width: 45%" >                                        
-                <h:outputText value="#{quantidadeDeItemBV.saldoDeEstoque.deposito.nome}" />
+                <h:outputText value="#{quantidadeDeItemPorDeposito.saldoDeEstoque.deposito.nome}" />
             </p:column>
             <p:column headerText="#{l.Saldo}" footerText="#{l.Saldo}"  style="width: 30%">
-                <h:outputText value="#{quantidadeDeItemBV.saldoDeEstoque.saldo}" />
+                <h:outputText value="#{quantidadeDeItemPorDeposito.saldoDeEstoque.saldo}" />
             </p:column>
             <p:column styleClass="TexAlCenter" headerText="#{l.Quantidade}" footerText="#{l.Quantidade}" style="width: 25%">
                 <p:cellEditor>
-                    <f:facet name="output"><h:outputText value="#{quantidadeDeItemBV.quantidade}" /></f:facet>
-                    <f:facet name="input"><p:inputText styleClass="TexAlCenter" value="#{quantidadeDeItemBV.quantidade}"/></f:facet>
+                    <f:facet name="output"><h:outputText value="#{quantidadeDeItemPorDeposito.quantidade}" /></f:facet>
+                    <f:facet name="input"><p:inputText styleClass="TexAlCenter" value="#{quantidadeDeItemPorDeposito.quantidade}"/></f:facet>
                 </p:cellEditor>
             </p:column>
 

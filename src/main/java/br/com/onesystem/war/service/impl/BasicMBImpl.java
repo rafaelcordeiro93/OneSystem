@@ -88,6 +88,9 @@ public abstract class BasicMBImpl<T, E> {
     }
 
     public E getE() {
+        if (e == null) {
+            limparJanela();
+        }
         return e;
     }
 

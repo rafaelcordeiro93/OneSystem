@@ -47,13 +47,13 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "PARCELA_CLASSE_NOME")
-public abstract class Parcela implements Serializable {
+@DiscriminatorColumn(name = "Cobranca_CLASSE_NOME")
+public abstract class Cobranca implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "SEQ_PARCELA", sequenceName = "SEQ_PARCELA",
+    @SequenceGenerator(name = "SEQ_COBRANCA", sequenceName = "SEQ_COBRANCA",
             initialValue = 1, allocationSize = 1)
-    @GeneratedValue(generator = "SEQ_PARCELA", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_COBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Min(value = 0, message = "{valor_min}")
@@ -91,10 +91,10 @@ public abstract class Parcela implements Serializable {
 
     private Boolean entrada;
 
-    public Parcela() {
+    public Cobranca() {
     }
 
-    public Parcela(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
+    public Cobranca(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota, Boolean entrada) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
@@ -105,14 +105,14 @@ public abstract class Parcela implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
         this.vencimento = vencimento;
-        this.nota = nota;
         this.entrada = entrada;
+        this.nota = nota;
         ehAbstracaoValida();
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao", "operacaoFinanceira");
-        new ValidadorDeCampos<Parcela>().valida(this, campos);
+        new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
     public abstract String getDetalhes();
@@ -149,7 +149,7 @@ public abstract class Parcela implements Serializable {
         return nota;
     }
 
-    public void setNota(Nota nota) {
+    public void geraPara(Nota nota) {
         this.nota = nota;
     }
 
@@ -205,10 +205,10 @@ public abstract class Parcela implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Parcela)) {
+        if (!(objeto instanceof Cobranca)) {
             return false;
         }
-        Parcela outro = (Parcela) objeto;
+        Cobranca outro = (Cobranca) objeto;
         if (this.id == null) {
             return false;
         }

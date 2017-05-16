@@ -5,19 +5,27 @@
  */
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
-import br.com.onesystem.domain.ValoresAVista;
-import br.com.onesystem.domain.ItemRecebido;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Parcela;
+import br.com.onesystem.domain.Orcamento;
+import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
-import java.util.Date;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.CobrancaBV;
+import br.com.onesystem.war.builder.ItemDeNotaBV;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,16 +37,20 @@ public class NotaRecebidaBuilder {
     private Long id;
     private Pessoa pessoa;
     private Operacao operacao;
-    private List<ItemRecebido> itensRecebidos;
+    private List<ItemDeNota> itens;
     private ListaDePreco listaDePreco;
-    private ValoresAVista valoresAVista;
-    private Date emissao;
     private boolean cancelada = false;
-    private List<Baixa> baixas;
     private FormaDeRecebimento formaDeRecebimento;
     private Credito credito;
-    private List<Parcela> parcelas;
+    private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
+    private List<ValorPorCotacao> valorPorCotacao;
+    private BigDecimal totalEmDinheiro;
+    private BigDecimal acrescimo;
+    private BigDecimal desconto;
+    private BigDecimal despesaCobranca;
+    private BigDecimal frete;
+    private BigDecimal aFaturar;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -55,8 +67,19 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comItensRecebidos(List<ItemRecebido> itensRecebidos) {
-        this.itensRecebidos = itensRecebidos;
+    public NotaRecebidaBuilder comItens(List<ItemDeNota> itens) throws DadoInvalidoException {
+        if (id == null) {
+            if (itens != null && !itens.isEmpty()) {
+                for (ItemDeNota i : itens) {
+                    itens.set(itens.indexOf(i), new ItemDeNotaBV(i).construir());
+                }
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
+            }
+            this.itens = itens;
+        } else {
+            throw new FDadoInvalidoException(new BundleUtil().getMessage("Nao_Constroi_Itens_Nota_Existente"));
+        }
         return this;
     }
 
@@ -65,23 +88,8 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comValoresAVista(ValoresAVista valoresAVista) {
-        this.valoresAVista = valoresAVista;
-        return this;
-    }
-
-    public NotaRecebidaBuilder comEmissao(Date emissao) {
-        this.emissao = emissao;
-        return this;
-    }
-
     public NotaRecebidaBuilder cancelada(boolean cancelada) {
         this.cancelada = cancelada;
-        return this;
-    }
-
-    public NotaRecebidaBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
         return this;
     }
 
@@ -95,8 +103,8 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comCheque(List<Parcela> parcelas) {
-        this.parcelas = parcelas;
+    public NotaRecebidaBuilder comCheque(List<Cobranca> parcelas) {
+        this.cobrancas = parcelas;
         return this;
     }
 
@@ -105,13 +113,65 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comParcelas(List<Parcela> parcelas) {
-        this.parcelas = parcelas;
+    public NotaRecebidaBuilder comCobrancas(List<Cobranca> cobrancas) throws DadoInvalidoException {
+        if (id == null) {
+            if (cobrancas != null && !cobrancas.isEmpty()) {
+                for (Cobranca i : cobrancas) {
+                    if (i.getId() != null) {
+                        if (i instanceof Cheque) {
+                            cobrancas.set(cobrancas.indexOf(i), new CobrancaBV(i).construirCheque());
+                        }
+                        if (i instanceof BoletoDeCartao) {
+                            cobrancas.set(cobrancas.indexOf(i), new CobrancaBV(i).construirBoletoDeCartao());
+                        }
+                        if (i instanceof Titulo) {
+                            cobrancas.set(cobrancas.indexOf(i), new CobrancaBV(i).construirTitulo());
+                        }
+                    }
+                }
+            }
+            this.cobrancas = cobrancas;
+        }
+        return this;
+    }
+
+    public NotaRecebidaBuilder comValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comTotalEmDinheiro(BigDecimal totalEmDinheiro) {
+        this.totalEmDinheiro = totalEmDinheiro;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comAcrescimo(BigDecimal acrescimo) {
+        this.acrescimo = acrescimo;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comDesconto(BigDecimal desconto) {
+        this.desconto = desconto;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comDespesaCobranca(BigDecimal despesaCobranca) {
+        this.despesaCobranca = despesaCobranca;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comFrete(BigDecimal frete) {
+        this.frete = frete;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comAFaturar(BigDecimal aFaturar) {
+        this.aFaturar = aFaturar;
         return this;
     }
 
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itensRecebidos, formaDeRecebimento, listaDePreco, valoresAVista, baixas, emissao, cancelada, credito, parcelas, moedaPadrao);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
     }
 
 }

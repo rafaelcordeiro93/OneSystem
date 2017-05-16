@@ -26,6 +26,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -84,8 +85,11 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne(optional = false)
     private Cotacao cotacao;
 
+    @OneToOne
+    private ValorPorCotacao valorPorCotacao;
+
     @ManyToOne
-    private Parcela parcela;
+    private Cobranca parcela;
 
     @ManyToOne
     private MovimentoFixo movimentoFixo;
@@ -111,9 +115,6 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private Recepcao recepcao;
 
-    @ManyToOne
-    private Nota nota;
-
     private boolean cancelada = false;
 
     public Baixa() {
@@ -124,7 +125,7 @@ public class Baixa implements Serializable, Movimento {
             BigDecimal desconto, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, Parcela parcela, Nota nota, MovimentoFixo movimentoFixo) throws DadoInvalidoException {
+            Recepcao recepcao, Cobranca parcela, MovimentoFixo movimentoFixo, ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
         this.cancelada = cancelada;
@@ -145,8 +146,8 @@ public class Baixa implements Serializable, Movimento {
         this.transferencia = transferencia;
         this.recepcao = recepcao;
         this.parcela = parcela;
-        this.nota = nota;
         this.movimentoFixo = movimentoFixo;
+        this.valorPorCotacao = valorPorCotacao;
         ehValido();
     }
 
@@ -205,10 +206,6 @@ public class Baixa implements Serializable, Movimento {
         return conhecimentoDeFrete;
     }
 
-    public Nota getNota() {
-        return nota;
-    }
-
     public String getSaldoFormatado(BigDecimal saldoAtual) {
         if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             return cotacao.getConta().getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual.add(this.getValor()));
@@ -247,8 +244,6 @@ public class Baixa implements Serializable, Movimento {
         } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             if (recepcao != null) {
                 return geraMovimentacaoEntradaRecepcao(msg);
-            } else if (nota != null) {
-                return geraMovimentacaoEntradaNota(msg);
             } else if (transferencia != null) {
                 return geraMovimentacaoEntradaTransferencia(msg);
 //            } else if (parcela instanceof DespesaProvisionada) {
@@ -279,10 +274,6 @@ public class Baixa implements Serializable, Movimento {
         }
         String str = pessoa == null ? historicoFormatado : " " + msg.getMessage("pagos_por") + " " + pessoa.getNome();
         return this.receita.getNome() + " - " + str;
-    }
-
-    private String geraMovimentacaoEntradaNota(BundleUtil msg) {
-        return msg.getMessage("Nota_Emitida") + " - " + nota.getId() + " - " + this.getPessoa();
     }
 
     private String geraMovimentacaoEntradaTransferencia(BundleUtil msg) {
@@ -389,8 +380,12 @@ public class Baixa implements Serializable, Movimento {
         return naturezaFinanceira;
     }
 
-    public Parcela getParcela() {
+    public Cobranca getParcela() {
         return parcela;
+    }
+
+    public ValorPorCotacao getValorPorCotacao() {
+        return valorPorCotacao;
     }
 
     public Pessoa getPessoa() {
@@ -424,10 +419,6 @@ public class Baixa implements Serializable, Movimento {
 
     public BigDecimal getMultas() {
         return multas;
-    }
-
-    public void setNota(Nota nota) {
-        this.nota = nota;
     }
 
     @Override
@@ -507,8 +498,7 @@ public class Baixa implements Serializable, Movimento {
                 + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="
                 + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null)
                 + ", transferencia=" + (transferencia != null ? transferencia.getId() : null)
-                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", nota="
-                + (nota != null ? nota.getId() : null) + ", cancelada=" + cancelada + '}';
+                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cancelada=" + cancelada + '}';
     }
 
 }

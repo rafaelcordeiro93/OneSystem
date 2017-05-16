@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.TipoCorMenu;
 import java.io.Serializable;
 
 public class UsuarioBV implements Serializable, BuilderView<Usuario> {
@@ -17,7 +18,7 @@ public class UsuarioBV implements Serializable, BuilderView<Usuario> {
     private String corTema;
     private String corLayout;
     private boolean overlayMenu;
-    private boolean darkMenu;
+    private TipoCorMenu corMenu;
     private boolean orientationRTL;
 
     public UsuarioBV(Usuario usuarioSelecionada) {
@@ -29,7 +30,7 @@ public class UsuarioBV implements Serializable, BuilderView<Usuario> {
         this.corTema = usuarioSelecionada.getCorTema();
         this.corLayout = usuarioSelecionada.getCorLayout();
         this.overlayMenu = usuarioSelecionada.isOverlayMenu();
-        this.darkMenu = usuarioSelecionada.isDarkMenu();
+        this.corMenu = usuarioSelecionada.getCorMenu();
         this.orientationRTL = usuarioSelecionada.isOrientationRTL();
     }
 
@@ -100,12 +101,12 @@ public class UsuarioBV implements Serializable, BuilderView<Usuario> {
         this.overlayMenu = overlayMenu;
     }
 
-    public boolean isDarkMenu() {
-        return darkMenu;
+    public TipoCorMenu getCorMenu() {
+        return corMenu;
     }
 
-    public void setDarkMenu(boolean darkMenu) {
-        this.darkMenu = darkMenu;
+    public void setCorMenu(TipoCorMenu corMenu) {
+        this.corMenu = corMenu;
     }
 
     public boolean isOrientationRTL() {
@@ -117,10 +118,10 @@ public class UsuarioBV implements Serializable, BuilderView<Usuario> {
     }
 
     public Usuario construir() throws DadoInvalidoException {
-        return new Usuario(null, pessoa, senha, grupoPrivilegio, supervisor, corTema, corLayout, overlayMenu, darkMenu, orientationRTL);
+        return new Usuario(null, pessoa, senha, grupoPrivilegio, supervisor, corTema, corLayout, overlayMenu, corMenu, orientationRTL);
     }
 
     public Usuario construirComID() throws DadoInvalidoException {
-        return new Usuario(id, pessoa, senha, grupoPrivilegio, supervisor, corTema, corLayout, overlayMenu, darkMenu, orientationRTL);
+        return new Usuario(id, pessoa, senha, grupoPrivilegio, supervisor, corTema, corLayout, overlayMenu, corMenu, orientationRTL);
     }
 }

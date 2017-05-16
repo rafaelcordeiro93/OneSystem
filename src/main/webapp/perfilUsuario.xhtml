@@ -65,10 +65,11 @@
                                 <f:selectItem itemLabel="Steel" itemValue="steel" />
                                 <f:selectItem itemLabel="Turquise" itemValue="turquoise" />
                             </p:selectOneMenu>
-                            
+
                             <p:outputLabel value="#{l.Cor_Layout}"/>
 
                             <p:selectOneMenu id="sonCorLayout" value="#{perfilUsuarioView.usuario.corLayout}" style="width:125px">
+                                <f:selectItem itemLabel="White" itemValue="white" />
                                 <f:selectItem itemLabel="Dark" itemValue="dark" />
                                 <f:selectItem itemLabel="Cyan" itemValue="cyan" />
                                 <f:selectItem itemLabel="Blue" itemValue="blue" />
@@ -83,8 +84,10 @@
                             <p:outputLabel value="#{l.Menu_Overlay}"/>
                             <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.overlayMenu}" />
 
-                            <p:outputLabel value="#{l.Menu_Escuro}"/>
-                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.darkMenu}" />
+                            <p:outputLabel value="#{l.Cor_Menu}"/>
+                            <p:selectOneMenu id="corMenu" value="#{perfilUsuarioView.usuario.corMenu}">
+                                <f:selectItems value="#{perfilUsuarioView.coresDeMenu}" var="tipoCorMenu" itemValue="#{tipoCorMenu}" itemLabel="#{tipoCorMenu.nome}"/>
+                            </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Menu_Inverso}"/>
                             <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.orientationRTL}" />

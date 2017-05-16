@@ -72,9 +72,9 @@ public class UsuarioLogadoUtil implements Serializable {
     public void carregaPreferenciasDo(Usuario usuario) {
         GuestPreferences gp = (GuestPreferences) new BeanUtil().getBeanNaSessao("guestPreferences");
 
-        gp.setLayout(usuario.getCorLayout());
+        gp.setLayout(usuario.getCorLayout());        
+        gp.setCorMenu(usuario.getCorMenu());
         gp.setTheme(usuario.getCorTema());
-        gp.setDarkMenu(usuario.isDarkMenu());
         gp.setOverlayMenu(usuario.isOverlayMenu());
         gp.setOrientationRTL(usuario.isOrientationRTL());
     }

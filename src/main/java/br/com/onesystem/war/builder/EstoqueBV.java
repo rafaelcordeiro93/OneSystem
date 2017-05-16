@@ -4,7 +4,7 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemEmitido;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -20,7 +20,7 @@ public class EstoqueBV implements Serializable {
     private BigDecimal quantidade;
     private OperacaoDeEstoque operacaoDeEstoque;
     private Date emissao;
-    private ItemEmitido itemEmitido;
+    private ItemDeNota itemEmitido;
     private AjusteDeEstoque ajusteDeEstoque;
 
     public EstoqueBV(Estoque estoqueSelecionado) {
@@ -29,13 +29,13 @@ public class EstoqueBV implements Serializable {
         this.item = estoqueSelecionado.getItem();
         this.quantidade = estoqueSelecionado.getQuantidade();
         this.emissao = estoqueSelecionado.getEmissao();
-        this.itemEmitido = estoqueSelecionado.getItemEmitido();
+        this.itemEmitido = estoqueSelecionado.getItemDeNota();
         this.ajusteDeEstoque = estoqueSelecionado.getAjusteDeEstoque();
         this.operacaoDeEstoque = estoqueSelecionado.getOperacaoDeEstoque();
     }
 
     public EstoqueBV(Deposito deposito, BigDecimal quantidade, Item item, OperacaoDeEstoque operacaoDeEstoque,
-            ItemEmitido itemEmitido, Date emissao, AjusteDeEstoque ajusteDeEstoque) {
+            ItemDeNota itemEmitido, Date emissao, AjusteDeEstoque ajusteDeEstoque) {
         this.deposito = deposito;
         this.quantidade = quantidade;
         this.item = item;
@@ -88,22 +88,22 @@ public class EstoqueBV implements Serializable {
         this.emissao = emissao;
     }
 
-    public ItemEmitido getItemEmitido() {
+    public ItemDeNota getItemEmitido() {
         return itemEmitido;
     }
 
-    public void setItemEmitido(ItemEmitido itemEmitido) {
+    public void setItemEmitido(ItemDeNota itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
 
     public Estoque construir() throws DadoInvalidoException {
-        return new EstoqueBuilder().comSaldo(quantidade).comItemEmitido(itemEmitido)
+        return new EstoqueBuilder().comQuantidade(quantidade).comItemDeNota(itemEmitido)
                 .comAjusteDeEstoque(ajusteDeEstoque).comEmissao(emissao)
                 .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
-        return new EstoqueBuilder().comSaldo(quantidade).comItemEmitido(itemEmitido)
+        return new EstoqueBuilder().comQuantidade(quantidade).comItemDeNota(itemEmitido)
                 .comAjusteDeEstoque(ajusteDeEstoque).comEmissao(emissao).comID(id)
                 .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
     }

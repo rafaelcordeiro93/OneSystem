@@ -5,7 +5,6 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.ValoresAVista;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -33,7 +32,6 @@ public class ChequeBV implements Serializable {
     private String emitente;
     private String historico;
     private Cotacao cotacao;
-    private ValoresAVista valoresAVista;
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
     private OperacaoFinanceira operacaoFinanceira;
@@ -56,10 +54,10 @@ public class ChequeBV implements Serializable {
         this.emitente = c.getEmitente();
         this.historico = c.getHistorico();
         this.cotacao = c.getCotacao();
-        this.valoresAVista = c.getValoresAVista();
         this.tipoLancamento = c.getTipoLancamento();
         this.pessoa = c.getPessoa();
         this.operacaoFinanceira = c.getOperacaoFinanceira();
+        this.entrada = c.getEntrada();
     }
 
     public ChequeBV() {
@@ -201,14 +199,6 @@ public class ChequeBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public ValoresAVista getValoresAVista() {
-        return valoresAVista;
-    }
-
-    public void setValoresAVista(ValoresAVista valoresAVista) {
-        this.valoresAVista = valoresAVista;
-    }
-
     public Pessoa getPessoa() {
         return pessoa;
     }
@@ -237,13 +227,13 @@ public class ChequeBV implements Serializable {
         return new ChequeBuilder().comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comValoresAVista(valoresAVista).comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
     }
 }

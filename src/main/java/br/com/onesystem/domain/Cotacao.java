@@ -36,7 +36,7 @@ public class Cotacao implements Serializable {
     @ManyToOne(optional = false)
     private Conta conta;
     @OneToMany(mappedBy = "cotacao")
-    private List<Parcela> parcelas;
+    private List<Cobranca> parcelas;
     @OneToMany(mappedBy = "cotacao")
     private List<MovimentoFixo> movimentoFixos;
     @OneToMany(mappedBy = "cotacao")
@@ -44,10 +44,9 @@ public class Cotacao implements Serializable {
     @OneToMany(mappedBy = "cotacao")
     private List<ConhecimentoDeFrete> conhecimentoDeFretes;
     @OneToMany(mappedBy = "cotacao")
-    private List<ValoresAVista> valoresAVista;
-        @OneToMany(mappedBy = "cotacao")
     private List<Orcamento> orcamentos;
-
+    @OneToMany(mappedBy = "cotacao")
+    private List<ValorPorCotacao> valores;
 
     public Cotacao() {
     }

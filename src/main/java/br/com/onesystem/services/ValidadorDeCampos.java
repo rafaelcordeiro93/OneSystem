@@ -44,7 +44,7 @@ public class ValidadorDeCampos<T> {
             }
             return true;
         } catch (IllegalArgumentException iae) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("erro_ao_validar_campos"));
+            throw new EDadoInvalidoException("{" + t.getClass().toString().substring(t.getClass().toString().lastIndexOf(".") + 1, t.getClass().toString().length()) + "} " + new BundleUtil().getMessage("erro_ao_validar_campos"));
         }
     }
 }

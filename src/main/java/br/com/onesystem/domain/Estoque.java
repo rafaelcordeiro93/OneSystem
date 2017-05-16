@@ -48,9 +48,7 @@ public class Estoque implements Serializable {
     @ManyToOne(optional = false)
     private OperacaoDeEstoque operacaoDeEstoque;
     @ManyToOne
-    private ItemEmitido itemEmitido;
-    @ManyToOne
-    private ItemRecebido itemRecebido;
+    private ItemDeNota itemDeNota;
     @OneToOne
     private AjusteDeEstoque ajusteDeEstoque;
 
@@ -58,7 +56,7 @@ public class Estoque implements Serializable {
     }
 
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
-            Date emissao, ItemEmitido itemEmitido, ItemRecebido itemRecebido, AjusteDeEstoque ajusteDeEstoque,
+            Date emissao, ItemDeNota itemDeNota, AjusteDeEstoque ajusteDeEstoque,
             OperacaoDeEstoque operacaoDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
@@ -66,14 +64,9 @@ public class Estoque implements Serializable {
         this.deposito = deposito;
         this.operacaoDeEstoque = operacaoDeEstoque;
         this.emissao = emissao;
-        this.itemEmitido = itemEmitido;
-        this.itemRecebido = itemRecebido;
+        this.itemDeNota = itemDeNota;
         this.ajusteDeEstoque = ajusteDeEstoque;
         ehValido();
-    }
-
-    public ItemRecebido getItemRecebido() {
-        return itemRecebido;
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -101,28 +94,12 @@ public class Estoque implements Serializable {
         return emissao;
     }
 
-    public void preparaInclusaoDe(ItemEmitido itemEmitido, Date emissao) {
-        if (this.itemEmitido == null) {
-            this.id = null;
-            this.emissao = emissao;
-            this.itemEmitido = itemEmitido;
-        }
-    }
-
-    public void preparaInclusaoDe(ItemRecebido itemRecebido, Date emissao) {
-        if (this.itemRecebido == null) {
-            this.id = null;
-            this.emissao = emissao;
-            this.itemRecebido = itemRecebido;
-        }
-    }
-
     public OperacaoDeEstoque getOperacaoDeEstoque() {
         return operacaoDeEstoque;
     }
 
-    public ItemEmitido getItemEmitido() {
-        return itemEmitido;
+    public ItemDeNota getItemDeNota() {
+        return itemDeNota;
     }
 
     public AjusteDeEstoque getAjusteDeEstoque() {
@@ -150,7 +127,7 @@ public class Estoque implements Serializable {
                 + ", deposito=" + (deposito != null ? deposito.getId() : null)
                 + ", quantidade=" + quantidade + ", emissao=" + emissao
                 + ", operacaoDeEstoque=" + (operacaoDeEstoque != null ? operacaoDeEstoque.getId() : null) + ", itemEmitido="
-                + (itemEmitido != null ? itemEmitido.getId() : null)
+                + (itemDeNota != null ? itemDeNota.getId() : null)
                 + ", ajusteDeEstoque=" + (ajusteDeEstoque != null ? ajusteDeEstoque.getId() : null) + '}';
     }
 

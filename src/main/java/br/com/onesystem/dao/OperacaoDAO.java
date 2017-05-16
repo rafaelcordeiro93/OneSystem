@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,12 @@ public class OperacaoDAO {
 
     public OperacaoDAO buscarOperacao() {
         consulta += "select o from Operacao o where o.id > 0 ";
+        return this;
+    }
+
+    public OperacaoDAO porTipoDeLancamento(TipoLancamento tipoLancamento) {
+        consulta += " and o.tipoNota = :oTipoNota ";
+        parametros.put("oTipoNota", tipoLancamento);
         return this;
     }
 
@@ -59,4 +66,5 @@ public class OperacaoDAO {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
         }
     }
+
 }
