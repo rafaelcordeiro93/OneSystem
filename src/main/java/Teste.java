@@ -45,7 +45,7 @@ public class Teste {
 
         t.setOutSize(70, 70);
 
-        List<NotaEmitida> listaImpressao = new NotaEmitidaDAO().buscarNotaEmitidaW().porId(new Long(2)).listaDeResultados();
+        List<NotaEmitida> listaImpressao = new NotaEmitidaDAO().porId(new Long(2)).listaDeResultados();
         for (NotaEmitida p : listaImpressao) {
 
             for (GenericLayout g : listaLayout) {

@@ -29,8 +29,8 @@ public class NotaRecebida extends Nota implements Serializable {
             boolean cancelada, Credito credito, List<Cobranca> cobrancas,
             Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
-            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
+            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
     @Override

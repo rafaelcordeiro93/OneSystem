@@ -11,12 +11,14 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
@@ -38,6 +40,7 @@ import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.builder.ChequeBV;
@@ -49,6 +52,7 @@ import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -84,6 +88,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private ItemDeNota itemEmitidoSelecionado;
     private EstoqueBV estoqueBV;
     private Configuracao configuracao;
+    private ConfiguracaoVenda configuracaoVenda;
     private ValorPorCotacaoBV cotacaoValoresSelecionado;
     private List<Cotacao> cotacaoLista;
     private List<ValorPorCotacaoBV> cotacoes;
@@ -96,9 +101,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private String historico;
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
+    private boolean devolucao = false;
 
     @Inject
     private ConfiguracaoService configuracaoService;
+
+    @Inject
+    private ConfiguracaoVendaService configuracaoVendaService;
 
     @Inject
     private CotacaoService service;
@@ -116,6 +125,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
+            configuracaoVenda = configuracaoVendaService.buscar();
             cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -133,8 +143,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         notaEmitidaSelecionada = null;
         cheque = new ChequeBV();
         inicializaCotacoes();
-        limparChequeEntrada();
         cobrancaBV = new CobrancaBV();
+        devolucao = false;
+        orcamento = null;
+        limparChequeEntrada();
+        limparChequeParcelas();
+        limparItemDeNota();
     }
 
     private void inicializaCotacoes() {
@@ -499,11 +513,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                if (((Operacao) obj).getOperacaoDeEstoque().isEmpty()) {
+                if (operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
-                    notaEmitida.setOperacao((Operacao) obj);
+                    notaEmitida.setOperacao(operacao);
                 }
             } else if (obj instanceof Pessoa) {
                 notaEmitida.setPessoa((Pessoa) obj);
@@ -523,15 +537,17 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 cobrancaBV.setBanco((Banco) obj);
             } else if (obj instanceof Cartao) {
                 boletoDeCartao.setCartao((Cartao) obj);
-            } else if (obj instanceof NotaEmitida) {
+            } else if (obj instanceof NotaEmitida && "importaItemNotaEmitida-btn".equals(idComponent)) {
                 importaItensDe((NotaEmitida) obj);
+            } else if (obj instanceof NotaEmitida && "importaNotaEmitida-btn".equals(idComponent)) {
+                importa((NotaEmitida) obj);
             } else if (obj instanceof Orcamento) {
                 importa((Orcamento) obj);
             } else if (obj instanceof List && "neQuantidade-btn".equals(idComponent)) {
                 List<QuantidadeDeItemPorDeposito> lista = (List<QuantidadeDeItemPorDeposito>) event.getObject();
                 itemEmitido.setListaDeQuantidade(lista);
                 itemEmitido.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
-            } else if (obj instanceof List) {
+            } else if (obj instanceof List && "exibeOrcamento-btn".equals(idComponent)) {
                 List<ItemOrcadoBV> lista = (List<ItemOrcadoBV>) event.getObject();
                 for (ItemOrcadoBV i : lista) {
                     itemEmitido.setItem(i.getItem());
@@ -542,6 +558,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
                 }
                 atribuiOrcamentoANota();
+            } else if (obj instanceof List && "exibeNotaEmitida-btn".equals(idComponent)) {
+                List<ItemDeNotaBV> lista = (List<ItemDeNotaBV>) event.getObject();
+                for (ItemDeNotaBV i : lista) {
+                    itemEmitido.setItem(i.getItem());
+                    itemEmitido.setUnitario(i.getUnitario());
+                    itemEmitido.setListaDeQuantidade(i.getListaDeQuantidade());
+                    itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                    addItemNaLista();
+                }
+                atribuiDevolucaoANota();
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -574,10 +600,25 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         recalculaValores();
     }
 
+    private void atribuiDevolucaoANota() {
+        notaEmitida.setNotaDeOrigem(notaEmitidaSelecionada);
+        notaEmitida.setPessoa(notaEmitidaSelecionada.getPessoa());
+        notaEmitida.setListaDePreco(notaEmitidaSelecionada.getListaDePreco());
+        notaEmitida.setFormaDeRecebimento(configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa());
+        calculaTotaisFormaDeRecebimento();
+        recalculaValores();
+    }
+
     private void importa(Orcamento orcamento) throws DadoInvalidoException {
         this.orcamento = orcamento;
         atribuiOrcamentoASessao(orcamento);
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeOrcamento-btn\").click();");
+    }
+
+    private void importa(NotaEmitida nota) throws DadoInvalidoException {
+        notaEmitidaSelecionada = nota;
+        atribuiNotaASessao(nota);
+        RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeNotaEmitida-btn\").click();");
     }
 
     public void atribuiItemASessao() {
@@ -587,11 +628,24 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
 
+    public void atribuiNotaASessao(Nota nota) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        session.removeAttribute("onesystem.nota.token");
+        session.setAttribute("onesystem.nota.token", nota);
+    }
+
     public void atribuiOrcamentoASessao(Orcamento orcamento) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.orcamento.token");
         session.setAttribute("onesystem.orcamento.token", orcamento);
+    }
+
+    public void setupView() {
+        if (notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
+            devolucao = true;
+        }
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {
@@ -1053,6 +1107,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public EstadoDeOrcamento getEstadoDeOrcamento() {
         return EstadoDeOrcamento.EFETIVADO;
+    }
+
+    public boolean isDevolucao() {
+        return devolucao;
+    }
+
+    public void setDevolucao(boolean devolucao) {
+        this.devolucao = devolucao;
     }
 
     //------------------- Fim Getters and Setters -----------------------------

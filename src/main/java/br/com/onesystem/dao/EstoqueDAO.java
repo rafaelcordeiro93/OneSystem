@@ -3,7 +3,10 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +34,7 @@ public class EstoqueDAO {
         return this;
     }
 
-    public EstoqueDAO eItem(Item item) {
+    public EstoqueDAO porItem(Item item) {
         consulta += " and e.item = :pItem";
         parametros.put("pItem", item);
         return this;
@@ -42,7 +45,31 @@ public class EstoqueDAO {
         parametros.put("pContaDeEstoque", contaDeEstoque);
         return this;
     }
+
+    public EstoqueDAO porNota(Nota nota) {
+        consulta += " and e.itemDeNota.nota = :pNota";
+        parametros.put("pNota", nota);
+        return this;
+    }
     
+    public EstoqueDAO porNotaDeOrigem(Nota notaDeOrigem) {
+        consulta += " and e.itemDeNota.nota.notaDeOrigem = :pNotaDeOrigem";
+        parametros.put("pNotaDeOrigem", notaDeOrigem);
+        return this;
+    }
+    
+       public EstoqueDAO porTipoDeOperacaoDeNota(TipoOperacao tipoOperacao) {
+        consulta += " and e.itemDeNota.nota.operacao.tipoOperacao = :pTipoOperacao";
+        parametros.put("pTipoOperacao", tipoOperacao);
+        return this;
+    }
+
+    public EstoqueDAO porTipoDeLancamentoDeNota(TipoLancamento tipoLancamento) {
+        consulta += " and e.itemDeNota.nota.operacao.tipoNota = :pTipoLancamento";
+        parametros.put("pTipoLancamento", tipoLancamento);
+        return this;
+    }
+
     public EstoqueDAO porEmissao(Date emissao) {
         if (emissao != null) {
             Calendar dataAtual = getDataComHoraFimdoDia(emissao);

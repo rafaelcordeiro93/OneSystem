@@ -21,7 +21,7 @@
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Moeda_Padrao}"/>
                         <a:inputTextDialog id="moedaPadrao" mbView="#{configuracaoView}" dialog="#{selecaoMoedaView}" value="#{configuracaoView.configuracaoBV.moedaPadrao}" var="moeda" converter="moedaConverter"  itemLabel="#{moeda.nome}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
                     </div>        
-                    
+
                     <div class="EmptyBox5"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Despesa_Comissao}</div>
 
@@ -57,19 +57,37 @@
 
             <div class="ui-g-12">                
                 <div class="card card-w-title">
+                    <h1 class="BoldGray FontRobotoRegular">#{l.Venda}</h1>
+
+                    <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao}</div>
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Forma_Recebimento_Devolucao_Padrao_Empresa}"/>
+                        <a:inputTextDialog id="formaDeRecebimentoDevolucaoEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" value="#{configuracaoVendaView.configuracaoBV.formaDeRecebimentoDevolucaoEmpresa}" var="formaDeRecebimento" converter="formaDeRecebimentoConverter"  itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTab="#{formaDeRecebimento.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
+                    </div>     
+
+                    <div class="EmptyBox5"/>
+                    <p:separator/>
+                    <p:commandButton value="#{l.Salvar}" action="#{configuracaoVendaView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">                
+                <div class="card card-w-title">
                     <h1 class="BoldGray FontRobotoRegular">#{l.Estoque}</h1>
-                    
+
                     <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Deposito_Padrao_Empresa}</div>
-                    
+
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Deposito_Padrao_Empresa}"/>
                         <a:inputTextDialog id="depositoPadrao" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoDepositoView}" value="#{configuracaoEstoqueView.configuracaoBV.depositoPadrao}" var="deposito" converter="depositoConverter"  itemLabel="#{deposito.nome}" itemValue="#{deposito}" itemLabelTab="#{deposito.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div>     
-                    
+
                     <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Conta_De_Estoque_Empresa}</div>
-                    
+
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Conta_De_Estoque_Empresa}"/>
                         <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa}" var="contaDeEstoque" converter="contaDeEstoqueConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
@@ -77,7 +95,7 @@
 
                     <div class="EmptyBox5"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Lista_De_Preco_Padrao_Empresa}</div>
-                    
+
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Lista_Preco_Padrao_Empresa}"/>
                         <a:inputTextDialog id="listaPrecoEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoListaDePrecoView}" value="#{configuracaoEstoqueView.configuracaoBV.listaDePreco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}"  editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
