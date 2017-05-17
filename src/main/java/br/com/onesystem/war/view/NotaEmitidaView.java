@@ -38,6 +38,7 @@ import br.com.onesystem.util.Money;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
@@ -324,7 +325,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 notaEmitida.setTotalEmDinheiro(resultado);
                 break;
             case CREDITO:
-                //valoresAVista.setCredito(resultado);
+                creditoBV.setValor(resultado);
                 break;
             case CHEQUE:
 //                valoresAVista.setCheque(resultado);
@@ -517,7 +518,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
-                    notaEmitida.setOperacao(operacao);
+                    setupView(operacao);
                 }
             } else if (obj instanceof Pessoa) {
                 notaEmitida.setPessoa((Pessoa) obj);
@@ -559,6 +560,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 }
                 atribuiOrcamentoANota();
             } else if (obj instanceof List && "exibeNotaEmitida-btn".equals(idComponent)) {
+                NotaEmitida nota = notaEmitidaSelecionada;
+                Operacao o = notaEmitida.getOperacao();
                 List<ItemDeNotaBV> lista = (List<ItemDeNotaBV>) event.getObject();
                 for (ItemDeNotaBV i : lista) {
                     itemEmitido.setItem(i.getItem());
@@ -567,11 +570,22 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
                     addItemNaLista();
                 }
-                atribuiDevolucaoANota();
+                atribuiDevolucaoANota(nota, o);
             }
         } catch (DadoInvalidoException die) {
             die.print();
         }
+    }
+
+    public void setupView(Operacao operacao) {
+        limparJanela();
+        if (operacao.getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
+            devolucao = true;
+        } else {
+            devolucao = false;
+        }
+        notaEmitida.setOperacao(operacao);
+        RequestContext.getCurrentInstance().update("conteudo");
     }
 
     private void importaItensDe(NotaEmitida nota) throws DadoInvalidoException {
@@ -600,11 +614,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         recalculaValores();
     }
 
-    private void atribuiDevolucaoANota() {
-        notaEmitida.setNotaDeOrigem(notaEmitidaSelecionada);
-        notaEmitida.setPessoa(notaEmitidaSelecionada.getPessoa());
-        notaEmitida.setListaDePreco(notaEmitidaSelecionada.getListaDePreco());
+    private void atribuiDevolucaoANota(Nota nota, Operacao o) {
+        devolucao = true;
+        notaEmitida.setOperacao(o);
+        notaEmitida.setNotaDeOrigem(nota);
+        notaEmitida.setPessoa(nota.getPessoa());
+        notaEmitida.setListaDePreco(nota.getListaDePreco());
         notaEmitida.setFormaDeRecebimento(configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa());
+        creditoBV.setTipoContabil(TipoContabil.CREDITAR);
+        creditoBV.setPessoa(nota.getPessoa());
         calculaTotaisFormaDeRecebimento();
         recalculaValores();
     }
@@ -640,12 +658,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.orcamento.token");
         session.setAttribute("onesystem.orcamento.token", orcamento);
-    }
-
-    public void setupView() {
-        if (notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
-            devolucao = true;
-        }
     }
 
     public void selecionaChequeDeEntrada(SelectEvent event) {

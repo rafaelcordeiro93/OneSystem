@@ -18,7 +18,7 @@ public class OperacaoDeEstoqueBV implements Serializable {
     public OperacaoDeEstoqueBV(OperacaoDeEstoque operacaoDeEstoqueSelecionada) {
         this.id = operacaoDeEstoqueSelecionada.getId();
         this.contaDeEstoque = operacaoDeEstoqueSelecionada.getContaDeEstoque();
-        this.operacao = operacaoDeEstoqueSelecionada.getOperacoes();
+        this.operacao = operacaoDeEstoqueSelecionada.getOperacao();
         this.operacaoFisica = operacaoDeEstoqueSelecionada.getOperacaoFisica();
     }
     

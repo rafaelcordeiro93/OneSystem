@@ -61,24 +61,25 @@ public class EstoqueService implements Serializable {
     public List<SaldoDeEstoque> buscaListaDeSaldoDeDevolucao(Item item, Nota notaDeOrigem) {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
-        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
-                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaDeResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
+        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                porNota(notaDeOrigem).listaDeResultados();
+        List<Estoque> estoqueDeDevolucao = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaDeResultados();
+
         for (Estoque e : estoque) {
-            boolean operacao = false;
+            saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
+        }
+
+        for (Estoque e : estoqueDeDevolucao) {
             for (SaldoDeEstoque saldo : saldoDeEstoque) {
                 if (e.getDeposito().getId().equals(saldo.getDeposito().getId())) {
                     if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
                         saldo.setSaldo(saldo.getSaldo().add(e.getQuantidade()));
-                        operacao = true;
                     } else if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
                         saldo.setSaldo(saldo.getSaldo().subtract(e.getQuantidade()));
-                        operacao = true;
                     }
                 }
-            }
-            if (!operacao) {
-                saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
             }
         }
 

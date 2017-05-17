@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -25,7 +26,7 @@ public class AjusteDeEstoqueBuilder {
     private BigDecimal quantidade;
     private BigDecimal custo;
     private Operacao operacao;
-    private Estoque estoque;
+    private List<Estoque> estoque;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -67,7 +68,7 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
 
-    public AjusteDeEstoqueBuilder comEstoque(Estoque estoque) {
+    public AjusteDeEstoqueBuilder comEstoque(List<Estoque> estoque) {
         this.estoque = estoque;
         return this;
     }

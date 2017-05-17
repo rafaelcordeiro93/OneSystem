@@ -47,28 +47,29 @@ public class TesteRauber {
             Nota nota = new NotaEmitidaBuilder().comId(new Long(1)).construir();
             List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
             List<Estoque> estoque = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                    porNota(nota).listaDeResultados();
+            List<Estoque> estoqueDeDevolucao = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
                     porNotaDeOrigem(nota).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaDeResultados();
 
             for (Estoque e : estoque) {
-                boolean operacao = false;
+                saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
+            }
+
+            for (Estoque e : estoqueDeDevolucao) {
                 for (SaldoDeEstoque saldo : saldoDeEstoque) {
                     if (e.getDeposito().getId().equals(saldo.getDeposito().getId())) {
                         if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
                             saldo.setSaldo(saldo.getSaldo().add(e.getQuantidade()));
-                            operacao = true;
                         } else if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
                             saldo.setSaldo(saldo.getSaldo().subtract(e.getQuantidade()));
-                            operacao = true;
                         }
                     }
                 }
-                if (!operacao) {
-                    saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
-                }
             }
-            
+
             saldoDeEstoque.forEach(System.out::println);
-            
+
+            System.out.println("Executou");
 
         } catch (DadoInvalidoException ex) {
             Logger.getLogger(EstoqueService.class.getName()).log(Level.SEVERE, null, ex);
