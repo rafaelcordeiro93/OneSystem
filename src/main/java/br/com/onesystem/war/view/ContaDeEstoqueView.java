@@ -1,40 +1,32 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ContaDeEstoqueDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ContaDeEstoqueBV;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-import javax.persistence.PersistenceException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoqueBV> implements Serializable {
 
-    private ContaDeEstoqueBV contaDeEstoque;
-    private ContaDeEstoque contaDeEstoqueSelecionada;
+    private ContaDeEstoque conta;
     private OperacaoDeEstoqueBV operacaoDeEstoque;
-    private OperacaoDeEstoqueBV operacaoDeEstoqueSelecionado;
-    private List<OperacaoDeEstoqueBV> listaOperacoesDeEstoqueBV;
+    private OperacaoDeEstoque operacaoDeEstoqueSelecionado;
 
     @PostConstruct
     public void init() {
@@ -43,106 +35,10 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     public void add() {
         try {
-            ContaDeEstoque novoRegistro = contaDeEstoque.construir();
-            addOperacaoDeEstoque(novoRegistro);
-            new AdicionaDAO<ContaDeEstoque>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
+            conta = e.construir();
+            addNoBanco(conta);
         } catch (DadoInvalidoException die) {
             die.print();
-        }
-    }
-
-    private void addOperacaoDeEstoque(ContaDeEstoque novoRegistro) throws DadoInvalidoException {
-        for (OperacaoDeEstoqueBV t : listaOperacoesDeEstoqueBV) {
-            t.setContaDeEstoque(novoRegistro);
-            novoRegistro.getOperacaoDeEstoque().add(t.construir());
-        }
-    }
-
-    public void update() {
-        try {
-            if (contaDeEstoqueSelecionada != null) {
-                ContaDeEstoque contaDeEstoqueExistente = contaDeEstoque.construirComID();
-                atualizaOperacaoDeEstoque(contaDeEstoqueExistente); // Atualiza Operacoes na lista
-                List<OperacaoDeEstoque> deletados = buscaOperacoesDeletadas(contaDeEstoqueExistente); // Busca operacoes deletadas
-
-                new AtualizaDAO<ContaDeEstoque>().atualiza(contaDeEstoqueExistente);
-
-                deletaOperacoes(deletados); //deleta operacoes de estoque retiradas da lista e atualiza a lista de operacoes de estoque no banco.
-
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    private void atualizaOperacaoDeEstoque(ContaDeEstoque contaDeEstoqueExistente) throws DadoInvalidoException {
-
-        List<OperacaoDeEstoqueBV> listaOperacao = new ArrayList<>();
-        for (OperacaoDeEstoqueBV cl : listaOperacoesDeEstoqueBV) {
-            OperacaoDeEstoqueBV operacaoDeEstoqueBV = new OperacaoDeEstoqueBV(cl);
-            operacaoDeEstoqueBV.setContaDeEstoque(contaDeEstoqueExistente);
-            listaOperacao.add(operacaoDeEstoqueBV);
-        }
-
-        for (OperacaoDeEstoqueBV o : listaOperacao) {
-            try {
-                contaDeEstoqueExistente.getOperacaoDeEstoque().set(contaDeEstoqueExistente.getOperacaoDeEstoque().indexOf(o.construirComID()),
-                        o.construirComID());
-            } catch (ArrayIndexOutOfBoundsException aiob) {
-                contaDeEstoqueExistente.getOperacaoDeEstoque().add(o.construir());
-            }
-        }
-    }
-
-    private void deletaOperacoes(List<OperacaoDeEstoque> deletados) throws PersistenceException, DadoInvalidoException {
-        // Deleta a operação
-        for (OperacaoDeEstoque od : deletados) {
-            new RemoveDAO<OperacaoDeEstoque>().remove(od, od.getId());
-        }
-    }
-
-    private List<OperacaoDeEstoque> buscaOperacoesDeletadas(ContaDeEstoque contaDeEstoqueExistente) throws PersistenceException, DadoInvalidoException {
-        List<OperacaoDeEstoque> deletados = new ArrayList<>();
-
-        // Busca Operações deletadas e adiciona na lista de deletados.
-        for (OperacaoDeEstoque o : contaDeEstoqueExistente.getOperacaoDeEstoque()) {
-            if (!listaOperacoesDeEstoqueBV.isEmpty()) {
-                if (o.getId() != null) {
-                    boolean encontrou = false;
-                    for (OperacaoDeEstoqueBV op : listaOperacoesDeEstoqueBV) {
-                        if (o.getId().equals(op.getId())) {
-                            encontrou = true;
-                            break;
-                        }
-                    }
-                    if (!encontrou) {
-                        deletados.add(o);
-                    }
-                }
-            } else {
-                deletados.add(o);
-            }
-        }
-        return deletados;
-    }
-
-    public void delete() {
-        try {
-            if (contaDeEstoqueSelecionada != null) {
-                new RemoveDAO<ContaDeEstoque>().remove(contaDeEstoqueSelecionada, contaDeEstoqueSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
         }
     }
 
@@ -151,18 +47,23 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         Object obj = event.getObject();
         if (obj instanceof ContaDeEstoque) {
             limparJanela();
-            ContaDeEstoque conta = (ContaDeEstoque) obj;
-            this.contaDeEstoqueSelecionada = conta;
-            this.contaDeEstoque = new ContaDeEstoqueBV(conta);
-            selecionaOperacoes();
+            ContaDeEstoque c = (ContaDeEstoque) obj;
+            this.e = new ContaDeEstoqueBV(c);
+            this.conta = c;
         } else if (obj instanceof Operacao) {
             this.operacaoDeEstoque.setOperacao((Operacao) obj);
         }
     }
 
-    public void selecionaOperacoes() {
-        for (OperacaoDeEstoque op : contaDeEstoque.getOperacaoDeEstoque()) {
-            this.listaOperacoesDeEstoqueBV.add(new OperacaoDeEstoqueBV(op));
+    public void selecionaConta() {
+        try {
+            if (e == null) {
+                conta = null;
+            } else {
+                conta = e.construirComID();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
     }
 
@@ -171,20 +72,16 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
     }
 
     public void selecionaOperacaoDeEstoque(SelectEvent event) {
-        this.operacaoDeEstoqueSelecionado = (OperacaoDeEstoqueBV) event.getObject();
+        this.operacaoDeEstoqueSelecionado = (OperacaoDeEstoque) event.getObject();
         this.operacaoDeEstoque = new OperacaoDeEstoqueBV(operacaoDeEstoqueSelecionado);
     }
 
     public void addOperacoesNaLista() {
         try {
             if (operacaoDeEstoque.getOperacao() != null) {
-                validaOperacaoDeEstoqueExistente(false);
-                operacaoDeEstoque.setId(retornarCodigo());
-                if (contaDeEstoqueSelecionada != null) {
-                    operacaoDeEstoque.setContaDeEstoque(contaDeEstoqueSelecionada);
-                }
-
-                listaOperacoesDeEstoqueBV.add(operacaoDeEstoque);
+                conta.adiciona(operacaoDeEstoque.construir());
+                new AtualizaDAO<ContaDeEstoque>().atualiza(conta);
+                InfoMessage.adicionado();
                 limparOperacao();
             }
         } catch (DadoInvalidoException ex) {
@@ -195,10 +92,9 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
     public void updateOperacoesNaLista() {
         try {
             if (operacaoDeEstoqueSelecionado != null) {
-
-                validaOperacaoDeEstoqueExistente(true);
-                listaOperacoesDeEstoqueBV.set(listaOperacoesDeEstoqueBV.indexOf(operacaoDeEstoqueSelecionado),
-                        operacaoDeEstoque);
+                conta.atualiza(operacaoDeEstoqueSelecionado, operacaoDeEstoque.construirComID());
+                new AtualizaDAO<ContaDeEstoque>().atualiza(conta);
+                InfoMessage.atualizado();
                 limparOperacao();
             }
         } catch (DadoInvalidoException ex) {
@@ -208,35 +104,10 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     public void deleteOperacoesNaLista() throws DadoInvalidoException {
         if (operacaoDeEstoqueSelecionado != null) {
-            listaOperacoesDeEstoqueBV.remove(operacaoDeEstoqueSelecionado);
+            conta.remove(operacaoDeEstoqueSelecionado);
+            new RemoveDAO<OperacaoDeEstoque>().remove(operacaoDeEstoqueSelecionado, operacaoDeEstoqueSelecionado.getId());
+            InfoMessage.removido();
             limparOperacao();
-        }
-    }
-
-    private void validaOperacaoDeEstoqueExistente(boolean update) throws EDadoInvalidoException {
-
-        if (!update) {
-
-            for (OperacaoDeEstoqueBV lista : listaOperacoesDeEstoqueBV) {
-                if (operacaoDeEstoque.getOperacao().equals(lista.getOperacao())) {
-                    throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));
-                }
-            }
-        } else {
-
-            boolean valida = false;
-            for (OperacaoDeEstoqueBV lista : listaOperacoesDeEstoqueBV) {
-                if (operacaoDeEstoque.getOperacao().equals(lista.getOperacao())
-                        && !operacaoDeEstoque.getId().equals(lista.getId())) {
-                    valida = true;
-                    break;
-                }
-            }
-            if (valida) {
-
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));
-            }
-
         }
     }
 
@@ -246,47 +117,11 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     }
 
-    private Long retornarCodigo() {
-        Long id = (long) 1;
-        if (!listaOperacoesDeEstoqueBV.isEmpty()) {
-            for (OperacaoDeEstoqueBV dp : listaOperacoesDeEstoqueBV) {
-                if (dp.getId() >= id) {
-                    id = dp.getId() + 1;
-                }
-            }
-        }
-        return id;
-    }
-
     public void limparJanela() {
-        contaDeEstoque = new ContaDeEstoqueBV();
-        contaDeEstoqueSelecionada = null;
+        e = new ContaDeEstoqueBV();
+        conta = null;
         operacaoDeEstoque = new OperacaoDeEstoqueBV();
         operacaoDeEstoqueSelecionado = null;
-        listaOperacoesDeEstoqueBV = new ArrayList<OperacaoDeEstoqueBV>();
-
-    }
-
-    public void desfazer() {
-        if (contaDeEstoqueSelecionada != null) {
-            contaDeEstoque = new ContaDeEstoqueBV(contaDeEstoqueSelecionada);
-        }
-    }
-
-    public ContaDeEstoqueBV getContaDeEstoque() {
-        return contaDeEstoque;
-    }
-
-    public void setContaDeEstoque(ContaDeEstoqueBV contaDeEstoque) {
-        this.contaDeEstoque = contaDeEstoque;
-    }
-
-    public ContaDeEstoque getContaDeEstoqueSelecionada() {
-        return contaDeEstoqueSelecionada;
-    }
-
-    public void setContaDeEstoqueSelecionada(ContaDeEstoque contaDeEstoqueSelecionada) {
-        this.contaDeEstoqueSelecionada = contaDeEstoqueSelecionada;
     }
 
     public OperacaoDeEstoqueBV getOperacoes() {
@@ -297,14 +132,6 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         this.operacaoDeEstoque = operacaoDeEstoque;
     }
 
-    public OperacaoDeEstoqueBV getOperacoesSelecionado() {
-        return operacaoDeEstoqueSelecionado;
-    }
-
-    public void setOperacoesSelecionado(OperacaoDeEstoqueBV operacaoDeEstoqueSelecionado) {
-        this.operacaoDeEstoqueSelecionado = operacaoDeEstoqueSelecionado;
-    }
-
     public OperacaoDeEstoqueBV getOperacaoDeEstoque() {
         return operacaoDeEstoque;
     }
@@ -313,19 +140,19 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         this.operacaoDeEstoque = operacaoDeEstoque;
     }
 
-    public OperacaoDeEstoqueBV getOperacaoDeEstoqueSelecionado() {
+    public OperacaoDeEstoque getOperacaoDeEstoqueSelecionado() {
         return operacaoDeEstoqueSelecionado;
     }
 
-    public void setOperacaoDeEstoqueSelecionado(OperacaoDeEstoqueBV operacaoDeEstoqueSelecionado) {
+    public void setOperacaoDeEstoqueSelecionado(OperacaoDeEstoque operacaoDeEstoqueSelecionado) {
         this.operacaoDeEstoqueSelecionado = operacaoDeEstoqueSelecionado;
     }
 
-    public List<OperacaoDeEstoqueBV> getListaOperacoesDeEstoqueBV() {
-        return listaOperacoesDeEstoqueBV;
+    public ContaDeEstoque getConta() {
+        return conta;
     }
 
-    public void setListaOperacoesDeEstoqueBV(List<OperacaoDeEstoqueBV> listaOperacoesDeEstoqueBV) {
-        this.listaOperacoesDeEstoqueBV = listaOperacoesDeEstoqueBV;
+    public void setConta(ContaDeEstoque conta) {
+        this.conta = conta;
     }
 }

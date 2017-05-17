@@ -27,6 +27,7 @@
         <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
         <composite:attribute name="styleClassDiv" shortDescription="Estilo CSS aplicado  com classes a div renderizado para o componente."/>
         <composite:clientBehavior event="change" targets="#{cc.attrs.id}-txt" name="change"/>
+        <composite:clientBehavior event="blur" targets="#{cc.attrs.id}-txt" name="blur"/>
         <composite:clientBehavior event="itemSelect" targets="#{cc.attrs.id}-txt" name="itemSelect"/>
     </composite:interface>
 
