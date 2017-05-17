@@ -37,6 +37,7 @@
     <class>br.com.onesystem.domain.DespesaProvisionada</class>
     <class>br.com.onesystem.domain.Janela</class>
     <class>br.com.onesystem.domain.Operacao</class>
+    <class>br.com.onesystem.domain.OperacaoDeEstoque</class>
     <class>br.com.onesystem.domain.ReceitaProvisionada</class>
     <class>br.com.onesystem.domain.ConfiguracaoFinanceiro</class>
     <class>br.com.onesystem.domain.Modulo</class>
