@@ -15,7 +15,7 @@ import javax.persistence.Persistence;
 public class JPAUtil {
 
     private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("minds");
-    private static EntityManager manager;
+    private static EntityManager manager; 
 
     public static EntityManager getEntityManager() {
         if (manager == null || !manager.isOpen()) {

@@ -4,6 +4,7 @@ import br.com.onesystem.dao.OperacaoDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -17,6 +17,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -52,6 +53,7 @@ public class NotaEmitidaBuilder {
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
     private BigDecimal aFaturar;
+    private Nota notaDeOrigem;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -175,9 +177,14 @@ public class NotaEmitidaBuilder {
         this.aFaturar = aFaturar;
         return this;
     }
+    
+    public NotaEmitidaBuilder comNotaDeOrigem(Nota notaDeOrigem) {
+        this.notaDeOrigem = notaDeOrigem;
+        return this;
+    }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

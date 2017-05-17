@@ -10,4 +10,4 @@ public class ConfiguracaoEstoqueService implements Serializable {
         return new ConfiguracaoEstoqueDAO().buscar();
     }
 
-}
+} 

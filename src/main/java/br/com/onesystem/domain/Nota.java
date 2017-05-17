@@ -87,6 +87,8 @@ public abstract class Nota implements Serializable {
     private BigDecimal aFaturar = BigDecimal.ZERO;
     @Min(value = 0, message = "{min_dinheiro}")
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
+    @OneToOne
+    private Nota notaDeOrigem;
 
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
@@ -96,7 +98,7 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, boolean cancelada, Credito credito,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro) throws DadoInvalidoException {
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
         this.emissao = new Date(); // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
@@ -115,6 +117,7 @@ public abstract class Nota implements Serializable {
         this.aFaturar = aFaturar;
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
+        this.notaDeOrigem = notaDeOrigem;
         adicionaNoEstoque();
         geraBaixaPorValorDeCotacao();
         geraCobrancas();
@@ -176,6 +179,10 @@ public abstract class Nota implements Serializable {
         return emissao;
     }
 
+    public Nota getNotaDeOrigem() {
+        return notaDeOrigem;
+    }
+
     public boolean isCancelada() {
         return cancelada;
     }
@@ -191,7 +198,7 @@ public abstract class Nota implements Serializable {
     public List<Cobranca> getCobrancas() {
         return cobrancas;
     }
-    
+
     public List<Cobranca> getParcelas() {
         if (cobrancas != null) {
             List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
@@ -261,7 +268,7 @@ public abstract class Nota implements Serializable {
         }
         return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
     }
-    
+
     public String getTotalCartaoDeEntradaFormatado() {
         return MoedaFomatter.format(moedaPadrao, getTotalCartaoDeEntrada());
     }
