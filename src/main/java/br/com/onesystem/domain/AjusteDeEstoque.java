@@ -5,6 +5,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -54,15 +56,15 @@ public class AjusteDeEstoque implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = true)
     private BigDecimal custo;
-    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER,
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER,
             mappedBy = "ajusteDeEstoque")
-    private Estoque estoque;
+    private List<Estoque> estoque;
 
     public AjusteDeEstoque() {
     }
 
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
-            Deposito deposito, Date emissao, Operacao operacao, Estoque estoque,
+            Deposito deposito, Date emissao, Operacao operacao, List<Estoque> estoque,
             BigDecimal custo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
@@ -109,7 +111,7 @@ public class AjusteDeEstoque implements Serializable {
         return operacao;
     }
 
-    public Estoque getEstoque() {
+    public List<Estoque> getEstoque() {
         return estoque;
     }
 
@@ -119,9 +121,10 @@ public class AjusteDeEstoque implements Serializable {
 
     public void preparaInclusaoDe(Estoque estoque) {
         if (this.estoque == null) {
+            this.estoque = new ArrayList<>();
             this.id = null;
-            this.estoque = estoque;
         }
+        this.estoque.add(estoque);
     }
 
     public String getDataFormatada() {

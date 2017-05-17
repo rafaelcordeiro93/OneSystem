@@ -48,11 +48,11 @@ public class CidadeDAO {
         limpar();
         return resultado;
     }
-    
-     public Cidade resultado() throws DadoInvalidoException {
+
+    public Cidade resultado() throws DadoInvalidoException {
         try {
             Cidade resultado = new ArmazemDeRegistros<Cidade>(Cidade.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);        
+                    .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {

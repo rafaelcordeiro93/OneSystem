@@ -78,10 +78,8 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     }
 
     private void lancaEstoque(AjusteDeEstoque ajusteDeEstoque) throws DadoInvalidoException {
-        System.out.println("AJ: " + ajusteDeEstoque);
         for (OperacaoDeEstoque operacaoDeEstoque : ajusteDeEstoque.getOperacao().getOperacaoDeEstoque()) {
-            Estoque estoque = new EstoqueBuilder().comID(ajusteDeEstoque.getEstoque()
-                    != null ? ajusteDeEstoque.getEstoque().getId() : null).
+            Estoque estoque = new EstoqueBuilder().
                     comDeposito(ajusteDeEstoque.getDeposito()).
                     comItem(ajusteDeEstoque.getItem()).
                     comEmissao(ajusteDeEstoque.getEmissao()).comQuantidade(ajusteDeEstoque.getQuantidade()).

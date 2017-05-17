@@ -11,6 +11,7 @@ import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEstoque> {
     
@@ -21,7 +22,7 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     private Date emissao = new Date();
     private BigDecimal quantidade;
     private Operacao operacao;
-    private Estoque estoque;
+    private List<Estoque> estoque;
     private BigDecimal custo;
     
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
@@ -95,11 +96,11 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
         this.operacao = operacao;
     }
     
-    public Estoque getEstoque() {
+    public List<Estoque> getEstoque() {
         return estoque;
     }
     
-    public void setEstoque(Estoque estoque) {
+    public void setEstoque(List<Estoque> estoque) {
         this.estoque = estoque;
     }
     
