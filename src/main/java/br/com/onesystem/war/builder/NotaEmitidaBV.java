@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
@@ -54,6 +55,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private BigDecimal porcentagemDesconto;
     private Cotacao cotacao;
     private Integer numeroParcelas;
+    private Nota notaDeOrigem;
 
     public NotaEmitidaBV(NotaEmitida nota) {
         this.id = nota.getId();
@@ -347,6 +349,14 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.aFaturar = aFaturar;
     }
 
+    public Nota getNotaDeOrigem() {
+        return notaDeOrigem;
+    }
+
+    public void setNotaDeOrigem(Nota notaDeOrigem) {
+        this.notaDeOrigem = notaDeOrigem;
+    }
+
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
     }
@@ -375,7 +385,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return new NotaEmitidaBuilder().comValorPorCotacao(valorPorCotacao)
                 .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao).
                 comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .cancelada(cancelada).comCredito(credito).comOrcamento(orcamento)
+                .cancelada(cancelada).comCredito(credito).comOrcamento(orcamento).comNotaDeOrigem(notaDeOrigem)
                 .comMoedaPadrao(moedaPadrao).construir();
     }
 
@@ -383,7 +393,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return new NotaEmitidaBuilder().comId(id).comValorPorCotacao(valorPorCotacao)
                 .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao)
                 .comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .comCredito(credito).comOrcamento(orcamento)
+                .comCredito(credito).comOrcamento(orcamento).comNotaDeOrigem(notaDeOrigem)
                 .cancelada(cancelada).comMoedaPadrao(moedaPadrao)
                 .construir();
     }

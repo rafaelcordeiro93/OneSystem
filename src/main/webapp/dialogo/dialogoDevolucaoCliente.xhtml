@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.NotaEmitida}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+            <h2 class="BigTopic">#{l.Nota_Emitida}</h2>
+            <div class="EmptyBox5"/>
+
+            <div class="ui-fluid">
+
+                <div id="orcamento" class="ui-g">
+                    <p:outputLabel value="#{l.Nota_Emitida}: "/>
+                    <p:outputLabel value="#{dialogoNotaEmitidaView.notaEmitida.id}"/>
+                </div>
+
+                <p:separator/>
+
+                <div class="ui-g">
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoNotaEmitidaView.notaEmitida.pessoa.id} #{dialogoNotaEmitidaView.notaEmitida.pessoa ne null ? '-' : ''}  #{dialogoNotaEmitidaView.notaEmitida.pessoa.nome}"/>
+
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoNotaEmitidaView.notaEmitida.listaDePreco.id} #{dialogoNotaEmitidaView.notaEmitida.listaDePreco ne null ? '-' : ''}  #{dialogoNotaEmitidaView.notaEmitida.listaDePreco.nome}"/>
+                </div>
+
+                <p:tabView style="border: 1px solid #d8d8d8;" id="tabs">
+
+                    <p:tab title="#{l.Itens}" id="itemTabNotaEmitida">
+
+                        <p:dataTable id="ItensDeNotaNotaEmitida" var="itemDeNotaBV" value="#{dialogoNotaEmitidaView.itensDeNota}" rowKey="#{itemDeNotaBV.id}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" style="font-size: 12px;" tableStyle="padding: 2px !important" rowStyleClass="#{itemDeNotaBV.comparaQuantidadeDevolucao eq 0 ? 'rowGreen' : itemDeNotaBV.comparaQuantidadeDevolucao eq 1 ? '' : 'rowRed'}">
+
+                            <f:facet name="header">
+                                #{l.Itens}
+                            </f:facet>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Id}" sortBy="#{itemDeNotaBV.item.id}"  colspan="1" >
+                                <h:outputText value="#{itemDeNotaBV.item.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" sortBy="#{itemDeNotaBV.item.nome}" colspan="3">
+                                <h:outputText value="#{itemDeNotaBV.item.nome}" />
+                            </p:column>
+                            <p:column headerText="#{l.UN}" sortBy="#{itemDeNotaBV.item.unidadeDeMedida.sigla}" colspan="1" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.item.unidadeDeMedida.sigla}" />
+                            </p:column>
+                            <p:column headerText="#{l.QTDE}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.quantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Devolvido}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.totalListaSaldoDeQuantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.A_Devolver}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.totalListaDeQuantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Unitario}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.unitarioFormatado}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeNotaBV.totalFormatado}" colspan="2" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.totalFormatado   }" />
+                            </p:column>
+
+                            <p:column headerText="+" width="7%" style="text-align: center;">
+                                <p:commandLink id="attr-btn" action="#{dialogoNotaEmitidaView.atribuiItemASessao(itemDeNotaBV)}"><i class="fa fa-plus Fs10"/></p:commandLink>
+
+                                <p:commandButton id="exibeQuantidade-btn" action="#{quantidadeDeItemView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                    <p:ajax event="dialogReturn" listener="#{dialogoNotaEmitidaView.selecionar}" process="@this" update="@form"/>
+                                </p:commandButton>
+
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="1" footerText="#{dialogoNotaEmitidaView.notaEmitida.itens.size() eq 0 ? '' : dialogoNotaEmitidaView.notaEmitida.itens.size()}" />
+                                    <p:column colspan="8"/>
+                                    <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
+                                    <p:column colspan="2" footerText="#{dialogoNotaEmitidaView.notaEmitida.totalItensFormatado}"/>
+                                    <p:column colspan="1"/>
+                                </p:row>
+                            </p:columnGroup> 
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+                    <p:tab id="pagamentos" title="#{l.Pagamentos}">
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Forma_Recebimento}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{dialogoNotaEmitidaView.notaEmitida.formaDeRecebimento.id} #{dialogoNotaEmitidaView.notaEmitida.pessoa ne null ? '-' : ''}  #{dialogoNotaEmitidaView.notaEmitida.formaDeRecebimento.nome}"/>
+                        </div>
+
+                        <p:separator/>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.acrescimoFormatado}" />                             
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_NotaEmitida}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.totalNotaFormatado}" />    
+                        </div>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.descontoFormatado}" />
+                        </div>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.despesaCobrancaFormatado}" />
+                        </div>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.freteFormatado}" />
+                        </div>                           
+
+                        <p:spacer width="1px"/>
+
+                    </p:tab>
+
+                </p:tabView>
+
+            </div>
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Salvar}" action="#{dialogoNotaEmitidaView.salvar}" update="tempDialog:msg"/>
+
+        </div>  
+
+    </ui:define>
+</ui:composition>

@@ -64,7 +64,7 @@
                                      reflow="true" selectionMode="single" selection="#{contaDeEstoqueView.operacaoDeEstoqueSelecionado}">
                             <p:ajax event="rowSelect" process="@this" listener="#{contaDeEstoqueView.selecionaOperacaoDeEstoque}" update=":conteudo"/>
                             <p:column style="width: 10%; text-align: center" headerText="#{l.Id}" sortBy="#{operacaoDeEstoque.id}" colspan="1">
-                                <h:outputText value="#{operacaoDeEstoque.id}" />
+                                <h:outputText value="#{operacaoDeEstoque.operacao.id}" />
                             </p:column>
                             <p:column headerText="#{l.Operacao}" sortBy="#{operacaoDeEstoque.operacao.nome}" colspan="1">
                                 <h:outputText value="#{operacaoDeEstoque.operacao.nome}" />

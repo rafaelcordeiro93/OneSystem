@@ -9,6 +9,7 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,19 +30,20 @@ public class NotaEmitidaDAO {
     }
 
     private void limpar() {
-        consulta = "";
+        consulta = "select n from NotaEmitida n where n.id > 0 ";
         msg = new BundleUtil();
         parametros = new HashMap<String, Object>();
     }
 
-    public NotaEmitidaDAO buscarNotaEmitidaW() {
-        consulta += "select n from NotaEmitida n where n.id > 0 ";
+    public NotaEmitidaDAO porId(Long id) {
+        consulta += " and n.id = :pId ";
+        parametros.put("pId", id);
         return this;
     }
 
-    public NotaEmitidaDAO porId(Long id) {
-        consulta += "and n.id = :pId ";
-        parametros.put("pId", id);
+    public NotaEmitidaDAO porTipoOperacao(TipoOperacao tipoOperacao) {
+        consulta += " and n.operacao.tipoOperacao = :pTipoOperacao";
+        parametros.put("pTipoOperacao", tipoOperacao);
         return this;
     }
 
@@ -55,7 +57,7 @@ public class NotaEmitidaDAO {
     public NotaEmitida resultado() throws DadoInvalidoException {
         try {
             NotaEmitida resultado = new ArmazemDeRegistros<NotaEmitida>(NotaEmitida.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);        
+                    .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {
