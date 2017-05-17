@@ -116,16 +116,20 @@ public class DadosNecessarios implements Serializable {
             ConfiguracaoVendaService configuracaoService = new ConfiguracaoVendaService();
             ConfiguracaoVenda conf = configuracaoService.buscar();
             if (conf.getFormaDeRecebimentoDevolucaoEmpresa() == null) {
-                bv.getLista().add(b.getMessage("forma_recebimento_devolucao_empresa_not_null"));
+                bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
                 pendencias.add(bv);
                 return null;
             }
             return conf.getFormaDeRecebimentoDevolucaoEmpresa();
         } catch (DadoInvalidoException ex) {
-            bv.getLista().add(b.getMessage("forma_recebimento_devolucao_empresa_not_null"));
+            bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
             pendencias.add(bv);
             return null;
-        }
+        } catch (NullPointerException npe){
+            bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
+            pendencias.add(bv);
+            return null;
+        }                
     }
 
     private Cotacao getCotacaoEmMoedaPadrao(Moeda moeda) {

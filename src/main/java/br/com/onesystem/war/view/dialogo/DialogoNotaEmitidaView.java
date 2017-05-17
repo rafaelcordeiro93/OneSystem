@@ -66,7 +66,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
         opcoes.put("draggable", false);
         opcoes.put("height", 600);
         opcoes.put("closable", false);
-        opcoes.put("contentWidth", "100%"); 
+        opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
@@ -93,31 +93,17 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
     }
 
     public List<QuantidadeDeItemPorDeposito> criaLista(List<SaldoDeEstoque> listaDeEstoque, ItemDeNotaBV itemDeNota) {
-        BigDecimal quantidade = itemDeNota.getQuantidade();
 
         List<QuantidadeDeItemPorDeposito> lista = new ArrayList<QuantidadeDeItemPorDeposito>();
         for (SaldoDeEstoque saldo : listaDeEstoque) {
-         
             if (saldo.getDeposito().getId().equals(serviceConfiguracaoEstoque.buscar().getDepositoPadrao().getId())) {
                 QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, BigDecimal.ZERO);
-                if (saldo.getSaldo().compareTo(quantidade) >= 0) {
-                    quantidadeDeItem.setQuantidade(quantidade);
-                    quantidade = BigDecimal.ZERO;
-                } else {
-                    quantidadeDeItem.setQuantidade(saldo.getSaldo());
-                    quantidade = quantidade.subtract(saldo.getSaldo());
-                }
                 lista.add(quantidadeDeItem);
                 listaDeEstoque.remove(saldo);
                 break;
             }
         }
-        if (quantidade.compareTo(BigDecimal.ZERO) > 0) {
-            for (SaldoDeEstoque saldo : listaDeEstoque) {
-                QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, itemDeNota.getQuantidade());
-                lista.add(quantidadeDeItem);
-            }
-        }
+
         return lista;
     }
 
@@ -167,7 +153,6 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
     public void setItemDeNotaBV(ItemDeNotaBV itemDeNotaBV) {
         this.itemDeNotaBV = itemDeNotaBV;
     }
-
 
     public EstoqueService getServiceEstoque() {
         return serviceEstoque;

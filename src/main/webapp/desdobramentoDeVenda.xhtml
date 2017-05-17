@@ -18,7 +18,7 @@
 
 
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaBVConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{desdobramentoDeVendaView.e}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaBVConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
                         </div>
 
 
@@ -29,7 +29,7 @@
                         <div class="ui-fluid ui-g-12">
                             <h:panelGrid columns="2" styleClass="Wid30">
                                 <p:outputLabel value="#{l.Forma_Recebimento} :"/>
-                                <p:outputLabel value="#{desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.nome}"> </p:outputLabel>
+                                <p:outputLabel value="#{desdobramentoDeVendaView.e.formaDeRecebimento.nome}"> </p:outputLabel>
 
                             </h:panelGrid>
                         </div>
@@ -49,13 +49,13 @@
                                     <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
                                     <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.porcentagemAcrescimo}">
+                                                   value="#{desdobramentoDeVendaView.e.acrescimo}">
                                         <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar" 
                                                 listener="#{desdobramentoDeVendaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber> 
                                     <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.acrescimo}">
+                                                   value="#{desdobramentoDeVendaView.e.acrescimo}">
                                         <p:ajax  event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota" listener="#{desdobramentoDeVendaView.calculaPorcentagemAcrescimoEDesconto}"/>
                                         <p:ajax  event="change" update="totalNota neAFaturar" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber>
@@ -63,12 +63,12 @@
                                     <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
                                     <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.porcentagemDesconto}">
+                                                   value="#{desdobramentoDeVendaView.e.porcentagemDesconto}">
                                         <p:ajax event="change" update="neDesconto neDinheiro totalNota" listener="#{desdobramentoDeVendaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber>                                     
                                     <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                    symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
-                                                   styleClass="Wid90" value="#{desdobramentoDeVendaView.valoresAVista.desconto}">
+                                                   styleClass="Wid90" value="#{desdobramentoDeVendaView.e.desconto}">
                                         <p:ajax event="change" update="nePDesconto neDinheiro totalNota" listener="#{desdobramentoDeVendaView.calculaPorcentagemAcrescimoEDesconto}"/>
                                         <p:ajax event="change" update="totalNota neAFaturar" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber> 
@@ -76,7 +76,7 @@
                                     <p:spacer/>
                                     <p:outputLabel value="#{l.Despesa_Cobranca}"/>
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.despesaCobranca}"
+                                                   value="#{desdobramentoDeVendaView.e.despesaCobranca}"
                                                    symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                         <p:ajax event="change" update="neDinheiro totalNota" listener="#{desdobramentoDeVendaView.calculaValoresTotais}"/>
                                     </p:inputNumber> 
@@ -84,7 +84,7 @@
                                     <p:spacer/>
                                     <p:outputLabel value="#{l.Frete}"/>
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.frete}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
+                                                   value="#{desdobramentoDeVendaView.e.frete}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                         <p:ajax event="change" update="neDinheiro totalNota" listener="#{desdobramentoDeVendaView.calculaValoresTotais}"/>
                                     </p:inputNumber>    
 
@@ -94,28 +94,28 @@
                                              columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-8">
 
                                     <p:outputLabel value="#{l.Dinheiro}"/>
-                                    <p:inputNumber id="neDinheiro" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmDinheiro}"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.dinheiro}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:inputNumber id="neDinheiro" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmDinheiro}"
+                                                   value="#{desdobramentoDeVendaView.e.totalEmDinheiro}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:outputLabel value="#{l.Credito}"/>
-                                    <p:inputNumber id="neCredito" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
-                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{desdobramentoDeVendaView.creditoBV.valor}"
+                                    <p:inputNumber id="neCredito" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCredito}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{desdobramentoDeVendaView.e.credito}"
                                                    symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:outputLabel value="#{l.Cheque}"/>
-                                    <p:inputText  id="chequeEntrada" readonly="true"  disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
-                                                  value="#{desdobramentoDeVendaView.totalChequeFormatado}">
+                                    <p:inputText  id="chequeEntrada" readonly="true"  disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCheque}"
+                                                  value="#{desdobramentoDeVendaView.e.totalChequeDeEntrada}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputText> 
 
                                     <p:outputLabel value="#{l.Cartao}"/>
-                                    <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCartao}" readonly="true"
+                                    <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCartao}" readonly="true"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
-                                                   value="#{desdobramentoDeVendaView.boletoDeCartao.valor}">
+                                                   value="#{desdobramentoDeVendaView.e.totalCartaoDeEntrada}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber>
 
@@ -126,12 +126,12 @@
 
                                     <p:spacer height="25"/>
 
-                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"/>
+                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCredito}"/>
 
-                                    <p:commandButton value="#{l.Cheques}" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
+                                    <p:commandButton value="#{l.Cheques}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCheque}"
                                                      onclick="PF('detalheChequeEntrada').show()"/>
 
-                                    <p:commandButton value="#{l.Cartao}" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
+                                    <p:commandButton value="#{l.Cartao}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCartao}"
                                                      onclick="PF('detalheCartaoEntrada').show()"/>
 
                                 </p:panelGrid>
@@ -141,12 +141,12 @@
 
                                     <p:outputLabel value="#{l.A_Faturar}"/>
                                     <p:inputNumber id="neAFaturar" maxValue="999999999999.99" minValue="-9999999.99" decimalSeparator="," thousandSeparator="." readonly="true"
-                                                   value="#{desdobramentoDeVendaView.valoresAVista.AFaturar}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
+                                                   value="#{desdobramentoDeVendaView.e.AFaturar}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                     </p:inputNumber> 
 
                                     <p:outputLabel value="#{l.Total_Nota}"/>
                                     <p:inputNumber id="totalNota" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
-                                                   value="#{desdobramentoDeVendaView.totalNota}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
+                                                   value="#{desdobramentoDeVendaView.e.totalNota}" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                     </p:inputNumber> 
 
                                 </p:panelGrid>
@@ -157,7 +157,7 @@
 
 
 
-                        <p:dataTable id="neParcelas" var="parcelaBV" value="#{desdobramentoDeVendaView.parcelas}" editMode="cell" editable="true"
+                        <p:dataTable id="neParcelas" var="parcelaBV" value="#{desdobramentoDeVendaView.notaEmitidaSelecionada.parcelas}" editMode="cell" editable="true"
                                      styleClass="ui-g-2" rowKey="#{parcelaBV.id}"
                                      paginatorAlwaysVisible="false" rows="12" paginator="true"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -362,7 +362,7 @@
                                  update="panelDetCheEnt detChequeEntrada :conteudo:growl"/>
             </h:panelGrid>
 
-            <p:dataTable id="detChequeEntrada" var="cheque" value="#{desdobramentoDeVendaView.valoresAVista.cheques}" rowKey="#{cheque.id}" 
+            <p:dataTable id="detChequeEntrada" var="cheque" value="#{desdobramentoDeVendaView.e.cheques}" rowKey="#{cheque.id}" 
                          emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{desdobramentoDeVendaView.chequeSelecionado}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{desdobramentoDeVendaView.selecionaChequeEntrada}" update=":conteudo:panelDetCheEnt"/>
@@ -417,7 +417,7 @@
                 <p:inputText id="detCodigoTransacao" value="#{desdobramentoDeVendaView.boletoDeCartao.codigoTransacao}"/>  
 
                 <p:outputLabel value="#{l.Valor}"/>
-                <p:inputNumber id="boletoCartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
+                <p:inputNumber id="boletoCartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCartao}"
                                decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
                                value="#{desdobramentoDeVendaView.boletoDeCartao.valor}">
 

@@ -49,7 +49,7 @@ public class Estoque implements Serializable {
     private OperacaoDeEstoque operacaoDeEstoque;
     @ManyToOne
     private ItemDeNota itemDeNota;
-    @OneToOne
+    @ManyToOne
     private AjusteDeEstoque ajusteDeEstoque;
 
     public Estoque() {

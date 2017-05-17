@@ -4,21 +4,23 @@ import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.util.BundleUtil;
 import java.util.List;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ContaDeEstoqueBV implements Serializable {
+public class ContaDeEstoqueBV implements Serializable, BuilderView<ContaDeEstoque> {
 
     private Long id;
     private String nome;
-    private List<OperacaoDeEstoque> operacaoDeEstoque = new ArrayList<OperacaoDeEstoque>();
+    private List<OperacaoDeEstoque> operacoesDeEstoque = new ArrayList<OperacaoDeEstoque>();
 
     public ContaDeEstoqueBV(ContaDeEstoque contaDeEstoqueSelecionada) {
         this.id = contaDeEstoqueSelecionada.getId();
         this.nome = contaDeEstoqueSelecionada.getNome();
-        this.operacaoDeEstoque = contaDeEstoqueSelecionada.getOperacaoDeEstoque();
-
+        this.operacoesDeEstoque = contaDeEstoqueSelecionada.getOperacaoDeEstoque();
     }
 
     public ContaDeEstoqueBV() {
@@ -40,19 +42,19 @@ public class ContaDeEstoqueBV implements Serializable {
         this.nome = nome;
     }
 
-    public List<OperacaoDeEstoque> getOperacaoDeEstoque() {
-        return operacaoDeEstoque;
+    public List<OperacaoDeEstoque> getOperacoesDeEstoque() {
+        return operacoesDeEstoque;
     }
 
-    public void setOperacaoDeEstoque(List<OperacaoDeEstoque> operacaoDeEstoque) {
-        this.operacaoDeEstoque = operacaoDeEstoque;
+    public void setOperacoesDeEstoque(List<OperacaoDeEstoque> operacoesDeEstoque) {
+        this.operacoesDeEstoque = operacoesDeEstoque;
     }
 
     public ContaDeEstoque construir() throws DadoInvalidoException {
-        return new ContaDeEstoqueBuilder().comNome(nome).comOperacaoDeEstoque(operacaoDeEstoque).construir();
+        return new ContaDeEstoqueBuilder().comNome(nome).comOperacaoDeEstoque(operacoesDeEstoque).construir();
     }
 
     public ContaDeEstoque construirComID() throws DadoInvalidoException {
-        return new ContaDeEstoqueBuilder().comID(id).comNome(nome).comOperacaoDeEstoque(operacaoDeEstoque).construir();
+        return new ContaDeEstoqueBuilder().comID(id).comOperacaoDeEstoque(operacoesDeEstoque).comNome(nome).construir();
     }
 }

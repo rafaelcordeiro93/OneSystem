@@ -109,7 +109,7 @@ public class Item implements Serializable {
         this.estoqueMaximo = estoqueMaximo;
         this.margem = margem;
         this.comissao = comissao;
-//        ehValido();
+        ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {

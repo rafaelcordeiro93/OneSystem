@@ -118,10 +118,10 @@ public abstract class Nota implements Serializable {
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
         this.notaDeOrigem = notaDeOrigem;
-//        adicionaNoEstoque();
-//        geraBaixaPorValorDeCotacao();
-//        geraCobrancas();
-//        ehValido();
+        adicionaNoEstoque();
+        geraBaixaPorValorDeCotacao();
+        geraCobrancas();
+        ehValido();
     }
 
     private void adicionaNoEstoque() throws DadoInvalidoException {
