@@ -23,6 +23,7 @@ import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -171,6 +172,28 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return MoedaFomatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
 
+    public BigDecimal getTotalCartaoDeEntrada() {
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            for (Cobranca c : cobrancas) {
+                if (c instanceof BoletoDeCartao && c.getEntrada() != null && c.getEntrada() == true) {
+                    if (c.getCotacao() != null && c.getCotacao() != cotacao) {
+                        total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                    } else {
+                        total = total.add(c.getValor());
+                    }
+                }
+            }
+        } catch (NullPointerException npe) {
+            return null;
+        }
+        return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
+    }
+
+    public String getTotalCartaoDeEntradaFormatado() {
+        return MoedaFomatter.format(moedaPadrao, getTotalCartaoDeEntrada());
+    }
+
     public BigDecimal getTotalItens() {
         return itens.stream().map(ItemDeNota::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -273,6 +296,16 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
+    }
+
+    public List<Cobranca> getParcelas() {
+        if (cobrancas != null) {
+            List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
+            parcelamento.sort(Comparator.comparingLong(Cobranca::getDias));
+            return parcelamento;
+        } else {
+            return null;
+        }
     }
 
     public List<Cobranca> getCobrancas() {
