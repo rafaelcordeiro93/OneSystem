@@ -8,8 +8,10 @@ package br.com.onesystem.util;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -17,6 +19,7 @@ import br.com.onesystem.war.builder.DadosNecessariosBV;
 import br.com.onesystem.war.service.ColunaService;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.OperacaoService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,7 +35,8 @@ import org.primefaces.context.RequestContext;
 public class DadosNecessarios implements Serializable {
 
     private List<DadosNecessariosBV> pendencias = new ArrayList<>();
-    FacesContext fc = FacesContext.getCurrentInstance();
+    private FacesContext fc = FacesContext.getCurrentInstance();
+    private BundleUtil b = new BundleUtil();
 
     public List<DadosNecessariosBV> valida(String janela) {
         switch (janela) {
@@ -41,6 +45,7 @@ public class DadosNecessarios implements Serializable {
                 getCotacaoEmMoedaPadrao(moeda);
                 getContaDeEstoque();
                 getOperacoes();
+                getFormaRecebimentoDevolucaoPadraoEmpresa();
                 break;
             }
             case "/orcamento.xhtml": {
@@ -69,7 +74,6 @@ public class DadosNecessarios implements Serializable {
     }
 
     private ContaDeEstoque getContaDeEstoque() {
-        BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
 
         ConfiguracaoEstoqueService configuracaoEstoqueService = new ConfiguracaoEstoqueService();
@@ -89,7 +93,6 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Moeda getMoedaPadrao() {
-        BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
         try {
             ConfiguracaoService configuracaoService = new ConfiguracaoService();
@@ -107,8 +110,25 @@ public class DadosNecessarios implements Serializable {
         }
     }
 
+    private FormaDeRecebimento getFormaRecebimentoDevolucaoPadraoEmpresa() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            ConfiguracaoVendaService configuracaoService = new ConfiguracaoVendaService();
+            ConfiguracaoVenda conf = configuracaoService.buscar();
+            if (conf.getFormaDeRecebimentoDevolucaoEmpresa() == null) {
+                bv.getLista().add(b.getMessage("forma_recebimento_devolucao_empresa_not_null"));
+                pendencias.add(bv);
+                return null;
+            }
+            return conf.getFormaDeRecebimentoDevolucaoEmpresa();
+        } catch (DadoInvalidoException ex) {
+            bv.getLista().add(b.getMessage("forma_recebimento_devolucao_empresa_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
     private Cotacao getCotacaoEmMoedaPadrao(Moeda moeda) {
-        BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/cotacao.xhtml");
         try {
             if (moeda != null) {
@@ -132,7 +152,6 @@ public class DadosNecessarios implements Serializable {
     }
 
     private List<Operacao> getOperacoes() {
-        BundleUtil b = new BundleUtil();
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/operacoes.xhtml");
         OperacaoService operacaoService = new OperacaoService();
         List<Operacao> operacoes = operacaoService.buscar();

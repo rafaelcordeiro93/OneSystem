@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
@@ -54,6 +55,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private BigDecimal porcentagemDesconto;
     private Cotacao cotacao;
     private Integer numeroParcelas;
+    private Nota notaDeOrigem;
 
     public NotaEmitidaBV(NotaEmitida nota) {
         this.id = nota.getId();
@@ -345,6 +347,14 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public void setAFaturar(BigDecimal aFaturar) {
         this.aFaturar = aFaturar;
+    }
+
+    public Nota getNotaDeOrigem() {
+        return notaDeOrigem;
+    }
+
+    public void setNotaDeOrigem(Nota notaDeOrigem) {
+        this.notaDeOrigem = notaDeOrigem;
     }
 
     public BigDecimal getTotalEmDinheiro() {

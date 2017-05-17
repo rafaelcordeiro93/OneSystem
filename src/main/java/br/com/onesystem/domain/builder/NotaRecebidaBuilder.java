@@ -15,8 +15,8 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -51,6 +51,7 @@ public class NotaRecebidaBuilder {
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
     private BigDecimal aFaturar;
+    private Nota notaDeOrigem;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -170,8 +171,13 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
+    public NotaRecebidaBuilder comNotaDeOrigem(Nota notaDeOrigem) {
+        this.notaDeOrigem = notaDeOrigem;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

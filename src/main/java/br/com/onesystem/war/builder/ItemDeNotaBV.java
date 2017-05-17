@@ -12,8 +12,11 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.ItemDeNotaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.util.MoedaFomatter;
 import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +85,18 @@ public class ItemDeNotaBV {
         this.listaDeQuantidade = listaDeQuantidade;
     }
 
+    public BigDecimal getTotalListaSaldoDeQuantidade() {
+        return getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public BigDecimal getTotalListaDeQuantidade() {
+        return getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+ 
+    public int getComparaQuantidadeDevolucao() {
+        return getTotalListaSaldoDeQuantidade().compareTo(getTotalListaDeQuantidade());
+    }
+
     public BigDecimal getQuantidade() {
         return quantidade;
     }
@@ -92,6 +107,22 @@ public class ItemDeNotaBV {
 
     public BigDecimal getTotal() {
         return getQuantidade() == null ? BigDecimal.ZERO : getQuantidade().multiply(unitario == null ? BigDecimal.ZERO : unitario);
+    }
+
+    public String getTotalFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getTotal());
+        } else {
+            return NumberFormat.getNumberInstance().format(getTotal());
+        }
+    }
+
+    public String getUnitarioFormatado() {
+        if (nota != null) {
+            return MoedaFomatter.format(nota.getMoedaPadrao(), getUnitario());
+        } else {
+            return NumberFormat.getNumberInstance().format(getUnitario());
+        }
     }
 
     public ItemDeNota construir() throws DadoInvalidoException {
