@@ -43,7 +43,6 @@ public class PerfilUsuarioView implements Serializable {
 
     public void update() throws IOException {
         try {
-            System.out.println("Cor Menu: " + usuario.getCorMenu());
             atualizaPessoa();
             validaSenha();
             Usuario usuarioExistente = usuario.construirComID();

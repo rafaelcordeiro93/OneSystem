@@ -51,14 +51,14 @@ public class EstoqueDAO {
         parametros.put("pNota", nota);
         return this;
     }
-    
+
     public EstoqueDAO porNotaDeOrigem(Nota notaDeOrigem) {
         consulta += " and e.itemDeNota.nota.notaDeOrigem = :pNotaDeOrigem";
         parametros.put("pNotaDeOrigem", notaDeOrigem);
         return this;
     }
-    
-       public EstoqueDAO porTipoDeOperacaoDeNota(TipoOperacao tipoOperacao) {
+
+    public EstoqueDAO porTipoDeOperacaoDeNota(TipoOperacao tipoOperacao) {
         consulta += " and e.itemDeNota.nota.operacao.tipoOperacao = :pTipoOperacao";
         parametros.put("pTipoOperacao", tipoOperacao);
         return this;
@@ -86,6 +86,10 @@ public class EstoqueDAO {
         dataAtual.set(Calendar.MINUTE, 59);
         dataAtual.set(Calendar.SECOND, 59);
         return dataAtual;
+    }
+
+    public String getConsulta() {
+        return consulta;
     }
 
     public List<Estoque> listaDeResultados() {

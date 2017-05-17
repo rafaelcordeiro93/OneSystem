@@ -37,7 +37,7 @@ public class OperacaoDeEstoque implements Serializable {
     @ManyToOne
     private ContaDeEstoque contaDeEstoque;
     @ManyToOne
-    private Operacao operacoes;
+    private Operacao operacao;
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{operacao_fisica_not_null}")
     private OperacaoFisica operacaoFisica;
@@ -49,7 +49,7 @@ public class OperacaoDeEstoque implements Serializable {
         this.id = id;
         this.contaDeEstoque = contaDeEstoque;
         this.operacaoFisica = operacaoFisica;
-        this.operacoes = operacoes;
+        this.operacao = operacoes;
         ehValido();
     }
 
@@ -57,12 +57,16 @@ public class OperacaoDeEstoque implements Serializable {
         return id;
     }
 
+    public void setContaDeEstoque(ContaDeEstoque contaDeEstoque) {
+        this.contaDeEstoque = contaDeEstoque;
+    }
+    
     public ContaDeEstoque getContaDeEstoque() {
         return contaDeEstoque;
     }
 
-    public Operacao getOperacoes() {
-        return operacoes;
+    public Operacao getOperacao() {
+        return operacao;
     }
 
     public OperacaoFisica getOperacaoFisica() {
@@ -94,7 +98,8 @@ public class OperacaoDeEstoque implements Serializable {
 
     @Override
     public String toString() {
-        return "OperacaoDeEstoque{" + "id=" + id + ", contaDeEstoque=" + contaDeEstoque + ", operacoes=" + operacoes + ", operacaoFisica=" + operacaoFisica + '}';
+        return "OperacaoDeEstoque{" + "id=" + id + ", contaDeEstoque=" + contaDeEstoque + ", operacoes=" + operacao + ", operacaoFisica=" + operacaoFisica + '}';
     }
+
 
 }

@@ -18,7 +18,7 @@ import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.Test;
+//import org.junit.Test;
 
 /**
  *
@@ -26,7 +26,7 @@ import org.junit.Test;
  */
 public class EstoqueService {
 
-    @Test
+//    @Test
     public void buscaNotasDeDevolucaoDeItem() {
 
         try {

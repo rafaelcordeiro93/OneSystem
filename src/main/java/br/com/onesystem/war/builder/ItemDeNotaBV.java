@@ -86,15 +86,16 @@ public class ItemDeNotaBV {
     }
 
     public BigDecimal getTotalListaSaldoDeQuantidade() {
-        return getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add);
+        return getQuantidade().subtract(getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add));
     }
 
     public BigDecimal getTotalListaDeQuantidade() {
         return getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
- 
+
     public int getComparaQuantidadeDevolucao() {
-        return getTotalListaSaldoDeQuantidade().compareTo(getTotalListaDeQuantidade());
+        BigDecimal r = getQuantidade().subtract(getTotalListaSaldoDeQuantidade());
+        return r.compareTo(getTotalListaDeQuantidade());
     }
 
     public BigDecimal getQuantidade() {

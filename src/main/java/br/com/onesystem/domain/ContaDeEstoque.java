@@ -6,8 +6,12 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -33,17 +37,61 @@ public class ContaDeEstoque implements Serializable {
     private Long id;
     @NotNull(message = "{nome_not_null}")
     private String nome;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "contaDeEstoque")
-    private List<OperacaoDeEstoque> operacaoDeEstoque;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "contaDeEstoque")
+    private List<OperacaoDeEstoque> operacaoDeEstoque = new ArrayList<>();
 
     public ContaDeEstoque() {
     }
 
-    public ContaDeEstoque(Long id, String nome, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
+    public ContaDeEstoque(Long id, List<OperacaoDeEstoque> operacoesDeEstoque,String nome) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.operacaoDeEstoque = operacaoDeEstoque;
+        this.operacaoDeEstoque = operacoesDeEstoque;
         ehValido();
+    }
+
+    public void adiciona(OperacaoDeEstoque operacao) throws DadoInvalidoException {
+        validaOperacaoDeEstoqueExistente(false, operacao);
+        operacao.setContaDeEstoque(this);
+        this.operacaoDeEstoque.add(operacao);
+    }
+
+    public void atualiza(OperacaoDeEstoque selecionado, OperacaoDeEstoque operacao) throws DadoInvalidoException {
+        validaOperacaoDeEstoqueExistente(true, operacao);
+        this.operacaoDeEstoque.set(this.operacaoDeEstoque.indexOf(selecionado), operacao);
+    }
+
+    public void remove(OperacaoDeEstoque selecionado) {
+        this.operacaoDeEstoque.remove(selecionado);
+    }
+
+    private void validaOperacaoDeEstoqueExistente(boolean update, OperacaoDeEstoque operacao) throws EDadoInvalidoException {
+        if (!update) {
+
+            for (OperacaoDeEstoque lista : operacaoDeEstoque) {
+                if (operacao.getOperacao().equals(lista.getOperacao())) {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));
+                }
+            }
+        } else {
+            boolean valida = false;
+            for (OperacaoDeEstoque lista : operacaoDeEstoque) {
+                if (operacao.getOperacao().equals(lista.getOperacao())
+                        && !operacao.getId().equals(lista.getId())) {
+                    valida = true;
+                    break;
+                }
+            }
+            if (valida) {
+
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));
+            }
+
+        }
+    }
+
+    private void geraOperacaoDeEstoque() {
+        operacaoDeEstoque.forEach(o -> o.setContaDeEstoque(this));
     }
 
     public Long getId() {
@@ -52,10 +100,6 @@ public class ContaDeEstoque implements Serializable {
 
     public String getNome() {
         return nome;
-    }
-
-    public void remove(OperacaoDeEstoque operacaoDeEstoque) {
-        this.operacaoDeEstoque.remove(operacaoDeEstoque);
     }
 
     public List<OperacaoDeEstoque> getOperacaoDeEstoque() {

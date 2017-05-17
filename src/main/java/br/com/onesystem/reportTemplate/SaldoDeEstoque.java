@@ -21,6 +21,7 @@ public class SaldoDeEstoque implements Serializable {
     private BigDecimal saldo;
 
     public SaldoDeEstoque(Long id, Deposito deposito, BigDecimal saldo) {
+        this.id = id;
         this.deposito = deposito;
         this.saldo = saldo;
     }
