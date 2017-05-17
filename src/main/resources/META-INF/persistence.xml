@@ -76,20 +76,23 @@
         <class>br.com.onesystem.domain.ItemDeNota</class>
         <class>br.com.onesystem.domain.Cobranca</class>
         <class>br.com.onesystem.domain.ValorPorCotacao</class>
-        <class>br.com.onesystem.doamin.ConfiguracaoVenda</class>
-        <properties>
-            <!--  Propriedades JDBC  -->
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/minds"/>
-            <property name="javax.persistence.jdbc.user" value="postgres"/>
-            <property name="javax.persistence.jdbc.password" value="root"/>
-            <!--  Configurações específicas do Hibernate  -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.format_sql" value="false"/>
-            <!-- Outros Auxiliares -->
-            <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
-        </properties>
+        <class>br.com.onesystem.domain.ConfiguracaoVenda</class>
+        <class>br.com.onesystem.domain.Comanda</class>
+        <class>br.com.onesystem.domain.ItemDeComanda</class>
     </persistence-unit>
+    <properties>
+        <!--  Propriedades JDBC  -->
+        <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+        <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/minds"/>
+        <property name="javax.persistence.jdbc.user" value="postgres"/>
+        <property name="javax.persistence.jdbc.password" value="root"/>
+        <!--  Configurações específicas do Hibernate  -->
+        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+        <property name="hibernate.hbm2ddl.auto" value="update"/>
+        <property name="hibernate.show_sql" value="false"/>
+        <property name="hibernate.format_sql" value="false"/>
+        <!-- Outros Auxiliares -->
+        <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
+    </properties>
+</persistence-unit>
 </persistence>
