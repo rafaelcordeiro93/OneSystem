@@ -5,6 +5,7 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -112,16 +114,25 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
     }
 
     public void salvar() {
-        for (ItemDeNotaBV ib : ItensDeNota) {
+        List<ItemDeNotaBV> lista = ItensDeNota.stream().filter(item -> item.getTotalListaDeQuantidade().compareTo(BigDecimal.ZERO) != 0).collect(Collectors.toList());
+        for (ItemDeNotaBV ib : lista) {
             if (ib.getComparaQuantidadeDevolucao() < 0) {
-                ErrorMessage.print(new BundleUtil().getMessage("Existe_Quantidade_A_Devolver_Maior_Que_Quantidade"));
+                ErrorMessage.print(new BundleUtil().getLabel("Existe_Quantidade_A_Devolver_Maior_Que_Quantidade"));
                 return;
             }
         }
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.nota.token");
-        RequestContext.getCurrentInstance().closeDialog(ItensDeNota);
+        RequestContext.getCurrentInstance().closeDialog(lista);
+    }
+
+    public String getZero() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+        } else {
+            return "";
+        }
     }
 
     @Override

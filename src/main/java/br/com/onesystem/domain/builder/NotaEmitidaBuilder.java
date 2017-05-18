@@ -42,7 +42,6 @@ public class NotaEmitidaBuilder {
     private ListaDePreco listaDePreco;
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private Credito credito;
     private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
     private Orcamento orcamento;
@@ -98,11 +97,6 @@ public class NotaEmitidaBuilder {
 
     public NotaEmitidaBuilder comFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         this.formaDeRecebimento = formaDeRecebimento;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comCredito(Credito credito) {
-        this.credito = credito;
         return this;
     }
 
@@ -184,7 +178,7 @@ public class NotaEmitidaBuilder {
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

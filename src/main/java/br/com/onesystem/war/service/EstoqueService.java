@@ -75,9 +75,9 @@ public class EstoqueService implements Serializable {
             for (SaldoDeEstoque saldo : saldoDeEstoque) {
                 if (e.getDeposito().getId().equals(saldo.getDeposito().getId())) {
                     if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
-                        saldo.setSaldo(saldo.getSaldo().add(e.getQuantidade()));
-                    } else if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
                         saldo.setSaldo(saldo.getSaldo().subtract(e.getQuantidade()));
+                    } else if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
+                        saldo.setSaldo(saldo.getSaldo().add(e.getQuantidade()));
                     }
                 }
             }

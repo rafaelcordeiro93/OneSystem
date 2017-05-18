@@ -82,7 +82,6 @@ public abstract class Cobranca implements Serializable {
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira operacaoFinanceira;
 
-    @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
@@ -98,7 +97,7 @@ public abstract class Cobranca implements Serializable {
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota, Boolean entrada) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
-        this.emissao = emissao;
+        this.emissao = emissao == null ? new Date() : emissao;
         this.pessoa = pessoa;
         this.cotacao = cotacao;
         this.historico = historico;
@@ -111,7 +110,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao", "operacaoFinanceira");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
@@ -151,11 +150,12 @@ public abstract class Cobranca implements Serializable {
 
     public void geraPara(Nota nota) {
         this.nota = nota;
+        this.emissao = nota.getEmissao();
     }
 
     public Boolean getEntrada() {
         return entrada;
-    }      
+    }
 
     public Long getDias() {
         LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

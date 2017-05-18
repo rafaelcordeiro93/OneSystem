@@ -43,7 +43,6 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private Date emissao = new Date();
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private Credito credito;
     private Moeda moedaPadrao;
     private Orcamento orcamento;
     private BigDecimal desconto;
@@ -68,7 +67,6 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
         this.emissao = nota.getEmissao();
         this.cancelada = nota.isCancelada();
-        this.credito = nota.getCredito();
         this.moedaPadrao = nota.getMoedaPadrao();
         this.orcamento = nota.getOrcamento();
     }
@@ -240,14 +238,6 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return operacao;
     }
 
-    public Credito getCredito() {
-        return credito;
-    }
-
-    public void setCredito(Credito credito) {
-        this.credito = credito;
-    }
-
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
     }
@@ -416,7 +406,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
-                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
@@ -424,7 +414,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
         return new NotaEmitidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
-                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();

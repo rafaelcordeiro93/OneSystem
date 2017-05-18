@@ -41,7 +41,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Date emissao = new Date();
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private Credito credito;
     private Moeda moedaPadrao;
     private BigDecimal desconto;
     private BigDecimal acrescimo;
@@ -64,7 +63,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
         this.emissao = nota.getEmissao();
         this.cancelada = nota.isCancelada();
-        this.credito = nota.getCredito();
         this.moedaPadrao = nota.getMoedaPadrao();
     }
 
@@ -213,14 +211,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return operacao;
     }
 
-    public Credito getCredito() {
-        return credito;
-    }
-
-    public void setCredito(Credito credito) {
-        this.credito = credito;
-    }
-
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
     }
@@ -363,7 +353,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
 
   public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
-                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
@@ -371,7 +361,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
 
     public NotaRecebida construirComID() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
-                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
