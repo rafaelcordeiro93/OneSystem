@@ -16,9 +16,16 @@
                         <h2 class="BigTopic">#{l.Orcamento}</h2>
                         <div class="EmptyBox5"/>
 
-                        <p:outputLabel>#{l.Situacao}: </p:outputLabel>
-                                    <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
-                        
+                        <div class="ui-g">
+                            <p:commandButton id="importaOrcamento" action="#{selecaoOrcamentoEmDefinicaoView.abrirDialogo}" process="@this" update="@none" value="#{l.Importar_Orcamento}">
+                                <p:ajax event="dialogReturn" listener="#{orcamentoView.selecionar}" process="@this" update=":conteudo"/>
+                            </p:commandButton>                          
+                        </div>
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel>#{l.Estado}: </p:outputLabel>
+                            <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
+                        </div>
+
                         <div class="ui-fluid">
                             <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
                                          columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
@@ -39,20 +46,23 @@
                         <p:separator/>
 
                         <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
-                        <div class="ui-fluid">
+                        <div class="ui-fluid" style="#{orcamentoView.e.id eq null ? '' : 'display: none'}">
                             <p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"
                                          layout="grid" style="border:0px !important; background:none;">
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neItem" value="#{orcamentoView.itemOrcado.item}" dialog="#{selecaoItemView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
-                                        <p:ajax event="itemSelect" listener="#{orcamentoView.atribuiItemASessao()}"/>
+                                    <a:inputTextDialog id="neItem" value="#{orcamentoView.itemOrcado.item}" dialog="#{selecaoItemView}" mbView="#{orcamentoView}" update=":conteudo:growl :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputNumberDialog id="neQuantidade" value="#{orcamentoView.itemOrcado.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{orcamentoView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" readonly="true" decimalPlaces="#{orcamentoView.itemOrcado.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="."/>
+                                    <a:inputNumber id="neQuantidade" maxValue="999999999999.99" minValue="0.00" symbol="#{orcamentoView.itemOrcado.item.unidadeDeMedida.sigla} "
+                                                   placeholder="#{l.Quantidade}" styleClass="Wid90" decimalPlaces="#{orcamentoView.itemOrcado.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{orcamentoView.itemOrcado.quantidade}">
+                                        <p:ajax event="blur" update=":conteudo:ne:orcamentoItemTotal"/>
+                                    </a:inputNumber>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
@@ -87,8 +97,8 @@
                             </p:panelGrid>
                         </div>
 
-                        <p:dataTable id="itensOrcadosNota" var="itemOrcado" value="#{orcamentoView.itensOrcados}" rowKey="#{itemOrcado.id}" 
-                                     emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{orcamentoView.itemOrcadoSelecionado}">
+                        <p:dataTable id="itensOrcadosNota" var="itemOrcado" value="#{orcamentoView.e.itensOrcados}" rowKey="#{itemOrcado.id}" 
+                                     emptyMessage="#{l.Nao_Ha_Registros}" style="border: none; display: inline-block" reflow="true" selectionMode="single" selection="#{orcamentoView.itemOrcadoSelecionado}">
 
                             <p:ajax event="rowSelect" process="@this" listener="#{orcamentoView.selecionaItemOrcado}" update=":conteudo"/>
 
@@ -116,10 +126,10 @@
 
                             <p:columnGroup type="footer">
                                 <p:row>
-                                    <p:column colspan="1" footerText="#{orcamentoView.itensOrcados.size() eq 0 ? '' : orcamentoView.itensOrcados.size()}" />
+                                    <p:column colspan="1" footerText="#{orcamentoView.e.itensOrcados.size() eq 0 ? '' : orcamentoView.e.itensOrcados.size()}" />
                                     <p:column colspan="6"/>
                                     <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
-                                    <p:column colspan="2" footerText="#{orcamentoView.totalItensFormatado}"/>
+                                    <p:column colspan="2" footerText="#{orcamentoView.e.totalItensFormatado}"/>
                                 </p:row>
                             </p:columnGroup>
 
@@ -207,7 +217,7 @@
 
                         <p:commandButton value="#{l.Finalizar}" action="#{orcamentoView.finalizar}" update=":conteudo"/>
 
-                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
+                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" update=":conteudo" action="#{orcamentoView.limparJanela()}"/>
 
                     </div>
                 </div>

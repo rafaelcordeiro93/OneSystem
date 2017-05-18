@@ -75,7 +75,7 @@ public class ItemDeComanda implements Serializable {
         return unitario;
     }
 
-    public Comanda getCondicional() {
+    public Comanda getComanda() {
         return comanda;
     }
 

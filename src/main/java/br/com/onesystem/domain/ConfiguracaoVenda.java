@@ -30,12 +30,15 @@ public class ConfiguracaoVenda implements Serializable {
     @OneToOne
     private FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa;
 
+    private boolean imprimeComanda;
+
     public ConfiguracaoVenda() {
     }
 
-    public ConfiguracaoVenda(Long id, FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa) throws DadoInvalidoException {
+    public ConfiguracaoVenda(Long id, FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa, boolean imprimeComanda) throws DadoInvalidoException {
         this.id = id;
         this.formaDeRecebimentoDevolucaoEmpresa = formaDeRecebimentoDevolucaoEmpresa;
+        this.imprimeComanda = imprimeComanda;
         ehValido();
     }
 
@@ -50,6 +53,10 @@ public class ConfiguracaoVenda implements Serializable {
 
     public FormaDeRecebimento getFormaDeRecebimentoDevolucaoEmpresa() {
         return formaDeRecebimentoDevolucaoEmpresa;
+    }
+
+    public boolean isImprimeComanda() {
+        return imprimeComanda;
     }
 
     @Override
