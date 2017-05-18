@@ -361,20 +361,20 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.porcentagemDesconto = porcentagemDesconto;
     }
 
-    public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebidaBuilder().comValorPorCotacao(valorPorCotacao)
-                .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao).
-                comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .cancelada(cancelada).comCredito(credito)
-                .comMoedaPadrao(moedaPadrao).construir();
+  public NotaRecebida construir() throws DadoInvalidoException {
+        return new NotaRecebidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public NotaRecebida construirComID() throws DadoInvalidoException {
-        return new NotaRecebidaBuilder().comId(id).comValorPorCotacao(valorPorCotacao)
-                .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao)
-                .comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .comCredito(credito).cancelada(cancelada).comMoedaPadrao(moedaPadrao)
-                .construir();
+        return new NotaRecebidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

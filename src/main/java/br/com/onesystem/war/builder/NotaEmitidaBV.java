@@ -415,20 +415,19 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().comValorPorCotacao(valorPorCotacao)
-                .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao).
-                comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .cancelada(cancelada).comCredito(credito).comOrcamento(orcamento).comNotaDeOrigem(notaDeOrigem)
-                .comMoedaPadrao(moedaPadrao).construir();
+        return new NotaEmitidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
+                .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().comId(id).comValorPorCotacao(valorPorCotacao)
-                .comItens(itens).comListaDePreco(listaDePreco).comOperacao(operacao)
-                .comPessoa(pessoa).comCobrancas(cobrancas).comFormaDeRecebimento(formaDeRecebimento)
-                .comCredito(credito).comOrcamento(orcamento).comNotaDeOrigem(notaDeOrigem)
-                .cancelada(cancelada).comMoedaPadrao(moedaPadrao)
-                .construir();
+        return new NotaEmitidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+                .comCobrancas(cobrancas).comCredito(credito).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
+                .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
+                .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

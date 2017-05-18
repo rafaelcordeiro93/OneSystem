@@ -24,14 +24,9 @@ public class EstoqueDAO {
     }
 
     private void limpar() {
-        consulta = "";
+        consulta = " select e from Estoque e where e.id != 0 ";
         msg = new BundleUtil();
         parametros = new HashMap<String, Object>();
-    }
-
-    public EstoqueDAO buscarEstoques() {
-        consulta += "select e from Estoque e where e.id != 0 ";
-        return this;
     }
 
     public EstoqueDAO porItem(Item item) {
@@ -88,11 +83,7 @@ public class EstoqueDAO {
         return dataAtual;
     }
 
-    public String getConsulta() {
-        return consulta;
-    }
-
-    public List<Estoque> listaDeResultados() {
+    public List<Estoque> listaResultados() {
         List<Estoque> resultado = new ArmazemDeRegistros<Estoque>(Estoque.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
