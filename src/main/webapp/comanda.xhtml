@@ -1,0 +1,219 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="ne">
+            <div class="ui-g">
+                <div class="ui-g-10" style="margin-left: 8%">
+                    <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                        <h2 class="BigTopic">#{l.Comanda}</h2>
+                        <div class="EmptyBox5"/>
+
+                        <p:outputLabel>#{l.Situacao}: </p:outputLabel>
+                        <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
+
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neListaDePreco" value="#{comandaView.e.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{comandaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                </h:panelGrid>
+
+                            </p:panelGrid> 
+                        </div>
+
+                        <p:separator/>
+
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"
+                                         layout="grid" style="border:0px !important; background:none;">
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neItem" value="#{comandaView.itemDeComanda.item}" dialog="#{selecaoItemView}" mbView="#{comandaView}" update=":conteudo:growl :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                    </a:inputTextDialog>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputNumber id="neQuantidade" maxValue="999999999999.99" minValue="0.00" symbol="#{comandaView.itemDeComanda.item.unidadeDeMedida.sigla} "
+                                                   placeholder="#{l.Quantidade}" styleClass="Wid90" decimalPlaces="#{comandaView.itemDeComanda.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{comandaView.itemDeComanda.quantidade}">
+                                        <p:ajax event="blur" update=":conteudo:ne:comandaItemTotal"/>
+                                    </a:inputNumber>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <p:outputPanel class="md-inputfield"> 
+                                        <p:inputNumber id="comandaItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                       symbol="#{comandaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{comandaView.itemDeComanda.unitario}">
+                                            <p:ajax event="blur" update="comandaItemTotal"/>
+                                        </p:inputNumber>    
+                                        <p:outputLabel value="#{l.Valor}"/>                                        
+                                    </p:outputPanel>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">                                                                               
+                                    <p:outputLabel value="#{l.Total}"/>        
+                                    <p:inputNumber id="comandaItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
+                                                   symbol="#{comandaView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{comandaView.itemDeComanda.total}">
+                                    </p:inputNumber>                            
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
+                                    <p:spacer/>
+                                    <h:panelGrid columns="3">
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{comandaView.addItemNaLista}" style="width: 25px"
+                                                         update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{comandaView.updateItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="green-btn"/>     
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{comandaView.deleteItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="orange-btn"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:dataTable id="itensDeComandasNota" var="itemDeComanda" value="#{comandaView.itensDeComandas}" rowKey="#{itemDeComanda.id}" 
+                                     emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{comandaView.itemDeComandaSelecionado}">
+
+                            <p:ajax event="rowSelect" process="@this" listener="#{comandaView.selecionaItemDeComanda}" update=":conteudo"/>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{itemDeComanda.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Id}" sortBy="#{itemDeComanda.item.id}"  colspan="1">
+                                <h:outputText value="#{itemDeComanda.item.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" sortBy="#{itemDeComanda.item.nome}" colspan="3">
+                                <h:outputText value="#{itemDeComanda.item.nome}" />
+                            </p:column>
+                            <p:column headerText="#{l.UN}" sortBy="#{itemDeComanda.item.unidadeDeMedida.sigla}" colspan="1">
+                                <h:outputText value="#{itemDeComanda.item.unidadeDeMedida.sigla}" />
+                            </p:column>
+                            <p:column headerText="#{l.QTDE}" sortBy="#{itemDeComanda.quantidade}" >
+                                <h:outputText value="#{itemDeComanda.quantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Unitario}" sortBy="#{itemDeComanda.unitario}">
+                                <h:outputText value="#{itemDeComanda.unitario}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeComanda.total}" colspan="2" >
+                                <h:outputText value="#{itemDeComanda.total}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="1" footerText="#{comandaView.itensDeComandas.size() eq 0 ? '' : comandaView.itensDeComandas.size()}" />
+                                    <p:column colspan="6"/>
+                                    <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
+                                    <p:column colspan="2" footerText="#{comandaView.totalItensFormatado}"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+
+                        <p:separator styleClass="Wid100"/>
+
+                        <div class="ui-fluid" >
+                            <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-6"
+                                         columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+
+                                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4">
+
+                                    <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
+                                    <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
+                                                   value="#{comandaView.e.porcentagemAcrescimo}">
+                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto totalComanda" 
+                                                listener="#{comandaView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+                                    <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{comandaView.configuracao.moedaPadrao.sigla} "
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{comandaView.e.acrescimo}">
+                                        <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto totalComanda" listener="#{comandaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber>
+
+                                    <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
+                                    <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{comandaView.e.porcentagemDesconto}">
+                                        <p:ajax event="change" update="neDesconto totalComanda" listener="#{comandaView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber>                                     
+                                    <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                   symbol="#{comandaView.configuracao.moedaPadrao.sigla} "
+                                                   styleClass="Wid90" value="#{comandaView.e.desconto}">
+                                        <p:ajax event="change" update="nePDesconto totalComanda" listener="#{comandaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Despesa_Cobranca}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{comandaView.e.despesaCobranca}"
+                                                   symbol="#{comandaView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalComanda"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Frete}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{comandaView.e.frete}" symbol="#{comandaView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalComanda"/>
+                                    </p:inputNumber>    
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-8">
+
+                                    <p:outputLabel value="#{l.Total_Comanda}"/>
+                                    <p:inputNumber id="totalComanda" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{comandaView.totalComanda}" symbol="#{comandaView.configuracao.moedaPadrao.sigla} " styleClass="ui-g-12 ui-md-6 NoPadding"/>
+
+                                    <p:outputLabel value="#{l.Observacao}"/>
+                                    <p:inputTextarea rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{comandaView.e.historico}"/>
+                                    <p:spacer/>
+                                    <p:outputLabel id="display"/>
+
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:separator/>
+
+                        <p:commandButton value="#{l.Finalizar}" action="#{comandaView.informaNumeroComanda}" update=":conteudo"/>
+
+                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+        <p:dialog id="numComandaDialog" widgetVar="numeroComandaDialog" width="300px" height="180px" header="#{l.Numero_Comanda}" closable="false" resizable="false" responsive="true">
+
+            <div class="Container100 Responsive100 TexAlCenter">
+                <div class="ContainerIndent">
+                    <div class="Container100 Fs24 BoldGray FontRobotoRegular br">#{l.Numero_Comanda}</div>
+                    <p:inputNumber inputStyleClass="Fs50 FontRobotoLight Orange BorderBottom TexAlCenter" inputStyle="background-color: #ffffff; width:100% !important" value="#{comandaView.e.numeroComanda}" decimalPlaces="0" decimalSeparator="" thousandSeparator="" />
+                </div>
+            </div>
+            <p:separator/>
+            <p:commandButton value="#{l.Finalizar}" action="#{comandaView.finalizar()}" update=":conteudo"/>
+            <p:commandButton value="#{l.Fechar}" onclick="PF('numeroComandaDialog').hide()"/>
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

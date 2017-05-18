@@ -14,6 +14,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.OrcamentoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
 
     private Long id;
     private Pessoa pessoa;
-    private List<ItemOrcado> itensOrcados = new ArrayList<>();
+    private List<ItemOrcado> itensOrcados;
     private ListaDePreco listaDePreco;
     private FormaDeRecebimento formaDeRecebimento;
     private Cotacao cotacao;
@@ -40,6 +41,65 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     private BigDecimal frete;
     private BigDecimal porcentagemAcrescimo;
     private BigDecimal porcentagemDesconto;
+
+    public OrcamentoBV() {
+    }
+
+    public OrcamentoBV(Orcamento o) {
+        this.id = o.getId();
+        this.pessoa = o.getPessoa();
+        this.listaDePreco = o.getListaDePreco();
+        this.formaDeRecebimento = o.getFormaDeRecebimento();
+        this.cotacao = o.getCotacao();
+        this.vencimento = o.getValidade();
+        this.historico = o.getObservacao();
+        this.acrescimo = o.getAcrescimo();
+        this.desconto = o.getDesconto();
+        this.despesaCobranca = o.getDespesaCobranca();
+        this.frete = o.getFrete();
+        this.itensOrcados = o.getItensOrcados();
+    }
+
+    public void adiciona(ItemOrcadoBV item) throws DadoInvalidoException {
+        if (itensOrcados == null) {
+            itensOrcados = new ArrayList<>();
+        }
+        item.setId(getCodigoItem());
+        ItemOrcado ie = item.construirComId();
+        itensOrcados.add(ie);
+    }
+
+    public void atualiza(ItemOrcado itemSelecionado, ItemOrcado itemNovo) throws DadoInvalidoException {
+        itensOrcados.set(itensOrcados.indexOf(itemSelecionado), itemNovo);
+    }
+
+    public void remove(ItemOrcado item) {
+        itensOrcados.remove(item);
+    }
+
+    public BigDecimal getTotalItens() {
+        if (itensOrcados == null) {
+            return BigDecimal.ZERO;
+        } else {
+            return itensOrcados.stream().map(ItemOrcado::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+    }
+
+    public String getTotalItensFormatado() {
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+    }
+
+    private Long getCodigoItem() {
+        Long id = (long) 1;
+        if (!itensOrcados.isEmpty()) {
+            for (ItemOrcado dp : itensOrcados) {
+                if (dp.getId() >= id) {
+                    id = dp.getId() + 1;
+                }
+            }
+        }
+        return id;
+    }
 
     public Long getId() {
         return id;
