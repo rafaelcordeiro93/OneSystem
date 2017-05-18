@@ -41,7 +41,6 @@ public class NotaRecebidaBuilder {
     private ListaDePreco listaDePreco;
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private Credito credito;
     private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
     private List<ValorPorCotacao> valorPorCotacao;
@@ -96,11 +95,6 @@ public class NotaRecebidaBuilder {
 
     public NotaRecebidaBuilder comFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         this.formaDeRecebimento = formaDeRecebimento;
-        return this;
-    }
-
-    public NotaRecebidaBuilder comCredito(Credito credito) {
-        this.credito = credito;
         return this;
     }
 
@@ -177,7 +171,7 @@ public class NotaRecebidaBuilder {
     }
 
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

@@ -33,11 +33,11 @@ public class NotaEmitida extends Nota implements Serializable {
 
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            boolean cancelada, Credito credito, List<Cobranca> cobrancas,
+            boolean cancelada, List<Cobranca> cobrancas,
             Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
         this.orcamento = orcamento;
     }
 
@@ -51,7 +51,6 @@ public class NotaEmitida extends Nota implements Serializable {
                 + ", operacao=" + (getOperacao() != null ? getOperacao().getId() : null)
                 + ", emissao=" + getEmissao()
                 + ", cancelada=" + isCancelada()
-                + ", credito=" + getCredito()
                 + ", itensEmitidos=" + getItens()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
                 + ", listaDePreco=" + getListaDePreco()

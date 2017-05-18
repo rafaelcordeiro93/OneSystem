@@ -93,6 +93,11 @@ public class ItemDeNotaBV {
         return getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
+    public String getValorTotalListaDeQuantidadeFormatado() {
+        BigDecimal resultado = getUnitario().multiply(getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return MoedaFomatter.format(nota.getMoedaPadrao(), resultado);
+    }
+
     public int getComparaQuantidadeDevolucao() {
         BigDecimal r = getQuantidade().subtract(getTotalListaSaldoDeQuantidade());
         return r.compareTo(getTotalListaDeQuantidade());
