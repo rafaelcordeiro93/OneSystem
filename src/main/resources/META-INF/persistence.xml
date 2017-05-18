@@ -77,7 +77,9 @@
         <class>br.com.onesystem.domain.ItemDeNota</class>
         <class>br.com.onesystem.domain.Cobranca</class>
         <class>br.com.onesystem.domain.ValorPorCotacao</class>
-        <class>br.com.onesystem.doamin.ConfiguracaoVenda</class>
+        <class>br.com.onesystem.domain.ConfiguracaoVenda</class>
+        <class>br.com.onesystem.domain.Comanda</class>
+        <class>br.com.onesystem.domain.ItemDeComanda</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
