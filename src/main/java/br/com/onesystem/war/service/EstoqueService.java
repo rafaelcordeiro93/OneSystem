@@ -34,8 +34,8 @@ public class EstoqueService implements Serializable {
     public List<SaldoDeEstoque> buscaListaDeSaldoDeEstoque(Item item, Date data) {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
-        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().porItem(item).porEmissao(data).porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
-                .listaDeResultados();
+        List<Estoque> estoque = new EstoqueDAO().porItem(item).porEmissao(data).porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
+                .listaResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         for (Estoque e : estoque) {
             boolean operacao = false;
@@ -62,10 +62,10 @@ public class EstoqueService implements Serializable {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
-        List<Estoque> estoque = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
-                porNota(notaDeOrigem).listaDeResultados();
-        List<Estoque> estoqueDeDevolucao = new EstoqueDAO().buscarEstoques().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
-                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaDeResultados();
+        List<Estoque> estoque = new EstoqueDAO().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                porNota(notaDeOrigem).listaResultados();
+        List<Estoque> estoqueDeDevolucao = new EstoqueDAO().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaResultados();
 
         for (Estoque e : estoque) {
             saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));

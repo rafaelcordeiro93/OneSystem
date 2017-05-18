@@ -10,6 +10,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;

@@ -30,12 +30,12 @@ import javax.validation.constraints.NotNull;
  * @author Rafael
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_ITEMORCADO",
-        sequenceName = "SEQ_ITEMORCADO")
-public class ItemOrcado implements Serializable {
+@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_ITEMDECOMANDA",
+        sequenceName = "SEQ_ITEMDECOMANDA")
+public class ItemDeComanda implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMORCADO")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_ITEMDECOMANDA")
     private Long id;
     @NotNull(message = "{item_not_null}")
     @ManyToOne
@@ -46,16 +46,16 @@ public class ItemOrcado implements Serializable {
     @Column(nullable = false)
     private BigDecimal unitario = BigDecimal.ZERO;
     @ManyToOne
-    private Orcamento orcamento;
+    private Comanda comanda;
     @NotNull(message = "{quantidade_not_null}")
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
     private BigDecimal quantidade;
 
-    public ItemOrcado() {
+    public ItemDeComanda() {
     }
 
-    public ItemOrcado(Long id, Item item, BigDecimal valorUnitario, BigDecimal quantidade) throws DadoInvalidoException {
+    public ItemDeComanda(Long id, Item item, BigDecimal valorUnitario, BigDecimal quantidade) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.unitario = valorUnitario;
@@ -75,8 +75,8 @@ public class ItemOrcado implements Serializable {
         return unitario;
     }
 
-    public Orcamento getOrcamento() {
-        return orcamento;
+    public Comanda getCondicional() {
+        return comanda;
     }
 
     public BigDecimal getQuantidade() {
@@ -87,21 +87,21 @@ public class ItemOrcado implements Serializable {
         return getQuantidade().multiply(unitario);
     }
 
-    public void setOrcamento(Orcamento orcamento) {
-        this.orcamento = orcamento;
+    public void setComanda(Comanda comanda) {
+        this.comanda = comanda;
     }
 
     public String getTotalFormatado() {
-        if (orcamento != null) {
-            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getTotal());
+        if (comanda != null) {
+            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
     }
 
     public String getUnitarioFormatado() {
-        if (orcamento != null) {
-            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getUnitario());
+        if (comanda != null) {
+            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }
@@ -109,7 +109,7 @@ public class ItemOrcado implements Serializable {
 
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("item", "unitario", "quantidade");
-        new ValidadorDeCampos<ItemOrcado>().valida(this, campos);
+        new ValidadorDeCampos<ItemDeComanda>().valida(this, campos);
     }
 
     @Override
@@ -117,10 +117,10 @@ public class ItemOrcado implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof ItemOrcado)) {
+        if (!(objeto instanceof ItemDeComanda)) {
             return false;
         }
-        ItemOrcado outro = (ItemOrcado) objeto;
+        ItemDeComanda outro = (ItemDeComanda) objeto;
         if (this.id == null) {
             return false;
         }
@@ -129,7 +129,7 @@ public class ItemOrcado implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemOrcado{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", orcamento=" + (orcamento != null ? orcamento.getId() : null) + '}';
+        return "ItemDeComanda{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", comanda=" + (comanda != null ? comanda.getId() : null) + '}';
     }
 
 }
