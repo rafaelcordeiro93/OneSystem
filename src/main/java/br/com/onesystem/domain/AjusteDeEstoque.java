@@ -1,7 +1,9 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -56,7 +58,7 @@ public class AjusteDeEstoque implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = true)
     private BigDecimal custo;
-    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER,
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER,
             mappedBy = "ajusteDeEstoque")
     private List<Estoque> estoque;
 
@@ -64,7 +66,7 @@ public class AjusteDeEstoque implements Serializable {
     }
 
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
-            Deposito deposito, Date emissao, Operacao operacao, List<Estoque> estoque,
+            Deposito deposito, Date emissao, Operacao operacao,
             BigDecimal custo) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
@@ -75,12 +77,42 @@ public class AjusteDeEstoque implements Serializable {
         this.operacao = operacao;
         this.estoque = estoque;
         this.custo = custo;
+        atualizaEstoque();
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("item", "emissao", "quantidade", "deposito", "observacao", "custo", "operacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
+    }
+
+    public void atualizaEstoque() throws DadoInvalidoException {
+        OperacaoDeEstoqueService serv = new OperacaoDeEstoqueService();
+        List<OperacaoDeEstoque> listaOpEstoque = serv.buscarOperacoesDeEstoquePor(operacao);
+        List<Estoque> adicionar = new ArrayList<>();
+        if (estoque == null) {
+            estoque = new ArrayList<>();
+        }
+
+        for (OperacaoDeEstoque op : listaOpEstoque) {
+            boolean encontrou = false;
+            for (Estoque e : estoque) {
+                if (e.getOperacaoDeEstoque() == op) {
+                    e.atualizaQuantidade(quantidade);
+                    encontrou = true;
+                    break;
+                }
+            }
+            if (!encontrou) {
+                adicionar.add(new EstoqueBuilder().comDeposito(deposito).comItem(item).comEmissao(emissao).comQuantidade(quantidade)
+                        .comOperacaoDeEstoque(op).comAjusteDeEstoque(this).construir());
+            }
+        }
+
+        for (Estoque a : adicionar) {
+            estoque.add(a);
+        }
+
     }
 
     public Long getId() {
@@ -117,14 +149,6 @@ public class AjusteDeEstoque implements Serializable {
 
     public BigDecimal getCusto() {
         return custo;
-    }
-
-    public void preparaInclusaoDe(Estoque estoque) {
-        if (this.estoque == null) {
-            this.estoque = new ArrayList<>();
-            this.id = null;
-        }
-        this.estoque.add(estoque);
     }
 
     public String getDataFormatada() {

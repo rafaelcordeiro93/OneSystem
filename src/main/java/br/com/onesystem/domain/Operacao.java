@@ -78,7 +78,7 @@ public class Operacao implements Serializable {
     @NotNull(message = "{compra_prazo_not_null}")
     @ManyToOne
     private TipoDespesa compraAPrazo;
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, mappedBy = "operacao")
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "operacao")
     private List<OperacaoDeEstoque> operacaoDeEstoque;
     @OneToMany(mappedBy = "operacao")
     private List<Nota> notas;
@@ -87,7 +87,7 @@ public class Operacao implements Serializable {
 
     public Operacao() {
     }
-
+    
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
             TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,

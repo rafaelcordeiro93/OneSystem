@@ -5,6 +5,8 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
@@ -21,6 +23,8 @@ import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -34,6 +38,7 @@ import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,8 +47,11 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -75,6 +83,10 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
 
     @Inject
     private CotacaoService service;
+
+    @Inject
+    private CreditoService creditoService;
+    private List<Cobranca> parcelasPagas;
 
     @PostConstruct
     public void init() {
@@ -128,7 +140,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
                 if (c.getEntrada() == false) {
                     parcelas.add(new CobrancaBV(c));
                 } else if (c.getEntrada() == true && c instanceof BoletoDeCartao) {
-                   boletoDeCartao = e.getCartaoDeEntrada();
+                    boletoDeCartao = e.getCartaoDeEntrada();
                 }
             }
 
@@ -136,7 +148,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
 
     }
 
-    public BigDecimal getTotalParcelas() {
+    public BigDecimal getTotalCobrancas() {
         BigDecimal totalParcela = BigDecimal.ZERO;
 
         for (Cobranca p : e.getCobrancas()) {
@@ -150,11 +162,35 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         return totalParcela;
     }
 
+    public String getTotalCobrancasFormatado() {
+        BigDecimal totalParcelas = getTotalCobrancas();
+
+        return totalParcelas.compareTo(BigDecimal.ZERO) == 0 ? ""
+                : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcelas);
+    }
+
+    public BigDecimal getTotalParcelas() {
+        BigDecimal totalParcela = BigDecimal.ZERO;
+
+        for (CobrancaBV p : parcelas) {
+            if (p.getEntrada() == false) {
+                if (p.getCotacao() != null && p.getCotacao() != cotacao) {
+                    totalParcela = totalParcela.add(p.getValor().divide(p.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                } else {
+                    totalParcela = totalParcela.add(p.getValor());
+                }
+            }
+        }
+
+        return totalParcela;
+    }
+
     public String getTotalParcelasFormatado() {
         BigDecimal totalParcelas = getTotalParcelas();
 
         return totalParcelas.compareTo(BigDecimal.ZERO) == 0 ? ""
                 : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcelas);
+
     }
 
     public void selecionaChequeEntrada(SelectEvent event) {
@@ -241,7 +277,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
                 e.setTotalEmDinheiro(resultado);
                 break;
             case CREDITO:
-                // e.setCredito(resultado);
+                creditoBV.setValor(resultado);
                 break;
             case CHEQUE:
 //                valoresAVista.setCheque(resultado);
@@ -255,6 +291,10 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             default:
                 break;
         }
+    }
+
+    public void calculaValoresTotais() {
+        incluiValorDeFormaDeRecebimento(e.getTotalNota());
     }
 
     public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
@@ -313,16 +353,30 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
                 Integer periodicidade = e.getFormaDeRecebimento().getPeriodicidade();
 
                 if (numParcelas != null && numParcelas > 0) {
+                    BigDecimal valorParcelas = getTotalParcelas(); // variavel local para calculo do valor das parcelas
 
-                    BigDecimal soma = e.getAFaturar().add(getTotalParcelas());
-                    Money m = Money.valueOf(soma.toString(), "USD");
-                    Money[] distribute = m.distribute(numParcelas);
+                    //  cria uma lista.
+                    parcelas = new ArrayList<>();
+                    // Salva as parcelas pagas para que na persistencia possa ser comparado quais parcelas não devem ser alteradas.
+                    parcelasPagas = e.getParcelas().stream().filter(c -> c.getPossuiPagamento() == true).collect(Collectors.toList());
+                    parcelasPagas.forEach(p -> {
+                        parcelas.add(new CobrancaBV(p));
+                    });
+
+                    //Busca a parcela com o maior vencimento e adiciona na variável para criar o primeiro vencimento.
+                    Cobranca pMaiorVencimento = parcelasPagas.stream().max(Comparator.comparing(Cobranca::getVencimento)).get();
+
+                    Date primeiroVencimento = pMaiorVencimento == null ? new Date() : pMaiorVencimento.getVencimento();
 
                     // Busca o primeiro vencimento das cobranca
-                    Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
+                    Date vencimento = new DateUtil().getPeriodicidadeCalculada(primeiroVencimento, tipoPeridiocidade, periodicidade);
 
-                    parcelas = new ArrayList<>();
-                    for (int i = 0; i < numParcelas; i++) {
+                    //BUsca o valor total de soma das parcelas sem pagamento
+                    BigDecimal soma = e.getAFaturar().add(valorParcelas.subtract(parcelasPagas.stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add)));
+                    Money m = Money.valueOf(soma.toString(), "USD");
+                    Money[] distribute = m.distribute(numParcelas - parcelasPagas.size());
+
+                    for (int i = 0; i < (numParcelas - parcelasPagas.size()); i++) {
                         parcelas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(e.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(e.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
@@ -455,7 +509,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
                                 LocalDate d = LocalDate.now();
                                 d = d.plusDays(new Long(b.getNumeroDias()));
                                 boletoDeCartao.setVencimento(Date.from(d.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant()));
-                                
+
                                 break;
                             }
                         }
@@ -467,8 +521,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("entrada_cartao_not_null"));
             }
             boletoDeCartao.construir();
-           
-           
+
             recalculaValores();
 
             rc.execute("PF('detalheCartaoEntrada').hide()");
@@ -495,6 +548,13 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         }
     }
 
+    public String getSaldoDeCredito() {
+        if (e.getPessoa() != null) {
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(e.getPessoa()));
+        }
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
+    }
+
     public Configuracao getConfiguracao() {
         return configuracao;
     }
@@ -509,6 +569,14 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
 
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
+    }
+
+    public CreditoBV getCreditoBV() {
+        return creditoBV;
+    }
+
+    public void setCreditoBV(CreditoBV creditoBV) {
+        this.creditoBV = creditoBV;
     }
 
     public List<ValorPorCotacaoBV> getCotacoes() {
@@ -591,4 +659,11 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         this.chequeSelecionado = chequeSelecionado;
     }
 
+    public CreditoService getCreditoService() {
+        return creditoService;
+    }
+
+    public void setCreditoService(CreditoService creditoService) {
+        this.creditoService = creditoService;
+    }
 }
