@@ -5,13 +5,12 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.TaxaDeAdministracao;
@@ -23,7 +22,6 @@ import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
@@ -37,6 +35,7 @@ import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -50,7 +49,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -77,6 +75,8 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
     private CreditoBV creditoBV;
+    private List<Cobranca> parcelasPagas;
+    private ConfiguracaoVenda configuracaoVenda;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -86,7 +86,9 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
 
     @Inject
     private CreditoService creditoService;
-    private List<Cobranca> parcelasPagas;
+
+    @Inject
+    private ConfiguracaoVendaService configuracaoVendaService;
 
     @PostConstruct
     public void init() {
@@ -99,6 +101,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
+            configuracaoVenda = configuracaoVendaService.buscar();
             cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -126,6 +129,7 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         boletoDeCartao = new BoletoDeCartaoBV();
         creditoBV = new CreditoBV();
         limparChequeEntrada();
+        limparChequeParcelas();
         inicializaCotacoes();
         // limparChequeParcelas();
     }
@@ -460,6 +464,15 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
         cheque.setCotacao(cotacao);
     }
 
+    public void limparChequeParcelas() {
+        cobranca.setBanco(null);
+        cobranca.setAgencia(null);
+        cobranca.setNumeroCheque(null);
+        cobranca.setConta(null);
+        cobranca.setEmitente(null);
+        cobranca.setObservacao(null);
+    }
+
     public void addDetalheParcelaCheque() {
         try {
 
@@ -549,10 +562,15 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     }
 
     public String getSaldoDeCredito() {
-        if (e.getPessoa() != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(e.getPessoa()));
+        try {
+            if (e.getPessoa() != null) {
+                return MoedaFomatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(e.getPessoa()));
+            }
+            return MoedaFomatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
+        } catch (NullPointerException npe) {
+            npe.getCause();
+            return "";
         }
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
     }
 
     public Configuracao getConfiguracao() {
@@ -666,4 +684,29 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
     public void setCreditoService(CreditoService creditoService) {
         this.creditoService = creditoService;
     }
+
+    public List<Cobranca> getParcelasPagas() {
+        return parcelasPagas;
+    }
+
+    public void setParcelasPagas(List<Cobranca> parcelasPagas) {
+        this.parcelasPagas = parcelasPagas;
+    }
+
+    public ConfiguracaoVenda getConfiguracaoVenda() {
+        return configuracaoVenda;
+    }
+
+    public void setConfiguracaoVenda(ConfiguracaoVenda configuracaoVenda) {
+        this.configuracaoVenda = configuracaoVenda;
+    }
+
+    public ConfiguracaoVendaService getConfiguracaoVendaService() {
+        return configuracaoVendaService;
+    }
+
+    public void setConfiguracaoVendaService(ConfiguracaoVendaService configuracaoVendaService) {
+        this.configuracaoVendaService = configuracaoVendaService;
+    }
+
 }
