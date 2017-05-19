@@ -23,7 +23,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="usuarioID" dialog="#{selecaoUsuarioView}" mbView="#{usuarioView}" value="#{usuarioView.usuario}" update=":conteudo" converter="usuarioConverter" var="usuario" itemLabel="#{e.pessoa.email}" itemValue="#{usuario}" editVisible="false"  itemLabelTab="#{e.pessoa.email}" itemLabelTabVisible="true" onlyNumber="true"/>
+                            <a:inputTextDialog id="usuarioID" dialog="#{selecaoUsuarioView}" mbView="#{usuarioView}" value="#{usuarioView.e}" update=":conteudo" converter="usuarioConverter" var="usuario" itemLabel="#{e.id}" itemValue="#{usuario}" editVisible="false"  itemLabelTab="#{e.pessoa.email}" itemLabelTabVisible="true" onlyNumber="true"/>
                             
                              <p:outputLabel value="#{l.Pessoa}"/>
                              <a:inputTextDialog id="usuarioPessoa" value="#{usuarioView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{usuarioView}" update=":conteudo:growl" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true"/>
