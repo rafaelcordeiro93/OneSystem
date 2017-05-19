@@ -317,12 +317,25 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
             return null;
         }
     }
-    
+
     public List<Cobranca> getChequesDeEntradas() {
         if (cobrancas != null) {
             List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
             entradas.sort(Comparator.comparingLong(Cobranca::getDias));
             return entradas;
+        } else {
+            return null;
+        }
+    }
+
+    public BoletoDeCartaoBV getCartaoDeEntrada() {
+        if (cobrancas != null) {
+            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof BoletoDeCartao).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            for (Cobranca c : entradas) {
+                return new BoletoDeCartaoBV(c);
+            }
+            return null;
         } else {
             return null;
         }

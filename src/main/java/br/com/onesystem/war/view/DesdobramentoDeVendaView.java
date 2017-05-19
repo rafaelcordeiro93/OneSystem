@@ -127,8 +127,8 @@ public class DesdobramentoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmiti
             for (Cobranca c : e.getCobrancas()) {
                 if (c.getEntrada() == false) {
                     parcelas.add(new CobrancaBV(c));
-                } else if (c.getEntrada() == true && e.getFormaDeRecebimento().isEntradaEmCartao()) {
-                    // cartaoAVista = new Cartao(c);
+                } else if (c.getEntrada() == true && c instanceof BoletoDeCartao) {
+                   boletoDeCartao = e.getCartaoDeEntrada();
                 }
             }
 

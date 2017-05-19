@@ -78,15 +78,19 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     }
 
     private void lancaEstoque(AjusteDeEstoque ajusteDeEstoque) throws DadoInvalidoException {
-        for (OperacaoDeEstoque operacaoDeEstoque : ajusteDeEstoque.getOperacao().getOperacaoDeEstoque()) {
-            Estoque estoque = new EstoqueBuilder().
-                    comDeposito(ajusteDeEstoque.getDeposito()).
-                    comItem(ajusteDeEstoque.getItem()).
-                    comEmissao(ajusteDeEstoque.getEmissao()).comQuantidade(ajusteDeEstoque.getQuantidade()).
-                    comEmissao(ajusteDeEstoque.getEmissao()).
-                    comOperacaoDeEstoque(operacaoDeEstoque).
-                    comAjusteDeEstoque(ajusteDeEstoque).construir();
-            ajusteDeEstoque.preparaInclusaoDe(estoque);
+        try {
+            for (OperacaoDeEstoque operacaoDeEstoque : ajusteDeEstoque.getOperacao().getOperacaoDeEstoque()) {
+                Estoque estoque = new EstoqueBuilder().
+                        comDeposito(ajusteDeEstoque.getDeposito()).
+                        comItem(ajusteDeEstoque.getItem()).
+                        comEmissao(ajusteDeEstoque.getEmissao()).comQuantidade(ajusteDeEstoque.getQuantidade()).
+                        comEmissao(ajusteDeEstoque.getEmissao()).
+                        comOperacaoDeEstoque(operacaoDeEstoque).
+                        comAjusteDeEstoque(ajusteDeEstoque).construir();
+                ajusteDeEstoque.preparaInclusaoDe(estoque);
+            }
+        } catch (EDadoInvalidoException die) {
+            die.print();
         }
     }
 
