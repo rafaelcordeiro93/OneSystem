@@ -483,6 +483,10 @@ public class CobrancaBV implements Serializable {
         return entrada;
     }
 
+    public boolean getPossuiPagamento() {
+        return baixas == null ? false : baixas.isEmpty() ? false : true;
+    }
+
     public void setEntrada(Boolean entrada) {
         this.entrada = entrada;
     }
@@ -522,6 +526,26 @@ public class CobrancaBV implements Serializable {
 
     public Credito construirCredito() throws DadoInvalidoException {
         return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comValor(valor).comVencimento(vencimento).construir();
+    }
+
+    public Cheque construirChequeComID() throws DadoInvalidoException {
+        return new ChequeBuilder().comID(id).comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
+                .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada)
+                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
+                .construir();
+    }
+
+    public Titulo construirTituloComID() throws DadoInvalidoException {
+        return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento)
+                .comEntrada(entrada).construir();
+    }
+
+    public Credito construirCreditoComID() throws DadoInvalidoException {
+        return new CreditoBuilder().comId(id).comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comValor(valor).comVencimento(vencimento).construir();
     }

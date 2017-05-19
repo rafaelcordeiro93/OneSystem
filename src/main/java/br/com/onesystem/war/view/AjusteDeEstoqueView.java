@@ -13,8 +13,10 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +30,9 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
+
+    @Inject
+    private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @PostConstruct
     public void init() {
@@ -45,8 +50,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     public void add() {
         try {
-            AjusteDeEstoque t = e.construir();
-            lancaEstoque(t);
+            AjusteDeEstoque t = e.construir(); 
             addNoBanco(t);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -57,7 +61,6 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         try {
             if (e != null && e.getId() != null) {
                 AjusteDeEstoque t = e.construirComID();
-                lancaEstoque(t);
                 updateNoBanco(t);
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
@@ -74,23 +77,6 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
             }
         } catch (DadoInvalidoException di) {
             di.print();
-        }
-    }
-
-    private void lancaEstoque(AjusteDeEstoque ajusteDeEstoque) throws DadoInvalidoException {
-        try {
-            for (OperacaoDeEstoque operacaoDeEstoque : ajusteDeEstoque.getOperacao().getOperacaoDeEstoque()) {
-                Estoque estoque = new EstoqueBuilder().
-                        comDeposito(ajusteDeEstoque.getDeposito()).
-                        comItem(ajusteDeEstoque.getItem()).
-                        comEmissao(ajusteDeEstoque.getEmissao()).comQuantidade(ajusteDeEstoque.getQuantidade()).
-                        comEmissao(ajusteDeEstoque.getEmissao()).
-                        comOperacaoDeEstoque(operacaoDeEstoque).
-                        comAjusteDeEstoque(ajusteDeEstoque).construir();
-                ajusteDeEstoque.preparaInclusaoDe(estoque);
-            }
-        } catch (EDadoInvalidoException die) {
-            die.print();
         }
     }
 

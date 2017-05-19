@@ -101,25 +101,25 @@
 
                                     <p:outputLabel value="#{l.Credito}"/>
                                     <p:inputNumber id="neCredito" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCredito}"
-                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{desdobramentoDeVendaView.e.credito}"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{desdobramentoDeVendaView.creditoBV.valor}"
                                                    symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} ">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:outputLabel value="#{l.Cheque}"/>
                                     <p:inputText  id="chequeEntrada" readonly="true"  disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCheque}"
-                                                  value="#{desdobramentoDeVendaView.e.totalChequeDeEntrada}">
+                                                  value="#{desdobramentoDeVendaView.e.totalChequeDeEntradaFormatado}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputText> 
 
                                     <p:outputLabel value="#{l.Cartao}"/>
                                     <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCartao}" readonly="true"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
-                                                      value="#{desdobramentoDeVendaView.boletoDeCartao.valor}">
+                                                   value="#{desdobramentoDeVendaView.boletoDeCartao.valor}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber>
-                                    
-                                    
+
+
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
@@ -127,7 +127,8 @@
 
                                     <p:spacer height="25"/>
 
-                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCredito}"/>
+                                    <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCredito}"
+                                                     onclick="PF('consultaCredito').show()"/>
 
                                     <p:commandButton value="#{l.Cheques}" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCheque}"
                                                      onclick="PF('detalheChequeEntrada').show()"/>
@@ -157,8 +158,17 @@
                         <p:separator/>
 
 
+                        <h:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                     columnClasses="ui-g-12 ui-md-5 TexAlRight,ui-g-12 ui-md-5">
+                            <p:outputLabel value="#{l.Parcelas}"/>
+                            <p:inputNumber id="neNumeroParcelas" value="#{desdobramentoDeVendaView.e.numeroParcelas}"
+                                           maxValue="#{desdobramentoDeVendaView.e.formaDeRecebimento.maximoDeParcelas.intValue()}" minValue="#{desdobramentoDeVendaView.e.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90">
+                                <p:ajax event="blur" listener="#{desdobramentoDeVendaView.criaParcelas}" update=":conteudo:ne:neParcelas :conteudo:ne:neAFaturar :conteudo:growl"/>
+                            </p:inputNumber>
+                        </h:panelGrid>  
 
-                        <p:dataTable id="neParcelas" var="parcelas" value="#{desdobramentoDeVendaView.parcelas}" editMode="cell" editable="true"
+
+                        <p:dataTable id="neParcelas" var="parcelas" value="#{desdobramentoDeVendaView.parcelas}" editMode="cell" editable="true" rowStyleClass="#{parcelas.possuiPagamento eq true ? 'rowRed' : ''}"
                                      styleClass="ui-g-2" rowKey="#{parcelas.id}"
                                      paginatorAlwaysVisible="false" rows="12" paginator="true"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -171,7 +181,7 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{parcelas.tipoFormaDeRecebimentoParcela}"/></f:facet>
                                     <f:facet name="input" class="Wid50">
-                                        <p:selectOneMenu  id="neParcelaModalidade" value="#{parcelas.tipoFormaDeRecebimentoParcela}" converter="formaDeRecebimentoParcelaConverter" styleClass="Wid50">
+                                        <p:selectOneMenu  id="neParcelaModalidade" value="#{parcelas.tipoFormaDeRecebimentoParcela}" converter="formaDeRecebimentoParcelaConverter" styleClass="Wid50" disabled="#{parcelas.possuiPagamento}">
                                             <p:ajax update="neParcelas" listener="#{desdobramentoDeVendaView.addCartaoQuandoSelecionadoNaParcela(parcelas)}"/>                                            
                                             <f:selectItems value="#{desdobramentoDeVendaView.tiposDeFormaDeRecebimentoParcela}" var="tipoFormaDeRecebimentoParcela" itemValue="#{tipoFormaDeRecebimentoParcela}" itemLabel="#{tipoFormaDeRecebimentoParcela}"/>
                                         </p:selectOneMenu>
@@ -182,7 +192,7 @@
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText id="vencimentoParcelaFormatado" value="#{parcelas.vencimentoFormatado}"/></f:facet>
                                     <f:facet name="input">
-                                        <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{parcelas.vencimento}">
+                                        <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{parcelas.vencimento}" disabled="#{parcelas.possuiPagamento}">
                                             <p:ajax event="dateSelect" update="vencimentoParcela diasParcela diaDaSemana diasParcelaInput" listener="#{parcelas.calcularDiasDeVencimento}" />
                                         </p:calendar>
                                     </f:facet>
@@ -193,8 +203,8 @@
                                     <f:facet name="output"><h:outputText id="dcpValorTxt" value="#{parcelas.valorFormatado}"/></f:facet>
                                     <f:facet name="input">
                                         <p:inputNumber id="dcpValorInp" maxValue="999999999999.99" minValue="0.00" value="#{parcelas.valor}"
-                                                       decimalSeparator="," thousandSeparator="." styleClass="Wid90">
-                                            <p:ajax event="blur" update="neParcelas :conteudo:ne:neAFaturar"/>
+                                                       decimalSeparator="," thousandSeparator="." styleClass="Wid90" disabled="#{parcelas.possuiPagamento}">
+                                            <p:ajax event="blur" update="neParcelas :conteudo:ne:neAFaturar" listener="#{desdobramentoDeVendaView.recalculaValorAFaturar()}" />
                                         </p:inputNumber> 
                                     </f:facet>
                                 </p:cellEditor>
@@ -210,7 +220,7 @@
                                     <f:facet name="output"><h:outputText id="diasParcela" value="#{parcelas.dias}"/></f:facet>
                                     <f:facet name="input">
                                         <p:inputNumber id="diasParcelaInput" maxValue="9999999" minValue="0" value="#{parcelas.dias}" decimalPlaces="0"
-                                                       decimalSeparator="" thousandSeparator="" styleClass="Wid90">
+                                                       decimalSeparator="" thousandSeparator="" styleClass="Wid90" disabled="#{parcelas.possuiPagamento}">
                                             <p:ajax event="blur" update="vencimentoParcelaFormatado vencimentoParcela" listener="#{parcelas.calcularVencimento}"/>
                                         </p:inputNumber> 
                                     </f:facet>
@@ -221,9 +231,9 @@
                             </p:column>
 
                             <p:column headerText="+" width="5%" style="text-align: center;">
-                                <p:commandButton id="detParButton" icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
+                                <p:commandButton id="detParButton" icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px" disabled="#{parcelas.possuiPagamento}"
                                                  action="#{desdobramentoDeVendaView.detalharParcela}" update="neParcelas">
-                                    <f:setPropertyActionListener value="#{parcelas}" target="#{desdobramentoDeVendaView.parcelaSelecionada}" />
+                                    <f:setPropertyActionListener value="#{parcelas}" target="#{desdobramentoDeVendaView.cobrancaSelecionada}" />
                                 </p:commandButton>
                             </p:column>
                             <p:columnGroup type="footer">
@@ -238,10 +248,7 @@
 
                         <p:separator/>
 
-
-
-
-                        <p:commandButton value="#{l.Finalizar}" action="#{desdobramentoDeVendaView.update()}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{desdobramentoDeVendaView.validaAFaturar()}" update=":conteudo"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
 
@@ -481,6 +488,24 @@
             <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeParcela').hide()"/>           
 
         </p:dialog>
+
+
+        <p:dialog id="consultaCreditoDialog" widgetVar="consultaCredito" width="400px"  height="150px" header="#{l.Consulta_Credito}" closable="true" resizable="false" responsive="true">
+
+            <div class="Container100 Responsive100">
+                <div class="ContainerIndent">
+                    <p:outputLabel  styleClass="Container100 Fs16" value="#{l.Pessoa}: #{desdobramentoDeVendaView.e.pessoa.nome}"/>
+                    <div class="Container100 Fs20 BoldGray FontRobotoRegular br">#{l.Saldo_Disponivel_Em_Credito}</div>
+                    <div class="Container100">
+                        <h:outputText styleClass="DispBlock Fs24 FontRobotoLight Orange BorderBottom" value="#{desdobramentoDeVendaView.saldoDeCredito}"/>
+                    </div>
+                </div>
+            </div>
+            <p:separator/>
+            <p:commandButton value="#{l.Fechar}" onclick="PF('consultaCredito').hide()"/>
+        </p:dialog>
+
+
 
         <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
                   modal="true" closable="false" closeOnEscape="false" visible="false"

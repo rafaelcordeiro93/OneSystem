@@ -68,13 +68,8 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
 
-    public AjusteDeEstoqueBuilder comEstoque(List<Estoque> estoque) {
-        this.estoque = estoque;
-        return this;
-    }
-
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, emissao, operacao, estoque, custo);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, emissao, operacao, custo);
     }
 
 }
