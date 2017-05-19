@@ -17,11 +17,13 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
 import br.com.onesystem.domain.builder.ChequeBuilder;
+import br.com.onesystem.domain.builder.CreditoBuilder;
 import br.com.onesystem.domain.builder.TituloBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -516,6 +518,12 @@ public class CobrancaBV implements Serializable {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento)
                 .comEntrada(entrada).construir();
+    }
+
+    public Credito construirCredito() throws DadoInvalidoException {
+        return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comValor(valor).comVencimento(vencimento).construir();
     }
 
     public boolean equals(Object objeto) {

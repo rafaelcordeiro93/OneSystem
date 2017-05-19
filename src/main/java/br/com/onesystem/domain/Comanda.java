@@ -28,6 +28,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -68,13 +69,16 @@ public class Comanda implements Serializable {
     private BigDecimal despesaCobranca;
     @Min(value = 0, message = "{valor_frete_min}")
     private BigDecimal frete;
+    @Min(value = 0, message = "{numero_comanda_min}")
+    @Max(value = 999999, message = "{numero_comanda_max}")
+    private Integer numeroComanda;
 
     public Comanda() {
         this.estado = EstadoDeComanda.EM_DEFINICAO;
     }
 
     public Comanda(Long id, ListaDePreco listaDePreco, Cotacao cotacao, List<ItemDeComanda> itensDeComanda,
-            String observacao, BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
+            String observacao, BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, Integer numeroComanda) throws DadoInvalidoException {
         this.id = id;
         this.listaDePreco = listaDePreco;
         this.emissao = new Date();
@@ -86,22 +90,27 @@ public class Comanda implements Serializable {
         this.acrescimo = acrescimo;
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
+        this.numeroComanda = numeroComanda;
         gera(itensDeComanda);
         ehValido();
     }
 
-    private void gera(List<ItemDeComanda> itensDeComanda) {
-        itensDeComanda.forEach(i -> {
-            i.setComanda(this);
-        });
+    private void gera(List<ItemDeComanda> itensDeComanda) throws DadoInvalidoException {
+        for (ItemDeComanda i : itensDeComanda) {
+            i.paraComanda(this);
+        }
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "formaDeRecebimento", "observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete");
+        List<String> campos = Arrays.asList("observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete", "numeroComanda");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
-    public void efetiva() throws DadoInvalidoException {
+    public void cancela() {
+        this.estado = EstadoDeComanda.CANCELADO;
+    }
+
+    public void efetiva() {
         this.estado = EstadoDeComanda.EFETIVADO;
     }
 
@@ -135,6 +144,10 @@ public class Comanda implements Serializable {
         } else {
             return MoedaFomatter.format(getFrete());
         }
+    }
+
+    public Integer getNumeroComanda() {
+        return numeroComanda;
     }
 
     public Long getId() {
@@ -219,7 +232,7 @@ public class Comanda implements Serializable {
 
     @Override
     public String toString() {
-        return "Comanda{" + "id=" + id + ", listaDePreco=" + listaDePreco + ", emissao=" + emissao + ", cotacao=" + cotacao +  ", observacao=" + observacao + ", estado=" + estado + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
+        return "Comanda{" + "id=" + id + ", listaDePreco=" + listaDePreco + ", emissao=" + emissao + ", cotacao=" + cotacao + ", observacao=" + observacao + ", estado=" + estado + ", desconto=" + desconto + ", acrescimo=" + acrescimo + ", despesaCobranca=" + despesaCobranca + ", frete=" + frete + '}';
     }
 
 }

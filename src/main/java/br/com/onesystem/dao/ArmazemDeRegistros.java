@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
@@ -44,7 +45,7 @@ public class ArmazemDeRegistros<T> implements Serializable {
         return null;
     }
 
-    private void adicionarParametrosNaConsulta(TypedQuery<T> query, Map<String, Object> parametros) {
+      private void adicionarParametrosNaConsulta(Query query, Map<String, Object> parametros) {
         for (Map.Entry<String, Object> map : parametros.entrySet()) {
             query.setParameter(map.getKey(), map.getValue());
         }

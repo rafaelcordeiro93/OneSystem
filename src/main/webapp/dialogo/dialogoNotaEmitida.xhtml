@@ -7,7 +7,7 @@
                 template="/WEB-INF/templateDialog.xhtml">
 
 
-    <ui:define name="title">#{l.NotaEmitida}</ui:define>
+    <ui:define name="title">#{l.Nota_Emitida}</ui:define>
 
     <ui:define name="content">      
 
@@ -19,7 +19,7 @@
 
                 <div id="orcamento" class="ui-g">
                     <p:outputLabel value="#{l.Nota_Emitida}: "/>
-                    <p:outputLabel value="#{dialogoNotaEmitidaView.notaEmitida.id}"/>
+                    <p:outputLabel value=" #{dialogoNotaEmitidaView.notaEmitida.id}"/>
                 </div>
 
                 <p:separator/>
@@ -58,18 +58,21 @@
                             <p:column headerText="#{l.QTDE}" style=" text-align: center">
                                 <h:outputText value="#{itemDeNotaBV.quantidade}" />
                             </p:column>
-                            <p:column headerText="#{l.Devolvido}" style=" text-align: center">
+                            <p:column headerText="#{l.Unitario}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.unitarioFormatado}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeNotaBV.totalFormatado}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.totalFormatado   }" />
+                            </p:column>
+                            <p:column headerText="#{dialogoNotaEmitidaView.saldoDeQuantidade}" style=" text-align: center">
                                 <h:outputText value="#{itemDeNotaBV.totalListaSaldoDeQuantidade}" />
                             </p:column>
                             <p:column headerText="#{l.A_Devolver}" style=" text-align: center">
                                 <h:outputText value="#{itemDeNotaBV.totalListaDeQuantidade}" />
                             </p:column>
-                            <p:column headerText="#{l.Unitario}" style=" text-align: center">
-                                <h:outputText value="#{itemDeNotaBV.unitarioFormatado}" />
-                            </p:column>
-                            <p:column headerText="#{l.Total}" sortBy="#{itemDeNotaBV.totalFormatado}" colspan="2" style=" text-align: center">
-                                <h:outputText value="#{itemDeNotaBV.totalFormatado   }" />
-                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeNotaBV.valorTotalListaDeQuantidadeFormatado}" style=" text-align: center">
+                                <h:outputText value="#{itemDeNotaBV.valorTotalListaDeQuantidadeFormatado   }" />
+                            </p:column>                            
 
                             <p:column headerText="+" width="7%" style="text-align: center;">
                                 <p:commandLink id="attr-btn" action="#{dialogoNotaEmitidaView.atribuiItemASessao(itemDeNotaBV)}"><i class="fa fa-plus Fs10"/></p:commandLink>
@@ -107,24 +110,84 @@
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.acrescimoFormatado}" />                             
 
-                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_NotaEmitida}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Dinheiro}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.totalEmDinheiroFormatado}" />    
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Nota}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.totalNotaFormatado}" />    
                         </div>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.descontoFormatado}" />
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Credito}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.credito.valorFormatado eq null ? dialogoNotaEmitidaView.zero : dialogoNotaEmitidaView.notaEmitida.credito.valorFormatado}" />    
                         </div>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.despesaCobrancaFormatado}" />
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cheque}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.totalChequeDeEntradaFormatado}" />    
                         </div>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.freteFormatado}" />
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cartao}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoNotaEmitidaView.notaEmitida.totalCartaoDeEntradaFormatado eq null ? dialogoNotaEmitidaView.zero : dialogoNotaEmitidaView.notaEmitida.totalCartaoDeEntradaFormatado}" />    
                         </div>                           
+
+                        <p:dataTable var="parcela" value="#{dialogoNotaEmitidaView.notaEmitida.parcelas}" 
+                                     styleClass="ui-g-2" rowKey="#{parcela.id}"
+                                     paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                            <f:facet name="header">
+                                #{l.Parcelas}
+                            </f:facet>
+
+                            <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                <h:outputText value="#{parcela.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
+                                <h:outputText value="#{dialogoNotaEmitidaView.getOrigem(parcela)}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                  
+                                <h:outputText value="#{parcela.vencimentoFormatadoSemHoras}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Valor}" width="12%">
+                                <h:outputText value="#{parcela.valorFormatado}"/>                               
+                            </p:column>                                   
+                            <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
+                                <h:outputText value="#{parcela.detalhes}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Dias}">                                
+                                <h:outputText value="#{parcela.dias}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Dia_Semana}">
+                                <h:outputText value="#{parcela.diaDaSemana}"/>
+                            </p:column>
+
+                            <p:column headerText="+" width="5%" style="text-align: center;">
+                                <p:commandButton icon="fa fa-plus" styleClass="brown-btn"  style="font-size: 10px"
+                                                 action="#{dialogoNotaEmitidaView.consultaParcela(parcela)}" update="@form">
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="3" style="text-align:right" footerText="#{l.Total}" />
+                                    <p:column footerText="#{dialogoNotaEmitidaView.notaEmitida.totalParcelasFormatado}"/>
+                                    <p:column colspan="4"/>
+                                </p:row>                                  
+                            </p:columnGroup>
+
+                        </p:dataTable>
 
                         <p:spacer width="1px"/>
 

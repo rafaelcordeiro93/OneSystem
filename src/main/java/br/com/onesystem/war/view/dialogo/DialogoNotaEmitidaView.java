@@ -2,9 +2,15 @@ package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
@@ -16,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -31,6 +38,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
     private NotaEmitida notaEmitida;
     private List<ItemDeNotaBV> ItensDeNota;
     private ItemDeNotaBV itemDeNotaBV;
+    private TipoOperacao tipoOperacao;
 
     @Inject
     private EstoqueService serviceEstoque;
@@ -40,14 +48,25 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
 
     @PostConstruct
     public void init() {
-        limparJanela();
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        notaEmitida = (NotaEmitida) session.getAttribute("onesystem.nota.token");
+        try {
+            limparJanela();
+            buscaDaSessao();
+            populaCampos();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    private void buscaDaSessao() throws FDadoInvalidoException {
+        notaEmitida = (NotaEmitida) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+        tipoOperacao = (TipoOperacao) SessionUtil.getObject("tipoOperacao", FacesContext.getCurrentInstance());
+    }
+
+    private void populaCampos() {
         if (notaEmitida != null) {
             notaEmitida.getItens().forEach((io) -> {
                 ItemDeNotaBV iobv = new ItemDeNotaBV(io);
-                List<SaldoDeEstoque> listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeDevolucao(iobv.getItem(), notaEmitida);
+                List<SaldoDeEstoque> listaDeEstoque = serviceEstoque.buscaListaDeSaldoDe(iobv.getItem(), notaEmitida, tipoOperacao);
                 List<QuantidadeDeItemPorDeposito> lista = criaLista(listaDeEstoque, iobv);
                 iobv.setListaDeQuantidade(lista);
                 ItensDeNota.add(iobv);
@@ -70,7 +89,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoDevolucaoCliente", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoNotaEmitida", opcoes, null);
     }
 
     @Override
@@ -112,22 +131,60 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
     }
 
     public void salvar() {
-        for (ItemDeNotaBV ib : ItensDeNota) {
+        try {
+            List<ItemDeNotaBV> lista = preparaItens();
+            removeDaSessao();
+            RequestContext.getCurrentInstance().closeDialog(lista);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    private List<ItemDeNotaBV> preparaItens() throws EDadoInvalidoException {
+        List<ItemDeNotaBV> lista = ItensDeNota.stream().filter(item -> item.getTotalListaDeQuantidade().compareTo(BigDecimal.ZERO) != 0).collect(Collectors.toList());
+        for (ItemDeNotaBV ib : lista) {
             if (ib.getComparaQuantidadeDevolucao() < 0) {
-                ErrorMessage.print(new BundleUtil().getMessage("Existe_Quantidade_A_Devolver_Maior_Que_Quantidade"));
-                return;
+                throw new EDadoInvalidoException(new BundleUtil().getLabel("Existe_Quantidade_A_Devolver_Maior_Que_Quantidade"));
             }
         }
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.removeAttribute("onesystem.nota.token");
-        RequestContext.getCurrentInstance().closeDialog(ItensDeNota);
+        return lista;
+    }
+
+    private void removeDaSessao() throws FDadoInvalidoException {
+        SessionUtil.remove("nota", FacesContext.getCurrentInstance());
+        SessionUtil.remove("tipoOperacao", FacesContext.getCurrentInstance());
+    }
+
+    public String getZero() {
+        if (notaEmitida != null) {
+            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+        } else {
+            return "";
+        }
     }
 
     @Override
     public void limparJanela() {
         itemDeNotaBV = new ItemDeNotaBV();
         ItensDeNota = new ArrayList<>();
+    }
+
+    public String getSaldoDeQuantidade() {
+        if (tipoOperacao == TipoOperacao.DEVOLUCAO_CLIENTE) {
+            return new BundleUtil().getLabel("Devolvido");
+        } else if (tipoOperacao == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA) {
+            return new BundleUtil().getLabel("Entregue");
+        }
+        return "";
+    }
+
+    public String getTotalQuantidade() {
+        if (tipoOperacao == TipoOperacao.DEVOLUCAO_CLIENTE) {
+            return new BundleUtil().getLabel("A_Devolver");
+        } else if (tipoOperacao == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA) {
+            return new BundleUtil().getLabel("A_Entregar");
+        }
+        return "";
     }
 
     public NotaEmitida getNotaEmitida() {

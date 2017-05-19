@@ -1,53 +1,53 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Orcamento;
+import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.valueobjects.EstadoDeOrcamento;
+import br.com.onesystem.valueobjects.EstadoDeComanda;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 
-public class OrcamentoDAO {
+public class ComandaDAO {
 
     private String consulta;
     private BundleUtil msg;
     private Map<String, Object> parametros;
 
-    public OrcamentoDAO() {
+    public ComandaDAO() {
         limpar();
     }
 
     private void limpar() {
-        consulta = "select o from Orcamento o where o.id > 0 ";
+        consulta = "select c from Comanda c where c.id > 0 ";
         msg = new BundleUtil();
         parametros = new HashMap<String, Object>();
     }
 
-    public OrcamentoDAO porId(Long id) {
-        consulta += " and o.id = :oId ";
+    public ComandaDAO porId(Long id) {
+        consulta += " and c.id = :oId ";
         parametros.put("oId", id);
         return this;
     }
 
-    public OrcamentoDAO porEstado(EstadoDeOrcamento estado) {
-        consulta += " and o.estado = :oEstado ";
+    public ComandaDAO porEstado(EstadoDeComanda estado) {
+        consulta += " and c.estado = :oEstado ";
         parametros.put("oEstado", estado);
         return this;
     }
 
-    public List<Orcamento> listaDeResultados() {
-        List<Orcamento> resultado = new ArmazemDeRegistros<Orcamento>(Orcamento.class)
+    public List<Comanda> listaDeResultados() {
+        List<Comanda> resultado = new ArmazemDeRegistros<Comanda>(Comanda.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public Orcamento resultado() throws DadoInvalidoException {
+    public Comanda resultado() throws DadoInvalidoException {
         try {
-            Orcamento resultado = new ArmazemDeRegistros<Orcamento>(Orcamento.class)
+            Comanda resultado = new ArmazemDeRegistros<Comanda>(Comanda.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;

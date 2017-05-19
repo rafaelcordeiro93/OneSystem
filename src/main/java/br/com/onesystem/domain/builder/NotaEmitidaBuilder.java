@@ -28,6 +28,7 @@ import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -42,7 +43,6 @@ public class NotaEmitidaBuilder {
     private ListaDePreco listaDePreco;
     private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
-    private Credito credito;
     private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
     private Orcamento orcamento;
@@ -72,14 +72,15 @@ public class NotaEmitidaBuilder {
 
     public NotaEmitidaBuilder comItens(List<ItemDeNota> itens) throws DadoInvalidoException {
         if (id == null) {
-            if (itens != null && !itens.isEmpty()) {
-                for (ItemDeNota i : itens) {
-                    itens.set(itens.indexOf(i), new ItemDeNotaBV(i).construir());
+            List<ItemDeNota> itensCol = itens.stream().collect(Collectors.toList());
+            if (itensCol != null && !itensCol.isEmpty()) {
+                for (ItemDeNota i : itensCol) {
+                    itensCol.set(itensCol.indexOf(i), new ItemDeNotaBV(i).construir());
                 }
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
-            this.itens = itens;
+            this.itens = itensCol;
         } else {
             throw new FDadoInvalidoException(new BundleUtil().getMessage("Nao_Constroi_Itens_Nota_Existente"));
         }
@@ -98,11 +99,6 @@ public class NotaEmitidaBuilder {
 
     public NotaEmitidaBuilder comFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         this.formaDeRecebimento = formaDeRecebimento;
-        return this;
-    }
-
-    public NotaEmitidaBuilder comCredito(Credito credito) {
-        this.credito = credito;
         return this;
     }
 
@@ -177,14 +173,14 @@ public class NotaEmitidaBuilder {
         this.aFaturar = aFaturar;
         return this;
     }
-    
+
     public NotaEmitidaBuilder comNotaDeOrigem(Nota notaDeOrigem) {
         this.notaDeOrigem = notaDeOrigem;
         return this;
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, credito, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

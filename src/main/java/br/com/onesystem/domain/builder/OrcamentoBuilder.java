@@ -12,9 +12,13 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.war.builder.ItemOrcadoBV;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,8 +54,16 @@ public class OrcamentoBuilder {
         return this;
     }
 
-    public OrcamentoBuilder comItensOrcados(List<ItemOrcado> itensOrcados) {
-        this.itensOrcados = itensOrcados;
+    public OrcamentoBuilder comItensOrcados(List<ItemOrcado> itensOrcados) throws DadoInvalidoException {
+        List<ItemOrcado> lista = itensOrcados.stream().collect(Collectors.toList());
+        if (lista != null && !lista.isEmpty()) {
+            for (ItemOrcado i : lista) {
+                lista.set(lista.indexOf(i), new ItemOrcadoBV(i).construir());
+            }
+        } else {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
+        }
+        this.itensOrcados = lista;
         return this;
     }
 

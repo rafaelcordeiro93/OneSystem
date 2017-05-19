@@ -53,6 +53,12 @@ public class DadosNecessarios implements Serializable {
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
+            case "/comanda.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+//                getOperacaoDeComanda(); Implantação Futura
+                break;
+            }
             case "/relatorioDeBalancoFisico.xhtml": {
                 getMoedaPadrao();
                 getContaDeEstoque();
@@ -121,15 +127,11 @@ public class DadosNecessarios implements Serializable {
                 return null;
             }
             return conf.getFormaDeRecebimentoDevolucaoEmpresa();
-        } catch (DadoInvalidoException ex) {
+        } catch (NullPointerException npe) {
             bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
             pendencias.add(bv);
             return null;
-        } catch (NullPointerException npe){
-            bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
-            pendencias.add(bv);
-            return null;
-        }                
+        }
     }
 
     private Cotacao getCotacaoEmMoedaPadrao(Moeda moeda) {
@@ -150,6 +152,25 @@ public class DadosNecessarios implements Serializable {
             }
         } catch (DadoInvalidoException ex) {
             bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private Operacao getOperacaoDeComanda() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+
+        ConfiguracaoVendaService configuracaoVendaService = new ConfiguracaoVendaService();
+        ConfiguracaoVenda conf = configuracaoVendaService.buscar();
+        try {
+            if (conf.getOperacaoDeComanda() == null) {
+                bv.getLista().add(b.getMessage("Operacao_Comanda_Not_Null"));
+                pendencias.add(bv);
+                return null;
+            }
+            return conf.getOperacaoDeComanda();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Operacao_Comanda_Not_Null"));
             pendencias.add(bv);
             return null;
         }
