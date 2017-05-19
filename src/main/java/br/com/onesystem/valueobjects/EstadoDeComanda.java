@@ -14,6 +14,7 @@ import br.com.onesystem.util.BundleUtil;
 public enum EstadoDeComanda {
 
     EM_DEFINICAO(new BundleUtil().getLabel("EM_DEFINICAO")),
+    CANCELADO(new BundleUtil().getLabel("CANCELADO")),
     EFETIVADO(new BundleUtil().getLabel("EFETIVADO"));
 
     private String nome;

@@ -8,17 +8,19 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemOrcado;
+import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.ListaDePreco;
-import br.com.onesystem.domain.Orcamento;
-import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
-import br.com.onesystem.war.builder.ItemOrcadoBV;
-import br.com.onesystem.war.builder.OrcamentoBV;
+import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.EstadoDeComanda;
+import br.com.onesystem.war.builder.ItemDeComandaBV;
+import br.com.onesystem.war.builder.ComandaBV;
+import br.com.onesystem.war.service.ComandaService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -28,9 +30,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -39,10 +44,12 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implements Serializable {
+public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Serializable {
 
-    private ItemOrcadoBV itemOrcado;
-    private ItemOrcado itemOrcadoSelecionado;
+    private List<Comanda> comandasAbertas;
+    private ItemDeComandaBV itemDeComanda;
+    private ItemDeComanda itemDeComandaSelecionado;
+    private List<ItemDeComanda> itensDeComandas;
     private Configuracao configuracao;
     private Cotacao cotacao;
 
@@ -50,7 +57,10 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     private ConfiguracaoService configuracaoService;
 
     @Inject
-    private CotacaoService service;
+    private CotacaoService cotacaoService;
+
+    @Inject
+    private ComandaService service;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -61,6 +71,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void iniciarConfiguracoes() {
         try {
+            comandasAbertas = service.buscarComandasNo(EstadoDeComanda.EM_DEFINICAO);
             configuracao = configuracaoService.buscar();
             cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
@@ -69,10 +80,19 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     }
 
     public void limparJanela() {
-        e = new OrcamentoBV();
+        e = new ComandaBV();
         e.setCotacao(cotacao);
-        itemOrcado = new ItemOrcadoBV();
-        itemOrcadoSelecionado = new ItemOrcado();
+        itemDeComanda = new ItemDeComandaBV();
+        itensDeComandas = new ArrayList<>();
+        limpaSessao();
+    }
+
+    private void limpaSessao() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+        if (session.getAttribute("onesystem.item.token") != null) {
+            session.removeAttribute("onesystem.item.token");
+        }
     }
 
     // --------------------- Fim Inicializa Janela ----------------------------
@@ -80,12 +100,26 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     /**
      * Gera a entidade com os dados de recebimento, parcelas, itens e cotações.
      */
+    public void informaNumeroComanda() {
+        e.setNumeroComanda(comandasAbertas.stream().mapToInt(Comanda::getNumeroComanda).max().orElse(0) + 1);
+        RequestContext.getCurrentInstance().execute("PF('numeroComandaDialog').show()");
+    }
+
     public void finalizar() {
         try {
-            //Constroi o orçamento
-            Orcamento ne = e.construirComID();
+            preparaInclusaoDeItemDeComanda();
 
-            addNoBanco(ne);
+            //Constroi o orçamento
+            Comanda comanda = e.construirComID();
+
+            if (e.getNumeroComanda() == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Numero_Comanda_Not_Null"));
+            } else if (comandasAbertas.stream().anyMatch(c -> c.getNumeroComanda().equals(e.getNumeroComanda()))) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Existe_Comanda_Em_Aberto_Com_Esse_Numero_Informe_Outro"));
+            }
+
+            addNoBanco(comanda);
+
         } catch (DadoInvalidoException die) {
             die.printConsole();
             die.print();
@@ -95,12 +129,20 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
         }
     }
 
+    private void preparaInclusaoDeItemDeComanda() throws DadoInvalidoException {
+        for (ItemDeComanda i : itensDeComandas) {
+            e.getItensDeComanda().add(new ItemDeComandaBV(i).construir());
+        }
+    }
+
     // -------------- Fim Operações para criação da entidade ------------------
     // ----------------------------- Itens ------------------------------------
     public void addItemNaLista() {
         try {
-            e.adiciona(itemOrcado);
-            limparItemOrcado();
+            itemDeComanda.setId(getCodigoItem());
+            ItemDeComanda ie = itemDeComanda.construirComId();
+            itensDeComandas.add(ie);
+            limparItemDeComanda();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -108,9 +150,10 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     public void updateItemNaLista() {
         try {
-            if (itemOrcadoSelecionado != null) {
-                e.atualiza(itemOrcadoSelecionado, itemOrcado.construirComId());
-                limparItemOrcado();
+            if (itemDeComandaSelecionado != null) {
+                itensDeComandas.set(itensDeComandas.indexOf(itemDeComandaSelecionado),
+                        itemDeComanda.construirComId());
+                limparItemDeComanda();
             }
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -118,15 +161,23 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     }
 
     public void deleteItemNaLista() {
-        if (itemOrcadoSelecionado != null) {
-            e.remove(itemOrcadoSelecionado);
-            limparItemOrcado();
+        if (itemDeComandaSelecionado != null) {
+            itensDeComandas.remove(itemDeComandaSelecionado);
+            limparItemDeComanda();
         }
     }
 
-    public void limparItemOrcado() {
-        itemOrcado = new ItemOrcadoBV();
-        itemOrcadoSelecionado = null;
+    public void limparItemDeComanda() {
+        itemDeComanda = new ItemDeComandaBV();
+        itemDeComandaSelecionado = null;
+    }
+
+    public BigDecimal getTotalItens() {
+        return itensDeComandas.stream().map(ItemDeComanda::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalItensFormatado() {
+        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     // -------------------------- Fim Itens -----------------------------------
@@ -135,23 +186,16 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         String idComponent = event.getComponent().getId();
-        if (obj instanceof Orcamento) {
-            e = new OrcamentoBV((Orcamento) obj);
-        } else if (obj instanceof Pessoa) {
-            e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof ListaDePreco) {
+        if (obj instanceof ListaDePreco) {
             e.setListaDePreco((ListaDePreco) obj);
         } else if (obj instanceof Item) {
-            itemOrcado.setItem((Item) obj);
-        } else if (obj instanceof FormaDeRecebimento) {
-            FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
-            e.setFormaDeRecebimento(formaDeRecebimento);
+            itemDeComanda.setItem((Item) obj);
         }
     }
 
-    public void selecionaItemOrcado(SelectEvent event) {
-        this.itemOrcadoSelecionado = (ItemOrcado) event.getObject();
-        this.itemOrcado = new ItemOrcadoBV(itemOrcadoSelecionado);
+    public void selecionaItemDeComanda(SelectEvent event) {
+        this.itemDeComandaSelecionado = (ItemDeComanda) event.getObject();
+        this.itemDeComanda = new ItemDeComandaBV(itemDeComandaSelecionado);
     }
 
     // ----------------------------- Fim Selecao ------------------------------
@@ -161,7 +205,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
      * porcentagem de acréscimo e desconto.
      */
     public void calculaValorAcrescimoEDesconto() {
-        BigDecimal total = e.getTotalItens();
+        BigDecimal total = getTotalItens();
         if (total.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal pAcrescimo = e.getPorcentagemAcrescimo() == null ? BigDecimal.ZERO : e.getPorcentagemAcrescimo();
             BigDecimal pDesconto = e.getPorcentagemDesconto() == null ? BigDecimal.ZERO : e.getPorcentagemDesconto();
@@ -189,7 +233,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
      * de valor de acréscimo e desconto.
      */
     public void calculaPorcentagemAcrescimoEDesconto() {
-        BigDecimal total = e.getTotalItens();
+        BigDecimal total = getTotalItens();
         if (total.compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal acrescimo = e.getAcrescimo() == null ? BigDecimal.ZERO : e.getAcrescimo();
             BigDecimal desconto = e.getDesconto() == null ? BigDecimal.ZERO : e.getDesconto();
@@ -214,45 +258,51 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     // ---------------- Fim Outras Operações da Janela ------------------------
     //----------------------- Getter Personalizados ---------------------------
-    public BigDecimal getTotalOrcamento() {
+    public BigDecimal getTotalComanda() {
         BigDecimal acrescimo = e.getAcrescimo() == null ? BigDecimal.ZERO : e.getAcrescimo();
         BigDecimal frete = e.getFrete() == null ? BigDecimal.ZERO : e.getFrete();
         BigDecimal despesaCobranca = e.getDespesaCobranca() == null ? BigDecimal.ZERO : e.getDespesaCobranca();
         BigDecimal desconto = e.getDesconto() == null ? BigDecimal.ZERO : e.getDesconto();
 
-        return e.getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
+        return getTotalItens().add(acrescimo.add(frete.add(despesaCobranca)).subtract(desconto));
+    }
+
+    private Long getCodigoItem() {
+        Long id = (long) 1;
+        if (!itensDeComandas.isEmpty()) {
+            for (ItemDeComanda dp : itensDeComandas) {
+                if (dp.getId() >= id) {
+                    id = dp.getId() + 1;
+                }
+            }
+        }
+        return id;
     }
 
     //------------------- Fim Getter Personalizados ---------------------------
     //----------------------- Getters and Setters -----------------------------
-    public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
-        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<>();
-        if (e.getFormaDeRecebimento().isParcelaEmCartao()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
-        }
-        if (e.getFormaDeRecebimento().isParcelaEmCheque()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CHEQUE);
-        }
-        if (e.getFormaDeRecebimento().isParcelaEmConta()) {
-            forma.add(TipoFormaDeRecebimentoParcela.TITULO);
-        }
-        return forma;
+    public ItemDeComandaBV getItemDeComanda() {
+        return itemDeComanda;
     }
 
-    public ItemOrcadoBV getItemOrcado() {
-        return itemOrcado;
+    public void setItemDeComanda(ItemDeComandaBV itemDeComanda) {
+        this.itemDeComanda = itemDeComanda;
     }
 
-    public void setItemOrcado(ItemOrcadoBV itemOrcado) {
-        this.itemOrcado = itemOrcado;
+    public ItemDeComanda getItemDeComandaSelecionado() {
+        return itemDeComandaSelecionado;
     }
 
-    public ItemOrcado getItemOrcadoSelecionado() {
-        return itemOrcadoSelecionado;
+    public void setItemDeComandaSelecionado(ItemDeComanda itemDeComandaSelecionado) {
+        this.itemDeComandaSelecionado = itemDeComandaSelecionado;
     }
 
-    public void setItemOrcadoSelecionado(ItemOrcado itemOrcadoSelecionado) {
-        this.itemOrcadoSelecionado = itemOrcadoSelecionado;
+    public List<ItemDeComanda> getItensDeComandas() {
+        return itensDeComandas;
+    }
+
+    public void setItensDeComandas(List<ItemDeComanda> itensDeComandas) {
+        this.itensDeComandas = itensDeComandas;
     }
 
     public Configuracao getConfiguracao() {
@@ -263,22 +313,6 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
         this.configuracao = configuracao;
     }
 
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
-    }
-
-    public CotacaoService getService() {
-        return service;
-    }
-
-    public void setService(CotacaoService service) {
-        this.service = service;
-    }
-
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -287,7 +321,29 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
         this.cotacao = cotacao;
     }
 
-}
+    public ConfiguracaoService getConfiguracaoService() {
+        return configuracaoService;
+    }
+
+    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
+        this.configuracaoService = configuracaoService;
+    }
+
+    public CotacaoService getCotacaoService() {
+        return cotacaoService;
+    }
+
+    public void setCotacaoService(CotacaoService cotacaoService) {
+        this.cotacaoService = cotacaoService;
+    }
+
+    public ComandaService getService() {
+        return service;
+    }
+
+    public void setService(ComandaService service) {
+        this.service = service;
+    }
 
 //------------------- Fim Getters and Setters -----------------------------
-
+}

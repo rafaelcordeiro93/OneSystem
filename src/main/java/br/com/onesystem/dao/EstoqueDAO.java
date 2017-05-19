@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.Calendar;
@@ -38,6 +39,12 @@ public class EstoqueDAO {
     public EstoqueDAO porContaDeEstoque(ContaDeEstoque contaDeEstoque) {
         consulta += " and e.operacaoDeEstoque.contaDeEstoque = :pContaDeEstoque";
         parametros.put("pContaDeEstoque", contaDeEstoque);
+        return this;
+    }
+
+    public EstoqueDAO porEstoqueAlterado() {
+        consulta += " and e.operacaoDeEstoque.operacaoFisica <> :pOperacaoFisica";
+        parametros.put("pOperacaoFisica", OperacaoFisica.SEM_ALTERACAO);
         return this;
     }
 

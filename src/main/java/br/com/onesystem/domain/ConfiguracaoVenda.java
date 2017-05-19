@@ -29,13 +29,20 @@ public class ConfiguracaoVenda implements Serializable {
     @NotNull(message = "{forma_recebimento_devolucao_empresa_not_null}")
     @OneToOne
     private FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa;
+    @OneToOne
+    private Operacao operacaoDeComanda;
+
+    private boolean imprimeComanda;
 
     public ConfiguracaoVenda() {
     }
 
-    public ConfiguracaoVenda(Long id, FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa) throws DadoInvalidoException {
+    public ConfiguracaoVenda(Long id, FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa, boolean imprimeComanda,
+            Operacao operacaoDeComanda) throws DadoInvalidoException {
         this.id = id;
         this.formaDeRecebimentoDevolucaoEmpresa = formaDeRecebimentoDevolucaoEmpresa;
+        this.imprimeComanda = imprimeComanda;
+        this.operacaoDeComanda = operacaoDeComanda;
         ehValido();
     }
 
@@ -50,6 +57,14 @@ public class ConfiguracaoVenda implements Serializable {
 
     public FormaDeRecebimento getFormaDeRecebimentoDevolucaoEmpresa() {
         return formaDeRecebimentoDevolucaoEmpresa;
+    }
+
+    public boolean isImprimeComanda() {
+        return imprimeComanda;
+    }
+
+    public Operacao getOperacaoDeComanda() {
+        return operacaoDeComanda;
     }
 
     @Override

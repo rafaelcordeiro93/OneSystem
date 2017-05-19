@@ -1,9 +1,7 @@
 
-import br.com.onesystem.dao.EstoqueDAO;
-import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.dao.CreditoDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoLancamento;
-import java.util.List;
+import br.com.onesystem.war.service.CreditoService;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,11 +16,10 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException, NoSuchFieldException {
 
-        EstoqueDAO dao = new EstoqueDAO();
-
-        List<Estoque> listaDeResultados = dao.porTipoDeLancamentoDeNota(TipoLancamento.EMITIDA).listaResultados();
-
-
+        CreditoService s = new CreditoService();
+        
+        s.buscarSaldo(null);
+        
     }
 
 }

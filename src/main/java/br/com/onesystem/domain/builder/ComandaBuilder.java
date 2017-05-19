@@ -28,6 +28,7 @@ public class ComandaBuilder {
     private BigDecimal desconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
+    private Integer numeroComanda;
 
     public ComandaBuilder comId(Long id) {
         this.id = id;
@@ -74,8 +75,13 @@ public class ComandaBuilder {
         return this;
     }
 
+    public ComandaBuilder comNumeroComanda(Integer numeroComanda) {
+        this.numeroComanda = numeroComanda;
+        return this;
+    }
+
     public Comanda construir() throws DadoInvalidoException {
-        return new Comanda(id, listaDePreco, cotacao, itensDeComanda, historico, desconto, acrescimo, despesaCobranca, frete);
+        return new Comanda(id, listaDePreco, cotacao, itensDeComanda, historico, desconto, acrescimo, despesaCobranca, frete, numeroComanda);
     }
 
 }

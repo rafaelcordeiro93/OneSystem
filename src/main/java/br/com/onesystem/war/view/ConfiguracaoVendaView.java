@@ -9,8 +9,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,11 +26,7 @@ public class ConfiguracaoVendaView extends BasicMBImpl<ConfiguracaoVenda, Config
 
     @PostConstruct
     public void init() {
-        try {
-            configuracao = service.buscar();
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
+        configuracao = service.buscar();
         if (configuracao == null) {
             configuracaoVendaBV = new ConfiguracaoVendaBV();
         } else {

@@ -65,8 +65,6 @@ public abstract class Nota implements Serializable {
     private boolean cancelada;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ValorPorCotacao> valorPorCotacao;
-    @OneToOne(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private Credito credito;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Cobranca> cobrancas;
     @NotNull(message = "{moeda_padrao_not_null}")
@@ -96,7 +94,7 @@ public abstract class Nota implements Serializable {
     }
 
     public Nota(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
-            FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, boolean cancelada, Credito credito,
+            FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, boolean cancelada,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
             BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
@@ -107,7 +105,6 @@ public abstract class Nota implements Serializable {
         this.formaDeRecebimento = formaDeRecebimento;
         this.listaDePreco = listaDePreco;
         this.cancelada = cancelada;
-        this.credito = credito;
         this.cobrancas = cobrancas;
         this.moedaPadrao = moedaPadrao;
         this.valorPorCotacao = valorPorCotacao;
@@ -188,10 +185,6 @@ public abstract class Nota implements Serializable {
         return cancelada;
     }
 
-    public Credito getCredito() {
-        return credito;
-    }
-
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
     }
@@ -250,7 +243,7 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getTotalParcelas() {
         if (cobrancas != null) {
-            return cobrancas.stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            return cobrancas.stream().filter(c -> c.getEntrada() == null || c.getEntrada() == false).map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         } else {
             return BigDecimal.ZERO;
         }
@@ -322,6 +315,15 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getFrete() {
         return frete;
+    }
+
+    public Credito getCredito() {
+        List<Cobranca> credito = cobrancas.stream().filter(c -> c instanceof Credito).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
+        if (credito != null && !credito.isEmpty()) {
+            return (Credito) credito.get(0);
+        } else {
+            return null;
+        }
     }
 
     public BigDecimal getaFaturar() {
