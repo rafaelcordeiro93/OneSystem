@@ -115,10 +115,11 @@
                                     <p:outputLabel value="#{l.Cartao}"/>
                                     <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!desdobramentoDeVendaView.e.formaDeRecebimento.entradaEmCartao}" readonly="true"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{desdobramentoDeVendaView.configuracao.moedaPadrao.sigla} "
-                                                   value="#{desdobramentoDeVendaView.e.totalCartaoDeEntrada}">
+                                                      value="#{desdobramentoDeVendaView.boletoDeCartao.valor}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{desdobramentoDeVendaView.recalculaValores}"/>
                                     </p:inputNumber>
-
+                                    
+                                    
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
