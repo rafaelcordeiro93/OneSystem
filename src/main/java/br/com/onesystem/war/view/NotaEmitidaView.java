@@ -105,7 +105,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private String historico;
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
-    private boolean editarItensEParcelas = false;
+    private boolean editarItensEParcelas;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -152,8 +152,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         inicializaCotacoes();
         cobrancaBV = new CobrancaBV();
         orcamento = null;
+        editarItensEParcelas = false;
         limparChequeEntrada();
-        limparChequeParcelas();
+        limparChequeParcelas(); 
         limparItemDeNota();
     }
 
@@ -553,7 +554,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 boletoDeCartao.setCartao((Cartao) obj);
             } else if (obj instanceof NotaEmitida && "importaItemNotaEmitida-btn".equals(idComponent)) {
                 importaItensDe((NotaEmitida) obj);
-            } else if (obj instanceof NotaEmitida && "importaNotaEmitida-btn".equals(idComponent)) {
+            } else if (obj instanceof NotaEmitida && ("importaNotaEmitida-btn".equals(idComponent) || "importaVendaEntregaFutura-btn".equals(idComponent))) {
                 importa((NotaEmitida) obj);
             } else if (obj instanceof Orcamento) {
                 importa((Orcamento) obj);
@@ -965,6 +966,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             forma.add(TipoFormaDeRecebimentoParcela.TITULO);
         }
         return forma;
+    }
+
+    public boolean getEntregaDeVenda() {
+        try {
+            return notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA;
+        } catch (NullPointerException npe) {
+            return false;
+        }
     }
 
     public void setNota(NotaEmitidaBV notaEmitida) {

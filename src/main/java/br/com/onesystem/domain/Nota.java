@@ -55,7 +55,6 @@ public abstract class Nota implements Serializable {
     @NotNull(message = "{operacao_not_null}")
     @ManyToOne
     private Operacao operacao;
-    @NotNull(message = "{forma_recebimento_not_null}")
     @ManyToOne
     private FormaDeRecebimento formaDeRecebimento;
     @ManyToOne
@@ -141,7 +140,7 @@ public abstract class Nota implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "formaDeRecebimento", "moedaPadrao");
+        List<String> campos = Arrays.asList("pessoa", "operacao", "moedaPadrao");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
