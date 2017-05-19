@@ -84,7 +84,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
         opcoes.put("width", "90%");
         opcoes.put("draggable", false);
         opcoes.put("height", 600);
-        opcoes.put("closable", false);
+        opcoes.put("closable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");

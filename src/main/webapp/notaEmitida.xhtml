@@ -60,11 +60,11 @@
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo"/>
                         </p:commandButton>
 
-                        <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid13" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
+                        <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid15" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
                             <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
                             <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
-                            <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
-                            <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
+                            <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 3}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
+                            <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaVendaEntregaFutura()" ajax="false"/>
                         </p:menuButton>
 
                         <div class="ui-fluid">
@@ -82,13 +82,13 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="nePessoa" disabled="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
+                                    <a:inputTextDialog id="nePessoa" disabledSearch="#{notaEmitidaView.editarItensEParcelas}" readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neListaDePreco" disabled="#{notaEmitidaView.editarItensEParcelas}"  value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                    <a:inputTextDialog id="neListaDePreco" disabledSearch="#{notaEmitidaView.editarItensEParcelas}"  readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
 
@@ -185,20 +185,20 @@
 
                         </p:dataTable>
 
-                        <p:separator/>
+                        <p:separator style="#{notaEmitidaView.entregaDeVenda eq true ? 'display: none;' : ''}"/>
 
-                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Forma_Recebimento}</div>
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular" style="#{notaEmitidaView.entregaDeVenda eq true ? 'display: none;' : ''}">#{l.Forma_Recebimento}</div>
 
-                        <div class="ui-fluid ui-g-12">
+                        <div class="ui-fluid ui-g-12" style="#{notaEmitidaView.entregaDeVenda eq true ? 'display: none;' : ''}">
                             <h:panelGrid columns="1" styleClass="Wid100">
                                 <p:outputLabel value="#{l.Forma_Recebimento}"/>
                                 <a:inputTextDialog styleDiv="max-width: 326px" style="max-width: 326px" id="neFormaRec" value="#{notaEmitidaView.notaEmitida.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{notaEmitidaView}" update=":conteudo" var="formaDeRecebimento" converter="formaDeRecebimentoConverter" itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" editVisible="true" readonly="true"/>
                             </h:panelGrid>
                         </div>
 
-                        <p:separator styleClass="Wid100"/>
+                        <p:separator styleClass="Wid100" style="#{notaEmitidaView.entregaDeVenda eq true ? 'display: none;' : ''}"/>
 
-                        <div class="ui-fluid" >
+                        <div class="ui-fluid" style="#{notaEmitidaView.entregaDeVenda eq true ? 'display: none;' : ''}">
                             <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-3"
                                          columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
 

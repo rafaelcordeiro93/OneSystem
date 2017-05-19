@@ -19,7 +19,7 @@ public class SessionUtil {
         if (key != null && key.trim().length() >= 3 && objeto != null && contexto != null) {
             HttpSession session = (HttpSession) contexto.getExternalContext().getSession(true);
             session.removeAttribute("minds." + key + ".key");
-            session.setAttribute(key, objeto);
+            session.setAttribute("minds." + key + ".key", objeto);
         } else {
             throw new FDadoInvalidoException("{SessaoUtil - put} Todos os campos devem ser informados.");
         }
@@ -33,7 +33,7 @@ public class SessionUtil {
             throw new FDadoInvalidoException("{SessaoUtil - getObject} Todos os campos devem ser informados.");
         }
     }
-    
+
     public static void remove(String key, FacesContext contexto) throws FDadoInvalidoException {
         if (key != null && key.trim().length() >= 3 && contexto != null) {
             HttpSession session = (HttpSession) contexto.getExternalContext().getSession(true);
