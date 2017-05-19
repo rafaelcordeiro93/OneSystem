@@ -172,22 +172,6 @@ public class CobrancaBV implements Serializable {
         this.baixas = p.getBaixas();
         this.nota = p.getNota();
         this.entrada = p.getEntrada();
-        //  this.agencia = p.get();
-        // this.conta = p.getCotacao().getConta();
-        //  this.numeroCheque = p.getNumeroCheque();
-        //  this.situacaoDeCheque = p.getSituacaoDeCheque();
-//        this.multas = p.getMultas();
-//        this.juros = p.getJuros();
-//        this.descontos = p.getDescontos();
-//        this.emitente = p.getEmitente();
-//        this.observacao = ;
-//        this.cartao = p.getCartao();
-//        this.codigoTransacao = p.getCodigoTransacao();
-//        this.situacaoDeCartao = p.getSituacaoDeCartao();
-
-//        this.recepcao = p.getRecepcao();
-        //this.dias = p.parseLong(conta)();
-        // this.cambio 
         this.moeda = p.getCotacao().getConta().getMoeda();
         this.dias = p.getDias().intValue();
 
