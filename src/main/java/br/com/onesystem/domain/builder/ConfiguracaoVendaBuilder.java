@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.FormaDeRecebimento;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 
 /**
@@ -18,6 +19,7 @@ public class ConfiguracaoVendaBuilder {
     private Long id;
     private FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa;
     private boolean gerarNumeroComanda;
+    private Operacao operacaoDeComanda;
 
     public ConfiguracaoVendaBuilder comId(Long id) {
         this.id = id;
@@ -34,8 +36,13 @@ public class ConfiguracaoVendaBuilder {
         return this;
     }
 
+    public ConfiguracaoVendaBuilder comOperacaoDeComanda(Operacao operacaoDeComanda) {
+        this.operacaoDeComanda = operacaoDeComanda;
+        return this;
+    }
+
     public ConfiguracaoVenda construir() throws DadoInvalidoException {
-        return new ConfiguracaoVenda(id, formaDeRecebimentoDevolucaoEmpresa, gerarNumeroComanda);
+        return new ConfiguracaoVenda(id, formaDeRecebimentoDevolucaoEmpresa, gerarNumeroComanda, operacaoDeComanda);
     }
 
 }

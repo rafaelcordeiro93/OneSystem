@@ -36,6 +36,7 @@ import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.util.Money;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -104,7 +105,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private String historico;
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
-    private boolean devolucao = false;
+    private boolean editarItensEParcelas = false;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -526,7 +527,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                if (operacao.getOperacaoDeEstoque().isEmpty()) {
+                if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
@@ -592,11 +593,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void setupView(Operacao operacao) {
         limparJanela();
-        if (operacao.getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
-            devolucao = true;
-        } else {
-            devolucao = false;
-        }
+        TipoOperacao tipo = operacao.getTipoOperacao();
+        editarItensEParcelas = tipo == TipoOperacao.DEVOLUCAO_CLIENTE || tipo == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA;
         notaEmitida.setOperacao(operacao);
         RequestContext.getCurrentInstance().update("conteudo");
     }
@@ -645,7 +643,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     private void importa(NotaEmitida nota) throws DadoInvalidoException {
         notaEmitidaSelecionada = nota;
-        atribuiNotaASessao(nota);
+        SessionUtil.put(nota, "nota", FacesContext.getCurrentInstance());
+        SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeNotaEmitida-btn\").click();");
     }
 
@@ -656,13 +655,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
 
-    public void atribuiNotaASessao(Nota nota) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.removeAttribute("onesystem.nota.token");
-        session.setAttribute("onesystem.nota.token", nota);
-    }
-
+//    public void atribuiNotaASessao(Nota nota) {
+//        FacesContext context = FacesContext.getCurrentInstance();
+//        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+//        session.removeAttribute("onesystem.nota.token");
+//        session.setAttribute("onesystem.nota.token", nota);
+//    }
     public void atribuiOrcamentoASessao(Orcamento orcamento) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -1137,12 +1135,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         return EstadoDeOrcamento.EFETIVADO;
     }
 
-    public boolean isDevolucao() {
-        return devolucao;
+    public boolean isEditarItensEParcelas() {
+        return editarItensEParcelas;
     }
 
-    public void setDevolucao(boolean devolucao) {
-        this.devolucao = devolucao;
+    public void setEditarItensEParcelas(boolean devolucao) {
+        this.editarItensEParcelas = devolucao;
     }
 
     public ConfiguracaoVenda getConfiguracaoVenda() {

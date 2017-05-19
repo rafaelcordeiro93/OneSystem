@@ -95,18 +95,22 @@ public class Comanda implements Serializable {
         ehValido();
     }
 
-    private void gera(List<ItemDeComanda> itensDeComanda) {
-        itensDeComanda.forEach(i -> {
-            i.setComanda(this);
-        });
+    private void gera(List<ItemDeComanda> itensDeComanda) throws DadoInvalidoException {
+        for (ItemDeComanda i : itensDeComanda) {
+            i.paraComanda(this);
+        }
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList( "observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete", "numeroComanda");
+        List<String> campos = Arrays.asList("observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete", "numeroComanda");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
-    public void efetiva() throws DadoInvalidoException {
+    public void cancela() {
+        this.estado = EstadoDeComanda.CANCELADO;
+    }
+
+    public void efetiva() {
         this.estado = EstadoDeComanda.EFETIVADO;
     }
 
