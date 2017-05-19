@@ -28,9 +28,10 @@
 
                         <div class="ui-fluid ui-g-12">
                             <h:panelGrid columns="2" styleClass="Wid30">
+                                <p:outputLabel value="#{l.Nome} :"/>
+                                <p:outputLabel value="#{desdobramentoDeVendaView.e.pessoa.nome}"> </p:outputLabel>
                                 <p:outputLabel value="#{l.Forma_Recebimento} :"/>
                                 <p:outputLabel value="#{desdobramentoDeVendaView.e.formaDeRecebimento.nome}"> </p:outputLabel>
-
                             </h:panelGrid>
                         </div>
 
@@ -249,9 +250,7 @@
                         <p:separator/>
 
                         <p:commandButton value="#{l.Atualizar}" action="#{desdobramentoDeVendaView.validaAFaturar()}" update=":conteudo"/>
-
-                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
-
+                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{desdobramentoDeVendaView.limparJanela()}" update=":conteudo"/>
                     </div>
                 </div>
             </div>
