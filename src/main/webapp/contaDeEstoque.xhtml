@@ -8,39 +8,44 @@
 
     <ui:define name="content">
         <div class="ui-g">
-            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
 
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD"> 
                     <h3 class="BigTopic" style="padding: 5% 0% 0% 3.5%" ><i class="fa fa-user-o Fs40" style="color: #848484"/> #{l.Conta_De_Estoque}</h3>
                     <div class="EmptyBox40"/>
-                    <div class="ui-fluid" style="padding: 0% 8% 0% 8%">
+                    <div style="padding: 0% 8% 0% 8%">
+                        <div class="ui-fluid">
 
-                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
-                        <p:separator/>
+                            <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                            <p:separator/>
 
-                        <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4">
 
-                            <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" update=":conteudo" value="#{contaDeEstoqueView.e}" var="contaDeEstoque" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoque.id}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true">
-                                <p:ajax event="change" listener="#{contaDeEstoqueView.selecionaConta}"/>
-                            </a:inputTextDialog>
+                                <p:outputLabel value="#{l.Id}"/>
+                                <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" update=":conteudo" value="#{contaDeEstoqueView.e}" var="contaDeEstoque" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoque.id}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true">
+                                    <p:ajax event="change" listener="#{contaDeEstoqueView.selecionaConta}"/>
+                                </a:inputTextDialog>
 
-                            <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{contaDeEstoqueView.e.nome}" maxlength="60"/>
-                        </p:panelGrid>
+                                <p:outputLabel value="#{l.Nome}"/>
+                                <p:inputText value="#{contaDeEstoqueView.e.nome}" maxlength="60"/>
+                            </p:panelGrid>
 
 
-                        <div class="EmptyBox20"/>
-                        <h4 style="font-size: 15px" >#{l.Operacao_De_Estoque}</h4>
-                        <p:separator/>
-                        <div class="EmptyBox20"/>
-                        
-                        <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
+                            <div class="EmptyBox20"/>
+                            <h4 style="font-size: 15px" >#{l.Operacao_De_Estoque}</h4>
+                            <p:separator/>
+                            <div class="EmptyBox20"/>
+
+                        </div>
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
                             <p:outputLabel value="#{l.Operacao}"/>
                             <a:inputTextDialog id="neOpera" value="#{contaDeEstoqueView.operacaoDeEstoque.operacao}" dialog="#{selecaoOperacaoView}" mbView="#{contaDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+
+                            <p:spacer/>
 
                             <p:outputLabel value="#{l.Operacao_Fisica}"/>
                             <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}">
@@ -48,17 +53,16 @@
                                 </f:selectItems>
                             </p:selectOneMenu>
 
-                            <h:panelGrid columns="3" style="margin-top: -2px" rendered="#{contaDeEstoqueView.e.id eq null ? false : true}">
-                                <p:commandButton icon="fa fa-plus Fs16 White" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
-                                <p:commandButton icon="fa fa-refresh Fs16 White" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn"/>     
-                                <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn"/>
+                            <h:panelGrid columns="3" style="margin-top: -2px">
+                                <p:commandButton icon="fa fa-plus Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
+                                <p:commandButton icon="fa fa-refresh Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn" />     
+                                <p:commandButton icon="fa fa-trash-o Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn" />
                             </h:panelGrid>
+
+
                         </p:panelGrid>
                         <div class="EmptyBox20"/>
                         <p:separator/>
-
-
-
 
                         <p:dataTable id="OperacaoDeEstoqueDT" var="operacaoDeEstoque" value="#{contaDeEstoqueView.conta.operacaoDeEstoque}" rowKey="#{operacaoDeEstoque.id}" emptyMessage="#{l.Nao_Ha_Registros}"  
                                      reflow="true" selectionMode="single" selection="#{contaDeEstoqueView.operacaoDeEstoqueSelecionado}">

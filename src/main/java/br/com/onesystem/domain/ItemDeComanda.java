@@ -5,21 +5,28 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
+import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -51,6 +58,8 @@ public class ItemDeComanda implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
     private BigDecimal quantidade;
+    @OneToMany(mappedBy = "itemDeComanda", cascade = CascadeType.ALL)
+    private List<Estoque> estoques;
 
     public ItemDeComanda() {
     }
@@ -87,8 +96,18 @@ public class ItemDeComanda implements Serializable {
         return getQuantidade().multiply(unitario);
     }
 
-    public void setComanda(Comanda comanda) {
+    public void paraComanda(Comanda comanda) throws DadoInvalidoException {
         this.comanda = comanda;
+        //Se necessário em implementação futura para retirar estoque na geração da comanda.
+//        estoques = new ArrayList<>();
+//        ConfiguracaoVenda conf = new ConfiguracaoVendaService().buscar();
+//        ConfiguracaoEstoque confEstoque = new ConfiguracaoEstoqueService().buscar();
+//        for (OperacaoDeEstoque operacaoDeEstoque : conf.getOperacaoDeComanda().getOperacaoDeEstoque()) {
+//            Estoque e = new EstoqueBuilder().comDeposito(confEstoque.getDepositoPadrao()).comQuantidade(quantidade)
+//                    .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(comanda.getEmissao()).comItemDeComanda(this).construir();
+//            // Adiciona no estoque
+//            estoques.add(e);
+//        }
     }
 
     public String getTotalFormatado() {

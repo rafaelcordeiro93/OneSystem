@@ -6,6 +6,7 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -35,7 +36,7 @@ public class EstoqueService implements Serializable {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
         List<Estoque> estoque = new EstoqueDAO().porItem(item).porEmissao(data).porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
-                .listaResultados();
+                .porEstoqueAlterado().listaResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         for (Estoque e : estoque) {
             boolean operacao = false;
@@ -58,20 +59,20 @@ public class EstoqueService implements Serializable {
         return saldoDeEstoque;
     }
 
-    public List<SaldoDeEstoque> buscaListaDeSaldoDeDevolucao(Item item, Nota notaDeOrigem) {
+    public List<SaldoDeEstoque> buscaListaDeSaldoDe(Item item, Nota notaDeOrigem, TipoOperacao operacaoDesejada) {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         List<Estoque> estoque = new EstoqueDAO().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
                 porNota(notaDeOrigem).listaResultados();
-        List<Estoque> estoqueDeDevolucao = new EstoqueDAO().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
-                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(TipoOperacao.DEVOLUCAO_CLIENTE).listaResultados();
+        List<Estoque> estoqueDaOperacao = new EstoqueDAO().porItem(item).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(operacaoDesejada).listaResultados();
 
         for (Estoque e : estoque) {
             saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
         }
 
-        for (Estoque e : estoqueDeDevolucao) {
+        for (Estoque e : estoqueDaOperacao) {
             for (SaldoDeEstoque saldo : saldoDeEstoque) {
                 if (e.getDeposito().getId().equals(saldo.getDeposito().getId())) {
                     if (e.getOperacaoDeEstoque().getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {

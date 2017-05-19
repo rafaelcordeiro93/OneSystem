@@ -18,6 +18,9 @@
             function importaNotaEmitida(){
             document.getElementById("conteudo:ne:importaNotaEmitida-btn").click();
             }
+            function importaVendaEntregaFutura(){
+            document.getElementById("conteudo:ne:importaVendaEntregaFutura-btn").click();
+            }
         </h:outputScript>
     </ui:define>
 
@@ -45,6 +48,10 @@
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
                         </p:commandButton>
 
+                        <p:commandButton id="importaVendaEntregaFutura-btn" action="#{selecaoNotaEmitidaVendaEntregaFuturaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
+                        
                         <p:commandButton id="exibeNotaEmitida-btn" action="#{dialogoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
                         </p:commandButton>
@@ -54,9 +61,10 @@
                         </p:commandButton>
 
                         <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid13" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
-                            <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.devolucao}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
-                            <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.devolucao}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
-                            <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.devolucao}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
+                            <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
+                            <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
+                            <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
+                            <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
                         </p:menuButton>
 
                         <div class="ui-fluid">
@@ -74,13 +82,13 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="nePessoa" disabled="#{notaEmitidaView.devolucao}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
+                                    <a:inputTextDialog id="nePessoa" disabled="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neListaDePreco" disabled="#{notaEmitidaView.devolucao}"  value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                    <a:inputTextDialog id="neListaDePreco" disabled="#{notaEmitidaView.editarItensEParcelas}"  value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
                                 </h:panelGrid>
 
 
@@ -91,7 +99,7 @@
                         <p:separator/>
 
                         <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
-                        <div class="ui-fluid" style="#{notaEmitidaView.devolucao eq true ? 'display: none' : ''}">
+                        <div class="ui-fluid" style="#{notaEmitidaView.editarItensEParcelas eq true ? 'display: none' : ''}">
                             <p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"
                                          layout="grid" style="border:0px !important; background:none;">
 
@@ -257,14 +265,14 @@
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
-                                    <p:outputLabel value="#{l.Cheque}" rendered="#{!notaEmitidaView.devolucao}"/>
-                                    <p:inputNumber  id="chequeEntrada" readonly="true"  disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}" rendered="#{!notaEmitidaView.devolucao}"
+                                    <p:outputLabel value="#{l.Cheque}" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
+                                    <p:inputNumber  id="chequeEntrada" readonly="true"  disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}" rendered="#{!notaEmitidaView.editarItensEParcelas}"
                                                     value="#{notaEmitidaView.notaEmitida.totalChequeDeEntrada}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator=".">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
-                                    <p:outputLabel value="#{l.Cartao}" rendered="#{!notaEmitidaView.devolucao}"/>
-                                    <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}" readonly="true" rendered="#{!notaEmitidaView.devolucao}"
+                                    <p:outputLabel value="#{l.Cartao}" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
+                                    <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}" readonly="true" rendered="#{!notaEmitidaView.editarItensEParcelas}"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    value="#{notaEmitidaView.boletoDeCartao.valor}">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
@@ -281,10 +289,10 @@
                                                      onclick="PF('consultaCredito').show()"/>
 
                                     <p:commandButton value="#{l.Cheques}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
-                                                     onclick="PF('detalheChequeEntrada').show()" rendered="#{!notaEmitidaView.devolucao}"/>
+                                                     onclick="PF('detalheChequeEntrada').show()" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
 
                                     <p:commandButton value="#{l.Cartao}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
-                                                     onclick="PF('detalheCartaoEntrada').show()" rendered="#{!notaEmitidaView.devolucao}"/>
+                                                     onclick="PF('detalheCartaoEntrada').show()" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
 
                                 </p:panelGrid>
 
@@ -305,19 +313,19 @@
                             </p:panelGrid>
                         </div>
 
-                        <p:separator style="#{notaEmitidaView.devolucao eq true ? 'display: none' : ''}"/>
+                        <p:separator style="#{notaEmitidaView.editarItensEParcelas eq true ? 'display: none' : ''}"/>
 
                         <h:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements" 
                                      columnClasses="ui-g-12 ui-md-5 TexAlRight,ui-g-12 ui-md-5">
-                            <p:outputLabel value="#{l.Parcelas}" rendered="#{!notaEmitidaView.devolucao}"/>
+                            <p:outputLabel value="#{l.Parcelas}" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
                             <p:inputNumber id="neNumeroParcelas" value="#{notaEmitidaView.notaEmitida.numeroParcelas}" disabled="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas eq null ? true : notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue() eq 0 ? true : false}"
-                                           maxValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue()}" minValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90" rendered="#{!notaEmitidaView.devolucao}">
+                                           maxValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.maximoDeParcelas.intValue()}" minValue="#{notaEmitidaView.notaEmitida.formaDeRecebimento.minimoDeParcelas}" decimalPlaces="0" styleClass="Wid90" rendered="#{!notaEmitidaView.editarItensEParcelas}">
                                 <p:ajax event="blur" listener="#{notaEmitidaView.criaParcelas}" update=":conteudo:ne:neParcelas :conteudo:ne:neAFaturar :conteudo:growl"/>
                             </p:inputNumber>
                         </h:panelGrid>                        
 
                         <p:dataTable id="neParcelas" var="cobrancaBV" value="#{notaEmitidaView.cobrancas}" editMode="cell" editable="true"
-                                     styleClass="ui-g-2" rowKey="#{cobrancaBV.id}" rendered="#{!notaEmitidaView.devolucao}"
+                                     styleClass="ui-g-2" rowKey="#{cobrancaBV.id}" rendered="#{!notaEmitidaView.editarItensEParcelas}"
                                      paginatorAlwaysVisible="false" rows="12" paginator="true"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
