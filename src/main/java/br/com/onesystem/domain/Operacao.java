@@ -87,7 +87,7 @@ public class Operacao implements Serializable {
 
     public Operacao() {
     }
-
+    
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
             TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,

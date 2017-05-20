@@ -90,6 +90,10 @@ public class EstoqueDAO {
         return dataAtual;
     }
 
+    public String getConsulta() {
+        return consulta;
+    }
+
     public List<Estoque> listaResultados() {
         List<Estoque> resultado = new ArmazemDeRegistros<Estoque>(Estoque.class)
                 .listaRegistrosDaConsulta(consulta, parametros);

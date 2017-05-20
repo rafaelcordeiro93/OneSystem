@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
@@ -40,8 +41,23 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.situacao = b.getSituacao();
         this.cotacao = b.getCotacao();
         this.pessoa = b.getPessoa();
-        this.operacaoFinanceira = b.getOperacaoFinanceira();        
+        this.operacaoFinanceira = b.getOperacaoFinanceira();
         this.entrada = b.getEntrada();
+    }
+
+    public BoletoDeCartaoBV(Cobranca c) {
+        this.id = c.getId();
+        this.nota = c.getNota();
+        this.cartao = ((BoletoDeCartao) c).getCartao();
+        this.emissao = c.getEmissao();
+        this.vencimento = c.getVencimento();
+        this.valor = c.getValor();
+        this.codigoTransacao = ((BoletoDeCartao) c).getCodigoTransacao();
+        this.situacao = ((BoletoDeCartao) c).getSituacao();
+        this.cotacao = c.getCotacao();
+        this.pessoa = c.getPessoa();
+        this.operacaoFinanceira = c.getOperacaoFinanceira();
+        this.entrada = c.getEntrada();
     }
 
     public BoletoDeCartaoBV() {
@@ -142,7 +158,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
     public void setEntrada(Boolean entrada) {
         this.entrada = entrada;
     }
-    
+
     public BoletoDeCartao construir() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comNota(nota).
                 comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
