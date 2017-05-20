@@ -182,6 +182,10 @@ public abstract class Cobranca implements Serializable {
         return baixas;
     }
 
+    public boolean getPossuiPagamento() {
+        return baixas == null ? false : baixas.isEmpty() ? false : true;
+    }
+
     public OperacaoFinanceira getOperacaoFinanceira() {
         return operacaoFinanceira;
     }
