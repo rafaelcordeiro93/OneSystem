@@ -22,7 +22,7 @@ public class TesteRauber {
     public static void main(String[] args) throws DadoInvalidoException, NoSuchFieldException {
 
         ItemDeComanda item = new ArmazemDeRegistros<ItemDeComanda>(ItemDeComanda.class).find(new Long(6));
-        Comanda comanda = new ArmazemDeRegistros<Comanda>(Comanda.class).find(new Long(1));
+        Comanda comanda = new ArmazemDeRegistros<Comanda>(Comanda.class).find(new Long(6));
 
         List<SaldoDeEstoque> lista = new EstoqueService().buscaListaDeSaldoDe(item, comanda, TipoOperacao.VENDA);
 

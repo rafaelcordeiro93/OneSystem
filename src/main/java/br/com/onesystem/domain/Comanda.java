@@ -207,6 +207,10 @@ public class Comanda implements Serializable {
 
     public void adiciona(NotaEmitida nota) {
         this.notasEmitidas.add(nota);
+        BigDecimal total = this.notasEmitidas.stream().map(n -> n.getItens().stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add)).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (total.equals(getItensDeComanda().stream().map(i -> i.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add))) {
+            efetiva();
+        }
     }
 
     public EstadoDeComanda getEstado() {
