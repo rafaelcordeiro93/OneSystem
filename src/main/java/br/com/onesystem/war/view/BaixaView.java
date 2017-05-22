@@ -23,6 +23,7 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.BaixaService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -38,7 +39,7 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class BaixaView implements Serializable {
+public class BaixaView extends BasicMBImpl<Baixa, BaixaBV> implements Serializable {
 
     private boolean panel;
     private BaixaBV baixa;
@@ -55,6 +56,18 @@ public class BaixaView implements Serializable {
         limparJanela();
         panel = false;
         baixaLista = service.buscarBaixas();
+    }
+
+    @Override
+    public void limparJanela() {
+        e = new BaixaBV();
+        baixa = new BaixaBV();
+        baixaSelecionada = new Baixa();
+    }
+
+    @Override
+    public void selecionar(SelectEvent event) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public void update() {
@@ -158,11 +171,6 @@ public class BaixaView implements Serializable {
     public void selecionaConta(SelectEvent event) {
         Conta contaSelecionada = (Conta) event.getObject();
 //        this.baixa.setConta(contaSelecionada);
-    }
-
-    public void limparJanela() {
-        baixa = new BaixaBV();
-        baixaSelecionada = new Baixa();
     }
 
     public boolean isPanel() {
