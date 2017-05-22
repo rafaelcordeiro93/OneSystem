@@ -2,11 +2,15 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.EstoqueDAO;
+import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -16,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EstoqueService implements Serializable {
 
@@ -72,6 +77,12 @@ public class EstoqueService implements Serializable {
             saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
         }
 
+        geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
+
+        return saldoDeEstoque;
+    }
+
+    private void geraSaldoDeEstoque(List<Estoque> estoqueDaOperacao, List<SaldoDeEstoque> saldoDeEstoque, TipoOperacao operacaoDesejada) {
         for (Estoque e : estoqueDaOperacao) {
             for (SaldoDeEstoque saldo : saldoDeEstoque) {
                 if (operacaoDesejada == TipoOperacao.DEVOLUCAO_CLIENTE) {
@@ -92,6 +103,20 @@ public class EstoqueService implements Serializable {
                     }
                 }
             }
+        }
+    }
+
+    public List<SaldoDeEstoque> buscaListaDeSaldoDe(ItemDeComanda item, Comanda comanda, TipoOperacao operacaoDesejada) throws DadoInvalidoException {
+        ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
+        ConfiguracaoEstoque conf = serv.buscar();
+
+        List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
+        saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), conf.getDepositoPadrao(), item.getQuantidade()));
+
+        if (comanda.getNotasEmitidas() != null && !comanda.getNotasEmitidas().isEmpty()) {
+            List<Estoque> estoqueDaOperacao = new EstoqueDAO().porItem(item.getItem()).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
+                    porNotasEmitidas(comanda.getNotasEmitidas()).listaResultados();
+            geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
         }
 
         return saldoDeEstoque;

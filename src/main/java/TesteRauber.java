@@ -1,7 +1,12 @@
 
-import br.com.onesystem.dao.CreditoDAO;
+import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.war.service.CreditoService;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.valueobjects.TipoOperacao;
+import br.com.onesystem.war.service.EstoqueService;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,10 +21,15 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException, NoSuchFieldException {
 
-        CreditoService s = new CreditoService();
-        
-        s.buscarSaldo(null);
-        
+        ItemDeComanda item = new ArmazemDeRegistros<ItemDeComanda>(ItemDeComanda.class).find(new Long(6));
+        Comanda comanda = new ArmazemDeRegistros<Comanda>(Comanda.class).find(new Long(1));
+
+        List<SaldoDeEstoque> lista = new EstoqueService().buscaListaDeSaldoDe(item, comanda, TipoOperacao.VENDA);
+
+        lista.forEach(System.out::println);
+
+        System.out.println("Concluiu");
+
     }
 
 }

@@ -7,7 +7,6 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
@@ -17,6 +16,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -54,6 +54,7 @@ public class NotaEmitidaBuilder {
     private BigDecimal frete;
     private BigDecimal aFaturar;
     private Nota notaDeOrigem;
+    private Comanda comanda;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -178,9 +179,14 @@ public class NotaEmitidaBuilder {
         this.notaDeOrigem = notaDeOrigem;
         return this;
     }
+    
+    public NotaEmitidaBuilder comComanda(Comanda comanda) {
+        this.comanda = comanda;
+        return this;
+    }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda);
     }
 
 }

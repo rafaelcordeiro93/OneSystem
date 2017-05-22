@@ -72,9 +72,15 @@ public class Comanda implements Serializable {
     @Min(value = 0, message = "{numero_comanda_min}")
     @Max(value = 999999, message = "{numero_comanda_max}")
     private Integer numeroComanda;
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "comanda")
+    private List<NotaEmitida> notasEmitidas;
 
     public Comanda() {
         this.estado = EstadoDeComanda.EM_DEFINICAO;
+    }
+
+    public Comanda(Long id) {
+        this.id = id;
     }
 
     public Comanda(Long id, ListaDePreco listaDePreco, Cotacao cotacao, List<ItemDeComanda> itensDeComanda,
@@ -166,6 +172,10 @@ public class Comanda implements Serializable {
         return cotacao;
     }
 
+    public List<NotaEmitida> getNotasEmitidas() {
+        return notasEmitidas;
+    }
+
     public List<ItemDeComanda> getItensDeComanda() {
         itensDeComanda.sort(Comparator.comparing(ItemDeComanda::getId));
         return itensDeComanda;
@@ -193,6 +203,10 @@ public class Comanda implements Serializable {
 
     public String getObservacao() {
         return observacao;
+    }
+
+    public void adiciona(NotaEmitida nota) {
+        this.notasEmitidas.add(nota);
     }
 
     public EstadoDeComanda getEstado() {
