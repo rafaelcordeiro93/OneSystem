@@ -80,6 +80,8 @@ public class Item implements Serializable {
     @OneToMany(mappedBy = "item")
     private List<ItemOrcado> itensOrcados;
     @OneToMany(mappedBy = "item")
+    private List<ItemDeComanda> itensDeComanda;
+    @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
     @ManyToOne
     private Margem margem;
@@ -87,6 +89,10 @@ public class Item implements Serializable {
     private Comissao comissao;
 
     public Item() {
+    }
+
+    public Item(Long id) {
+        this.id = id;
     }
 
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,

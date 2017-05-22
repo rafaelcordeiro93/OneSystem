@@ -28,6 +28,7 @@ public class ItemDeComandaBV {
     private BigDecimal quantidade;
     private List<QuantidadeDeItemPorDeposito> quantidadePorDeposito = new ArrayList<>();
     private Comanda comanda;
+    private List<QuantidadeDeItemPorDeposito> listaDeQuantidade = new ArrayList<QuantidadeDeItemPorDeposito>();
 
     public ItemDeComandaBV() {
     }
@@ -99,6 +100,32 @@ public class ItemDeComandaBV {
 
     public void setComanda(Comanda comanda) {
         this.comanda = comanda;
+    }
+
+    public List<QuantidadeDeItemPorDeposito> getListaDeQuantidade() {
+        return listaDeQuantidade;
+    }
+
+    public void setListaDeQuantidade(List<QuantidadeDeItemPorDeposito> listaDeQuantidade) {
+        this.listaDeQuantidade = listaDeQuantidade;
+    }
+
+    public BigDecimal getTotalListaSaldoDeQuantidade() {
+        return getQuantidade().subtract(getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    public BigDecimal getTotalListaDeQuantidade() {
+        return getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getValorTotalListaDeQuantidadeFormatado() {
+        BigDecimal resultado = getUnitario().multiply(getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), resultado);
+    }
+
+    public int getComparaQuantidadeDevolucao() {
+        BigDecimal r = getQuantidade().subtract(getTotalListaSaldoDeQuantidade());
+        return r.compareTo(getTotalListaDeQuantidade());
     }
 
     public BigDecimal getTotal() {

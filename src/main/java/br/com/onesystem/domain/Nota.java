@@ -295,6 +295,14 @@ public abstract class Nota implements Serializable {
     public String getTotalNotaFormatado() {
         return MoedaFomatter.format(moedaPadrao, getTotalNota());
     }
+    
+      public BigDecimal getTotalNota() {
+        BigDecimal a = acrescimo == null ? BigDecimal.ZERO : acrescimo;
+        BigDecimal f = frete == null ? BigDecimal.ZERO : frete;
+        BigDecimal c = despesaCobranca == null ? BigDecimal.ZERO : despesaCobranca;
+        BigDecimal d = desconto == null ? BigDecimal.ZERO : desconto;
+        return getTotalItens().add(a.add(f.add(c))).subtract(d);
+    }
 
     public List<ValorPorCotacao> getValorPorCotacao() {
         return valorPorCotacao;
@@ -331,14 +339,6 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
-    }
-
-    public BigDecimal getTotalNota() {
-        BigDecimal a = acrescimo == null ? BigDecimal.ZERO : acrescimo;
-        BigDecimal f = frete == null ? BigDecimal.ZERO : frete;
-        BigDecimal c = despesaCobranca == null ? BigDecimal.ZERO : despesaCobranca;
-        BigDecimal d = desconto == null ? BigDecimal.ZERO : desconto;
-        return getTotalItens().add(a.add(f.add(c))).subtract(d);
     }
 
     @Override

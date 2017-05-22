@@ -4,6 +4,10 @@ import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -54,6 +58,17 @@ public class EstoqueDAO {
         return this;
     }
 
+    public EstoqueDAO porNotasEmitidas(List<NotaEmitida> notasEmitidas) throws DadoInvalidoException {
+        if (notasEmitidas != null && !notasEmitidas.isEmpty()) {
+            consulta += " and e.itemDeNota.nota in :pNotas ";
+            parametros.put("pNotas", notasEmitidas);
+        }else{
+            throw new FDadoInvalidoException("Erro: Deve ser feito a validação de lista de notas emitida não "
+                    + "nula e não vazia antes de chamar o método porNotasEmitidas a fim de não trazer resultados incorretos");
+        }
+        return this;
+    }
+
     public EstoqueDAO porNotaDeOrigem(Nota notaDeOrigem) {
         consulta += " and e.itemDeNota.nota.notaDeOrigem = :pNotaDeOrigem";
         parametros.put("pNotaDeOrigem", notaDeOrigem);
@@ -79,6 +94,10 @@ public class EstoqueDAO {
             parametros.put("pEmissao", dataAtual.getTime());
         }
         return this;
+    }
+
+    public String getConsulta() {
+        return consulta;
     }
 
     private Calendar getDataComHoraFimdoDia(Date emissao) {

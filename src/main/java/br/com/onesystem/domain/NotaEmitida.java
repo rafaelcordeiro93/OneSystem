@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
@@ -27,6 +28,9 @@ public class NotaEmitida extends Nota implements Serializable {
     @OneToOne(cascade = {CascadeType.ALL})
     private Orcamento orcamento;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Comanda comanda;
+
     public NotaEmitida() {
         emissao = new Date();
     }
@@ -36,13 +40,25 @@ public class NotaEmitida extends Nota implements Serializable {
             boolean cancelada, List<Cobranca> cobrancas,
             Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
-            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
+            BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
+            Comanda comanda) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
         this.orcamento = orcamento;
+        this.comanda = adicionaNotaNa(comanda);
+
+    }
+
+    public Comanda adicionaNotaNa(Comanda comanda) {
+        comanda.adiciona(this);
+        return comanda;
     }
 
     public Orcamento getOrcamento() {
         return orcamento;
+    }
+
+    public Comanda getComanda() {
+        return comanda;
     }
 
     @Override

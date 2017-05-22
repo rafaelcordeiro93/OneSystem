@@ -10,6 +10,7 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Cotacao;
@@ -53,6 +54,7 @@ import br.com.onesystem.war.builder.ItemDeNotaBV;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.builder.CobrancaBV;
+import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
@@ -69,6 +71,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -106,6 +110,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
     private boolean editarItensEParcelas;
+    private Comanda comandaSelecionada;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -143,6 +148,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         notaEmitida = new NotaEmitidaBV();
         notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
         notaEmitida.setCotacao(cotacao);
+        comandaSelecionada = null;
         creditoBV = new CreditoBV();
         itemEmitido = new ItemDeNotaBV();
         boletoDeCartao = new BoletoDeCartaoBV();
@@ -154,7 +160,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         orcamento = null;
         editarItensEParcelas = false;
         limparChequeEntrada();
-        limparChequeParcelas(); 
+        limparChequeParcelas();
         limparItemDeNota();
     }
 
@@ -168,15 +174,19 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     // --------------------- Fim Inicializa Janela ----------------------------
     // -------------- Operações para criação da entidade ----------------------   
-    public void validaAFaturar() throws DadoInvalidoException {
-        // Se valor a faturar maior que zero deve exibir diálogo de confirmação
-        if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
-            RequestContext c = RequestContext.getCurrentInstance();
-            c.execute("PF('existeValorAFaturar').show()");
-        } else if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
-        } else {
-            validaDinheiro();
+    public void validaAFaturar() {
+        try {
+            // Se valor a faturar maior que zero deve exibir diálogo de confirmação
+            if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
+                RequestContext c = RequestContext.getCurrentInstance();
+                c.execute("PF('existeValorAFaturar').show()");
+            } else if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
+            } else {
+                validaDinheiro();
+            }
+        } catch (EDadoInvalidoException ex) {
+            ex.print();
         }
     }
 
@@ -323,13 +333,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Fim Operações para criação da entidade ------------------
     // ---------------------- Forma de Recebimento ----------------------------
     private void calculaTotaisFormaDeRecebimento() {
-        FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
-        if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
-                && notaEmitida.getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
-            BigDecimal cem = new BigDecimal(100);
-            BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
-            BigDecimal resultado = p.multiply(notaEmitida.getTotalNota());
-            incluiValorDeFormaDeRecebimento(resultado);
+        if (notaEmitida.getFormaDeRecebimento() != null) {
+            FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
+            if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
+                    && notaEmitida.getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
+                BigDecimal cem = new BigDecimal(100);
+                BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
+                BigDecimal resultado = p.multiply(notaEmitida.getTotalNota());
+                incluiValorDeFormaDeRecebimento(resultado);
+            }
         }
     }
 
@@ -556,6 +568,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 importaItensDe((NotaEmitida) obj);
             } else if (obj instanceof NotaEmitida && ("importaNotaEmitida-btn".equals(idComponent) || "importaVendaEntregaFutura-btn".equals(idComponent))) {
                 importa((NotaEmitida) obj);
+            } else if (obj instanceof Comanda && "importaComanda-btn".equals(idComponent)) {
+                importa((Comanda) obj);
             } else if (obj instanceof Orcamento) {
                 importa((Orcamento) obj);
             } else if (obj instanceof List && "neQuantidade-btn".equals(idComponent)) {
@@ -564,17 +578,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 itemEmitido.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
             } else if (obj instanceof List && "exibeOrcamento-btn".equals(idComponent)) {
                 List<ItemOrcadoBV> lista = (List<ItemOrcadoBV>) event.getObject();
-                for (ItemOrcadoBV i : lista) {
-                    itemEmitido.setItem(i.getItem());
-                    itemEmitido.setUnitario(i.getUnitario());
-                    itemEmitido.setListaDeQuantidade(i.getQuantidadePorDeposito());
-                    itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
-                    addItemNaLista();
+                if (!lista.isEmpty()) {
+                    for (ItemOrcadoBV i : lista) {
+                        itemEmitido.setItem(i.getItem());
+                        itemEmitido.setUnitario(i.getUnitario());
+                        itemEmitido.setListaDeQuantidade(i.getQuantidadePorDeposito());
+                        itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                        addItemNaLista();
 
+                    }
+                    populaCampos(orcamento);
                 }
-                atribuiOrcamentoANota();
             } else if (obj instanceof List && "exibeNotaEmitida-btn".equals(idComponent)) {
-                NotaEmitida nota = notaEmitidaSelecionada;
                 List<ItemDeNotaBV> lista = (List<ItemDeNotaBV>) event.getObject();
                 if (!lista.isEmpty()) {
                     for (ItemDeNotaBV i : lista) {
@@ -584,7 +599,19 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                         itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
                         addItemNaLista();
                     }
-                    populaCamposDevolucao(nota);
+                    populaCampos(notaEmitidaSelecionada);
+                }
+            } else if (obj instanceof List && "exibeComanda-btn".equals(idComponent)) {
+                List<ItemDeComandaBV> lista = (List<ItemDeComandaBV>) event.getObject();
+                if (!lista.isEmpty()) {
+                    for (ItemDeComandaBV i : lista) {
+                        itemEmitido.setItem(i.getItem());
+                        itemEmitido.setUnitario(i.getUnitario());
+                        itemEmitido.setListaDeQuantidade(i.getListaDeQuantidade());
+                        itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                        addItemNaLista();
+                    }
+                    populaCampos(comandaSelecionada);
                 }
             }
         } catch (DadoInvalidoException die) {
@@ -617,7 +644,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
-    private void atribuiOrcamentoANota() {
+    private void populaCampos(Orcamento orcamento) {
         notaEmitida.setOrcamento(orcamento);
         notaEmitida.setPessoa(orcamento.getPessoa());
         notaEmitida.setListaDePreco(orcamento.getListaDePreco());
@@ -626,18 +653,28 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         recalculaValores();
     }
 
-    private void populaCamposDevolucao(Nota nota) {
+    private void populaCampos(Nota nota) {
         notaEmitida.setNotaDeOrigem(nota);
         notaEmitida.setPessoa(nota.getPessoa());
         notaEmitida.setListaDePreco(nota.getListaDePreco());
-        notaEmitida.setFormaDeRecebimento(configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa());
+
+        if (nota.getOperacao().getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
+            notaEmitida.setFormaDeRecebimento(configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa());
+        }
         calculaTotaisFormaDeRecebimento();
         recalculaValores();
         RequestContext.getCurrentInstance().update("conteudo");
     }
 
+    private void populaCampos(Comanda comanda) {
+        notaEmitida.setComanda(comanda);
+        notaEmitida.setListaDePreco(comanda.getListaDePreco());
+        recalculaValores();
+        RequestContext.getCurrentInstance().update("conteudo");
+    }
+
     private void importa(Orcamento orcamento) throws DadoInvalidoException {
-        this.orcamento = orcamento;
+        orcamento = orcamento;
         atribuiOrcamentoASessao(orcamento);
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeOrcamento-btn\").click();");
     }
@@ -649,6 +686,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeNotaEmitida-btn\").click();");
     }
 
+    private void importa(Comanda comanda) throws DadoInvalidoException {
+        comandaSelecionada = comanda;
+        SessionUtil.put(comanda, "comanda", FacesContext.getCurrentInstance());
+        SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
+        RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeComanda-btn\").click();");
+    }
+
     public void atribuiItemASessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -656,12 +700,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
 
-//    public void atribuiNotaASessao(Nota nota) {
-//        FacesContext context = FacesContext.getCurrentInstance();
-//        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-//        session.removeAttribute("onesystem.nota.token");
-//        session.setAttribute("onesystem.nota.token", nota);
-//    }
     public void atribuiOrcamentoASessao(Orcamento orcamento) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
@@ -801,10 +839,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     public void recalculaValores() {
-        if (cobrancas.isEmpty()) {
-            recalculaValorAFaturar();
-        } else {
-            recalculaValorAFaturar();
+        recalculaValorAFaturar();
+        if (!cobrancas.isEmpty()) {
             criaParcelas();
         }
     }

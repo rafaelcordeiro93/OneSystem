@@ -15,6 +15,9 @@
             function importaOrcamento(){
             document.getElementById("conteudo:ne:importaOrcamento-btn").click();
             }
+            function importaComanda(){
+            document.getElementById("conteudo:ne:importaComanda-btn").click();
+            }
             function importaNotaEmitida(){
             document.getElementById("conteudo:ne:importaNotaEmitida-btn").click();
             }
@@ -51,7 +54,11 @@
                         <p:commandButton id="importaVendaEntregaFutura-btn" action="#{selecaoNotaEmitidaVendaEntregaFuturaView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
                         </p:commandButton>
-                        
+
+                        <p:commandButton id="importaComanda-btn" action="#{selecaoComandaEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
+
                         <p:commandButton id="exibeNotaEmitida-btn" action="#{dialogoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
                         </p:commandButton>
@@ -60,9 +67,14 @@
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo"/>
                         </p:commandButton>
 
+                        <p:commandButton id="exibeComanda-btn" action="#{dialogoComandaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
+
                         <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid15" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
                             <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
                             <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
+                            <p:menuitem value="#{l.Comanda}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa fa-superpowers" onclick="importaComanda()" ajax="false"/>
                             <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 3}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
                             <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaVendaEntregaFutura()" ajax="false"/>
                         </p:menuButton>
