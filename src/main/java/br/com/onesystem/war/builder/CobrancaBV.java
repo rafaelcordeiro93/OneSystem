@@ -119,6 +119,7 @@ public class CobrancaBV implements Serializable {
         this.tipoLancamento = p.getTipoLancamento();
         this.pessoa = p.getPessoa();
         this.entrada = p.getEntrada();
+        this.historico = p.getHistorico();
     }
 
     public CobrancaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
@@ -129,7 +130,7 @@ public class CobrancaBV implements Serializable {
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
             Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela,
-            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada) {
+            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico) {
         this.id = id;
         this.notaEmitida = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -159,6 +160,7 @@ public class CobrancaBV implements Serializable {
         this.cotacao = cotacao;
         this.pessoa = pessoa;
         this.entrada = entrada;
+        this.historico = historico;
     }
 
     public CobrancaBV(Cobranca p) {
@@ -176,7 +178,6 @@ public class CobrancaBV implements Serializable {
         this.entrada = p.getEntrada();
         this.moeda = p.getCotacao().getConta().getMoeda();
         this.dias = p.getDias().intValue();
-
         this.banco = p.getCotacao().getConta().getBanco();
 
         if (p instanceof Cheque) {
@@ -191,10 +192,7 @@ public class CobrancaBV implements Serializable {
             this.tipoLancamento = ((Cheque) p).getTipoLancamento();
             this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CHEQUE;
 
-            this.observacao = p.getHistorico(); //conferir depois
-
         } else if (p instanceof BoletoDeCartao) {
-            this.observacao = p.getHistorico();
             this.cartao = ((BoletoDeCartao) p).getCartao();
             this.codigoTransacao = ((BoletoDeCartao) p).getCodigoTransacao();
             this.situacaoDeCartao = ((BoletoDeCartao) p).getSituacao();
@@ -530,18 +528,25 @@ public class CobrancaBV implements Serializable {
                 .comValor(valor).comVencimento(vencimento).construir();
     }
 
+    public BoletoDeCartao construirBoletoDeCartaoComId() throws DadoInvalidoException {
+        return new BoletoDeCartaoBuilder().comID(id).comCartao(cartao).comCodigoTransacao(codigoTransacao)
+                .comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada)
+                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira).comNota(nota).comHistorico(historico)
+                .construir();
+    }
+
     public Cheque construirChequeComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
-                .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada)
-                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
+                .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada).comHistorico(historico)
+                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comNota(nota)
                 .construir();
     }
 
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento)
-                .comEntrada(entrada).construir();
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento)
+                .comEntrada(entrada).comNota(nota).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {
