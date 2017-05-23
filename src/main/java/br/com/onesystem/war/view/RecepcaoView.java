@@ -39,7 +39,7 @@ public class RecepcaoView implements Serializable {
     public void init() {
         limparJanela();
         panel = false;
-        recepcaoLista = service.buscarRecepcoes();
+       
     }
 
     public void add() {
@@ -103,6 +103,7 @@ public class RecepcaoView implements Serializable {
     public void limparJanela() {
         recepcao = new RecepcaoBV();
         recepcaoSelecionada = new Recepcao();
+//        recepcaoLista = service.buscarRecepcoes();
     }
 
     public void selecionaPessoa(SelectEvent event) {

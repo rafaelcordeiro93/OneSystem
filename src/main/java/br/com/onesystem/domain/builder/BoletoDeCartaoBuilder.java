@@ -22,6 +22,7 @@ public class BoletoDeCartaoBuilder {
     private Long id;
     private Nota nota;
     private Cartao cartao;
+    private String historico;
     private Date emissao;
     private Date vencimento;
     private BigDecimal valor;
@@ -101,8 +102,13 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
+    public BoletoDeCartaoBuilder comHistorico(String historico) {
+        this.historico = historico;
+        return this;
+    }
+
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, codigoTransacao, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada);
     }
 
 }
