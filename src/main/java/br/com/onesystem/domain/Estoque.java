@@ -78,6 +78,10 @@ public class Estoque implements Serializable {
         new ValidadorDeCampos<Estoque>().valida(this, campos);
     }
 
+    public void atualizaQuantidade(BigDecimal quantidade) {
+        this.quantidade = quantidade;
+    }
+
     public Long getId() {
         return id;
     }
@@ -113,7 +117,7 @@ public class Estoque implements Serializable {
     public ItemDeCondicional getItemDeCondicional() {
         return itemDeCondicional;
     }
-    
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

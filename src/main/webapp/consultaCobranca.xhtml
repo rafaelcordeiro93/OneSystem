@@ -1,0 +1,153 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4%" ><i class="fa fa-bullseye Fs40" style="color: #848484"/> #{l.Cobranca}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+                            <p:outputLabel   value="#{l.Id}:"/>
+                            <a:inputTextDialog  id="cNotaEmitida" value="#{consultaCobrancaView.cobranca}" update=":conteudo" dialog="#{selecaoCobrancaView}" mbView="#{consultaCobrancaView}" var="cobranca" converter="cobrancaConverter" itemLabel="#{cobranca.id}" itemValue="#{cobranca}" editVisible="false" onlyNumber="true"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+
+                            <p:outputLabel  value="#{l.Id_Nota}:"/> 
+                            <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.id}" />
+
+                            <p:outputLabel  value="#{l.Nota_Cancelada}:"/> 
+                            <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.cancelada eq true ? l.Sim : l.Nao}" />
+
+                            <p:outputLabel  value="#{l.Total_Nota}:"/> 
+                            <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.totalNotaFormatado}" />
+
+                            <p:outputLabel  value="#{l.Pessoa}:"/> 
+                            <p:outputLabel  value="#{consultaCobrancaView.cobranca.pessoa.nome}" />
+
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                        <p:tabView style="border: none">
+
+                            <p:tab id="item" title="#{l.Detalhes_Cobranca}">
+
+                                <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel  value="#{l.Detalhes}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.detalhes}" />
+
+                                    <p:outputLabel  value="#{l.Cotacao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.cotacao.valorFormatado}" />
+
+
+                                    <p:outputLabel  value="#{l.Emissao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.emissaoFormatadaSemHoras}" />
+
+                                    <p:outputLabel  value="#{l.Historico}:"/> 
+                                    <p:inputText  value="#{consultaCobrancaView.e.historico}" /> 
+
+                                    <p:outputLabel  value="#{l.Vencimento}:"/> 
+                                    <p:calendar value="#{consultaCobrancaView.e.vencimento}" pattern="dd/MM/yyyy" />
+
+                                    <p:outputLabel  value="#{l.Valor}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.valorFormatado}" />
+
+                                    <p:outputLabel  value="#{l.Entrada}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.entrada eq true ? l.Sim : l.Nao}" />
+
+                                    <p:outputLabel  value="#{l.Possui_Pagamento}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.cobranca.possuiPagamento eq true ? l.Sim : l.Nao}" />
+
+                                </p:panelGrid>
+
+
+                            </p:tab>
+
+
+                            <p:tab id="pagamentos" title="#{l.Baixa}">
+
+                                <p:dataTable var="baixas" value="#{consultaCobrancaView.cobranca.baixas}" 
+                                             styleClass="ui-g-2" rowKey="#{baixas.id}"
+                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                        <h:outputText value="#{baixas.id}" />
+                                    </p:column>
+                                    <p:column headerText="#{l.Desconto}" width="10%" styleClass="TexAlCenter">
+                                        <h:outputText value="#{baixas.desconto}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Multas}" width="7%" styleClass="TexAlCenter">                  
+                                        <h:outputText value="#{baixas.multas}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Despesa}" width="10%">
+                                        <h:outputText value="#{baixas.despesa}"/>                               
+                                    </p:column> 
+                                    <p:column headerText="#{l.Juros}" width="7%">
+                                        <h:outputText value="#{baixas.juros}"/>                               
+                                    </p:column>
+                                    <p:column headerText="#{l.Vencimento}" width="10%">
+                                        <h:outputText value="#{baixas.vencimento}"/>                               
+                                    </p:column>  
+                                    <p:column headerText="#{l.Historico}" width="20%" style="text-align: center;">
+                                        <h:outputText value="#{baixas.historico}"/>
+                                    </p:column>                                    
+                                    <p:column headerText="#{l.Valor}" width="10%">
+                                        <h:outputText value="#{baixas.valorFormatadoSemNegativos}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Total}" width="10%">                                
+                                        <h:outputText value="#{baixas.totalFormatado}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Cancelada}" width="10%">
+                                        <h:outputText value="#{baixas.cancelada}"/>
+                                    </p:column>
+
+
+
+                                </p:dataTable>
+
+
+                            </p:tab>
+
+                        </p:tabView>
+
+                        <div class="EmptyBox20"/>
+
+                    </div>
+
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">     
+                        <p:commandButton value=" #{l.Atualizar}"  action="#{consultaCobrancaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value=" #{l.Limpar}" action="#{consultaCobrancaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+                </div>  
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -24,6 +24,7 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
@@ -66,6 +67,7 @@ import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.EstoqueService;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -84,6 +86,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
+import org.hibernate.Hibernate;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -556,7 +559,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
+                List<OperacaoDeEstoque> operacoesDeEstoque = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(operacao);
+                if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {

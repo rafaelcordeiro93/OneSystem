@@ -7,6 +7,7 @@ import br.com.onesystem.services.Movimento;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.NumberUtils;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
@@ -115,12 +116,16 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private Recepcao recepcao;
 
-    private boolean cancelada = false;
+    @Enumerated(EnumType.STRING)
+    private EstadoDeBaixa estado;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCancelamento;
 
     public Baixa() {
     }
 
-    public Baixa(Long id, Integer numeroParcela, boolean cancelada,
+    public Baixa(Long id, Integer numeroParcela,
             BigDecimal juros, BigDecimal valor, BigDecimal multas,
             BigDecimal desconto, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
@@ -128,7 +133,7 @@ public class Baixa implements Serializable, Movimento {
             Recepcao recepcao, Cobranca parcela, MovimentoFixo movimentoFixo, ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
         this.id = id;
         this.numeroParcela = numeroParcela;
-        this.cancelada = cancelada;
+        this.estado = EstadoDeBaixa.EM_DEFINICAO;
         this.juros = juros;
         this.valor = valor;
         this.multas = multas;
@@ -257,14 +262,15 @@ public class Baixa implements Serializable, Movimento {
         return "";
     }
 
-    public void cancelar() throws EDadoInvalidoException {
+    public void cancela() throws EDadoInvalidoException {
         if (getCambio() != null) {
             throw new EDadoInvalidoException("Baixas com referências de câmbio não podem ser canceladas!");
         }
         if (parcela instanceof Titulo) {
             ((Titulo) parcela).cancelarSaldoDeBaixa(valor);
         }
-        this.cancelada = true;
+        this.estado = EstadoDeBaixa.CANCELADO;
+        this.dataCancelamento = new Date();
     }
 
     private String geraMovimentacaoReceita(BundleUtil msg) {
@@ -409,12 +415,16 @@ public class Baixa implements Serializable, Movimento {
         return null;
     }
 
-    public boolean isCancelada() {
-        return cancelada;
+    public EstadoDeBaixa getEstado() {
+        return estado;
     }
 
     public BigDecimal getJuros() {
         return juros;
+    }
+
+    public Date getDataCancelamento() {
+        return dataCancelamento;
     }
 
     public BigDecimal getMultas() {
@@ -498,7 +508,7 @@ public class Baixa implements Serializable, Movimento {
                 + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="
                 + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null)
                 + ", transferencia=" + (transferencia != null ? transferencia.getId() : null)
-                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cancelada=" + cancelada + '}';
+                + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", estado=" + estado + '}';
     }
 
 }

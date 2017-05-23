@@ -59,6 +59,7 @@ public class ParcelaBuilder {
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
     private Boolean entrada;
+    private String historico;
 
     public ParcelaBuilder comID(Long ID) {
         this.id = ID;
@@ -204,9 +205,14 @@ public class ParcelaBuilder {
         this.entrada = entrada;
         return this;
     }
+    
+     public ParcelaBuilder comHistorico(String historico){
+        this.historico = historico;
+        return this;
+    }
 
     public CobrancaBV construir() {
-        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada);
+        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico);
     }
 
 }
