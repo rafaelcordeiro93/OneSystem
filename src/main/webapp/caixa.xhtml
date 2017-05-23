@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-briefcase Fs40" style="color: #848484"/> #{l.Caixa}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <div class="EmptyBox10"/>
+
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel  rendered="#{caixaView.estado eq null? false : true}" value="#{l.Estado}: "/>
+                            <p:outputLabel rendered="#{caixaView.estado eq null? false : true}" class="#{caixaView.estado eq 'FECHADO' ?  'label label-warning' : 'label label-success'}" value="#{caixaView.estado}"/> 
+                        </div>
+
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog  id="caixaId" value="#{caixaView.e}" dialog="#{selecaoCaixaView}" 
+                                                mbView="#{caixaView}" var="caixa" converter="caixaBVConverter" itemLabel="#{caixa.id}" itemValue="#{caixa}" onlyNumber="true" editVisible="false" update="conteudo"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
+
+                            <p:outputLabel value="#{l.Usuario}"/>
+                            <p:inputText id="caixaPessoa" readonly="true"  size="51" value="#{caixaView.e.usuario.pessoa.nome}"/>
+
+                            <p:outputLabel value="#{l.Abertura}"/>
+                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{caixaView.e.abertura}"/>  
+
+                            <p:outputLabel value="#{l.Fechamento}"/>
+                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{caixaView.e.fechamento}"/> 
+
+                            <p:outputLabel value="#{l.Saldo}"/>
+                            <p:inputNumber id="Valor" maxValue="99999999999999999.99" minValue="0.00" readonly="#{caixaView.e.fechamento eq null ? false: true}" symbol="#{caixaView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" decimalSeparator="," thousandSeparator="." value="#{caixaView.e.saldo}"/>
+                          
+
+                        </p:panelGrid>
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                    </div>
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" rendered="true" action="#{caixaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Atualizar}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Fechar_Caixa}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.fecharCaixa()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{caixaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

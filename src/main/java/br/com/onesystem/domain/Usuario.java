@@ -55,6 +55,8 @@ public class Usuario implements Serializable {
     @Enumerated(EnumType.STRING)
     private TipoCorMenu corMenu;
     private boolean orientationRTL;
+    @OneToMany(mappedBy = "usuario")
+    private List<Caixa> listaCaixa;
 
     public Usuario() {
     }
@@ -108,7 +110,7 @@ public class Usuario implements Serializable {
 
     public boolean isOverlayMenu() {
         return overlayMenu;
-    }   
+    }
 
     public boolean isOrientationRTL() {
         return orientationRTL;
