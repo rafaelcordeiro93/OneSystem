@@ -140,6 +140,7 @@ public class DadosIniciais {
         Janela extratoConta = new Janela(null, "Extrato Conta", "/extratoConta.xhtml", fin);
         Janela cotacoes = new Janela(null, "Cotacao", "/cotacao.xhtml", fin);
         Janela baixa = new Janela(null, "Baixa", "/baixa.xhtml", fin);
+        Janela caixa = new Janela(null, "Caixa", "/caixa.xhtml", fin);
         Janela formarecebimento = new Janela(null, "Formas de Recebimento", "/formaDeRecebimento.xhtml", fin);
         Janela jbanco = new Janela(null, "Banco", "/banco.xhtml", fin);
         Janela moeda = new Janela(null, "Moeda", "/moeda.xhtml", fin);
@@ -160,6 +161,7 @@ public class DadosIniciais {
         daoJanela.adiciona(extratoConta);
         daoJanela.adiciona(cotacoes);
         daoJanela.adiciona(baixa);
+        daoJanela.adiciona(caixa);
         daoJanela.adiciona(formarecebimento);
         daoJanela.adiciona(jbanco);
         daoJanela.adiciona(moeda);
@@ -262,6 +264,7 @@ public class DadosIniciais {
                 new Privilegio(null, extratoConta, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cotacoes, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, baixa, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, caixa, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, formarecebimento, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jbanco, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, moeda, true, true, true, true, grupoDePrivilegio),

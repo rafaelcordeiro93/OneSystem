@@ -1,0 +1,66 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Caixa}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+            <h2 class="BigTopic">#{l.Caixa}</h2>
+            <div class="EmptyBox5"/>
+
+            <div class="ui-fluid">
+
+                <div id="orcamento" class="ui-g">
+                    <p:outputLabel value="#{l.Caixa}: "/>
+                    <p:outputLabel value=" #{dialogoCaixaView.e.id}"/>
+                </div>
+
+                <p:separator/>
+
+                <div class="ui-g">
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Id}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoCaixaView.e.id}"/>
+
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Numero_Caixa}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoCaixaView.e.usuario.pessoa.nome}"/>
+
+                </div>
+
+                
+                    <p:dataTable id="caixaDT" var="caixa" value="#{dialogoCaixaView.caixas}" rowKey="#{caixa.id}" selection="#{dialogoCaixaView.caixa}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" style="font-size: 12px;" tableStyle="padding: 2px !important">
+
+                            <f:facet name="header">
+                                #{l.Caixa}
+                            </f:facet>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{caixa.id}" />
+                            </p:column>
+                        <p:column headerText="#{l.Saldo}" sortBy="#{caixa.saldo}"  colspan="1" >
+                                <h:outputText value="#{caixa.saldo}" />
+                            </p:column>
+                            <p:column headerText="#{l.Abertura}" sortBy="#{caixa.abertura}" colspan="3">
+                                <h:outputText value="#{caixa.abertura}" />
+                            </p:column>
+                           
+                        </p:dataTable>
+
+
+            </div>
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Selecionar}" action="#{dialogoCaixaView.add}" update="tempDialog:msg"/>
+
+        </div>  
+
+    </ui:define>
+</ui:composition>
