@@ -3,10 +3,12 @@ package br.com.onesystem.war.service;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeComanda;
+import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
@@ -41,7 +43,7 @@ public class EstoqueService implements Serializable {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
         List<Estoque> estoque = new EstoqueDAO().porItem(item).porEmissao(data).porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().listaResultados();
+                .porEstoqueAlterado().porNaoCancelado().listaResultados();
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         for (Estoque e : estoque) {
             boolean operacao = false;
@@ -115,7 +117,7 @@ public class EstoqueService implements Serializable {
 
         if (comanda.getNotasEmitidas() != null && !comanda.getNotasEmitidas().isEmpty()) {
             List<Estoque> estoqueDaOperacao = new EstoqueDAO().porItem(item.getItem()).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).
-                    porNotasEmitidas(comanda.getNotasEmitidas()).listaResultados();
+                    porNotasEmitidas(comanda.getNotasEmitidas()).porNaoCancelado().listaResultados();
             geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
         }
 

@@ -53,14 +53,14 @@ public class Estoque implements Serializable {
     @ManyToOne
     private AjusteDeEstoque ajusteDeEstoque;
     @ManyToOne
-    private ItemDeComanda itemDeComanda;
+    private ItemDeCondicional itemDeCondicional;
 
     public Estoque() {
     }
 
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemDeNota itemDeNota, AjusteDeEstoque ajusteDeEstoque,
-            OperacaoDeEstoque operacaoDeEstoque, ItemDeComanda itemDeComanda) throws DadoInvalidoException {
+            OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.quantidade = quantidade;
@@ -69,7 +69,7 @@ public class Estoque implements Serializable {
         this.emissao = emissao;
         this.itemDeNota = itemDeNota;
         this.ajusteDeEstoque = ajusteDeEstoque;
-        this.itemDeComanda = itemDeComanda;
+        this.itemDeCondicional = itemDeCondicional;
         ehValido();
     }
 
@@ -110,8 +110,8 @@ public class Estoque implements Serializable {
         return ajusteDeEstoque;
     }
 
-    public ItemDeComanda getItemDeComanda() {
-        return itemDeComanda;
+    public ItemDeCondicional getItemDeCondicional() {
+        return itemDeCondicional;
     }
     
     @Override

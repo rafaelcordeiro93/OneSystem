@@ -20,6 +20,8 @@ public class ConfiguracaoVendaBuilder {
     private FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa;
     private boolean gerarNumeroComanda;
     private Operacao operacaoDeComanda;
+    private Operacao operacaoDeCondicional;
+    private Operacao operacaoDeDevolucaoCondicional;
 
     public ConfiguracaoVendaBuilder comId(Long id) {
         this.id = id;
@@ -41,8 +43,18 @@ public class ConfiguracaoVendaBuilder {
         return this;
     }
 
+    public ConfiguracaoVendaBuilder comOperacaoDeCondicional(Operacao operacaoDeCondicional) {
+        this.operacaoDeCondicional = operacaoDeCondicional;
+        return this;
+    }
+
+    public ConfiguracaoVendaBuilder comOperacaoDeDevolucaoCondicional(Operacao operacaoDeDevolucaoCondicional) {
+        this.operacaoDeDevolucaoCondicional = operacaoDeDevolucaoCondicional;
+        return this;
+    }
+
     public ConfiguracaoVenda construir() throws DadoInvalidoException {
-        return new ConfiguracaoVenda(id, formaDeRecebimentoDevolucaoEmpresa, gerarNumeroComanda, operacaoDeComanda);
+        return new ConfiguracaoVenda(id, formaDeRecebimentoDevolucaoEmpresa, gerarNumeroComanda, operacaoDeComanda, operacaoDeCondicional, operacaoDeDevolucaoCondicional);
     }
 
 }

@@ -152,7 +152,7 @@ public class DialogoComandaView extends BasicMBImpl<Comanda, ItemDeComandaBV> im
         List<ItemDeComandaBV> lista = ItensDeComanda.stream().filter(item -> item.getTotalListaDeQuantidade().compareTo(BigDecimal.ZERO) != 0).collect(Collectors.toList());
         for (ItemDeComandaBV ib : lista) {
             if (ib.getComparaQuantidadeDevolucao() < 0) {
-                throw new EDadoInvalidoException(new BundleUtil().getLabel("Existe_Quantidade_A_Devolver_Maior_Que_Quantidade"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Existem_quantidade_a_faturar_maior_que_saldo"));
             }
         }
         return lista;
@@ -175,15 +175,6 @@ public class DialogoComandaView extends BasicMBImpl<Comanda, ItemDeComandaBV> im
     public void limparJanela() {
         itemDeComandaBV = new ItemDeComandaBV();
         ItensDeComanda = new ArrayList<>();
-    }
-
-    public String getTotalQuantidade() {
-        if (tipoOperacao == TipoOperacao.DEVOLUCAO_CLIENTE) {
-            return new BundleUtil().getLabel("A_Devolver");
-        } else if (tipoOperacao == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA) {
-            return new BundleUtil().getLabel("A_Entregar");
-        }
-        return "";
     }
 
     public Comanda getComanda() {

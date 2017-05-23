@@ -66,7 +66,23 @@
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Forma_Recebimento_Devolucao_Padrao_Empresa}"/>
                         <a:inputTextDialog id="formaDeRecebimentoDevolucaoEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" value="#{configuracaoVendaView.configuracaoBV.formaDeRecebimentoDevolucaoEmpresa}" var="formaDeRecebimento" converter="formaDeRecebimentoConverter"  itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTab="#{formaDeRecebimento.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div>     
+                    
+                    <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Operacao_Condicional_Empresa}</div>
 
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Operacao_Condicional_Empresa}"/>
+                        <a:inputTextDialog id="operacaoCondicionalEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoOperacaoCondicionalView}" value="#{configuracaoVendaView.configuracaoBV.operacaoCondicional}" var="operacao" converter="operacaoConverter"  itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
+                    </div> 
+                    
+                    <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Operacao_Devolucao_Condicional_Empresa}</div>
+                    
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Operacao_Devolucao_Condicional_Empresa}"/>
+                        <a:inputTextDialog id="operacaoDevolucaoCondicionalEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoOperacaoDevolucaoCondicionalView}" value="#{configuracaoVendaView.configuracaoBV.operacaoDevolucaoCondicional}" var="operacao" converter="operacaoConverter"  itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
+                    </div> 
+                    
                     <div class="EmptyBox5"/>
                     <p:separator/>
                     <p:commandButton value="#{l.Salvar}" action="#{configuracaoVendaView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    

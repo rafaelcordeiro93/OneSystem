@@ -34,6 +34,9 @@
                         </div>
                         <p:separator/>
 
+                        <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Numero_Comanda}:"/> 
+                        <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.comanda.numeroComanda}"/>
+
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
                             <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaComandaView.comanda.listaDePreco.id} #{consultaComandaView.comanda.listaDePreco ne null ? '-' : ''}  #{consultaComandaView.comanda.listaDePreco.nome}"/>

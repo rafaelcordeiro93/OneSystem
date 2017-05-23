@@ -19,6 +19,7 @@ import br.com.onesystem.domain.builder.NotaRecebidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -39,7 +40,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private List<ValorPorCotacao> valorPorCotacao;
     private ListaDePreco listaDePreco;
     private Date emissao = new Date();
-    private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
     private Moeda moedaPadrao;
     private BigDecimal desconto;
@@ -52,6 +52,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private BigDecimal porcentagemDesconto;
     private Cotacao cotacao;
     private Integer numeroParcelas;
+    private EstadoDeNota estado;
 
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
@@ -62,7 +63,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.listaDePreco = nota.getListaDePreco();
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
         this.emissao = nota.getEmissao();
-        this.cancelada = nota.isCancelada();
+        this.estado = nota.getEstado();
         this.moedaPadrao = nota.getMoedaPadrao();
     }
 
@@ -247,14 +248,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.emissao = emissao;
     }
 
-    public boolean isCancelada() {
-        return cancelada;
-    }
-
-    public void setCancelada(boolean cancelada) {
-        this.cancelada = cancelada;
-    }
-
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -352,7 +345,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
 
   public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+        return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
@@ -360,7 +353,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
 
     public NotaRecebida construirComID() throws DadoInvalidoException {
-        return new NotaRecebidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+        return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao)

@@ -17,6 +17,7 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -41,7 +42,6 @@ public class NotaEmitidaBuilder {
     private Operacao operacao;
     private List<ItemDeNota> itens;
     private ListaDePreco listaDePreco;
-    private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
     private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
@@ -55,6 +55,7 @@ public class NotaEmitidaBuilder {
     private BigDecimal aFaturar;
     private Nota notaDeOrigem;
     private Comanda comanda;
+    private Condicional condicional;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -90,11 +91,6 @@ public class NotaEmitidaBuilder {
 
     public NotaEmitidaBuilder comListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
-        return this;
-    }
-
-    public NotaEmitidaBuilder cancelada(boolean cancelada) {
-        this.cancelada = cancelada;
         return this;
     }
 
@@ -184,9 +180,14 @@ public class NotaEmitidaBuilder {
         this.comanda = comanda;
         return this;
     }
+    
+    public NotaEmitidaBuilder comCondicional(Condicional condicional) {
+        this.condicional = condicional;
+        return this;
+    }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional);
     }
 
 }

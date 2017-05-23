@@ -80,6 +80,8 @@
         <class>br.com.onesystem.domain.ConfiguracaoVenda</class>
         <class>br.com.onesystem.domain.Comanda</class>
         <class>br.com.onesystem.domain.ItemDeComanda</class>
+        <class>br.com.onesystem.domain.Condicional</class>
+        <class>br.com.onesystem.domain.ItemDeCondicional</class>
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

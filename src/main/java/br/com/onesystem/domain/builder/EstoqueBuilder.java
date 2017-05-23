@@ -4,7 +4,7 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemDeComanda;
+import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -25,7 +25,7 @@ public class EstoqueBuilder {
     private Date emissao = new Date();
     private ItemDeNota itemDeNota;
     private AjusteDeEstoque ajusteDeEstoque;
-    private ItemDeComanda itemDeComanda;
+    private ItemDeCondicional itemDeCondicional;
 
     public EstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -62,8 +62,8 @@ public class EstoqueBuilder {
         return this;
     }
 
-    public EstoqueBuilder comItemDeComanda(ItemDeComanda itemDeComanda) {
-        this.itemDeComanda = itemDeComanda;
+    public EstoqueBuilder comItemDeCondicional(ItemDeCondicional itemDeCondicional) {
+        this.itemDeCondicional = itemDeCondicional;
         return this;
     }
 
@@ -73,7 +73,7 @@ public class EstoqueBuilder {
     }
 
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeComanda);
+        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeCondicional);
     }
 
 }

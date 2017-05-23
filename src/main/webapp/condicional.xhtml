@@ -1,0 +1,211 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="ne">
+            <div class="ui-g">
+                <div class="ui-g-10" style="margin-left: 8%">
+                    <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                        <h2 class="BigTopic">#{l.Condicional}</h2>
+                        <div class="EmptyBox5"/>
+
+                        <p:outputLabel>#{l.Situacao}: </p:outputLabel>
+                        <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
+
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="condPessoa" value="#{condicionalView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{condicionalView}" update=":conteudo:growl" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true"/>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neListaDePreco" value="#{condicionalView.e.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{condicionalView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                </h:panelGrid>
+
+                            </p:panelGrid> 
+                        </div>
+
+                        <p:separator/>
+
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
+                        <div class="ui-fluid">
+                            <p:panelGrid columns="5" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2"
+                                         layout="grid" style="border:0px !important; background:none;">
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputTextDialog id="neItem" value="#{condicionalView.itemDeCondicional.item}" dialog="#{selecaoItemView}" mbView="#{condicionalView}" update=":conteudo:growl :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                    </a:inputTextDialog>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">
+                                    <p:spacer/>
+                                    <a:inputNumber id="neQuantidade" maxValue="999999999999.99" minValue="0.00" symbol="#{condicionalView.itemDeCondicional.item.unidadeDeMedida.sigla} "
+                                                   placeholder="#{l.Quantidade}" styleClass="Wid90" decimalPlaces="#{condicionalView.itemDeCondicional.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{condicionalView.itemDeCondicional.quantidade}">
+                                        <p:ajax event="blur" update=":conteudo:ne:condicionalItemTotal"/>
+                                    </a:inputNumber>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" >
+                                    <p:spacer/>
+                                    <p:outputPanel class="md-inputfield"> 
+                                        <p:inputNumber id="condicionalItemPreco" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                       symbol="#{condicionalView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{condicionalView.itemDeCondicional.unitario}">
+                                            <p:ajax event="blur" update="condicionalItemTotal"/>
+                                        </p:inputNumber>    
+                                        <p:outputLabel value="#{l.Valor}"/>                                        
+                                    </p:outputPanel>
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100">                                                                               
+                                    <p:outputLabel value="#{l.Total}"/>        
+                                    <p:inputNumber id="condicionalItemTotal" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="true"
+                                                   symbol="#{condicionalView.configuracao.moedaPadrao.sigla} " decimalPlaces="2" value="#{condicionalView.itemDeCondicional.total}">
+                                    </p:inputNumber>                            
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="1" styleClass="Wid100" style="margin-top: -2px;">
+                                    <p:spacer/>
+                                    <h:panelGrid columns="3">
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{condicionalView.addItemNaLista}" style="width: 25px"
+                                                         update=":conteudo"/>
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{condicionalView.updateItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="green-btn"/>     
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{condicionalView.deleteItemNaLista}" style="width: 25px"
+                                                         update=":conteudo" styleClass="orange-btn"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:dataTable id="itensDeCondicionaisNota" var="itemDeCondicional" value="#{condicionalView.itensDeCondicionais}" rowKey="#{itemDeCondicional.id}" 
+                                     emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{condicionalView.itemDeCondicionalSelecionado}">
+
+                            <p:ajax event="rowSelect" process="@this" listener="#{condicionalView.selecionaItemDeCondicional}" update=":conteudo"/>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{itemDeCondicional.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Id}" sortBy="#{itemDeCondicional.item.id}"  colspan="1">
+                                <h:outputText value="#{itemDeCondicional.item.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" sortBy="#{itemDeCondicional.item.nome}" colspan="3">
+                                <h:outputText value="#{itemDeCondicional.item.nome}" />
+                            </p:column>
+                            <p:column headerText="#{l.UN}" sortBy="#{itemDeCondicional.item.unidadeDeMedida.sigla}" colspan="1">
+                                <h:outputText value="#{itemDeCondicional.item.unidadeDeMedida.sigla}" />
+                            </p:column>
+                            <p:column headerText="#{l.QTDE}" sortBy="#{itemDeCondicional.quantidade}" >
+                                <h:outputText value="#{itemDeCondicional.quantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Unitario}" sortBy="#{itemDeCondicional.unitario}">
+                                <h:outputText value="#{itemDeCondicional.unitario}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeCondicional.total}" colspan="2" >
+                                <h:outputText value="#{itemDeCondicional.total}" />
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="1" footerText="#{condicionalView.itensDeCondicionais.size() eq 0 ? '' : condicionalView.itensDeCondicionais.size()}" />
+                                    <p:column colspan="6"/>
+                                    <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; text-align: right; font-weight: bold"/>
+                                    <p:column colspan="2" footerText="#{condicionalView.totalItensFormatado}"/>
+                                </p:row>
+                            </p:columnGroup>
+
+                        </p:dataTable>
+
+                        <p:separator styleClass="Wid100"/>
+
+                        <div class="ui-fluid" >
+                            <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-6"
+                                         columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+
+                                <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4">
+
+                                    <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
+                                    <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
+                                                   value="#{condicionalView.e.porcentagemAcrescimo}">
+                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto totalCondicional" 
+                                                listener="#{condicionalView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+                                    <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{condicionalView.configuracao.moedaPadrao.sigla} "
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{condicionalView.e.acrescimo}">
+                                        <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto totalCondicional" listener="#{condicionalView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber>
+
+                                    <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
+                                    <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
+                                                   decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{condicionalView.e.porcentagemDesconto}">
+                                        <p:ajax event="change" update="neDesconto totalCondicional" listener="#{condicionalView.calculaValorAcrescimoEDesconto}"/>
+                                    </p:inputNumber>                                     
+                                    <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                                   symbol="#{condicionalView.configuracao.moedaPadrao.sigla} "
+                                                   styleClass="Wid90" value="#{condicionalView.e.desconto}">
+                                        <p:ajax event="change" update="nePDesconto totalCondicional" listener="#{condicionalView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Despesa_Cobranca}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{condicionalView.e.despesaCobranca}"
+                                                   symbol="#{condicionalView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalCondicional"/>
+                                    </p:inputNumber> 
+
+                                    <p:spacer/>
+                                    <p:outputLabel value="#{l.Frete}"/>
+                                    <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
+                                                   value="#{condicionalView.e.frete}" symbol="#{condicionalView.configuracao.moedaPadrao.sigla} ">
+                                        <p:ajax event="change" update="totalCondicional"/>
+                                    </p:inputNumber>    
+
+                                </p:panelGrid>
+
+                                <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
+                                             columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-8">
+
+                                    <p:outputLabel value="#{l.Total_Condicional}"/>
+                                    <p:inputNumber id="totalCondicional" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
+                                                   value="#{condicionalView.totalCondicional}" symbol="#{condicionalView.configuracao.moedaPadrao.sigla} " styleClass="ui-g-12 ui-md-6 NoPadding"/>
+
+                                    <p:outputLabel value="#{l.Observacao}"/>
+                                    <p:inputTextarea rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{condicionalView.e.observacao}"/>
+                                    <p:spacer/>
+                                    <p:outputLabel id="display"/>
+
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </div>
+
+                        <p:separator/>
+
+                        <p:commandButton value="#{l.Finalizar}" action="#{condicionalView.finalizar}" update=":conteudo"/>
+
+                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
+
+                    </div>
+                </div>
+            </div>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>

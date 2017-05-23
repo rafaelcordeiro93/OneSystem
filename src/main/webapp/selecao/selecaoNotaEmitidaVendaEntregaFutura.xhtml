@@ -22,8 +22,8 @@
             <p:column headerText="#{l.Operacao}" sortBy="#{bean.operacao.nome}" filterBy="#{bean.operacao.nome}" footerText="#{l.Operacao}" filterMatchMode="contains" >
                 <h:outputText value="#{bean.operacao.nome}" />
             </p:column>
-            <p:column headerText="#{l.Cancelada}" sortBy="#{bean.cancelada}" filterBy="#{bean.cancelada}" footerText="#{l.Cancelada}" filterMatchMode="contains">
-                <h:outputText value="#{bean.cancelada}" />
+            <p:column headerText="#{l.Estado}" sortBy="#{bean.estado.nome}" filterBy="#{bean.estado.nome}" footerText="#{l.Estado}" filterMatchMode="contains">
+                <h:outputText value="#{bean.estado.nome}" />
             </p:column>
         </a:dataTable>
 

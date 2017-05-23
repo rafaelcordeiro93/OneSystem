@@ -59,6 +59,12 @@ public class DadosNecessarios implements Serializable {
 //                getOperacaoDeComanda(); Implantação Futura
                 break;
             }
+            case "/condicional.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                getOperacaoDeCondicional();
+                break;
+            }
             case "/relatorioDeBalancoFisico.xhtml": {
                 getMoedaPadrao();
                 getContaDeEstoque();
@@ -171,6 +177,25 @@ public class DadosNecessarios implements Serializable {
             return conf.getOperacaoDeComanda();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("Operacao_Comanda_Not_Null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private Operacao getOperacaoDeCondicional() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+
+        ConfiguracaoVendaService configuracaoVendaService = new ConfiguracaoVendaService();
+        ConfiguracaoVenda conf = configuracaoVendaService.buscar();
+        try {
+            if (conf.getOperacaoDeCondicional() == null) {
+                bv.getLista().add(b.getMessage("Operacao_Condicional_Not_Null"));
+                pendencias.add(bv);
+                return null;
+            }
+            return conf.getOperacaoDeCondicional();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Operacao_Condicional_Not_Null"));
             pendencias.add(bv);
             return null;
         }

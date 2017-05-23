@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -44,6 +45,12 @@ public class NotaEmitidaDAO {
     public NotaEmitidaDAO porTipoOperacao(TipoOperacao tipoOperacao) {
         consulta += " and n.operacao.tipoOperacao = :pTipoOperacao";
         parametros.put("pTipoOperacao", tipoOperacao);
+        return this;
+    }
+
+    public NotaEmitidaDAO porCondicional(Condicional condicional) {
+        consulta += " and n.condicional = :pCondicional ";
+        parametros.put("pCondicional", condicional);
         return this;
     }
 

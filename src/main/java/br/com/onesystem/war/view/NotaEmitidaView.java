@@ -11,7 +11,9 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
@@ -39,6 +41,7 @@ import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoContabil;
@@ -55,7 +58,9 @@ import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
+import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
@@ -69,6 +74,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -111,6 +117,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private Cheque chequeSelecionado;
     private boolean editarItensEParcelas;
     private Comanda comandaSelecionada;
+    private Condicional condicionalSelecionada;
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -127,17 +135,21 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     @Inject
     private EstoqueService serviceEstoque;
 
+    @Inject
+    private ConfiguracaoEstoqueService confEstoqueService;
+
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
         iniciarConfiguracoes();
         limparJanela();
-    }
+    } 
 
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
             configuracaoVenda = configuracaoVendaService.buscar();
+            configuracaoEstoque = confEstoqueService.buscar();
             cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -176,14 +188,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Operações para criação da entidade ----------------------   
     public void validaAFaturar() {
         try {
-            // Se valor a faturar maior que zero deve exibir diálogo de confirmação
-            if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
-                RequestContext c = RequestContext.getCurrentInstance();
-                c.execute("PF('existeValorAFaturar').show()");
-            } else if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
+            if (!notaEmitida.getOperacao().getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
+                // Se valor a faturar maior que zero deve exibir diálogo de confirmação
+                if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
+                    RequestContext c = RequestContext.getCurrentInstance();
+                    c.execute("PF('existeValorAFaturar').show()");
+                } else if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) < 0) {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Valor_A_Faturar_Menor_Que_Zero"));
+                } else {
+                    validaDinheiro();
+                }
             } else {
-                validaDinheiro();
+                add();
             }
         } catch (EDadoInvalidoException ex) {
             ex.print();
@@ -570,6 +586,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 importa((NotaEmitida) obj);
             } else if (obj instanceof Comanda && "importaComanda-btn".equals(idComponent)) {
                 importa((Comanda) obj);
+            } else if (obj instanceof Condicional && "importaCondicional-btn".equals(idComponent)) {
+                importa((Condicional) obj);
             } else if (obj instanceof Orcamento) {
                 importa((Orcamento) obj);
             } else if (obj instanceof List && "neQuantidade-btn".equals(idComponent)) {
@@ -613,6 +631,18 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     }
                     populaCampos(comandaSelecionada);
                 }
+            } else if (obj instanceof List && "exibeCondicional-btn".equals(idComponent)) {
+                List<ItemDeCondicionalBV> lista = (List<ItemDeCondicionalBV>) event.getObject();
+                if (!lista.isEmpty()) {
+                    for (ItemDeCondicionalBV i : lista) {
+                        itemEmitido.setItem(i.getItem());
+                        itemEmitido.setUnitario(i.getUnitario());
+                        itemEmitido.setListaDeQuantidade(Arrays.asList(new QuantidadeDeItemPorDeposito(new Long(1), new SaldoDeEstoque(new Long(1), configuracaoEstoque.getDepositoPadrao(), BigDecimal.ZERO), i.getAFaturar())));
+                        itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                        addItemNaLista();
+                    }
+                    populaCampos(condicionalSelecionada);
+                }
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -622,7 +652,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void setupView(Operacao operacao) {
         limparJanela();
         TipoOperacao tipo = operacao.getTipoOperacao();
-        editarItensEParcelas = tipo == TipoOperacao.DEVOLUCAO_CLIENTE || tipo == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA;
+        editarItensEParcelas = tipo == TipoOperacao.DEVOLUCAO_CLIENTE || tipo == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA
+                || tipo == TipoOperacao.DEVOLUCAO_CONDICIONAL;
         notaEmitida.setOperacao(operacao);
         RequestContext.getCurrentInstance().update("conteudo");
     }
@@ -673,6 +704,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         RequestContext.getCurrentInstance().update("conteudo");
     }
 
+    private void populaCampos(Condicional condicional) {
+        notaEmitida.setCondicional(condicional);
+        notaEmitida.setPessoa(condicional.getPessoa());
+        notaEmitida.setListaDePreco(condicional.getListaDePreco());
+        recalculaValores();
+        RequestContext.getCurrentInstance().update("conteudo");
+    }
+
     private void importa(Orcamento orcamento) throws DadoInvalidoException {
         orcamento = orcamento;
         atribuiOrcamentoASessao(orcamento);
@@ -691,6 +730,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         SessionUtil.put(comanda, "comanda", FacesContext.getCurrentInstance());
         SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeComanda-btn\").click();");
+    }
+
+    private void importa(Condicional condicional) throws DadoInvalidoException {
+        condicionalSelecionada = condicional;
+        SessionUtil.put(condicional, "condicional", FacesContext.getCurrentInstance());
+        SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
+        RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeCondicional-btn\").click();");
     }
 
     public void atribuiItemASessao() {
@@ -1004,9 +1050,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         return forma;
     }
 
-    public boolean getEntregaDeVenda() {
+    public boolean getGeraFinanceiro() {
         try {
-            return notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA;
+            return notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA
+                    || (notaEmitida.getCondicional() != null && notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.DEVOLUCAO_CONDICIONAL);
         } catch (NullPointerException npe) {
             return false;
         }

@@ -26,11 +26,19 @@ public class NotaRecebida extends Nota implements Serializable {
 
     public NotaRecebida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            boolean cancelada, List<Cobranca> cobrancas,
+            List<Cobranca> cobrancas,
             Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        adicionaNoEstoque();
+    }
+
+    protected void adicionaNoEstoque() throws DadoInvalidoException {
+        for (ItemDeNota i : getItens()) {
+            i.setNota(this);
+            i.geraEstoque();
+        }
     }
 
     @Override
@@ -38,7 +46,6 @@ public class NotaRecebida extends Nota implements Serializable {
         return "NotaEmitida{" + "id=" + getId() + ", pessoa=" + (getPessoa() != null ? getPessoa().getId() : null)
                 + ", operacao=" + (getOperacao() != null ? getOperacao().getId() : null)
                 + ", emissao=" + getEmissao()
-                + ", cancelada=" + isCancelada()
                 + ", itensRecebidos=" + getItens()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
                 + ", listaDePreco=" + getListaDePreco()

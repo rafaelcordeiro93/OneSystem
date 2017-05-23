@@ -87,6 +87,8 @@ public class DadosIniciais {
         Janela consultaOrcamento = new Janela(null, "Consulta Orçamento", "/consultaOrcamento.xhtml", arq);
         Janela comanda = new Janela(null, "Comanda", "/comanda.xhtml", arq);
         Janela consultaComanda = new Janela(null, "Consulta Comanda", "/consultaComanda.xhtml", arq);
+        Janela condicional = new Janela(null, "Condicional", "/condicional.xhtml", arq);
+        Janela consultaCondicional = new Janela(null, "Consulta Condicional", "/consultaCondicional.xhtml", arq);
 
         daoJanela.adiciona(notaSaida);
         daoJanela.adiciona(consultaNotaSaida);
@@ -94,6 +96,8 @@ public class DadosIniciais {
         daoJanela.adiciona(consultaOrcamento);
         daoJanela.adiciona(comanda);
         daoJanela.adiciona(consultaComanda);
+        daoJanela.adiciona(condicional);
+        daoJanela.adiciona(consultaCondicional);
 
         //Modulo de Estoque
         Janela jitem = new Janela(null, "Item", "/item.xhtml", estoque);
@@ -231,6 +235,8 @@ public class DadosIniciais {
                 new Privilegio(null, consultaOrcamento, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, comanda, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaComanda, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, condicional, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaCondicional, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jitem, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, notaRecebida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaNotaRecebida, true, true, true, true, grupoDePrivilegio),

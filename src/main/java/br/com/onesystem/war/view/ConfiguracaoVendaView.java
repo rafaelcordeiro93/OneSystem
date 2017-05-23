@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.FormaDeRecebimento;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoVendaBV;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
@@ -51,10 +52,15 @@ public class ConfiguracaoVendaView extends BasicMBImpl<ConfiguracaoVenda, Config
 
     @Override
     public void selecionar(SelectEvent event) {
+        String id = event.getComponent().getId();
         Object obj = event.getObject();
         if (obj instanceof FormaDeRecebimento) {
             FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
             configuracaoVendaBV.setFormaDeRecebimentoDevolucaoEmpresa(formaDeRecebimento);
+        } else if (obj instanceof Operacao && id.equals("operacaoCondicionalEmpresa-search")) {
+            configuracaoVendaBV.setOperacaoCondicional((Operacao) obj);
+        } else if (obj instanceof Operacao && id.equals("operacaoDevolucaoCondicionalEmpresa-search")) {
+            configuracaoVendaBV.setOperacaoDevolucaoCondicional((Operacao) obj);
         }
     }
 

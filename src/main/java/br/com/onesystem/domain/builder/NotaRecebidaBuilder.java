@@ -39,7 +39,6 @@ public class NotaRecebidaBuilder {
     private Operacao operacao;
     private List<ItemDeNota> itens;
     private ListaDePreco listaDePreco;
-    private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
     private List<Cobranca> cobrancas;
     private Moeda moedaPadrao;
@@ -85,11 +84,6 @@ public class NotaRecebidaBuilder {
 
     public NotaRecebidaBuilder comListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
-        return this;
-    }
-
-    public NotaRecebidaBuilder cancelada(boolean cancelada) {
-        this.cancelada = cancelada;
         return this;
     }
 
@@ -171,7 +165,7 @@ public class NotaRecebidaBuilder {
     }
 
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cancelada, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
     }
 
 }

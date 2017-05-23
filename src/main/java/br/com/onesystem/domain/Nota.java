@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,7 +64,8 @@ public abstract class Nota implements Serializable {
     private ListaDePreco listaDePreco;
     @Temporal(TemporalType.TIMESTAMP)
     protected Date emissao;
-    private boolean cancelada;
+    @Enumerated(EnumType.STRING)
+    private EstadoDeNota estado;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ValorPorCotacao> valorPorCotacao;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -93,7 +97,7 @@ public abstract class Nota implements Serializable {
     }
 
     public Nota(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
-            FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco, boolean cancelada,
+            FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
             BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
@@ -103,7 +107,7 @@ public abstract class Nota implements Serializable {
         this.operacao = operacao;
         this.formaDeRecebimento = formaDeRecebimento;
         this.listaDePreco = listaDePreco;
-        this.cancelada = cancelada;
+        this.estado = EstadoDeNota.EM_DEFINICAO;
         this.cobrancas = cobrancas;
         this.moedaPadrao = moedaPadrao;
         this.valorPorCotacao = valorPorCotacao;
@@ -115,17 +119,12 @@ public abstract class Nota implements Serializable {
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
         this.notaDeOrigem = notaDeOrigem;
-        adicionaNoEstoque();
         geraBaixaPorValorDeCotacao();
         geraCobrancas();
         ehValido();
     }
 
-    private void adicionaNoEstoque() throws DadoInvalidoException {
-        for (ItemDeNota i : itens) {
-            i.geraEstoque(this);
-        }
-    }
+    protected abstract void adicionaNoEstoque() throws DadoInvalidoException;
 
     private void geraBaixaPorValorDeCotacao() throws DadoInvalidoException {
         for (ValorPorCotacao v : valorPorCotacao) {
@@ -137,6 +136,10 @@ public abstract class Nota implements Serializable {
         cobrancas.forEach((c) -> {
             c.geraPara(this);
         });
+    }
+
+    public void cancela() {
+        estado = EstadoDeNota.CANCELADO;
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -180,8 +183,8 @@ public abstract class Nota implements Serializable {
         return notaDeOrigem;
     }
 
-    public boolean isCancelada() {
-        return cancelada;
+    public EstadoDeNota getEstado() {
+        return estado;
     }
 
     public Moeda getMoedaPadrao() {
@@ -295,8 +298,8 @@ public abstract class Nota implements Serializable {
     public String getTotalNotaFormatado() {
         return MoedaFomatter.format(moedaPadrao, getTotalNota());
     }
-    
-      public BigDecimal getTotalNota() {
+
+    public BigDecimal getTotalNota() {
         BigDecimal a = acrescimo == null ? BigDecimal.ZERO : acrescimo;
         BigDecimal f = frete == null ? BigDecimal.ZERO : frete;
         BigDecimal c = despesaCobranca == null ? BigDecimal.ZERO : despesaCobranca;
