@@ -15,8 +15,10 @@ import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,8 +45,10 @@ public class BaixaBV implements Serializable {
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
-    private boolean cancelada = false;
+    private EstadoDeBaixa estado;
     private MovimentoFixo movimentoFixo;
+    private Date dataCancelamento;
+    private ValorPorCotacao valorPorCotacao;
 
     public BaixaBV() {
     }
@@ -53,7 +57,8 @@ public class BaixaBV implements Serializable {
         this.id = baixa.getId();
         this.pessoa = baixa.getPessoa();
         this.numeroParcela = baixa.getNumeroParcela();
-        this.cancelada = baixa.isCancelada();
+        this.estado = baixa.getEstado();
+        this.dataCancelamento = baixa.getDataCancelamento();
         this.valor = baixa.getValor();
         this.desconto = baixa.getDesconto();
         this.emissao = baixa.getEmissao();
@@ -69,6 +74,7 @@ public class BaixaBV implements Serializable {
         this.juros = baixa.getJuros();
         this.multas = baixa.getMultas();
         this.cotacao = baixa.getCotacao();
+        this.valorPorCotacao = baixa.getValorPorCotacao();
     }
 
     public void selecionaTitulo(Titulo titulo) {
@@ -204,6 +210,10 @@ public class BaixaBV implements Serializable {
         this.despesa = despesa;
     }
 
+    public Date getDataCancelamento() {
+        return dataCancelamento;
+    }
+
     public TipoReceita getReceita() {
         return receita;
     }
@@ -252,30 +262,39 @@ public class BaixaBV implements Serializable {
         this.recepcao = recepcao;
     }
 
-    public boolean isCancelada() {
-        return cancelada;
+    public EstadoDeBaixa getEstado() {
+        return estado;
     }
 
-    public void setCancelada(boolean cancelada) {
-        this.cancelada = cancelada;
+    public void setEstado(EstadoDeBaixa estado) {
+        this.estado = estado;
     }
 
+    public ValorPorCotacao getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
+    public void setValorPorCotacao(ValorPorCotacao valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+    }
+    
+    
     public Baixa construir() throws DadoInvalidoException {
-        return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+        return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
                 .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa)
                 .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
                 .comNaturezaFinanceira(naturezaFinanceira).comNumeroParcela(numeroParcela)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor).comMovimentoFixo(movimentoFixo)
-                .comTransferencia(transferencia).comValor(valor).construir();
+                .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
-        return new BaixaBuilder().cancelada(cancelada).comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+        return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
                 .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa).comId(id)
                 .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas).comMovimentoFixo(movimentoFixo)
                 .comNaturezaFinanceira(naturezaFinanceira).comNumeroParcela(numeroParcela)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
-                .comTransferencia(transferencia).comValor(valor).construir();
+                .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

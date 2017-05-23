@@ -19,154 +19,121 @@
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
 
+                        <div class="EmptyBox20"/>
+                        <div class="ui-g">
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-5" styleDiv="padding: 2px !important" placeholder="#{l.Id}" id="baixaId" value="#{baixaView.e}" dialog="#{selecaoBaixaView}" mbView="#{baixaView}" var="baixa" converter="baixaBVConverter" itemLabel="#{baixa.id}" itemValue="#{baixa}" onlyNumber="true" editVisible="false" update="conteudo"/>
+                            <p:commandButton value="#{l.Cancelar}" actionListener="#{baixaView.cancela}" icon="fa fa-ban"
+                                             styleClass="orange-btn" style="width: auto !important" update=":conteudo"
+                                             rendered="#{baixaView.e.estado ne null ? (baixaView.e.estado eq 'EFETIVADO' ? 'false' : (baixaView.e.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
+                        </div>
+                        <div class="EmptyBox5"/>
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel  value="#{l.Estado}: "/>
+                            <p:outputLabel class="#{baixaView.e.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    baixaView.e.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    baixaView.e.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{baixaView.e.estado.nome}
+                            </p:outputLabel>
+
+                            <div class="EmptyBox10"/>
+
+                            <p:panelGrid rendered="#{baixaView.e.estado eq 'CANCELADO' ? true : false}" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2">
+
+                                <p:outputLabel value="#{l.Data_Cancelamento}: "/>
+                                <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{baixaView.e.dataCancelamento}"/> 
+                            </p:panelGrid>
+                        </div>
+
+                        <div class="EmptyBox20"/>
+
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
-                            <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="bancoId" value="#{baixaView.e}" dialog="#{selecaoBaixaView}" mbView="#{baixaView}" var="baixa" converter="baixaBVConverter" itemLabel="#{baixa.id}" itemValue="#{baixa}" onlyNumber="true" editVisible="false"/>
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <p:inputText id="baixaPessoa" readonly="true"  size="51" value="#{baixaView.e.pessoa.nome}"/>
 
                             <p:outputLabel value="#{l.Emissao}"/>
-                            <p:inputText value="#{baixaView.baixa.emissao}"  readonly="true" maxlength="60"/>                            
-
-                            <p:outputLabel value="#{l.Pessoa}"/>
-                            <p:inputText id="baixaPessoa" readonly="true"  size="51" value="#{baixaView.baixa.pessoa.nome}"/>
-
-
+                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{baixaView.e.emissao}"/>                          
 
                             <p:outputLabel value="#{l.Natureza_Financeira}"/>
-                            <p:inputText id="baixaUnidadeFinanceira" readonly="true" value="#{baixaView.baixa.naturezaFinanceira.tipoUnidade}"/>
-
-                            <p:outputLabel value="#{l.Cancelada}"/>
-                            <p:selectBooleanCheckbox disabled="true"  value="#{baixaView.baixa.cancelada}"/>
-
+                            <p:inputText id="baixaUnidadeFinanceira" readonly="true" value="#{baixaView.e.naturezaFinanceira.tipoUnidade}"/>
 
                             <p:outputLabel value="#{l.Historico}"/>
-                            <p:inputTextarea autoResize="true" rows="4" cols="68" maxlength="150" readonly="true" />
-
+                            <p:inputTextarea readonly="#{baixaView.e.estado eq 'CANCELADO' ? true : false}" autoResize="true" rows="4" cols="68" maxlength="150" value="#{baixaView.e.historico}"/>
                         </p:panelGrid>
+                        <div class="EmptyBox20"/>
 
+                        <h4 style="font-size: 15px" >#{l.Tipos}</h4>
                         <p:separator/>
+                        <div class="EmptyBox10"/>
 
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-2">
 
+                            <p:outputLabel value="#{l.Despesa}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.despesa.nome}"/>
 
+                            <p:outputLabel value="#{l.Receita}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.receita.nome}"/>
 
+                            <p:outputLabel value="#{l.Cambio}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.cambio.id}"/>
 
+                            <p:outputLabel value="#{l.Recepcao}"/>
+                            <p:inputText  readonly="true"  value="#{baixaView.e.recepcao.id}"/>
 
-                        <h2 class="BigTopic">#{l.Tipos}</h2>
-                        <p:panelGrid columns="1" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaDespesa" readonly="true" placeholder="#{l.Despesa}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaDespesa}"
-                                            process="@this" update="baixaDespesa" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaReceita" readonly="true" placeholder="#{l.Receita}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaReceita}"
-                                            process="@this" update="baixaReceita" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaCambio" readonly="true" placeholder="#{l.Cambio}" styleClass="Wid95"/>    
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoCambioView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaCambio}"
-                                            process="@this" update="baixaCambio" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaDespesaProvisionada" readonly="true" placeholder="#{l.Despesa_Provisionada}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaProvisionadaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaDespesaProvisionada}"
-                                            process="@this" update="baixaDespesaProvisionada" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaReceitaProvisionada" readonly="true" placeholder="#{l.Receita_Provisionada}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaReceitaProvisionada}"
-                                            process="@this" update="baixaReceitaProvisionada" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaTitulo" readonly="true" placeholder="#{l.Titulo}" styleClass="Wid95"/>            
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaTitulo}"
-                                            process="@this" update="baixaTitulo" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaRecepcao" readonly="true" placeholder="#{l.Recepcao}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaRecepcao}"
-                                            process="@this" update="baixaRecepcao" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <h:panelGrid columns="2" styleClass="Wid100">
-                                <p:inputText id="baixaTransferencia" readonly="true" placeholder="#{l.Transferencia}" styleClass="Wid95"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaTransferencia}"
-                                            process="@this" update="baixaTransferencia" />
-                                </p:commandButton>
-                            </h:panelGrid>
-                            <p:outputLabel/>
+                            <p:outputLabel value="#{l.Transferencia}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.transferencia.id}"/>
 
                         </p:panelGrid>
 
+                        <div class="EmptyBox30"/>
+                        <h4 style="font-size: 15px" >#{l.Forma_De_Pagamento}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-2">
 
 
-                        <h2 class="BigTopic">#{l.Forma_De_Pagamento}</h2>
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.cotacao.conta.nome}"/>
 
-                        <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.cotacao.conta.moeda.nome}"/>
 
-                            <h:panelGrid columns="2" style="margin-left: -2%;">
-                                <p:inputText id="baixaConta" readonly="true" placeholder="#{l.Conta}" size="38" value="#{recepcaoView.recepcao.pessoa.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                 disabled="true" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{baixaView.selecionaConta}"
-                                            process="@this" update="baixaConta" />
-                                </p:commandButton>
-                            </h:panelGrid>
-                            <h:outputText/>
-                            <p:inputText readonly="true" placeholder="#{l.Moeda}" value="#{baixaView.baixa.cotacao.conta.moeda.nome}"/>
+                            <p:outputLabel value="#{l.Numero_Parcela}"/>
+                            <p:inputText readonly="true" value="#{baixaView.e.numeroParcela}"/>
 
-                            <p:inputText readonly="true" placeholder="#{l.Numero_Parcela}" value="#{baixaView.baixa.numeroParcela}"/>
-                            <p:inputText readonly="true" placeholder="#{l.Valor}" value="#{baixaView.baixa.valor}"/>
-                            <p:inputText readonly="true" placeholder="#{l.Desconto}" value="#{baixaView.baixa.desconto}"/>                                            
+                            <p:outputLabel value="#{l.Valor_Por_Cotacao}"/>
+                            <p:inputText readonly="true" value="#{baixaView.e.valorPorCotacao.valor}"/>
 
-                            <p:inputText readonly="true" placeholder="#{l.Multas}" value="#{baixaView.baixa.multas}"/>
-                            <p:inputText readonly="true" placeholder="#{l.Total}" value="#{baixaView.baixa.valor}"/> <!--AQUI FICAVA O TOTAL-->
-                            <h:outputText/>
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.valor eq 0 ? '' : baixaView.e.valor}"/>
+
+                            <p:outputLabel value="#{l.Desconto}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.desconto eq 0 ? '' : baixaView.e.desconto}"/>                                            
+
+                            <p:outputLabel value="#{l.Multa}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.multas eq 0 ? '' : baixaView.e.multas}"/>
+
+                            <p:outputLabel value="#{l.Total}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.baixa.total eq 0 ? '' : baixaView.baixa.total}"/>
+
 
                         </p:panelGrid>
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox10"/>
 
                         <p:separator/>
 
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Atualizar}" action="#{bancoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton rendered="#{baixaView.e.estado eq 'CANCELADO' ? false : true}" value="#{l.Atualizar}" action="#{baixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{baixaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{baixaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
 
                 </div>

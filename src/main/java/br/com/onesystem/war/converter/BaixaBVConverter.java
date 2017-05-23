@@ -1,7 +1,6 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.BaixaService;
 import java.io.Serializable;
@@ -10,7 +9,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
 
 /**
  *

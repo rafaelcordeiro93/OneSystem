@@ -20,6 +20,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -50,7 +51,7 @@ public class BaixaBuilder {
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
-    private boolean cancelada = false;
+    private EstadoDeBaixa estado = EstadoDeBaixa.EFETIVADO;
     private MovimentoFixo movimentoFixo;
     private ValorPorCotacao valorPorCotacao;
 
@@ -139,11 +140,6 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder cancelada(boolean cancelada) {
-        this.cancelada = cancelada;
-        return this;
-    }
-
     public BaixaBuilder comPerfilDeValor(Cobranca perfilDeValor) {
         this.perfilDeValor = perfilDeValor;
         return this;
@@ -160,7 +156,7 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, numeroParcela, cancelada, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, movimentoFixo, valorPorCotacao);
+        return new Baixa(id, numeroParcela, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, movimentoFixo, valorPorCotacao);
     }
 
 }
