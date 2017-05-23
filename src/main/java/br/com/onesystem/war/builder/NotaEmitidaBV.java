@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
@@ -21,6 +22,7 @@ import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -42,7 +44,6 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private List<ValorPorCotacao> valorPorCotacao;
     private ListaDePreco listaDePreco;
     private Date emissao = new Date();
-    private boolean cancelada = false;
     private FormaDeRecebimento formaDeRecebimento;
     private Moeda moedaPadrao;
     private Orcamento orcamento;
@@ -58,6 +59,8 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private Integer numeroParcelas;
     private Nota notaDeOrigem;
     private Comanda comanda;
+    private Condicional condicional;
+    private EstadoDeNota estado;
 
     public NotaEmitidaBV(NotaEmitida nota) {
         this.id = nota.getId();
@@ -68,10 +71,11 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.listaDePreco = nota.getListaDePreco();
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
         this.emissao = nota.getEmissao();
-        this.cancelada = nota.isCancelada();
+        this.estado = nota.getEstado();
         this.moedaPadrao = nota.getMoedaPadrao();
         this.orcamento = nota.getOrcamento();
         this.comanda = nota.getComanda();
+        this.condicional = nota.getCondicional();
     }
 
     public NotaEmitidaBV() {
@@ -277,14 +281,6 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.emissao = emissao;
     }
 
-    public boolean isCancelada() {
-        return cancelada;
-    }
-
-    public void setCancelada(boolean cancelada) {
-        this.cancelada = cancelada;
-    }
-
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -415,20 +411,30 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.comanda = comanda;
     }
 
+    public Condicional getCondicional() {
+        return condicional;
+    }
+
+    public void setCondicional(Condicional condicional) {
+        this.condicional = condicional;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+        return new NotaEmitidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
-                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda).construir();
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
+                .comCondicional(condicional).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
-        return new NotaEmitidaBuilder().comId(id).cancelada(cancelada).comAFaturar(aFaturar).comAcrescimo(acrescimo)
+        return new NotaEmitidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
-                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda).construir();
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
+                .comCondicional(condicional).construir();
     }
 
 }

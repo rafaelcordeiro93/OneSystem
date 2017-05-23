@@ -5,6 +5,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,6 +35,12 @@ public class OperacaoDAO {
     public OperacaoDAO porTipoDeLancamento(TipoLancamento tipoLancamento) {
         consulta += " and o.tipoNota = :oTipoNota ";
         parametros.put("oTipoNota", tipoLancamento);
+        return this;
+    }
+
+    public OperacaoDAO porTipoDeOperacao(TipoOperacao tipoOperacao) {
+        consulta += " and o.tipoOperacao = :oTipoOperacao ";
+        parametros.put("oTipoOperacao", tipoOperacao);
         return this;
     }
 

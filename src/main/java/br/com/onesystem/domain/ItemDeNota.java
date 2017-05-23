@@ -80,11 +80,19 @@ public class ItemDeNota implements Serializable {
         this.quantidade = lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void geraEstoque(Nota nota) throws DadoInvalidoException {
+    public void setNota(Nota nota) {
         this.nota = nota;
+    }
+
+    public void geraEstoque() throws DadoInvalidoException {
         estoques = new ArrayList<>();
         for (QuantidadeDeItemPorDeposito q : listaDeQuantidade) {
             for (OperacaoDeEstoque operacaoDeEstoque : nota.getOperacao().getOperacaoDeEstoque()) {
+                System.out.println("1: " + q.getSaldoDeEstoque().getDeposito());
+                System.out.println("2: " + q.getQuantidade());
+                System.out.println("3: " + item);
+                System.out.println("4: " + operacaoDeEstoque);
+                System.out.println("5: " + nota.getEmissao());
                 Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade())
                         .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(this).construir();
                 // Adiciona no estoque
@@ -120,7 +128,7 @@ public class ItemDeNota implements Serializable {
     public List<QuantidadeDeItemPorDeposito> getListaDeQuantidade() {
         return listaDeQuantidade;
     }
-    
+
     public String getTotalFormatado() {
         if (nota != null) {
             return MoedaFomatter.format(nota.getMoedaPadrao(), getTotal());
@@ -174,7 +182,7 @@ public class ItemDeNota implements Serializable {
 
     @Override
     public String toString() {
-        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", unitario=" + unitario + ", notaEmitida=" + (nota != null ? nota.getId() : null) + ", estoques=" + estoques + '}';
+        return "ItemEmitido{" + "id=" + id + ", item=" + (item != null ? item.getId() : null) + ", quantidade " + quantidade + ", unitario=" + unitario + ", notaEmitida=" + (nota != null ? nota.getId() : null) + ", estoques=" + estoques + '}';
     }
 
 }

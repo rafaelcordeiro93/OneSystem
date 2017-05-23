@@ -58,8 +58,6 @@ public class ItemDeComanda implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
     private BigDecimal quantidade;
-    @OneToMany(mappedBy = "itemDeComanda", cascade = CascadeType.ALL)
-    private List<Estoque> estoques;
 
     public ItemDeComanda() {
     }

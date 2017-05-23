@@ -35,7 +35,9 @@ public enum TipoOperacao {
     BONIFICACAO(29, new BundleUtil().getLabel("BONIFICACAO")),
     RETORNO_DE_CONSERTO(30, new BundleUtil().getLabel("RETORNO_DE_CONSERTO")),
     DEVOLUCAO_DE_CONSIGNACAO(31, new BundleUtil().getLabel("DEVOLUCAO_DE_CONSIGNACAO")),
-    OUTRAS(32, new BundleUtil().getLabel("OUTRAS"));
+    OUTRAS(32, new BundleUtil().getLabel("OUTRAS")),
+    DEVOLUCAO_CONDICIONAL(33, new BundleUtil().getLabel("DEVOLUCAO_CONDICIONAL")),
+    CONDICIONAL(34, new BundleUtil().getLabel("CONDICIONAL"));
 
     private Integer id;
     private String nome;

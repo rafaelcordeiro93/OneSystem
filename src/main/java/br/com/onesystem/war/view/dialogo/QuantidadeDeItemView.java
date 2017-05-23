@@ -69,7 +69,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDep
         opcoes.put("draggable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
-        opcoes.put("closable", false);
+        opcoes.put("closable", true);
         opcoes.put("headerElement", "customheader");
 
         RequestContext.getCurrentInstance().openDialog("/selecao/" + selecao, opcoes, null);

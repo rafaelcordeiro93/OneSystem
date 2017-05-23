@@ -21,10 +21,16 @@
                         </div>
                         <div class="ui-g">
                             <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{consultaNotaEmitidaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <p:commandButton value="#{l.Cancelar}" actionListener="#{consultaNotaEmitidaView.cancela}" icon="fa fa-ban"
+                                             styleClass="orange-btn" style="width: auto !important" update=":conteudo"
+                                             rendered="#{consultaNotaEmitidaView.notaEmitida.estado ne null ? (consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.comanda.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
                         </div>
-                        <div class="ui-g" style="padding-bottom: 2px">
-                            <p:outputLabel class="ui-g-4 ui-md-2 ui-lg-1"  value="#{l.Cancelada}:"/>
-                            <p:selectBooleanCheckbox class="ui-g-2 ui-md-1 ui-lg-1" style="margin-top: 2px"/>
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel  value="#{l.Estado}: "/>
+                            <p:outputLabel class="#{consultaNotaEmitidaView.notaEmitida.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaNotaEmitidaView.notaEmitida.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaNotaEmitidaView.notaEmitida.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaNotaEmitidaView.notaEmitida.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 

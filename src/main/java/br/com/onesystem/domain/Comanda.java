@@ -9,6 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeComanda;
+import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -207,7 +208,7 @@ public class Comanda implements Serializable {
 
     public void adiciona(NotaEmitida nota) {
         this.notasEmitidas.add(nota);
-        BigDecimal total = this.notasEmitidas.stream().map(n -> n.getItens().stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add)).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal total = this.notasEmitidas.stream().filter(n -> !n.getEstado().equals(EstadoDeNota.CANCELADO)).map(n -> n.getItens().stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add)).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (total.equals(getItensDeComanda().stream().map(i -> i.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add))) {
             efetiva();
         }

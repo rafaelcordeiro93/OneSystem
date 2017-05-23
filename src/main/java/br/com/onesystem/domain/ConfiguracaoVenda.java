@@ -1,7 +1,13 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFisica;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -31,6 +37,10 @@ public class ConfiguracaoVenda implements Serializable {
     private FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa;
     @OneToOne
     private Operacao operacaoDeComanda;
+    @OneToOne
+    private Operacao operacaoDeCondicional;
+    @OneToOne
+    private Operacao operacaoDeDevolucaoCondicional;
 
     private boolean imprimeComanda;
 
@@ -38,12 +48,36 @@ public class ConfiguracaoVenda implements Serializable {
     }
 
     public ConfiguracaoVenda(Long id, FormaDeRecebimento formaDeRecebimentoDevolucaoEmpresa, boolean imprimeComanda,
-            Operacao operacaoDeComanda) throws DadoInvalidoException {
+            Operacao operacaoDeComanda, Operacao operacaoDeCondicional, Operacao operacaoDeDevolucaoCondicional) throws DadoInvalidoException {
         this.id = id;
         this.formaDeRecebimentoDevolucaoEmpresa = formaDeRecebimentoDevolucaoEmpresa;
         this.imprimeComanda = imprimeComanda;
         this.operacaoDeComanda = operacaoDeComanda;
+        if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
+                && buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
+            this.operacaoDeCondicional = operacaoDeCondicional;
+            if (!operacaoDeCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Condicional_Deve_Ser_Sem_Alteracao"));
+            }
+        } else {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Condicional_Deve_Ser_Saida"));
+        }
+        if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
+                && buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
+            this.operacaoDeDevolucaoCondicional = operacaoDeDevolucaoCondicional;
+            if (!operacaoDeDevolucaoCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Devolucao_Condicional_Deve_Ser_Sem_Alteracao"));
+            }
+        } else {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Devolucao_Condicional_Deve_Ser_Entrada"));
+        }
         ehValido();
+    }
+
+    private OperacaoDeEstoque buscaOperacaoDeEstoqueDa(Operacao operacao) throws DadoInvalidoException {
+        ConfiguracaoEstoque c = new ConfiguracaoEstoqueService().buscar();
+        OperacaoDeEstoque operacaoDeEstoque = operacao.getOperacaoDeEstoque().stream().filter(o -> o.getContaDeEstoque().equals(c.getContaDeEstoqueEmpresa())).findFirst().orElseThrow(() -> new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Condicional_Not_Null")));
+        return operacaoDeEstoque;
     }
 
     private void ehValido() throws DadoInvalidoException {
@@ -61,6 +95,14 @@ public class ConfiguracaoVenda implements Serializable {
 
     public boolean isImprimeComanda() {
         return imprimeComanda;
+    }
+
+    public Operacao getOperacaoDeDevolucaoCondicional() {
+        return operacaoDeDevolucaoCondicional;
+    }
+
+    public Operacao getOperacaoDeCondicional() {
+        return operacaoDeCondicional;
     }
 
     public Operacao getOperacaoDeComanda() {

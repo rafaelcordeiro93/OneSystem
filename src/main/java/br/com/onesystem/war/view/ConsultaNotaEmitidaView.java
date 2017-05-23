@@ -5,12 +5,14 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFomatter;
@@ -61,6 +63,16 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
             return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
         } else {
             return "";
+        }
+    }
+    
+     public void cancela() {
+        try {
+            notaEmitida.cancela();
+            new AtualizaDAO<>().atualiza(notaEmitida);
+            InfoMessage.atualizado();
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
     }
 
