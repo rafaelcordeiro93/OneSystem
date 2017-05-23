@@ -22,6 +22,7 @@
                         <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/orcamento" />
                         <p:menuitem value="#{l.Comanda}" icon="fa fa-superpowers" outcome="/comanda" />
                         <p:menuitem value="#{l.Condicional}" icon="fa fa-compress" outcome="/condicional" />
+                        <p:menuitem value="#{l.Desdobramento_De_Venda}" icon="fa fa-american-sign-language-interpreting" outcome="/desdobramentoDeVenda" />
                         <p:submenu label="#{l.Consultar}" icon="fa fa-book">
                             <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
                             <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaOrcamento" />
@@ -73,6 +74,12 @@
                             <p:menuitem value="#{l.Boleto_De_Cartao}" icon="fa fa-file-text-o" outcome="/boletoDeCartao" />
                             <p:menuitem value="#{l.Cheque}" icon="fa fa-file-text-o" outcome="/cheque" />
                         </p:submenu>
+                        <p:submenu label="#{l.Consultar}" icon="icon-library_books">   
+                            <p:menuitem value="#{l.Cobranca}" icon="fa fa-file-text-o" outcome="/consultaCobranca" />
+                        </p:submenu>
+
+
+
                     </p:submenu>
 
                     <p:submenu label="#{l.Cambio}" icon="fa fa-exchange">

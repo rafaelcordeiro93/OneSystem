@@ -33,23 +33,6 @@ import org.hibernate.Hibernate;
 public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException, NoSuchFieldException {
-
-        Item item = new ArmazemDeRegistros<Item>(Item.class).find(new Long(1));
-        Condicional condicional = new ArmazemDeRegistros<Condicional>(Condicional.class).find(new Long(7));
-
-        ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
-        ConfiguracaoEstoque conf = serv.buscar();
-
-//        List<NotaEmitida> notas = new NotaEmitidaDAO().porCondicional(condicional).listaDeResultados(); 
-        condicional.getNotasEmitidas().forEach(System.out::println);
-
-        List<ItemDeNota> itensDeNotas = new ItemDeNotaDAO().buscarItens().porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item)
-                .porNaoCancelado().listaDeResultados();
-
-        itensDeNotas.forEach(System.out::println);
-
-        System.out.println("Concluiu: " + itensDeNotas.stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
-
     }
 
 }

@@ -66,7 +66,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.id = nota.getId();
         this.pessoa = nota.getPessoa();
         this.operacao = nota.getOperacao();
-        this.cobrancas = nota.getParcelas();
+        this.cobrancas = nota.getCobrancas();
         this.itens = nota.getItens();
         this.listaDePreco = nota.getListaDePreco();
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
@@ -76,6 +76,14 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.orcamento = nota.getOrcamento();
         this.comanda = nota.getComanda();
         this.condicional = nota.getCondicional();
+        this.acrescimo = nota.getAcrescimo();
+        this.desconto = nota.getDesconto();
+        this.despesaCobranca = nota.getDespesaCobranca();
+        this.frete = nota.getFrete();
+        this.valorPorCotacao = nota.getValorPorCotacao();
+        this.aFaturar = nota.getaFaturar();
+        this.totalEmDinheiro = nota.getTotalEmDinheiro();
+        this.notaDeOrigem = nota.getNotaDeOrigem();
     }
 
     public NotaEmitidaBV() {
@@ -294,6 +302,29 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
             List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
             parcelamento.sort(Comparator.comparingLong(Cobranca::getDias));
             return parcelamento;
+        } else {
+            return null;
+        }
+    }
+
+    public List<Cobranca> getChequesDeEntradas() {
+        if (cobrancas != null) {
+            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            return entradas;
+        } else {
+            return null;
+        }
+    }
+
+    public BoletoDeCartaoBV getCartaoDeEntrada() {
+        if (cobrancas != null) {
+            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof BoletoDeCartao).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            for (Cobranca c : entradas) {
+                return new BoletoDeCartaoBV(c);
+            }
+            return null;
         } else {
             return null;
         }
