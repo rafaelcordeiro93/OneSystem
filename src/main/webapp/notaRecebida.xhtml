@@ -173,13 +173,13 @@
                                     <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
                                                    value="#{notaRecebidaView.notaRecebida.porcentagemAcrescimo}">
-                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar" 
+                                        <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar neCredito" 
                                                 listener="#{notaRecebidaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber> 
                                     <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} "
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaRecebidaView.notaRecebida.acrescimo}">
-                                        <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota" listener="#{notaRecebidaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota neCredito" listener="#{notaRecebidaView.calculaPorcentagemAcrescimoEDesconto}"/>
                                         <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaRecebidaView.recalculaValores}"/>
                                     </p:inputNumber>
 
@@ -187,12 +187,12 @@
                                     <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaRecebidaView.notaRecebida.porcentagemDesconto}">
-                                        <p:ajax event="change" update="neDesconto neDinheiro totalNota" listener="#{notaRecebidaView.calculaValorAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="neDesconto neDinheiro totalNota neCredito" listener="#{notaRecebidaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber>                                     
                                     <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                    symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} "
                                                    styleClass="Wid90" value="#{notaRecebidaView.notaRecebida.desconto}">
-                                        <p:ajax event="change" update="nePDesconto neDinheiro totalNota" listener="#{notaRecebidaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="nePDesconto neDinheiro totalNota neCredito" listener="#{notaRecebidaView.calculaPorcentagemAcrescimoEDesconto}"/>
                                         <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaRecebidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
@@ -201,14 +201,14 @@
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaRecebidaView.notaRecebida.despesaCobranca}"
                                                    symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} ">
-                                        <p:ajax event="change" update="neDinheiro totalNota" listener="#{notaRecebidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaRecebidaView.calculaValoresTotais}"/>
                                     </p:inputNumber> 
 
                                     <p:spacer/>
                                     <p:outputLabel value="#{l.Frete}"/>
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaRecebidaView.notaRecebida.frete}" symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} ">
-                                        <p:ajax event="change" update="neDinheiro totalNota" listener="#{notaRecebidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaRecebidaView.calculaValoresTotais}"/>
                                     </p:inputNumber>    
 
                                 </p:panelGrid>
@@ -481,7 +481,7 @@
                                  update="panelDetCheEnt detChequeEntrada :conteudo:growl"/>
             </h:panelGrid>
 
-            <p:dataTable id="detChequeEntrada" var="cheque" value="#{notaRecebidaView.notaRecebida.cobrancas}" rowKey="#{cheque.id}" 
+            <p:dataTable id="detChequeEntrada" var="cheque" value="#{notaRecebidaView.notaRecebida.chequesDeEntradas}" rowKey="#{cheque.id}" 
                          emptyMessage="#{l.Nao_Ha_Registros}" style="border: none" reflow="true" selectionMode="single" selection="#{notaRecebidaView.chequeSelecionado}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{notaRecebidaView.selecionaChequeEntrada}" update=":conteudo:panelDetCheEnt"/>

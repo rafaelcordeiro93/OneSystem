@@ -219,4 +219,9 @@ public abstract class Cobranca implements Serializable {
         return this.id.equals(outro.id);
     }
 
+    @Override
+    public String toString() {
+        return "Cobranca{" + "id=" + id + ", valor=" + valor + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cotacao=" + cotacao + ", historico=" + historico + ", baixas=" + baixas + ", operacaoFinanceira=" + operacaoFinanceira + ", vencimento=" + vencimento + ", nota=" + nota + ", entrada=" + entrada + '}';
+    }
+
 }
