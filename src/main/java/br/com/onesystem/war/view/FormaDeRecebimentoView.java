@@ -6,7 +6,7 @@ import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.FormaDeRecebimentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -60,8 +60,8 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, Form
         return Arrays.asList(TipoFormaDeRecebimento.values());
     }
 
-    public List<TipoFormaDeRecebimentoParcela> getTipoFormaDeRecebimentoPadraoParcela() {
-        return Arrays.asList(TipoFormaDeRecebimentoParcela.values());
+    public List<ModalidadeDeCobranca> getTipoFormaDeRecebimentoPadraoParcela() {
+        return Arrays.asList(ModalidadeDeCobranca.values());
     }
 
     public List<TipoPeriodicidade> getTipoPeriodicidade() {

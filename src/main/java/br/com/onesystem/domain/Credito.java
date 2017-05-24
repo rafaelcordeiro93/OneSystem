@@ -6,6 +6,8 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,6 +30,11 @@ public class Credito extends Cobranca implements Serializable {
     public Credito(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
             BigDecimal valor, Date vencimento, Nota nota, Boolean entrada) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
+    }
+
+    @Override
+    public ModalidadeDeCobranca getModalidade() {
+        return ModalidadeDeCobranca.CREDITO;
     }
 
     @Override

@@ -9,6 +9,11 @@
 
     <ui:define name="content">
 
+        <p:commandButton id="abreDialogoCobranca-btn" action="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+            <p:ajax event="dialogReturn" listener="#{desdobramentoDeVendaView.selecionar}" process="@this"/>
+        </p:commandButton>
+
+
         <div class="ui-g">
             <div class="ui-g-10" style="margin-left: 8%">
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">
@@ -18,172 +23,58 @@
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Emitida}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="consultaDesdNotaEmitida" value="#{desdobramentoDeVendaView.nota}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{notaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="consultaDesdNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
                         </div>
                         <p:separator/>
-                    </div>
-
-                    <div class="ui-fluid" style="#{notaEmitidaView.geraFinanceiro eq true ? 'display: none;' : ''}">
-                        <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-3"
-                                     columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-
-                            <p:panelGrid columns="3" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
-                                         columnClasses="ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4 TexAlRight, ui-g-12 ui-md-4">
-
-                                <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
-                                <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
-                                               decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
-                                               value="#{notaEmitidaView.notaEmitida.porcentagemAcrescimo}">
-                                    <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar neCredito" 
-                                            listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
-                                </p:inputNumber> 
-                                <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
-                                               decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.acrescimo}">
-                                    <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber>
-
-                                <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
-                                <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
-                                               decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.porcentagemDesconto}">
-                                    <p:ajax event="change" update="neDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
-                                </p:inputNumber>                                     
-                                <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
-                                               symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
-                                               styleClass="Wid90" value="#{notaEmitidaView.notaEmitida.desconto}">
-                                    <p:ajax event="change" update="nePDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber> 
-
-                                <p:spacer/>
-                                <p:outputLabel value="#{l.Despesa_Cobranca}"/>
-                                <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.despesaCobranca}"
-                                               symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                    <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValoresTotais}"/>
-                                </p:inputNumber> 
-
-                                <p:spacer/>
-                                <p:outputLabel value="#{l.Frete}"/>
-                                <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.frete}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                    <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValoresTotais}"/>
-                                </p:inputNumber>    
-
-                            </p:panelGrid>
-
-                            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
-                                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-8">
-
-                                <p:outputLabel value="#{l.Dinheiro}"/>
-                                <p:inputNumber id="neDinheiro" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmDinheiro}"
-                                               value="#{notaEmitidaView.notaEmitida.totalEmDinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
-                                    <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber> 
-
-                                <p:outputLabel value="#{l.Credito}"/>
-                                <p:inputNumber id="neCredito" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
-                                               decimalSeparator="," thousandSeparator="." styleClass="Wid90" value="#{notaEmitidaView.creditoBV.valor}"
-                                               symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                    <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber> 
-
-                                <p:outputLabel value="#{l.Cheque}" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
-                                <p:inputNumber  id="chequeEntrada" readonly="true"  disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}" rendered="#{!notaEmitidaView.editarItensEParcelas}"
-                                                value="#{notaEmitidaView.notaEmitida.totalChequeDeEntrada}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator=".">
-                                    <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber> 
-
-                                <p:outputLabel value="#{l.Cartao}" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
-                                <p:inputNumber id="cartaoValor" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}" readonly="true" rendered="#{!notaEmitidaView.editarItensEParcelas}"
-                                               decimalSeparator="," thousandSeparator="." styleClass="Wid90" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
-                                               value="#{notaEmitidaView.boletoDeCartao.valor}">
-                                    <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
-                                </p:inputNumber>
-
-                            </p:panelGrid>
-
-                            <p:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
-                                         columnClasses="ui-g-12 ui-md-12">
-
-                                <p:spacer height="25"/>
-
-                                <p:commandButton value="#{l.Consulta_Credito}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCredito}"
-                                                 onclick="PF('consultaCredito').show()"/>
-
-                                <p:commandButton value="#{l.Cheques}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCheque}"
-                                                 onclick="PF('detalheChequeEntrada').show()" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
-
-                                <p:commandButton value="#{l.Cartao}" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmCartao}"
-                                                 onclick="PF('detalheCartaoEntrada').show()" rendered="#{!notaEmitidaView.editarItensEParcelas}"/>
-
-                            </p:panelGrid>
-
-                            <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
-                                         columnClasses="ui-g-12 ui-md-4 TexAlRight,ui-g-12 ui-md-6">
-
-                                <p:outputLabel value="#{l.A_Faturar}"/>
-                                <p:inputNumber id="neAFaturar" maxValue="999999999999.99" minValue="-9999999.99" decimalSeparator="," thousandSeparator="." readonly="true"
-                                               value="#{notaEmitidaView.notaEmitida.AFaturar}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                </p:inputNumber> 
-
-                                <p:outputLabel value="#{l.Total_Nota}"/>
-                                <p:inputNumber id="totalNota" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
-                                               value="#{notaEmitidaView.notaEmitida.totalNota}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                </p:inputNumber> 
-
-                            </p:panelGrid>
-                        </p:panelGrid>
                     </div>
 
                     <div class="ui-g">  
 
                         <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaEmitidaView.addItemNaLista}"
-                                             update=":conteudo" value="#{l.Adicionar}"/>
-                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaEmitidaView.updateItemNaLista}"
-                                             update=":conteudo" styleClass="green-btn" value="#{l.Atualizar}"/>     
-                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaEmitidaView.deleteItemNaLista}" 
-                                             update=":conteudo" styleClass="orange-btn" value="#{l.Remover}"/>
+                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{desdobramentoDeVendaView.removeDaSessao()}" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Adicionar}">
+                                <p:ajax event="dialogReturn"  listener="#{desdobramentoDeVendaView.selecionar}" process="@this" update=":conteudo:parcelas"/>
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Atualizar}"  styleClass="green-btn">
+                                <p:ajax event="dialogReturn" listener="#{desdobramentoDeVendaView.selecionar}" process="@this" update=":conteudo:parcelas"/>
+                            </p:commandButton>
+                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{desdobramentoDeVendaView.remover}" 
+                                             update=":conteudo:parcelas" styleClass="orange-btn" value="#{l.Remover}"/>
                         </p:panelGrid>
 
-                        <p:dataTable id="neParcelas" var="cobrancaBV" value="#{notaEmitidaView.cobrancas}"
-                                     styleClass="ui-g-2" rowKey="#{cobrancaBV.id}" rendered="#{!notaEmitidaView.editarItensEParcelas}"
+                        <p:dataTable id="parcelas" var="cobranca" value="#{desdobramentoDeVendaView.notaEmitida.parcelas}"
+                                     styleClass="ui-g-2" selectionMode="single" rowKey="#{cobranca.id}"
                                      paginatorAlwaysVisible="false" rows="12" paginator="true"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
+                            <p:ajax event="rowSelect" listener="#{desdobramentoDeVendaView.selecionaParcela}" />
+
                             <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
-                                <h:outputText value="#{cobrancaBV.id}" />
+                                <h:outputText value="#{cobranca.id}" />
                             </p:column>
                             <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
-                                <h:outputText value="#{cobrancaBV.tipoFormaDeRecebimentoParcela}"/>
+                                <h:outputText value="#{cobranca.modalidade.nome}"/>
                             </p:column>
                             <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                                    
-                                <h:outputText id="vencimentoParcelaFormatado" value="#{cobrancaBV.vencimentoFormatado}"/>
+                                <h:outputText id="vencimentoParcelaFormatado" value="#{cobranca.vencimentoFormatado}"/>
                             </p:column>
                             <p:column headerText="#{l.Valor}" width="12%">
-                                <h:outputText id="dcpValorTxt" value="#{cobrancaBV.valorFormatado}"/>
+                                <h:outputText id="dcpValorTxt" value="#{cobranca.valorFormatado}"/>
                             </p:column>                                   
                             <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
-                                <h:outputText id="parDetalhes" value="#{cobrancaBV.tipoFormaDeRecebimentoParcela.id eq 1 ? 
-                                                                        cobrancaBV.descricaoCheque : 
-                                                                        cobrancaBV.tipoFormaDeRecebimentoParcela.id eq 2 ? cobrancaBV.descricaoCartao :
-                                                                        ''}"/>
+                                <h:outputText id="parDetalhes" value="#{cobranca.detalhes}"/>
                             </p:column>
                             <p:column headerText="#{l.Dias}">                                
-                                <h:outputText id="diasParcela" value="#{cobrancaBV.dias}"/>
+                                <h:outputText id="diasParcela" value="#{cobranca.dias}"/>
                             </p:column>
                             <p:column headerText="#{l.Dia_Semana}">
-                                <h:outputText id="diaDaSemana" value="#{cobrancaBV.diaDaSemana}"/>
+                                <h:outputText id="diaDaSemana" value="#{cobranca.diaDaSemana}"/>
                             </p:column>
 
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
-                                    <p:column id="totalParcelas" footerText="#{notaEmitidaView.totalParcelasFormatado}"/>
+                                    <p:column id="totalParcelas" footerText="#{desdobramentoDeVendaView.notaEmitida.totalParcelasFormatado}"/>
                                     <p:column colspan="3"/>
                                 </p:row>                                  
                             </p:columnGroup>
@@ -192,10 +83,12 @@
 
                     </div>
 
+
+                    <p:commandButton action="#{desdobramentoDeVendaView.update()}" value="#{l.Atualizar}"/>
+
                 </div>
             </div>
         </div>
-
 
     </ui:define>
 
