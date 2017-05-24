@@ -29,7 +29,7 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
 
     @Override
     public String abrirEdicao() {
-        return "cartao";
+        return "/cartao";
     }
     
      @Override

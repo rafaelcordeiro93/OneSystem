@@ -16,7 +16,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -225,16 +225,16 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     //------------------- Fim Getter Personalizados ---------------------------
     //----------------------- Getters and Setters -----------------------------
-    public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
-        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<>();
+    public List<ModalidadeDeCobranca> getTiposDeFormaDeRecebimentoParcela() {
+        List<ModalidadeDeCobranca> forma = new ArrayList<>();
         if (e.getFormaDeRecebimento().isParcelaEmCartao()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
+            forma.add(ModalidadeDeCobranca.CARTAO);
         }
         if (e.getFormaDeRecebimento().isParcelaEmCheque()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CHEQUE);
+            forma.add(ModalidadeDeCobranca.CHEQUE);
         }
         if (e.getFormaDeRecebimento().isParcelaEmConta()) {
-            forma.add(TipoFormaDeRecebimentoParcela.TITULO);
+            forma.add(ModalidadeDeCobranca.TITULO);
         }
         return forma;
     }

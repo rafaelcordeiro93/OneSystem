@@ -9,7 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -95,7 +95,7 @@ public class FormaDeRecebimento implements Serializable {
     @Column(nullable = true)
     private Integer diasPrimeiraParcela;
     @Enumerated(EnumType.STRING)
-    private TipoFormaDeRecebimentoParcela formaPadraoDeParcela;
+    private ModalidadeDeCobranca formaPadraoDeParcela;
     @OneToMany(mappedBy = "formaDeRecebimento")
     private List<Nota> notas;
     @OneToMany(mappedBy = "formaDeRecebimento")
@@ -108,7 +108,7 @@ public class FormaDeRecebimento implements Serializable {
             TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque,
             boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas,
             Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela,
-            TipoFormaDeRecebimentoParcela formaPadraoDeParcela, Cartao cartao) throws DadoInvalidoException {
+            ModalidadeDeCobranca formaPadraoDeParcela, Cartao cartao) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.ativo = ativo;
@@ -212,7 +212,7 @@ public class FormaDeRecebimento implements Serializable {
         return diasPrimeiraParcela;
     }
 
-    public TipoFormaDeRecebimentoParcela getFormaPadraoDeParcela() {
+    public ModalidadeDeCobranca getFormaPadraoDeParcela() {
         return formaPadraoDeParcela;
     }
 

@@ -6,7 +6,7 @@ import br.com.onesystem.domain.builder.FormaDeRecebimentoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -35,7 +35,7 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
     private Integer periodicidade;
     private TipoPeriodicidade tipoPeriodicidade;
     private Integer diasPrimeiraParcela;
-    private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
+    private ModalidadeDeCobranca formaPadraoDeRecebimentoParcela;
     private Cartao cartao;
     
     public FormaDeRecebimentoBV(FormaDeRecebimento formaDeRecebimentoSelecionada) {
@@ -209,11 +209,11 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
         this.diasPrimeiraParcela = diasPrimeiraParcela;
     }
     
-    public TipoFormaDeRecebimentoParcela getFormaPadraoDeRecebimentoParcela() {
+    public ModalidadeDeCobranca getFormaPadraoDeRecebimentoParcela() {
         return formaPadraoDeRecebimentoParcela;
     }
     
-    public void setFormaPadraoDeRecebimentoParcela(TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela) {
+    public void setFormaPadraoDeRecebimentoParcela(ModalidadeDeCobranca formaPadraoDeRecebimentoParcela) {
         this.formaPadraoDeRecebimentoParcela = formaPadraoDeRecebimentoParcela;
     }
     

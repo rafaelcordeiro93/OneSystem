@@ -35,8 +35,8 @@
                             <p:inputText value="#{operacaoView.operacao.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Operacao_Financeira}"/>
-                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.operacao.operacaoFinanceira}">
-                                <f:selectItems value="#{operacaoView.operacaoFinanceira}" itemLabel="#{OperacaoFinaceira}" itemValue="#{OperacaoFinaceira}" >
+                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.operacao.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
+                                <f:selectItems value="#{operacaoView.operacaoFinanceira}" var="operacaoFinanceira" itemLabel="#{operacaoFinanceira.nome}" itemValue="#{operacaoFinanceira}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 

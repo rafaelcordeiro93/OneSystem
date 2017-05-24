@@ -31,7 +31,9 @@ public class NotaRecebida extends Nota implements Serializable {
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
-        adicionaNoEstoque();
+        if (id == null) {
+            adicionaNoEstoque();
+        }
     }
 
     protected void adicionaNoEstoque() throws DadoInvalidoException {
