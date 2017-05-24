@@ -34,7 +34,7 @@ import br.com.onesystem.util.Money;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
@@ -189,7 +189,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             //Gera as cobranca de acordo a sua modalidade.
             for (CobrancaBV p : cobrancas) {
                 p.setEmissao(notaRecebida.getEmissao());
-                switch (p.getTipoFormaDeRecebimentoParcela()) {
+                switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         notaRecebida.adiciona(p.construirBoletoDeCartao());
                         break;
@@ -353,10 +353,10 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void detalharParcela() {
         cobrancaBV = new CobrancaBV(cobrancaSelecionada);
         RequestContext req = RequestContext.getCurrentInstance();
-        if (cobrancaSelecionada.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CHEQUE) {
+        if (cobrancaSelecionada.getModalidadeDeCobranca() == ModalidadeDeCobranca.CHEQUE) {
             req.execute("PF('detalheChequeParcela').show()");
             req.update("conteudo:panelDetCheParcela");
-        } else if (cobrancaSelecionada.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CARTAO) {
+        } else if (cobrancaSelecionada.getModalidadeDeCobranca() == ModalidadeDeCobranca.CARTAO) {
 
             req.execute("PF('detalheCartaoParcela').show()");
             req.update("conteudo:panelDetCartaoPar");
@@ -452,7 +452,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     }
 
     public void addCartaoQuandoSelecionadoNaParcela(CobrancaBV parcela) {
-        if (parcela.getTipoFormaDeRecebimentoParcela() == TipoFormaDeRecebimentoParcela.CARTAO) {
+        if (parcela.getModalidadeDeCobranca() == ModalidadeDeCobranca.CARTAO) {
             for (CobrancaBV p : cobrancas) {
                 if (p.getId().equals(parcela.getId())) {
                     p.setCartao(notaRecebida.getFormaDeRecebimento().getCartao());
@@ -821,16 +821,16 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         return notaRecebida;
     }
 
-    public List<TipoFormaDeRecebimentoParcela> getTiposDeFormaDeRecebimentoParcela() {
-        List<TipoFormaDeRecebimentoParcela> forma = new ArrayList<>();
+    public List<ModalidadeDeCobranca> getTiposDeFormaDeRecebimentoParcela() {
+        List<ModalidadeDeCobranca> forma = new ArrayList<>();
         if (notaRecebida.getFormaDeRecebimento().isParcelaEmCartao()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CARTAO);
+            forma.add(ModalidadeDeCobranca.CARTAO);
         }
         if (notaRecebida.getFormaDeRecebimento().isParcelaEmCheque()) {
-            forma.add(TipoFormaDeRecebimentoParcela.CHEQUE);
+            forma.add(ModalidadeDeCobranca.CHEQUE);
         }
         if (notaRecebida.getFormaDeRecebimento().isParcelaEmConta()) {
-            forma.add(TipoFormaDeRecebimentoParcela.TITULO);
+            forma.add(ModalidadeDeCobranca.TITULO);
         }
         return forma;
     }

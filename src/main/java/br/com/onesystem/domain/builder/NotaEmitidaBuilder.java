@@ -83,9 +83,7 @@ public class NotaEmitidaBuilder {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
             this.itens = itensCol;
-        } else {
-            throw new FDadoInvalidoException(new BundleUtil().getMessage("Nao_Constroi_Itens_Nota_Existente"));
-        }
+        } 
         return this;
     }
 

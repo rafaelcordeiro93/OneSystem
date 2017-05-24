@@ -22,7 +22,7 @@ public abstract class BasicCrudMBImpl<Bean> {
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("selecao/" + selecao, opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/selecao/" + selecao, opcoes, null);
     }
 
     public abstract void abrirDialogo();

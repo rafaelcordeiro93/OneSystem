@@ -357,11 +357,11 @@
                             </p:column>
                             <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{cobrancaBV.tipoFormaDeRecebimentoParcela}"/></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{cobrancaBV.modalidadeDeCobranca}"/></f:facet>
                                     <f:facet name="input" class="Wid50">
-                                        <p:selectOneMenu  id="neParcelaModalidade" value="#{cobrancaBV.tipoFormaDeRecebimentoParcela}" converter="formaDeRecebimentoParcelaConverter" styleClass="Wid50">
+                                        <p:selectOneMenu  id="neParcelaModalidade" value="#{cobrancaBV.modalidadeDeCobranca}" converter="modalidadeCobrancaConverter" styleClass="Wid50">
                                             <p:ajax update="neParcelas" listener="#{notaEmitidaView.addCartaoQuandoSelecionadoNaParcela(cobrancaBV)}"/>                                            
-                                            <f:selectItems value="#{notaEmitidaView.tiposDeFormaDeRecebimentoParcela}" var="tipoFormaDeRecebimentoParcela" itemValue="#{tipoFormaDeRecebimentoParcela}" itemLabel="#{tipoFormaDeRecebimentoParcela}"/>
+                                            <f:selectItems value="#{notaEmitidaView.tiposDeFormaDeRecebimentoParcela}" var="modalidadeDeCobranca" itemValue="#{modalidadeDeCobranca}" itemLabel="#{modalidadeDeCobranca}"/>
                                         </p:selectOneMenu>
                                     </f:facet>
                                 </p:cellEditor>
@@ -388,9 +388,9 @@
                                 </p:cellEditor>
                             </p:column>                                   
                             <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
-                                <h:outputText id="parDetalhes" value="#{cobrancaBV.tipoFormaDeRecebimentoParcela.id eq 1 ? 
+                                <h:outputText id="parDetalhes" value="#{cobrancaBV.modalidadeDeCobranca.id eq 1 ? 
                                                                         cobrancaBV.descricaoCheque : 
-                                                                        cobrancaBV.tipoFormaDeRecebimentoParcela.id eq 2 ? cobrancaBV.descricaoCartao :
+                                                                        cobrancaBV.modalidadeDeCobranca.id eq 2 ? cobrancaBV.descricaoCartao :
                                                                         ''}"/>
                             </p:column>
                             <p:column headerText="#{l.Dias}">                                

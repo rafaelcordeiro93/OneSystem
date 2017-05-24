@@ -39,6 +39,15 @@ public class NotaEmitida extends Nota implements Serializable {
         emissao = new Date();
     }
 
+    public NotaEmitida(NotaEmitida notaEmitida) throws DadoInvalidoException {
+        super(notaEmitida.getId(), notaEmitida.getPessoa(), notaEmitida.getOperacao(), notaEmitida.getItens(), notaEmitida.getFormaDeRecebimento(), notaEmitida.getListaDePreco(), notaEmitida.getCobrancas(), notaEmitida.getMoedaPadrao(),
+                notaEmitida.getValorPorCotacao(), notaEmitida.getDesconto(), notaEmitida.getAcrescimo(), notaEmitida.getDespesaCobranca(), notaEmitida.getFrete(), notaEmitida.getaFaturar(), notaEmitida.getTotalEmDinheiro(), notaEmitida.getNotaDeOrigem());
+        this.orcamento = notaEmitida.getOrcamento();
+        this.comanda = notaEmitida.getComanda();
+        this.condicional = notaEmitida.getCondicional();
+        this.emissao = notaEmitida.getEmissao();
+    }
+
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas,
@@ -48,23 +57,25 @@ public class NotaEmitida extends Nota implements Serializable {
             Comanda comanda, Condicional condicional) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
         this.orcamento = orcamento;
-        this.comanda = adicionaNotaNa(comanda);
-        this.condicional = adicionaNotaNa(condicional);
-        adicionaNoEstoque();
+        this.comanda = comanda;
+        this.condicional = condicional;
+        if (id == null) {
+            adicionaNotaNaComanda();
+            adicionaNotaNaCondicional();
+            adicionaNoEstoque();
+        }
     }
 
-    public Comanda adicionaNotaNa(Comanda comanda) {
+    public void adicionaNotaNaComanda() {
         if (comanda != null) {
             comanda.adiciona(this);
         }
-        return comanda;
     }
 
-    public Condicional adicionaNotaNa(Condicional condicional) {
+    public void adicionaNotaNaCondicional() {
         if (condicional != null) {
             condicional.adiciona(this);
         }
-        return condicional;
     }
 
     protected void adicionaNoEstoque() throws DadoInvalidoException {

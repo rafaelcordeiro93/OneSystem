@@ -123,8 +123,10 @@ public abstract class Nota implements Serializable {
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
         this.notaDeOrigem = notaDeOrigem;
-        geraBaixaPorValorDeCotacao();
-        geraCobrancas();
+        if (id == null) {
+            geraBaixaPorValorDeCotacao();
+            geraCobrancas();
+        }
         ehValido();
     }
 

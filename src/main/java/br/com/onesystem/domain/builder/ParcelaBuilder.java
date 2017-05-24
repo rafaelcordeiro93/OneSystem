@@ -18,7 +18,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
 import java.math.BigDecimal;
@@ -53,7 +53,7 @@ public class ParcelaBuilder {
     private Moeda moeda;
     private Cambio cambio;
     private Recepcao recepcao;
-    private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+    private ModalidadeDeCobranca tipoFormaDeRecebimentoParcela;
     private Integer dias;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
@@ -176,7 +176,7 @@ public class ParcelaBuilder {
         return this;
     }
 
-    public ParcelaBuilder comTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
+    public ParcelaBuilder comTipoFormaDeRecebimentoParcela(ModalidadeDeCobranca tipoFormaDeRecebimentoParcela) {
         this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
         return this;
     }

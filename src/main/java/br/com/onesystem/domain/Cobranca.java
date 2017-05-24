@@ -9,6 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -113,6 +114,8 @@ public abstract class Cobranca implements Serializable {
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
+    
+    public abstract ModalidadeDeCobranca getModalidade();
 
     public abstract String getDetalhes();
 
@@ -169,7 +172,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     public String getVencimentoFormatado() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
     }
 
@@ -177,7 +180,7 @@ public abstract class Cobranca implements Serializable {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
     }
-
+    
     public List<Baixa> getBaixas() {
         return baixas;
     }

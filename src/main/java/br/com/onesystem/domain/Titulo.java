@@ -6,6 +6,8 @@ import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -59,6 +61,11 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     private void ehValido() throws DadoInvalidoException {
         List<String> camposTitulo = Arrays.asList("tipoFormaPagRec");
         new ValidadorDeCampos<>().valida(this, camposTitulo);
+    }
+    
+    @Override
+    public ModalidadeDeCobranca getModalidade(){
+        return ModalidadeDeCobranca.TITULO; 
     }
 
     public void cancelarSaldoDeBaixa(BigDecimal valor) {
@@ -138,7 +145,7 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     }
 
     public String getDetalhes() {
-        return "Título: " + getId();
+        return "";
     }
 
 }
