@@ -45,7 +45,7 @@ public class RemoveDAO<T> {
             throw new FDadoInvalidoException("<RemoveDAO> Erro de Remoção: " + ex.getMessage());
         } finally {
             // fecha a entity manager
-//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
+//            em.close(); //Comentado na alteração de versão do Hibernate para 5.2
         }
 
     }

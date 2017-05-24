@@ -134,7 +134,7 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
 
     @Override
     public String toString() {
-        return "Titulo{" + "saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+        return "Titulo{" + getId() +  ", saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
     }
 
     public String getDetalhes() {
