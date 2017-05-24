@@ -31,13 +31,15 @@
                     <div class="profile-info">
                         <span class="topbar-item-name profile-name">#{usuarioLogadoUtil.nomeUsuario}</span>
                         <span style="#{dialogoCaixaView.temCaixa() eq true ? 'display: none' : ''}"  class="topbar-item-name profile-name">#{l.Caixa_Logado}: #{dialogoCaixaView.e.id}</span> 
-                        <span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>
+                         <!--<span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>-->
                     </div>
                 </a>
 
                 <ul class="animated">
                     <li role="menuitem">
-                        <p:commandButton id="btAbrirDialogoCaixa" action="#{dialogoCaixaView.abrirDialogo()}" style="display: none"/>
+                        <p:commandButton id="btAbrirDialogoCaixa" action="#{dialogoCaixaView.abrirDialogo()}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{topBarView.redireciona}" />
+                        </p:commandButton>
                         <a onclick="document.getElementById('btAbrirDialogoCaixa').click()" > <i class="fa fa-fw fa-briefcase"></i> <span>#{l.Logar_Caixa}</span> </a>
                     </li>
                     <li role="menuitem">

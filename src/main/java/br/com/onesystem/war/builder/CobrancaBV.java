@@ -177,7 +177,6 @@ public class CobrancaBV implements Serializable {
         this.nota = p.getNota();
         this.entrada = p.getEntrada();
         this.moeda = p.getCotacao().getConta().getMoeda();
-        this.dias = p.getDias().intValue();
         this.banco = p.getCotacao().getConta().getBanco();
 
         if (p instanceof Cheque) {
@@ -190,18 +189,22 @@ public class CobrancaBV implements Serializable {
             this.descontos = ((Cheque) p).getDescontos();
             this.emitente = ((Cheque) p).getEmitente();
             this.tipoLancamento = ((Cheque) p).getTipoLancamento();
+            this.dias = p.getDias().intValue();
             this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CHEQUE;
 
         } else if (p instanceof BoletoDeCartao) {
             this.cartao = ((BoletoDeCartao) p).getCartao();
             this.codigoTransacao = ((BoletoDeCartao) p).getCodigoTransacao();
             this.situacaoDeCartao = ((BoletoDeCartao) p).getSituacao();
+            this.dias = p.getDias().intValue();
             this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CARTAO;
 
         } else if (p instanceof Titulo) {
             this.recepcao = ((Titulo) p).getRecepcao();
+            this.dias = p.getDias().intValue();
             this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.TITULO;
-        } else {
+            
+        } else if (p instanceof Credito) {
 
         }
 

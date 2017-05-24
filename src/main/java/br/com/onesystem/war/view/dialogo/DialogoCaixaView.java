@@ -13,14 +13,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -36,11 +31,6 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         limparJanela();
     }
 
-    @PreDestroy
-    public void exit() throws IOException{
-          FacesContext.getCurrentInstance().getExternalContext().redirect("perfilUsuario.xhtml");
-    }
-    
     @Override
     public void limparJanela() {
         e = new CaixaBV();
@@ -59,10 +49,10 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     public void reloadPage() throws IOException {
-        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        RequestContext.getCurrentInstance().closeDialog("dialogo/dialogoCaixa");
-               
-        ec.redirect(ec.getRequestContextPath() + "/dashboard.xhtml");
+//        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+//        RequestContext.getCurrentInstance().closeDialog("dialogo/dialogoCaixa");               
+//        ec.redirect(ec.getRequestContextPath() + "/dashboard.xhtml");
+        RequestContext.getCurrentInstance().closeDialog("redireciona");
     }
 
     private void buscaCaixaLogada() throws FDadoInvalidoException {
