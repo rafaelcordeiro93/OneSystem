@@ -30,7 +30,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -75,7 +75,7 @@ public class CobrancaBV implements Serializable {
     private Moeda moeda;
     private Cambio cambio;
     private Recepcao recepcao;
-    private TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela;
+    private ModalidadeDeCobranca modalidadeDeCobranca;
     private Integer dias;
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
@@ -113,7 +113,7 @@ public class CobrancaBV implements Serializable {
         this.moeda = p.getMoeda();
         this.cambio = p.getCambio();
         this.recepcao = p.getRecepcao();
-        this.tipoFormaDeRecebimentoParcela = p.getTipoFormaDeRecebimentoParcela();
+        this.modalidadeDeCobranca = p.getModalidadeDeCobranca();
         this.dias = p.getDias();
         this.cotacao = p.getCotacao();
         this.tipoLancamento = p.getTipoLancamento();
@@ -129,7 +129,7 @@ public class CobrancaBV implements Serializable {
             BigDecimal juros, BigDecimal descontos, String emitente, String observacao,
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
-            Recepcao recepcao, TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela,
+            Recepcao recepcao, ModalidadeDeCobranca tipoFormaDeRecebimentoParcela,
             Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico) {
         this.id = id;
         this.notaEmitida = notaEmitida;
@@ -154,7 +154,7 @@ public class CobrancaBV implements Serializable {
         this.moeda = moeda;
         this.cambio = cambio;
         this.recepcao = recepcao;
-        this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
+        this.modalidadeDeCobranca = tipoFormaDeRecebimentoParcela;
         this.dias = dias;
         this.tipoLancamento = tipoLancamento;
         this.cotacao = cotacao;
@@ -189,22 +189,18 @@ public class CobrancaBV implements Serializable {
             this.descontos = ((Cheque) p).getDescontos();
             this.emitente = ((Cheque) p).getEmitente();
             this.tipoLancamento = ((Cheque) p).getTipoLancamento();
-            this.dias = p.getDias().intValue();
-            this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CHEQUE;
+            this.modalidadeDeCobranca = ((Cheque) p).getModalidade();
 
         } else if (p instanceof BoletoDeCartao) {
             this.cartao = ((BoletoDeCartao) p).getCartao();
             this.codigoTransacao = ((BoletoDeCartao) p).getCodigoTransacao();
             this.situacaoDeCartao = ((BoletoDeCartao) p).getSituacao();
-            this.dias = p.getDias().intValue();
-            this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.CARTAO;
+            this.modalidadeDeCobranca = ((BoletoDeCartao) p).getModalidade();
 
         } else if (p instanceof Titulo) {
             this.recepcao = ((Titulo) p).getRecepcao();
-            this.dias = p.getDias().intValue();
-            this.tipoFormaDeRecebimentoParcela = TipoFormaDeRecebimentoParcela.TITULO;
-            
-        } else if (p instanceof Credito) {
+            this.modalidadeDeCobranca = ((Titulo) p).getModalidade();
+        } else {
 
         }
 
@@ -288,8 +284,11 @@ public class CobrancaBV implements Serializable {
     }
 
     public String getDiaDaSemana() {
-        DayOfWeek diaDaSemana = vencimento.toInstant().atZone(ZoneId.systemDefault()).getDayOfWeek();
-        return new BundleUtil().getLabel(diaDaSemana.getDisplayName(TextStyle.FULL, Locale.US));
+        if (vencimento != null) {
+            DayOfWeek diaDaSemana = vencimento.toInstant().atZone(ZoneId.systemDefault()).getDayOfWeek();
+            return new BundleUtil().getLabel(diaDaSemana.getDisplayName(TextStyle.FULL, Locale.US));
+        }
+        return "";
     }
 
     public void setVencimento(Date vencimento) {
@@ -496,12 +495,12 @@ public class CobrancaBV implements Serializable {
         return pessoa;
     }
 
-    public TipoFormaDeRecebimentoParcela getTipoFormaDeRecebimentoParcela() {
-        return tipoFormaDeRecebimentoParcela;
+    public ModalidadeDeCobranca getModalidadeDeCobranca() {
+        return modalidadeDeCobranca;
     }
 
-    public void setTipoFormaDeRecebimentoParcela(TipoFormaDeRecebimentoParcela tipoFormaDeRecebimentoParcela) {
-        this.tipoFormaDeRecebimentoParcela = tipoFormaDeRecebimentoParcela;
+    public void setModalidadeDeCobranca(ModalidadeDeCobranca modalidadeDeCobranca) {
+        this.modalidadeDeCobranca = modalidadeDeCobranca;
     }
 
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {

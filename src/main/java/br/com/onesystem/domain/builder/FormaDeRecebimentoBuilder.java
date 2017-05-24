@@ -4,7 +4,7 @@ import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
-import br.com.onesystem.valueobjects.TipoFormaDeRecebimentoParcela;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import java.math.BigDecimal;
 
@@ -32,7 +32,7 @@ public class FormaDeRecebimentoBuilder {
     Integer periodicidade;
     TipoPeriodicidade tipoPeriodicidade;
     Integer diasPrimeiraParcela;
-    private TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela;
+    private ModalidadeDeCobranca formaPadraoDeRecebimentoParcela;
     private Cartao cartao;
 
     public FormaDeRecebimentoBuilder comID(Long ID) {
@@ -65,7 +65,7 @@ public class FormaDeRecebimentoBuilder {
         return this;
     }
 
-    public FormaDeRecebimentoBuilder comFormaPadraoParcela(TipoFormaDeRecebimentoParcela formaPadraoDeRecebimentoParcela) {
+    public FormaDeRecebimentoBuilder comFormaPadraoParcela(ModalidadeDeCobranca formaPadraoDeRecebimentoParcela) {
         this.formaPadraoDeRecebimentoParcela = formaPadraoDeRecebimentoParcela;
         return this;
     }

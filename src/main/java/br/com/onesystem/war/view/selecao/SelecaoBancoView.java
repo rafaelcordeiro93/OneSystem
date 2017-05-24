@@ -30,7 +30,7 @@ public class SelecaoBancoView extends BasicCrudMBImpl<Banco> implements Serializ
     
     @Override
     public String abrirEdicao() {
-        return "banco";
+        return "/banco";
     }
     
     @Override

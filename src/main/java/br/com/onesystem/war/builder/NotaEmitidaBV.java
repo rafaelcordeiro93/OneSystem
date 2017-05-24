@@ -307,6 +307,25 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         }
     }
 
+    public BigDecimal getTotalParcelas() {
+        BigDecimal totalParcela = BigDecimal.ZERO;
+        for (Cobranca p : getParcelas()) {
+            if (p.getCotacao() != null && p.getCotacao() != cotacao) {
+                totalParcela = totalParcela.add(p.getValor().divide(p.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+            } else {
+                totalParcela = totalParcela.add(p.getValor());
+            }
+        }
+
+        return totalParcela;
+    }
+
+    public String getTotalParcelasFormatado() {
+        BigDecimal totalParcelas = getTotalParcelas();
+
+        return MoedaFomatter.format(moedaPadrao, totalParcelas);
+    }
+
     public List<Cobranca> getChequesDeEntradas() {
         if (cobrancas != null) {
             List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
