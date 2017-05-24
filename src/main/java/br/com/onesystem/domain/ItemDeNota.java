@@ -55,7 +55,7 @@ public class ItemDeNota implements Serializable {
     private BigDecimal unitario = BigDecimal.ZERO;
     @ManyToOne
     private Nota nota;
-    @OneToMany(mappedBy = "itemDeNota", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "itemDeNota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Estoque> estoques;
     private BigDecimal quantidade;
     @Transient
@@ -88,11 +88,6 @@ public class ItemDeNota implements Serializable {
         estoques = new ArrayList<>();
         for (QuantidadeDeItemPorDeposito q : listaDeQuantidade) {
             for (OperacaoDeEstoque operacaoDeEstoque : nota.getOperacao().getOperacaoDeEstoque()) {
-                System.out.println("1: " + q.getSaldoDeEstoque().getDeposito());
-                System.out.println("2: " + q.getQuantidade());
-                System.out.println("3: " + item);
-                System.out.println("4: " + operacaoDeEstoque);
-                System.out.println("5: " + nota.getEmissao());
                 Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade())
                         .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(this).construir();
                 // Adiciona no estoque

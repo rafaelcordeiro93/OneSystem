@@ -9,6 +9,10 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
+import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.war.builder.BoletoDeCartaoBV;
+import br.com.onesystem.war.builder.ChequeBV;
+import br.com.onesystem.war.builder.TituloBV;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -125,6 +129,28 @@ public abstract class Nota implements Serializable {
     }
 
     protected abstract void adicionaNoEstoque() throws DadoInvalidoException;
+
+    public void adiciona(ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
+        valorPorCotacao.geraBaixaPor(this);
+        this.valorPorCotacao.add(valorPorCotacao);
+    }
+
+    public void atualiza(ValorPorCotacao valor) throws DadoInvalidoException {
+        this.valorPorCotacao.set(valorPorCotacao.indexOf(valor), valor);
+    }
+
+    public void adiciona(Cobranca cobranca) throws DadoInvalidoException {
+        cobranca.geraPara(this);
+        this.cobrancas.add(cobranca);
+    }
+
+    public void atualiza(Cobranca cobranca) throws DadoInvalidoException {
+        this.cobrancas.set(cobrancas.indexOf(cobranca), cobranca);
+    }
+
+    public void remove(Cobranca cobranca) {
+        this.cobrancas.remove(cobranca);
+    }
 
     private void geraBaixaPorValorDeCotacao() throws DadoInvalidoException {
         for (ValorPorCotacao v : valorPorCotacao) {
@@ -331,6 +357,15 @@ public abstract class Nota implements Serializable {
         List<Cobranca> credito = cobrancas.stream().filter(c -> c instanceof Credito).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
         if (credito != null && !credito.isEmpty()) {
             return (Credito) credito.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    public BoletoDeCartao getBoletoDeCartaoEntrada() {
+        List<Cobranca> boletoDeCartao = cobrancas.stream().filter(c -> c instanceof BoletoDeCartao).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
+        if (boletoDeCartao != null && !boletoDeCartao.isEmpty()) {
+            return (BoletoDeCartao) boletoDeCartao.get(0);
         } else {
             return null;
         }

@@ -48,6 +48,14 @@ public class DadosNecessarios implements Serializable {
                 getFormaRecebimentoDevolucaoPadraoEmpresa();
                 break;
             }
+             case "/desdobramentoDeVenda.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                getContaDeEstoque();
+                getOperacoes();
+                getFormaRecebimentoDevolucaoPadraoEmpresa();
+                break;
+            }
             case "/orcamento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
