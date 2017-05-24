@@ -44,7 +44,6 @@
 
             <p:separator/>
             
-            <p:button id="btRefresh" outcome="/dashboard.xhtml"/>
             <p:commandButton value="#{l.Logar}" rendered="#{dialogoCaixaView.temCaixa()}" action="#{dialogoCaixaView.logarCaixa}" styleClass="green-btn" update="tempDialog"/>
             <p:commandButton value="#{l.Deslogar}" rendered="#{!dialogoCaixaView.temCaixa()}" action="#{dialogoCaixaView.deslogarCaixa}" styleClass="orange-btn" update="tempDialog"/>
 

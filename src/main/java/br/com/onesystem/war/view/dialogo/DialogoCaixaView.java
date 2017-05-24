@@ -13,9 +13,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -28,26 +32,20 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
 
     @PostConstruct
     public void init() {
-        try {
-            limparJanela();
-            buscaCaixaLogada();
-        } catch (FDadoInvalidoException ex) {
-            ex.print();
-        }
+        limparJanela();
     }
 
-    
-     public void refresh() throws IOException {
-         RequestContext.getCurrentInstance().closeDialog(null);
-       //FacesContext.getCurrentInstance().getExternalContext().redirect("OneSystem-war/dashboard.xhtml");//atualiza a pagina para atualizar a aparencia do sistema
-    }
-    
     @Override
     public void limparJanela() {
         e = new CaixaBV();
         caixa = null;
         caixas = new ArrayList<>();
         popularLista();
+        try {
+            buscaCaixaLogada();
+        } catch (FDadoInvalidoException ex) {
+           ex.print();
+        }
     }
 
     private void popularLista() {
@@ -66,7 +64,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         try {
             SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
             SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
-            refresh();
+            limparJanela();
         } catch (Exception e) {
             e.getMessage();
         }
@@ -75,6 +73,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     public void deslogarCaixa() throws FDadoInvalidoException {
         try {
             SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+            limparJanela();
         } catch (Exception e) {
             e.getMessage();
         }

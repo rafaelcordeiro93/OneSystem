@@ -9,6 +9,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Credito;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CobrancaBV;
@@ -43,6 +44,9 @@ public class ConsultaCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> impl
                 }
                 if (cobranca instanceof Titulo) {
                     updateNoBanco(e.construirTituloComID());
+                }
+                if (cobranca instanceof Credito) {
+                    updateNoBanco(e.construirCreditoComID());
                 }
             }
 
