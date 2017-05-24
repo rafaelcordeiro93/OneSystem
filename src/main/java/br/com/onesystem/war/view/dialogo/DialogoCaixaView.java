@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
@@ -35,6 +36,11 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         limparJanela();
     }
 
+    @PreDestroy
+    public void exit() throws IOException{
+          FacesContext.getCurrentInstance().getExternalContext().redirect("perfilUsuario.xhtml");
+    }
+    
     @Override
     public void limparJanela() {
         e = new CaixaBV();
@@ -44,12 +50,19 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         try {
             buscaCaixaLogada();
         } catch (FDadoInvalidoException ex) {
-           ex.print();
+            ex.print();
         }
     }
 
     private void popularLista() {
         caixas = new CaixaDAO().buscarCaixas().porUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porEmAberto().listaDeResultados();
+    }
+
+    public void reloadPage() throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        RequestContext.getCurrentInstance().closeDialog("dialogo/dialogoCaixa");
+               
+        ec.redirect(ec.getRequestContextPath() + "/dashboard.xhtml");
     }
 
     private void buscaCaixaLogada() throws FDadoInvalidoException {
@@ -64,7 +77,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         try {
             SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
             SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
-            limparJanela();
+            reloadPage();
         } catch (Exception e) {
             e.getMessage();
         }
@@ -73,7 +86,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     public void deslogarCaixa() throws FDadoInvalidoException {
         try {
             SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
-            limparJanela();
+            reloadPage();
         } catch (Exception e) {
             e.getMessage();
         }
