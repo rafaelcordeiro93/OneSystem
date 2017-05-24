@@ -3,11 +3,21 @@ package br.com.onesystem.domain;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.DateUtil;
+import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.Money;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javafx.scene.input.DataFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -86,6 +96,25 @@ public class Caixa implements Serializable {
 
     public BigDecimal getSaldo() {
         return saldo;
+    }
+
+    public String getSaldoFormatado() throws EDadoInvalidoException {
+        Configuracao cfg = new ConfiguracaoService().buscar();
+        return MoedaFomatter.format(cfg.getMoedaPadrao(), getSaldo());
+    }
+
+    public String getAberturaFormatado() {
+        DateTimeFormatter formatadorBarra = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return getAbertura().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatadorBarra).toString();
+    }
+
+    public String getFechamentoFormatado() {
+        if (getFechamento() != null) {
+            DateTimeFormatter formatadorBarra = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            return getFechamento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().format(formatadorBarra).toString();
+        } else {
+            return null;
+        }
     }
 
     public List<Cotacao> getCotacao() {

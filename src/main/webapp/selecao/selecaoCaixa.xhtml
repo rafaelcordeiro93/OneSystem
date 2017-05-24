@@ -14,13 +14,13 @@
                 <h:outputText value="#{bean.id}" />
             </p:column>
             <p:column headerText="#{l.Saldo}" sortBy="#{bean.saldo}" filterBy="#{bean.saldo}" footerText="#{l.Saldo}" filterMatchMode="contains">
-                <h:outputText value="#{bean.saldo}" />
+                <h:outputText value="#{bean.saldoFormatado}" />
             </p:column>
-            <p:column headerText="#{l.Abertura}" sortBy="#{bean.abertura}" filterBy="#{bean.abertura}" footerText="#{l.Abertura}" filterMatchMode="contains">
-                <h:outputText value="#{bean.abertura}" />
+            <p:column headerText="#{l.Abertura}" sortBy="#{bean.aberturaFormatado}" filterBy="#{bean.aberturaFormatado}" footerText="#{l.Abertura}" filterMatchMode="contains">
+                <h:outputText value="#{bean.aberturaFormatado}" />
             </p:column>                                    
-            <p:column headerText="#{l.Fechamento}" sortBy="#{bean.fechamento}" filterBy="#{bean.fechamento}" footerText="#{l.Fechamento}" filterMatchMode="contains">
-                <h:outputText value="#{bean.fechamento}" />
+            <p:column headerText="#{l.Fechamento}" sortBy="#{bean.fechamentoFormatado}" filterBy="#{bean.fechamentoFormatado}" footerText="#{l.Fechamento}" filterMatchMode="contains">
+                <h:outputText value="#{bean.fechamentoFormatado}" />
             </p:column>
         </a:dataTable>
 
