@@ -23,7 +23,7 @@
 
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  rendered="#{caixaView.estado eq null? false : true}" value="#{l.Estado}: "/>
-                            <p:outputLabel rendered="#{caixaView.estado eq null? false : true}" class="#{caixaView.estado eq 'FECHADO' ?  'label label-warning' : 'label label-success'}" value="#{caixaView.estado}"/> 
+                            <p:outputLabel rendered="#{caixaView.estado eq null? false : true}" class="#{caixaView.estado eq l.Fechado ?  'label label-warning' : 'label label-success'}" value="#{caixaView.estado}"/> 
                         </div>
 
                         <div class="EmptyBox10"/>

@@ -1,13 +1,13 @@
 package br.com.onesystem.war.view.dialogo;
 
+import br.com.onesystem.dao.CaixaDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.CaixaBV;
-import br.com.onesystem.war.builder.ItemDeComandaBV;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.servlet.http.HttpSession;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -30,27 +28,75 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
 
     @PostConstruct
     public void init() {
-        limparJanela();
-//            buscaDaSessao();
-//            populaCampos();
+        try {
+            limparJanela();
+            buscaCaixaLogada();
+        } catch (FDadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    
+     public void refresh() throws IOException {
+         RequestContext.getCurrentInstance().closeDialog(null);
+       //FacesContext.getCurrentInstance().getExternalContext().redirect("OneSystem-war/dashboard.xhtml");//atualiza a pagina para atualizar a aparencia do sistema
     }
     
-     @Override
+    @Override
     public void limparJanela() {
         e = new CaixaBV();
         caixa = null;
         caixas = new ArrayList<>();
+        popularLista();
     }
 
-  
+    private void popularLista() {
+        caixas = new CaixaDAO().buscarCaixas().porUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porEmAberto().listaDeResultados();
+    }
 
-//    private void buscaDaSessao() throws FDadoInvalidoException {
-//        comanda = (Comanda) SessionUtil.getObject("comanda", FacesContext.getCurrentInstance());
-//        tipoOperacao = (TipoOperacao) SessionUtil.getObject("tipoOperacao", FacesContext.getCurrentInstance());
-//    }
+    private void buscaCaixaLogada() throws FDadoInvalidoException {
+        try {
+            e = new CaixaBV(buscaCaixaNaSessao());
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
 
-    private void populaCampos() {
-      
+    public void logarCaixa() throws FDadoInvalidoException {
+        try {
+            SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+            SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
+            refresh();
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
+
+    public void deslogarCaixa() throws FDadoInvalidoException {
+        try {
+            SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+        } catch (Exception e) {
+            e.getMessage();
+        }
+    }
+
+    public Caixa buscaCaixaNaSessao() throws FDadoInvalidoException {
+        try {
+            Caixa c = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+            return c;
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return null;
+    }
+
+    public boolean temCaixa() throws FDadoInvalidoException {
+        Caixa c = buscaCaixaNaSessao();
+        if (c != null) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     public void abrirDialogo() {
@@ -60,9 +106,9 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("resizable", false);
-        opcoes.put("width", "90%");
+        opcoes.put("width", "45%");
         opcoes.put("draggable", false);
-        opcoes.put("height", 600);
+        opcoes.put("height", 300);
         opcoes.put("closable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
@@ -73,24 +119,6 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
 
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof List) {
-            
-        }
-    }
-
-    public void atribuiItemASessao(ItemDeComandaBV itemDeComanda) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.removeAttribute("onesystem.quantidadeLista.token");
-        session.setAttribute("onesystem.quantidadeLista.token", itemDeComanda.getListaDeQuantidade());
-
-    }
-
-  
-    private void removeDaSessao() throws FDadoInvalidoException {
-        SessionUtil.remove("nota", FacesContext.getCurrentInstance());
-        SessionUtil.remove("tipoOperacao", FacesContext.getCurrentInstance());
     }
 
     public Caixa getCaixa() {
@@ -108,8 +136,5 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     public void setCaixas(List<Caixa> caixas) {
         this.caixas = caixas;
     }
-
-   
-   
 
 }

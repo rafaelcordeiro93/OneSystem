@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.CaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
@@ -18,6 +19,7 @@ import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
@@ -118,12 +120,21 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     public void fecharCaixa() throws DadoInvalidoException {
-        Caixa c = e.construirComID();
-        c.fecharCaixa();
-        new AtualizaDAO<>().atualiza(c);
-        InfoMessage.atualizado();
-        limparJanela();
-        populaCampos();
+        try {
+            Caixa ca = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+            if (ca.getId().equals(e.getId())) {
+                SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+            }
+            Caixa c = e.construirComID();
+            c.fecharCaixa();
+            new AtualizaDAO<>().atualiza(c);
+            InfoMessage.atualizado();
+            limparJanela();
+            populaCampos();
+
+        } catch (EDadoInvalidoException die) {
+            die.print();
+        }
     }
 
     public String getEstado() {

@@ -7,6 +7,9 @@
     xmlns:pa="http://primefaces.org/atlantis">
 
     <div class="topbar">
+
+        <p:commandButton id="btAbrirDialogoCaixa" action="#{dialogoCaixaView.abrirDialogo()}" style="display: none"/>
+
         <div class="logo">
             <p:graphicImage name="images/logo.png" library="atlantis-layout" />
         </div>
@@ -27,13 +30,14 @@
                     </div>
                     <div class="profile-info">
                         <span class="topbar-item-name profile-name">#{usuarioLogadoUtil.nomeUsuario}</span>
-                        <span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>
+                        <span style="#{dialogoCaixaView.temCaixa() eq true ? 'display: none' : ''}"  class="topbar-item-name profile-name">#{l.Caixa_Logado}: #{dialogoCaixaView.e.id}</span>
+                        <!-- <span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>-->
                     </div>
                 </a>
 
                 <ul class="animated">
                     <li role="menuitem">
-                        <a href="#{dialogoCaixaView.abrirDialogo()}"> <i class="fa fa-fw fa-briefcase"></i> <span>#{l.Caixa}</span> </a>
+                        <a onclick="document.getElementById('btAbrirDialogoCaixa').click()"> <i class="fa fa-fw fa-briefcase"></i> <span>#{l.Logar_Caixa}</span> </a>
                     </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/perfilUsuario.xhtml"> <i class="fa fa-fw fa-user-o"></i> <span>#{l.Perfil}</span> </a>
