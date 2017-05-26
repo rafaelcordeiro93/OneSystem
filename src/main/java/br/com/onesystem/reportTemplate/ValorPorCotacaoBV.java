@@ -42,6 +42,10 @@ public class ValorPorCotacaoBV {
         this.totalConvertidoRecebido = totalConvertidoRecebido;
         this.moedaPadrao = moedaPadrao;
     }
+
+    public ValorPorCotacaoBV() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public Cotacao getCotacao() {
         return cotacao;

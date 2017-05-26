@@ -1,9 +1,8 @@
 
-import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.valueobjects.TipoFormaPagRec;
-import java.math.BigDecimal;
+import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Cotacao;
+import java.util.Date;
+import java.util.List;
 
 
 
@@ -20,12 +19,11 @@ public class TesteRauber {
 
     public static void main(String[] args) {
         
-        try {
-            Titulo t = new Titulo(null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, null, OperacaoFinanceira.SEM_ALTERACAO, TipoFormaPagRec.A_PRAZO, null, null, null, null, null, null, null, Boolean.TRUE);
-        } catch (DadoInvalidoException ex) {
-            ex.printConsole();
-        }
+        List<Cotacao> listaCotacao = new CotacaoDAO().buscarCotacoes().naMaiorEmissao(new Date()).listaDeResultados();
         
+        listaCotacao.forEach(System.out::println);
+        
+        System.out.println("Concluiu");
     }
 
 }

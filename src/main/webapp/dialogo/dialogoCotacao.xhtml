@@ -12,9 +12,8 @@
     <ui:define name="content">      
 
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
-            <p:panelGrid columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-4,ui-g-8">
 
-                <p:dataTable id="valorPorCotacaoBVData" var="valorPorCotacaoBV" value="#{notaEmitidaView.cotacoes}" rowKey="#{valorPorCotacaoBV.id}"
+            <p:dataTable id="valorPorCotacaoBVData" var="valorPorCotacaoBV" value="#{dialogoCotacaoView.cotacoes}" rowKey="#{valorPorCotacaoBV.id}"
                              rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginatorPosition="bottom" paginatorAlwaysVisible="false"
                              emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
@@ -37,7 +36,7 @@
                             <f:facet name="input">
                                 <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                value="#{valorPorCotacaoBV.valorAReceber}" symbol="#{valorPorCotacaoBV.cotacao.conta.moeda.sigla } ">                                           
-                                    <p:ajax event="blur" listener="#{notaEmitidaView.recalculaCotacoes}" update="valorPorCotacaoBVData" />
+                                    <p:ajax event="blur" listener="#{dialogoCotacaoView.calculaCotacoes}" update="valorPorCotacaoBVData" />
                                 </p:inputNumber> 
                             </f:facet>
                         </p:cellEditor>
@@ -50,7 +49,7 @@
                     <p:columnGroup type="footer">
                         <p:row>
                             <p:column colspan="4" style="text-align:right" footerText="#{l.Total}" />
-                            <p:column id="totalConvertidoRecebido" footerText="#{notaEmitidaView.totalConvertidoRecebidoFormatado}"/>
+                            <p:column id="totalConvertidoRecebido" footerText="#{dialogoCotacaoView.totalConvertidoRecebidoFormatado}"/>
                         </p:row>                                  
                     </p:columnGroup>
 
@@ -58,7 +57,7 @@
 
                 <div class="EmptyBox5"/>
 
-                <p:commandButton value="#{l.Confirmar}" action="#{notaEmitidaView.geraBaixaDeCotacoes()}" update=":conteudo"/>
+                <p:commandButton value="#{l.Confirmar}" action="#{dialogoCotacaoView.finalizar()}" update=":tempDialog"/>
 
         </div>
 

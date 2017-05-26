@@ -9,8 +9,8 @@
 
     <ui:define name="content">
 
-        <p:commandButton id="abreDialogoCobranca-btn" action="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-            <p:ajax event="dialogReturn" listener="#{desdobramentoDeVendaView.selecionar}" process="@this"/>
+        <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+            <p:ajax event="dialogReturn" listener="#{retificacaoDeVendaView.selecionar}" process="@this"/>
         </p:commandButton>
 
 
@@ -20,15 +20,15 @@
 
                     <div class="ui-fluid">
                         <div class="ui-g">
-                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Emitida}:"/>
+                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Recebida}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="consultaDesdNotaEmitida" value="#{desdobramentoDeVendaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{desdobramentoDeVendaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="consultaDesdNotaRecebida" value="#{retificacaoDeVendaView.nota}" update=":conteudo" dialog="#{selecaoNotaRecebidaView}" mbView="#{retificacaoDeVendaView}" var="notaRecebida" converter="notaRecebidaConverter" itemLabel="#{notaRecebida.id}" itemValue="#{notaRecebida}" editVisible="false" onlyNumber="true"/>
                         </div>
                         <p:separator/>
                     </div>
 
-                    <div class="ui-fluid" style="#{notaEmitidaView.geraFinanceiro eq true ? 'display: none;' : ''}">
+                    <div class="ui-fluid" >
                         <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-3"
                                      columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
 
@@ -38,43 +38,43 @@
                                 <p:outputLabel value="#{l.Porcentagem_Acrescimo}"/>
                                 <p:inputNumber id="nePAcrescimo" maxValue="999999999999.99" minValue="0" symbol=" %" symbolPosition="right"
                                                decimalSeparator="," thousandSeparator="." styleClass="Wid90" 
-                                               value="#{notaEmitidaView.notaEmitida.porcentagemAcrescimo}">
+                                               value="#{retificacaoDeVendaView.notaBV.porcentagemAcrescimo}">
                                     <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar" 
-                                            listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
+                                            listener="#{retificacaoDeVendaView.calculaValorAcrescimoEDesconto}"/>
                                 </p:inputNumber> 
-                                <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
+                                <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} "
                                                decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.acrescimo}">
-                                    <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
+                                               value="#{retificacaoDeVendaView.notaBV.acrescimo}">
+                                    <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota" listener="#{retificacaoDeVendaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{retificacaoDeVendaView.recalculaValorAFaturar}"/>
                                 </p:inputNumber>
 
                                 <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
                                 <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
                                                decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.porcentagemDesconto}">
-                                    <p:ajax event="change" update="neDesconto neDinheiro totalNota" listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
+                                               value="#{retificacaoDeVendaView.notaBV.porcentagemDesconto}">
+                                    <p:ajax event="change" update="neDesconto neDinheiro totalNota" listener="#{retificacaoDeVendaView.calculaValorAcrescimoEDesconto}"/>
                                 </p:inputNumber>                                     
                                 <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
-                                               symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
-                                               styleClass="Wid90" value="#{notaEmitidaView.notaEmitida.desconto}">
-                                    <p:ajax event="change" update="nePDesconto neDinheiro totalNota" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
+                                               symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} "
+                                               styleClass="Wid90" value="#{retificacaoDeVendaView.notaBV.desconto}">
+                                    <p:ajax event="change" update="nePDesconto neDinheiro totalNota" listener="#{retificacaoDeVendaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                    <p:ajax event="change" update="totalNota neAFaturar" listener="#{retificacaoDeVendaView.recalculaValorAFaturar}"/>
                                 </p:inputNumber> 
 
                                 <p:spacer/>
                                 <p:outputLabel value="#{l.Despesa_Cobranca}"/>
                                 <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.despesaCobranca}"
-                                               symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                    <p:ajax event="change" update="neDinheiro totalNota" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                               value="#{retificacaoDeVendaView.notaBV.despesaCobranca}"
+                                               symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} ">
+                                    <p:ajax event="change" update="neDinheiro totalNota neAFaturar" listener="#{retificacaoDeVendaView.recalculaValorAFaturar}"/>
                                 </p:inputNumber> 
 
                                 <p:spacer/>
                                 <p:outputLabel value="#{l.Frete}"/>
                                 <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
-                                               value="#{notaEmitidaView.notaEmitida.frete}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                    <p:ajax event="change" update="neDinheiro totalNota" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                               value="#{retificacaoDeVendaView.notaBV.frete}" symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} ">
+                                    <p:ajax event="change" update="neDinheiro totalNota neAFaturar" listener="#{retificacaoDeVendaView.recalculaValorAFaturar}"/>
                                 </p:inputNumber>    
 
                             </p:panelGrid>
@@ -83,19 +83,19 @@
                                          columnClasses="ui-g-12 ui-md-5 TexAlRight,ui-g-12 ui-md-7">
 
                                 <p:outputLabel value="#{l.Dinheiro}"/>
-                                <p:inputNumber id="neDinheiro" maxValue="999999999999.99" minValue="0.00" disabled="#{!notaEmitidaView.notaEmitida.formaDeRecebimento.entradaEmDinheiro}"
-                                               value="#{notaEmitidaView.notaEmitida.totalEmDinheiro}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
-                                    <p:ajax event="change" update="neAFaturar parcelas" listener="#{notaEmitidaView.recalculaValores}"/>
+                                <p:inputNumber id="neDinheiro" maxValue="999999999999.99" minValue="0.00" disabled="#{!retificacaoDeVendaView.notaBV.formaDeRecebimento.entradaEmDinheiro}"
+                                               value="#{retificacaoDeVendaView.notaBV.totalEmDinheiro}" symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator="." styleClass="Wid90">
+                                    <p:ajax event="change" update="neAFaturar parcelas" listener="#{retificacaoDeVendaView.recalculaValorAFaturar}"/>
                                 </p:inputNumber> 
 
                                 <p:outputLabel value="#{l.A_Faturar}"/>
                                 <p:inputNumber id="neAFaturar" maxValue="999999999999.99" minValue="-9999999.99" decimalSeparator="," thousandSeparator="." readonly="true"
-                                               value="#{notaEmitidaView.notaEmitida.AFaturar}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
+                                               value="#{retificacaoDeVendaView.notaBV.AFaturar}" symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} ">
                                 </p:inputNumber> 
 
                                 <p:outputLabel value="#{l.Total_Nota}"/>
                                 <p:inputNumber id="totalNota" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
-                                               value="#{notaEmitidaView.notaEmitida.totalNota}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
+                                               value="#{retificacaoDeVendaView.notaBV.totalNota}" symbol="#{retificacaoDeVendaView.notaBV.moedaPadrao.sigla} ">
                                 </p:inputNumber> 
 
                             </p:panelGrid>
@@ -111,23 +111,22 @@
                     <div class="ui-g">  
 
                         <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{desdobramentoDeVendaView.removeDaSessao()}" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Adicionar}">
-                                <p:ajax event="dialogReturn"  listener="#{desdobramentoDeVendaView.selecionar}" process="@this" update=":conteudo:parcelas"/>
+                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{retificacaoDeVendaView.removeDaSessao}" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Adicionar}">
+                                <p:ajax event="dialogReturn"  listener="#{retificacaoDeVendaView.selecionar}" process="@this" update=":conteudo"/>
                             </p:commandButton>
                             <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Atualizar}"  styleClass="green-btn">
-                                <p:ajax event="dialogReturn" listener="#{desdobramentoDeVendaView.selecionar}" process="@this" update=":conteudo:parcelas"/>
+                                <p:ajax event="dialogReturn" listener="#{retificacaoDeVendaView.selecionar}" process="@this" update=":conteudo"/>
                             </p:commandButton>
-                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{desdobramentoDeVendaView.remover}" 
-                                             update=":conteudo:parcelas" styleClass="orange-btn" value="#{l.Remover}"/>
+                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{retificacaoDeVendaView.remover}" styleClass="orange-btn" value="#{l.Remover}" update=":conteudo"/>
                         </p:panelGrid>
 
-                        <p:dataTable id="parcelas" var="model" value="#{desdobramentoDeVendaView.list}"
+                        <p:dataTable id="parcelas" var="model" value="#{retificacaoDeVendaView.list}"
                                      styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" disabledSelection="#{model.object.possuiPagamento}"
                                      paginatorAlwaysVisible="false" rows="12" paginator="true" rowStyleClass="#{model.object.possuiPagamento ? 'rowSoftBlue' : ''}"
                                      paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                      emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                            <p:ajax event="rowSelect" listener="#{desdobramentoDeVendaView.selecionaParcela}" />
+                            <p:ajax event="rowSelect" listener="#{retificacaoDeVendaView.selecionaParcela}" update="@this" />
 
                             <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
                                 <h:outputText value="#{model.id + 1}" />
@@ -154,7 +153,7 @@
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
-                                    <p:column id="totalParcelas" footerText="#{desdobramentoDeVendaView.totalParcelas}"/>
+                                    <p:column id="totalParcelas" footerText="#{retificacaoDeVendaView.totalParcelas}"/>
                                     <p:column colspan="3"/>
                                 </p:row>                                  
                             </p:columnGroup>
@@ -164,11 +163,39 @@
                     </div>
 
 
-                    <p:commandButton action="#{desdobramentoDeVendaView.update()}" value="#{l.Atualizar}"/>
+                    <p:commandButton action="#{retificacaoDeVendaView.validaAFaturar()}" value="#{l.Atualizar}" update=":conteudo"/>
 
                 </div>
             </div>
         </div>
+
+        <p:dialog widgetVar="existeValorAFaturar" width="500" header="#{l.Valor_A_Faturar}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500" >
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Existe_Valor_A_Faturar}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" action="#{retificacaoDeVendaView.validaDinheiro}" onclick="PF('existeValorAFaturar').hide()" update=":conteudo"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Nao}" icon="fa fa-repeat" onclick="PF('existeValorAFaturar').hide()"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog>
 
     </ui:define>
 
