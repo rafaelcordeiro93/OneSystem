@@ -98,7 +98,8 @@ public class NotaEmitida extends Nota implements Serializable {
                 + ", itensEmitidos=" + getItens()
                 + ", formaDeRecebimento=" + (getFormaDeRecebimento() != null ? getFormaDeRecebimento().getId() : null)
                 + ", listaDePreco=" + getListaDePreco()
-                + ", parcelas=" + getParcelas()
+                + ", parcelas=" + getCobrancas()
+                + ", valorPorCotacao = " + getValorPorCotacao()
                 + ",orcamento=" + getOrcamento() + '}';
     }
 

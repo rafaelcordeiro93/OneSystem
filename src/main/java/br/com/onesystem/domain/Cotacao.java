@@ -101,7 +101,7 @@ public class Cotacao implements Serializable {
 
     @Override
     public String toString() {
-        return "Cotacao{" + "id=" + id + ", valor=" + valor + ", emissao=" + emissao + ", conta=" + conta + '}';
+        return "Cotacao{" + "id=" + id + ", valor=" + valor + ", emissao=" + emissao + ", conta=" + conta.getMoedaNomeESiglaMoeda() + '}';
     }
 
 }

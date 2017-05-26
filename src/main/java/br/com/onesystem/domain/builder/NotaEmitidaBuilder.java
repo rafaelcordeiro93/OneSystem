@@ -85,7 +85,9 @@ public class NotaEmitidaBuilder {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
             this.itens = itensCol;
-        } 
+        }else{
+            this.itens = itens;
+        }
         return this;
     }
 
@@ -131,8 +133,8 @@ public class NotaEmitidaBuilder {
                     }
                 }
             }
-            this.cobrancas = cobrancas;
         }
+        this.cobrancas = cobrancas;
         return this;
     }
 
@@ -175,22 +177,22 @@ public class NotaEmitidaBuilder {
         this.notaDeOrigem = notaDeOrigem;
         return this;
     }
-    
+
     public NotaEmitidaBuilder comComanda(Comanda comanda) {
         this.comanda = comanda;
         return this;
     }
-    
+
     public NotaEmitidaBuilder comCondicional(Condicional condicional) {
         this.condicional = condicional;
         return this;
     }
 
-    public NotaEmitidaBuilder comEmissao(Date emissao){
+    public NotaEmitidaBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
         return this;
     }
-    
+
     public NotaEmitida construir() throws DadoInvalidoException {
         return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao);
     }

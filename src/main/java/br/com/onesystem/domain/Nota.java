@@ -9,15 +9,9 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
-import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.war.builder.BoletoDeCartaoBV;
-import br.com.onesystem.war.builder.ChequeBV;
-import br.com.onesystem.war.builder.TituloBV;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -180,7 +174,7 @@ public abstract class Nota implements Serializable {
     }
 
     public List<ItemDeNota> getItens() {
-        return Collections.unmodifiableList(itens);
+        return itens;
     }
 
     public Long getId() {

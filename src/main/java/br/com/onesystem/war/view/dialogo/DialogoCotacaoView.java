@@ -1,76 +1,107 @@
 package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import br.com.onesystem.util.Model;
+import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
+import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
-import br.com.onesystem.war.builder.CobrancaBV;
-import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.view.ViewScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
-@ViewScoped
-public class DialogoCotacaoView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
+@RequestScoped
+public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCotacaoBV> implements Serializable {
 
-    private boolean modalidade = true;
-    private Cobranca cobranca;
-    private List<Cotacao> cotacaoLista;
+    private List<ValorPorCotacaoBV> cotacoes;
     private Nota nota;
-    private Model<Cobranca> model;
-
-    @Inject
 
     @PostConstruct
     public void init() {
         try {
             limparJanela();
             buscaDaSessao();
+            if (nota != null) {
+                inicializaCotacoes();
+            }
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
     private void buscaDaSessao() throws DadoInvalidoException {
-        model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
-        if (model != null) {
-            cobranca = (Cobranca) model.getObject();
-            e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
-        } else {
-            nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
-            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();
-            e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
-            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(nota.getMoedaPadrao()).naMaiorEmissao(nota.getEmissao()).resultado());
-            e.setTipoLancamento(nota.getOperacao().getTipoNota());
-            e.setMoeda(nota.getMoedaPadrao());
-            e.setNota(nota);
-            e.setPessoa(nota.getPessoa());
-            e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
-            e.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
-            modalidade = false;
+        nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+    }
+
+    private void inicializaCotacoes() {
+        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naMaiorEmissao(nota.getEmissao()).listaDeResultados();
+        cotacoes = new ArrayList<>();
+        for (Cotacao c : cotacaoLista) {
+            cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, nota.getMoedaPadrao()));
         }
+        calculaCotacoes();
+    }
+
+    /**
+     * Busca a moeda padrão e abre a janela de cotações com o valor restante na
+     * cotação de cada moeda.
+     */
+    public void calculaCotacoes() {
+        RequestContext rc = RequestContext.getCurrentInstance();
+        for (ValorPorCotacaoBV c : cotacoes) {
+            c.setTotal(nota.getTotalEmDinheiro());
+            c.setTotalConvertidoRecebido(getTotalConvertidoRecebido());
+        }
+        rc.update("tempDialog:valorPorCotacaoBVData");
+    }
+
+    /**
+     * Gera as baixas para o recebimento do valor a vista.
+     *
+     * @throws br.com.onesystem.exception.DadoInvalidoException
+     */
+    public BigDecimal getTotalConvertidoRecebido() {
+        BigDecimal total = BigDecimal.ZERO;
+        for (ValorPorCotacaoBV c : cotacoes) {
+            total = total.add(c.getValorConvertidoRecebido());
+        }
+        return total;
+    }
+
+    public String getTotalConvertidoRecebidoFormatado() {
+        return MoedaFomatter.format(nota.getMoedaPadrao(), getTotalConvertidoRecebido());
+    }
+
+    public void finalizar() throws DadoInvalidoException {
+        for (ValorPorCotacaoBV c : cotacoes) {
+            boolean entrou = false;
+            for (ValorPorCotacao v : nota.getValorPorCotacao()) {
+                if (c.getId().equals(v.getId())) {
+                    nota.atualiza(c.construirComId());
+                    entrou = true;
+                    break;
+                }
+            }
+            if (!entrou && c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
+                nota.adiciona(c.construir());
+            }
+        }
+        RequestContext.getCurrentInstance().closeDialog(nota);
     }
 
     public void abrirDialogo() {
@@ -80,15 +111,15 @@ public class DialogoCotacaoView extends BasicMBImpl<Cobranca, CobrancaBV> implem
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("resizable", false);
-        opcoes.put("width", 400);
+        opcoes.put("width", 900);
         opcoes.put("draggable", true);
-        opcoes.put("height", 525);
+        opcoes.put("height", 400);
         opcoes.put("closable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCobranca", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCotacao", opcoes, null);
     }
 
     public List<ModalidadeDeCobranca> getModalidadesDeCobranca() {
@@ -96,75 +127,29 @@ public class DialogoCotacaoView extends BasicMBImpl<Cobranca, CobrancaBV> implem
     }
 
     @Override
-    public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof Cartao) {
-            e.setCartao((Cartao) obj);
-        } else if (obj instanceof Banco) {
-            e.setBanco((Banco) obj);
-        }
-    }
-
-    public void salvar() {
-        try {
-            removeDaSessao();
-            Cobranca c = constroi();
-            if (model != null) {
-                model.setObject(c);
-                RequestContext.getCurrentInstance().closeDialog(model);
-            } else {
-                RequestContext.getCurrentInstance().closeDialog(c);
-            }
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    private Cobranca constroi() throws DadoInvalidoException {
-        Cobranca c = null;
-        switch (e.getModalidadeDeCobranca()) {
-            case CARTAO:
-                c = e.construirBoletoDeCartaoComId();
-                break;
-            case CHEQUE:
-                c = e.construirChequeComID();
-                break;
-            case CREDITO:
-                c = e.construirCreditoComID();
-                break;
-            case TITULO:
-                c = e.construirTituloComID();
-                break;
-        }
-        return c;
-    }
-
-    private void removeDaSessao() throws FDadoInvalidoException {
-        SessionUtil.remove("model", FacesContext.getCurrentInstance());
+    public void limparJanela() {
+        cotacoes = new ArrayList<>();
+        nota = null;
     }
 
     @Override
-    public void limparJanela() {
-        e = new CobrancaBV();
-        e.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
-        cobranca = null;
+    public void selecionar(SelectEvent event) {
     }
 
-    public boolean isModalidade() {
-        return modalidade;
+    public List<ValorPorCotacaoBV> getCotacoes() {
+        return cotacoes;
     }
 
-    public void setModalidade(boolean modalidade) {
-        this.modalidade = modalidade;
+    public void setCotacoes(List<ValorPorCotacaoBV> cotacoes) {
+        this.cotacoes = cotacoes;
     }
 
-    public List<Cotacao> getCotacaoLista() {
-        return cotacaoLista;
+    public Nota getNota() {
+        return nota;
     }
 
-    public void setCotacaoLista(List<Cotacao> cotacaoLista) {
-        this.cotacaoLista = cotacaoLista;
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
 }
