@@ -39,23 +39,14 @@ public class NotaEmitida extends Nota implements Serializable {
         emissao = new Date();
     }
 
-    public NotaEmitida(NotaEmitida notaEmitida) throws DadoInvalidoException {
-        super(notaEmitida.getId(), notaEmitida.getPessoa(), notaEmitida.getOperacao(), notaEmitida.getItens(), notaEmitida.getFormaDeRecebimento(), notaEmitida.getListaDePreco(), notaEmitida.getCobrancas(), notaEmitida.getMoedaPadrao(),
-                notaEmitida.getValorPorCotacao(), notaEmitida.getDesconto(), notaEmitida.getAcrescimo(), notaEmitida.getDespesaCobranca(), notaEmitida.getFrete(), notaEmitida.getaFaturar(), notaEmitida.getTotalEmDinheiro(), notaEmitida.getNotaDeOrigem());
-        this.orcamento = notaEmitida.getOrcamento();
-        this.comanda = notaEmitida.getComanda();
-        this.condicional = notaEmitida.getCondicional();
-        this.emissao = notaEmitida.getEmissao();
-    }
-
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas,
             Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
-            Comanda comanda, Condicional condicional) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+            Comanda comanda, Condicional condicional, Date emissao) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao);
         this.orcamento = orcamento;
         this.comanda = comanda;
         this.condicional = condicional;

@@ -32,7 +32,7 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
+public class DialogoCotacaoView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
 
     private boolean modalidade = true;
     private Cobranca cobranca;
