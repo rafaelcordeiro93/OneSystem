@@ -1,25 +1,11 @@
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.EstoqueDAO;
-import br.com.onesystem.dao.ItemDeNotaDAO;
-import br.com.onesystem.dao.NotaEmitidaDAO;
-import br.com.onesystem.domain.Comanda;
-import br.com.onesystem.domain.Condicional;
-import br.com.onesystem.domain.ConfiguracaoEstoque;
-import br.com.onesystem.domain.Estoque;
-import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.ItemDeComanda;
-import br.com.onesystem.domain.ItemDeNota;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.valueobjects.TipoOperacao;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.EstoqueService;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import org.hibernate.Hibernate;
+
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,7 +18,14 @@ import org.hibernate.Hibernate;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws DadoInvalidoException, NoSuchFieldException {
+    public static void main(String[] args) {
+        
+        try {
+            Titulo t = new Titulo(null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, null, OperacaoFinanceira.SEM_ALTERACAO, TipoFormaPagRec.A_PRAZO, null, null, null, null, null, null, null, Boolean.TRUE);
+        } catch (DadoInvalidoException ex) {
+            ex.printConsole();
+        }
+        
     }
 
 }

@@ -46,17 +46,15 @@ public class BoletoDeCartao extends Cobranca implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao");
+        List<String> camposBoleto = Arrays.asList("codigoTransacao", "situacao", "cartao");
         new ValidadorDeCampos<BoletoDeCartao>().valida(this, camposBoleto);
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "valor", "cotacao");
-        new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
     @Override
-    public ModalidadeDeCobranca getModalidade(){
+    public ModalidadeDeCobranca getModalidade() {
         return ModalidadeDeCobranca.CARTAO;
     }
-    
+
     public Cartao getCartao() {
         return cartao;
     }

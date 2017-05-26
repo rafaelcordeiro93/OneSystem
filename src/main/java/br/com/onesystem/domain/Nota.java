@@ -104,8 +104,8 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
-        this.emissao = new Date(); // Necesário para construção do estoque.
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao) throws DadoInvalidoException {
+        this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;

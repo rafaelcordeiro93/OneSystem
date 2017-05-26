@@ -348,7 +348,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
@@ -356,7 +356,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 

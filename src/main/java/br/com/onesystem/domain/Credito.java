@@ -39,7 +39,7 @@ public class Credito extends Cobranca implements Serializable {
 
     @Override
     public String getDetalhes() {
-        return "Crédito: " + getId();
+        return "";
     }
 
 }

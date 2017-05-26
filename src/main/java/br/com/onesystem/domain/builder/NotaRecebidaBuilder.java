@@ -26,6 +26,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -50,6 +51,7 @@ public class NotaRecebidaBuilder {
     private BigDecimal frete;
     private BigDecimal aFaturar;
     private Nota notaDeOrigem;
+    private Date emissao;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -164,8 +166,13 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
+    public NotaRecebidaBuilder comEmissao(Date emissao) {
+        this.emissao = emissao;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao);
     }
 
 }

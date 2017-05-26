@@ -475,7 +475,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
-                .comCondicional(condicional).construir();
+                .comCondicional(condicional).comEmissao(emissao).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
@@ -484,7 +484,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
-                .comCondicional(condicional).construir();
+                .comCondicional(condicional).comEmissao(emissao).construir();
     }
 
 }
