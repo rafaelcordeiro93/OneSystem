@@ -66,7 +66,7 @@ public class CotacaoDAO {
                 + "where ct.emissao between :pEmissao and :pEmissaoFinal "
                 + "group by ct.conta) ";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
-        parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
+        parametros.put("pEmissaoFinal", emissao);
         return this;
     }
 

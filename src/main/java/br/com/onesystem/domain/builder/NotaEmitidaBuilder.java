@@ -28,6 +28,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,7 @@ public class NotaEmitidaBuilder {
     private Nota notaDeOrigem;
     private Comanda comanda;
     private Condicional condicional;
+    private Date emissao;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -83,7 +85,9 @@ public class NotaEmitidaBuilder {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
             this.itens = itensCol;
-        } 
+        }else{
+            this.itens = itens;
+        }
         return this;
     }
 
@@ -129,8 +133,8 @@ public class NotaEmitidaBuilder {
                     }
                 }
             }
-            this.cobrancas = cobrancas;
         }
+        this.cobrancas = cobrancas;
         return this;
     }
 
@@ -173,19 +177,24 @@ public class NotaEmitidaBuilder {
         this.notaDeOrigem = notaDeOrigem;
         return this;
     }
-    
+
     public NotaEmitidaBuilder comComanda(Comanda comanda) {
         this.comanda = comanda;
         return this;
     }
-    
+
     public NotaEmitidaBuilder comCondicional(Condicional condicional) {
         this.condicional = condicional;
         return this;
     }
 
+    public NotaEmitidaBuilder comEmissao(Date emissao) {
+        this.emissao = emissao;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao);
     }
 
 }

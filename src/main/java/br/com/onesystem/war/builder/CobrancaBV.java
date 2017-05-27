@@ -53,7 +53,6 @@ import java.util.Locale;
 public class CobrancaBV implements Serializable {
 
     private Long id;
-    private NotaEmitida notaEmitida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private OperacaoFinanceira operacaoFinanceira;
     private BigDecimal valor;
@@ -91,7 +90,7 @@ public class CobrancaBV implements Serializable {
 
     public CobrancaBV(CobrancaBV p) {
         this.id = p.getId();
-        this.notaEmitida = p.getNotaEmitida();
+        this.nota = p.getNota();
         this.conhecimentoDeFrete = p.getConhecimentoDeFrete();
         this.operacaoFinanceira = p.getOperacaoFinanceira();
         this.valor = p.getValor();
@@ -122,7 +121,7 @@ public class CobrancaBV implements Serializable {
         this.historico = p.getHistorico();
     }
 
-    public CobrancaBV(Long id, NotaEmitida notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
+    public CobrancaBV(Long id, Nota notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
             OperacaoFinanceira unidadeFinanceira, BigDecimal valor,
             Date emissao, Date vencimento, Banco banco, String agencia, String conta,
             String numeroCheque, SituacaoDeCheque situacaoDeCheque, BigDecimal multas,
@@ -132,7 +131,7 @@ public class CobrancaBV implements Serializable {
             Recepcao recepcao, ModalidadeDeCobranca tipoFormaDeRecebimentoParcela,
             Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico) {
         this.id = id;
-        this.notaEmitida = notaEmitida;
+        this.nota = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.operacaoFinanceira = unidadeFinanceira;
         this.valor = valor;
@@ -177,6 +176,7 @@ public class CobrancaBV implements Serializable {
         this.nota = p.getNota();
         this.entrada = p.getEntrada();
         this.moeda = p.getCotacao().getConta().getMoeda();
+        this.dias = p.getDias() != null ? p.getDias().intValue() : 0;
         this.banco = p.getCotacao().getConta().getBanco();
 
         if (p instanceof Cheque) {
@@ -212,14 +212,6 @@ public class CobrancaBV implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
-    }
-
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
     }
 
     public ConhecimentoDeFrete getConhecimentoDeFrete() {

@@ -14,6 +14,7 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -62,10 +63,10 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         List<String> camposTitulo = Arrays.asList("tipoFormaPagRec");
         new ValidadorDeCampos<>().valida(this, camposTitulo);
     }
-    
+
     @Override
-    public ModalidadeDeCobranca getModalidade(){
-        return ModalidadeDeCobranca.TITULO; 
+    public ModalidadeDeCobranca getModalidade() {
+        return ModalidadeDeCobranca.TITULO;
     }
 
     public void cancelarSaldoDeBaixa(BigDecimal valor) {
@@ -141,7 +142,14 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
 
     @Override
     public String toString() {
-        return "Titulo{" + getId() +  ", saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+        return "Titulo{" + getId() + ", saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(getId());
+        return hash;
     }
 
     public String getDetalhes() {
