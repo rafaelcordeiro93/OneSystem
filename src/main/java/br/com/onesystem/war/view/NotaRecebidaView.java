@@ -76,6 +76,7 @@ import org.primefaces.event.SelectEvent;
 public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> implements Serializable {
 
     private CreditoBV creditoBV;
+    private NotaRecebida nota;
     private NotaRecebida notaRecebidaSelecionada;
     private NotaRecebidaBV notaRecebida;
     private ItemDeNotaBV itemRecebido;
@@ -146,6 +147,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     // --------------------- Fim Inicializa Janela ----------------------------
     // -------------- Operações para criação da entidade ----------------------   
     public void validaAFaturar() throws DadoInvalidoException {
+        notaRecebida.setEmissao(new Date());
+        nota = notaRecebida.construir();
         // Se valor a faturar maior que zero deve exibir diálogo de confirmação
         if (notaRecebida.getAFaturar() != null && notaRecebida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
             RequestContext c = RequestContext.getCurrentInstance();
@@ -170,8 +173,17 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
-                notaRecebida.adiciona(boletoDeCartao.construir());
+                nota.adiciona(boletoDeCartao.construir());
             }
+
+            if (creditoBV.getValor() != null && creditoBV.getValor().compareTo(BigDecimal.ZERO) > 0) {
+                creditoBV.setOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira());
+                creditoBV.setPessoa(notaRecebida.getPessoa());
+                creditoBV.setCotacao(cotacao);
+                creditoBV.setEntrada(true);
+                nota.adiciona(creditoBV.construir());
+            }
+
             geraParcelas();
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -188,16 +200,15 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             //Gera as cobranca de acordo a sua modalidade.
             for (CobrancaBV p : cobrancas) {
-                p.setEmissao(notaRecebida.getEmissao());
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
-                        notaRecebida.adiciona(p.construirBoletoDeCartao());
+                        nota.adiciona(p.construirBoletoDeCartao());
                         break;
                     case CHEQUE:
-                        notaRecebida.adiciona(p.construirCheque());
+                        nota.adiciona(p.construirCheque());
                         break;
                     case TITULO:
-                        notaRecebida.adiciona(p.construirTitulo());
+                        nota.adiciona(p.construirTitulo());
                         break;
                     default:
                         break;
@@ -216,7 +227,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
      */
     public void add() {
         try {
-            new AdicionaDAO<>().adiciona(notaRecebida.construir());
+            new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
@@ -266,7 +277,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void geraBaixaDeCotacoes() throws DadoInvalidoException {
         for (ValorPorCotacaoBV c : cotacoes) {
             if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
-                notaRecebida.adiciona(c.construir());
+                nota.adiciona(c.construir());
             }
         }
         geraBoletoDeCartaoAVista();

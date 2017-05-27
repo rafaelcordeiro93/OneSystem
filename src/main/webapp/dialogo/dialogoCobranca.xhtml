@@ -7,7 +7,7 @@
                 template="/WEB-INF/templateDialog.xhtml">
 
 
-    <ui:define name="title">#{l.Comanda}</ui:define>
+    <ui:define name="title">#{l.Cobranca}</ui:define>
 
     <ui:define name="content">      
 
@@ -18,23 +18,23 @@
                 <p:outputLabel id="idCobranca" value="#{dialogoCobrancaView.e.id}" />
 
                 <p:outputLabel value="#{l.Modalidade}:" />
-                <p:selectOneMenu  id="modalidadeCobranca" value="#{dialogoCobrancaView.e.modalidadeDeCobranca}" converter="modalidadeCobrancaConverter">
+                <p:selectOneMenu  id="modalidadeCobranca" disabled="#{dialogoCobrancaView.modalidade}" value="#{dialogoCobrancaView.e.modalidadeDeCobranca}" converter="modalidadeCobrancaConverter">
                     <p:ajax update="@form" />                                            
                     <f:selectItems value="#{dialogoCobrancaView.modalidadesDeCobranca}" var="modalidadeDeCobranca" itemValue="#{modalidadeDeCobranca}" itemLabel="#{modalidadeDeCobranca.nome}"/>
                 </p:selectOneMenu>
 
-                <p:outputLabel value="#{l.Vencimento}:"/>
-                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{dialogoCobrancaView.e.vencimento}">
+                <p:outputLabel value="#{l.Vencimento}:" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id ne 4}"/>
+                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{dialogoCobrancaView.e.vencimento}" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id ne 4}">
                 </p:calendar>
 
                 <p:outputLabel value="#{l.Cotacao}"/>
                 <p:selectOneMenu  id="dceCotacao" value="#{dialogoCobrancaView.e.cotacao}" converter="cotacaoConverter" >
-                    <f:selectItems value="#{notaEmitidaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
+                    <f:selectItems value="#{dialogoCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
                 </p:selectOneMenu>
 
                 <p:outputLabel value="#{l.Valor}:"/>
                 <p:inputNumber id="dcpValorInp" maxValue="999999999999.99" minValue="0.00" value="#{dialogoCobrancaView.e.valor}" inputStyleClass="Wid100"
-                               decimalSeparator="," thousandSeparator=".">
+                               decimalSeparator="," thousandSeparator="." symbol="#{dialogoCobrancaView.e.cotacao.conta.moeda.sigla}">
                 </p:inputNumber> 
 
             </p:panelGrid>

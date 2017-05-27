@@ -99,6 +99,7 @@ import org.primefaces.event.SelectEvent;
 public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
 
     private CreditoBV creditoBV;
+    private NotaEmitida nota;
     private NotaEmitida notaEmitidaSelecionada;
     private NotaEmitidaBV notaEmitida;
     private ItemDeNotaBV itemEmitido;
@@ -191,6 +192,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Operações para criação da entidade ----------------------   
     public void validaAFaturar() {
         try {
+            notaEmitida.setEmissao(new Date());
+            NotaEmitida nota = notaEmitida.construir();
             if (!notaEmitida.getOperacao().getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 // Se valor a faturar maior que zero deve exibir diálogo de confirmação
                 if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
@@ -204,7 +207,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             } else {
                 add();
             }
-        } catch (EDadoInvalidoException ex) {
+        } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
@@ -222,7 +225,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
-                notaEmitida.adiciona(boletoDeCartao.construir());
+                nota.adiciona(boletoDeCartao.construir());
             }
 
             if (creditoBV.getValor() != null && creditoBV.getValor().compareTo(BigDecimal.ZERO) > 0) {
@@ -230,7 +233,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 creditoBV.setPessoa(notaEmitida.getPessoa());
                 creditoBV.setCotacao(cotacao);
                 creditoBV.setEntrada(true);
-                notaEmitida.adiciona(creditoBV.construir());
+                nota.adiciona(creditoBV.construir());
             }
 
             geraParcelas();
@@ -251,13 +254,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             for (CobrancaBV p : cobrancas) {
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
-                        notaEmitida.adiciona(p.construirBoletoDeCartao());
+                        nota.adiciona(p.construirBoletoDeCartao());
                         break;
                     case CHEQUE:
-                        notaEmitida.adiciona(p.construirCheque());
+                        nota.adiciona(p.construirCheque());
                         break;
                     case TITULO:
-                        notaEmitida.adiciona(p.construirTitulo());
+                        nota.adiciona(p.construirTitulo());
                         break;
                     default:
                         break;
@@ -281,7 +284,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void efetivaOrcamento() {
         try {
-            notaEmitida.getOrcamento().efetiva(historico);
+            nota.getOrcamento().efetiva(historico);
             add();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -293,7 +296,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
-            new AdicionaDAO<>().adiciona(notaEmitida.construir());
+            
+            new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
@@ -343,7 +347,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void geraBaixaDeCotacoes() throws DadoInvalidoException {
         for (ValorPorCotacaoBV c : cotacoes) {
             if (c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
-                notaEmitida.adiciona(c.construir());
+                nota.adiciona(c.construir());
             }
         }
         geraBoletoECreditoAVista();

@@ -26,7 +26,9 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -50,6 +52,7 @@ public class NotaRecebidaBuilder {
     private BigDecimal frete;
     private BigDecimal aFaturar;
     private Nota notaDeOrigem;
+    private Date emissao;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -68,16 +71,17 @@ public class NotaRecebidaBuilder {
 
     public NotaRecebidaBuilder comItens(List<ItemDeNota> itens) throws DadoInvalidoException {
         if (id == null) {
-            if (itens != null && !itens.isEmpty()) {
-                for (ItemDeNota i : itens) {
-                    itens.set(itens.indexOf(i), new ItemDeNotaBV(i).construir());
+            List<ItemDeNota> itensCol = itens.stream().collect(Collectors.toList());
+            if (itensCol != null && !itensCol.isEmpty()) {
+                for (ItemDeNota i : itensCol) {
+                    itensCol.set(itensCol.indexOf(i), new ItemDeNotaBV(i).construir());
                 }
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
-            this.itens = itens;
+            this.itens = itensCol;
         } else {
-            throw new FDadoInvalidoException(new BundleUtil().getMessage("Nao_Constroi_Itens_Nota_Existente"));
+            this.itens = itens;
         }
         return this;
     }
@@ -119,8 +123,8 @@ public class NotaRecebidaBuilder {
                     }
                 }
             }
-            this.cobrancas = cobrancas;
         }
+        this.cobrancas = cobrancas;
         return this;
     }
 
@@ -164,8 +168,13 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
+    public NotaRecebidaBuilder comEmissao(Date emissao) {
+        this.emissao = emissao;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao);
     }
 
 }

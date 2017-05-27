@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -57,6 +58,7 @@ public abstract class Cobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_COBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @NotNull(message = "{valor_not_null}")
     @Min(value = 0, message = "{valor_min}")
     @Column(nullable = false)
     protected BigDecimal valor;
@@ -68,7 +70,7 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne(optional = true)
     private Pessoa pessoa;
 
-    @NotNull(message = "cotacao_not_null")
+    @NotNull(message = "{cotacao_not_null}")
     @ManyToOne(optional = false)
     private Cotacao cotacao;
 
@@ -83,6 +85,7 @@ public abstract class Cobranca implements Serializable {
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira operacaoFinanceira;
 
+    @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
@@ -115,6 +118,9 @@ public abstract class Cobranca implements Serializable {
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
+        if (!(this instanceof Credito)) {
+            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","vencimento");
+        }
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
@@ -164,24 +170,36 @@ public abstract class Cobranca implements Serializable {
     }
 
     public Long getDias() {
-        LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate e = emissao.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return ChronoUnit.DAYS.between(e, v);
+        if (vencimento != null) {
+            LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate e = emissao.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            return ChronoUnit.DAYS.between(e, v);
+        }
+        return null;
     }
 
     public DayOfWeek getDiaDaSemana() {
-        LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return v.getDayOfWeek();
+        if (vencimento != null) {
+            LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            return v.getDayOfWeek();
+        }
+        return null;
     }
 
     public String getVencimentoFormatado() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
+        if (vencimento != null) {
+            SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
+        }
+        return "";
     }
 
     public String getVencimentoFormatadoSemHoras() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
+        if (vencimento != null) {
+            SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+            return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
+        }
+        return "";
     }
 
     public List<Baixa> getBaixas() {

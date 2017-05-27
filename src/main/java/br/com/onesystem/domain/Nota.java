@@ -9,15 +9,9 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFomatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
-import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.war.builder.BoletoDeCartaoBV;
-import br.com.onesystem.war.builder.ChequeBV;
-import br.com.onesystem.war.builder.TituloBV;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -104,8 +98,8 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro, Nota notaDeOrigem) throws DadoInvalidoException {
-        this.emissao = new Date(); // Necesário para construção do estoque.
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao) throws DadoInvalidoException {
+        this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -180,7 +174,7 @@ public abstract class Nota implements Serializable {
     }
 
     public List<ItemDeNota> getItens() {
-        return Collections.unmodifiableList(itens);
+        return itens;
     }
 
     public Long getId() {

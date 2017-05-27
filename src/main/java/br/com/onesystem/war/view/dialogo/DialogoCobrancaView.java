@@ -1,31 +1,46 @@
 package br.com.onesystem.war.view.dialogo;
 
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.Model;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.war.builder.CobrancaBV;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
-@javax.faces.view.ViewScoped
+@ViewScoped
 public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
     
+    private boolean modalidade = true;
     private Cobranca cobranca;
+    private List<Cotacao> cotacaoLista;
+    private Nota nota;
+    private Model<Cobranca> model;
+    
+    @Inject
     
     @PostConstruct
     public void init() {
@@ -37,13 +52,24 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         }
     }
     
-    private void buscaDaSessao() throws FDadoInvalidoException {
-        cobranca = (Cobranca) SessionUtil.getObject("cobranca", FacesContext.getCurrentInstance());
-        if (cobranca != null) {
+    private void buscaDaSessao() throws DadoInvalidoException {
+        model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
+        if (model != null) {
+            cobranca = (Cobranca) model.getObject();
             e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
         } else {
-            e = new CobrancaBV();
-            e.setId((Long) SessionUtil.getObject("idCobranca", FacesContext.getCurrentInstance()));
+            nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();
+            e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(nota.getMoedaPadrao()).naMaiorEmissao(nota.getEmissao()).resultado());
+            e.setTipoLancamento(nota.getOperacao().getTipoNota());
+            e.setMoeda(nota.getMoedaPadrao());
+            e.setNota(nota);
+            e.setPessoa(nota.getPessoa());
+            e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
+            e.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
+            modalidade = false;
         }
     }
     
@@ -83,7 +109,13 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         try {
             removeDaSessao();
             Cobranca c = constroi();
-            RequestContext.getCurrentInstance().closeDialog(c);
+            if (model != null) {
+                model.setObject(c);
+                RequestContext.getCurrentInstance().closeDialog(model);
+            } else {
+                RequestContext.getCurrentInstance().closeDialog(c);
+            }
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -99,6 +131,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
                 c = e.construirChequeComID();
                 break;
             case CREDITO:
+                e.setEntrada(true);
                 c = e.construirCreditoComID();
                 break;
             case TITULO:
@@ -109,13 +142,30 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     }
     
     private void removeDaSessao() throws FDadoInvalidoException {
-        SessionUtil.remove("cobranca", FacesContext.getCurrentInstance());
+        SessionUtil.remove("model", FacesContext.getCurrentInstance());
     }
     
     @Override
     public void limparJanela() {
         e = new CobrancaBV();
+        e.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
         cobranca = null;
+    }
+    
+    public boolean isModalidade() {
+        return modalidade;
+    }
+    
+    public void setModalidade(boolean modalidade) {
+        this.modalidade = modalidade;
+    }
+    
+    public List<Cotacao> getCotacaoLista() {
+        return cotacaoLista;
+    }
+    
+    public void setCotacaoLista(List<Cotacao> cotacaoLista) {
+        this.cotacaoLista = cotacaoLista;
     }
     
 }
