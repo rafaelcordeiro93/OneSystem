@@ -89,6 +89,9 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne
     private Nota nota;
 
+    @ManyToOne
+    private FaturaLegada faturaLegada;
+
     private Boolean entrada;
 
     public Cobranca() {
@@ -114,7 +117,7 @@ public abstract class Cobranca implements Serializable {
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
-    
+
     public abstract ModalidadeDeCobranca getModalidade();
 
     public abstract String getDetalhes();
@@ -180,7 +183,7 @@ public abstract class Cobranca implements Serializable {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
     }
-    
+
     public List<Baixa> getBaixas() {
         return baixas;
     }
