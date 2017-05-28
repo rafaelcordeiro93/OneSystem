@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Caixa}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+
+            <div class="ui-fluid">
+
+                <div class="EmptyBox10"/>
+
+                <p:panelGrid rendered="#{!dialogoCaixaView.temCaixa()}" columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                             columnClasses="ui-g-12 ui-md-2">
+
+                    <p:outputLabel class="label label-success" value="#{l.Caixa_Logado}: #{dialogoCaixaView.e.id}"/> 
+
+                </p:panelGrid>
+
+                <div class="EmptyBox30"/>
+
+                <p:dataTable id="caixaDT" selectionMode="single" var="caixa" value="#{dialogoCaixaView.caixas}" rowKey="#{caixa.id}" selection="#{dialogoCaixaView.caixa}"
+                             emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
+
+                    <p:column headerText="#{l.Id}" sortBy="#{caixa.id}"  colspan="1" >
+                        <h:outputText value="#{caixa.id}" />
+                    </p:column>
+                    <p:column headerText="#{l.Saldo}" sortBy="#{caixa.saldo}"  colspan="1" >
+                        <h:outputText value="#{caixa.saldoFormatado}" />
+                    </p:column>
+                    <p:column headerText="#{l.Abertura}" sortBy="#{caixa.aberturaFormatado}" colspan="3">
+                        <h:outputText value="#{caixa.aberturaFormatado}" />
+                    </p:column>
+                </p:dataTable>
+
+            </div>
+
+            <p:separator/>
+            
+            <p:commandButton value="#{l.Logar}" rendered="#{dialogoCaixaView.temCaixa()}" action="#{dialogoCaixaView.logarCaixa}" styleClass="green-btn" update="tempDialog"/>
+            <p:commandButton value="#{l.Deslogar}" rendered="#{!dialogoCaixaView.temCaixa()}" action="#{dialogoCaixaView.deslogarCaixa}" styleClass="orange-btn" update="tempDialog"/>
+
+        </div>  
+
+    </ui:define>
+</ui:composition>

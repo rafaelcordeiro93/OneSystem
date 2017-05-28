@@ -59,7 +59,8 @@ public class ConfiguracaoVenda implements Serializable {
             if (!operacaoDeCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Condicional_Deve_Ser_Sem_Alteracao"));
             }
-        } else {
+        } else if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
+                && !buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Condicional_Deve_Ser_Saida"));
         }
         if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
@@ -68,7 +69,8 @@ public class ConfiguracaoVenda implements Serializable {
             if (!operacaoDeDevolucaoCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Devolucao_Condicional_Deve_Ser_Sem_Alteracao"));
             }
-        } else {
+        } else if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
+                && !buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Devolucao_Condicional_Deve_Ser_Entrada"));
         }
         ehValido();
