@@ -92,6 +92,9 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne
     private Nota nota;
 
+    @ManyToOne
+    private FaturaLegada faturaLegada;
+
     private Boolean entrada;
 
     public Cobranca() {

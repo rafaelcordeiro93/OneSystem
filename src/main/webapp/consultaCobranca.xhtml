@@ -34,8 +34,8 @@
                             <p:outputLabel  value="#{l.Id_Nota}:"/> 
                             <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.id}" />
 
-                            <p:outputLabel  value="#{l.Nota_Cancelada}:"/> 
-                            <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.cancelada eq true ? l.Sim : l.Nao}" />
+                            <p:outputLabel  value="#{l.Modalidade}:"/> 
+                            <p:outputLabel  value="#{consultaCobrancaView.e.modalidadeDeCobranca.nome}" />
 
                             <p:outputLabel  value="#{l.Total_Nota}:"/> 
                             <p:outputLabel  value="#{consultaCobrancaView.cobranca.nota.totalNotaFormatado}" />
@@ -55,12 +55,16 @@
                                 <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                              columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
+
+
                                     <p:outputLabel  value="#{l.Detalhes}:"/> 
                                     <p:outputLabel  value="#{consultaCobrancaView.cobranca.detalhes}" />
 
                                     <p:outputLabel  value="#{l.Cotacao}:"/> 
                                     <p:outputLabel  value="#{consultaCobrancaView.cobranca.cotacao.valorFormatado}" />
 
+                                    <p:outputLabel  value="#{l.Operacao_Financeira}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.operacaoFinanceira}" />
 
                                     <p:outputLabel  value="#{l.Emissao}:"/> 
                                     <p:outputLabel  value="#{consultaCobrancaView.cobranca.emissaoFormatadaSemHoras}" />
@@ -79,6 +83,60 @@
 
                                     <p:outputLabel  value="#{l.Possui_Pagamento}:"/> 
                                     <p:outputLabel  value="#{consultaCobrancaView.cobranca.possuiPagamento eq true ? l.Sim : l.Nao}" />
+
+                                </p:panelGrid>
+
+
+                                <p:panelGrid rendered="#{consultaCobrancaView.e.modalidadeDeCobranca.id eq 1 ? true : false}" columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel  value="#{l.Agencia}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.agencia}" />
+
+                                    <p:outputLabel  value="#{l.Conta}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.conta}" />
+
+                                    <p:outputLabel  value="#{l.Numero_Cheque}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.numeroCheque}" />
+
+                                    <p:outputLabel  value="#{l.Situacao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.situacaoDeCheque}" />
+
+                                    <p:outputLabel  value="#{l.Multas}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.multas}" />
+
+                                    <p:outputLabel  value="#{l.Juros}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.juros}" />
+
+                                    <p:outputLabel  value="#{l.Descontos}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.descontos}" />
+
+                                    <p:outputLabel  value="#{l.Emitente}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.emitente}" />
+
+                                    <p:outputLabel  value="#{l.Tipo_Lancamento}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.tipoLancamento}" />
+                                </p:panelGrid>
+
+                                <p:panelGrid rendered="#{consultaCobrancaView.e.modalidadeDeCobranca.id eq 2 ? true : false}" columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel  value="#{l.Cartao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.cartao.nome}" />
+
+                                    <p:outputLabel  value="#{l.Cod_Transacao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.codigoTransacao}" />
+
+                                    <p:outputLabel  value="#{l.Situacao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.situacaoDeCartao}" />
+
+                                </p:panelGrid>
+
+                                <p:panelGrid rendered="#{consultaCobrancaView.e.modalidadeDeCobranca.id eq 3 ? true : false}" columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel  value="#{l.Recepcao}:"/> 
+                                    <p:outputLabel  value="#{consultaCobrancaView.e.recepcao}" />
 
                                 </p:panelGrid>
 

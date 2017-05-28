@@ -189,7 +189,7 @@ public class CobrancaBV implements Serializable {
             this.descontos = ((Cheque) p).getDescontos();
             this.emitente = ((Cheque) p).getEmitente();
             this.tipoLancamento = ((Cheque) p).getTipoLancamento();
-            this.modalidadeDeCobranca = ((Cheque) p).getModalidade();
+            this.modalidadeDeCobranca =  ModalidadeDeCobranca.CHEQUE ;//((Cheque) p).getModalidade();
 
         } else if (p instanceof BoletoDeCartao) {
             this.cartao = ((BoletoDeCartao) p).getCartao();
