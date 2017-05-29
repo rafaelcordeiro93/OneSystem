@@ -2,6 +2,8 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -77,6 +79,10 @@ public class FaturaLegada implements Serializable {
         return codigo;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
     public Date getEmissao() {
         return emissao;
     }
@@ -87,6 +93,11 @@ public class FaturaLegada implements Serializable {
 
     public List<Cobranca> getCobranca() {
         return cobranca;
+    }
+
+    public Moeda getMoedaPadrao() throws EDadoInvalidoException {
+        Configuracao cfg = new ConfiguracaoService().buscar();
+        return cfg.getMoedaPadrao();
     }
 
     @Override

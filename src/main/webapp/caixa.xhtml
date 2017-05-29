@@ -60,7 +60,7 @@
 
                     <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" rendered="true" action="#{caixaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Adicionar}" rendered="true" action="#{caixaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
                         <p:commandButton value="#{l.Atualizar}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Fechar_Caixa}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.fecharCaixa()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{caixaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
