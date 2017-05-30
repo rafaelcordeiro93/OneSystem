@@ -25,7 +25,7 @@ import br.com.onesystem.domain.builder.ParcelaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
+import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;

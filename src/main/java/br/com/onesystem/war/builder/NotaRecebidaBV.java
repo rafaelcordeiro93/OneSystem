@@ -24,6 +24,7 @@ import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -144,6 +145,16 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
             return id;
         }
         return id;
+    }
+
+    public List<Cobranca> getChequesDeEntradas() {
+        if (cobrancas != null) {
+            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            return entradas;
+        } else {
+            return null;
+        }
     }
 
     public BigDecimal getTotalChequeDeEntrada() {
@@ -344,7 +355,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.porcentagemDesconto = porcentagemDesconto;
     }
 
-  public NotaRecebida construir() throws DadoInvalidoException {
+    public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
