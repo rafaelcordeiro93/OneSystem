@@ -50,6 +50,9 @@ public class ValorPorCotacao implements Serializable {
 
     @ManyToOne
     private Nota nota;
+    
+    @ManyToOne
+    private Recebimento recebimento;
 
     public ValorPorCotacao() {
     }
