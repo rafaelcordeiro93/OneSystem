@@ -119,7 +119,7 @@ public abstract class Cobranca implements Serializable {
     private final void ehAbstracaoValida() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
         if (!(this instanceof Credito)) {
-            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","vencimento");
+            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "vencimento");
         }
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
@@ -226,6 +226,10 @@ public abstract class Cobranca implements Serializable {
     public String getEmissaoFormatadaSemHoras() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
+    }
+
+    public FaturaLegada getFaturaLegada() {
+        return faturaLegada;
     }
 
     @Override
