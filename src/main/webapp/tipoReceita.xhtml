@@ -25,7 +25,7 @@
                                 <p:inputNumber id="receitaid" size="26" value="#{receitaView.receita.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
                                     <p:ajax event="blur" listener="#{receitaView.buscaPorId}" update=":conteudo"/>
                                 </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoReceitaView.abrirDialogo()}" process="@this" update="@none">
+                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
                                     <p:ajax event="dialogReturn" listener="#{receitaView.selecionaReceita}" update=":conteudo" process="@this"/>
                                 </p:commandButton>
                             </h:panelGrid>     

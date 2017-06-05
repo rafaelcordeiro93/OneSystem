@@ -29,7 +29,7 @@ public class SelecaoReceitaProvisionadaView extends BasicCrudMBImpl<ReceitaProvi
 
     @Override
     public String abrirEdicao() {
-        return "receitaProvisionada";
+        return "/receitaProvisionada";
     }
     
     @Override

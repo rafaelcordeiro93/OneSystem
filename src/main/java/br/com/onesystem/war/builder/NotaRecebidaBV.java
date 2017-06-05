@@ -18,7 +18,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.NotaRecebidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -176,7 +176,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
 
     public String getTotalChequeDeEntradaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalChequeDeEntrada());
+        return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
 
     public BigDecimal getTotalItens() {
@@ -184,7 +184,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalItens());
+        return MoedaFormatter.format(moedaPadrao, getTotalItens());
     }
 
     public BigDecimal getTotalNota() {

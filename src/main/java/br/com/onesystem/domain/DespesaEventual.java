@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_EVENTUAL")
-public class DespesaEventual extends MovimentoFixo implements RelatorioContaAbertaImpl {
+public class DespesaEventual extends CobrancaFixa implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private TipoDespesa tipoDespesa;
@@ -22,8 +22,8 @@ public class DespesaEventual extends MovimentoFixo implements RelatorioContaAber
     }
 
     public DespesaEventual(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date emissao, String historico,
-            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao);
+            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira, Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao, mesReferencia, anoReferencia);
         this.tipoDespesa = tipoDespesa;
     }
 
@@ -52,5 +52,5 @@ public class DespesaEventual extends MovimentoFixo implements RelatorioContaAber
     public String getOrigem() {
         return TipoOperacao.AVULSO.getNome();
     }
-
+    
 }

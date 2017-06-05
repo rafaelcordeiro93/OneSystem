@@ -30,7 +30,7 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
     
     @Override
     public String abrirEdicao() {
-        return "pessoa";
+        return "/pessoa";
     }
     
     @Override

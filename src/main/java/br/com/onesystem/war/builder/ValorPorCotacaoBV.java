@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.onesystem.reportTemplate;
+package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;

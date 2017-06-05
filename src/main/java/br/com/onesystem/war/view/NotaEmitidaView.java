@@ -38,7 +38,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
@@ -154,7 +154,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             configuracao = configuracaoService.buscar();
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracaoEstoque = confEstoqueService.buscar();
-            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -1027,9 +1027,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     //----------------------- Getters and Setters -----------------------------
     public String getSaldoDeCredito() {
         if (notaEmitida.getPessoa() != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(notaEmitida.getPessoa()));
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(notaEmitida.getPessoa()));
         }
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
     }
 
     public NotaEmitida getNotaEmitidaSelecionada() {

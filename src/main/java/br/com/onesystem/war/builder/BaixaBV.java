@@ -6,7 +6,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.MovimentoFixo;
+import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Pessoa;
@@ -46,7 +46,7 @@ public class BaixaBV implements Serializable {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado;
-    private MovimentoFixo movimentoFixo;
+    private CobrancaFixa movimentoFixo;
     private Date dataCancelamento;
     private ValorPorCotacao valorPorCotacao;
 
@@ -174,11 +174,11 @@ public class BaixaBV implements Serializable {
         return naturezaFinanceira;
     }
 
-    public MovimentoFixo getMovimentoFixo() {
+    public CobrancaFixa getMovimentoFixo() {
         return movimentoFixo;
     }
 
-    public void setMovimentoFixo(MovimentoFixo movimentoFixo) {
+    public void setMovimentoFixo(CobrancaFixa movimentoFixo) {
         this.movimentoFixo = movimentoFixo;
     }
 

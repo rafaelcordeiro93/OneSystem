@@ -7,7 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import java.io.Serializable;
@@ -34,6 +34,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -67,6 +69,7 @@ public abstract class Cobranca implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @NotNull(message = "{pessoa_not_null}")
     @ManyToOne(optional = true)
     private Pessoa pessoa;
 
@@ -94,6 +97,12 @@ public abstract class Cobranca implements Serializable {
 
     @ManyToOne
     private FaturaLegada faturaLegada;
+    
+    @OneToMany(mappedBy = "cobranca")
+    private List<TipoDeCobranca> tiposDeCobranca;
+    
+    @OneToMany(mappedBy = "cobranca")
+    private List<FormaDeCobranca> formasDeCobranca;
 
     private Boolean entrada;
 
@@ -117,7 +126,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","pessoa");
         if (!(this instanceof Credito)) {
             campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "vencimento");
         }
@@ -215,7 +224,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     public String getValorFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), valor);
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
     public String getEmissaoFormatada() {

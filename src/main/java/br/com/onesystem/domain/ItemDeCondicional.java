@@ -8,7 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
@@ -111,7 +111,7 @@ public class ItemDeCondicional implements Serializable {
 
     public String getTotalFormatado() {
         if (condicional != null) {
-            return MoedaFomatter.format(condicional.getCotacao().getConta().getMoeda(), getTotal());
+            return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -119,7 +119,7 @@ public class ItemDeCondicional implements Serializable {
 
     public String getUnitarioFormatado() {
         if (condicional != null) {
-            return MoedaFomatter.format(condicional.getCotacao().getConta().getMoeda(), getUnitario());
+            return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

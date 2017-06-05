@@ -7,7 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -47,13 +47,13 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "MOVIMENTOFIXO_CLASSE_NOME")
-public abstract class MovimentoFixo implements Serializable {
+@DiscriminatorColumn(name = "COBRANCAFIXA_CLASSE_NOME")
+public abstract class CobrancaFixa implements Serializable {
 
     @Id
-    @SequenceGenerator(name = "SEQ_MOVIMENTOFIXO", sequenceName = "SEQ_MOVIMENTOFIXO",
+    @SequenceGenerator(name = "SEQ_COBRANCAFIXA", sequenceName = "SEQ_COBRANCAFIXA",
             initialValue = 1, allocationSize = 1)
-    @GeneratedValue(generator = "SEQ_MOVIMENTOFIXO", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_COBRANCAFIXA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Min(value = 0, message = "{valor_min}")
@@ -78,19 +78,31 @@ public abstract class MovimentoFixo implements Serializable {
     @OneToMany(mappedBy = "movimentoFixo", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
+    @NotNull(message = "{mesReferencia_not_null}")
+    @Min(value = 0, message = "{mesReferencia_min}")
+    private Integer mesReferencia;
+
+    @NotNull(message = "{anoReferencia_not_null}")
+    @Min(value = 0, message = "{anoReferencia_min}")
+    private Integer anoReferencia;
+
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira operacaoFinanceira;
+
+    @OneToMany(mappedBy = "cobrancaFixa")
+    private List<TipoDeCobranca> tiposDeCobranca;
 
     @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
-    public MovimentoFixo() {
+    public CobrancaFixa() {
     }
 
-    public MovimentoFixo(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento) throws DadoInvalidoException {
+    public CobrancaFixa(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
+            Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -100,12 +112,14 @@ public abstract class MovimentoFixo implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
         this.vencimento = vencimento;
+        this.mesReferencia = mesReferencia;
+        this.anoReferencia = anoReferencia;
         ehAbstracaoValida();
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "vencimento", "historico", "cotacao", "operacaoFinanceira");
-        new ValidadorDeCampos<MovimentoFixo>().valida(this, campos);
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "mesReferencia", "anoReferencia");
+        new ValidadorDeCampos<CobrancaFixa>().valida(this, campos);
     }
 
     public abstract String getDetalhes();
@@ -138,13 +152,29 @@ public abstract class MovimentoFixo implements Serializable {
         return historico;
     }
 
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
     public Date getVencimento() {
         return vencimento;
     }
 
+    public Integer getMesReferencia() {
+        return mesReferencia;
+    }
+
+    public Integer getAnoReferencia() {
+        return anoReferencia;
+    }
+    
     public Long getDias() {
         LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate e = emissao.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate e = getEmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         return ChronoUnit.DAYS.between(e, v);
     }
 
@@ -163,16 +193,8 @@ public abstract class MovimentoFixo implements Serializable {
         return getVencimento() != null ? emissaoFormatada.format(getVencimento().getTime()) : "";
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public OperacaoFinanceira getOperacaoFinanceira() {
-        return operacaoFinanceira;
-    }
-
     public String getValorFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), valor);
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
     public String getEmissaoFormatada() {
@@ -190,10 +212,10 @@ public abstract class MovimentoFixo implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof MovimentoFixo)) {
+        if (!(objeto instanceof CobrancaFixa)) {
             return false;
         }
-        MovimentoFixo outro = (MovimentoFixo) objeto;
+        CobrancaFixa outro = (CobrancaFixa) objeto;
         if (this.id == null) {
             return false;
         }

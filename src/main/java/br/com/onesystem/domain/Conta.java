@@ -38,6 +38,9 @@ public class Conta implements Serializable {
 
     @OneToMany(mappedBy = "destino")
     private List<Transferencia> destinoDeTransferencias;
+    
+    @OneToMany(mappedBy = "conta")
+    private List<TipoDeCobranca> tipoDeCobrancas;
 
     @NotNull(message = "moeda_not_null")
     @ManyToOne(optional = false)
@@ -102,6 +105,11 @@ public class Conta implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "Conta{" + "id=" + id + ", nome=" + nome + ", banco=" + banco + ", origemDeTransferencias=" + origemDeTransferencias + ", destinoDeTransferencias=" + destinoDeTransferencias + ", moeda=" + moeda + ", cotacoes=" + cotacoes + '}';
     }
 
 }

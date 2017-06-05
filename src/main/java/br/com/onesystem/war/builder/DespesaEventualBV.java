@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.DespesaEventualBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -20,10 +21,13 @@ public class DespesaEventualBV implements Serializable {
     private TipoDespesa despesa;
     private BigDecimal valor;
     private Date vencimento;
+    private OperacaoFinanceira operacaoFinanceira;
     private Date emissao;
     private String historico;
     private Cotacao cotacao;
     private List<Baixa> baixas;
+    private Integer anoReferencia;
+    private Integer mesReferencia;
 
     public DespesaEventualBV(DespesaEventual despesaEventualSelecionada) {
         this.id = despesaEventualSelecionada.getId();
@@ -35,10 +39,14 @@ public class DespesaEventualBV implements Serializable {
         this.historico = despesaEventualSelecionada.getHistorico();
         this.cotacao = despesaEventualSelecionada.getCotacao();
         this.baixas = despesaEventualSelecionada.getBaixas();
+        this.operacaoFinanceira = despesaEventualSelecionada.getOperacaoFinanceira();
+        this.mesReferencia = despesaEventualSelecionada.getMesReferencia();
+        this.anoReferencia = despesaEventualSelecionada.getAnoReferencia();
     }
 
     public DespesaEventualBV(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento,
-            Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas) {
+            Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
+            Integer mesReferencia, Integer anoReferencia) {
         this.id = id;
         this.pessoa = pessoa;
         this.despesa = despesa;
@@ -48,6 +56,9 @@ public class DespesaEventualBV implements Serializable {
         this.historico = historico;
         this.cotacao = cotacao;
         this.baixas = baixas;
+        this.operacaoFinanceira = operacaoFinanceira;
+        this.mesReferencia = mesReferencia;
+        this.anoReferencia = anoReferencia;
     }
 
     public DespesaEventualBV() {
@@ -130,14 +141,40 @@ public class DespesaEventualBV implements Serializable {
         this.baixas = baixas;
     }
 
+    public Integer getAnoReferencia() {
+        return anoReferencia;
+    }
+
+    public void setAnoReferencia(Integer anoReferencia) {
+        this.anoReferencia = anoReferencia;
+    }
+
+    public Integer getMesReferencia() {
+        return mesReferencia;
+    }
+
+    public void setMesReferencia(Integer mesReferencia) {
+        this.mesReferencia = mesReferencia;
+    }
+    
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+    }
+    
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventualBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
+        return new DespesaEventualBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
+                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia).construir();
 
     }
 
     public DespesaEventual construirComID() throws DadoInvalidoException {
-        return new DespesaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
+        return new DespesaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
+                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia).construir();
     }
 }

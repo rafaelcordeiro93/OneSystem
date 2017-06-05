@@ -30,8 +30,8 @@ public class ReceitaProvisionadaDAO {
     }
 
     public ReceitaProvisionadaDAO wAReceber() {
-        consulta += "where 0 = (select count(*) from Baixa b where b.receitaProvisionada = rp.id and b.cancelada = :pBNaoCancelada) ";
-        parametros.put("pBNaoCancelada", false);
+//        consulta += "where 0 = (select count(*) from Baixa b where b.receitaProvisionada = rp.id and b.cancelada = :pBNaoCancelada) ";
+//        parametros.put("pBNaoCancelada", false);
         return this;
     }
 
@@ -66,12 +66,12 @@ public class ReceitaProvisionadaDAO {
         return this;
     }
 
-    public ReceitaProvisionadaDAO orderByMoeda(){
+    public ReceitaProvisionadaDAO orderByMoeda() {
         consulta += "order by rp.moeda asc ";
         return this;
     }
-    
-    public List<ReceitaProvisionada> gerarDados() {
+
+    public List<ReceitaProvisionada> listaDeResultados() {
         List<ReceitaProvisionada> resultado = new ArmazemDeRegistros<ReceitaProvisionada>(ReceitaProvisionada.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();

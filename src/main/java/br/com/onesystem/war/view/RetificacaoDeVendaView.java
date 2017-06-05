@@ -16,7 +16,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -231,7 +231,7 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
     public String getTotalParcelas() {
         if (list != null) {
             BigDecimal valor = list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-            return MoedaFomatter.format(nota.getMoedaPadrao(), valor);
+            return MoedaFormatter.format(nota.getMoedaPadrao(), valor);
         }
         return "";
     }

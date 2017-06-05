@@ -10,7 +10,7 @@ import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.builder.ItemDeComandaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ public class ItemDeComandaBV {
 
     public String getTotalFormatado() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -84,7 +84,7 @@ public class ItemDeComandaBV {
 
     public String getUnitarioFormatado() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }
@@ -120,7 +120,7 @@ public class ItemDeComandaBV {
 
     public String getValorTotalListaDeQuantidadeFormatado() {
         BigDecimal resultado = getUnitario().multiply(getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
-        return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), resultado);
+        return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), resultado);
     }
 
     public int getComparaQuantidadeDevolucao() {
