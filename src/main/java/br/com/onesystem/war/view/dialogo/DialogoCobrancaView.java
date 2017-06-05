@@ -5,14 +5,17 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -38,6 +41,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     private Cobranca cobranca;
     private List<Cotacao> cotacaoLista;
     private Nota nota;
+    private FaturaLegada faturaLegada;
     private Model<Cobranca> model;
     
     @Inject
@@ -54,10 +58,23 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     
     private void buscaDaSessao() throws DadoInvalidoException {
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
+        faturaLegada = (FaturaLegada) SessionUtil.getObject("faturaLegada", FacesContext.getCurrentInstance());
+        
         if (model != null) {
             cobranca = (Cobranca) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
+        } else if (faturaLegada != null) {
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
+            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaLegada.getMoedaPadrao()).naMaiorEmissao(faturaLegada.getEmissao()).resultado());
+            e.setTipoLancamento(TipoLancamento.EMITIDA);
+            e.setMoeda(faturaLegada.getMoedaPadrao());
+            e.setFaturaLegada(faturaLegada);
+            e.setPessoa(faturaLegada.getPessoa());
+            e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
+            e.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
+            modalidade = false;
         } else {
             nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();
