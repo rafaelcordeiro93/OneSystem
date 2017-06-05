@@ -9,7 +9,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.MovimentoFixo;
+import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
@@ -52,7 +52,7 @@ public class BaixaBuilder {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado = EstadoDeBaixa.EFETIVADO;
-    private MovimentoFixo movimentoFixo;
+    private CobrancaFixa movimentoFixo;
     private ValorPorCotacao valorPorCotacao;
 
     public BaixaBuilder comId(Long id) {
@@ -145,7 +145,7 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comMovimentoFixo(MovimentoFixo movimentoFixo) {
+    public BaixaBuilder comMovimentoFixo(CobrancaFixa movimentoFixo) {
         this.movimentoFixo = movimentoFixo;
         return this;
     }

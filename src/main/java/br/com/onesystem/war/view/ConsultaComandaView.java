@@ -9,7 +9,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.ComandaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -52,7 +52,7 @@ public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> impleme
 
     public String getZero() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

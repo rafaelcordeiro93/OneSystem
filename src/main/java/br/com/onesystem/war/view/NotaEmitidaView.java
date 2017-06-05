@@ -33,12 +33,12 @@ import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
+import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
@@ -147,14 +147,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void init() {
         iniciarConfiguracoes();
         limparJanela();
-    } 
+    }
 
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracaoEstoque = confEstoqueService.buscar();
-            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -193,7 +193,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void validaAFaturar() {
         try {
             notaEmitida.setEmissao(new Date());
-            NotaEmitida nota = notaEmitida.construir();
+            nota = notaEmitida.construir();
             if (!notaEmitida.getOperacao().getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 // Se valor a faturar maior que zero deve exibir diálogo de confirmação
                 if (notaEmitida.getAFaturar() != null && notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0) {
@@ -296,7 +296,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
-            
+
             new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
@@ -721,7 +721,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     private void importa(Orcamento orcamento) throws DadoInvalidoException {
-        orcamento = orcamento;
+        this.orcamento = orcamento;
         atribuiOrcamentoASessao(orcamento);
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeOrcamento-btn\").click();");
     }
@@ -1027,9 +1027,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     //----------------------- Getters and Setters -----------------------------
     public String getSaldoDeCredito() {
         if (notaEmitida.getPessoa() != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(notaEmitida.getPessoa()));
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), creditoService.buscarSaldo(notaEmitida.getPessoa()));
         }
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
     }
 
     public NotaEmitida getNotaEmitidaSelecionada() {

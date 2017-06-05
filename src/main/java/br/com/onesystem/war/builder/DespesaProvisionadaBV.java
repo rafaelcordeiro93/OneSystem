@@ -27,6 +27,8 @@ public class DespesaProvisionadaBV implements Serializable {
     private Cotacao cotacao;
     private Cambio cambio;
     private List<Baixa> baixas;
+    private Integer anoReferencia;
+    private Integer mesReferencia;
 
     public DespesaProvisionadaBV(DespesaProvisionada despesaProvisionadaSelecionada) {
         this.id = despesaProvisionadaSelecionada.getId();
@@ -40,11 +42,13 @@ public class DespesaProvisionadaBV implements Serializable {
         this.cotacao = despesaProvisionadaSelecionada.getCotacao();
         this.cambio = despesaProvisionadaSelecionada.getCambio();
         this.baixas = despesaProvisionadaSelecionada.getBaixas();
+        this.mesReferencia = despesaProvisionadaSelecionada.getMesReferencia();
+        this.anoReferencia = despesaProvisionadaSelecionada.getAnoReferencia();
     }
 
     public DespesaProvisionadaBV(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento,
             Date emissao, String historico, boolean divisaoLucroCambioCaixa, Cotacao cotacao,
-            Cambio cambio, List<Baixa> baixas) {
+            Cambio cambio, List<Baixa> baixas, Integer mesReferencia, Integer anoReferencia) {
         this.id = id;
         this.pessoa = pessoa;
         this.despesa = despesa;
@@ -56,6 +60,8 @@ public class DespesaProvisionadaBV implements Serializable {
         this.cotacao = cotacao;
         this.cambio = cambio;
         this.baixas = baixas;
+        this.mesReferencia = mesReferencia;
+        this.anoReferencia = anoReferencia;
     }
 
     public DespesaProvisionadaBV() {
@@ -154,16 +160,32 @@ public class DespesaProvisionadaBV implements Serializable {
         this.baixas = baixas;
     }
 
+    public Integer getAnoReferencia() {
+        return anoReferencia;
+    }
+
+    public void setAnoReferencia(Integer anoReferencia) {
+        this.anoReferencia = anoReferencia;
+    }
+
+    public Integer getMesReferencia() {
+        return mesReferencia;
+    }
+
+    public void setMesReferencia(Integer mesReferencia) {
+        this.mesReferencia = mesReferencia;
+    }
+
     public DespesaProvisionada construir() throws DadoInvalidoException {
         return new DespesaProvisionadaBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas)
+                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas).comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia)
                 .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
 
     }
 
     public DespesaProvisionada construirComID() throws DadoInvalidoException {
         return new DespesaProvisionadaBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas)
+                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas).comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia)
                 .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).construir();
     }
 }

@@ -21,7 +21,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -184,7 +184,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     }
 
     public String getTotalChequeDeEntradaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalChequeDeEntrada());
+        return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
 
     public BigDecimal getTotalCartaoDeEntrada() {
@@ -206,7 +206,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     }
 
     public String getTotalCartaoDeEntradaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalCartaoDeEntrada());
+        return MoedaFormatter.format(moedaPadrao, getTotalCartaoDeEntrada());
     }
 
     public BigDecimal getTotalItens() {
@@ -214,7 +214,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalItens());
+        return MoedaFormatter.format(moedaPadrao, getTotalItens());
     }
 
     public BigDecimal getTotalNota() {
@@ -323,7 +323,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     public String getTotalParcelasFormatado() {
         BigDecimal totalParcelas = getTotalParcelas();
 
-        return MoedaFomatter.format(moedaPadrao, totalParcelas);
+        return MoedaFormatter.format(moedaPadrao, totalParcelas);
     }
 
     public List<Cobranca> getChequesDeEntradas() {

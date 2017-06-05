@@ -96,11 +96,6 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
         }
     }
 
-    @Override
-    public void buscaPorId() {
-
-    }
-
     public void limparJanela() {
         e = new UsuarioBV();
     }

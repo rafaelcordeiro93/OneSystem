@@ -15,7 +15,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -60,7 +60,7 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
 
     public String getZero() {
         if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
         } else {
             return "";
         }

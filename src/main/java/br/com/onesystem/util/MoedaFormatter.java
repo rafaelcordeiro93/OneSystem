@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  *
  * @author rauber
  */
-public class MoedaFomatter {
+public class MoedaFormatter {
 
     public static String format(Moeda moeda, Double valor) {
         Double v = valor == null ? 0 : valor == 0 ? 0 : valor;

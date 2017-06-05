@@ -1,102 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="minds">
-        <description>
+  <persistence-unit name="minds">
+    <description>
             Persistence unit para Minds
         </description>
-        <!--<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <!--  Aqui são listadas todas as entidades  -->
-        <class>br.com.onesystem.domain.Cidade</class>
-        <class>br.com.onesystem.domain.Contato</class>
-        <class>br.com.onesystem.domain.Log</class>
-        <class>br.com.onesystem.domain.GrupoDePrivilegio</class>
-        <class>br.com.onesystem.domain.Pessoa</class>
-        <class>br.com.onesystem.domain.PessoaFisica</class>
-        <class>br.com.onesystem.domain.PessoaJuridica</class>
-        <class>br.com.onesystem.domain.Privilegio</class>
-        <class>br.com.onesystem.domain.Usuario</class>
-        <class>br.com.onesystem.domain.Moeda</class>
-        <class>br.com.onesystem.domain.Cotacao</class>
-        <class>br.com.onesystem.domain.ConfiguracaoCambio</class>
-        <class>br.com.onesystem.domain.UnidadeMedidaItem</class>
-        <class>br.com.onesystem.domain.IVA</class>
-        <class>br.com.onesystem.domain.Marca</class>
-        <class>br.com.onesystem.domain.Deposito</class>
-        <class>br.com.onesystem.domain.Grupo</class>
-        <class>br.com.onesystem.domain.Item</class>
-        <class>br.com.onesystem.domain.Banco</class>
-        <class>br.com.onesystem.domain.Conta</class>
-        <class>br.com.onesystem.domain.Recepcao</class>
-        <class>br.com.onesystem.domain.Cambio</class>
-        <class>br.com.onesystem.domain.ContratoDeCambio</class>
-        <class>br.com.onesystem.domain.GrupoFinanceiro</class>
-        <class>br.com.onesystem.domain.Baixa</class>
-        <class>br.com.onesystem.domain.Titulo</class>
-        <class>br.com.onesystem.domain.Transferencia</class>
-        <class>br.com.onesystem.domain.DespesaProvisionada</class>
-        <class>br.com.onesystem.domain.Janela</class>
-        <class>br.com.onesystem.domain.Operacao</class>
-        <class>br.com.onesystem.domain.OperacaoDeEstoque</class>
-        <class>br.com.onesystem.domain.ReceitaProvisionada</class>
-        <class>br.com.onesystem.domain.ConfiguracaoFinanceiro</class>
-        <class>br.com.onesystem.domain.Modulo</class>
-        <class>br.com.onesystem.domain.AjusteDeEstoque</class>
-        <class>br.com.onesystem.domain.Estoque</class>
-        <class>br.com.onesystem.domain.ContaDeEstoque</class>
-        <class>br.com.onesystem.domain.Nota</class>
-        <class>br.com.onesystem.domain.NotaEmitida</class>
-        <class>br.com.onesystem.domain.NotaRecebida</class>
-        <class>br.com.onesystem.domain.ListaDePreco</class>
-        <class>br.com.onesystem.domain.ItemRecebido</class>
-        <class>br.com.onesystem.domain.PrecoDeItem</class>
-        <class>br.com.onesystem.domain.Configuracao</class>
-        <class>br.com.onesystem.domain.TabelaDeComissao</class>
-        <class>br.com.onesystem.domain.GrupoFiscal</class>
-        <class>br.com.onesystem.domain.ConhecimentoDeFrete</class>
-        <class>br.com.onesystem.domain.Margem</class>
-        <class>br.com.onesystem.domain.Comissao</class>
-        <class>br.com.onesystem.domain.Filial</class>
-        <class>br.com.onesystem.domain.Cartao</class>
-        <class>br.com.onesystem.domain.TaxaDeAdministracao</class>
-        <class>br.com.onesystem.domain.BoletoDeCartao</class>
-        <class>br.com.onesystem.domain.Cheque</class>
-        <class>br.com.onesystem.domain.Credito</class>
-        <class>br.com.onesystem.domain.ConfiguracaoEstoque</class>
-        <class>br.com.onesystem.domain.Coluna</class>
-        <class>br.com.onesystem.domain.ModeloDeRelatorio</class>
-        <class>br.com.onesystem.domain.FormaPagamentoRecebimento</class>
-        <class>br.com.onesystem.domain.DespesaEventual</class>
-        <class>br.com.onesystem.domain.ReceitaEventual</class>
-        <class>br.com.onesystem.domain.TipoDespesa</class>
-        <class>br.com.onesystem.domain.TipoReceita</class>
-        <class>br.com.onesystem.domain.MovimentoFixo</class>
-        <class>br.com.onesystem.domain.Orcamento</class>
-        <class>br.com.onesystem.domain.ItemOrcado</class>
-        <class>br.com.onesystem.domain.HistoricoDeOrcamento</class>
-        <class>br.com.onesystem.domain.ItemDeNota</class>
-        <class>br.com.onesystem.domain.Cobranca</class>
-        <class>br.com.onesystem.domain.ValorPorCotacao</class>
-        <class>br.com.onesystem.domain.ConfiguracaoVenda</class>
-        <class>br.com.onesystem.domain.Comanda</class>
-        <class>br.com.onesystem.domain.ItemDeComanda</class>
-        <class>br.com.onesystem.domain.Condicional</class>
-        <class>br.com.onesystem.domain.ItemDeCondicional</class>
-        <class>br.com.onesystem.domain.Caixa</class>
-        <class>br.com.onesystem.domain.FaturaLegada</class>
-        <properties>
-            <!--  Propriedades JDBC  -->
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/minds"/>
-            <property name="javax.persistence.jdbc.user" value="postgres"/>
-            <property name="javax.persistence.jdbc.password" value="root"/>
-            <!--  Configurações específicas do Hibernate  -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.format_sql" value="false"/>
-            <!-- Outros Auxiliares -->
-            <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
-        </properties>
-    </persistence-unit>
+    <!--<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+    <!--  Aqui são listadas todas as entidades  -->
+    <class>br.com.onesystem.domain.Cidade</class>
+    <class>br.com.onesystem.domain.Contato</class>
+    <class>br.com.onesystem.domain.Log</class>
+    <class>br.com.onesystem.domain.GrupoDePrivilegio</class>
+    <class>br.com.onesystem.domain.Pessoa</class>
+    <class>br.com.onesystem.domain.PessoaFisica</class>
+    <class>br.com.onesystem.domain.PessoaJuridica</class>
+    <class>br.com.onesystem.domain.Privilegio</class>
+    <class>br.com.onesystem.domain.Usuario</class>
+    <class>br.com.onesystem.domain.Moeda</class>
+    <class>br.com.onesystem.domain.Cotacao</class>
+    <class>br.com.onesystem.domain.ConfiguracaoCambio</class>
+    <class>br.com.onesystem.domain.UnidadeMedidaItem</class>
+    <class>br.com.onesystem.domain.IVA</class>
+    <class>br.com.onesystem.domain.Marca</class>
+    <class>br.com.onesystem.domain.Deposito</class>
+    <class>br.com.onesystem.domain.Grupo</class>
+    <class>br.com.onesystem.domain.Item</class>
+    <class>br.com.onesystem.domain.Banco</class>
+    <class>br.com.onesystem.domain.Conta</class>
+    <class>br.com.onesystem.domain.Recepcao</class>
+    <class>br.com.onesystem.domain.Cambio</class>
+    <class>br.com.onesystem.domain.ContratoDeCambio</class>
+    <class>br.com.onesystem.domain.GrupoFinanceiro</class>
+    <class>br.com.onesystem.domain.Baixa</class>
+    <class>br.com.onesystem.domain.Titulo</class>
+    <class>br.com.onesystem.domain.Transferencia</class>
+    <class>br.com.onesystem.domain.DespesaProvisionada</class>
+    <class>br.com.onesystem.domain.Janela</class>
+    <class>br.com.onesystem.domain.Operacao</class>
+    <class>br.com.onesystem.domain.OperacaoDeEstoque</class>
+    <class>br.com.onesystem.domain.ReceitaProvisionada</class>
+    <class>br.com.onesystem.domain.ConfiguracaoFinanceiro</class>
+    <class>br.com.onesystem.domain.Modulo</class>
+    <class>br.com.onesystem.domain.AjusteDeEstoque</class>
+    <class>br.com.onesystem.domain.Estoque</class>
+    <class>br.com.onesystem.domain.ContaDeEstoque</class>
+    <class>br.com.onesystem.domain.Nota</class>
+    <class>br.com.onesystem.domain.NotaEmitida</class>
+    <class>br.com.onesystem.domain.NotaRecebida</class>
+    <class>br.com.onesystem.domain.ListaDePreco</class>
+    <class>br.com.onesystem.domain.ItemRecebido</class>
+    <class>br.com.onesystem.domain.PrecoDeItem</class>
+    <class>br.com.onesystem.domain.Configuracao</class>
+    <class>br.com.onesystem.domain.TabelaDeComissao</class>
+    <class>br.com.onesystem.domain.GrupoFiscal</class>
+    <class>br.com.onesystem.domain.ConhecimentoDeFrete</class>
+    <class>br.com.onesystem.domain.Margem</class>
+    <class>br.com.onesystem.domain.Comissao</class>
+    <class>br.com.onesystem.domain.Filial</class>
+    <class>br.com.onesystem.domain.Cartao</class>
+    <class>br.com.onesystem.domain.TaxaDeAdministracao</class>
+    <class>br.com.onesystem.domain.BoletoDeCartao</class>
+    <class>br.com.onesystem.domain.Cheque</class>
+    <class>br.com.onesystem.domain.ConfiguracaoEstoque</class>
+    <class>br.com.onesystem.domain.Coluna</class>
+    <class>br.com.onesystem.domain.ModeloDeRelatorio</class>
+    <class>br.com.onesystem.domain.DespesaEventual</class>
+    <class>br.com.onesystem.domain.ReceitaEventual</class>
+    <class>br.com.onesystem.domain.TipoDespesa</class>
+    <class>br.com.onesystem.domain.TipoReceita</class>
+    <class>br.com.onesystem.domain.Orcamento</class>
+    <class>br.com.onesystem.domain.ItemOrcado</class>
+    <class>br.com.onesystem.domain.HistoricoDeOrcamento</class>
+    <class>br.com.onesystem.domain.ItemDeNota</class>
+    <class>br.com.onesystem.domain.Cobranca</class>
+    <class>br.com.onesystem.domain.ValorPorCotacao</class>
+    <class>br.com.onesystem.domain.ConfiguracaoVenda</class>
+    <class>br.com.onesystem.domain.Comanda</class>
+    <class>br.com.onesystem.domain.ItemDeComanda</class>
+    <class>br.com.onesystem.domain.Condicional</class>
+    <class>br.com.onesystem.domain.ItemDeCondicional</class>
+    <class>br.com.onesystem.domain.Caixa</class>
+    <class>br.com.onesystem.domain.FaturaLegada</class>
+    <class>br.com.onesystem.domain.Credito</class>
+    <class>br.com.onesystem.domain.Recebimento</class>
+    <class>br.com.onesystem.domain.TipoDeCobranca</class>
+    <class>br.com.onesystem.domain.CobrancaFixa</class>
+    <properties>
+      <!--  Propriedades JDBC  -->
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/minds"/>
+      <property name="javax.persistence.jdbc.user" value="postgres"/>
+      <property name="javax.persistence.jdbc.password" value="root"/>
+      <!--  Configurações específicas do Hibernate  -->
+      <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.show_sql" value="false"/>
+      <property name="hibernate.format_sql" value="false"/>
+      <!-- Outros Auxiliares -->
+      <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
+    </properties>
+  </persistence-unit>
 </persistence>

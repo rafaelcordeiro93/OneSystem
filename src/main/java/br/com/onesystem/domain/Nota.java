@@ -7,7 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -238,31 +238,31 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalItens());
+        return MoedaFormatter.format(moedaPadrao, getTotalItens());
     }
 
     public String getTotalParcelasFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalParcelas());
+        return MoedaFormatter.format(moedaPadrao, getTotalParcelas());
     }
 
     public String getAcrescimoFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getAcrescimo());
+        return MoedaFormatter.format(moedaPadrao, getAcrescimo());
     }
 
     public String getTotalEmDinheiroFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalEmDinheiro());
+        return MoedaFormatter.format(moedaPadrao, getTotalEmDinheiro());
     }
 
     public String getDescontoFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getDesconto());
+        return MoedaFormatter.format(moedaPadrao, getDesconto());
     }
 
     public String getDespesaCobrancaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getDespesaCobranca());
+        return MoedaFormatter.format(moedaPadrao, getDespesaCobranca());
     }
 
     public String getFreteFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getFrete());
+        return MoedaFormatter.format(moedaPadrao, getFrete());
     }
 
     public BigDecimal getTotalParcelas() {
@@ -288,7 +288,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalCartaoDeEntradaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalCartaoDeEntrada());
+        return MoedaFormatter.format(moedaPadrao, getTotalCartaoDeEntrada());
     }
 
     public BigDecimal getTotalChequeDeEntrada() {
@@ -310,7 +310,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalChequeDeEntradaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalChequeDeEntrada());
+        return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
 
     public void setParcelas(List<Cobranca> parcelas) {
@@ -318,7 +318,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalNotaFormatado() {
-        return MoedaFomatter.format(moedaPadrao, getTotalNota());
+        return MoedaFormatter.format(moedaPadrao, getTotalNota());
     }
 
     public BigDecimal getTotalNota() {

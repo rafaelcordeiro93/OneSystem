@@ -11,6 +11,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -33,9 +34,9 @@ import org.hibernate.validator.constraints.Length;
 @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_GRUPOFINANCEIRO",
         sequenceName = "SEQ_GRUPOFINANCEIRO")
 public class GrupoFinanceiro implements Serializable {
-    
+
     private static final long serialVersionUID = 8167702146233639964L;
-    
+
     @Id
     @GeneratedValue(generator = "SEQ_GRUPOFINANCEIRO", strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -50,7 +51,7 @@ public class GrupoFinanceiro implements Serializable {
 
     @OneToMany(mappedBy = "grupoFinanceiro")
     private List<TipoDespesa> listaDeDespesas;
-    
+
     @OneToMany(mappedBy = "grupoFinanceiro")
     private List<TipoDespesa> listaDeReceitas;
 
@@ -58,15 +59,20 @@ public class GrupoFinanceiro implements Serializable {
     @Enumerated(EnumType.STRING)
     private ClassificacaoFinanceira classificacaoFinanceira;
 
+    @NotNull(message = "{unidadeFinanceira_not_null}")
+    @Enumerated(EnumType.STRING)
+    private OperacaoFinanceira operacaoFinanceira;
+
     public GrupoFinanceiro() {
     }
 
     public GrupoFinanceiro(Long id, String nome, NaturezaFinanceira naturezaFinanceira,
-            ClassificacaoFinanceira classificacaoFinanceira) throws DadoInvalidoException {
+            ClassificacaoFinanceira classificacaoFinanceira, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.naturezaFinanceira = naturezaFinanceira;
         this.classificacaoFinanceira = classificacaoFinanceira;
+        this.operacaoFinanceira = operacaoFinanceira;
         ehValido();
     }
 
@@ -93,9 +99,13 @@ public class GrupoFinanceiro implements Serializable {
     public List<TipoDespesa> getListaDeReceitas() {
         return listaDeReceitas;
     }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
     
-    private void ehValido() throws DadoInvalidoException { 
-        List<String> campos = Arrays.asList("nome", "naturezaFinanceira", "classificacaoFinanceira");
+    private void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("nome", "naturezaFinanceira", "classificacaoFinanceira", "operacaoFinanceira");
         new ValidadorDeCampos<GrupoFinanceiro>().valida(this, campos);
     }
 

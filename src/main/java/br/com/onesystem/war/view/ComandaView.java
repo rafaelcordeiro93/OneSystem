@@ -16,7 +16,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeComanda;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.ComandaBV;
@@ -177,7 +177,7 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     // -------------------------- Fim Itens -----------------------------------

@@ -21,7 +21,7 @@ import javax.persistence.Entity;
  * @author Rafael Fernando Rauber
  */
 @Entity
-@DiscriminatorValue("CREDITO")
+@DiscriminatorValue("CONTA_CORRENTE")
 public class Credito extends Cobranca implements Serializable {
 
     public Credito() {

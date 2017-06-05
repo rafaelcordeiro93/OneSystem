@@ -244,7 +244,6 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         }
     }
 
-    @Override
     public void buscaPorId() {
         Long id = modelo.getId();
         if (id != null) {
