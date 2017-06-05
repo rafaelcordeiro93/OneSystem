@@ -86,7 +86,6 @@ public class GrupoView extends BasicMBImpl<Grupo, GrupoBV> implements Serializab
         grupoSelecionada = g;
     }
 
-    @Override
     public void buscaPorId() {
         Long id = grupo.getId();
         if (id != null) {

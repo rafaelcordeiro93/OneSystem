@@ -10,7 +10,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -59,7 +59,7 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
 
     public String getZero() {
         if (orcamento != null) {
-            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+            return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

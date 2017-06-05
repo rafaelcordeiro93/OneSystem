@@ -39,14 +39,14 @@ public class TituloDAO {
     }
 
     public TituloDAO wAPagar() {
-        consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
-        parametros.put("pUnidadeFinanceira", OperacaoFinanceira.SAIDA);
+        consulta += "where t.operacaoFinanceira = :pOperacaoFinanceira ";
+        parametros.put("pOperacaoFinanceira", OperacaoFinanceira.SAIDA);
         return this;
     }
 
     public TituloDAO wAReceber() {
-        consulta += "where t.unidadeFinanceira = :pUnidadeFinanceira ";
-        parametros.put("pUnidadeFinanceira", OperacaoFinanceira.ENTRADA);
+        consulta += "where t.operacaoFinanceira = :pOperacaoFinanceira ";
+        parametros.put("pOperacaoFinanceira", OperacaoFinanceira.ENTRADA);
         return this;
     }
 

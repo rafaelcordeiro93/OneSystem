@@ -129,7 +129,9 @@ public class ReceitaProvisionadaView implements Serializable {
                                 adicionarDiasNa(receitaProvisionada.getVencimento(), count),
                                 receitaProvisionada.getEmissao(),
                                 receitaProvisionada.getHistorico(),
-                                receitaProvisionada.getCotacao());
+                                receitaProvisionada.getCotacao(),
+                                receitaProvisionada.getMesReferencia(),
+                                receitaProvisionada.getAnoReferencia());
                 parcelas.add(dp);
             }
         } catch (NullPointerException npe) {

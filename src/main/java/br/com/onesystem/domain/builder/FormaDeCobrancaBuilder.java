@@ -25,7 +25,7 @@ public class FormaDeCobrancaBuilder {
     private BigDecimal juros;
     private BigDecimal multa;
     private BigDecimal desconto;
-    private String historico;
+    private String observacao;
     private Cotacao cotacao;
 
     public FormaDeCobrancaBuilder comId(Long id) {
@@ -63,8 +63,8 @@ public class FormaDeCobrancaBuilder {
         return this;
     }
 
-    public FormaDeCobrancaBuilder comHistorico(String historico) {
-        this.historico = historico;
+    public FormaDeCobrancaBuilder comObservacao(String observacao) {
+        this.observacao = observacao;
         return this;
     }
 
@@ -74,7 +74,7 @@ public class FormaDeCobrancaBuilder {
     }
 
     public FormaDeCobranca construir() throws DadoInvalidoException {
-        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao);
+        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao);
     }
 
 }

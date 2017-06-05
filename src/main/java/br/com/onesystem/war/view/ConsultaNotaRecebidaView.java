@@ -13,7 +13,7 @@ import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.NotaRecebidaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -58,7 +58,7 @@ public class ConsultaNotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRece
 
     public String getZero() {
         if (notaRecebida != null) {
-            return MoedaFomatter.format(notaRecebida.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(notaRecebida.getMoedaPadrao(), BigDecimal.ZERO);
         } else {
             return "";
         }

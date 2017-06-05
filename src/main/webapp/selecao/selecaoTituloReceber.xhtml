@@ -9,7 +9,7 @@
     <ui:define name="title">#{l.Selecao_De_Titulo}</ui:define>
 
     <ui:define name="content">
-        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoTituloReceberView}">
+        <a:dataTable id="tituloDT" managedBeanName="#{selecaoTituloReceberView}">
 
                 <p:column headerText="#{l.Id}" sortBy="#{bean.id}" footerText="#{l.Id}" filterBy="#{bean.id}" filterMatchMode="contains">                                        
                     <h:outputText value="#{bean.id}" />

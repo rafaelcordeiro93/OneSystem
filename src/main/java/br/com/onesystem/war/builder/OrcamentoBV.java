@@ -14,7 +14,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.OrcamentoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     private Long getCodigoItem() {

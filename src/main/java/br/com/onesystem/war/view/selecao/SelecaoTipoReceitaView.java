@@ -2,7 +2,7 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ReceitaService;
+import br.com.onesystem.war.service.TipoReceitaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,23 +13,23 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoReceitaView extends BasicCrudMBImpl<TipoReceita> implements Serializable {
+public class SelecaoTipoReceitaView extends BasicCrudMBImpl<TipoReceita> implements Serializable {
 
     @Inject
-    private ReceitaService service;
+    private TipoReceitaService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarReceitas();
+        beans = service.buscarTiposDeReceita();
     }
 
     @Override
     public String abrirEdicao() {
-        return "Receita";
+        return "/tipoReceita";
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoReceita");
+        exibirNaTela("selecaoTipoReceita");
     }
     
     @Override
@@ -45,11 +45,11 @@ public class SelecaoReceitaView extends BasicCrudMBImpl<TipoReceita> implements 
         return receitasFiltradas;
     }
 
-    public ReceitaService getService() {
+    public TipoReceitaService getService() {
         return service;
     }
 
-    public void setService(ReceitaService service) {
+    public void setService(TipoReceitaService service) {
         this.service = service;
     }
 }

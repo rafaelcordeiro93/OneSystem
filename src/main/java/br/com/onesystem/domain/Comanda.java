@@ -7,7 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeComanda;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
@@ -123,33 +123,33 @@ public class Comanda implements Serializable {
 
     public String getAcrescimoFormatado() {
         if (cotacao != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getAcrescimo());
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), getAcrescimo());
         } else {
-            return MoedaFomatter.format(getAcrescimo());
+            return MoedaFormatter.format(getAcrescimo());
         }
     }
 
     public String getDescontoFormatado() {
         if (cotacao != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getDesconto());
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDesconto());
         } else {
-            return MoedaFomatter.format(getDesconto());
+            return MoedaFormatter.format(getDesconto());
         }
     }
 
     public String getDespesaCobrancaFormatado() {
         if (cotacao != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getDespesaCobranca());
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDespesaCobranca());
         } else {
-            return MoedaFomatter.format(getDespesaCobranca());
+            return MoedaFormatter.format(getDespesaCobranca());
         }
     }
 
     public String getFreteFormatado() {
         if (cotacao != null) {
-            return MoedaFomatter.format(cotacao.getConta().getMoeda(), getFrete());
+            return MoedaFormatter.format(cotacao.getConta().getMoeda(), getFrete());
         } else {
-            return MoedaFomatter.format(getFrete());
+            return MoedaFormatter.format(getFrete());
         }
     }
 
@@ -187,11 +187,11 @@ public class Comanda implements Serializable {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     public String getTotalComandaFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalComanda());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalComanda());
     }
 
     public BigDecimal getTotalComanda() {

@@ -18,7 +18,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeCondicional;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.CondicionalBV;
@@ -171,7 +171,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFomatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     // -------------------------- Fim Itens -----------------------------------
