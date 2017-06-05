@@ -102,7 +102,7 @@ public abstract class Pessoa implements Serializable {
     @OneToMany(mappedBy = "pessoa")
     private List<Cobranca> parcelas;
     @OneToMany(mappedBy = "pessoa")
-    private List<MovimentoFixo> movimentosFixos;
+    private List<CobrancaFixa> movimentosFixos;
     @OneToMany(mappedBy = "pessoa")
     private List<Nota> notas;
     @OneToMany(mappedBy = "pessoa")

@@ -4,7 +4,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.DateUtil;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.Money;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
@@ -100,7 +100,7 @@ public class Caixa implements Serializable {
 
     public String getSaldoFormatado() throws EDadoInvalidoException {
         Configuracao cfg = new ConfiguracaoService().buscar();
-        return MoedaFomatter.format(cfg.getMoedaPadrao(), getSaldo());
+        return MoedaFormatter.format(cfg.getMoedaPadrao(), getSaldo());
     }
 
     public String getAberturaFormatado() {

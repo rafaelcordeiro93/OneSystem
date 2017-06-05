@@ -29,9 +29,9 @@ public class SelecaoTituloReceberView extends BasicCrudMBImpl<Titulo> implements
 
     @Override
     public String abrirEdicao() {
-        return "";
+        return "/consultaCobranca";
     }
-
+ 
     @Override
     public List<Titulo> complete(String query) {
         List<Titulo> titulosFiltrados = new ArrayList<>();

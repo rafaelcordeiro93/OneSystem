@@ -29,7 +29,7 @@ public class SelecaoDespesaProvisionadaView extends BasicCrudMBImpl<DespesaProvi
 
     @Override
     public String abrirEdicao() {
-        return "despesaProvisionada";
+        return "/despesaProvisionada";
     }
 
     @Override

@@ -8,7 +8,7 @@ import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
@@ -165,7 +165,7 @@ public class DialogoComandaView extends BasicMBImpl<Comanda, ItemDeComandaBV> im
 
     public String getZero() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

@@ -19,6 +19,7 @@ import org.primefaces.event.SelectEvent;
  */
 public abstract class BasicMBImpl<T, E> {
 
+    protected T t; //Objeto da persistência
     protected E e; //BuilderView da View
 
     public abstract void selecionar(SelectEvent event);
@@ -34,8 +35,6 @@ public abstract class BasicMBImpl<T, E> {
     public void buscaPorId() {
     }
 
-    ;
-     
     public void add() {
         try {
             BuilderView b = (BuilderView) e;
@@ -47,6 +46,12 @@ public abstract class BasicMBImpl<T, E> {
 
     public void addNoBanco(T objeto) throws DadoInvalidoException {
         new AdicionaDAO<>().adiciona(objeto);
+        InfoMessage.adicionado();
+        limparJanela();
+    }
+
+    public void addNoBanco() throws DadoInvalidoException {
+        new AdicionaDAO<>().adiciona(t);
         InfoMessage.adicionado();
         limparJanela();
     }
@@ -66,6 +71,12 @@ public abstract class BasicMBImpl<T, E> {
 
     public void updateNoBanco(T objeto) throws DadoInvalidoException {
         new AtualizaDAO<>().atualiza(objeto);
+        InfoMessage.atualizado();
+        limparJanela();
+    }
+
+    public void updateNoBanco() throws DadoInvalidoException {
+        new AtualizaDAO<>().atualiza(t);
         InfoMessage.atualizado();
         limparJanela();
     }
@@ -97,4 +108,13 @@ public abstract class BasicMBImpl<T, E> {
     public void setE(E e) {
         this.e = e;
     }
+
+    public T getT() {
+        return t;
+    }
+
+    public void setT(T t) {
+        this.t = t;
+    }
+
 }
