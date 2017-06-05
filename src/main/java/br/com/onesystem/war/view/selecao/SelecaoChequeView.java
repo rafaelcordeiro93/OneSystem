@@ -29,7 +29,7 @@ public class SelecaoChequeView extends BasicCrudMBImpl<Cheque> implements Serial
     
     @Override
     public String abrirEdicao() {
-        return "cheque";
+        return "/cheque";
     }
     
      @Override

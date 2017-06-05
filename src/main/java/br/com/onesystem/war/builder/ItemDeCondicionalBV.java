@@ -10,7 +10,7 @@ import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.builder.ItemDeCondicionalBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -95,12 +95,12 @@ public class ItemDeCondicionalBV {
     }
 
     public String getTotalAFaturarFormatado() {
-        return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario().multiply(aFaturar));
+        return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario().multiply(aFaturar));
     }
 
     public String getTotalFormatado() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -108,7 +108,7 @@ public class ItemDeCondicionalBV {
 
     public String getUnitarioFormatado() {
         if (comanda != null) {
-            return MoedaFomatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
+            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

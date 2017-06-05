@@ -54,7 +54,7 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
 
     public void add(T t) {
         List<Model<T>> list = (List<Model<T>>) getWrappedData();
-        Long id = (list.stream().max(Comparator.comparing(Model::getId)).map(Model::getId).get()) + 1;
+        Long id = list.isEmpty() ? new Long(0) : (list.stream().max(Comparator.comparing(Model::getId)).map(Model::getId).get()) + 1;
         list.add(new Model<>(id, t));
     }
 

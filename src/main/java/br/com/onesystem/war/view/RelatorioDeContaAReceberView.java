@@ -143,11 +143,11 @@ public class RelatorioDeContaAReceberView implements Serializable {
         if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
             lista = receitaProvisionadaDao.buscarReceitasProvisionadas().wAReceber()
                     .ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal())
-                    .ePorPessoa(relatorio.getPessoa()).orderByMoeda().gerarDados();
+                    .ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
             lista = receitaProvisionadaDao.buscarReceitasProvisionadas().wAReceber()
                     .ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal())
-                    .ePorPessoa(relatorio.getPessoa()).orderByMoeda().gerarDados();
+                    .ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_existem_dados"));
         }

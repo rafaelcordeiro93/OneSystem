@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @DiscriminatorValue("DESPESA_PROVISIONADA")
-public class DespesaProvisionada extends MovimentoFixo implements RelatorioContaAbertaImpl {
+public class DespesaProvisionada extends CobrancaFixa implements RelatorioContaAbertaImpl {
 
     @ManyToOne
     private TipoDespesa tipoDespesa;
@@ -27,8 +27,9 @@ public class DespesaProvisionada extends MovimentoFixo implements RelatorioConta
     }
 
     public DespesaProvisionada(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
-            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento);
+            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira,
+             Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento, mesReferencia, anoReferencia);
         this.tipoDespesa = tipoDespesa;
         this.cambio = cambio;
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;

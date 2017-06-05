@@ -4,6 +4,8 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ public class BoletoDeCartaoDAO {
         parametros = new HashMap<String, Object>();
     }
 
-    public BoletoDeCartaoDAO buscarBoletoDeCartaos() {
+    public BoletoDeCartaoDAO buscarBoletosDeCartao() {
         consulta += "select b from BoletoDeCartao b where b.id > 0 ";
         return this;
     }
@@ -36,6 +38,12 @@ public class BoletoDeCartaoDAO {
         return this;
     }
 
+     public BoletoDeCartaoDAO porSituacao(SituacaoDeCartao situacao){
+        consulta += "and b.situacao = :pSituacao";
+        parametros.put("pSituacao", situacao);
+        return this;
+    }
+    
     public BoletoDeCartaoDAO porId(Long id) {
         consulta += " and b.id = :bId ";
         parametros.put("bId", id);

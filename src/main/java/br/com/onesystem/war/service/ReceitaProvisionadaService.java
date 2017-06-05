@@ -8,11 +8,11 @@ import java.util.List;
 public class ReceitaProvisionadaService implements Serializable {
 
     public List<ReceitaProvisionada> buscarReceitaProvisionadasAReceber() {
-        return new ReceitaProvisionadaDAO().buscarReceitasProvisionadas().wAReceber().gerarDados();
+        return new ReceitaProvisionadaDAO().buscarReceitasProvisionadas().wAReceber().listaDeResultados();
     }
     
     public List<ReceitaProvisionada> buscarReceitaProvisionadas() {
-        return new ReceitaProvisionadaDAO().buscarReceitasProvisionadas().gerarDados();
+        return new ReceitaProvisionadaDAO().buscarReceitasProvisionadas().listaDeResultados();
     }
     
 }

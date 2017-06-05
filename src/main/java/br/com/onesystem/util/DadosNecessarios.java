@@ -55,6 +55,10 @@ public class DadosNecessarios implements Serializable {
                 getOperacoes();
                 getFormaRecebimentoDevolucaoPadraoEmpresa();
                 break;
+            }case "/recebimento.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                break;
             }
             case "/orcamento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
@@ -152,7 +156,7 @@ public class DadosNecessarios implements Serializable {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/cotacao.xhtml");
         try {
             if (moeda != null) {
-                Cotacao cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(moeda).naMaiorEmissao(new Date()).resultado();
+                Cotacao cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
                 if (cotacao == null) {
                     bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
                     pendencias.add(bv);

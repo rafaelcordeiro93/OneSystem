@@ -10,7 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import java.io.Serializable;
@@ -126,7 +126,7 @@ public class ItemDeNota implements Serializable {
 
     public String getTotalFormatado() {
         if (nota != null) {
-            return MoedaFomatter.format(nota.getMoedaPadrao(), getTotal());
+            return MoedaFormatter.format(nota.getMoedaPadrao(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -134,7 +134,7 @@ public class ItemDeNota implements Serializable {
 
     public String getUnitarioFormatado() {
         if (nota != null) {
-            return MoedaFomatter.format(nota.getMoedaPadrao(), getUnitario());
+            return MoedaFormatter.format(nota.getMoedaPadrao(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

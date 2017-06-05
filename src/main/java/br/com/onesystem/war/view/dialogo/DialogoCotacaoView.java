@@ -5,8 +5,8 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.reportTemplate.ValorPorCotacaoBV;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.war.builder.ValorPorCotacaoBV;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -84,7 +84,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     }
 
     public String getTotalConvertidoRecebidoFormatado() {
-        return MoedaFomatter.format(nota.getMoedaPadrao(), getTotalConvertidoRecebido());
+        return MoedaFormatter.format(nota.getMoedaPadrao(), getTotalConvertidoRecebido());
     }
 
     public void finalizar() throws DadoInvalidoException {

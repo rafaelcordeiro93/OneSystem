@@ -12,7 +12,6 @@ public enum SituacaoDeCartao {
 
     ABERTO("Aberto", "ABERTO"),
     CANCELADO("Cancelado", "CANCELADO"),
-    PARCIAL("Parcial", "PARCIAL"),
     QUITADO("Quitado", "QUITADO");
 
     private String tipoUnidade;

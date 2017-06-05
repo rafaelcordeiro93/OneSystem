@@ -55,9 +55,19 @@ public class CotacaoDAO {
     }
 
     public CotacaoDAO naEmissao(Date emissao) {
-        consulta += "and c.emissao between :pEmissao and :pEmissaoFinal";
+        consulta += " and c.emissao between :pEmissao and :pEmissaoFinal";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
         parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
+        return this;
+    }
+
+    public CotacaoDAO porCotacaoBancaria() {
+        consulta += " and c.conta.banco is not null ";
+        return this;
+    }
+
+    public CotacaoDAO porCotacaoEmpresa() {
+        consulta += " and c.conta.banco is null ";
         return this;
     }
 

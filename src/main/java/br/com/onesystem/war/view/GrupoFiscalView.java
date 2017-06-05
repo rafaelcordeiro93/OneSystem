@@ -91,7 +91,6 @@ public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal, GrupoFiscalBV> imp
         }
     }
 
-    @Override
     public void buscaPorId() {
         Long id = grupoFiscal.getId();
         if (id != null) {
