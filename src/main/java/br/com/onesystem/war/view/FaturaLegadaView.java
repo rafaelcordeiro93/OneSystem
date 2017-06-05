@@ -16,6 +16,7 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.FaturaLegadaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.dialogo.DialogoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.annotation.PostConstruct;
@@ -26,7 +27,7 @@ import org.primefaces.event.SelectEvent;
 
 /**
  *
- * @author Rafael Fernando Rauber
+ * @author Rafael 
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
@@ -57,11 +58,20 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof FaturaLegada) {
-            this.e = new FaturaLegadaBV((FaturaLegada) obj);
-            list = new ModelList<>(e.getCobranca());
+            try {
+                e = new FaturaLegadaBV((FaturaLegada) obj);
+                if (e.getCobranca().size() > 0) {
+                    list = new ModelList<>(e.getCobranca());
+                }
+
+                SessionUtil.put(e.construirComID(), "faturaLegada", FacesContext.getCurrentInstance());
+            } catch (DadoInvalidoException ex) {
+                ex.print();
+            }
         } else if (obj instanceof Pessoa) {
             e.setPessoa((Pessoa) obj);
         } else if (obj instanceof Cobranca) {
+            System.out.println("" + obj);
             Cobranca cb = (Cobranca) obj;
             list.add(cb);
         } else if (obj instanceof Model) {
@@ -89,13 +99,13 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
     public void limparJanela() {
         try {
             removeDaSessao();
+            SessionUtil.remove("faturaLegada", FacesContext.getCurrentInstance());
             e = new FaturaLegadaBV();
             modeloSelecionado = null;
             list = null;
         } catch (FDadoInvalidoException ex) {
             ex.print();
         }
-
     }
 
     public String getTotalParcelas() {
@@ -105,6 +115,11 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             return valor.toString();
         }
         return "";
+    }
+
+    public void addNovaParcela() throws DadoInvalidoException {
+        SessionUtil.put(e.construir(), "faturaLegada", FacesContext.getCurrentInstance());
+        new DialogoCobrancaView().abrirDialogo();
     }
 
     public void removeDaSessao() throws FDadoInvalidoException {

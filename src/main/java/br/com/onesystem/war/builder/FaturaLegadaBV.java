@@ -24,7 +24,7 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
     private Long id;
     private String codigo;
     private BigDecimal total;
-    private Date emissao;
+    private Date emissao = new Date();
     private Pessoa pessoa;
     private List<Cobranca> cobranca;
 

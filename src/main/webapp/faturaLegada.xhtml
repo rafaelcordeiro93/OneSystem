@@ -37,7 +37,7 @@
                             <p:inputText value="#{faturaLegadaView.e.codigo}"/>
 
                             <p:outputLabel value="#{l.Pessoa}"/>
-                            <a:inputTextDialog id="pessoaID" value="#{faturaLegadaView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{faturaLegadaView}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
+                            <a:inputTextDialog id="pessoaID" value="#{faturaLegadaView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{faturaLegadaView}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
 
                             <p:outputLabel value="#{l.Emissao}"/>
                             <p:calendar value="#{faturaLegadaView.e.emissao}" pattern="dd/MM/yyyy"/>
@@ -58,7 +58,7 @@
                         <div class="ui-g">  
 
                             <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Adicionar}">
+                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{faturaLegadaView.addNovaParcela}" process="@this" update="@none" value="#{l.Adicionar}">
                                     <p:ajax event="dialogReturn"  listener="#{faturaLegadaView.selecionar}" process="@this" update=":conteudo"/>
                                 </p:commandButton>
                                 <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" value="#{l.Atualizar}"  styleClass="green-btn">
