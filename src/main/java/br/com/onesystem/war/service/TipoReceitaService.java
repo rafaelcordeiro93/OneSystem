@@ -5,9 +5,9 @@ import br.com.onesystem.domain.TipoReceita;
 import java.io.Serializable;
 import java.util.List;
 
-public class ReceitaService implements Serializable {
+public class TipoReceitaService implements Serializable {
     
-    public List<TipoReceita> buscarReceitas(){
+    public List<TipoReceita> buscarTiposDeReceita(){
         return new ArmazemDeRegistros<TipoReceita>(TipoReceita.class).listaTodosOsRegistros();
     }
     

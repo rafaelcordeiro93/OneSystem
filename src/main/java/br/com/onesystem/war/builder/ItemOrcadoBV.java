@@ -10,7 +10,7 @@ import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.builder.ItemOrcadoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class ItemOrcadoBV {
 
     public String getTotalFormatado() {
         if (orcamento != null) {
-            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getTotal());
+            return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -83,7 +83,7 @@ public class ItemOrcadoBV {
 
     public String getUnitarioFormatado() {
         if (orcamento != null) {
-            return MoedaFomatter.format(orcamento.getCotacao().getConta().getMoeda(), getUnitario());
+            return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

@@ -5,7 +5,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
@@ -118,7 +118,7 @@ public class DialogoCondicionalView extends BasicMBImpl<Condicional, ItemDeCondi
 
     public String getZero() {
         if (condicional != null) {
-            return MoedaFomatter.format(condicional.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+            return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

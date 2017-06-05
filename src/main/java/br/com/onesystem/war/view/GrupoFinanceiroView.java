@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.GrupoFinanceiroBV;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -116,6 +117,10 @@ public class GrupoFinanceiroView implements Serializable {
         if (grupoFinanceiroSelecionado != null) {
             grupoFinanceiro = new GrupoFinanceiroBV(grupoFinanceiroSelecionado);
         }
+    }
+    
+     public List<OperacaoFinanceira> getOperacaoFinanceira() {
+        return Arrays.asList(OperacaoFinanceira.values());
     }
 
     public GrupoFinanceiroBV getGrupoFinanceiro() {

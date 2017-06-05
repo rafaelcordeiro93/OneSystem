@@ -4,9 +4,11 @@ import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 
 public class GrupoFinanceiroBV implements Serializable {
+
     private static final long serialVersionUID = 6686124108160060627L;
 
     private Long id;
@@ -14,12 +16,14 @@ public class GrupoFinanceiroBV implements Serializable {
     private NaturezaFinanceira naturezaFinanceira = NaturezaFinanceira.RECEITA;
     private boolean exibirNoDRE = true;
     private ClassificacaoFinanceira classificacaoFinanceira;
+    private OperacaoFinanceira operacaoFinanceira;
 
     public GrupoFinanceiroBV(GrupoFinanceiro grupoFinanceiroSelecionado) {
         this.id = grupoFinanceiroSelecionado.getId();
         this.nome = grupoFinanceiroSelecionado.getNome();
         this.naturezaFinanceira = grupoFinanceiroSelecionado.getNaturezaFinanceira();
         this.classificacaoFinanceira = grupoFinanceiroSelecionado.getClassificacaoFinanceira();
+        this.operacaoFinanceira = grupoFinanceiroSelecionado.getOperacaoFinanceira();
     }
 
     public GrupoFinanceiroBV() {
@@ -61,15 +65,23 @@ public class GrupoFinanceiroBV implements Serializable {
         return classificacaoFinanceira;
     }
 
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+    }
+
     public void setClassificacaoFinanceira(ClassificacaoFinanceira classificacaoFinanceira) {
         this.classificacaoFinanceira = classificacaoFinanceira;
     }
 
     public GrupoFinanceiro construir() throws DadoInvalidoException {
-        return new GrupoFinanceiro(null, nome, naturezaFinanceira, classificacaoFinanceira);
+        return new GrupoFinanceiro(null, nome, naturezaFinanceira, classificacaoFinanceira, operacaoFinanceira);
     }
 
     public GrupoFinanceiro construirComID() throws DadoInvalidoException {
-        return new GrupoFinanceiro(id, nome, naturezaFinanceira, classificacaoFinanceira);
+        return new GrupoFinanceiro(id, nome, naturezaFinanceira, classificacaoFinanceira, operacaoFinanceira);
     }
 }

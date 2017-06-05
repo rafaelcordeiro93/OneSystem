@@ -8,7 +8,7 @@ import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.MoedaFomatter;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
@@ -157,7 +157,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
 
     public String getZero() {
         if (notaEmitida != null) {
-            return MoedaFomatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
         } else {
             return "";
         }

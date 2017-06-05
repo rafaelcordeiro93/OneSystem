@@ -28,6 +28,8 @@ public class DespesaEventualBuilder {
     private Cotacao cotacao;
     private TipoDespesa despesa;
     private OperacaoFinanceira operacaoFinanceira;
+    private Integer mesReferencia;
+    private Integer anoReferencia;
 
     public DespesaEventualBuilder comId(Long id) {
         this.id = id;
@@ -79,8 +81,18 @@ public class DespesaEventualBuilder {
         return this;
     }
 
+    public DespesaEventualBuilder comMesReferencia(Integer mesReferencia) {
+        this.mesReferencia = mesReferencia;
+        return this;
+    }
+
+    public DespesaEventualBuilder comAnoReferencia(Integer anoReferencia) {
+        this.anoReferencia = anoReferencia;
+        return this;
+    }
+
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira);
+        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, mesReferencia, anoReferencia);
     }
 
 }

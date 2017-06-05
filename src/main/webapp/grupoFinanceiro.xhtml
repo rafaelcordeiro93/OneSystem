@@ -43,6 +43,12 @@
                                 <f:selectItems value="#{grupoFinanceiroView.classificacaoFinanceira}" var="classificacaoFinanceira" itemValue="#{classificacaoFinanceira}"/>
                             </p:selectOneMenu> 
 
+                            <p:outputLabel value="#{l.Operacao_Financeira}"/>
+                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{grupoFinanceiroView.grupoFinanceiro.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
+                                <f:selectItems value="#{grupoFinanceiroView.operacaoFinanceira}" var="operacaoFinanceira" itemLabel="#{operacaoFinanceira.nome}" itemValue="#{operacaoFinanceira}" >
+                                </f:selectItems>
+                            </p:selectOneMenu>
+
                         </p:panelGrid>
 
                         <div class="EmptyBox15"/>
