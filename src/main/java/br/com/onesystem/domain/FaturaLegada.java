@@ -51,23 +51,23 @@ public class FaturaLegada implements Serializable {
     private Pessoa pessoa;
 
     @OneToMany(mappedBy = "faturaLegada", cascade = {CascadeType.ALL})
-    private List<Cobranca> cobranca;
+    private List<Titulo> titulo;
 
     public FaturaLegada() {
     }
 
-    public FaturaLegada(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Cobranca> cobranca) throws DadoInvalidoException {
+    public FaturaLegada(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo) throws DadoInvalidoException {
         this.id = id;
         this.codigo = codigo;
         this.total = total;
         this.emissao = emissao;
         this.pessoa = pessoa;
-        this.cobranca = cobranca;
+        this.titulo = titulo;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa", "cobranca");
+        List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa");
         new ValidadorDeCampos<FaturaLegada>().valida(this, campos);
     }
 
@@ -91,8 +91,8 @@ public class FaturaLegada implements Serializable {
         return pessoa;
     }
 
-    public List<Cobranca> getCobranca() {
-        return cobranca;
+    public List<Titulo> getTitulo() {
+        return titulo;
     }
 
     public Moeda getMoedaPadrao() throws EDadoInvalidoException {
@@ -117,7 +117,7 @@ public class FaturaLegada implements Serializable {
 
     @Override
     public String toString() {
-        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cobranca=" + cobranca + '}';
+        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + '}';
     }
 
 }

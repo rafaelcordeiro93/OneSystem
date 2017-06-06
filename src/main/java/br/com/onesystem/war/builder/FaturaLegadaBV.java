@@ -1,6 +1,6 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Moeda;
@@ -26,7 +26,7 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
     private BigDecimal total;
     private Date emissao = new Date();
     private Pessoa pessoa;
-    private List<Cobranca> cobranca;
+    private List<Titulo> titulo;
 
     public FaturaLegadaBV(FaturaLegada faturaLegadaSelecionada) {
         this.id = faturaLegadaSelecionada.getId();
@@ -34,7 +34,7 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
         this.total = faturaLegadaSelecionada.getTotal();
         this.emissao = faturaLegadaSelecionada.getEmissao();
         this.pessoa = faturaLegadaSelecionada.getPessoa();
-        this.cobranca = faturaLegadaSelecionada.getCobranca();
+        this.titulo = faturaLegadaSelecionada.getTitulo();
 
     }
 
@@ -82,25 +82,25 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
         this.pessoa = pessoa;
     }
 
-    public List<Cobranca> getCobranca() {
-        return cobranca;
+    public List<Titulo> getTitulo() {
+        return titulo;
     }
-    
-     public String getMoedaPadrao() throws EDadoInvalidoException {
+
+    public String getMoedaPadrao() throws EDadoInvalidoException {
         Configuracao cfg = new ConfiguracaoService().buscar();
         return cfg.getMoedaPadrao().getSigla();
     }
 
-    public void setCobranca(List<Cobranca> cobranca) {
-        this.cobranca = cobranca;
+    public void setTitulo(List<Titulo> titulo) {
+        this.titulo = titulo;
     }
 
     public FaturaLegada construirComID() throws DadoInvalidoException {
-        return new FaturaLegadaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comCobranca(cobranca).construir();
+        return new FaturaLegadaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).construir();
     }
 
     public FaturaLegada construir() throws DadoInvalidoException {
-        return new FaturaLegadaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comCobranca(cobranca).construir();
+        return new FaturaLegadaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).construir();
     }
 
 }

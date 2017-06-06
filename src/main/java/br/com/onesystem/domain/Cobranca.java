@@ -95,12 +95,9 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne
     private Nota nota;
 
-    @ManyToOne
-    private FaturaLegada faturaLegada;
-    
     @OneToMany(mappedBy = "cobranca")
     private List<TipoDeCobranca> tiposDeCobranca;
-    
+
     @OneToMany(mappedBy = "cobranca")
     private List<FormaDeCobranca> formasDeCobranca;
 
@@ -126,7 +123,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","pessoa");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "pessoa");
         if (!(this instanceof Credito)) {
             campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "vencimento");
         }
@@ -235,10 +232,6 @@ public abstract class Cobranca implements Serializable {
     public String getEmissaoFormatadaSemHoras() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public FaturaLegada getFaturaLegada() {
-        return faturaLegada;
     }
 
     @Override

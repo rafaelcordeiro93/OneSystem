@@ -72,9 +72,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setMoeda(faturaLegada.getMoedaPadrao());
             e.setFaturaLegada(faturaLegada);
             e.setPessoa(faturaLegada.getPessoa());
-            e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
-            e.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
-            modalidade = false;
+            modalidade = true;
         } else {
             nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();
@@ -126,6 +124,8 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         try {
             removeDaSessao();
             Cobranca c = constroi();
+            
+            System.out.println("" + c.getCotacao());
             if (model != null) {
                 model.setObject(c);
                 RequestContext.getCurrentInstance().closeDialog(model);
