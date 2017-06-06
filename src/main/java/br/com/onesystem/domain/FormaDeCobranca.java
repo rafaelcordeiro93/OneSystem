@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.GeradorDeBaixaDeFormaCobranca;
 import br.com.onesystem.util.MoedaFormatter;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -43,6 +44,9 @@ public class FormaDeCobranca implements Serializable {
     @ManyToOne
     private Recebimento recebimento;
 
+    @ManyToOne
+    private Pagamento pagamento;
+
     @NotNull(message = "{valor_not_null}")
     @Min(value = 0, message = "{valor_min}")
     @Column(nullable = false)
@@ -71,7 +75,7 @@ public class FormaDeCobranca implements Serializable {
     }
 
     public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
-            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao) throws DadoInvalidoException {
+            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
         this.recebimento = recebimento;
@@ -81,6 +85,7 @@ public class FormaDeCobranca implements Serializable {
         this.desconto = desconto;
         this.observacao = observacao;
         this.cotacao = cotacao;
+        this.pagamento = pagamento;
         ehValido();
     }
 
@@ -91,6 +96,21 @@ public class FormaDeCobranca implements Serializable {
 
     public void setRecebimento(Recebimento recebimento) {
         this.recebimento = recebimento;
+    }
+
+    public void geraBaixas() {
+        try {
+            if (cobranca != null) {
+                GeradorDeBaixaDeFormaCobranca gerador = new GeradorDeBaixaDeFormaCobranca(this);
+                gerador.geraBaixas();
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
     public Long getId() {
@@ -129,7 +149,7 @@ public class FormaDeCobranca implements Serializable {
         return cotacao;
     }
 
-public BigDecimal getTotal() {
+    public BigDecimal getTotal() {
         BigDecimal v = valor == null ? BigDecimal.ZERO : valor;
         BigDecimal j = juros == null ? BigDecimal.ZERO : juros;
         BigDecimal m = multa == null ? BigDecimal.ZERO : multa;
@@ -140,6 +160,10 @@ public BigDecimal getTotal() {
 
     public String getTotalFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
     }
 
     public String getTipoDocumento() {

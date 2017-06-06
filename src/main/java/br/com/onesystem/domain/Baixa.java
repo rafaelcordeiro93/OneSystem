@@ -48,29 +48,9 @@ public class Baixa implements Serializable, Movimento {
     @GeneratedValue(generator = "SEQ_BAIXA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Min(value = 0, message = "{minimo_parcela_min}")
-    @Column(nullable = true)
-    private Integer numeroParcela;
-
-    @Min(value = 0, message = "{valor_juros_min}")
-    @Column(nullable = true)
-    private BigDecimal juros = BigDecimal.ZERO;
-
     @Min(value = 0, message = "{valor_min}")
     @Column(nullable = true)
     private BigDecimal valor = BigDecimal.ZERO;
-
-    @Min(value = 0, message = "{valorTotal_min}")
-    @Column(nullable = true)
-    private BigDecimal total = BigDecimal.ZERO;
-
-    @Min(value = 0, message = "{valor_multa_min}")
-    @Column(nullable = true)
-    private BigDecimal multas = BigDecimal.ZERO;
-
-    @Min(value = 0, message = "{valorDesconto_min}")
-    @Column(nullable = true)
-    private BigDecimal desconto = BigDecimal.ZERO;
 
     @Length(min = 0, max = 255, message = "{historico_length}")
     @Column(nullable = true, length = 255)
@@ -122,37 +102,38 @@ public class Baixa implements Serializable, Movimento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataCancelamento;
 
+    @ManyToOne
+    private TipoDeCobranca tipoDeCobranca;
+
+    @ManyToOne
+    private FormaDeCobranca formaDeCobranca;
+
     public Baixa() {
     }
 
-    public Baixa(Long id, Integer numeroParcela,
-            BigDecimal juros, BigDecimal valor, BigDecimal multas,
-            BigDecimal desconto, Date emissao, String historico,
+    public Baixa(Long id, BigDecimal valor, Date emissao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, Cobranca parcela, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
+            Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
+            TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
         this.id = id;
-        this.numeroParcela = numeroParcela;
         this.estado = EstadoDeBaixa.EM_DEFINICAO;
-        this.juros = juros;
         this.valor = valor;
-        this.multas = multas;
-        this.desconto = desconto;
         this.emissao = emissao;
         this.historico = historico;
         this.pessoa = pessoa;
         this.naturezaFinanceira = tipoMovimentacaoFinanceira;
         this.despesa = despesa;
         this.cotacao = cotacao;
-        this.total = valor.add(juros == null ? BigDecimal.ZERO : juros).add(multas == null ? BigDecimal.ZERO : multas)
-                .subtract(desconto == null ? BigDecimal.ZERO : desconto);
         this.receita = receita;
         this.cambio = cambio;
         this.transferencia = transferencia;
         this.recepcao = recepcao;
-        this.parcela = parcela;
+        this.parcela = cobranca;
         this.movimentoFixo = movimentoFixo;
         this.valorPorCotacao = valorPorCotacao;
+        this.tipoDeCobranca = tipoDeCobranca;
+        this.formaDeCobranca = formaDeCobranca;
         ehValido();
     }
 
@@ -163,10 +144,6 @@ public class Baixa implements Serializable, Movimento {
 
     public void atualizaValor(BigDecimal valor) {
         this.valor = valor;
-    }
-
-    public void atualizaTotal(BigDecimal total) {
-        this.total = total;
     }
 
     public boolean equals(Object objeto) {
@@ -181,10 +158,6 @@ public class Baixa implements Serializable, Movimento {
             return false;
         }
         return this.id.equals(outro.id);
-    }
-
-    public BigDecimal getDesconto() {
-        return desconto;
     }
 
     public TipoDespesa getDespesa() {
@@ -344,10 +317,6 @@ public class Baixa implements Serializable, Movimento {
                 + " " + msg.getMessage("de") + " " + cambio.getContrato().getPessoa().getNome();
     }
 
-    public BigDecimal getTotal() {
-        return total;
-    }
-
     public BigDecimal getValor() {
         return valor;
     }
@@ -370,11 +339,6 @@ public class Baixa implements Serializable, Movimento {
 
     public Date getEmissao() {
         return emissao;
-    }
-
-    public String getTotalFormatado() {
-        NumberFormat numeroFormatado = NumberFormat.getCurrencyInstance();
-        return numeroFormatado.format(getTotal());
     }
 
     public String getEmissaoFormatada() {
@@ -402,10 +366,6 @@ public class Baixa implements Serializable, Movimento {
         return cotacao;
     }
 
-    public Integer getNumeroParcela() {
-        return numeroParcela;
-    }
-
     public TipoReceita getReceita() {
         return receita;
     }
@@ -419,16 +379,8 @@ public class Baixa implements Serializable, Movimento {
         return estado;
     }
 
-    public BigDecimal getJuros() {
-        return juros;
-    }
-
     public Date getDataCancelamento() {
         return dataCancelamento;
-    }
-
-    public BigDecimal getMultas() {
-        return multas;
     }
 
     @Override
@@ -497,9 +449,8 @@ public class Baixa implements Serializable, Movimento {
 
     @Override
     public String toString() {
-        return "Baixa{" + "id=" + id + ", numeroParcela=" + numeroParcela
-                + ", juros=" + juros + ", valor=" + valor + ", total=" + total
-                + ", multas=" + multas + ", desconto=" + desconto + ", historico="
+
+        return "Baixa{" + "id=" + id + ",valor=" + valor + ", historico="
                 + historico + ", emissao=" + emissao + ", naturezaFinanceira="
                 + naturezaFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
                 + ", perfilDeValor=" + (parcela != null ? parcela.getId() : null)

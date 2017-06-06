@@ -50,9 +50,6 @@ public class ValorPorCotacao implements Serializable {
 
     @ManyToOne
     private Nota nota;
-    
-    @ManyToOne
-    private Recebimento recebimento;
 
     public ValorPorCotacao() {
     }
@@ -72,7 +69,7 @@ public class ValorPorCotacao implements Serializable {
     public void geraBaixaPor(Nota nota) throws DadoInvalidoException {
         this.nota = nota;
         baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao())
-                .comNaturezaFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
+                .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
                 .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).construir();
     }
 

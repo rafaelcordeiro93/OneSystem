@@ -21,7 +21,9 @@
                                 <p:outputLabel value="#{l.Data}"/>
                             </td>
                             <td>
-                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" navigator="true" value="#{recebimentoView.e.emissao}"/>   
+                                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" navigator="true" value="#{recebimentoView.e.emissao}" disabled="#{recebimentoView.tiposDeCobranca.list.size() eq 0 ? false : recebimentoView.formasDeCobranca.list.size() eq 0 ? false : true}">
+                                    <p:ajax event="change" listener="#{recebimentoView.atualizaEmissao}" />
+                                </p:calendar>
                             </td>
                         </tr>
                     </table>
@@ -30,9 +32,9 @@
 
                     <h:outputText value="#{l.Tipos_De_Recebimento}" />
                     <p:dataTable id="recebimentoBaixa" var="m" value="#{recebimentoView.tiposDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
-                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{recebimentoView.tipoSelecionado}">
+                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{recebimentoView.tipoSelecionado}" rowStyleClass="#{m.object.cotacao eq null ? 'Red' : ''}" >
 
-                        <p:ajax event="rowSelect" listener="#{recebimentoView.adicionaTipoNaSessao}" update="@this" />
+                        <p:ajax event="rowSelect" listener="#{recebimentoView.adicionaTipoNaSessao}" update="@this"/>
 
                         <p:column headerText="#{l.Documento}" >
                             <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.id : m.object.cobrancaFixa.id}"/>
@@ -69,31 +71,31 @@
                         <div class="ui-g-12 ui-md-12 ui-lg-10">
                             <p:panelGrid columns="7" layout="grid" styleClass="ui-fluid Wid100 ui-panelgrid-blank form-group form-elements" >
                                 <p:commandButton value="#{l.Titulo}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreTitulo}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Cheque}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCheque}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Cartao}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCartao}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Credito}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCredito}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Receita_Eventual}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreReceitaEventual}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Receita_Provisionada}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreReceitaProvisionada}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmConta :conteudo:growl"/>
+                                    <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
-                                <p:commandButton value="#{l.Remover}" update="recebimentoBaixa valorEmConta :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{recebimentoView.removeTipo}" styleClass="orange-btn" />
+                                <p:commandButton value="#{l.Remover}" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{recebimentoView.removeTipo}" styleClass="orange-btn" />
                             </p:panelGrid>
                         </div>
 
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
-                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-6 ui-lg-3, ui-g-12 ui-md-6 ui-lg-1 Wid100" >
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
                                 <p:outputLabel value="#{l.Conta}: "/>
-                                <p:inputNumber id="valorEmConta" value="#{recebimentoView.valorEmConta}" symbol="#{recebimentoView.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                <p:inputNumber id="valorEmConta" value="#{recebimentoView.valorEmConta}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
                                                thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
                             </p:panelGrid>
                         </div>
@@ -113,7 +115,10 @@
                         <p:column headerText="#{l.Documento}" >
                             <h:outputText value="#{m.object.id}"/>
                         </p:column>
-                        <p:column headerText="#{l.Nome}" colspan="2" >
+                        <p:column headerText="#{l.Tipo_Documento}" colspan="2">
+                            <h:outputText value="#{m.object.tipoDocumento}" />
+                        </p:column>
+                        <p:column headerText="#{l.Nome}" colspan="3" >
                             <h:outputText value="#{m.object.cobranca.pessoa.nome}"/>
                         </p:column>
                         <p:column headerText="#{l.Vencimento}" >
@@ -130,29 +135,42 @@
                         </p:column>
                         <p:columnGroup type="footer">
                             <p:row>
-                                <p:column colspan="8" style="text-align:right" footerText="" />
-                                <p:column footerText="" style="color: #E53935"/>
+                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column styleClass="Blue" footerText="#{recebimentoView.totalFormaNaCotacaoPadraoFormatado}"/>
                             </p:row>                                    
                         </p:columnGroup>
                     </p:dataTable>
 
                     <p:separator/>
-                    <p:commandButton value="#{l.Titulo}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreTitulo}" process="@this" update="@none" >
-                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento :conteudo:growl"/>
-                    </p:commandButton>
-                    <p:commandButton value="#{l.Cheque}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCheque}" process="@this" update="@none" >
-                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento :conteudo:growl"/>
-                    </p:commandButton>
-                    <p:commandButton value="#{l.Cartao}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCartao}" process="@this" update="@none" >
-                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento :conteudo:growl"/>
-                    </p:commandButton>
-                    <p:commandButton value="#{l.Credito}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCredito}" process="@this" update="@none" >
-                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento :conteudo:growl"/>
-                    </p:commandButton>
-                    <p:commandButton value="#{l.Remover}" update="formasPagamento :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{recebimentoView.removeForma}" styleClass="orange-btn" />
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12 ui-lg-10">
+                            <p:commandButton value="#{l.Titulo}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreTitulo}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{l.Cheque}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCheque}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{l.Cartao}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCartao}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{l.Credito}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{recebimentoView.abreCredito}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+                            <p:commandButton value="#{l.Remover}" update="formasPagamento valorEmDinheiro :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{recebimentoView.removeForma}" styleClass="orange-btn" />
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Dinheiro}: "/>
+                                <p:inputNumber id="valorEmDinheiro" value="#{recebimentoView.totalEmDinheiro}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                               thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
 
                     <p:separator/>
-                    <p:commandButton value="#{l.Receber_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White" />
+                    <p:commandButton value="#{l.Receber_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White"  action="#{recebimentoView.receber()}" />
                 </div>
             </div>
         </div>

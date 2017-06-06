@@ -45,7 +45,7 @@
                     <div class="EmptyBox10"/>
 
                     <p:selectOneMenu value="#{configuracaoView.configuracaoBV.tipoDeCalculoDeCusto}" styleClass="Wid20">
-                        <f:selectItems value="#{configuracaoView.tipoDeCalculoDeCusto}" var="#{l.Tipo_Calculo_Custo}" itemLabel="#{TipoDeCalculoDeCusto}" itemValue="#{TipoDeCalculoDeCusto}" />
+                        <f:selectItems value="#{configuracaoView.tipoDeCalculoDeCusto}" var="tipoDeCalculoDeCusto" itemLabel="#{tipoDeCalculoDeCusto.nome}" itemValue="#{tipoDeCalculoDeCusto}" />
                     </p:selectOneMenu>
 
                     <div class="EmptyBox5"/>
@@ -66,7 +66,7 @@
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Forma_Recebimento_Devolucao_Padrao_Empresa}"/>
                         <a:inputTextDialog id="formaDeRecebimentoDevolucaoEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" value="#{configuracaoVendaView.configuracaoBV.formaDeRecebimentoDevolucaoEmpresa}" var="formaDeRecebimento" converter="formaDeRecebimentoConverter"  itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTab="#{formaDeRecebimento.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div>     
-                    
+
                     <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Operacao_Condicional_Empresa}</div>
 
@@ -74,18 +74,73 @@
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Operacao_Condicional_Empresa}"/>
                         <a:inputTextDialog id="operacaoCondicionalEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoOperacaoCondicionalView}" value="#{configuracaoVendaView.configuracaoBV.operacaoCondicional}" var="operacao" converter="operacaoConverter"  itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div> 
-                    
+
                     <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Operacao_Devolucao_Condicional_Empresa}</div>
-                    
+
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Operacao_Devolucao_Condicional_Empresa}"/>
                         <a:inputTextDialog id="operacaoDevolucaoCondicionalEmpresa" mbView="#{configuracaoVendaView}" dialog="#{selecaoOperacaoDevolucaoCondicionalView}" value="#{configuracaoVendaView.configuracaoBV.operacaoDevolucaoCondicional}" var="operacao" converter="operacaoConverter"  itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div> 
-                    
+
                     <div class="EmptyBox5"/>
                     <p:separator/>
                     <p:commandButton value="#{l.Salvar}" action="#{configuracaoVendaView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    
+                </div>
+            </div>
+
+            <div class="ui-g-12">                
+                <div class="card card-w-title">
+                    <h1 class="BoldGray FontRobotoRegular">#{l.Contabil}</h1>
+                    <p:separator/>
+                    <h3 class="BoldGray FontRobotoRegular">#{l.Receitas}</h3>
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Receita_Juros}"/>
+                        <a:inputTextDialog id="receitaJuros" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoReceitaView}" value="#{configuracaoContabilView.e.receitaDeJuros}" var="tipoReceita" converter="tipoReceitaConverter"  itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTab="#{tipoReceita.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Receita_Multas}"/>
+                        <a:inputTextDialog id="receitaMultas" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoReceitaView}" value="#{configuracaoContabilView.e.receitaDeMultas}" var="tipoReceita" converter="tipoReceitaConverter"  itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTab="#{tipoReceita.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Receita_De_Descontos_Obtidos}"/>
+                        <a:inputTextDialog id="receitaDescontosObtidos" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoReceitaView}" value="#{configuracaoContabilView.e.receitaDeDescontosObtidos}" var="tipoReceita" converter="tipoReceitaConverter"  itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTab="#{tipoReceita.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Receita_De_Variacao_Cambial}"/>
+                        <a:inputTextDialog id="receitaVariacaoCambial" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoReceitaView}" value="#{configuracaoContabilView.e.receitaDeVariacaoCambial}" var="tipoReceita" converter="tipoReceitaConverter"  itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTab="#{tipoReceita.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <p:separator/>
+                    <h3 class="BoldGray FontRobotoRegular">#{l.Despesas}</h3>
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Despesa_Juros}"/>
+                        <a:inputTextDialog id="despesaJuros" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoContabilView.e.despesaDeJuros}" var="tipoDespesa" converter="tipoDespesaConverter"  itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Despesa_Multas}"/>
+                        <a:inputTextDialog id="despesaMultas" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoContabilView.e.despesaDeMultas}" var="tipoDespesa" converter="tipoDespesaConverter"  itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Despesa_De_Descontos_Obtidos}"/>
+                        <a:inputTextDialog id="despesaDescontosObtidos" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoContabilView.e.despesaDeDescontosConcedidos}" var="tipoDespesa" converter="tipoDespesaConverter"  itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Despesa_De_Variacao_Cambial}"/>
+                        <a:inputTextDialog id="despesaVariacaoCambial" mbView="#{configuracaoContabilView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoContabilView.e.despesaDeVariacaoCambial}" var="tipoDespesa" converter="tipoDespesaConverter"  itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
+                    </div>    
+
+                    <div class="EmptyBox5"/>
+                    <p:separator/>
+                    <p:commandButton value="#{l.Salvar}" action="#{configuracaoContabilView.update()}" icon="fa fa-save Fs16 White" update=":conteudo"/>                                    
                 </div>
             </div>
 

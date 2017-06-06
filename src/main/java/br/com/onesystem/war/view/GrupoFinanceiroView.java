@@ -119,10 +119,6 @@ public class GrupoFinanceiroView implements Serializable {
         }
     }
     
-     public List<OperacaoFinanceira> getOperacaoFinanceira() {
-        return Arrays.asList(OperacaoFinanceira.values());
-    }
-
     public GrupoFinanceiroBV getGrupoFinanceiro() {
         return grupoFinanceiro;
     }

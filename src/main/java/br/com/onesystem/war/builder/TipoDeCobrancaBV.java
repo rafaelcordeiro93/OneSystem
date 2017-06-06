@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -27,6 +28,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     private Cobranca cobranca;
     private CobrancaFixa cobrancaFixa;
     private Recebimento recebimento;
+    private Pagamento pagamento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -49,6 +51,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.observacao = f.getObservacao();
         this.cotacao = f.getCotacao();
         this.conta = f.getConta();
+        this.pagamento = f.getPagamento();
     }
 
     public Long getId() {
@@ -107,6 +110,14 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.desconto = desconto;
     }
 
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
+
     public String getObservacao() {
         return observacao;
     }
@@ -138,23 +149,18 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     public void setConta(Conta conta) {
         this.conta = conta;
     }
-    
+
     public TipoDeCobranca construir() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comCobrancaFixa(cobrancaFixa).comConta(conta).construir();
+                .comCobrancaFixa(cobrancaFixa).comConta(conta).comPagamento(pagamento).construir();
     }
 
     @Override
     public TipoDeCobranca construirComID() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comId(id).comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comCobrancaFixa(cobrancaFixa).comConta(conta).construir();
-    }
-
-    @Override
-    public String toString() {
-        return "TipoDeCobrancaBV{" + "id=" + id + ", conta=" + conta + ", cobranca=" + cobranca + ", recebimento=" + recebimento + ", valor=" + valor + ", juros=" + juros + ", multa=" + multa + ", desconto=" + desconto + ", observacao=" + observacao + ", cotacao=" + cotacao + '}';
+                .comCobrancaFixa(cobrancaFixa).comConta(conta).comPagamento(pagamento).construir();
     }
 
 }

@@ -81,7 +81,7 @@ public class Recepcao implements Serializable {
         if (baixa == null) {
             baixa = new ArrayList<Baixa>();
         }
-        Baixa novaBaixa = new BaixaBuilder().comValor(valor).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.ENTRADA)
+        Baixa novaBaixa = new BaixaBuilder().comValor(valor).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
                 .comPessoa(pessoa).comCotacao(cotacao).construir();
         this.baixa.add(novaBaixa);
     }

@@ -27,7 +27,6 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     private Long id;
     private List<TipoDeCobranca> tiposDeCobranca;
     private List<FormaDeCobranca> formasDeCobranca;
-    private List<ValorPorCotacao> valoresPorCotacao;
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
     private Cotacao cotacaoPadrao;
     private Date emissao;
@@ -43,7 +42,6 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.id = r.getId();
         this.tiposDeCobranca = r.getTipoDeCobranca();
         this.formasDeCobranca = r.getFormasDeCobranca();
-        this.valoresPorCotacao = r.getValoresPorCotacao();
         this.cotacaoPadrao = r.getCotacaoPadrao();
         this.emissao = r.getEmissao();
         this.totalEmDinheiro = r.getTotalEmDinheiro();
@@ -73,14 +71,6 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.formasDeCobranca = formasDeCobranca;
     }
 
-    public List<ValorPorCotacao> getValoresPorCotacao() {
-        return valoresPorCotacao;
-    }
-
-    public void setValoresPorCotacao(List<ValorPorCotacao> valoresPorCotacao) {
-        this.valoresPorCotacao = valoresPorCotacao;
-    }
-
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
     }
@@ -108,14 +98,14 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     public Recebimento construir() throws DadoInvalidoException {
         return new RecebimentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
-                .comTotalEmDinheiro(totalEmDinheiro).comValoresPorCotacao(valoresPorCotacao).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 
     @Override
     public Recebimento construirComID() throws DadoInvalidoException {
         return new RecebimentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
-                .comTotalEmDinheiro(totalEmDinheiro).comValoresPorCotacao(valoresPorCotacao).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 
 }

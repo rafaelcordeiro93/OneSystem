@@ -26,8 +26,7 @@ public class DespesaEventualBV implements Serializable {
     private String historico;
     private Cotacao cotacao;
     private List<Baixa> baixas;
-    private Integer anoReferencia;
-    private Integer mesReferencia;
+    private Date referencia;
 
     public DespesaEventualBV(DespesaEventual despesaEventualSelecionada) {
         this.id = despesaEventualSelecionada.getId();
@@ -40,13 +39,12 @@ public class DespesaEventualBV implements Serializable {
         this.cotacao = despesaEventualSelecionada.getCotacao();
         this.baixas = despesaEventualSelecionada.getBaixas();
         this.operacaoFinanceira = despesaEventualSelecionada.getOperacaoFinanceira();
-        this.mesReferencia = despesaEventualSelecionada.getMesReferencia();
-        this.anoReferencia = despesaEventualSelecionada.getAnoReferencia();
+        this.referencia = despesaEventualSelecionada.getReferencia();
     }
 
     public DespesaEventualBV(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento,
             Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
-            Integer mesReferencia, Integer anoReferencia) {
+            Date referencia) {
         this.id = id;
         this.pessoa = pessoa;
         this.despesa = despesa;
@@ -57,8 +55,7 @@ public class DespesaEventualBV implements Serializable {
         this.cotacao = cotacao;
         this.baixas = baixas;
         this.operacaoFinanceira = operacaoFinanceira;
-        this.mesReferencia = mesReferencia;
-        this.anoReferencia = anoReferencia;
+        this.referencia = referencia;
     }
 
     public DespesaEventualBV() {
@@ -141,20 +138,12 @@ public class DespesaEventualBV implements Serializable {
         this.baixas = baixas;
     }
 
-    public Integer getAnoReferencia() {
-        return anoReferencia;
+    public Date getReferencia() {
+        return referencia; 
     }
 
-    public void setAnoReferencia(Integer anoReferencia) {
-        this.anoReferencia = anoReferencia;
-    }
-
-    public Integer getMesReferencia() {
-        return mesReferencia;
-    }
-
-    public void setMesReferencia(Integer mesReferencia) {
-        this.mesReferencia = mesReferencia;
+    public void setReferencia(Date referencia) {
+        this.referencia = referencia;
     }
     
     public OperacaoFinanceira getOperacaoFinanceira() {
@@ -168,13 +157,13 @@ public class DespesaEventualBV implements Serializable {
     public DespesaEventual construir() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
                 .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
-                .comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia).construir();
+                .comReferencia(referencia).construir();
 
     }
 
     public DespesaEventual construirComID() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
                 .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
-                .comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia).construir();
+                .comReferencia(referencia).construir();
     }
 }

@@ -22,8 +22,8 @@ public class DespesaEventual extends CobrancaFixa implements RelatorioContaAbert
     }
 
     public DespesaEventual(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date emissao, String historico,
-            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira, Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao, mesReferencia, anoReferencia);
+            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira, Date referencia) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao, referencia);
         this.tipoDespesa = tipoDespesa;
     }
 

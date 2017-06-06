@@ -6,26 +6,21 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -40,16 +35,12 @@ public class Recebimento {
     @GeneratedValue(generator = "SEQ_RECEBIMENTO", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToMany(mappedBy = "recebimento")
+    @OneToMany(mappedBy = "recebimento", cascade = CascadeType.ALL)
     private List<TipoDeCobranca> tipoDeCobranca;
 
-    @OneToMany(mappedBy = "recebimento")
+    @OneToMany(mappedBy = "recebimento", cascade = CascadeType.ALL)
     private List<FormaDeCobranca> formasDeCobranca;
 
-    @OneToMany(mappedBy = "recebimento")
-    private List<ValorPorCotacao> valoresPorCotacao;
-
-    @Min(value = 0, message = "{min_dinheiro}")
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
 
     @ManyToOne
@@ -62,13 +53,19 @@ public class Recebimento {
     }
 
     public Recebimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
-            List<ValorPorCotacao> valoresPorCotacao, Cotacao cotacaoPadrao, Date emissao) {
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro) {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
-        this.valoresPorCotacao = valoresPorCotacao;
         this.cotacaoPadrao = cotacaoPadrao;
         this.emissao = emissao;
+        this.totalEmDinheiro = totalEmDinheiro;
+    }
+
+    public void ehValido() throws DadoInvalidoException {
+        if ((tipoDeCobranca == null || tipoDeCobranca.isEmpty()) && (formasDeCobranca == null || formasDeCobranca.isEmpty())) {
+            throw new EDadoInvalidoException("Deve_possuir_recebimentos_informados");
+        }
     }
 
     public void adiciona(TipoDeCobranca tipo) {
@@ -103,6 +100,15 @@ public class Recebimento {
         formasDeCobranca.remove(forma);
     }
 
+    public void geraBaixas() {
+        if (tipoDeCobranca != null) {
+            tipoDeCobranca.forEach(t -> t.geraBaixas());
+        }
+        if (formasDeCobranca != null) {
+            formasDeCobranca.forEach(f -> f.geraBaixas());
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -113,10 +119,6 @@ public class Recebimento {
 
     public List<FormaDeCobranca> getFormasDeCobranca() {
         return formasDeCobranca;
-    }
-
-    public List<ValorPorCotacao> getValoresPorCotacao() {
-        return valoresPorCotacao;
     }
 
     public BigDecimal getTotalEmDinheiro() {

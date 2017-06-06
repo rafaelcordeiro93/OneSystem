@@ -1,551 +1,301 @@
-//package br.com.onesystem.war.view;
-//
-//import br.com.onesystem.dao.AdicionaDAO;
-//import br.com.onesystem.dao.AtualizaDAO;
-//import br.com.onesystem.dao.CotacaoDAO;
-//import br.com.onesystem.domain.Baixa;
-//import br.com.onesystem.domain.Cheque;
-//import br.com.onesystem.domain.ConfiguracaoCambio;
-//import br.com.onesystem.domain.Cotacao;
-//import br.com.onesystem.domain.TipoDespesa;
-//import br.com.onesystem.domain.DespesaProvisionada;
-//import br.com.onesystem.domain.FormaPagamentoRecebimento;
-//import br.com.onesystem.domain.Parcela;
-//import br.com.onesystem.domain.Pessoa;
-//import br.com.onesystem.domain.Titulo;
-//import br.com.onesystem.exception.DadoInvalidoException;
-//import br.com.onesystem.exception.impl.EDadoInvalidoException;
-//import br.com.onesystem.util.ErrorMessage;
-//import br.com.onesystem.util.InfoMessage;
-//import br.com.onesystem.valueobjects.OperacaoFinanceira;
-//import br.com.onesystem.war.builder.BaixaBV;
-//import br.com.onesystem.war.builder.ChequeBV;
-//import br.com.onesystem.war.builder.DespesaEventualBV;
-//import br.com.onesystem.war.builder.DespesaProvisionadaBV;
-//import br.com.onesystem.war.builder.TituloBV;
-//import br.com.onesystem.war.service.ConfiguracaoCambioService;
-//import br.com.onesystem.war.service.ContaService;
-//import java.io.Serializable;
-//import java.math.BigDecimal;
-//import java.text.NumberFormat;
-//import java.util.ArrayList;
-//import java.util.Calendar;
-//import java.util.Date;
-//import java.util.List;
-//import java.util.Locale;
-//import javax.annotation.PostConstruct;
-//import javax.faces.bean.ManagedProperty;
-//import javax.inject.Named;
-//import org.hibernate.exception.ConstraintViolationException;
-//import org.primefaces.context.RequestContext;
-//import org.primefaces.event.SelectEvent;
-//
-//@Named
-//@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-//public class PagamentoView implements Serializable {
-//
-//    private Date data = new Date();
-//    private TituloBV titulo;
-//    private DespesaEventualBV despesaEventual;
-//    private DespesaProvisionadaBV despesaProvisionada;
-//    private Parcela perfilDeValorSelecionado;
-//    private List<Parcela> listaPerfilDeValor;
-//    private List<Cotacao> listaCotacao;
-//    
-//    private ChequeBV chequeEmitido;
-//    private ChequeBV chequeTerceiro;
-//    private TituloBV debitoCC;
-//    private FormaPagamentoRecebimento formaPagamentoRecebimentoSelecionado;
-//    private List<FormaPagamentoRecebimento> listaFormaPagamentoRecebimento;
-//    
-//    
-//
-//    private BaixaBV baixa;
-//    private BaixaBV baixaDespesaEventual;
-//    private BaixaBV baixaDespesaProvisionada;
-//    private List<Baixa> baixaLista;
-//    private Baixa baixaSelecionada;
-//    private BigDecimal total;
-//    private Pessoa pessoa;
-//    private ConfiguracaoCambio confCambio;
-//
-//    @ManagedProperty("#{configuracaoCambioService}")
-//    private ConfiguracaoCambioService serviceConfCambio;
-//
-//    @ManagedProperty("#{contaService}")
-//    private ContaService serviceConta;
-//
-//    @PostConstruct
-//    public void init() {
-//        limpar();
-//        inicializaConfiguracoes();
-//    }
-//
-//    private void inicializaConfiguracoes() {
-//        try {
-//            confCambio = serviceConfCambio.buscar();
-//        } catch (EDadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    public void selecionaPessoa(SelectEvent event) {
-//        Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-//        this.setPessoa(pessoaSelecionada);
-//    }
-//
-//    public void selecionaPessoaEventual(SelectEvent event) {
-//        Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-//        this.despesaEventual.setPessoa(pessoaSelecionada);
-//    }
-//
-//    public void selecionaDespesaEventual(SelectEvent event) throws DadoInvalidoException {
-//        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
-//        this.despesaEventual.setDespesa(despesaSelecionada);
-//
-//    }
-//    
-//    
-//    public void selecionaChequeEmitido(SelectEvent event) throws DadoInvalidoException {
-//        Cheque c = (Cheque) event.getObject();
-//        this.chequeEmitido = new ChequeBV(c);
-//    }
-//    
-//    public void selecionaChequeTerceiro(SelectEvent event) throws DadoInvalidoException {
-//        Cheque c = (Cheque) event.getObject();
-//        this.chequeTerceiro = new ChequeBV(c);
-//    }
-//    
-//    public void selecionaTitulo(SelectEvent event) {
-//        Titulo t = (Titulo) event.getObject();
-//        this.titulo = new TituloBV(t);
-//
-////        baixa.setConta(contaLista.get(0));
-//    }
-//
-//    public List<Cotacao> buscarListaDeCotacao() {
-//        listaCotacao = new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
-//        return listaCotacao;
-//    }
-//
-//    public void selecionaDespesaProvisionada(SelectEvent event) {
-//        DespesaProvisionada dp = (DespesaProvisionada) event.getObject();
-//        despesaProvisionada = new DespesaProvisionadaBV(dp);
-////        baixaDespesaProvisionada.setConta(contaLista.get(0));
-//    }
-//
-//    public void pagar() {
-//       // Movimento movimento ; movimento.getperfildevalor
-//       // if cartao {adicionadao cartao}
-//       
-//        
-//        
-//        try {
-//            for (Baixa novaBaixa : baixaLista) {
-//                new AdicionaDAO<Baixa>().adiciona(new BaixaBV(novaBaixa).construir());
-//                atualizaSaldo(novaBaixa);
-//                ehDivisaoDeLucro(novaBaixa);
-//            }
-//            limpar();
-//            InfoMessage.print("Pagamentos realizados com sucesso!");
-//        } catch (ConstraintViolationException ex) {
-//            ErrorMessage.print("Erro: " + ex.getMessage());
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    private void ehDivisaoDeLucro(Baixa novaBaixa) throws DadoInvalidoException, ConstraintViolationException {
-//        if (novaBaixa.getMovimentoFixo() instanceof DespesaProvisionada && confCambio != null
-//                && ((DespesaProvisionada) novaBaixa.getMovimentoFixo()).isDivisaoLucroCambioCaixa()) {
-//            BaixaBV baixaBV = new BaixaBV(novaBaixa);
-////            baixaBV.setConta(confCambio.getContaCaixa()); Verificar Possivel erro apos atualização
-//            baixaBV.setNaturezaFinanceira(OperacaoFinanceira.ENTRADA);
-//            Calendar calendar = Calendar.getInstance();
-//            calendar.setTime(novaBaixa.getEmissao());
-//            calendar.add(Calendar.MILLISECOND, 1);
-//            baixaBV.setEmissao(calendar.getTime());
-//            new AdicionaDAO<Baixa>().adiciona(baixaBV.construir());
-//        }
-//    }
-//
-//    public void delete() {
-//        if (baixaSelecionada != null) {
-//            total = total.subtract(baixaSelecionada.getValor());
-//            baixaLista.remove(baixaSelecionada);
-//            limpaDialogos();
-//            InfoMessage.print("Registro Removido!");
-//        } else {
-//            ErrorMessage.print("Selecione um registro para remover!");
-//        }
-//    }
-//
-//    public void addTituloNaLista() {
-//        try {
-//            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
-//            listaPerfilDeValor.add(titulo.construirComID());
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    public void addDespesaProvisonadaNaLista() {
-//        try {
-//            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
-//            listaPerfilDeValor.add(titulo.construirComID());
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    public void addDespesaEventualNaLista() {
-//        try {
-//            //retornar codigo
-//            // validaBaixa(perfildevalor); ajustar valida depois para adicionar o hitorico automaticamente
-//            listaPerfilDeValor.add(despesaEventual.construirComID());
-//        } catch (DadoInvalidoException ex) {
-//            ex.print();
-//        }
-//    }
-//
-//    private void validaExistente() throws EDadoInvalidoException {
-//        for (Parcela novo : listaPerfilDeValor) {
-//            if (novo != null && novo.getId().equals(titulo.getId())) {
-//                throw new EDadoInvalidoException("Titulo já consta na lista!");
-//            }
-//
-//        }
-//    }
-//
-//    private void validaBaixa() throws EDadoInvalidoException {
-//        validaRegistroFoiInformado();
-//        if ((this.baixa.getHistorico() == null || this.baixa.getHistorico().length() == 0)
-//                && (this.baixaDespesaProvisionada.getHistorico() == null || this.baixaDespesaProvisionada.getHistorico().length() == 0)
-//                && (this.baixaDespesaEventual.getHistorico() == null || this.baixaDespesaEventual.getHistorico().length() == 0)) {
-//            String str;
-//            if (baixa.getPerfilDeValor() instanceof Titulo) {
-//                str = " Título";
-//                if (this.baixa.getPessoa() != null) {
-//                    this.baixa.setHistorico("Pagamento de " + str + " para " + this.baixa.getPessoa().getNome());
-//                }
-//            } else if (baixaDespesaEventual.getDespesa() != null) {
-//                str = "Pagamento de " + baixaDespesaEventual.getDespesa().getNome();
-//                this.baixaDespesaEventual.setHistorico(str);
-//            } else {
-//                str = "Despesa Provisionada";
-//                this.baixaDespesaProvisionada.setHistorico("Pagamento de " + str + this.baixaDespesaProvisionada.getPessoa() == null ? " para " + this.baixaDespesaProvisionada.getPessoa().getNome() : "");
-//            }
-//        }
-//        if (baixa.getPerfilDeValor() instanceof Titulo) {
-//            if (this.baixa.getValor().compareTo(((Titulo) this.baixa.getPerfilDeValor()).getSaldo()) > 0) {
-//                throw new EDadoInvalidoException("O valor deve ser menor que o saldo.");
-//            }
-//        }
-//    }
-//
-//    private void validaRegistroFoiInformado() throws EDadoInvalidoException {
-//        if (this.baixa.getPerfilDeValor() instanceof Titulo && this.baixaDespesaEventual.getDespesa() == null && this.baixa.getPerfilDeValor() instanceof DespesaProvisionada) {
-//            throw new EDadoInvalidoException("Selecione um titulo ou uma despesa para pagar!");
-//        }
-//        if (this.baixa.getValor().compareTo(BigDecimal.ZERO) == 0 && this.baixaDespesaProvisionada.getValor().compareTo(BigDecimal.ZERO) == 0
-//                && this.baixaDespesaEventual.getValor().compareTo(BigDecimal.ZERO) == 0) {
-//            throw new EDadoInvalidoException("O valor deve ser maior que zero!");
-//        }
-//    }
-//
-//    private Baixa contruirBaixa(BaixaBV baixa) throws EDadoInvalidoException, DadoInvalidoException {
-//        baixa.setId(retornarCodigo());
-//        baixa.setEmissao(data);
-//        baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
-//        Baixa novaBaixa = baixa.construirComID();
-//        total = total.add(baixa.getValor());
-//        return novaBaixa;
-//    }
-//
-//    private Baixa atualizaSaldo(Baixa baixa) throws DadoInvalidoException, EDadoInvalidoException {
-//        if (baixa.getParcela() instanceof Titulo) {
-//            ((Titulo) baixa.getParcela()).atualizaSaldo(baixa.getValor());
-//            new AtualizaDAO<Parcela>().atualiza(baixa.getParcela());
-//        }
-//        return baixa;
-//    }
-//
-//    private void limpaDialogos() {
-//        perfilDeValorSelecionado = null;
-//        // listaPerfilDeValor = new ArrayList<>();
-//        titulo = new TituloBV();
-//        despesaProvisionada = new DespesaProvisionadaBV();
-//        despesaEventual = new DespesaEventualBV();
-//    }
-//
-////    public void abrirBaixaComDados() {
-////        if (this.baixa.getParcela() instanceof Titulo) {
-////            baixa = new BaixaBV(baixaSelecionada);
-////            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-////            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-////        } else if (this.baixa.getParcela() instanceof DespesaProvisionada) {
-////            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
-////            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-////            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
-////        } else {
-////            buscarListaDeContas();
-////            baixaDespesaEventual = new BaixaBV(baixaSelecionada);
-////            RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
-////        }
-////    }
-//    public void abrirPerfilDeValorComDados() {
-//        if (this.perfilDeValorSelecionado instanceof Titulo) {
-////            baixa = new BaixaBV(baixaSelecionada);
-////            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-////            RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-//        } else if (this.perfilDeValorSelecionado instanceof DespesaProvisionada) {
-////            baixaDespesaProvisionada = new BaixaBV(baixaSelecionada);
-////            buscarListaDeContas(baixaSelecionada.getCotacao().getConta().getMoeda());
-////            RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
-//        } else {
-////            buscarListaDeContas();
-////            baixaDespesaEventual = new BaixaBV(baixaSelecionada);
-////            RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
-//        }
-//    }
-//
-//    public void abrirTitulo() {
-//        RequestContext.getCurrentInstance().execute("PF('pagarTitulo').show()");
-//        limpaDialogos();
-//    }
-//
-//    public void abrirDespesaProvisionada() {
-//        RequestContext.getCurrentInstance().execute("PF('pagarDespesaProvisionada').show()");
-//        limpaDialogos();
-//    }
-//
-//    public void abrirDespesaEventual() {
-//        RequestContext.getCurrentInstance().execute("PF('despesaEventual').show()");
-//        limpaDialogos();
-//
-////        baixaDespesaEventual.setConta(contaLista.get(0)); Verificar possivel erro de atualização
-//    }
-//
-//    public void abrirChequeEmitido() {
-//        RequestContext.getCurrentInstance().execute("PF('chequeEmitido').show()");
-//        limpaDialogos();
-//    }
-//
-//    public void abrirChequeTerceiro() {
-//        RequestContext.getCurrentInstance().execute("PF('chequeTerceiro').show()");
-//        limpaDialogos();
-//    }
-//
-//    public void abrirDebitoCC() {
-//        RequestContext.getCurrentInstance().execute("PF('debitoCC').show()");
-//        limpaDialogos();
-//    }
-//
-//    private void limpar() {
-//        data = new Date();
-//        baixa = new BaixaBV();
-//        baixaDespesaProvisionada = new BaixaBV();
-//        baixaDespesaEventual = new BaixaBV();
-//        baixaLista = new ArrayList<Baixa>();
-//        baixaSelecionada = null;
-//        total = BigDecimal.ZERO;
-//
-//        titulo = new TituloBV();
-//        despesaEventual = new DespesaEventualBV();
-//        despesaProvisionada = new DespesaProvisionadaBV();
-//        listaPerfilDeValor = new ArrayList<>();
-//        perfilDeValorSelecionado = null;
-//
-//    }
-//
-//    private Long retornarCodigo() {
-//        Long id = (long) 1;
-//        if (!baixaLista.isEmpty()) {
-//            for (Baixa baixaExistente : baixaLista) {
-//                if (baixaExistente.getId() >= id) {
-//                    id = baixaExistente.getId() + 1;
-//                }
-//            }
-//        }
-//        return id;
-//    }
-//
-//    public Pessoa getPessoa() {
-//        return pessoa;
-//    }
-//
-//    public void setPessoa(Pessoa pessoa) {
-//        this.pessoa = pessoa;
-//    }
-//
-//    public Date getData() {
-//        return data;
-//    }
-//
-//    public void setData(Date data) {
-//        this.data = data;
-//    }
-//
-//    public BaixaBV getBaixa() {
-//        return baixa;
-//    }
-//
-//    public void setBaixa(BaixaBV baixa) {
-//        this.baixa = baixa;
-//    }
-//
-//    public List<Baixa> getBaixaLista() {
-//        return baixaLista;
-//    }
-//
-//    public void setBaixaLista(List<Baixa> baixaLista) {
-//        this.baixaLista = baixaLista;
-//    }
-//
-//    public Baixa getBaixaSelecionada() {
-//        return baixaSelecionada;
-//    }
-//
-//    public void setBaixaSelecionada(Baixa baixaSelecionada) {
-//        this.baixaSelecionada = baixaSelecionada;
-//    }
-//
-//    public String getTotalFormatado() {
-//        NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
-//        return nf.format(total);
-//    }
-//
-//    public void setTotal(BigDecimal total) {
-//        this.total = total;
-//    }
-//
-//    public BigDecimal getTotal() {
-//        return total;
-//    }
-//
-//    public BaixaBV getBaixaDespesaProvisionada() {
-//        return baixaDespesaProvisionada;
-//    }
-//
-//    public void setBaixaDespesaProvisionada(BaixaBV baixaDespesaProvisionada) {
-//        this.baixaDespesaProvisionada = baixaDespesaProvisionada;
-//    }
-//
-//    public ConfiguracaoCambio getConfCambio() {
-//        return confCambio;
-//    }
-//
-//    public void setConfCambio(ConfiguracaoCambio confCambio) {
-//        this.confCambio = confCambio;
-//    }
-//
-//    public ConfiguracaoCambioService getServiceConfCambio() {
-//        return serviceConfCambio;
-//    }
-//
-//    public void setServiceConfCambio(ConfiguracaoCambioService serviceConfCambio) {
-//        this.serviceConfCambio = serviceConfCambio;
-//    }
-//
-//    public List<Cotacao> getListaCotacao() {
-//        return listaCotacao;
-//    }
-//
-//    public void setListaCotacao(List<Cotacao> listaCotacao) {
-//        this.listaCotacao = listaCotacao;
-//    }
-//
-//    public ContaService getServiceConta() {
-//        return serviceConta;
-//    }
-//
-//    public void setServiceConta(ContaService serviceConta) {
-//        this.serviceConta = serviceConta;
-//    }
-//
-//    public BaixaBV getBaixaDespesaEventual() {
-//        return baixaDespesaEventual;
-//    }
-//
-//    public void setBaixaDespesaEventual(BaixaBV baixaDespesaEventual) {
-//        this.baixaDespesaEventual = baixaDespesaEventual;
-//    }
-//
-//    public TituloBV getTitulo() {
-//        return titulo;
-//    }
-//
-//    public void setTitulo(TituloBV titulo) {
-//        this.titulo = titulo;
-//    }
-//
-//    public DespesaEventualBV getDespesaEventual() {
-//        return despesaEventual;
-//    }
-//
-//    public void setDespesaEventual(DespesaEventualBV despesaEventual) {
-//        this.despesaEventual = despesaEventual;
-//    }
-//
-//    public DespesaProvisionadaBV getDespesaProvisionada() {
-//        return despesaProvisionada;
-//    }
-//
-//    public void setDespesaProvisionada(DespesaProvisionadaBV despesaProvisionada) {
-//        this.despesaProvisionada = despesaProvisionada;
-//    }
-//
-//    public List<Parcela> getListaPerfilDeValor() {
-//        return listaPerfilDeValor;
-//    }
-//
-//    public void setListaPerfilDeValor(List<Parcela> listaPerfilDeValor) {
-//        this.listaPerfilDeValor = listaPerfilDeValor;
-//    }
-//
-//    public Parcela getPerfilDeValorSelecionado() {
-//        return perfilDeValorSelecionado;
-//    }
-//
-//    public void setPerfilDeValorSelecionado(Parcela perfilDeValorSelecionado) {
-//        this.perfilDeValorSelecionado = perfilDeValorSelecionado;
-//    }
-//
-//    public FormaPagamentoRecebimento getFormaPagamentoRecebimentoSelecionado() {
-//        return formaPagamentoRecebimentoSelecionado;
-//    }
-//
-//    public void setFormaPagamentoRecebimentoSelecionado(FormaPagamentoRecebimento formaPagamentoRecebimentoSelecionado) {
-//        this.formaPagamentoRecebimentoSelecionado = formaPagamentoRecebimentoSelecionado;
-//    }
-//
-//    public List<FormaPagamentoRecebimento> getListaFormaPagamentoRecebimento() {
-//        return listaFormaPagamentoRecebimento;
-//    }
-//
-//    public void setListaFormaPagamentoRecebimento(List<FormaPagamentoRecebimento> listaFormaPagamentoRecebimento) {
-//        this.listaFormaPagamentoRecebimento = listaFormaPagamentoRecebimento;
-//    }
-//
-//    public ChequeBV getChequeEmitido() {
-//        return chequeEmitido;
-//    }
-//
-//    public void setChequeEmitido(ChequeBV chequeEmitido) {
-//        this.chequeEmitido = chequeEmitido;
-//    }
-//
-//    public ChequeBV getChequeTerceiro() {
-//        return chequeTerceiro;
-//    }
-//
-//    public void setChequeTerceiro(ChequeBV chequeTerceiro) {
-//        this.chequeTerceiro = chequeTerceiro;
-//    }
-//
-//   
-//    
-//    
-//    
-//
-//}
+package br.com.onesystem.war.view;
+
+import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.Pagamento;
+import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.Model;
+import br.com.onesystem.util.ModelList;
+import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
+import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.war.builder.FormaDeCobrancaBV;
+import br.com.onesystem.war.builder.PagamentoBV;
+import br.com.onesystem.war.builder.TipoDeCobrancaBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
+import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.primefaces.event.SelectEvent;
+
+@Named
+@javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
+public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implements Serializable {
+
+    private Model tipoSelecionado;
+    private Model formaSelecionado;
+    private ModelList<TipoDeCobranca> tiposDeCobranca;
+    private ModelList<FormaDeCobranca> formasDeCobranca;
+    private TipoDeCobrancaBV tipoDeCobrancaBV;
+    private FormaDeCobrancaBV formaDeCobrancaBV;
+
+    @Inject
+    private ConfiguracaoService serviceConf;
+
+    public void pagar() {
+        try {
+            e.setTotalEmDinheiro(getTotalEmDinheiro());
+            Pagamento pagamento = e.construirComID();
+            tiposDeCobranca.getList().forEach(tp -> pagamento.adiciona(tp));
+            formasDeCobranca.getList().forEach(f -> pagamento.adiciona(f));
+            pagamento.geraBaixas();
+            pagamento.ehValido();
+
+            addNoBanco(pagamento);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    @Override
+    public void limparJanela() {
+        try {
+            e = new PagamentoBV(new Date());
+            e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+            tiposDeCobranca = new ModelList<>();
+            formasDeCobranca = new ModelList<>();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void atualizaEmissao() throws DadoInvalidoException {
+        e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+    }
+
+    @Override
+    public void selecionar(SelectEvent event) {
+        try {
+            Object obj = event.getObject();
+            if (obj instanceof TipoDeCobranca) {
+                TipoDeCobranca tipo = (TipoDeCobranca) obj;
+                boolean possuiCobranca = false;
+                if (tipo.getCobranca() != null) {
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
+                } else {
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobrancaFixa() != null).filter(tp -> tp.getCobrancaFixa().getId() != null).map(TipoDeCobranca::getCobrancaFixa).anyMatch(co -> co.getId().equals(tipo.getCobrancaFixa().getId()));
+                }
+                if (!possuiCobranca) {
+                    tiposDeCobranca.add(tipo);
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Tipo_Cobranca_Já_Está_Informado"));
+                }
+            } else if (obj instanceof FormaDeCobranca) {
+                FormaDeCobranca forma = (FormaDeCobranca) obj;
+                boolean possuiCobranca = formasDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null).filter(tp -> tp.getCobranca().getId() != null).map(FormaDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(forma.getCobranca().getId()));
+                if (!possuiCobranca) {
+                    formasDeCobranca.add(forma);
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Forma_Cobranca_Já_Está_Informada"));
+                }
+            } else if (obj instanceof Model) {
+                Model model = (Model) obj;
+                if (model.getObject() instanceof TipoDeCobranca) {
+                    tiposDeCobranca.atualiza(model);
+                } else {
+                    formasDeCobranca.atualiza(model);
+                }
+            }
+            tipoSelecionado = null;
+            formaSelecionado = null;
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void abreTitulo() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.TITULO, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+
+    public void abreCheque() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.CHEQUE, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+
+    public void abreCartao() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.CARTAO, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+
+    public void abreCredito() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.CREDITO, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+ 
+    public void abreDespesaProvisionada() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+
+    public void abreDespesaEventual() throws DadoInvalidoException {
+        SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_EVENTUAL, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        adicionaEmissaoNaSessao();
+    }
+
+    public void adicionaEmissaoNaSessao() throws DadoInvalidoException {
+        SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
+        SessionUtil.put(NaturezaFinanceira.DESPESA, "naturezaFinanceira", FacesContext.getCurrentInstance());
+        SessionUtil.remove("emissao", FacesContext.getCurrentInstance());
+        SessionUtil.put(e.getEmissao(), "emissao", FacesContext.getCurrentInstance());
+    }
+
+    public void adicionaTipoNaSessao(SelectEvent event) throws DadoInvalidoException {
+        tipoSelecionado = (Model) event.getObject();
+        if (tipoSelecionado != null) {
+            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            SessionUtil.put(tipoSelecionado, "model", FacesContext.getCurrentInstance());
+        }
+    }
+
+    public void adicionaFormaNaSessao(SelectEvent event) throws DadoInvalidoException {
+        formaSelecionado = (Model) event.getObject();
+        if (formaSelecionado != null) {
+            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            SessionUtil.put(formaSelecionado, "model", FacesContext.getCurrentInstance());
+        }
+    }
+
+    public void removeTipo() throws FDadoInvalidoException {
+        if (tipoSelecionado != null) {
+            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            tiposDeCobranca.remove(tipoSelecionado);
+        }
+    }
+
+    public void removeForma() throws FDadoInvalidoException {
+        if (formaSelecionado != null) {
+            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            formasDeCobranca.remove(formaSelecionado);
+        }
+    }
+
+    public BigDecimal getTotalTipoNaCotacaoPadrao() {
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            for (TipoDeCobranca tp : tiposDeCobranca.getList()) {
+                if (tp.getCotacao() != null && tp.getCotacao() != e.getCotacaoPadrao()) {
+                    total = total.add(tp.getValor().divide(tp.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                } else {
+                    total = total.add(tp.getValor());
+                }
+            }
+        } catch (NullPointerException npe) {
+            return null;
+        }
+        return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
+    }
+
+    public String getTotalTipoNaCotacaoPadraoFormatado() {
+        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
+    }
+
+    public BigDecimal getTotalFormaNaCotacaoPadrao() {
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            for (FormaDeCobranca fm : formasDeCobranca.getList()) {
+                if (fm.getCotacao() != null && fm.getCotacao() != e.getCotacaoPadrao()) {
+                    total = total.add(fm.getValor().divide(fm.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                } else {
+                    total = total.add(fm.getValor());
+                }
+            }
+        } catch (NullPointerException npe) {
+            return null;
+        }
+        return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
+    }
+
+    public String getTotalFormaNaCotacaoPadraoFormatado() {
+        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalFormaNaCotacaoPadrao());
+    }
+
+    public BigDecimal getValorEmConta() {
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            for (TipoDeCobranca tp : tiposDeCobranca.getList()) {
+                if (tp.getConta() != null) {
+                    if (tp.getCotacao() != null && tp.getCotacao() != e.getCotacaoPadrao()) {
+                        total = total.add(tp.getValor().divide(tp.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                    } else {
+                        total = total.add(tp.getValor());
+                    }
+                }
+            }
+        } catch (NullPointerException npe) {
+            return null;
+        }
+        return total;
+    }
+
+    public BigDecimal getTotalEmDinheiro() {
+        BigDecimal totalTipo = getTotalTipoNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalTipoNaCotacaoPadrao();
+        BigDecimal totalForma = getTotalFormaNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalFormaNaCotacaoPadrao();
+        return totalTipo.subtract(totalForma);
+    }
+
+    public Model getTipoSelecionado() {
+        return tipoSelecionado;
+    }
+
+    public void setTipoSelecionado(Model tipoSelecionado) {
+        this.tipoSelecionado = tipoSelecionado;
+    }
+
+    public Model getFormaSelecionado() {
+        return formaSelecionado;
+    }
+
+    public void setFormaSelecionado(Model formaSelecionado) {
+        this.formaSelecionado = formaSelecionado;
+    }
+
+    public ModelList<TipoDeCobranca> getTiposDeCobranca() {
+        return tiposDeCobranca;
+    }
+
+    public void setTiposDeCobranca(ModelList<TipoDeCobranca> tiposDeCobranca) {
+        this.tiposDeCobranca = tiposDeCobranca;
+    }
+
+    public ModelList<FormaDeCobranca> getFormasDeCobranca() {
+        return formasDeCobranca;
+    }
+
+    public void setFormasDeCobranca(ModelList<FormaDeCobranca> formasDeCobranca) {
+        this.formasDeCobranca = formasDeCobranca;
+    }
+
+    public TipoDeCobrancaBV getTipoDeCobrancaBV() {
+        return tipoDeCobrancaBV;
+    }
+
+    public void setTipoDeCobrancaBV(TipoDeCobrancaBV tipoDeCobrancaBV) {
+        this.tipoDeCobrancaBV = tipoDeCobrancaBV;
+    }
+
+    public FormaDeCobrancaBV getFormaDeCobrancaBV() {
+        return formaDeCobrancaBV;
+    }
+
+    public void setFormaDeCobrancaBV(FormaDeCobrancaBV formaDeCobrancaBV) {
+        this.formaDeCobrancaBV = formaDeCobrancaBV;
+    }
+
+}

@@ -156,9 +156,9 @@ public class CambioView implements Serializable {
                 baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
                 baixa.setCotacao(cambio.getCotacao());
                 baixa.setId(retornarCodigo());
-                baixa.setDesconto(BigDecimal.ZERO);
-                baixa.setJuros(BigDecimal.ZERO);
-                baixa.setMultas(BigDecimal.ZERO);
+//                baixa.setDesconto(BigDecimal.ZERO);
+//                baixa.setJuros(BigDecimal.ZERO);
+//                baixa.setMultas(BigDecimal.ZERO);
                 Baixa novoRegistro = baixa.construirComID();
                 baixaLista.add(novoRegistro);
                 cambio.setValorLiquido(cambio.getValorLiquido().subtract(novoRegistro.getValor()));

@@ -5,12 +5,10 @@
  */
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
-import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,7 +23,6 @@ public class RecebimentoBuilder {
     private Long id;
     private List<TipoDeCobranca> tiposDeCobranca;
     private List<FormaDeCobranca> formasDeCobranca;
-    private List<ValorPorCotacao> valoresPorCotacao;
     private BigDecimal totalEmDinheiro;
     private Cotacao cotacaoPadrao;
     private Date emissao;
@@ -45,11 +42,6 @@ public class RecebimentoBuilder {
         return this;
     }
 
-    public RecebimentoBuilder comValoresPorCotacao(List<ValorPorCotacao> valoresPorCotacao) {
-        this.valoresPorCotacao = valoresPorCotacao;
-        return this;
-    }
-
     public RecebimentoBuilder comTotalEmDinheiro(BigDecimal totalEmDinheiro) {
         this.totalEmDinheiro = totalEmDinheiro;
         return this;
@@ -66,7 +58,7 @@ public class RecebimentoBuilder {
     }
 
     public Recebimento construir() throws DadoInvalidoException {
-        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, valoresPorCotacao, cotacaoPadrao, emissao);
+        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro);
     }
 
 }

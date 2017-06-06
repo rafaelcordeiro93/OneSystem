@@ -88,7 +88,7 @@ public class TipoReceita implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (!(objeto instanceof TipoReceita)) {
             return false;
         }
         TipoReceita outro = (TipoReceita) objeto;

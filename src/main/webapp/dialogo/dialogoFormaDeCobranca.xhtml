@@ -104,13 +104,6 @@
                 <div id="valores" class="ui-g-12 ui-md-6 ui-lg-3">
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
-                        <p:outputLabel value="#{l.Banco}: "/>
-                        <p:selectOneMenu  id="dceBanco" value="#{dialogoFormaDeCobrancaView.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoFormaDeCobrancaView.contaComCotacao.size() eq 0}">
-                            <p:ajax update="tempDialog" listener="#{dialogoFormaDeCobrancaView.selecionaCotacaoConformeConta}"/>
-                            <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
-                            <f:selectItems value="#{dialogoFormaDeCobrancaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
-                        </p:selectOneMenu>
-
                         <p:outputLabel value="#{l.Cotacao}: "/>
                         <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" >
                             <p:ajax update="tempDialog"/>

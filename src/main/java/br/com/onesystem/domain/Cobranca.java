@@ -18,6 +18,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -97,10 +98,10 @@ public abstract class Cobranca implements Serializable {
 
     @ManyToOne
     private FaturaLegada faturaLegada;
-    
+
     @OneToMany(mappedBy = "cobranca")
     private List<TipoDeCobranca> tiposDeCobranca;
-    
+
     @OneToMany(mappedBy = "cobranca")
     private List<FormaDeCobranca> formasDeCobranca;
 
@@ -126,9 +127,9 @@ public abstract class Cobranca implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","pessoa");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "pessoa");
         if (!(this instanceof Credito)) {
-            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira","vencimento");
+            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "vencimento");
         }
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
@@ -136,6 +137,13 @@ public abstract class Cobranca implements Serializable {
     public abstract ModalidadeDeCobranca getModalidade();
 
     public abstract String getDetalhes();
+
+    public void adiciona(Baixa baixa) {
+        if (baixas == null) {
+            baixas = new ArrayList<>();
+        }
+        this.baixas.add(baixa);
+    }
 
     public Long getId() {
         return id;
