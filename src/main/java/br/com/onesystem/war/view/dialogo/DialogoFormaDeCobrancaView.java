@@ -19,6 +19,7 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
@@ -45,6 +46,7 @@ import org.primefaces.event.SelectEvent;
 @ViewScoped
 public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, FormaDeCobrancaBV> implements Serializable {
 
+    private NaturezaFinanceira recebimentoOuPagamento;
     private CreditoBV credito;
     private Titulo titulo;
     private BoletoDeCartao boletoDeCartao;
@@ -82,6 +84,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     }
 
     private void buscaDaSessao() throws DadoInvalidoException {
+        recebimentoOuPagamento = (NaturezaFinanceira) SessionUtil.getObject("naturezaFinanceira", FacesContext.getCurrentInstance());
         modalidadeDeCobranca = (ModalidadeDeCobranca) SessionUtil.getObject("modalidadeDeCobranca", FacesContext.getCurrentInstance());
         if (modalidadeDeCobranca != null) {
             emissao = (Date) SessionUtil.getObject("emissao", FacesContext.getCurrentInstance());
@@ -100,12 +103,16 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
             if (model.getObject().getCobranca() != null) {
                 if (model.getObject().getCobranca() instanceof Titulo) {
                     titulo = (Titulo) model.getObject().getCobranca();
+                    modalidadeDeCobranca = ModalidadeDeCobranca.TITULO;
                 } else if (model.getObject().getCobranca() instanceof BoletoDeCartao) {
                     boletoDeCartao = (BoletoDeCartao) model.getObject().getCobranca();
+                    modalidadeDeCobranca = ModalidadeDeCobranca.CARTAO;
                 } else if (model.getObject().getCobranca() instanceof Credito) {
                     credito = new CreditoBV((Credito) model.getObject().getCobranca());
+                    modalidadeDeCobranca = ModalidadeDeCobranca.CREDITO;
                 } else {
                     cheque = (Cheque) model.getObject().getCobranca();
+                    modalidadeDeCobranca = ModalidadeDeCobranca.CHEQUE;
                 }
             }
         }
@@ -158,7 +165,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
             selecionaCobrancaNoObjeto();
         } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
             credito.setPessoa((Pessoa) obj);
-        } 
+        }
     }
 
     public void selecionaCotacaoConformeConta() {
@@ -186,14 +193,21 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     }
 
     private void construir() throws DadoInvalidoException {
-        if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO) {
+        if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
+            credito.setValor(e.getValor());
+            credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            credito.setEmissao(emissao);
+            credito.setCotacao(e.getCotacao());
+            credito.setHistorico(e.getObservacao());
+            e.setCobranca(credito.construirComID());
+        } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
             credito.setValor(e.getValor());
             credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             credito.setEmissao(emissao);
             credito.setCotacao(e.getCotacao());
             credito.setHistorico(e.getObservacao());
             e.setCobranca(credito.construirComID());
-        } 
+        }
     }
 
     public void fechar() {
@@ -209,6 +223,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         SessionUtil.remove("model", FacesContext.getCurrentInstance());
         SessionUtil.remove("emissao", FacesContext.getCurrentInstance());
         SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
     }
 
     public List<Cotacao> getCotacaoLista() {
@@ -296,6 +311,14 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public NaturezaFinanceira getRecebimentoOuPagamento() {
+        return recebimentoOuPagamento;
+    }
+
+    public void setRecebimentoOuPagamento(NaturezaFinanceira recebimentoOuPagamento) {
+        this.recebimentoOuPagamento = recebimentoOuPagamento;
     }
 
 }

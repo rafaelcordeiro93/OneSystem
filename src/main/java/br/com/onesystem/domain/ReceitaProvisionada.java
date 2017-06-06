@@ -30,8 +30,8 @@ public class ReceitaProvisionada extends CobrancaFixa implements Serializable, R
     }
 
     public ReceitaProvisionada(Long id, Pessoa pessoa, TipoReceita tipoReceita, BigDecimal valor, OperacaoFinanceira operacaoFinanceira,
-            Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, mesReferencia, anoReferencia);
+            Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, Date referencia) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, referencia);
         this.tipoReceita = tipoReceita;
     }
 

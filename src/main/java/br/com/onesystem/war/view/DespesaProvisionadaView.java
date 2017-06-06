@@ -134,8 +134,7 @@ public class DespesaProvisionadaView implements Serializable {
                                 despesaProvisionada.getCotacao(),
                                 null,
                                 null,
-                                despesaProvisionada.getMesReferencia(),
-                                despesaProvisionada.getAnoReferencia());
+                                despesaProvisionada.getReferencia());
                 parcelas.add(dp);
             }
         } catch (NullPointerException npe) {

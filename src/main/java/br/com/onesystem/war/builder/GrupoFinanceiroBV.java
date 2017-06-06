@@ -16,14 +16,12 @@ public class GrupoFinanceiroBV implements Serializable {
     private NaturezaFinanceira naturezaFinanceira = NaturezaFinanceira.RECEITA;
     private boolean exibirNoDRE = true;
     private ClassificacaoFinanceira classificacaoFinanceira;
-    private OperacaoFinanceira operacaoFinanceira;
 
     public GrupoFinanceiroBV(GrupoFinanceiro grupoFinanceiroSelecionado) {
         this.id = grupoFinanceiroSelecionado.getId();
         this.nome = grupoFinanceiroSelecionado.getNome();
         this.naturezaFinanceira = grupoFinanceiroSelecionado.getNaturezaFinanceira();
         this.classificacaoFinanceira = grupoFinanceiroSelecionado.getClassificacaoFinanceira();
-        this.operacaoFinanceira = grupoFinanceiroSelecionado.getOperacaoFinanceira();
     }
 
     public GrupoFinanceiroBV() {
@@ -65,23 +63,15 @@ public class GrupoFinanceiroBV implements Serializable {
         return classificacaoFinanceira;
     }
 
-    public OperacaoFinanceira getOperacaoFinanceira() {
-        return operacaoFinanceira;
-    }
-
-    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
-        this.operacaoFinanceira = operacaoFinanceira;
-    }
-
     public void setClassificacaoFinanceira(ClassificacaoFinanceira classificacaoFinanceira) {
         this.classificacaoFinanceira = classificacaoFinanceira;
     }
 
     public GrupoFinanceiro construir() throws DadoInvalidoException {
-        return new GrupoFinanceiro(null, nome, naturezaFinanceira, classificacaoFinanceira, operacaoFinanceira);
+        return new GrupoFinanceiro(null, nome, naturezaFinanceira, classificacaoFinanceira);
     }
 
     public GrupoFinanceiro construirComID() throws DadoInvalidoException {
-        return new GrupoFinanceiro(id, nome, naturezaFinanceira, classificacaoFinanceira, operacaoFinanceira);
+        return new GrupoFinanceiro(id, nome, naturezaFinanceira, classificacaoFinanceira);
     }
 }

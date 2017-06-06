@@ -12,7 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOFINANCEIO",
+@SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOFINANCEIRO",
         name = "SEQ_CONFIGURACAOFINANCEIRO")
 @NamedQueries({
     @NamedQuery(name = "ConfiguracaoFinanceiro.busca", query = "select c from ConfiguracaoFinanceiro c")

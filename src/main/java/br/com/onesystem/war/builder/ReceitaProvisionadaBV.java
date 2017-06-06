@@ -21,8 +21,7 @@ public class ReceitaProvisionadaBV implements Serializable {
     private Date emissao;
     private String historico;
     private Cotacao cotacao;
-    private Integer anoReferencia;
-    private Integer mesReferencia;
+    private Date referencia;
 
     public ReceitaProvisionadaBV(ReceitaProvisionada receitaProvisionadaSelecionada) {
         this.id = receitaProvisionadaSelecionada.getId();
@@ -33,12 +32,11 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.emissao = receitaProvisionadaSelecionada.getEmissao();
         this.historico = receitaProvisionadaSelecionada.getHistorico();
         this.cotacao = receitaProvisionadaSelecionada.getCotacao();
-        this.mesReferencia = receitaProvisionadaSelecionada.getMesReferencia();
-        this.anoReferencia = receitaProvisionadaSelecionada.getAnoReferencia();
+        this.referencia = receitaProvisionadaSelecionada.getReferencia();
     }
 
     public ReceitaProvisionadaBV(Long id, Pessoa pessoa, TipoReceita receita, BigDecimal valor,
-            Date vencimento, Date emissao, String historico, Cotacao cotacao, Integer mesReferencia, Integer anoReferencia) {
+            Date vencimento, Date emissao, String historico, Cotacao cotacao, Date referencia) {
         this.id = id;
         this.pessoa = pessoa;
         this.receita = receita;
@@ -47,8 +45,7 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.emissao = emissao;
         this.historico = historico;
         this.cotacao = cotacao;
-        this.mesReferencia = mesReferencia;
-        this.anoReferencia = anoReferencia;
+        this.referencia = referencia;
     }
 
     public ReceitaProvisionadaBV() {
@@ -123,31 +120,23 @@ public class ReceitaProvisionadaBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public Integer getAnoReferencia() {
-        return anoReferencia;
+    public Date getReferencia() {
+        return referencia;
     }
 
-    public void setAnoReferencia(Integer anoReferencia) {
-        this.anoReferencia = anoReferencia;
-    }
-
-    public Integer getMesReferencia() {
-        return mesReferencia;
-    }
-
-    public void setMesReferencia(Integer mesReferencia) {
-        this.mesReferencia = mesReferencia;
+    public void setReferencia(Date referencia) {
+        this.referencia = referencia;
     }
 
     public ReceitaProvisionada construir() throws DadoInvalidoException {
         return new ReceitaProvisionadaBuilder().comPessoa(pessoa).comReceita(receita)
-                .comValor(valor).comVencimento(vencimento).comHistorico(historico).comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia)
+                .comValor(valor).comVencimento(vencimento).comHistorico(historico).comReferencia(referencia)
                 .comCotacao(cotacao).construir();
     }
 
     public ReceitaProvisionada construirComID() throws DadoInvalidoException {
         return new ReceitaProvisionadaBuilder().comId(id).comPessoa(pessoa).comReceita(receita)
-                .comValor(valor).comVencimento(vencimento).comHistorico(historico).comMesReferencia(mesReferencia).comAnoReferencia(anoReferencia)
+                .comValor(valor).comVencimento(vencimento).comHistorico(historico).comReferencia(referencia)
                 .comCotacao(cotacao).construir();
     }
 }

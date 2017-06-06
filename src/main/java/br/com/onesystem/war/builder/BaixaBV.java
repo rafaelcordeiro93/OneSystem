@@ -28,11 +28,7 @@ import java.util.Date;
 public class BaixaBV implements Serializable {
 
     private Long id;
-    private Integer numeroParcela;
-    private BigDecimal juros = BigDecimal.ZERO;
     private BigDecimal valor = BigDecimal.ZERO;
-    private BigDecimal multas = BigDecimal.ZERO;
-    private BigDecimal desconto = BigDecimal.ZERO;
     private String historico = "";
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
@@ -56,11 +52,9 @@ public class BaixaBV implements Serializable {
     public BaixaBV(Baixa baixa) {
         this.id = baixa.getId();
         this.pessoa = baixa.getPessoa();
-        this.numeroParcela = baixa.getNumeroParcela();
         this.estado = baixa.getEstado();
         this.dataCancelamento = baixa.getDataCancelamento();
         this.valor = baixa.getValor();
-        this.desconto = baixa.getDesconto();
         this.emissao = baixa.getEmissao();
         this.historico = baixa.getHistorico();
         this.naturezaFinanceira = baixa.getNaturezaFinanceira();
@@ -71,8 +65,6 @@ public class BaixaBV implements Serializable {
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
         this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
-        this.juros = baixa.getJuros();
-        this.multas = baixa.getMultas();
         this.cotacao = baixa.getCotacao();
         this.valorPorCotacao = baixa.getValorPorCotacao();
     }
@@ -114,44 +106,12 @@ public class BaixaBV implements Serializable {
         this.id = id;
     }
 
-    public Integer getNumeroParcela() {
-        return numeroParcela;
-    }
-
-    public void setNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
-    }
-
-    public BigDecimal getJuros() {
-        return juros;
-    }
-
-    public void setJuros(BigDecimal juros) {
-        this.juros = juros;
-    }
-
     public BigDecimal getValor() {
         return valor;
     }
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
-    }
-
-    public BigDecimal getMultas() {
-        return multas;
-    }
-
-    public void setMultas(BigDecimal multas) {
-        this.multas = multas;
-    }
-
-    public BigDecimal getDesconto() {
-        return desconto;
-    }
-
-    public void setDesconto(BigDecimal desconto) {
-        this.desconto = desconto;
     }
 
     public String getHistorico() {
@@ -277,23 +237,20 @@ public class BaixaBV implements Serializable {
     public void setValorPorCotacao(ValorPorCotacao valorPorCotacao) {
         this.valorPorCotacao = valorPorCotacao;
     }
-    
-    
+
     public Baixa construir() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa)
-                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas)
-                .comNaturezaFinanceira(naturezaFinanceira).comNumeroParcela(numeroParcela)
-                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor).comMovimentoFixo(movimentoFixo)
+                .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).
+                comHistorico(historico).comOperacaoFinanceira(naturezaFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
                 .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comCotacao(cotacao).comDesconto(desconto).comDespesa(despesa).comId(id)
-                .comEmissao(emissao).comHistorico(historico).comJuros(juros).comMultas(multas).comMovimentoFixo(movimentoFixo)
-                .comNaturezaFinanceira(naturezaFinanceira).comNumeroParcela(numeroParcela)
-                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comPerfilDeValor(perfilDeValor)
+                .comCotacao(cotacao).comDespesa(despesa).comId(id)
+                .comEmissao(emissao).comHistorico(historico).comCobrancaFixa(movimentoFixo)
+                .comOperacaoFinanceira(naturezaFinanceira)
+                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor)
                 .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
     }
 

@@ -185,9 +185,9 @@ public class ExtratoDeContaView implements Serializable {
                 baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
                 //      baixa.setConta(transferencia.getOrigem());
                 baixa.setId(retornarCodigo());
-                baixa.setDesconto(BigDecimal.ZERO);
-                baixa.setJuros(BigDecimal.ZERO);
-                baixa.setMultas(BigDecimal.ZERO);
+//                baixa.setDesconto(BigDecimal.ZERO);
+//                baixa.setJuros(BigDecimal.ZERO);
+//                baixa.setMultas(BigDecimal.ZERO);
                 Baixa novoRegistro = baixa.construirComID();
                 tarifasTransferencia.add(novoRegistro);
                 InfoMessage.print("Tarifa '" + novoRegistro.getDespesa().getNome() + "' adicionada com sucesso.");
