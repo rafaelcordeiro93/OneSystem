@@ -68,6 +68,10 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         new ValidadorDeCampos<>().valida(this, camposTitulo);
     }
 
+    public void setFaturaLegada(FaturaLegada faturaLegada) {
+        this.faturaLegada = faturaLegada;
+    }
+
     @Override
     public ModalidadeDeCobranca getModalidade() {
         return ModalidadeDeCobranca.TITULO;

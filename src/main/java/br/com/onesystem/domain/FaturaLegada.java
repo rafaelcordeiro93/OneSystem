@@ -6,6 +6,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -64,6 +65,27 @@ public class FaturaLegada implements Serializable {
         this.pessoa = pessoa;
         this.titulo = titulo;
         ehValido();
+    }
+
+    public void adiciona(Titulo t) {
+        if (titulo == null) {
+            titulo = new ArrayList<>();
+        }
+        t.setFaturaLegada(this);
+        titulo.add(t);
+    }
+
+    public void atualiza(Titulo t) {
+        if (t.getId() != null) {
+            titulo.set(titulo.indexOf(t), t);
+        } else {
+            t.setFaturaLegada(this);
+            titulo.add(t);
+        }
+    }
+
+    public void remove(Titulo t) {
+        titulo.remove(t);
     }
 
     private void ehValido() throws DadoInvalidoException {
