@@ -182,7 +182,7 @@ public class CobrancaBV implements Serializable {
         this.moeda = p.getCotacao().getConta().getMoeda();
         this.dias = p.getDias() != null ? p.getDias().intValue() : 0;
         this.banco = p.getCotacao().getConta().getBanco();
-        this.faturaLegada = p.getFaturaLegada();
+        
 
         if (p instanceof Cheque) {
             this.agencia = ((Cheque) p).getAgencia();
@@ -205,6 +205,7 @@ public class CobrancaBV implements Serializable {
         } else if (p instanceof Titulo) {
             this.recepcao = ((Titulo) p).getRecepcao();
             this.modalidadeDeCobranca = ((Titulo) p).getModalidade();
+            this.faturaLegada = ((Titulo) p).getFaturaLegada();
         } else if (p instanceof Credito) {
             this.modalidadeDeCobranca = ((Credito) p).getModalidade();
         }
@@ -553,7 +554,7 @@ public class CobrancaBV implements Serializable {
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas)
-                .comEntrada(entrada).comNota(nota).construir();
+                .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {

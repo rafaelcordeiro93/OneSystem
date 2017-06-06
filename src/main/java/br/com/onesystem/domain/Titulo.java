@@ -44,18 +44,22 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     @ManyToOne
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
+    @ManyToOne
+    private FaturaLegada faturaLegada;
+
     public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada) throws DadoInvalidoException {
+            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, FaturaLegada faturaLegada) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
+        this.faturaLegada = faturaLegada;
         ehValido();
     }
 
@@ -116,6 +120,10 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
 
     public TipoFormaPagRec getTipoFormaPagRec() {
         return tipoFormaPagRec;
+    }
+
+    public FaturaLegada getFaturaLegada() {
+        return faturaLegada;
     }
 
     public Long getIdOrigem() {
