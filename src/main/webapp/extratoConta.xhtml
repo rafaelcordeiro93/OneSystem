@@ -2,7 +2,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -11,35 +12,46 @@
             <div class="ui-g-12">
                 <div class="card">                                 
                     <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                    <div class="EmptyBox5"/>
+                    <div class="EmptyBox20"/>
                     <div class="ui-fluid">
 
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
 
 
-                            <p:outputLabel value="#{l.Periodo}"/>
-                            <p:calendar id="extratoDataInicial" navigator="true" pattern="dd/MM/yyyy" placeholder="#{l.Data_Inicial}" value="#{extratoDeContaView.extrato.dataInicial}"/> 
+                            <p:column>
+                                <p:outputLabel value="#{l.Periodo}"/>
+                                <p:calendar id="extratoDataInicial" navigator="true" pattern="dd/MM/yyyy" placeholder="#{l.Data_Inicial}" value="#{extratoDeContaView.extrato.dataInicial}"/> 
+                            </p:column>
 
-                            <p:outputLabel value="#{l.Ate}"/>
-                            <p:calendar navigator="true" pattern="dd/MM/yyyy" placeholder="#{l.Data_Final}" value="#{extratoDeContaView.extrato.dataFinal}"/> 
+                            <p:column>
+                                <p:outputLabel value="#{l.Ate}"/>
+                                <p:calendar navigator="true" pattern="dd/MM/yyyy" placeholder="#{l.Data_Final}" value="#{extratoDeContaView.extrato.dataFinal}"/> 
+                            </p:column>
 
-                            <h:panelGrid columns="2" style="margin-top: -1.5%">
-                                <p:inputText id="extratoConta" readonly="true" placeholder="#{l.Conta}" value="#{extratoDeContaView.extrato.conta.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionarConta}" process="@this" update="conteudo" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <p:column>
+                                <p:spacer/>
+                                <a:inputTextDialog id="extratoConta" placeholder="#{l.Conta}" dialog="#{selecaoContaView}" mbView="#{extratoDeContaView}" value="#{extratoDeContaView.extrato.conta}" updateButtonSearch="conteudo" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}">
+                                    <p:ajax event="itemSelect" update="conteudo" listener="#{extratoDeContaView.atualizar()}" />
+                                </a:inputTextDialog>
+                            </p:column>
 
-                            <h:panelGrid columns="2" style="margin-top: -1.5%">
-                                <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="GreenButton" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
-                                <p:commandButton value="#{l.Transferencia}" icon="fa fa-exchange Fs16 White" onclick="PF('extratoTransferencia').show()" />
-                            </h:panelGrid>
+                            <p:column>
+                                <p:spacer/>
+                                <h:panelGrid columns="2" style="margin-top: -1.5%">
+                                    <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="green-btn" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
+                                    <p:commandButton value="#{l.Transferencia}" icon="fa fa-exchange Fs16 White" onclick="PF('extratoTransferencia').show()" />
+                                </h:panelGrid>
+                            </p:column>
 
                         </p:panelGrid>    
 
                         <p:dataTable id="dataBaixa" var="baixa" value="#{extratoDeContaView.baixas}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
-                                     selection="#{extratoDeContaView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+                                     selection="#{extratoDeContaView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" >
+
+                            <f:facet name="header">
+                                #{l.Extrato_Conta}
+                            </f:facet>
 
                             <p:columnGroup type="header">
                                 <p:row>
@@ -50,18 +62,17 @@
                                     <p:column colspan="1"/>
                                 </p:row>
                                 <p:row>
-                                    <p:column headerText="#{l.Historico}" colspan="2"/>
+                                    <p:column headerText="#{l.Historico}" colspan="3"/>
                                     <p:column headerText="#{l.Doc}"/>
                                     <p:column headerText="#{l.Data}"/>
                                     <p:column headerText="#{l.Entradas}"/>
                                     <p:column headerText="#{l.Saidas}"/>
                                     <p:column headerText="#{l.Saldo}"/>
-                                    <p:column headerText="#{l.Conta}"/>
                                 </p:row>
                             </p:columnGroup>
 
-                            <p:column colspan="2">
-                                <h:outputText value="#{baixa.historicoMovimentacao}" />
+                            <p:column colspan="3">
+                                <h:outputText value="#{baixa.historico}" />
                             </p:column>
 
                             <p:column style="text-align: center">
@@ -72,21 +83,17 @@
                                 <h:outputText value="#{baixa.emissaoFormatada}" />
                             </p:column>
 
-                            <p:column style="text-align: center">
-                                <h:outputText value="#{baixa.naturezaFinanceira.tipoUnidadeUP eq 'ENTRADA' ? baixa.valorFormatado : null }" style="color: #0288d1" />
+                            <p:column id="columnEntrada" style="text-align: center">
+                                <h:outputText id="entrada" value="#{baixa.naturezaFinanceira.id eq 1 ? baixa.valorFormatado : null }" style="color: #0288D1" />
                             </p:column>
 
                             <p:column style="text-align: center;">
-                                <h:outputText value="#{baixa.naturezaFinanceira.tipoUnidadeUP eq 'SAIDA' ? baixa.valorFormatado : null }" style="color: #E53935"/>
+                                <h:outputText value="#{baixa.naturezaFinanceira.id eq 2 ? baixa.valorFormatado : null }" style="color: #E53935"/>
                             </p:column>
 
                             <p:column style="text-align: center">
                                 <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : baixa.getSaldoFormatado(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta))}" 
-                                              style="color : #{baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta)) ge 0 ? '#0288d1' : '#E53935'}"/>
-                            </p:column>
-
-                            <p:column headerText="#{l.Conta}" style="text-align: center">
-                                <h:outputText value="#{baixa.conta.nome}"/>
+                                              style="color : #{extratoDeContaView.baixaSelecionada.id eq baixa.id ? '' : baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta)) ge 0 ? '#0288d1' : '#E53935'}"/>
                             </p:column>
 
                             <p:columnGroup type="footer">

@@ -8,6 +8,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.JPAUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -35,7 +36,7 @@ public class BaixaDAO {
 
     public BaixaDAO buscarTotalDeBaixasW() {
         parametros.put("pValor", BigDecimal.ZERO);
-        consulta += "select sum(b.total) from Baixa b where b.valor >= :pValor ";
+        consulta += "select sum(b.valor) from Baixa b where b.valor >= :pValor ";
         return this;
     }
 
@@ -73,14 +74,14 @@ public class BaixaDAO {
     }
     
     public BaixaDAO eNaoCancelada() {
-        consulta += "and b.cancelada = :pNaoCancelada ";
-        parametros.put("pNaoCancelada", false);
+        consulta += "and b.estado <> :pNaoCancelada ";
+        parametros.put("pNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
     
     public BaixaDAO eCancelada() {
-        consulta += "and b.cancelada = :pCancelada ";
-        parametros.put("pCancelada", true);
+        consulta += "and b.estado = :pCancelada ";
+        parametros.put("pCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
 
@@ -183,7 +184,7 @@ public class BaixaDAO {
     public BaixaDAO ePorConta(Conta conta) {
         if (conta != null) {
             parametros.put("pConta", conta);
-            consulta += "and b.conta = :pConta ";
+            consulta += "and b.cotacao.conta = :pConta ";
         }
         return this;
     }
