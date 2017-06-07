@@ -2,6 +2,7 @@
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.TipoDespesa;
@@ -157,7 +158,6 @@ public class DadosIniciais {
         Janela cheque = new Janela(null, "Cheque", "/cheque.xhtml", fin);
         Janela consultaCobranca = new Janela(null, "Consulta de Cobrança", "/consultaCobranca.xhtml", fin);
         Janela faturaLegada = new Janela(null, "Fatura Legada", "/faturaLegada.xhtml", fin);
-        
 
         daoJanela.adiciona(receberValores);
         daoJanela.adiciona(pagarValores);
@@ -348,6 +348,15 @@ public class DadosIniciais {
         // -- Adiciona TipoDespesa
         AdicionaDAO<TipoDespesa> daoDespesa = new AdicionaDAO<>();
 
+        TipoDespesa descontosConcedidos = new TipoDespesa(null, "Descontos Concedidos", tot);
+        TipoDespesa jurosPagos = new TipoDespesa(null, "Juros Pagos", tot);
+        TipoDespesa multasPagas = new TipoDespesa(null, "Multas Pagas", depf);
+        TipoDespesa despesaCambial = new TipoDespesa(null, "Despesa com variação cambial", tot);
+
+        daoDespesa.adiciona(descontosConcedidos);
+        daoDespesa.adiciona(jurosPagos);
+        daoDespesa.adiciona(multasPagas);
+        daoDespesa.adiciona(despesaCambial);
         daoDespesa.adiciona(new TipoDespesa(null, "Ajuste de Saldo Inicial", aje));
         daoDespesa.adiciona(new TipoDespesa(null, "PIS Sobre Faturamento", imp));
         daoDespesa.adiciona(new TipoDespesa(null, "COFINS Sobre Faturamento", imp));
@@ -406,9 +415,6 @@ public class DadosIniciais {
         daoDespesa.adiciona(new TipoDespesa(null, "Outros Impostos Estaduais", dept));
         daoDespesa.adiciona(new TipoDespesa(null, "Outros Impostos Municipais", dept));
         daoDespesa.adiciona(new TipoDespesa(null, "Impostos e Taxas Diversas", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Descontos Concedidos", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Juros Pagos", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Multas Pagas", depf));
         daoDespesa.adiciona(new TipoDespesa(null, "Outras Financeiras", depf));
         daoDespesa.adiciona(new TipoDespesa(null, "Tarifas Bancarias", tot));
         daoDespesa.adiciona(new TipoDespesa(null, "Correcao Monetaria Paga", depf));
@@ -429,6 +435,15 @@ public class DadosIniciais {
         // -- Adiciona Receitas
         AdicionaDAO<TipoReceita> daoReceita = new AdicionaDAO<>();
 
+        TipoReceita descontosRecebidos = new TipoReceita(null, "Descontos Recebidos", tot);
+        TipoReceita jurosRecebidos = new TipoReceita(null, "Juros Recebidos", tot);
+        TipoReceita multasRecebidas = new TipoReceita(null, "Multas Recebidas", depf);
+        TipoReceita receitaCambial = new TipoReceita(null, "Receita com variação cambial", tot);
+
+        daoReceita.adiciona(descontosRecebidos);
+        daoReceita.adiciona(jurosRecebidos);
+        daoReceita.adiciona(multasRecebidas);
+        daoReceita.adiciona(receitaCambial);
         daoReceita.adiciona(new TipoReceita(null, "Ajuste de Saldo Inicial", aje));
         daoReceita.adiciona(new TipoReceita(null, "Venda a Vista", imp));
         daoReceita.adiciona(new TipoReceita(null, "Venda a Prazo", imp));
@@ -577,6 +592,10 @@ public class DadosIniciais {
         //Configuracao
         Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO);
         new AdicionaDAO<Configuracao>().adiciona(configuracao);
+
+        //ConfiguracaoContabil
+        ConfiguracaoContabil configuracaoContabil = new ConfiguracaoContabil(null, jurosRecebidos, multasRecebidas, descontosRecebidos, receitaCambial, jurosPagos, multasPagas, descontosConcedidos, despesaCambial);
+        new AdicionaDAO<ConfiguracaoContabil>().adiciona(configuracaoContabil);
 
         // Conta
         // ---------------------------------------------------------------------

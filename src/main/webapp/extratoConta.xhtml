@@ -6,7 +6,17 @@
                 xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="head">
+        <h:outputScript>
+            function transferencia() {
+            document.getElementById("conteudo:transferencia-btn").click();
+            }
+        </h:outputScript>
+    </ui:define>
+
     <ui:define name="content">
+
+
 
         <div class="ui-g">
             <div class="ui-g-12">
@@ -38,16 +48,18 @@
 
                             <p:column>
                                 <p:spacer/>
-                                <h:panelGrid columns="2" style="margin-top: -1.5%">
+                                <h:panelGrid columns="4" style="margin-top: -1.5%">
                                     <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="green-btn" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
-                                    <p:commandButton value="#{l.Transferencia}" icon="fa fa-exchange Fs16 White" onclick="PF('extratoTransferencia').show()" />
+                                    <p:commandButton id="transferencia-btn" value="#{l.Transferencia}" action="#{dialogoTransferenciaView.abrirDialogo}" process="@this" update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this" update=":conteudo"/>
+                                    </p:commandButton>
                                 </h:panelGrid>
                             </p:column>
 
                         </p:panelGrid>    
 
                         <p:dataTable id="dataBaixa" var="baixa" value="#{extratoDeContaView.baixas}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
-                                     selection="#{extratoDeContaView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" >
+                                     rowKey="#{baixa.id}" reflow="true" >
 
                             <f:facet name="header">
                                 #{l.Extrato_Conta}
@@ -93,7 +105,7 @@
 
                             <p:column style="text-align: center">
                                 <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : baixa.getSaldoFormatado(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta))}" 
-                                              style="color : #{extratoDeContaView.baixaSelecionada.id eq baixa.id ? '' : baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta)) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                              style="color : #{baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta)) ge 0 ? '#0288d1' : '#E53935'}"/>
                             </p:column>
 
                             <p:columnGroup type="footer">
@@ -121,78 +133,6 @@
                 </div>
             </div>
         </div>
-
-
-        <p:dialog id="dlgTransfer" header="#{l.Transferencia}" maximizable="false" resizable="false" width="650" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="false" widgetVar="extratoTransferencia" draggable="false">
-            <div class="Container100 Responsive100">
-                <div class="ContainerIndent">
-                    <div class="Container45 Responsive100">
-                        <div class="ContainerIndent">
-                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-
-                                <h:panelGrid columns="2" style="margin-left: -1.5%">
-                                    <p:inputText id="extratoOrigem" readonly="true" placeholder="#{l.Origem}" value="#{extratoDeContaView.transferencia.origem.nome}"/>
-                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionarOrigem}" process="@this" update="extratoOrigem vlConvertido vlOriginal vlTarifa btnVlTarifa EXCTarifa" />
-                                    </p:commandButton>
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="2" style="margin-left: -1.5%">
-                                    <p:inputText id="extratoDestino" readonly="true" placeholder="#{l.Destino}" value="#{extratoDeContaView.transferencia.destino.nome}"/>
-                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionarDestino}" process="@this" update="extratoDestino vlConvertido" />
-                                    </p:commandButton>
-                                </h:panelGrid> 
-
-                                <p:inputNumber id="vlOriginal" placeholder="#{l.Valor}" symbol="#{extratoDeContaView.transferencia.origem.moeda.sigla} " value="#{extratoDeContaView.transferencia.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
-
-                                <p:inputNumber id="vlConvertido" placeholder="#{l.Valor_Convertido}" symbol="#{extratoDeContaView.transferencia.destino.moeda.sigla} " value="#{extratoDeContaView.transferencia.valorConvertido}" decimalPlaces="2" disabled="#{extratoDeContaView.ehMoedaIgual()}" thousandSeparator="." decimalSeparator=","/>
-
-                            </p:panelGrid>
-                        </div>
-                    </div>
-
-                    <div class="Container55 Responsive100">
-                        <div class="ContainerIndent">
-                            <p:panel style="border-right: none; border-bottom: none;border-top: none">
-                                <div style="margin-top: -5.5%" class="Red">#{l.Tarifas} </div>
-
-                                <h:panelGrid columns="2">
-                                    <p:inputText id="pgTarifa" readonly="true" placeholder="#{l.Despesa}" style="margin-top: -1%" value="#{extratoDeContaView.baixa.despesa.nome}"/>
-                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionaDespesa}" process="@this" update="pgTarifa" />
-                                    </p:commandButton>
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="2">
-                                    <p:inputNumber placeholder="#{l.Valor}" id="vlTarifa" disabled="#{extratoDeContaView.transferencia.origem eq null ? true : false}" symbol="#{extratoDeContaView.transferencia.origem.moeda.sigla} " value="#{extratoDeContaView.baixa.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
-                                    <p:commandButton  id="btnVlTarifa" disabled="#{extratoDeContaView.transferencia.origem eq null ? true : false}" icon="fa fa-plus Fs16 White" action="#{extratoDeContaView.addBaixa()}" update="pgTarifa vlTarifa EXCTarifa growl"/>
-                                </h:panelGrid>
-
-                                <p:dataTable id="EXCTarifa" scrollable="true" var="baixa" value="#{extratoDeContaView.tarifasTransferencia}" emptyMessage="#{l.Nao_Ha_Registros}" rowKey="#{baixa.id}" reflow="true" style="margin-left: 1%  ; border: none" >
-                                    <p:column>
-                                        <h:outputText value="#{baixa.despesa.nome}"/>
-                                    </p:column>  
-                                    <p:column>
-                                        <h:outputText value="#{baixa.valorFormatado}"/>
-                                    </p:column>
-                                </p:dataTable>
-
-                            </p:panel>
-                        </div>
-                    </div>  
-                </div>
-            </div>   
-
-            <div class="Container100 Responsive100">
-                <div class="ContainerIndent">
-                    <p:separator/>
-                    <div class="EmptyBox5"/>
-                    <p:commandButton value="#{l.Transferir}" action="#{extratoDeContaView.transferir()}" update=":conteudo" onclick="PF('extratoTransferencia').hide()"/>
-                </div>
-            </div>
-
-        </p:dialog>
 
     </ui:define>
 

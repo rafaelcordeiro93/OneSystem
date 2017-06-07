@@ -45,19 +45,19 @@ public class ContaDAO {
         parametros.put("pMoeda", moeda);
         return this;
     }
-    
+
     public ContaDAO ePorMoedas(List<Moeda> moedas) {
-        consulta += "and c.moeda in :pMoedas ";
+        consulta += " and c.moeda in :pMoedas ";
         parametros.put("pMoedas", moedas);
         return this;
     }
-    
-    public ContaDAO comBanco(){
+
+    public ContaDAO comBanco() {
         consulta += "and c.banco is not null ";
         return this;
     }
-    
-    public ContaDAO semBanco(){
+
+    public ContaDAO semBanco() {
         consulta += "and c.banco is null ";
         return this;
     }
@@ -66,6 +66,10 @@ public class ContaDAO {
         consulta += " and c.id = :cId ";
         parametros.put("cId", id);
         return this;
+    }
+
+    public String getConsulta() {
+        return consulta;
     }
 
     public List<Conta> listaDeResultados() {

@@ -56,6 +56,31 @@ public class BaixaBuilder {
     private TipoDeCobranca tipoDeCobranca;
     private FormaDeCobranca formaDeCobranca;
 
+    public BaixaBuilder(){
+    }
+
+    public BaixaBuilder(Baixa baixa) {
+        this.id = baixa.getId();
+        this.historico = baixa.getHistorico();
+        this.valor = baixa.getValor();
+        this.emissao = baixa.getEmissao();
+        this.estado = baixa.getEstado();
+        this.naturezaFinanceira = baixa.getNaturezaFinanceira();
+        this.cotacao = baixa.getCotacao();
+        this.cobranca = baixa.getParcela();
+        this.despesa = baixa.getDespesa();
+        this.receita = baixa.getReceita();
+        this.pessoa = baixa.getPessoa();
+        this.cambio = baixa.getCambio();
+        this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
+        this.transferencia = baixa.getTransferencia();
+        this.recepcao = baixa.getRecepcao();
+        this.cobrancaFixa = baixa.getMovimentoFixo();
+        this.valorPorCotacao = baixa.getValorPorCotacao();
+        this.tipoDeCobranca = baixa.getTipoDeCobranca();
+        this.formaDeCobranca = baixa.getFormaDeCobranca();
+    }
+    
     public BaixaBuilder comId(Long id) {
         this.id = id;
         return this;
