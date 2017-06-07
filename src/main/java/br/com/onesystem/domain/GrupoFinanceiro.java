@@ -59,20 +59,15 @@ public class GrupoFinanceiro implements Serializable {
     @Enumerated(EnumType.STRING)
     private ClassificacaoFinanceira classificacaoFinanceira;
 
-    @NotNull(message = "{unidadeFinanceira_not_null}")
-    @Enumerated(EnumType.STRING)
-    private OperacaoFinanceira operacaoFinanceira;
-
     public GrupoFinanceiro() {
     }
 
     public GrupoFinanceiro(Long id, String nome, NaturezaFinanceira naturezaFinanceira,
-            ClassificacaoFinanceira classificacaoFinanceira, OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
+            ClassificacaoFinanceira classificacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.naturezaFinanceira = naturezaFinanceira;
         this.classificacaoFinanceira = classificacaoFinanceira;
-        this.operacaoFinanceira = operacaoFinanceira;
         ehValido();
     }
 
@@ -100,12 +95,8 @@ public class GrupoFinanceiro implements Serializable {
         return listaDeReceitas;
     }
 
-    public OperacaoFinanceira getOperacaoFinanceira() {
-        return operacaoFinanceira;
-    }
-    
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "naturezaFinanceira", "classificacaoFinanceira", "operacaoFinanceira");
+        List<String> campos = Arrays.asList("nome", "naturezaFinanceira", "classificacaoFinanceira");
         new ValidadorDeCampos<GrupoFinanceiro>().valida(this, campos);
     }
 

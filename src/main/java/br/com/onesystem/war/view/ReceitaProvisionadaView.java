@@ -130,8 +130,7 @@ public class ReceitaProvisionadaView implements Serializable {
                                 receitaProvisionada.getEmissao(),
                                 receitaProvisionada.getHistorico(),
                                 receitaProvisionada.getCotacao(),
-                                receitaProvisionada.getMesReferencia(),
-                                receitaProvisionada.getAnoReferencia());
+                                receitaProvisionada.getReferencia());
                 parcelas.add(dp);
             }
         } catch (NullPointerException npe) {

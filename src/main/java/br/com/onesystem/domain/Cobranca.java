@@ -18,6 +18,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -133,6 +134,13 @@ public abstract class Cobranca implements Serializable {
     public abstract ModalidadeDeCobranca getModalidade();
 
     public abstract String getDetalhes();
+
+    public void adiciona(Baixa baixa) {
+        if (baixas == null) {
+            baixas = new ArrayList<>();
+        }
+        this.baixas.add(baixa);
+    }
 
     public Long getId() {
         return id;

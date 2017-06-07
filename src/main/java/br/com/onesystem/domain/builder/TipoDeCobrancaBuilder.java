@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -31,6 +32,7 @@ public class TipoDeCobrancaBuilder {
     private Cotacao cotacao;
     private CobrancaFixa cobrancaFixa;
     private Conta conta;
+    private Pagamento pagamento;
 
     public TipoDeCobrancaBuilder comId(Long id) {
         this.id = id;
@@ -39,6 +41,11 @@ public class TipoDeCobrancaBuilder {
 
     public TipoDeCobrancaBuilder comCobranca(Cobranca cobranca) {
         this.cobranca = cobranca;
+        return this;
+    }
+
+    public TipoDeCobrancaBuilder comPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
         return this;
     }
 
@@ -88,7 +95,7 @@ public class TipoDeCobrancaBuilder {
     }
 
     public TipoDeCobranca construir() throws DadoInvalidoException {
-        return new TipoDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao, cobrancaFixa, conta);
+        return new TipoDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao, cobrancaFixa, conta, pagamento);
     }
 
 }

@@ -29,8 +29,7 @@ public class ReceitaProvisionadaBuilder {
     private Cotacao cotacao;
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
-    private Integer mesReferencia;
-    private Integer anoReferencia;
+    private Date referencia;
 
     public ReceitaProvisionadaBuilder comId(Long id) {
         this.id = id;
@@ -82,18 +81,13 @@ public class ReceitaProvisionadaBuilder {
         return this;
     }
     
-    public ReceitaProvisionadaBuilder comMesReferencia(Integer mesReferencia) {
-        this.mesReferencia = mesReferencia;
+    public ReceitaProvisionadaBuilder comReferencia(Date referencia) {
+        this.referencia = referencia;
         return this;
     }
     
-    public ReceitaProvisionadaBuilder comAnoReferencia(Integer anoReferencia) {
-        this.anoReferencia = anoReferencia;
-        return this;
-    }
-
     public ReceitaProvisionada construir() throws DadoInvalidoException {
-        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, baixas, mesReferencia, anoReferencia);
+        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, baixas, referencia);
     }
 
 }

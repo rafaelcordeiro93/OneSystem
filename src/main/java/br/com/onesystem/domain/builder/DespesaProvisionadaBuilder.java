@@ -31,9 +31,8 @@ public class DespesaProvisionadaBuilder {
     private TipoDespesa despesa;
     private boolean divisaoLucroCambioCaixa;
     private OperacaoFinanceira operacaoFinanceira;
-    private Integer mesReferencia;
-    private Integer anoReferencia;
-    
+    private Date referencia;
+
     public DespesaProvisionadaBuilder comId(Long id) {
         this.id = id;
         return this;
@@ -93,19 +92,14 @@ public class DespesaProvisionadaBuilder {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
     }
-    
-    public DespesaProvisionadaBuilder comMesReferencia(Integer mesReferencia) {
-        this.mesReferencia = mesReferencia;
-        return this;
-    }
-    
-    public DespesaProvisionadaBuilder comAnoReferencia(Integer anoReferencia) {
-        this.anoReferencia = anoReferencia;
+
+    public DespesaProvisionadaBuilder comReferencia(Date referencia) {
+        this.referencia = referencia;
         return this;
     }
 
     public DespesaProvisionada construir() throws DadoInvalidoException {
-        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira, mesReferencia, anoReferencia);
+        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira, referencia);
     }
 
 }

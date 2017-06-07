@@ -5,6 +5,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,12 @@ public class ChequeDAO {
     public ChequeDAO porSituacao(SituacaoDeCheque situacaoDeCheque){
         consulta += "and b.tipoSituacao = :pSituacao";
         parametros.put("pSituacao", situacaoDeCheque);
+        return this;
+    }
+    
+        public ChequeDAO porTipoLancamento(TipoLancamento tipoLancamento){
+        consulta += "and b.tipoLancamento = :pTipoLancamento";
+        parametros.put("pTipoLancamento", tipoLancamento);
         return this;
     }
 

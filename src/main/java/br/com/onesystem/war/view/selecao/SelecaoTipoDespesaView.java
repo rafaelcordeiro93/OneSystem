@@ -29,7 +29,7 @@ public class SelecaoTipoDespesaView extends BasicCrudMBImpl<TipoDespesa> impleme
     
     @Override
     public String abrirEdicao() {
-        return "tipoDespesa";
+        return "/tipoDespesa";
     }
     
     @Override

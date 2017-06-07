@@ -5,10 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TipoDespesa;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TipoDespesaService;
+import br.com.onesystem.war.service.TipoReceitaService;
 import br.com.onesystem.war.service.TipoReceitaService;
 import java.io.Serializable;
 import java.util.List;
@@ -23,7 +23,7 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "tipoReceitaConverter", forClass = TipoDespesa.class)
+@FacesConverter(value = "tipoReceitaConverter", forClass = TipoReceita.class)
 public class TipoReceitaConverter implements Converter, Serializable {
 
     @Override
@@ -57,7 +57,7 @@ public class TipoReceitaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((TipoDespesa) object).getNome());
+                return String.valueOf(((TipoReceita) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

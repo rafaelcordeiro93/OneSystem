@@ -28,8 +28,7 @@ public class ReceitaEventualBuilder {
     private Cotacao cotacao;
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
-    private Integer mesReferencia;
-    private Integer anoReferencia;
+    private Date referencia;
 
     public ReceitaEventualBuilder comId(Long id) {
         this.id = id;
@@ -81,18 +80,13 @@ public class ReceitaEventualBuilder {
         return this;
     }
     
-    public ReceitaEventualBuilder comMesReferencia(Integer mesReferencia) {
-        this.mesReferencia = mesReferencia;
+    public ReceitaEventualBuilder comReferencia(Date referencia) {
+        this.referencia = referencia;
         return this;
     }
     
-    public ReceitaEventualBuilder comAnoReferencia(Integer anoReferencia) {
-        this.anoReferencia = anoReferencia;
-        return this;
-    }
-
     public ReceitaEventual construir() throws DadoInvalidoException {
-        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, mesReferencia, anoReferencia);
+        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia);
     }
 
 }
