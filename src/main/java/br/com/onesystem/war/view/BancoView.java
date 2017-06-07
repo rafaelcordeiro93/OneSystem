@@ -17,7 +17,6 @@ public class BancoView extends BasicMBImpl<Banco, BancoBV> implements Serializab
 
     public void selecionar(SelectEvent obj) {
         Banco b = (Banco) obj.getObject();
-        System.out.println("B: " + b);
         e = new BancoBV(b);
     }
 }
