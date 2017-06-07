@@ -6,6 +6,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.Movimento;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.NumberUtils;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.TipoOperacao;
@@ -322,7 +323,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public String getValorFormatado() {
-        return cotacao.getConta().getMoeda().getSigla() + " " + NumberUtils.format(naturezaFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), naturezaFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
     }
 
     public String getValorFormatadoSemNegativos() {

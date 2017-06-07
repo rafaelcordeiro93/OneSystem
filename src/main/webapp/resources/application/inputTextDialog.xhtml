@@ -12,6 +12,7 @@
         <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
         <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
         <composite:attribute name="update" default="" shortDescription="Atualiza o componte por ajax."/>
+        <composite:attribute name="updateButtonSearch" default="" shortDescription="Atualiza o componte ao fazer a seleção via botão de pesquisa."/>
         <composite:attribute name="process" default="" shortDescription="Processa o componte por ajax."/>
         <composite:attribute name="var" required="true" shortDescription="Classe do objeto a ser manipulado"/>
         <composite:attribute name="itemValue" required="true" shortDescription="Valor que é selecionado."/>
@@ -52,7 +53,7 @@
                 </p:autoComplete>
                 <p:outputLabel value="#{cc.attrs.placeholder}"/>
                 <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" disabled="#{cc.attrs.disabledSearch}" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
-                    <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update}" />
+                    <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update} #{cc.attrs.updateButtonSearch}" />
                 </p:commandButton>
                 <p:button id="#{cc.attrs.id}-edit" rendered="#{cc.attrs.editVisible}" icon="fa fa-pencil-square-o" styleClass="submit-edit"  target="_blank" outcome="#{cc.attrs.dialog.abrirEdicao()}">
                 </p:button>

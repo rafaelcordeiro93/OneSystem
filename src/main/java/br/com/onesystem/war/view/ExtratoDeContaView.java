@@ -18,6 +18,7 @@ import br.com.onesystem.war.builder.ExtratoDeContaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
 import br.com.onesystem.war.service.BaixaService;
 import br.com.onesystem.war.service.ConfiguracaoFinanceiroService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,14 +27,14 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ExtratoDeContaView implements Serializable {
+public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements Serializable {
 
     private Baixa baixaSelecionada;
     private Date hoje = new Date();
@@ -44,10 +45,10 @@ public class ExtratoDeContaView implements Serializable {
     private List<Baixa> baixas;
     private List<Baixa> tarifasTransferencia = new ArrayList<Baixa>();
 
-    @ManagedProperty("#{baixaService}")
+    @Inject
     private BaixaService service;
 
-    @ManagedProperty("#{configuracaoFinanceiroService}")
+    @Inject
     private ConfiguracaoFinanceiroService serviceFinanceiro;
 
     @PostConstruct
@@ -169,10 +170,16 @@ public class ExtratoDeContaView implements Serializable {
         tarifasTransferencia = new ArrayList<Baixa>();
     }
 
-    public void selecionarConta(SelectEvent event) {
-        Conta conta = (Conta) event.getObject();
-        this.extrato.setConta(conta);
-        atualizar();
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof Conta) {
+            this.extrato.setConta((Conta) event.getObject());
+            atualizar();
+        }
+    }
+
+    public void selecionaBaixa(SelectEvent event) {
+        baixaSelecionada = (Baixa) event.getObject();
     }
 
     public void addBaixa() {
@@ -306,6 +313,10 @@ public class ExtratoDeContaView implements Serializable {
 
     public void setServiceFinanceiro(ConfiguracaoFinanceiroService serviceFinanceiro) {
         this.serviceFinanceiro = serviceFinanceiro;
+    }
+
+    @Override
+    public void limparJanela() {
     }
 
 }
