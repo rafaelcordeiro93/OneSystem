@@ -21,11 +21,11 @@
                         <p:separator/>
 
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Id}"/>                            
-                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
-                            
+                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="true"/>
+
                         </p:panelGrid>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
@@ -111,7 +111,7 @@
                         <p:separator/>
 
                         <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2, ui-grc-1 ui-g-12 ui-md-1,ui-g-12 ui-md-2, ui-grc-1 ui-g-12 ui-md-1,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Endereco}"/>
                             <p:inputText value="#{pessoaView.e.direcao}" style="margin-left: 5%"/>
@@ -140,7 +140,7 @@
                         <p:commandButton value="#{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{pessoaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{pessoaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        
+
                     </div>
 
                 </div>
