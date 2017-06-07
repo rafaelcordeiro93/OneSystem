@@ -25,7 +25,7 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
         }
         Object obj = event.getObject();
         if (obj instanceof Pessoa) {
-            e = new PessoaBV((Pessoa) event.getObject());
+            e = new PessoaBV((Pessoa) obj);
         } else if (obj instanceof Cidade) {
             e.setCidade((Cidade) obj);
         }
