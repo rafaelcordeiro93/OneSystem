@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -17,126 +18,131 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
+                        <div class="EmptyBox10"/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
-                                <p:inputNumber id="operacao" size="26" value="#{operacaoView.operacao.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{operacaoView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoOperacaoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaOperacao}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>  
+
+                            <a:inputTextDialog id="operacaoId" value="#{operacaoView.e}" update=":conteudo" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoBVConverter" process="@this" itemLabel="#{operacao.id}" itemValue="#{operacao}" editVisible="false" onlyNumber="true"/>
+
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{operacaoView.operacao.nome}" maxlength="60"/>
+                            <p:inputText value="#{operacaoView.e.nome}" maxlength="60"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Configuracoes}</h4>
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Operacao_Financeira}"/>
-                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.operacao.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
+                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.e.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
                                 <f:selectItems value="#{operacaoView.operacaoFinanceira}" var="operacaoFinanceira" itemLabel="#{operacaoFinanceira.nome}" itemValue="#{operacaoFinanceira}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Tipo_Nota}"/>
-                            <p:selectOneMenu  id="TipoNota" value="#{operacaoView.operacao.tipoNota}" >
+                            <p:selectOneMenu  id="TipoNota" value="#{operacaoView.e.tipoNota}" >
                                 <f:selectItems value="#{operacaoView.tipoNota}" itemLabel="#{TipoNota}" itemValue="#{TipoNota}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Tipo_Contabil}"/>
-                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.operacao.contabilizarCMV}">
+                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.e.contabilizarCMV}">
                                 <f:selectItems value="#{operacaoView.tipoContabil}" itemLabel="#{TipoContabil}" itemValue="#{TipoContabil}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Tipo_Operacao}"/>
-                            <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.operacao.tipoOperacao}" >
+                            <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.e.tipoOperacao}" >
                                 <f:selectItems value="#{operacaoView.tipoDeOperacao}" var="tipoDeOperacao" itemLabel="#{tipoDeOperacao.nome}" itemValue="#{tipoDeOperacao}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Receitas}</h4>
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
                             <p:outputLabel value="#{l.Receita_AVista}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
-                                <p:inputText id="ReceitaAVista" size="26" readonly="true" value="#{operacaoView.operacao.vendaAVista.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaAVista}" process="@this" update="ReceitaAVista" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="receitaAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+
 
                             <p:outputLabel value="#{l.Receita_APrazo}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
-                                <p:inputText id="ReceitaAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.vendaAPrazo.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaAPrazo}" process="@this" update="ReceitaAPrazo" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="receitaAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+
 
                             <p:outputLabel value="#{l.Servico_AVista}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
-                                <p:inputText id="ServicoAVista" size="26" readonly="true" value="#{operacaoView.operacao.servicoAVista.nome}"/>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaServicoAVista}" process="@this" update="ServicoAVista" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="servicoAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+
 
                             <p:outputLabel value="#{l.Servico_APrazo}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100">
-                                <p:inputText id="ServicoAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.servicoAPrazo.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaServicoAPrazo}" process="@this" update="ServicoAPrazo" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="servicoAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+
 
                             <p:outputLabel value="#{l.Receita_Frete}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
-                                <p:inputText id="ReceitaFrete" size="26" readonly="true" value="#{operacaoView.operacao.receitaFrete.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoReceitaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaReceitaFrete}" process="@this" update="ReceitaFrete" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="receitaFrete" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.receitaFrete}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
-                            <p:outputLabel value="#{l.Despesa_CMV}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
-                                <p:inputText id="DespesaCMV" size="26" readonly="true" value="#{operacaoView.operacao.despesaCMV.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaDespesaCMV}" process="@this" update="DespesaCMV" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <p:outputLabel value="#{l.Compra_AVista}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
-                                <p:inputText id="CompraAVista" size="26" readonly="true" value="#{operacaoView.operacao.compraAVista.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAVista}" process="@this" update="CompraAVista" />
-                                </p:commandButton>
-                            </h:panelGrid>
-
-                            <p:outputLabel value="#{l.Compra_APrazo}"/>
-                            <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 ui-g-nopad" styleClass="Wid100" >
-                                <p:inputText id="CompraAPrazo" size="26" readonly="true" value="#{operacaoView.operacao.compraAPrazo.nome}" />
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{operacaoView.selecionaCompraAPrazo}" process="@this" update="CompraAPrazo" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
+                            <p:outputLabel  value=""/>
 
                         </p:panelGrid>
+
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Despesas}</h4>
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Despesa_CMV}"/>
+                            <a:inputTextDialog id="despesaCMV" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.despesaCMV}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+
+
+                            <p:outputLabel value="#{l.Compra_AVista}"/>
+                            <a:inputTextDialog id="despesaAVista" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAVista}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+
+
+                            <p:outputLabel value="#{l.Compra_APrazo}"/>
+                            <a:inputTextDialog id="despesaAPrazo" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAPrazo}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+
+                            <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
+                            <p:outputLabel  value=""/>
+                            
+                        </p:panelGrid>
+
+
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
                     </div>
 
-                    <div class="EmptyBox20"/>
 
-                    <p:separator/>
 
-                    <div class="EmptyBox15"/>
+
+
+                    <div class="EmptyBox10"/>
 
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{operacaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{operacaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{operacaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{operacaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{operacaoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

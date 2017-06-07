@@ -40,7 +40,7 @@ public class Usuario implements Serializable {
     @OneToOne(optional = false)
     private Pessoa pessoa;
     @NotNull(message = "{senha_not_null}")
-    @Length(min = 8, max = 100, message = "{senha_length}")
+    @Length(min = 4, max = 1000, message = "{senha_length}")
     @Column(nullable = false)
     private String senha;
     @NotNull(message = "{grupo_privilegio_not_null}")

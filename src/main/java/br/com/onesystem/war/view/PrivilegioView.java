@@ -11,14 +11,18 @@ import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.RelatorioPrivilegioPorModulo;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.war.builder.PrivilegioBV;
 import br.com.onesystem.war.service.GrupoPrivilegioService;
 import br.com.onesystem.war.service.PrivilegioService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
+import javax.inject.Inject;
+
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -28,28 +32,37 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class PrivilegioView implements Serializable {
+public class PrivilegioView extends BasicMBImpl<Privilegio, PrivilegioBV> implements Serializable {
 
-    private boolean panel;
     private GrupoDePrivilegio grupoSelecionado;
     private GrupoDePrivilegio outroGrupo;
-    private List<GrupoDePrivilegio> grupoLista;
     private List<Privilegio> privilegioLista;
-    private List<GrupoDePrivilegio> gruposFiltrados;
 
-    @ManagedProperty("#{privilegioService}")
+    @Inject
     private PrivilegioService service;
 
-    @ManagedProperty("#{grupoPrivilegioService}")
+    @Inject
     private GrupoPrivilegioService grupoService;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        grupoSelecionado = new GrupoDePrivilegio();
+    }
+
+    public void limparJanela() {
         privilegioLista = new ArrayList<Privilegio>();
-        grupoLista = grupoService.buscarGrupoDePrivilegio();
+    }
+
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        String idComponent = event.getComponent().getId();
+        if (obj instanceof GrupoDePrivilegio && "grupoDePrivilegioID-search".equals(idComponent)) {
+            grupoSelecionado = (GrupoDePrivilegio) obj;
+            privilegioLista = service.buscarPrivilegioDoGrupo(grupoSelecionado);
+        } else if (obj instanceof GrupoDePrivilegio && "grupoDePrivilegioOutro-search".equals(idComponent)) {
+            outroGrupo = (GrupoDePrivilegio) obj;
+        }
     }
 
     public void save() {
@@ -81,10 +94,6 @@ public class PrivilegioView implements Serializable {
         }
     }
 
-    public void selecionaOutroGrupo(SelectEvent event) {
-        outroGrupo = (GrupoDePrivilegio) event.getObject();
-    }
-
     public void copiarDeOutroGrupo() {
         List<Privilegio> lista = service.buscarPrivilegioDoGrupo(outroGrupo);
         for (Privilegio p : privilegioLista) {
@@ -99,60 +108,6 @@ public class PrivilegioView implements Serializable {
             }
         }
         Collections.sort(privilegioLista, new RelatorioPrivilegioPorModulo());
-    }
-
-    public void limparJanela() {
-        privilegioLista = new ArrayList<Privilegio>();
-    }
-
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        buscarDados();
-    }
-
-    private void buscarDados() {
-        privilegioLista = service.buscarPrivilegioDoGrupo(grupoSelecionado);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
-    }
-
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
-    }
-
-    public GrupoDePrivilegio getGrupoSelecionado() {
-        return grupoSelecionado;
-    }
-
-    public void setGrupoSelecionado(GrupoDePrivilegio grupoSelecionado) {
-        this.grupoSelecionado = grupoSelecionado;
-    }
-
-    public List<GrupoDePrivilegio> getGrupoLista() {
-        return grupoLista;
-    }
-
-    public void setGrupoLista(List<GrupoDePrivilegio> grupoLista) {
-        this.grupoLista = grupoLista;
-    }
-
-    public List<GrupoDePrivilegio> getGruposFiltrados() {
-        return gruposFiltrados;
-    }
-
-    public void setGruposFiltrados(List<GrupoDePrivilegio> gruposFiltrados) {
-        this.gruposFiltrados = gruposFiltrados;
     }
 
     public PrivilegioService getService() {
@@ -187,4 +142,13 @@ public class PrivilegioView implements Serializable {
     public void setOutroGrupo(GrupoDePrivilegio outroGrupo) {
         this.outroGrupo = outroGrupo;
     }
+
+    public GrupoDePrivilegio getGrupoSelecionado() {
+        return grupoSelecionado;
+    }
+
+    public void setGrupoSelecionado(GrupoDePrivilegio grupoSelecionado) {
+        this.grupoSelecionado = grupoSelecionado;
+    }
+
 }
