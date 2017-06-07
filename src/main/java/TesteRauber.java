@@ -31,23 +31,13 @@ import javax.inject.Inject;
 public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
-        Date emissao = new Date();
 
-        ConfiguracaoContabil configuracao;
-
-        ConfiguracaoContabilService service = new ConfiguracaoContabilService();
-
-        configuracao = service.buscar();
+        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naUltimaEmissao().porCotacaoBancaria().listaDeResultados();
+        System.out.println(new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).getConsulta());
+        List<Conta> contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         
-        TipoReceita r = new ArmazemDeRegistros<TipoReceita>(TipoReceita.class).find(new Long(1));
-        
-        TipoDespesa d = new ArmazemDeRegistros<TipoDespesa>(TipoDespesa.class).find(new Long(1));
-        
-        ConfiguracaoContabilBV bv = new ConfiguracaoContabilBV(configuracao);
-        bv.setDespesaDeJuros(d);
-        
-
-        new AtualizaDAO<>().atualiza(bv.construirComID());
+        cotacaoLista.forEach(System.out::println);
+        contaComCotacao.forEach(System.out::println);
         
         System.out.println("Concluiu");
     }

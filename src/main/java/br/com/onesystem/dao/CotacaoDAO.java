@@ -72,11 +72,16 @@ public class CotacaoDAO {
     }
 
     public CotacaoDAO naMaiorEmissao(Date emissao) {
-        consulta += "and c.emissao in (select max(ct.emissao) from Cotacao ct "
+        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct "
                 + "where ct.emissao between :pEmissao and :pEmissaoFinal "
                 + "group by ct.conta) ";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
         parametros.put("pEmissaoFinal", emissao);
+        return this;
+    }
+
+    public CotacaoDAO naUltimaEmissao() {
+        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct group by ct.conta) ";
         return this;
     }
 

@@ -371,6 +371,14 @@ public class Baixa implements Serializable, Movimento {
         return receita;
     }
 
+    public TipoDeCobranca getTipoDeCobranca() {
+        return tipoDeCobranca;
+    }
+
+    public FormaDeCobranca getFormaDeCobranca() {
+        return formaDeCobranca;
+    }
+    
     @Override
     public Date getVencimento() {
         return null;

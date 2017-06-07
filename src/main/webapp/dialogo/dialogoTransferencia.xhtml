@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Cobranca}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+
+            <div class="ui-g-12">
+                <p:outputLabel value="#{l.Data}"/>
+                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid100" style="box-sizing: border-box" navigator="true" value="#{dialogoTransferenciaView.e.emissao}"/>
+                <p:separator/>
+            </div>
+
+            <div class="ui-g-6">
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Origem}: "/>
+                    <p:selectOneMenu  id="extratoOrigem" value="#{dialogoTransferenciaView.e.origem}" 
+                                      converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
+                        <p:ajax listener="#{dialogoTransferenciaView.selecionaCotacaoDeOrigemConformeConta}" update="vlConvertido vlOriginal vlTarifa btnVlTarifa EXCTarifa"/>
+                        <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                        <f:selectItems value="#{dialogoTransferenciaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Destino}"/>
+                    <p:selectOneMenu  id="extratoDestino" value="#{dialogoTransferenciaView.e.destino}" converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
+                        <p:ajax listener="#{dialogoTransferenciaView.selecionaCotacaoDeDestinoConformeConta}" update="vlConvertido"/>
+                        <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                        <f:selectItems value="#{dialogoTransferenciaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Valor}"/>
+                    <p:inputNumber id="vlOriginal" inputStyleClass="Wid100" inputStyle="box-sizing: border-box" symbol="#{dialogoTransferenciaView.e.origem.moeda.sigla} " value="#{dialogoTransferenciaView.e.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Valor_Convertido}"/>
+                    <p:inputNumber id="vlConvertido" inputStyleClass="Wid100" inputStyle="box-sizing: border-box" symbol="#{dialogoTransferenciaView.e.destino.moeda.sigla} " value="#{dialogoTransferenciaView.e.valorConvertido}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
+                </div>
+
+            </div>
+
+            <div class="ui-g-6" style="margin-top: 2%">
+
+                <p:panel header="#{l.Tarifas}" style="border-radius: 0px">
+
+                    <p:outputLabel value="#{l.Despesa}"/>
+                    <a:inputTextDialog id="pgTarifa" mbView="#{dialogoTransferenciaView}" dialog="#{selecaoTipoDespesaView}" value="#{dialogoTransferenciaView.baixaBV.despesa}" var="tipoDespesa" converter="tipoDespesaConverter"  itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" editVisible="true" styleDiv="padding: 0px !important"/>
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-8 ui-lg-4,ui-g-12 ui-md-6 ui-lg-2">
+                        <p:inputNumber placeholder="#{l.Valor}" id="vlTarifa" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" symbol="#{dialogoTransferenciaView.e.origem.moeda.sigla} " value="#{dialogoTransferenciaView.baixaBV.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                            <p:commandButton  id="btnVlTarifa" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-plus" action="#{dialogoTransferenciaView.addBaixa()}" update="tempDialog"/>
+                            <p:commandButton  disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-refresh" action="#{dialogoTransferenciaView.atualizaBaixa()}" update="tempDialog"/>
+                            <p:commandButton  disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-trash" action="#{dialogoTransferenciaView.deleteBaixa()}" update="tempDialog"/>
+                        </p:panelGrid>                    
+                    </p:panelGrid>
+
+
+
+                    <p:dataTable id="EXCTarifa" var="model" value="#{dialogoTransferenciaView.baixas}" selectionMode="single"
+                                 emptyMessage="#{l.Nao_Ha_Registros}" rowKey="#{baixa.id}" reflow="true" selection="#{dialogoTransferenciaView.baixaSelecionada}" >
+
+                        <p:ajax event="rowSelect" listener="#{dialogoTransferenciaView.selecionar}" update="tempDialog"/>
+
+                        <p:column headerText="#{l.Despesa}">
+                            <h:outputText value="#{model.object.despesa.nome}"/>
+                        </p:column>  
+                        <p:column headerText="#{l.Valor}">
+                            <h:outputText value="#{model.object.valorFormatado}"/>
+                        </p:column>
+                    </p:dataTable>
+
+                </p:panel>
+            </div>
+
+            <section>
+
+                <div class="EmptyBox5"/>
+                <p:separator/>
+                <p:commandButton value="#{l.Transferir}" action="#{dialogoTransferenciaView.transferir()}" update="tempDialog"/>
+                <p:commandButton value="#{l.Fechar}" action="#{dialogoTransferenciaView.fechar}" styleClass="orange-btn"/>
+            </section>
+
+        </div>
+
+    </ui:define>
+</ui:composition>
