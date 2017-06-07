@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
@@ -40,6 +41,7 @@ public class TituloBuilder {
     private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
     private Cotacao cotacao;
+    private FaturaLegada faturaLegada;
 
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Boolean entrada;
@@ -99,6 +101,11 @@ public class TituloBuilder {
         return this;
     }
 
+    public TituloBuilder comFaturaLegada(FaturaLegada faturaLegada) {
+        this.faturaLegada = faturaLegada;
+        return this;
+    }
+
     public TituloBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
@@ -126,7 +133,7 @@ public class TituloBuilder {
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada);
+                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, faturaLegada);
     }
 
 }

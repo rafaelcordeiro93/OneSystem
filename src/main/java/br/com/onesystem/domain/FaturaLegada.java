@@ -2,8 +2,11 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -49,23 +52,44 @@ public class FaturaLegada implements Serializable {
     private Pessoa pessoa;
 
     @OneToMany(mappedBy = "faturaLegada", cascade = {CascadeType.ALL})
-    private List<Cobranca> cobranca;
+    private List<Titulo> titulo;
 
     public FaturaLegada() {
     }
 
-    public FaturaLegada(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Cobranca> cobranca) throws DadoInvalidoException {
+    public FaturaLegada(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo) throws DadoInvalidoException {
         this.id = id;
         this.codigo = codigo;
         this.total = total;
         this.emissao = emissao;
         this.pessoa = pessoa;
-        this.cobranca = cobranca;
+        this.titulo = titulo;
         ehValido();
     }
 
+    public void adiciona(Titulo t) {
+        if (titulo == null) {
+            titulo = new ArrayList<>();
+        }
+        t.setFaturaLegada(this);
+        titulo.add(t);
+    }
+
+    public void atualiza(Titulo t) {
+        if (t.getId() != null) {
+            titulo.set(titulo.indexOf(t), t);
+        } else {
+            t.setFaturaLegada(this);
+            titulo.add(t);
+        }
+    }
+
+    public void remove(Titulo t) {
+        titulo.remove(t);
+    }
+
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa", "cobranca");
+        List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa");
         new ValidadorDeCampos<FaturaLegada>().valida(this, campos);
     }
 
@@ -77,6 +101,10 @@ public class FaturaLegada implements Serializable {
         return codigo;
     }
 
+    public BigDecimal getTotal() {
+        return total;
+    }
+
     public Date getEmissao() {
         return emissao;
     }
@@ -85,8 +113,13 @@ public class FaturaLegada implements Serializable {
         return pessoa;
     }
 
-    public List<Cobranca> getCobranca() {
-        return cobranca;
+    public List<Titulo> getTitulo() {
+        return titulo;
+    }
+
+    public Moeda getMoedaPadrao() throws EDadoInvalidoException {
+        Configuracao cfg = new ConfiguracaoService().buscar();
+        return cfg.getMoedaPadrao();
     }
 
     @Override
@@ -106,7 +139,7 @@ public class FaturaLegada implements Serializable {
 
     @Override
     public String toString() {
-        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cobranca=" + cobranca + '}';
+        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + '}';
     }
 
 }

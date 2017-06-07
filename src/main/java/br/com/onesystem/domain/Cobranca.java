@@ -96,9 +96,6 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne
     private Nota nota;
 
-    @ManyToOne
-    private FaturaLegada faturaLegada;
-
     @OneToMany(mappedBy = "cobranca")
     private List<TipoDeCobranca> tiposDeCobranca;
 
