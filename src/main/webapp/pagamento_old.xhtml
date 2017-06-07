@@ -1,0 +1,415 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <h:form id="formPagamento">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card">        
+
+                        <h2 class="BigTopic Red">#{l.Pagar_Valores}</h2>
+
+                        <div class="EmptyBox15"/>
+
+                        <table>
+                            <tr>
+                                <td>
+                                    <p:outputLabel value="#{l.Id}"/>
+                                </td>
+                                <td>
+                                    <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
+                                        <p:inputNumber id="margem" size="26" value="#{ajusteDeEstoqueView.ajusteDeEstoque.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
+                                            <p:ajax event="blur" listener="#{ajusteDeEstoqueView.buscaPorId}" update=":conteudo"/>
+                                        </p:inputNumber>
+                                        <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoAjusteDeEstoqueView.abrirDialogo()}" process="@this" update="@none">
+                                            <p:ajax event="dialogReturn" listener="#{ajusteDeEstoqueView.selecionaAjusteDeEstoque}" update=":conteudo" process="@this"/>
+                                        </p:commandButton>
+                                    </h:panelGrid>   
+                                </td>
+                                <td>
+                                    <p:outputLabel value="#{l.Data}"/>
+                                </td>
+                                <td>
+                                    <p:calendar pattern="dd/MM/yyyy HH:mm:ss" navigator="true" value="#{pagamentoView.data}"/>   
+                                </td>
+                            </tr>
+                        </table>
+
+
+                        <p:separator/>
+
+                        <h:outputText styleClass="Red" value="#{l.Tipos_De_Pagamento}" />
+                        <p:dataTable id="listaPerfilDeValorDT" var="perfilDeValor" value="#{pagamentoView.listaPerfilDeValor}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                     selection="#{pagamentoView.perfilDeValorSelecionado}" filteredValue="" rowKey="#{perfilDeValor.valor}" reflow="true" style="border: none" >
+
+                            <p:ajax event="rowSelect" process="@this" listener="#{pagamentoView.abrirPerfilDeValorComDados}" update=":conteudo"/>
+
+                            <p:column headerText="#{l.Documento}" >
+                                <h:outputText value="#{perfilDeValor.id}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Historico}" colspan="3">
+                                <h:outputText value="#{perfilDeValor.historico}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Conta}" >
+                                <h:outputText value="#{perfilDeValor.cotacao.conta.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Vencimento}" >
+                                <h:outputText value="#{perfilDeValor.vencimento}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" >
+                                <h:outputText value="#{perfilDeValor.pessoa.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Origem}" >
+                                <h:outputText value="#{perfilDeValor.cotacao.conta.origemDeTransferencias}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Valor}">
+                                <h:outputText value="#{perfilDeValor.valorFormatado}"/>
+                            </p:column>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="8" style="text-align:right" footerText="" />
+                                    <p:column footerText="" style="color: #E53935"/>
+                                </p:row>                                    
+                            </p:columnGroup>
+                        </p:dataTable>
+
+
+                        <p:separator/>
+
+
+                        <p:commandButton value="#{l.Titulo}" action="#{pagamentoView.abrirTitulo}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Despesa_Provisionada}" action="#{pagamentoView.abrirDespesaProvisionada}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Despesa_Eventual}" action="#{pagamentoView.abrirDespesaEventual}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Remover}" action="#{pagamentoView.delete()}" styleClass="Mar2 red-btn" update="conteudo" icon="fa fa-trash-o Fs16 White"/>
+
+
+
+                        <p:separator/>
+
+                        <h:outputText styleClass="Red" value="#{l.Formas_De_Pagamento}" />
+                        <p:dataTable id="formasPagamento" var="formaPR" value="#{pagamentoView.listaFormaPagamentoRecebimento}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                     selection="#{pagamentoView.formaPagamentoRecebimentoSelecionado}" rowKey="#{formaPR.valor}" reflow="true" style="border: none" >
+
+                            <p:ajax event="rowSelect" process="@this" listener="#{pagamentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                            <p:column headerText="#{l.Operacao}" >
+                                <h:outputText value="#{formaPR.id}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" >
+                                <h:outputText value="#{formaPR.historico}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Historico}" colspan="3">
+                                <h:outputText value="#{formaPR.cotacao.conta.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Valor}" >
+                                <h:outputText value="#{formaPR.vencimento}"/>
+                            </p:column>
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="4" style="text-align:right" footerText="" />
+                                    <p:column footerText="" style="color: #E53935"/>
+                                </p:row>                                    
+                            </p:columnGroup>
+                        </p:dataTable>
+
+
+                        <p:separator/>
+
+
+                        <p:commandButton value="#{l.Cheque_Emitido}" action="#{pagamentoView.abrirChequeEmitido}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Cheque_Terceiro}" action="#{pagamentoView.abrirChequeTerceiro}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Debito_CC}" action="#{pagamentoView.abrirDebitoCC}" styleClass="Mar2 red-btn" update="conteudo"/>
+                        <p:commandButton value="#{l.Remover}" action="#{pagamentoView.delete()}" styleClass="Mar2 red-btn" update="conteudo" icon="fa fa-trash-o Fs16 White"/>                                 
+                        <p:separator/>
+                        <p:commandButton value="#{l.Pagar_Valores}" action="#{pagamentoView.pagar()}" styleClass="Mar2 red-btn" update="conteudo" icon="fa fa-dollar Fs16 White" />
+
+
+                    </div>
+                </div>
+            </div>
+
+        </h:form>
+        <!-- DIALOGOS -->
+
+        <!-- DIALOGOS DE TITULOS -->
+        <p:dialog header="#{l.Pagar_Titulo}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarTitulo" draggable="false">
+            <p:panelGrid id="dados" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                <p:commandButton icon="fa fa-search Fs16 White" value="#{l.Buscar_Titulo}" action="#{selecaoTituloPagarView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="Mar2 red-btn">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaTitulo}"
+                            process="@this" update="dados :conteudo:valorPagoDP :conteudo:historicoTitulo"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.titulo.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{pagamentoView.titulo.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.titulo.emissao}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.titulo.vencimento}"/>                
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.titulo.valor}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Saldo}: #{pagamentoView.titulo.saldo}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Origem}: #{pagamentoView.titulo.recepcao.id}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.titulo.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-10 ui-md-2,ui-g-10 ui-md-3,ui-g-10 ui-md-2 ui-grc-2,ui-g-10 ui-md-3">
+
+                <p:outputLabel value="#{l.Moeda}:" styleClass="Red" />
+                <p:selectOneMenu  id="MoedaTitulo" value="#{pagamentoView.despesaEventual.cotacao}" converter="cotacaoConverter">
+                    <f:selectItems  var="cotacao" value="#{pagamentoView.buscarListaDeCotacao()}" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{pagamentoView.despesaEventual.cotacao}"/>
+                    <p:ajax event="itemSelect" update=":conteudo:valorPagoDP"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" />
+                <p:inputNumber id="valorPagoDP" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{pagamentoView.titulo.cotacao.conta.moeda.sigla} " 
+                               decimalPlaces="2" value="#{pagamentoView.titulo.valor}"/>
+
+                <p:outputLabel value="#{l.Historico}:" styleClass="Red" />
+                <p:inputTextarea  id="historicoTitulo" autoResize="true" placeholder="#{l.Escreva_Um_Comentario}" rows="1" cols="26" maxlength="150" value="#{pagamentoView.baixa.historico}"/>
+
+            </p:panelGrid>
+            <p:separator/>
+            <p:commandButton value="#{l.Confirmar}" styleClass="Mar2 red-btn" update=":conteudo" action="#{pagamentoView.addTituloNaLista()}"  onclick="PF('pagarTitulo').hide()" />
+        </p:dialog>       
+
+
+
+
+        <!-- DIALOGOS DE DESPESA PROVISIONADA -->
+        <p:dialog header="#{l.Pagar_Despesa_Provisionada}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarDespesaProvisionada" draggable="false">
+
+            <p:panelGrid id="dadosDP" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                <p:commandButton icon="fa fa-search Fs16 White" value="#{l.Buscar_Despesa_Provisionada}" action="#{selecaoDespesaProvisionadaView.abrirDialogo()}" process="@this"
+                                 update="@none" styleClass="Mar2 red-btn">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaDespesaProvisionada}"
+                            process="@this" update="dadosDP :conteudo:valorRecebido :conteudo:historicoDP"/>
+                </p:commandButton>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.despesaProvisionada.id}"/>
+                <p:outputLabel value="#{l.Pessoa}: #{pagamentoView.despesaProvisionada.pessoa.nome}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.despesaProvisionada.emissao}"/>
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.despesaProvisionada.vencimento}"/>                
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.despesaProvisionada.valor}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Cambio}: #{pagamentoView.despesaProvisionada.cambio.id}"/>
+                <p:outputLabel value="#{l.Despesa}: #{pagamentoView.despesaProvisionada.despesa.nome}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.despesaProvisionada.historico}"/> 
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-10 ui-md-2,ui-g-10 ui-md-3,ui-g-10 ui-md-2 ui-grc-2,ui-g-10 ui-md-3">
+
+                <p:outputLabel value="#{l.Moeda}:" styleClass="Red" />
+                <p:selectOneMenu  id="MoedaDP" value="#{pagamentoView.despesaEventual.cotacao}" converter="cotacaoConverter">
+                    <f:selectItems  var="cotacao" value="#{pagamentoView.buscarListaDeCotacao()}" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{pagamentoView.despesaEventual.cotacao}"/>
+                    <p:ajax event="itemSelect" update=":conteudo:valorRecebido"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" />
+                <p:inputNumber id="valorRecebido"  maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                               symbol="#{pagamentoView.despesaProvisionada.cotacao.conta.moeda.sigla} " decimalPlaces="2" value="#{pagamentoView.despesaProvisionada.valor}"/>
+
+                <p:outputLabel value="#{l.Historico}:" styleClass="Red" />
+                <p:inputTextarea id="historicoDP" autoResize="true" placeholder="#{l.Escreva_Um_Comentario}" maxlength="150" value="#{pagamentoView.despesaProvisionada.historico}" rows="1" cols="26"/>
+            </p:panelGrid>
+
+            <p:separator/>
+            <p:commandButton value="#{l.Confirmar}" styleClass="Mar2 red-btn" update=":conteudo" action="#{pagamentoView.addDespesaProvisonadaNaLista()}"  onclick="PF('pagarTitulo').hide()" />
+
+        </p:dialog>
+
+
+
+
+        <!-- DIALOGOS DE DESPESA EVENTUAL -->
+        <p:dialog header="#{l.Pagar_Despesa}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="despesaEventual" draggable="false">
+
+
+            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                <p:outputLabel value="#{l.Pessoa}:" styleClass="Red" style="margin-left: 1%"/>
+                <p:outputLabel value="#{l.Despesa}:" styleClass="Red" style="margin-left: 1%"/>
+
+                <h:panelGrid columns="2" style="margin-left: -1%">
+                    <p:inputText id="pagamentoDespesaPessoa" readonly="true" placeholder="#{l.Pessoa}"  value="#{pagamentoView.despesaEventual.pessoa.nome}"/>
+                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                     update="@none" styleClass="RedButton">
+                        <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaPessoaEventual}"
+                                process="@this" update="pagamentoDespesaPessoa" />
+                    </p:commandButton>
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="margin-left: -1%">
+                    <p:inputText id="pagamentoDespesaDespesa" readonly="true" placeholder="#{l.Despesa}" value="#{pagamentoView.despesaEventual.despesa.nome}"/>
+                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
+                                     update="@none" styleClass="RedButton">
+                        <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaDespesaEventual}"
+                                process="@this" update="pagamentoDespesaDespesa" />
+                    </p:commandButton>
+                </h:panelGrid>
+
+            </p:panelGrid>
+
+            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-10 ui-md-2,ui-g-10 ui-md-3,ui-g-10 ui-md-2 ui-grc-2,ui-g-10 ui-md-3">
+
+                <p:outputLabel value="#{l.Moeda}:" styleClass="Red" />
+                <p:selectOneMenu  id="OperacaoFinaceira" value="#{pagamentoView.despesaEventual.cotacao}" converter="cotacaoConverter">
+                    <f:selectItems  var="cotacao" value="#{pagamentoView.buscarListaDeCotacao()}" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{pagamentoView.despesaEventual.cotacao}"/>
+                    <p:ajax event="itemSelect" update=":conteudo:vlDe"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{l.Valor_Pago}:" styleClass="Red" />
+                <p:inputNumber id="vlDe" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                               symbol="#{pagamentoView.despesaEventual.cotacao.conta.moeda.sigla} " decimalPlaces="2" value="#{pagamentoView.despesaEventual.valor}"/>
+
+                <p:outputLabel value="#{l.Historico}:" styleClass="Red" />
+                <p:inputTextarea autoResize="true" placeholder="#{l.Escreva_Um_Comentario}"
+                                 rows="1" cols="26" maxlength="150" value="#{pagamentoView.despesaEventual.historico}"/>
+
+            </p:panelGrid>
+
+            <p:separator/>
+            <p:commandButton value="#{l.Confirmar}" styleClass="Mar2 red-btn" action="#{pagamentoView.addDespesaEventualNaLista()}" update=":conteudo" onclick="PF('pagarTitulo').hide()" />
+
+        </p:dialog>
+
+
+
+
+        <!-- DIALOGOS DE CHEQUES EMITIDOS -->
+        <p:dialog header="#{l.Cheque_Emitido}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="chequeEmitido" draggable="false">
+            <p:panelGrid id="chequeEmitidoPG" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-grc-2">
+
+                <h:panelGrid columns="3" style="margin-left: -1%">
+                    <p:outputLabel value="#{l.Cheque}"/>
+                    <p:inputText id="contaChequeEmitido" size="23" value="#{pagamentoView.chequeEmitido}" readonly="true" maxlength="60"/>
+                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this" update="@none">
+                        <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaChequeEmitido}" process="@this" update="contaChequeEmitido" />
+                    </p:commandButton>
+                </h:panelGrid>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.chequeEmitido.id}"/>
+                <p:outputLabel value="#{l.Banco}: #{pagamentoView.chequeEmitido.banco.nome}"/>
+                <p:outputLabel value="#{l.Agencia}: #{pagamentoView.chequeEmitido.agencia}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.chequeEmitido.emissao}"/>                
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.chequeEmitido.vencimento}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Numero_Cheque}: #{pagamentoView.chequeEmitido.numeroCheque}"/>
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.chequeEmitido.valor}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.chequeEmitido.historico}"/> 
+
+            </p:panelGrid>
+            
+            <p:panelGrid>
+           
+            </p:panelGrid>
+
+            <p:separator/>
+            <p:commandButton value="#{l.Confirmar}" styleClass="Mar2 red-btn" update=":conteudo" action="#{pagamentoView.confirmar()}"  onclick="PF('chequeEmitido').hide()" />
+        </p:dialog>    
+
+
+
+        <!-- DIALOGOS DE CHEQUES TERCEIROS    -->
+        <p:dialog header="#{l.Cheque_Terceiro}" resizable="false" width="800" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="chequeTerceiro" draggable="false">
+            <p:panelGrid id="chequeTerceiroPG" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-grc-2">
+
+                <h:panelGrid columns="3" style="margin-left: -1%">
+                    <p:outputLabel value="#{l.Cheque}"/>
+                    <p:inputText id="contaChequeTerceiro" size="23" value="#{pagamentoView.chequeTerceiro}" readonly="true" maxlength="60"/>
+                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this" update="@none">
+                        <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaChequeTerceiro}" process="@this" update="contaChequeEmitido" />
+                    </p:commandButton>
+                </h:panelGrid>
+                <p:outputLabel/>
+                <p:outputLabel value="#{l.Codigo}: #{pagamentoView.chequeTerceiro.id}"/>
+                <p:outputLabel value="#{l.Banco}: #{pagamentoView.chequeTerceiro.banco.nome}"/>
+                <p:outputLabel value="#{l.Agencia}: #{pagamentoView.chequeTerceiro.agencia}"/>
+                <p:outputLabel value="#{l.Emissao}: #{pagamentoView.chequeTerceiro.emissao}"/>                
+                <p:outputLabel value="#{l.Vencimento}: #{pagamentoView.chequeTerceiro.vencimento}" styleClass="Red"/>
+                <p:outputLabel value="#{l.Numero_Cheque}: #{pagamentoView.chequeTerceiro.numeroCheque}"/>
+                <p:outputLabel value="#{l.Valor}: #{pagamentoView.chequeTerceiro.valor}"/>
+                <p:outputLabel value="#{l.Historico}: #{pagamentoView.chequeTerceiro.historico}"/> 
+
+            </p:panelGrid>
+
+            <p:separator/>
+            <p:commandButton value="#{l.Confirmar}" styleClass="Mar2 red-btn" update=":conteudo" action="#{pagamentoView.confirmar()}"  onclick="PF('chequeEmitido').hide()" />
+        </p:dialog>    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!-- DIALOGOS DE PAGAR DESPESA PROVISIONADA -->
+        <p:dialog header="#{l.Pagar_Despesa_Provisionada}" resizable="false" width="950" maximizable="true" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="pagarDP" draggable="false">
+            <h:panelGrid columns="3">
+                <p:inputText id="relatorioCambioPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{pagamentoView.pessoa.nome}"/>
+                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionaPessoa}"
+                            process="@this" update="relatorioCambioPessoa" />
+                </p:commandButton>
+                <pe:inputNumber maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                symbol="R$ " decimalPlaces="2">
+                    <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                </pe:inputNumber>                 
+            </h:panelGrid>
+
+            <p:dataTable id="pagamentoDP" scrollable="true" var="baixa" value="#{pagamentoView.baixaLista}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                         selection="#{pagamentoView.baixaSelecionada}" rowKey="#{baixa.id}" reflow="true" style="border: none" >
+
+                <p:ajax event="rowSelect" process="@this" listener="#{pagamentoView.abrirBaixaComDados}" update=":conteudo"/>
+
+                <p:column headerText="#{l.Documento}" >
+                    <h:outputText />
+                </p:column>  
+                <p:column headerText="#{l.Emissao}" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="#{l.Vencimento}" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="#{l.Origem}" >
+                    <h:outputText />
+                </p:column>
+                <p:column headerText="#{l.Valor}">
+                    <h:outputText />
+                </p:column>
+
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column />
+                        <p:column />
+                        <p:column />
+                        <p:column colspan="1" style="text-align:right" footerText="#{l.Totais}" />
+                        <p:column />
+                    </p:row>                                    
+                </p:columnGroup>
+            </p:dataTable>   
+
+            <div class="EmptyBox5"/>
+
+            <p:commandButton value="#{l.Confirmar}"/>
+
+        </p:dialog>
+
+    </ui:define>
+
+</ui:composition>

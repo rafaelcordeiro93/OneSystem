@@ -47,13 +47,13 @@ public class CalculadoraDePreco {
         }
         soma = cem.subtract(soma);
         this.markup = cem.divide(soma, 2, BigDecimal.ROUND_UP);
-        this.precoMarkup = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.MEDIO ? markup.multiply(new ItemService().custoMedio(item))
+        this.precoMarkup = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? markup.multiply(new ItemService().custoMedio(item))
                 : markup.multiply(new ItemService().ultimoCusto(item));
 
     }
 
     private void calculaMargemContribuicao() {
-        BigDecimal custo = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.MEDIO ? new ItemService().custoMedio(item)
+        BigDecimal custo = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? new ItemService().custoMedio(item)
                 : new ItemService().ultimoCusto(item);
         this.margemContribuicao = item.getMargem().getMargem();
         BigDecimal mc = margemContribuicao.divide(new BigDecimal(100), BigDecimal.ROUND_UP);

@@ -13,10 +13,13 @@ import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
+import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -34,16 +37,12 @@ import java.util.List;
 public class BaixaBuilder {
 
     private Long id;
-    private Integer numeroParcela;
-    private BigDecimal juros = BigDecimal.ZERO;
     private BigDecimal valor = BigDecimal.ZERO;
-    private BigDecimal multas = BigDecimal.ZERO;
-    private BigDecimal desconto = BigDecimal.ZERO;
     private String historico = "";
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private Cobranca perfilDeValor;
+    private Cobranca cobranca;
     private TipoDespesa despesa;
     private TipoReceita receita;
     private Pessoa pessoa;
@@ -52,36 +51,18 @@ public class BaixaBuilder {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado = EstadoDeBaixa.EFETIVADO;
-    private CobrancaFixa movimentoFixo;
+    private CobrancaFixa cobrancaFixa;
     private ValorPorCotacao valorPorCotacao;
+    private TipoDeCobranca tipoDeCobranca;
+    private FormaDeCobranca formaDeCobranca;
 
     public BaixaBuilder comId(Long id) {
         this.id = id;
         return this;
     }
 
-    public BaixaBuilder comNumeroParcela(Integer numeroParcela) {
-        this.numeroParcela = numeroParcela;
-        return this;
-    }
-
-    public BaixaBuilder comJuros(BigDecimal juros) {
-        this.juros = juros;
-        return this;
-    }
-
     public BaixaBuilder comValor(BigDecimal valor) {
         this.valor = valor;
-        return this;
-    }
-
-    public BaixaBuilder comMultas(BigDecimal multas) {
-        this.multas = multas;
-        return this;
-    }
-
-    public BaixaBuilder comDesconto(BigDecimal desconto) {
-        this.desconto = desconto;
         return this;
     }
 
@@ -95,7 +76,7 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comNaturezaFinanceira(OperacaoFinanceira naturezaFinanceira) {
+    public BaixaBuilder comOperacaoFinanceira(OperacaoFinanceira naturezaFinanceira) {
         this.naturezaFinanceira = naturezaFinanceira;
         return this;
     }
@@ -140,13 +121,23 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comPerfilDeValor(Cobranca perfilDeValor) {
-        this.perfilDeValor = perfilDeValor;
+    public BaixaBuilder comCobranca(Cobranca cobranca) {
+        this.cobranca = cobranca;
         return this;
     }
 
-    public BaixaBuilder comMovimentoFixo(CobrancaFixa movimentoFixo) {
-        this.movimentoFixo = movimentoFixo;
+    public BaixaBuilder comTipoDeCobranca(TipoDeCobranca tipoDeCobranca) {
+        this.tipoDeCobranca = tipoDeCobranca;
+        return this;
+    }
+
+    public BaixaBuilder comFormaDeCobranca(FormaDeCobranca formaDeCobranca) {
+        this.formaDeCobranca = formaDeCobranca;
+        return this;
+    }
+
+    public BaixaBuilder comCobrancaFixa(CobrancaFixa cobrancaFixa) {
+        this.cobrancaFixa = cobrancaFixa;
         return this;
     }
 
@@ -156,7 +147,7 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, numeroParcela, juros, valor, multas, desconto, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, perfilDeValor, movimentoFixo, valorPorCotacao);
+        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca);
     }
 
 }

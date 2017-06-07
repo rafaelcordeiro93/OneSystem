@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.builder.FormaDeCobrancaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
@@ -23,6 +24,7 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
     private Long id;
     private Cobranca cobranca;
     private Recebimento recebimento;
+    private Pagamento pagamento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -43,6 +45,7 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
         this.desconto = f.getDesconto();
         this.observacao = f.getObservacao();
         this.cotacao = f.getCotacao();
+        this.pagamento = f.getPagamento();
     }
 
     public Long getId() {
@@ -75,6 +78,14 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
 
     public void setValor(BigDecimal valor) {
         this.valor = valor;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
     public BigDecimal getJuros() {
@@ -120,14 +131,14 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
     public FormaDeCobranca construir() throws DadoInvalidoException {
         return new FormaDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .construir();
+                .comPagamento(pagamento).construir();
     }
 
     @Override
     public FormaDeCobranca construirComID() throws DadoInvalidoException {
         return new FormaDeCobrancaBuilder().comId(id).comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .construir();
+                .comPagamento(pagamento).construir();
     }
 
 }

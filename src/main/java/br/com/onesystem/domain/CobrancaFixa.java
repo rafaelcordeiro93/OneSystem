@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -78,13 +79,9 @@ public abstract class CobrancaFixa implements Serializable {
     @OneToMany(mappedBy = "movimentoFixo", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
-    @NotNull(message = "{mesReferencia_not_null}")
-    @Min(value = 0, message = "{mesReferencia_min}")
-    private Integer mesReferencia;
-
-    @NotNull(message = "{anoReferencia_not_null}")
-    @Min(value = 0, message = "{anoReferencia_min}")
-    private Integer anoReferencia;
+    @NotNull(message = "{referencia_not_null}")
+    @Temporal(TemporalType.DATE)
+    private Date referencia;
 
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
@@ -102,7 +99,7 @@ public abstract class CobrancaFixa implements Serializable {
 
     public CobrancaFixa(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
-            Integer mesReferencia, Integer anoReferencia) throws DadoInvalidoException {
+            Date referencia) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -112,14 +109,20 @@ public abstract class CobrancaFixa implements Serializable {
         this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
         this.vencimento = vencimento;
-        this.mesReferencia = mesReferencia;
-        this.anoReferencia = anoReferencia;
+        this.referencia = referencia;
         ehAbstracaoValida();
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "mesReferencia", "anoReferencia");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "referencia");
         new ValidadorDeCampos<CobrancaFixa>().valida(this, campos);
+    }
+
+    public void adiciona(Baixa baixa) {
+        if (baixas == null) {
+            baixas = new ArrayList<>();
+        }
+        this.baixas.add(baixa);
     }
 
     public abstract String getDetalhes();
@@ -164,14 +167,10 @@ public abstract class CobrancaFixa implements Serializable {
         return vencimento;
     }
 
-    public Integer getMesReferencia() {
-        return mesReferencia;
+    public Date getReferencia() {
+        return referencia;
     }
 
-    public Integer getAnoReferencia() {
-        return anoReferencia;
-    }
-    
     public Long getDias() {
         LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate e = getEmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

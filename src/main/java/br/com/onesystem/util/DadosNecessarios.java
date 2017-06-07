@@ -7,6 +7,7 @@ package br.com.onesystem.util;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.ContaDeEstoque;
@@ -14,9 +15,12 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.TipoDespesa;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
-import br.com.onesystem.war.service.ColunaService;
+import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
@@ -25,8 +29,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.context.RequestContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
@@ -37,8 +44,24 @@ public class DadosNecessarios implements Serializable {
     private List<DadosNecessariosBV> pendencias = new ArrayList<>();
     private FacesContext fc = FacesContext.getCurrentInstance();
     private BundleUtil b = new BundleUtil();
+    private ConfiguracaoContabil configuracaoContabil;
+    private ConfiguracaoEstoque configuracaoEstoque;
+    private Configuracao configuracao;
+    private ConfiguracaoVenda configuracaoVenda;
+
+    public void init() {
+        try {
+            configuracaoContabil = new ConfiguracaoContabilService().buscar();
+            configuracaoEstoque = new ConfiguracaoEstoqueService().buscar();
+            configuracao = new ConfiguracaoService().buscar();
+            configuracaoVenda = new ConfiguracaoVendaService().buscar();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
 
     public List<DadosNecessariosBV> valida(String janela) {
+        init();
         switch (janela) {
             case "/notaEmitida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
@@ -46,18 +69,56 @@ public class DadosNecessarios implements Serializable {
                 getContaDeEstoque();
                 getOperacoes();
                 getFormaRecebimentoDevolucaoPadraoEmpresa();
+                getReceitaDeDescontosObtidos();
+                getReceitaDeJuros();
+                getReceitaDeMultas();
+                getReceitaDeVariacaoCambial();
+                getDespesaDeDescontosConcedidos();
+                getDespesaDeJuros();
+                getDespesaDeMultas();
+                getDespesaDeVariacaoCambial();
                 break;
             }
-             case "/desdobramentoDeVenda.xhtml": {
+            case "/desdobramentoDeVenda.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getContaDeEstoque();
                 getOperacoes();
                 getFormaRecebimentoDevolucaoPadraoEmpresa();
+                getReceitaDeDescontosObtidos();
+                getReceitaDeJuros();
+                getReceitaDeMultas();
+                getReceitaDeVariacaoCambial();
+                getDespesaDeDescontosConcedidos();
+                getDespesaDeJuros();
+                getDespesaDeMultas();
+                getDespesaDeVariacaoCambial();
                 break;
-            }case "/recebimento.xhtml": {
+            }
+            case "/recebimento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
+                getReceitaDeDescontosObtidos();
+                getReceitaDeJuros();
+                getReceitaDeMultas();
+                getReceitaDeVariacaoCambial();
+                getDespesaDeDescontosConcedidos();
+                getDespesaDeJuros();
+                getDespesaDeMultas();
+                getDespesaDeVariacaoCambial();
+                break;
+            }
+            case "/pagamento.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                getReceitaDeDescontosObtidos();
+                getReceitaDeJuros();
+                getReceitaDeMultas();
+                getReceitaDeVariacaoCambial();
+                getDespesaDeDescontosConcedidos();
+                getDespesaDeJuros();
+                getDespesaDeMultas();
+                getDespesaDeVariacaoCambial();
                 break;
             }
             case "/orcamento.xhtml": {
@@ -99,16 +160,11 @@ public class DadosNecessarios implements Serializable {
 
     private ContaDeEstoque getContaDeEstoque() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
-
-        ConfiguracaoEstoqueService configuracaoEstoqueService = new ConfiguracaoEstoqueService();
-        ConfiguracaoEstoque conf = configuracaoEstoqueService.buscar();
         try {
-            if (conf.getContaDeEstoqueEmpresa() == null) {
-                bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
-                pendencias.add(bv);
-                return null;
+            if (configuracaoEstoque.getContaDeEstoqueEmpresa() == null) {
+                throw new NullPointerException();
             }
-            return conf.getContaDeEstoqueEmpresa();
+            return configuracaoEstoque.getContaDeEstoqueEmpresa();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
             pendencias.add(bv);
@@ -119,15 +175,11 @@ public class DadosNecessarios implements Serializable {
     private Moeda getMoedaPadrao() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
         try {
-            ConfiguracaoService configuracaoService = new ConfiguracaoService();
-            Configuracao conf = configuracaoService.buscar();
-            if (conf.getMoedaPadrao() == null) {
-                bv.getLista().add(b.getMessage("moeda_padrao_not_null"));
-                pendencias.add(bv);
-                return null;
+            if (configuracao.getMoedaPadrao() == null) {
+                throw new NullPointerException();
             }
-            return conf.getMoedaPadrao();
-        } catch (DadoInvalidoException ex) {
+            return configuracao.getMoedaPadrao();
+        } catch (NullPointerException ex) {
             bv.getLista().add(b.getMessage("moeda_padrao_not_null"));
             pendencias.add(bv);
             return null;
@@ -137,14 +189,11 @@ public class DadosNecessarios implements Serializable {
     private FormaDeRecebimento getFormaRecebimentoDevolucaoPadraoEmpresa() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
         try {
-            ConfiguracaoVendaService configuracaoService = new ConfiguracaoVendaService();
-            ConfiguracaoVenda conf = configuracaoService.buscar();
-            if (conf.getFormaDeRecebimentoDevolucaoEmpresa() == null) {
-                bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
-                pendencias.add(bv);
-                return null;
+
+            if (configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa() == null) {
+                throw new NullPointerException();
             }
-            return conf.getFormaDeRecebimentoDevolucaoEmpresa();
+            return configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getLabel("Deve_Selecionar_Forma_Recebimento_Devolucao_Padrao"));
             pendencias.add(bv);
@@ -158,15 +207,11 @@ public class DadosNecessarios implements Serializable {
             if (moeda != null) {
                 Cotacao cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
                 if (cotacao == null) {
-                    bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
-                    pendencias.add(bv);
-                    return null;
+                    throw new FDadoInvalidoException("");
                 }
                 return cotacao;
             } else {
-                bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
-                pendencias.add(bv);
-                return null;
+                throw new FDadoInvalidoException("");
             }
         } catch (DadoInvalidoException ex) {
             bv.getLista().add(b.getMessage("Cotacao_Dia_Deve_Ser_Cadastrada"));
@@ -177,16 +222,11 @@ public class DadosNecessarios implements Serializable {
 
     private Operacao getOperacaoDeComanda() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
-
-        ConfiguracaoVendaService configuracaoVendaService = new ConfiguracaoVendaService();
-        ConfiguracaoVenda conf = configuracaoVendaService.buscar();
         try {
-            if (conf.getOperacaoDeComanda() == null) {
-                bv.getLista().add(b.getMessage("Operacao_Comanda_Not_Null"));
-                pendencias.add(bv);
-                return null;
+            if (configuracaoVenda.getOperacaoDeComanda() == null) {
+                throw new NullPointerException();
             }
-            return conf.getOperacaoDeComanda();
+            return configuracaoVenda.getOperacaoDeComanda();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("Operacao_Comanda_Not_Null"));
             pendencias.add(bv);
@@ -196,16 +236,11 @@ public class DadosNecessarios implements Serializable {
 
     private Operacao getOperacaoDeCondicional() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
-
-        ConfiguracaoVendaService configuracaoVendaService = new ConfiguracaoVendaService();
-        ConfiguracaoVenda conf = configuracaoVendaService.buscar();
         try {
-            if (conf.getOperacaoDeCondicional() == null) {
-                bv.getLista().add(b.getMessage("Operacao_Condicional_Not_Null"));
-                pendencias.add(bv);
-                return null;
+            if (configuracaoVenda.getOperacaoDeCondicional() == null) {
+                throw new NullPointerException();
             }
-            return conf.getOperacaoDeCondicional();
+            return configuracaoVenda.getOperacaoDeCondicional();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("Operacao_Condicional_Not_Null"));
             pendencias.add(bv);
@@ -215,14 +250,130 @@ public class DadosNecessarios implements Serializable {
 
     private List<Operacao> getOperacoes() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/operacoes.xhtml");
-        OperacaoService operacaoService = new OperacaoService();
-        List<Operacao> operacoes = operacaoService.buscar();
-        if (operacoes.isEmpty()) {
+        try {
+            OperacaoService operacaoService = new OperacaoService();
+            List<Operacao> operacoes = operacaoService.buscar();
+            if (operacoes.isEmpty()) {
+                throw new NullPointerException();
+            }
+            return operacoes;
+        } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("operacao_not_null"));
             pendencias.add(bv);
             return null;
         }
-        return operacoes;
+    }
+
+    private TipoReceita getReceitaDeJuros() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getReceitaDeJuros() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getReceitaDeJuros();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Receita_Juros_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoReceita getReceitaDeMultas() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getReceitaDeMultas() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getReceitaDeMultas();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Receita_Multas_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoReceita getReceitaDeDescontosObtidos() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getReceitaDeDescontosObtidos() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getReceitaDeDescontosObtidos();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Receita_Descontos_Obtidos_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoReceita getReceitaDeVariacaoCambial() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getReceitaDeVariacaoCambial() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getReceitaDeVariacaoCambial();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Receita_Variacao_Cambial_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoDespesa getDespesaDeDescontosConcedidos() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getDespesaDeDescontosConcedidos() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getDespesaDeDescontosConcedidos();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Despesa_Descontos_Obtidos_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoDespesa getDespesaDeJuros() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getDespesaDeJuros() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getDespesaDeJuros();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Despesa_Juros_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoDespesa getDespesaDeMultas() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getDespesaDeMultas() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getDespesaDeMultas();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Despesa_Multas_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private TipoDespesa getDespesaDeVariacaoCambial() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        try {
+            if (configuracaoContabil.getDespesaDeVariacaoCambial() == null) {
+                throw new NullPointerException();
+            }
+            return configuracaoContabil.getDespesaDeVariacaoCambial();
+        } catch (NullPointerException npe) {
+            bv.getLista().add(b.getMessage("Despesa_Variacao_Cambial_not_null"));
+            pendencias.add(bv);
+            return null;
+        }
     }
 
 }

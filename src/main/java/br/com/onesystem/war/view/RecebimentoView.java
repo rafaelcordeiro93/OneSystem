@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -15,17 +14,15 @@ import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
+import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
-import br.com.onesystem.war.converter.ModalidadeCobrancaConverter;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.stream.Collectors;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,7 +32,6 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> implements Serializable {
 
-    private Cotacao cotacaoPadrao;
     private Model tipoSelecionado;
     private Model formaSelecionado;
     private ModelList<TipoDeCobranca> tiposDeCobranca;
@@ -46,11 +42,26 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     @Inject
     private ConfiguracaoService serviceConf;
 
+    public void receber() {
+        try {
+            e.setTotalEmDinheiro(getTotalEmDinheiro());
+            Recebimento recebimento = e.construirComID();
+            tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp));
+            formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f));
+            recebimento.geraBaixas();
+            recebimento.ehValido();
+
+            addNoBanco(recebimento);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
     @Override
     public void limparJanela() {
         try {
             e = new RecebimentoBV(new Date());
-            cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado();
+            e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
         } catch (DadoInvalidoException die) {
@@ -59,7 +70,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado();
+        e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
     }
 
     @Override
@@ -139,6 +150,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public void adicionaEmissaoNaSessao() throws DadoInvalidoException {
+        SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
+        SessionUtil.put(NaturezaFinanceira.RECEITA, "naturezaFinanceira", FacesContext.getCurrentInstance());
         SessionUtil.remove("emissao", FacesContext.getCurrentInstance());
         SessionUtil.put(e.getEmissao(), "emissao", FacesContext.getCurrentInstance());
     }
@@ -177,7 +190,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         BigDecimal total = BigDecimal.ZERO;
         try {
             for (TipoDeCobranca tp : tiposDeCobranca.getList()) {
-                if (tp.getCotacao() != null && tp.getCotacao() != cotacaoPadrao) {
+                if (tp.getCotacao() != null && tp.getCotacao() != e.getCotacaoPadrao()) {
                     total = total.add(tp.getValor().divide(tp.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
                 } else {
                     total = total.add(tp.getValor());
@@ -188,9 +201,29 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         }
         return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
     }
-    
-    public String getTotalTipoNaCotacaoPadraoFormatado(){
-        return MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
+
+    public String getTotalTipoNaCotacaoPadraoFormatado() {
+        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
+    }
+
+    public BigDecimal getTotalFormaNaCotacaoPadrao() {
+        BigDecimal total = BigDecimal.ZERO;
+        try {
+            for (FormaDeCobranca fm : formasDeCobranca.getList()) {
+                if (fm.getCotacao() != null && fm.getCotacao() != e.getCotacaoPadrao()) {
+                    total = total.add(fm.getValor().divide(fm.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
+                } else {
+                    total = total.add(fm.getValor());
+                }
+            }
+        } catch (NullPointerException npe) {
+            return null;
+        }
+        return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
+    }
+
+    public String getTotalFormaNaCotacaoPadraoFormatado() {
+        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalFormaNaCotacaoPadrao());
     }
 
     public BigDecimal getValorEmConta() {
@@ -198,7 +231,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         try {
             for (TipoDeCobranca tp : tiposDeCobranca.getList()) {
                 if (tp.getConta() != null) {
-                    if (tp.getCotacao() != null && tp.getCotacao() != cotacaoPadrao) {
+                    if (tp.getCotacao() != null && tp.getCotacao() != e.getCotacaoPadrao()) {
                         total = total.add(tp.getValor().divide(tp.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
                     } else {
                         total = total.add(tp.getValor());
@@ -208,7 +241,13 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         } catch (NullPointerException npe) {
             return null;
         }
-        return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
+        return total;
+    }
+
+    public BigDecimal getTotalEmDinheiro() {
+        BigDecimal totalTipo = getTotalTipoNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalTipoNaCotacaoPadrao();
+        BigDecimal totalForma = getTotalFormaNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalFormaNaCotacaoPadrao();
+        return totalTipo.subtract(totalForma);
     }
 
     public Model getTipoSelecionado() {
@@ -257,14 +296,6 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void setFormaDeCobrancaBV(FormaDeCobrancaBV formaDeCobrancaBV) {
         this.formaDeCobrancaBV = formaDeCobrancaBV;
-    }
-
-    public Cotacao getCotacaoPadrao() {
-        return cotacaoPadrao;
-    }
-
-    public void setCotacaoPadrao(Cotacao cotacaoPadrao) {
-        this.cotacaoPadrao = cotacaoPadrao;
     }
 
 }

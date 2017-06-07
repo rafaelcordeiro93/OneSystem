@@ -315,20 +315,20 @@ public class DadosIniciais {
         // -- Adiciona Grupo Financeiro
         AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
 
-        GrupoFinanceiro aje = new GrupoFinanceiro(null, "Ajuste de Saldo Inicial", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS, OperacaoFinanceira.SEM_ALTERACAO);
-        GrupoFinanceiro dev = new GrupoFinanceiro(null, "(-) Devoluções de Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro imp = new GrupoFinanceiro(null, "Impostos Sobre Faturamento", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro tot = new GrupoFinanceiro(null, "Total dos Custos Variáveis", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro depv = new GrupoFinanceiro(null, "Despesas Com Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro depp = new GrupoFinanceiro(null, "Despesas Com Pessoal", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro depa = new GrupoFinanceiro(null, "Despesas Administrativas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro dept = new GrupoFinanceiro(null, "Despesas Tributarias", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro depf = new GrupoFinanceiro(null, "Despesas Financeiras", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro depo = new GrupoFinanceiro(null, "Despesas Não Operacionais", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro ope = new GrupoFinanceiro(null, "Operações Com Estoque", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro opi = new GrupoFinanceiro(null, "Operações Com Imobilizado", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro oo = new GrupoFinanceiro(null, "Outras Operações", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS, OperacaoFinanceira.SAIDA);
-        GrupoFinanceiro cp = new GrupoFinanceiro(null, "Custos de Produção", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS, OperacaoFinanceira.SAIDA);
+        GrupoFinanceiro aje = new GrupoFinanceiro(null, "Ajuste de Saldo Inicial", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro dev = new GrupoFinanceiro(null, "(-) Devoluções de Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro imp = new GrupoFinanceiro(null, "Impostos Sobre Faturamento", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro tot = new GrupoFinanceiro(null, "Total dos Custos Variáveis", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        GrupoFinanceiro depv = new GrupoFinanceiro(null, "Despesas Com Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro depp = new GrupoFinanceiro(null, "Despesas Com Pessoal", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro depa = new GrupoFinanceiro(null, "Despesas Administrativas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro dept = new GrupoFinanceiro(null, "Despesas Tributarias", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro depf = new GrupoFinanceiro(null, "Despesas Financeiras", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        GrupoFinanceiro depo = new GrupoFinanceiro(null, "Despesas Não Operacionais", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro ope = new GrupoFinanceiro(null, "Operações Com Estoque", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro opi = new GrupoFinanceiro(null, "Operações Com Imobilizado", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro oo = new GrupoFinanceiro(null, "Outras Operações", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro cp = new GrupoFinanceiro(null, "Custos de Produção", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
 
         daoGrupoFinanceiro.adiciona(aje);
         daoGrupoFinanceiro.adiciona(dev);

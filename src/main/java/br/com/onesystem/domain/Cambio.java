@@ -153,7 +153,7 @@ public class Cambio implements Serializable {
     }
 
     private void pagarBaixa() throws DadoInvalidoException {
-        Baixa baixa = new BaixaBuilder().comValor(valorBruto).comEmissao(emissao).comNaturezaFinanceira(OperacaoFinanceira.SAIDA)
+        Baixa baixa = new BaixaBuilder().comValor(valorBruto).comEmissao(emissao).comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
                 .comPessoa(contrato.getPessoa()).comCotacao(cotacao).construir();
         pagamentos.add(baixa);
     }

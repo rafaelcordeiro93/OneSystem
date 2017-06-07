@@ -5,14 +5,22 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
+import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.war.service.ConfiguracaoContabilService;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,14 +45,17 @@ public class TipoDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_TIPODECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Cobranca cobranca;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private CobrancaFixa cobrancaFixa;
 
     @ManyToOne
     private Recebimento recebimento;
+
+    @ManyToOne
+    private Pagamento pagamento;
 
     @NotNull(message = "{valor_not_null}")
     @Min(value = 0, message = "{valor_min}")
@@ -78,7 +89,7 @@ public class TipoDeCobranca implements Serializable {
 
     public TipoDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
             BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao,
-            CobrancaFixa cobrancaFixa, Conta conta) throws DadoInvalidoException {
+            CobrancaFixa cobrancaFixa, Conta conta, Pagamento pagamento) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
         this.recebimento = recebimento;
@@ -90,7 +101,22 @@ public class TipoDeCobranca implements Serializable {
         this.cotacao = cotacao;
         this.conta = conta;
         this.cobrancaFixa = cobrancaFixa;
+        this.pagamento = pagamento;
         ehValido();
+    }
+
+    public void geraBaixas() {
+        try {
+            if (cobranca != null) {
+                GeradorDeBaixaDeTipoCobranca gerador = new GeradorDeBaixaDeTipoCobranca(this);
+                gerador.geraBaixas();
+            } else {
+                GeradorDeBaixaDeTipoCobrancaFixa gerador = new GeradorDeBaixaDeTipoCobrancaFixa(this);
+                gerador.geraBaixas();
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -100,6 +126,10 @@ public class TipoDeCobranca implements Serializable {
 
     public void setRecebimento(Recebimento recebimento) {
         this.recebimento = recebimento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
     public Long getId() {
@@ -132,6 +162,10 @@ public class TipoDeCobranca implements Serializable {
 
     public CobrancaFixa getCobrancaFixa() {
         return cobrancaFixa;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
     }
 
     public Conta getConta() {

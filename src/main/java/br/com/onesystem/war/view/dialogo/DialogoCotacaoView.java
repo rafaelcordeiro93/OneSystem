@@ -2,7 +2,9 @@ package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
@@ -14,6 +16,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,10 +52,13 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     }
 
     private void inicializaCotacoes() {
-        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naMaiorEmissao(nota.getEmissao()).listaDeResultados();
+        Date emissao = nota.getEmissao();
+        Moeda moedaPadrao = nota.getMoedaPadrao();
+
+        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naMaiorEmissao(emissao).listaDeResultados();
         cotacoes = new ArrayList<>();
         for (Cotacao c : cotacaoLista) {
-            cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, nota.getMoedaPadrao()));
+            cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, moedaPadrao));
         }
         calculaCotacoes();
     }
@@ -62,12 +68,12 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
      * cotação de cada moeda.
      */
     public void calculaCotacoes() {
-        RequestContext rc = RequestContext.getCurrentInstance();
+        BigDecimal totalEmDinheiro = nota.getTotalEmDinheiro();
         for (ValorPorCotacaoBV c : cotacoes) {
-            c.setTotal(nota.getTotalEmDinheiro());
+            c.setTotal(totalEmDinheiro);
             c.setTotalConvertidoRecebido(getTotalConvertidoRecebido());
         }
-        rc.update("tempDialog:valorPorCotacaoBVData");
+        RequestContext.getCurrentInstance().update("tempDialog:valorPorCotacaoBVData");
     }
 
     /**
@@ -89,19 +95,25 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
 
     public void finalizar() throws DadoInvalidoException {
         for (ValorPorCotacaoBV c : cotacoes) {
-            boolean entrou = false;
-            for (ValorPorCotacao v : nota.getValorPorCotacao()) {
-                if (c.getId().equals(v.getId())) {
-                    nota.atualiza(c.construirComId());
-                    entrou = true;
-                    break;
-                }
-            }
-            if (!entrou && c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
-                nota.adiciona(c.construir());
+            if (nota != null) {
+                constroiNota(c);
             }
         }
         RequestContext.getCurrentInstance().closeDialog(nota);
+    }
+
+    private void constroiNota(ValorPorCotacaoBV c) throws DadoInvalidoException {
+        boolean entrou = false;
+        for (ValorPorCotacao v : nota.getValorPorCotacao()) {
+            if (c.getId().equals(v.getId())) {
+                nota.atualiza(c.construirComId());
+                entrou = true;
+                break;
+            }
+        }
+        if (!entrou && c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
+            nota.adiciona(c.construir());
+        }
     }
 
     public void abrirDialogo() {

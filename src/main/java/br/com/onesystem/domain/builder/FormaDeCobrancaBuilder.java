@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
 
@@ -21,6 +22,7 @@ public class FormaDeCobrancaBuilder {
     private Long id;
     private Cobranca cobranca;
     private Recebimento recebimento;
+    private Pagamento pagamento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -40,6 +42,11 @@ public class FormaDeCobrancaBuilder {
 
     public FormaDeCobrancaBuilder comRecebimento(Recebimento recebimento) {
         this.recebimento = recebimento;
+        return this;
+    }
+
+    public FormaDeCobrancaBuilder comPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
         return this;
     }
 
@@ -74,7 +81,7 @@ public class FormaDeCobrancaBuilder {
     }
 
     public FormaDeCobranca construir() throws DadoInvalidoException {
-        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao);
+        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento);
     }
 
 }
