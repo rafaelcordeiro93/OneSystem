@@ -1,7 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -20,7 +20,7 @@ public class FaturaLegadaBuilder {
     private BigDecimal total;
     private Date emissao;
     private Pessoa pessoa;
-    private List<Cobranca> cobranca;
+    private List<Titulo> titulo;
 
     public FaturaLegadaBuilder comID(Long ID) {
         this.id = ID;
@@ -47,13 +47,13 @@ public class FaturaLegadaBuilder {
         return this;
     }
 
-    public FaturaLegadaBuilder comCobranca(List<Cobranca> cobranca) {
-        this.cobranca = cobranca;
+    public FaturaLegadaBuilder comTitulo(List<Titulo> titulo) {
+        this.titulo = titulo;
         return this;
     }
 
     public FaturaLegada construir() throws DadoInvalidoException {
-        return new FaturaLegada(id, codigo, total, emissao, pessoa, cobranca);
+        return new FaturaLegada(id, codigo, total, emissao, pessoa, titulo);
     }
 
 }
