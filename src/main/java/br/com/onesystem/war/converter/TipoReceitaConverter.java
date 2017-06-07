@@ -6,9 +6,7 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TipoReceitaService;
 import br.com.onesystem.war.service.TipoReceitaService;
 import java.io.Serializable;
 import java.util.List;
@@ -32,15 +30,15 @@ public class TipoReceitaConverter implements Converter, Serializable {
             try {
                 List<TipoReceita> lista = new TipoReceitaService().buscarTiposDeReceita();
                 if (StringUtils.containsLetter(value)) {
-                    for (TipoReceita receita : lista) {
-                        if (receita.getNome().equals(value)) {
-                            return receita;
+                    for (TipoReceita despesa : lista) {
+                        if (despesa.getNome().equals(value)) {
+                            return despesa;
                         }
                     }
                 } else {
-                    for (TipoReceita receita : lista) {
-                        if (receita.getId().equals(new Long(value))) {
-                            return receita;
+                    for (TipoReceita despesa : lista) {
+                        if (despesa.getId().equals(new Long(value))) {
+                            return despesa;
                         }
                     }
                 }

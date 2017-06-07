@@ -1,17 +1,10 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.OperacaoDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.OperacaoBV;
-import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -19,21 +12,19 @@ import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class OperacaoView implements Serializable {
+public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements Serializable {
 
-    private OperacaoBV operacao;
-    private Operacao operacaoSelecionada;
     private Configuracao configuracao;
 
     @Inject
@@ -56,106 +47,32 @@ public class OperacaoView implements Serializable {
         }
     }
 
-    public void add() {
-        try {
-            Operacao novoRegistro = operacao.construir();
-            new AdicionaDAO<Operacao>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
+    public void limparJanela() {
+        e = new OperacaoBV();
     }
 
-    public void update() {
-        try {
-
-            if (operacaoSelecionada != null) {
-                Operacao operacaoExistente = operacao.construirComID();
-                new AtualizaDAO<Operacao>().atualiza(operacaoExistente);
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("ajuste_estoque_nao_encontrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void delete() {
-        try {
-            if (operacaoSelecionada != null) {
-                new RemoveDAO<Operacao>().remove(operacaoSelecionada, operacaoSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
-    public void selecionaReceitaAVista(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        this.operacao.setVendaAVista(receitaSelecionada);
-    }
-
-    public void selecionaReceitaAPrazo(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        this.operacao.setVendaAPrazo(receitaSelecionada);
-    }
-
-    public void selecionaServicoAVista(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        this.operacao.setServicoAVista(receitaSelecionada);
-    }
-
-    public void selecionaServicoAPrazo(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        this.operacao.setServicoAPrazo(receitaSelecionada);
-    }
-
-    public void selecionaReceitaFrete(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        this.operacao.setReceitaFrete(receitaSelecionada);
-    }
-
-    public void selecionaDespesaCMV(SelectEvent event) {
-        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
-        this.operacao.setDespesaCMV(despesaSelecionada);
-    }
-
-    public void selecionaCompraAVista(SelectEvent event) {
-        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
-        this.operacao.setCompraAVista(despesaSelecionada);
-    }
-
-    public void selecionaCompraAPrazo(SelectEvent event) {
-        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
-        this.operacao.setCompraAPrazo(despesaSelecionada);
-    }
-
-    public void selecionaOperacao(SelectEvent e) {
-        Operacao a = (Operacao) e.getObject();
-        operacao = new OperacaoBV(a);
-        operacaoSelecionada = a;
-    }
-
-    public void buscaPorId() {
-        Long id = operacao.getId();
-        if (id != null) {
-            try {
-                OperacaoDAO dao = new OperacaoDAO();
-                Operacao c = dao.buscarOperacao().porId(id).resultado();
-                operacaoSelecionada = c;
-                operacao = new OperacaoBV(operacaoSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                operacao.setId(id);
-                die.print();
-            }
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        String idComponent = event.getComponent().getId();
+        if (obj instanceof Operacao) {
+            e = new OperacaoBV((Operacao) obj);
+        } else if (obj instanceof TipoReceita && "receitaAVista-search".equals(idComponent)) {
+            e.setVendaAVista((TipoReceita) obj);
+        } else if (obj instanceof TipoReceita && "receitaAPrazo-search".equals(idComponent)) {
+            e.setVendaAPrazo((TipoReceita) obj);
+        } else if (obj instanceof TipoReceita && "servicoAVista-search".equals(idComponent)) {
+            e.setServicoAVista((TipoReceita) obj);
+        } else if (obj instanceof TipoReceita && "servicoAPrazo-search".equals(idComponent)) {
+            e.setServicoAPrazo((TipoReceita) obj);
+        } else if (obj instanceof TipoReceita && "receitaFrete-search".equals(idComponent)) {
+            e.setReceitaFrete((TipoReceita) obj);
+        } else if (obj instanceof TipoDespesa && "despesaCMV-search".equals(idComponent)) {
+            e.setDespesaCMV((TipoDespesa) obj);
+        } else if (obj instanceof TipoDespesa && "despesaAVista-search".equals(idComponent)) {
+            e.setCompraAVista((TipoDespesa) obj);
+        } else if (obj instanceof TipoDespesa && "despesaAPrazo-search".equals(idComponent)) {
+            e.setCompraAPrazo((TipoDespesa) obj);
         }
     }
 
@@ -173,33 +90,6 @@ public class OperacaoView implements Serializable {
 
     public List<TipoContabil> getTipoContabil() {
         return Arrays.asList(TipoContabil.values());
-    }
-
-    public void limparJanela() {
-        operacao = new OperacaoBV();
-        operacaoSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (operacaoSelecionada != null) {
-            operacao = new OperacaoBV(operacaoSelecionada);
-        }
-    }
-
-    public OperacaoBV getOperacao() {
-        return operacao;
-    }
-
-    public void setOperacao(OperacaoBV operacao) {
-        this.operacao = operacao;
-    }
-
-    public Operacao getOperacaoSelecionada() {
-        return operacaoSelecionada;
-    }
-
-    public void setOperacaoSelecionada(Operacao operacaoSelecionada) {
-        this.operacaoSelecionada = operacaoSelecionada;
     }
 
     public Configuracao getConfiguracao() {
