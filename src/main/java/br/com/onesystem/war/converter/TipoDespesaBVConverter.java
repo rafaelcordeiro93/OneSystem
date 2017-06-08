@@ -20,16 +20,21 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "tipoDespesaBVConverter", forClass = TipoDespesa.class)
+@FacesConverter(value = "tipoDespesaBVConverter", forClass = TipoDespesaBV.class)
 public class TipoDespesaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-            TipoDespesaService service = new TipoDespesaService();
             try {
-                List<TipoDespesa> lista = service.buscarTiposDeDespesa();
-                if (!StringUtils.containsLetter(value)) {
+                List<TipoDespesa> lista = new TipoDespesaService().buscarTiposDeDespesa();
+                if (StringUtils.containsLetter(value)) {
+                    for (TipoDespesa tipoDespesa : lista) {
+                        if (tipoDespesa.getNome().equals(value)) {
+                            return new TipoDespesaBV(tipoDespesa);
+                        }
+                    }
+                } else {
                     for (TipoDespesa tipoDespesa : lista) {
                         if (tipoDespesa.getId().equals(new Long(value))) {
                             return new TipoDespesaBV(tipoDespesa);

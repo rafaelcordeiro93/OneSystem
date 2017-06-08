@@ -10,23 +10,40 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">                                 
-                    <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
-                    <div class="EmptyBox5"/>
-                    <div class="ui-fluid">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Forma_De_Recebimento}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" update=":conteudo" editVisible="false" onlyNumber="true"/>
-                            
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="true"/>
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-1">
                             <p:outputLabel value="#{l.Nome}" />
                             <p:inputText value="#{formaDeRecebimentoView.e.nome}"  maxlength="60"/>
 
                             <p:outputLabel value="#{l.Ativo}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoAtiva" value="#{formaDeRecebimentoView.e.ativo}"/>
+                        </p:panelGrid>
+
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Entrada}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Percentual_Entrada}" />
                             <p:inputNumber  value="#{formaDeRecebimentoView.e.porcentagemDeEntrada}" maxValue="100" minValue="0"/>
@@ -52,16 +69,14 @@
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCredito" value="#{formaDeRecebimentoView.e.entradaEmCredito}"/>
 
                         </p:panelGrid>
-                    </div>
 
-                    <div class="EmptyBox10"/>
-                    <p:separator/>
-                    <div class="EmptyBox10"/>
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Parcelas}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
 
-                    <div class="ui-fluid">
-
-                        <p:panelGrid columns="6" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-2">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Parcela_Cheque}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.e.parcelaEmCheque}"/>
@@ -86,7 +101,7 @@
 
                             <p:outputLabel value="#{l.Cartao}"/>
                             <a:inputTextDialog id="formaRecCartaoParcela" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}"/>
-                          
+
                             <p:outputLabel value="#{l.Primeira_Parcela}" />
                             <p:inputNumber  value="#{formaDeRecebimentoView.e.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
 
@@ -100,16 +115,17 @@
                             </p:selectOneMenu>
 
                         </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
                     </div>
 
-                    <div class="EmptyBox5"/>
-
-                    <p:separator/>
-
-                    <p:commandButton value="#{l.Adicionar}" action="#{formaDeRecebimentoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{formaDeRecebimentoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{formaDeRecebimentoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{formaDeRecebimentoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{formaDeRecebimentoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{formaDeRecebimentoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{formaDeRecebimentoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{formaDeRecebimentoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>
