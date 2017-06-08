@@ -15,7 +15,7 @@ public class CartaoBV implements Serializable, BuilderView<Cartao> {
 
     private Long id;
     private String nome;
-    private Conta conta;
+    private Conta conta; 
     private TipoDespesa despesa;
     private TipoDespesa juros;
    private List<TaxaDeAdministracao> taxaDeAdministracao = new ArrayList<TaxaDeAdministracao>();

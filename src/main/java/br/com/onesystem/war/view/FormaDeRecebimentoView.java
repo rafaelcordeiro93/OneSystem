@@ -57,7 +57,7 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, Form
     }
 
     public List<TipoFormaDeRecebimento> getFormaDeRecebimentoPadrao() {
-        return Arrays.asList(TipoFormaDeRecebimento.values());
+        return Arrays.asList(TipoFormaDeRecebimento.DINHEIRO, TipoFormaDeRecebimento.CREDITO, TipoFormaDeRecebimento.A_FATURAR);
     }
 
     public List<ModalidadeDeCobranca> getTipoFormaDeRecebimentoPadraoParcela() {

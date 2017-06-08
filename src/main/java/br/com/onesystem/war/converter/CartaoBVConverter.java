@@ -18,7 +18,7 @@ import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author Rafael
+ * @author Rafael 
  */
 @FacesConverter(value = "cartaoBVConverter", forClass = CartaoBV.class)
 public class CartaoBVConverter implements Converter, Serializable {
