@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -13,7 +14,7 @@ import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.util.List;
 
-public class OperacaoBV implements Serializable {
+public class OperacaoBV implements Serializable, BuilderView<Operacao> {
 
     private Long id;
     private String nome;

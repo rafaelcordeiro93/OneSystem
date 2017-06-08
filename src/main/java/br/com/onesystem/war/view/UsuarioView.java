@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MD5Util;
+import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
@@ -28,12 +29,29 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
     @PostConstruct
     public void init() {
         limparJanela();
+    }
 
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof Usuario) {
+            e = new UsuarioBV((Usuario) obj);
+        } else if (obj instanceof Pessoa) {
+            e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof GrupoDePrivilegio) {
+            e.setGrupoPrivilegio((GrupoDePrivilegio) obj);
+        }
+    }
+
+    @Override
+    public void limparJanela() {
+        e = new UsuarioBV();
     }
 
     public void add() {
         try {
             validaSenha(e.construir());
+            adicionaOpcoesDeLayout();
             Usuario novoRegistro = e.construir();
             if (validaPessoaExistente(novoRegistro)) {
                 addNoBanco(novoRegistro);
@@ -48,13 +66,10 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
     public void update() {
         try {
             validaSenha(e.construirComID());
+            adicionaOpcoesDeLayout();
             Usuario usuarioExistente = e.construirComID();
             if (usuarioExistente.getId() != null) {
-                if (!validaUsuarioExistente(usuarioExistente)) {
-                    updateNoBanco(usuarioExistente);
-                } else {
-
-                }
+                updateNoBanco(usuarioExistente);
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_existe"));
             }
@@ -74,9 +89,9 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
     }
 
     private void validaSenha(Usuario user) throws EDadoInvalidoException, DadoInvalidoException {
-        if (user.getSenha() != null) {
+        if (user.getSenha() != null && user.getSenha().length() >= 4) {
             e.setSenha(new MD5Util().md5Hex(e.getSenha()));
-        } else if (!validaUsuarioExistente(user)) {
+        } else if (!validaUsuarioExistente(user) && user.getSenha().length() >= 4) { //busca a senha q ja estava no cadastro se não houve alteração.
             Usuario buscar = new UsuarioDAO().buscarUsuarios().porId(user.getId()).resultado();
             e.setSenha(buscar.getSenha());
         } else {
@@ -84,20 +99,12 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
         }
     }
 
-    @Override
-    public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof Usuario) {
-            e = new UsuarioBV((Usuario) obj);
-        } else if (obj instanceof Pessoa) {
-            e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof GrupoDePrivilegio) {
-            e.setGrupoPrivilegio((GrupoDePrivilegio) obj);
-        }
-    }
-
-    public void limparJanela() {
-        e = new UsuarioBV();
+    private void adicionaOpcoesDeLayout() {
+        e.setCorLayout(e.getCorLayout() == null ? "blue" : e.getCorLayout());
+        e.setCorMenu(e.getCorMenu() == null ? TipoCorMenu.CINZA : e.getCorMenu());
+        e.setCorTema(e.getCorTema() == null ? "blue" : e.getCorTema());
+        e.setOverlayMenu(true);
+        e.setOrientationRTL(false);
     }
 
     public UsuarioService getService() {
@@ -107,5 +114,4 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
     public void setService(UsuarioService service) {
         this.service = service;
     }
-
 }
