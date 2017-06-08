@@ -6,11 +6,12 @@ import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.builder.CartaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartaoBV implements Serializable {
+public class CartaoBV implements Serializable, BuilderView<Cartao> {
 
     private Long id;
     private String nome;

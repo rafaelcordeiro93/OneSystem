@@ -74,8 +74,8 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
         try {
             Cartao cartaoExistente = e.construirComID();
             preparaParaInclusaoDeTaxa(cartaoExistente);
-            deletarTaxas();
             updateNoBanco(cartaoExistente);
+            deletarTaxas();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -88,28 +88,27 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
         }
     }
 
-    public void selecionaConta(SelectEvent event) {
-        Conta contaSelecionado = (Conta) event.getObject();
-        e.setConta(contaSelecionado);
-    }
-
-    public void selecionaDespesa(SelectEvent event) {
-        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
-        e.setDespesa(despesaSelecionado);
-    }
-
-    public void selecionaJuros(SelectEvent event) {
-        TipoDespesa despesaSelecionado = (TipoDespesa) event.getObject();
-        e.setJuros(despesaSelecionado);
+    @Override
+    public void limparJanela() {
+        e = new CartaoBV();
+        taxa = new TaxaDeAdministracaoBV();
+        taxaSelecionado = null;
+        listaTaxaDeletada = new ArrayList<TaxaDeAdministracao>();
     }
 
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = (Object) event.getObject();
+        String idComponent = event.getComponent().getId();
         if (obj instanceof Cartao) {
             e = new CartaoBV((Cartao) obj);
+        } else if (obj instanceof Conta) {
+            e.setConta((Conta) obj);
+        } else if (obj instanceof TipoDespesa && "despesasId-search".equals(idComponent)) {
+            e.setDespesa((TipoDespesa) obj);
+        } else if (obj instanceof TipoDespesa && "jurosId-search".equals(idComponent)) {
+            e.setJuros((TipoDespesa) obj);
         }
-
     }
 
     public void selecionaTaxa(SelectEvent event) {
@@ -135,9 +134,7 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
     public void updateTaxaNaLista() {
         try {
             if (taxaSelecionado != null) {
-
-                e.getTaxaDeAdministracao().set(e.getTaxaDeAdministracao().indexOf(taxaSelecionado),
-                        taxa.construirComID());
+                e.getTaxaDeAdministracao().set(e.getTaxaDeAdministracao().indexOf(taxaSelecionado), taxa.construirComID());
                 limparTaxaDeAdministracao();
             }
         } catch (DadoInvalidoException ex) {
@@ -168,12 +165,6 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
             }
         }
         return id;
-    }
-
-    public void limparJanela() {
-        e = new CartaoBV();
-        taxa = new TaxaDeAdministracaoBV();
-        listaTaxaDeletada = new ArrayList<TaxaDeAdministracao>();
     }
 
     public TaxaDeAdministracaoBV getTaxa() {
