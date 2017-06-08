@@ -21,12 +21,17 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
+                        <div class="EmptyBox20"/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="contaId" update=":conteudo"  dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.e}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" converter="contaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="contaId" update=":conteudo"  dialog="#{selecaoContaView}" mbView="#{contaView}" value="#{contaView.e}" var="conta" itemLabel="#{conta.id}" itemValue="#{conta}" process="@this" converter="contaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}" editVisible="false" onlyNumber="true"/>
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText id="nome" value="#{contaView.e.nome}"/>
@@ -39,12 +44,12 @@
 
                         </p:panelGrid>
 
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox20"/>
 
                         <p:separator/>
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
 
                         <p:commandButton value="#{l.Adicionar}" action="#{contaView.add()}" styleClass="Mar2"  update=":conteudo" icon="fa fa-plus Fs16 White"/>

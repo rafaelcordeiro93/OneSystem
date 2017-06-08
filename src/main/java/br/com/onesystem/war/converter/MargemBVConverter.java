@@ -20,16 +20,21 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "margemBVConverter", forClass = Margem.class)
+@FacesConverter(value = "margemBVConverter", forClass = GrupoDeMargemBV.class)
 public class MargemBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-            GrupoDeMargemService service = new GrupoDeMargemService();
             try {
-                List<Margem> lista = service.buscarGrupoDeMargens();
-                if (!StringUtils.containsLetter(value)) {
+                List<Margem> lista = new GrupoDeMargemService().buscarGrupoDeMargens();
+                if (StringUtils.containsLetter(value)) {
+                    for (Margem margem : lista) {
+                        if (margem.getNome().equals(value)) {
+                            return new GrupoDeMargemBV(margem);
+                        }
+                    }
+                } else {
                     for (Margem margem : lista) {
                         if (margem.getId().equals(new Long(value))) {
                             return new GrupoDeMargemBV(margem);

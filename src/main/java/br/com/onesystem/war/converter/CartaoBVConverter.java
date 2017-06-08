@@ -5,10 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.BancoBV;
-import br.com.onesystem.war.service.BancoService;
+import br.com.onesystem.war.builder.CartaoBV;
+import br.com.onesystem.war.service.CartaoService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -20,33 +20,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "bancoBVConverter", forClass = BancoBV.class)
-public class BancoBVConverter implements Converter, Serializable {
+@FacesConverter(value = "cartaoBVConverter", forClass = CartaoBV.class)
+public class CartaoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Banco> lista = new BancoService().buscarBancos();
+                List<Cartao> lista = new CartaoService().buscarCartaos();
                 if (StringUtils.containsLetter(value)) {
-                    for (Banco banco : lista) {
-                        if (banco.getNome().equals(value)) {
-                            return new BancoBV(banco);
+                    for (Cartao cartao : lista) {
+                        if (cartao.getNome().equals(value)) {
+                            return new CartaoBV(cartao);
                         }
                     }
                 } else {
-                    for (Banco banco : lista) {
-                        if (banco.getId().equals(new Long(value))) {
-                            return new BancoBV(banco);
+                    for (Cartao cartao : lista) {
+                        if (cartao.getId().equals(new Long(value))) {
+                            return new CartaoBV(cartao);
                         }
                     }
                 }
-                return new BancoBV();
+                return new CartaoBV();
             } catch (Exception e) {
-                return new BancoBV();
+                return new CartaoBV();
             }
         } else {
-            return new BancoBV();
+            return new CartaoBV();
         }
     }
 
@@ -54,7 +54,7 @@ public class BancoBVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((BancoBV) object).getNome());
+                return String.valueOf(((CartaoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
