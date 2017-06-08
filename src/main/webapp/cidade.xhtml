@@ -23,13 +23,13 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                             <a:inputTextDialog id="cidadeId" update=":conteudo"  dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.e}" var="cidade" itemLabel="#{cidade.id}" itemValue="#{cidade}" converter="cidadeBVConverter" itemLabelTabVisible="true" itemLabelTab="#{cidade.nome}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="cidadeId" update=":conteudo" process="@this"  dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.e}" var="cidade" itemLabel="#{cidade.id}" itemValue="#{cidade}" converter="cidadeBVConverter" itemLabelTabVisible="true" itemLabelTab="#{cidade.nome}" editVisible="false" onlyNumber="true"/>
                             
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{cidadeView.e.nome}"/>
 
                             <p:outputLabel value="#{l.Uf}"/>
-                            <p:inputText value="#{cidadeView.e.UF}"/>
+                            <p:inputText value="#{cidadeView.e.UF}" maxlength="2" size="1" style="width: auto"/>
 
                             <p:outputLabel value="#{l.Pais}"/>
                             <p:inputText value="#{cidadeView.e.pais}"/>

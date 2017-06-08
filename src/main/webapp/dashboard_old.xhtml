@@ -57,12 +57,12 @@
         <div class="ui-g dashboard">          
             <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <div class="ui-g card overview-box" style="padding: 16px !important;height: auto !important">
-                    <span class="overview-box-title">Unread Messages</span>
+                    <span class="overview-box-title">Vendas na Empresa</span>
                     <div class="overview-box-details">                        
                         <i class="fa fa-inbox overview-box-details-icon overview-box-details-icon-1"></i>                        
                         <span class="overview-box-details-count">253</span>
                         <div style="color:#3fb839">
-                            %12 more than yesterday
+                            %12 a mais do que ontem
                         </div>
                     </div>
                 </div>
@@ -85,12 +85,12 @@
             -->
             <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <div class="ui-g card overview-box" style="padding: 16px !important;height: auto !important">
-                    <span class="overview-box-title">Check-ins</span>
+                    <span class="overview-box-title">Compras na empresa</span>
                     <div class="overview-box-details">                        
                         <i class="fa fa-map-marker overview-box-details-icon overview-box-details-icon-2"></i>                        
-                        <span class="overview-box-details-count">3216</span>
+                        <span class="overview-box-details-count">316</span>
                         <div style="color:#3fb839">
-                            %20 less than yesterday
+                            %20 a menos que ontem
                         </div>
                     </div>
                 </div>
@@ -112,12 +112,12 @@
             -->
             <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <div class="ui-g card overview-box" style="padding: 16px !important;height: auto !important">
-                    <span class="overview-box-title">Check-ins</span>
+                    <span class="overview-box-title">Vendas no Web Site</span>
                     <div class="overview-box-details">                        
                         <i class="fa fa-cloud overview-box-details-icon overview-box-details-icon-3"></i>                        
-                        <span class="overview-box-details-count">428</span>
+                        <span class="overview-box-details-count">3428</span>
                         <div style="color:#3fb839">
-                            %20 more than last week
+                            %23 a mais que semana passada
                         </div>
                     </div>
                 </div>
@@ -140,12 +140,12 @@
             -->
             <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <div class="ui-g card overview-box" style="padding: 16px !important;height: auto !important">
-                    <span class="overview-box-title">Check-ins</span>
+                    <span class="overview-box-title">Trocas</span>
                     <div class="overview-box-details">                        
                         <i class="fa fa-key overview-box-details-icon overview-box-details-icon-4"></i>                        
                         <span class="overview-box-details-count">4</span>
                         <div style="color:#3fb839">
-                            %50 less than last week
+                            %50 a menos que semana passada
                         </div>
                     </div>
                 </div>
@@ -168,12 +168,12 @@
             -->
 
             <div class="ui-g-12 ui-md-4">
-                <div class="user-card">
+                <div class="user-card" style="margin-bottom:20px">
                     <div class="user-card-header"></div>
                     <div class="user-card-content">
-                        <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
-                        <span class="user-card-name">Jane White</span>
-                        <span class="user-card-role">System Admin</span>
+                        <p:graphicImage style="max-width: 120px; max-height: 120px;width: auto;height: auto;border-radius: 25%" name="images/photo.jpg" library="atlantis-layout" />
+                        <span class="user-card-name">#{usuarioLogadoUtil.nomeUsuario}</span>
+                        <span class="user-card-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>
                         <p:commandButton type="button" value="Connect"></p:commandButton>
                     </div>
                     <div class="user-card-footer">
@@ -193,97 +193,130 @@
                         </div>
                     </div>
                 </div>
+                <div class="task-list">
+                    <p:panel header="Tasks" style="min-height:360px">
+                        <ul>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Sales Reports</span>
+                                <i class="fa fa-briefcase"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Pay Invoices</span>
+                                <i class="fa fa-credit-card"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Dinner with Tony</span> 
+                                <i class="fa fa-cutlery"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Client Meeting</span>
+                                <i class="fa fa-user"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">New Theme</span>
+                                <i class="fa fa-paint-brush"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Flight Ticket</span>
+                                <i class="fa fa-fighter-jet"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Generate Charts</span>
+                                <i class="fa fa-area-chart"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Call Client</span>
+                                <i class="fa fa-phone"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Share location</span>
+                                <i class="fa fa-map-marker"></i>
+                            </li>
+                            <li>
+                                <p:selectBooleanCheckbox />
+                                <span class="task-name">Create Feed</span>
+                                <i class="fa fa-rss"></i>
+                            </li>
+                        </ul>
+                    </p:panel>
+                </div>
             </div>
 
             <div class="ui-g-12 ui-md-8">
                 <div class="card">
                     <h:form>
 
-                        <p:panel header="Sales Graph" class="chart-panel" style="margin-bottom:20px">
-                            <p:chart type="bar" model="#{chartDemoView.barModel}" responsive="true"/>
-                        </p:panel>
-
-                        <p:dataTable var="car" value="#{dtBasicView.cars}" selectionMode="single" rowKey="#{car.id}" reflow="true">
-                            <f:facet name="header">Recent Sales</f:facet>
+                        <p:dataTable var="car" value="#{dtBasicView.cars}" selectionMode="single" rowKey="#{car.id}" reflow="true"  style="margin-bottom:20px">
+                            <f:facet name="header">Vendas Recentes</f:facet>
                             <p:column headerText="Id" sortBy="#{car.id}">
                                 <h:outputText value="#{car.id}" />
                             </p:column>
 
-                            <p:column headerText="Year" sortBy="#{car.year}">
+                            <p:column headerText="Ano" sortBy="#{car.year}">
                                 <h:outputText value="#{car.year}" />
                             </p:column>
 
-                            <p:column headerText="Brand" sortBy="#{car.brand}">
+                            <p:column headerText="Marca" sortBy="#{car.brand}">
                                 <h:outputText value="#{car.brand}" />
                             </p:column>
 
-                            <p:column headerText="Color" sortBy="#{car.color}">
+                            <p:column headerText="Cor" sortBy="#{car.color}">
                                 <h:outputText value="#{car.color}" />
                             </p:column>
                         </p:dataTable>   
+
+                        <p:panel header="Gráfico de Vendas" class="chart-panel">
+                            <p:chart type="bar" model="#{chartDemoView.barModel}" responsive="true"/>
+                        </p:panel>
 
                     </h:form>
                 </div>
             </div>
 
-            <div class="ui-g-12 ui-md-6 ui-lg-4 task-list">
-                <p:panel header="Tasks" style="min-height:360px">
+            <div class="ui-g-12 ui-md-8 chat" style="margin-bottom:20px">
+                <p:panel header="Chat">
                     <ul>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Sales Reports</span>
-                            <i class="fa fa-briefcase"></i>
+                        <li class="clearfix message-from">
+                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
+                            <span>Retro occupy organic, stumptown shabby chic pour-over roof party DIY normcore.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Pay Invoices</span>
-                            <i class="fa fa-credit-card"></i>
+                        <li class="clearfix message-own">
+                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
+                            <span>Actually artisan organic occupy, Wes Anderson ugh whatever pour-over gastropub selvage.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Dinner with Tony</span> 
-                            <i class="fa fa-cutlery"></i>
+                        <li class="clearfix message-from">
+                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
+                            <span>Chillwave craft beer tote bag stumptown quinoa hashtag.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Client Meeting</span>
-                            <i class="fa fa-user"></i>
+                        <li class="clearfix message-own">
+                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
+                            <span>Dreamcatcher locavore iPhone chillwave, occupy trust fund slow-carb distillery art party narwhal.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">New Theme</span>
-                            <i class="fa fa-paint-brush"></i>
+                        <li class="clearfix message-own">
+                            <span>Sed ut perspiciatis unde omnis iste natus.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Flight Ticket</span>
-                            <i class="fa fa-fighter-jet"></i>
+                        <li class="clearfix message-from">
+                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
+                            <span>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.</span>
                         </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Generate Charts</span>
-                            <i class="fa fa-area-chart"></i>
-                        </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Call Client</span>
-                            <i class="fa fa-phone"></i>
-                        </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Share location</span>
-                            <i class="fa fa-map-marker"></i>
-                        </li>
-                        <li>
-                            <p:selectBooleanCheckbox />
-                            <span class="task-name">Create Feed</span>
-                            <i class="fa fa-rss"></i>
+                        <li class="clearfix message-own">
+                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
+                            <span>At vero eos et accusamus.</span>
                         </li>
                     </ul>
                 </p:panel>
-            </div>
-            <div class="ui-g-12 ui-md-6 ui-lg-4 ui-fluid contact-form">
-                <p:panel header="Contact Us" style="min-height:360px">
+                
+                  <div class="ui-g-12 ui-md-6 ui-lg-6 ui-fluid contact-form">
+                <p:panel header="Contact Us" style="min-height:440px">
                     <div class="ui-g">
                         <div class="ui-g-12">
                             <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" autoWidth="false">
@@ -312,8 +345,8 @@
                     <p:commandButton type="button" value="Send" icon="fa fa-paper-plane-o"></p:commandButton>
                 </p:panel>
             </div>
-            <div class="ui-g-12 ui-lg-4 contacts">
-                <p:panel header="Contacts" style="min-height:360px">
+            <div class="ui-g-12 ui-lg-6 contacts">
+                <p:panel header="Contacts" style="min-height:440px">
                     <ul>
                         <li class="clearfix">
                             <p:graphicImage name="images/profile-image.png" library="atlantis-layout" width="45"/>
@@ -377,6 +410,8 @@
                         </li>
                     </ul>
                 </p:panel>
+            </div>
+                
             </div>
 
             <div class="ui-g-12 ui-md-4">
@@ -447,40 +482,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="ui-g-12 ui-md-8 chat">
-                <p:panel header="Chat">
-                    <ul>
-                        <li class="clearfix message-from">
-                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
-                            <span>Retro occupy organic, stumptown shabby chic pour-over roof party DIY normcore.</span>
-                        </li>
-                        <li class="clearfix message-own">
-                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
-                            <span>Actually artisan organic occupy, Wes Anderson ugh whatever pour-over gastropub selvage.</span>
-                        </li>
-                        <li class="clearfix message-from">
-                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
-                            <span>Chillwave craft beer tote bag stumptown quinoa hashtag.</span>
-                        </li>
-                        <li class="clearfix message-own">
-                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
-                            <span>Dreamcatcher locavore iPhone chillwave, occupy trust fund slow-carb distillery art party narwhal.</span>
-                        </li>
-                        <li class="clearfix message-own">
-                            <span>Sed ut perspiciatis unde omnis iste natus.</span>
-                        </li>
-                        <li class="clearfix message-from">
-                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" />
-                            <span>Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse.</span>
-                        </li>
-                        <li class="clearfix message-own">
-                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" />
-                            <span>At vero eos et accusamus.</span>
-                        </li>
-                    </ul>
-                </p:panel>
             </div>
 
             <div class="ui-g-12 ui-md-8">
