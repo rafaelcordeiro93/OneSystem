@@ -83,6 +83,7 @@ public class Transferencia implements Serializable {
             }
             b.comTransferencia(this);
             geraHistorico(baixa, b);
+            b.comEmissao(emissao);
             this.baixas.add(b.construir());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -92,8 +93,8 @@ public class Transferencia implements Serializable {
     private void geraHistorico(Baixa baixa, BaixaBuilder b) {
         BundleUtil msg = new BundleUtil();
         if (baixa.getDespesa() == null) {
-            b.comHistorico(msg.getLabel("Transferencia") + " " + msg.getLabel("de") + " (" + origem.getId() + ") " + origem.getNome() + " "
-                    + msg.getLabel("para") + " (" + destino.getId() + ") " + destino.getNome());
+            b.comHistorico(msg.getLabel("Transferencia") + " " + msg.getLabel("de") + " (" + origem.getId() + " - " + origem.getNome() + ") "
+                    + msg.getLabel("para") + " (" + destino.getId() + " - " + destino.getNome() + ")");
         } else {
             b.comHistorico(msg.getLabel("Tarifa") + " " + msg.getLabel("de") + " " + baixa.getDespesa().getNome() + " " + msg.getLabel("de") + " " + msg.getLabel("Transferencia"));
         }

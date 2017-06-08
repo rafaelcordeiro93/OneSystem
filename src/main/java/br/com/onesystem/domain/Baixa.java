@@ -186,12 +186,13 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public String getSaldoFormatado(BigDecimal saldoAtual) {
-        if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
-            return cotacao.getConta().getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual.add(this.getValor()));
-        } else if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
-            return cotacao.getConta().getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual.subtract(this.getValor()));
-        } else {
-            return cotacao.getConta().getMoeda().getSigla() + " " + NumberUtils.format(saldoAtual);
+        switch (naturezaFinanceira) {
+            case ENTRADA:
+                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.add(this.getValor()));
+            case SAIDA:
+                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.subtract(this.getValor()));
+            default:
+                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual);
         }
     }
 
@@ -378,7 +379,7 @@ public class Baixa implements Serializable, Movimento {
     public FormaDeCobranca getFormaDeCobranca() {
         return formaDeCobranca;
     }
-    
+
     @Override
     public Date getVencimento() {
         return null;

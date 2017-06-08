@@ -12,6 +12,7 @@ import java.util.List;
 
 public class BaixaService implements Serializable {
 
+    
     public List<Baixa> buscarBaixas() {
         return new BaixaDAO().buscarBaixasW().orderByEmissao().listaDeResultados();
     }

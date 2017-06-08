@@ -37,9 +37,9 @@ import java.util.List;
 public class BaixaBuilder {
 
     private Long id;
-    private BigDecimal valor = BigDecimal.ZERO;
-    private String historico = "";
-    private Date emissao = Calendar.getInstance().getTime();
+    private BigDecimal valor;
+    private String historico;
+    private Date emissao;
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
     private Cobranca cobranca;
@@ -50,7 +50,7 @@ public class BaixaBuilder {
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
-    private EstadoDeBaixa estado = EstadoDeBaixa.EFETIVADO;
+    private EstadoDeBaixa estado;
     private CobrancaFixa cobrancaFixa;
     private ValorPorCotacao valorPorCotacao;
     private TipoDeCobranca tipoDeCobranca;
