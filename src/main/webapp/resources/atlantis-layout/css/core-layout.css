@@ -686,3 +686,13 @@ body .ui-button.red-btn.ui-state-active {
     background-color: rgba(0, 191, 174, 0.48) !important;
     cursor: not-allowed !important;
 }
+.globe{
+    border: 1px solid #dee4e9;
+    position: absolute;
+    left: -1px;
+    top: -45px;
+    width: 100px;
+    height: 75px;
+    text-align: center;
+    background-color: #ffffff;
+}

@@ -25,7 +25,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="cotacao" value="#{cotacaoView.e}" dialog="#{selecaoCotacaoView}" mbView="#{cotacaoView}" update=":conteudo" var="cotacao" converter="cotacaoBVConverter" itemLabel="#{cotacao.id}" itemValue="#{cotacao}" onlyNumber="true" editVisible="false"/>
+                            <a:inputTextDialog id="cotacao" value="#{cotacaoView.e}" dialog="#{selecaoCotacaoView}" mbView="#{cotacaoView}" process="@this" update="conteudo" var="cotacaoBV" converter="cotacaoBVConverter" itemLabel="#{cotacaoBV.id}" itemValue="#{cotacaoBV}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel  value="#{l.Conta}"/>
                             <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cotacaoView}" value="#{cotacaoView.e.conta}" update=":conteudo:Valor" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>

@@ -7,21 +7,22 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.IVA;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.IVABV;
 import br.com.onesystem.war.service.IVAService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaBVConverter", forClass = IVABV.class)
-public class IVABVConverter implements Converter, Serializable {
+@FacesConverter(value = "ivaConverter", forClass = IVA.class)
+public class IVAConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
@@ -31,22 +32,22 @@ public class IVABVConverter implements Converter, Serializable {
                 if (StringUtils.containsLetter(value)) {
                     for (IVA iva : lista) {
                         if (iva.getNome().equals(value)) {
-                            return new IVABV(iva);
+                            return iva;
                         }
                     }
                 } else {
                     for (IVA iva : lista) {
                         if (iva.getId().equals(new Long(value))) {
-                            return new IVABV(iva);
+                            return iva;
                         }
                     }
                 }
-                return new IVABV();
-            } catch (Exception e) {
-                return new IVABV();
+                return null;
+            } catch (NumberFormatException e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma iva válida."));
             }
         } else {
-            return new IVABV();
+            return null;
         }
     }
 
@@ -54,12 +55,12 @@ public class IVABVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVABV) object).getNome());
+                return String.valueOf(((IVA) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
         } else {
-            return "";
+            return null;
         }
     }
 }

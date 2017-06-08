@@ -33,12 +33,6 @@ public class Conta implements Serializable {
     @ManyToOne(optional = true)
     private Banco banco;
 
-    @OneToMany(mappedBy = "origem")
-    private List<Transferencia> origemDeTransferencias;
-
-    @OneToMany(mappedBy = "destino")
-    private List<Transferencia> destinoDeTransferencias;
-    
     @OneToMany(mappedBy = "conta")
     private List<TipoDeCobranca> tipoDeCobrancas;
 
@@ -71,14 +65,6 @@ public class Conta implements Serializable {
         return banco;
     }
 
-    public List<Transferencia> getOrigemDeTransferencias() {
-        return origemDeTransferencias;
-    }
-
-    public List<Transferencia> getDestinoDeTransferencias() {
-        return destinoDeTransferencias;
-    }
-
     public String getMoedaNomeESiglaMoeda() {
         return nome + " - " + moeda.getSigla();
     }
@@ -109,7 +95,7 @@ public class Conta implements Serializable {
 
     @Override
     public String toString() {
-        return "Conta{" + "id=" + id + ", nome=" + nome + ", banco=" + banco + ", origemDeTransferencias=" + origemDeTransferencias + ", destinoDeTransferencias=" + destinoDeTransferencias + ", moeda=" + moeda + ", cotacoes=" + cotacoes + '}';
+        return "Conta{" + "id=" + id + ", nome=" + nome + ", banco=" + banco + ", moeda=" + moeda + ", cotacoes=" + cotacoes + '}';
     }
 
 }

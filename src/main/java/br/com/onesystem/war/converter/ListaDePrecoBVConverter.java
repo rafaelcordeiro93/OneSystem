@@ -5,12 +5,13 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.IVABV;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.builder.ListaDePrecoBV;
+import br.com.onesystem.war.service.ListaDePrecoService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,33 +21,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaBVConverter", forClass = IVABV.class)
-public class IVABVConverter implements Converter, Serializable {
+@FacesConverter(value = "listaDePrecoBVConverter", forClass = ListaDePrecoBV.class)
+public class ListaDePrecoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<IVA> lista = new IVAService().buscarIVAs();
+                List<ListaDePreco> lista = new ListaDePrecoService().buscarListaPrecos();
                 if (StringUtils.containsLetter(value)) {
-                    for (IVA iva : lista) {
-                        if (iva.getNome().equals(value)) {
-                            return new IVABV(iva);
+                    for (ListaDePreco listaDePreco : lista) {
+                        if (listaDePreco.getNome().equals(value)) {
+                            return new ListaDePrecoBV(listaDePreco);
                         }
                     }
                 } else {
-                    for (IVA iva : lista) {
-                        if (iva.getId().equals(new Long(value))) {
-                            return new IVABV(iva);
+                    for (ListaDePreco listaDePreco : lista) {
+                        if (listaDePreco.getId().equals(new Long(value))) {
+                            return new ListaDePrecoBV(listaDePreco);
                         }
                     }
                 }
-                return new IVABV();
+                return new ListaDePrecoBV();
             } catch (Exception e) {
-                return new IVABV();
+                return new ListaDePrecoBV();
             }
         } else {
-            return new IVABV();
+            return new ListaDePrecoBV();
         }
     }
 
@@ -54,7 +55,7 @@ public class IVABVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVABV) object).getNome());
+                return String.valueOf(((ListaDePrecoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

@@ -23,41 +23,6 @@ public class MarcaView extends BasicMBImpl<Marca, MarcaBV> implements Serializab
         limparJanela();
     }
 
-    public void add() {
-        try {
-            Marca novoRegistro = e.construir();
-            if (validaMarcaExistente(novoRegistro)) {
-                addNoBanco(novoRegistro);
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("marca_ja_cadastrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void update() {
-        try {
-            Marca marcaExistente = e.construirComID();
-            if (marcaExistente.getId() != null) {
-                if (validaMarcaExistente(marcaExistente)) {
-                    updateNoBanco(marcaExistente);
-                } else {
-                    throw new EDadoInvalidoException(new BundleUtil().getMessage("marca_ja_cadastrado"));
-                }
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("marca_nao_cadastrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    private boolean validaMarcaExistente(Marca novoRegistro) {
-        List<Marca> lista = new MarcaDAO().buscarMarcas().porNome(novoRegistro).listaDeResultados();
-        return lista.isEmpty();
-    }
-
     @Override
     public void selecionar(SelectEvent event) {
         e = new MarcaBV((Marca) event.getObject());

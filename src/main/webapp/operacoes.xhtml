@@ -24,9 +24,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-
-                            <a:inputTextDialog id="operacaoId" value="#{operacaoView.e}" update=":conteudo" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoBVConverter" process="@this" itemLabel="#{operacao.id}" itemValue="#{operacao}" editVisible="false" onlyNumber="true"/>
-
+                            <a:inputTextDialog id="operacaoId" value="#{operacaoView.e}" update=":conteudo" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoBVConverter" process="@this" itemLabel="#{operacao.id}" itemValue="#{operacao}" editVisible="false" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{operacaoView.e.nome}" maxlength="60"/>

@@ -11,19 +11,25 @@
     <ui:define name="content">
         <a:dataTable id="pessoaDT" managedBeanName="#{selecaoCotacaoView}">
 
-                <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
-                    <h:outputText value="#{bean.id}" />
-                </p:column>
-                <p:column headerText="#{l.Data}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Data}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.emissao}" />
-                </p:column>
-                <p:column headerText="#{l.Moeda}" sortBy="#{bean.conta.moeda.nome}" filterBy="#{bean.conta.moeda.nome}" footerText="#{l.Moeda}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.conta.moeda.nome}" />
-                </p:column>
-                <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" filterBy="#{bean.valor}" footerText="#{l.Valor}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.valor}" />
-                </p:column>
-         </a:dataTable>
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Data}" sortBy="#{bean.emissaoFormatada}" filterBy="#{bean.emissaoFormatada}" footerText="#{l.Data}" filterMatchMode="contains">
+                <h:outputText value="#{bean.emissaoFormatada}" />
+            </p:column>
+            <p:column headerText="#{l.Conta}" sortBy="#{bean.conta.nome}" filterBy="#{bean.conta.nome}" footerText="#{l.Conta}" filterMatchMode="contains">
+                <h:outputText value="#{bean.conta.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Banco}" colspan="2" sortBy="#{bean.conta.banco.nome}" filterBy="#{bean.conta.banco.nome}" footerText="#{l.Banco}" filterMatchMode="contains">
+                <h:outputText value="#{bean.conta.banco.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Moeda}" sortBy="#{bean.conta.moeda.nome}" filterBy="#{bean.conta.moeda.nome}" footerText="#{l.Moeda}" filterMatchMode="contains">
+                <h:outputText value="#{bean.conta.moeda.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" filterBy="#{bean.valor}" footerText="#{l.Valor}" filterMatchMode="contains">
+                <h:outputText value="#{bean.valor}" />
+            </p:column>
+        </a:dataTable>
 
     </ui:define>
 </ui:composition>

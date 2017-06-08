@@ -5,12 +5,13 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.IVABV;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.builder.GrupoBV;
+import br.com.onesystem.war.service.GrupoService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,33 +21,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaBVConverter", forClass = IVABV.class)
-public class IVABVConverter implements Converter, Serializable {
+@FacesConverter(value = "grupoBVConverter", forClass = GrupoBV.class)
+public class GrupoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<IVA> lista = new IVAService().buscarIVAs();
+                List<Grupo> lista = new GrupoService().buscarGrupos();
                 if (StringUtils.containsLetter(value)) {
-                    for (IVA iva : lista) {
-                        if (iva.getNome().equals(value)) {
-                            return new IVABV(iva);
+                    for (Grupo grupo : lista) {
+                        if (grupo.getNome().equals(value)) {
+                            return new GrupoBV(grupo);
                         }
                     }
                 } else {
-                    for (IVA iva : lista) {
-                        if (iva.getId().equals(new Long(value))) {
-                            return new IVABV(iva);
+                    for (Grupo grupo : lista) {
+                        if (grupo.getId().equals(new Long(value))) {
+                            return new GrupoBV(grupo);
                         }
                     }
                 }
-                return new IVABV();
+                return new GrupoBV();
             } catch (Exception e) {
-                return new IVABV();
+                return new GrupoBV();
             }
         } else {
-            return new IVABV();
+            return new GrupoBV();
         }
     }
 
@@ -54,7 +55,7 @@ public class IVABVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVABV) object).getNome());
+                return String.valueOf(((GrupoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

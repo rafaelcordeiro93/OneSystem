@@ -16,10 +16,10 @@
             <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
                 <h:outputText value="#{bean.nome}" />
             </p:column>
-            <p:column headerText="#{l.Banco}" sortBy="#{bean.banco.nome}" filterBy="#{bean.banco.nome}" footerText="#{l.Banco}" filterMatchMode="contains">
+            <p:column headerText="#{l.Banco}" colspan="2" sortBy="#{bean.banco.nome}" filterBy="#{bean.banco.nome}" footerText="#{l.Banco}" filterMatchMode="contains">
                 <h:outputText value="#{bean.banco.nome}" />
             </p:column>
-            <p:column headerText="#{l.Moeda}" sortBy="#{bean.moeda.nome}" filterBy="#{bean.moeda.nome}" footerText="#{l.Moeda}" >
+            <p:column headerText="#{l.Moeda}" colspan="2" sortBy="#{bean.moeda.nome}" filterBy="#{bean.moeda.nome}" footerText="#{l.Moeda}" >
                 <h:outputText value="#{bean.moeda.nome}" />
             </p:column>
         </a:dataTable>
