@@ -18,34 +18,33 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
-
+                        <div class="EmptyBox20"/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="grupoFiscalID" dialog="#{selecaoGrupoFiscalView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.grupoFiscal.id}" update=":conteudo" />
+                            <a:inputTextDialog id="grupoid" value="#{grupoFiscalView.e}" update=":conteudo" dialog="#{selecaoGrupoFiscalView}" mbView="#{grupoFiscalView}" var="grupoFiscal" converter="grupoFiscalBVConverter" process="@this" itemLabel="#{grupoFiscal.id}" itemValue="#{grupoFiscal}" editVisible="false" itemLabelTab="#{grupoFiscal.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{grupoFiscalView.grupoFiscal.nome}" maxlength="60"/>
+                            <p:inputText value="#{grupoFiscalView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.IVA}"/>
-                            <a:inputTextDialog id="grupoFiscalIVA" dialog="#{selecaoIVAView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.grupoFiscal.iva.nome}"/>
+                            <a:inputTextDialog id="grupoFiscalIVA" dialog="#{selecaoIVAView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.e.iva}" var="iva" itemLabel="#{iva.nome}" itemValue="#{iva}" converter="ivaConverter" itemLabelTabVisible="true" itemLabelTab="#{iva.nome}"/>
+
 
                         </p:panelGrid>
 
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox20"/>
 
                         <p:separator/>
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{grupoFiscalView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{grupoFiscalView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{grupoFiscalView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{grupoFiscalView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{grupoFiscalView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
-
                     </div>
                 </div>
             </div>

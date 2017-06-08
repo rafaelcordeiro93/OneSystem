@@ -31,18 +31,23 @@ public class SelecaoTipoReceitaView extends BasicCrudMBImpl<TipoReceita> impleme
     public void abrirDialogo() {
         exibirNaTela("selecaoTipoReceita");
     }
-    
+
     @Override
     public List<TipoReceita> complete(String query) {
-        List<TipoReceita> receitasFiltradas = new ArrayList<>();
+        List<TipoReceita> listaFIltrada = new ArrayList<>();
+        for (TipoReceita b : beans) {
+            if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
+                listaFIltrada.add(b);
+            }
+        }
         if (!StringUtils.containsLetter(query)) {
-            for (TipoReceita t : beans) {
-                if (StringUtils.startsWithIgnoreCase(t.getId().toString(), query)) {
-                    receitasFiltradas.add(t);
+            for (TipoReceita m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+                    listaFIltrada.add(m);
                 }
             }
         }
-        return receitasFiltradas;
+        return listaFIltrada;
     }
 
     public TipoReceitaService getService() {

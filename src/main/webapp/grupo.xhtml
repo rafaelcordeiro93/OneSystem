@@ -18,29 +18,28 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
-
+                        <div class="EmptyBox20"/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputNumberDialog id="grupoid" dialog="#{selecaoGrupoView}" mbView="#{grupoView}" value="#{grupoView.grupo.id}" update=":conteudo" />
+                            <a:inputTextDialog id="grupoID" value="#{grupoView.e}" update=":conteudo" dialog="#{selecaoGrupoView}" mbView="#{grupoView}" var="grupo" converter="grupoBVConverter" process="@this" itemLabel="#{grupo.id}" itemValue="#{grupo}" editVisible="false" itemLabelTab="#{grupo.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{grupoView.grupo.nome}" maxlength="60"/>
+                            <p:inputText value="#{grupoView.e.nome}" maxlength="60"/>
                         </p:panelGrid>
 
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox20"/>
 
                         <p:separator/>
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{grupoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{grupoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{grupoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{grupoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{grupoView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White"/>
                     </div>
                 </div>
             </div>

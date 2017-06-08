@@ -3,114 +3,120 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect  ">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Privilegio} </h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                            <p:panel id="panelDT" visible="#{!privilegioView.panel}" style="border: none">
-                                <p:dataTable id="privilegioDT" var="grupoDePrivilegio" value="#{privilegioView.grupoLista}" selectionMode="single" selection="#{privilegioView.grupoSelecionado}" rowKey="#{grupoDePrivilegio.id}"
-                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{privilegioView.gruposFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
-                                    <f:facet name="header">    
-                                        Tabela de Grupos de Privilégios
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+
+                            <p:outputLabel value="#{l.Grupo_De_Privilegio}"/> 
+                            <a:inputTextDialog id="grupoDePrivilegioID" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{privilegioView}" value="#{privilegioView.grupoSelecionado}" updateButtonSearch="conteudo" process="@this" var="grupoDePrivilegio" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" converter="grupoDePrivilegioConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}">
+                                <p:ajax event="itemSelect" update="conteudo" listener="#{privilegioView.buscarPrivilegioLista}"/>
+                            </a:inputTextDialog>
+
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                    </div>
+
+
+
+                    <div style="padding: 0% 0% 0% 8%">
+                        <p:commandButton value="#{l.Atualizar}" styleClass="Mar2" action="#{privilegioView.save}" update=":conteudo" icon="fa fa-save Fs16 White"/>
+                        <p:commandButton value="#{l.Copiar_De_Outro_Grupo}" styleClass="Mar2" onclick="PF('copiarDeOutroGrupo').show()" icon="fa fa-save Fs16 White"/>
+                        <p:commandButton value="#{l.Permitir_Tudo}" styleClass="Mar2 green-btn" action="#{privilegioView.permitir}" update=":conteudo" icon="fa fa-save Fs16 White" />
+                        <p:commandButton value="#{l.Negar_Tudo}" styleClass="Mar2 red-btn" action="#{privilegioView.negar}" update=":conteudo" icon="fa fa-save Fs16 White" />
+                    </div>
+
+
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+                        <p:dataTable id="privDT" var="privilegioBV" value="#{privilegioView.privilegioLista}" editable="true" editMode="cell" widgetVar="cellPriv" emptyMessage="#{l.Nao_Ha_Registros}">
+
+                            <p:ajax event="cellEdit" update=":conteudo:privDT"/>
+
+                            <p:column headerText="#{l.Janela}" sortBy="#{privilegioBV.janela.nome}" filterBy="#{privilegioBV.janela.nome}" filterMatchMode="contains" style="width: 30%">
+                                <h:outputText value="#{privilegioBV.janela.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Modulo}" sortBy="#{privilegioBV.janela.modulo.nome}" filterBy="#{privilegioBV.janela.modulo.nome}" filterMatchMode="contains">
+                                <h:outputText value="#{privilegioBV.janela.modulo.nome}"/>
+                            </p:column>
+                            <p:column headerText="#{l.Consultar}" style="text-align: center">
+                                <p:cellEditor>
+                                    <f:facet name="output"><p:selectBooleanCheckbox id="consultar" value="#{privilegioBV.consultar}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectBooleanCheckbox value="#{privilegioBV.consultar}">
+                                            <p:ajax update="consultar"/>
+                                        </p:selectBooleanCheckbox>
                                     </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Adicionar}" style="text-align: center">
+                                <p:cellEditor>
+                                    <f:facet name="output"><p:selectBooleanCheckbox id="adicionar" value="#{privilegioBV.adicionar}" /></f:facet>
+                                    <f:facet name="input"><p:selectBooleanCheckbox value="#{privilegioBV.adicionar}">
+                                            <p:ajax update="adicionar"/>
+                                        </p:selectBooleanCheckbox>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Atualizar}" style="text-align: center">
+                                <p:cellEditor>
+                                    <f:facet name="output"><p:selectBooleanCheckbox id="alterar" value="#{privilegioBV.alterar}" /></f:facet>
+                                    <f:facet name="input"> 
+                                        <p:selectBooleanCheckbox value="#{privilegioBV.alterar}">
+                                            <p:ajax update="alterar"/>
+                                        </p:selectBooleanCheckbox>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Remover}" style="text-align: center">
+                                <p:cellEditor>
+                                    <f:facet name="output"><p:selectBooleanCheckbox id="remover" value="#{privilegioBV.remover}" /></f:facet>
+                                    <f:facet name="input">
+                                        <p:selectBooleanCheckbox value="#{privilegioBV.remover}">
+                                            <p:ajax update="remover"/>
+                                        </p:selectBooleanCheckbox>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>
 
-                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{privilegioView.abrirEdicaoComDados()}" />
 
-                                    <p:column headerText="#{l.Id}" sortBy="#{grupoDePrivilegio.id}" filterBy="#{grupoDePrivilegio.id}" footerText="#{l.Id}" >                                        
-                                        <h:outputText value="#{grupoDePrivilegio.id}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Nome}" sortBy="#{grupoDePrivilegio.nome}" filterBy="#{grupoDePrivilegio.nome}" footerText="#{l.Nome}" >
-                                        <h:outputText value="#{grupoDePrivilegio.nome}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:panel>
-
-                            <p:panel id="panelED" visible="#{privilegioView.panel}" style="border: none">
-
-                                <p:commandButton value="#{l.Atualizar}" action="#{privilegioView.save}" update=":conteudo" icon="fa fa-save Fs16 White"/>
-                                <p:commandButton value="#{l.Copiar_De_Outro_Grupo}" onclick="PF('copiarDeOutroGrupo').show()" icon="fa fa-save Fs16 White"/>
-                                <p:commandButton value="#{l.Permitir_Tudo}" action="#{privilegioView.permitir}" update=":conteudo" icon="fa fa-save Fs16 White" styleClass="green-btn"/>
-                                <p:commandButton value="#{l.Negar_Tudo}" action="#{privilegioView.negar}" update=":conteudo" icon="fa fa-save Fs16 White" styleClass="red-btn"/>
-                                <p:commandButton value="#{l.Voltar}" action="#{privilegioView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
-                                                 immediate="true" styleClass="BrownButton" />
-
-                                <p:separator/>
-                                <p:dataTable id="privDT" var="privilegioBV" value="#{privilegioView.privilegioLista}" editable="true" editMode="cell" widgetVar="cellPriv">
-
-                                    <p:ajax event="cellEdit" update=":conteudo:privDT"/>
-
-                                    <p:column headerText="#{l.Janela}" sortBy="#{privilegioBV.janela.nome}" style="width: 30%">
-                                        <h:outputText value="#{privilegioBV.janela.nome}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Modulo}" sortBy="#{privilegioBV.janela.modulo.nome}">
-                                        <h:outputText value="#{privilegioBV.janela.modulo.nome}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Consultar}" style="text-align: center">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><p:selectBooleanCheckbox id="consultar" value="#{privilegioBV.consultar}" /></f:facet>
-                                            <f:facet name="input">
-                                                <p:selectBooleanCheckbox value="#{privilegioBV.consultar}">
-                                                    <p:ajax update="consultar"/>
-                                                </p:selectBooleanCheckbox>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-                                    <p:column headerText="#{l.Adicionar}" style="text-align: center">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><p:selectBooleanCheckbox id="adicionar" value="#{privilegioBV.adicionar}" /></f:facet>
-                                            <f:facet name="input"><p:selectBooleanCheckbox value="#{privilegioBV.adicionar}">
-                                                    <p:ajax update="adicionar"/>
-                                                </p:selectBooleanCheckbox>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-                                    <p:column headerText="#{l.Atualizar}" style="text-align: center">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><p:selectBooleanCheckbox id="alterar" value="#{privilegioBV.alterar}" /></f:facet>
-                                            <f:facet name="input"> 
-                                                <p:selectBooleanCheckbox value="#{privilegioBV.alterar}">
-                                                    <p:ajax update="alterar"/>
-                                                </p:selectBooleanCheckbox>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-                                    <p:column headerText="#{l.Remover}" style="text-align: center">
-                                        <p:cellEditor>
-                                            <f:facet name="output"><p:selectBooleanCheckbox id="remover" value="#{privilegioBV.remover}" /></f:facet>
-                                            <f:facet name="input">
-                                                <p:selectBooleanCheckbox value="#{privilegioBV.remover}">
-                                                    <p:ajax update="remover"/>
-                                                </p:selectBooleanCheckbox>
-                                            </f:facet>
-                                        </p:cellEditor>
-                                    </p:column>
-                                </p:dataTable>
-                            </p:panel>  
-
-                        </div>
+                        <div class="EmptyBox20"/>
                     </div>
                 </div>
             </div>
         </div>
 
+
+
+
+
         <p:dialog header="#{l.Copiar_De_Outro_Grupo}" resizable="false" closeOnEscape="true" hideEffect="fade" showEffect="fade" modal="true" widgetVar="copiarDeOutroGrupo" draggable="false">
-
+            <div class="EmptyBox20"/>
             <h:panelGrid columns="2" style="margin-top: -2%;">
-                <p:inputText id="privilegioOutroGrupo" readonly="true" placeholder="#{l.Grupo_De_Privilegio}" value="#{privilegioView.outroGrupo.nome}"/>
-                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoDePrivilegioView.abrirDialogo()}" process="@this"
-                                 update="@none">
-                    <p:ajax event="dialogReturn" listener="#{privilegioView.selecionaOutroGrupo}"
-                            process="@this" update="privilegioOutroGrupo" />
-                </p:commandButton>
-            </h:panelGrid>
 
+                <p:outputLabel value="#{l.Grupo_De_Privilegio}"/> 
+                <a:inputTextDialog id="grupoDePrivilegioOutro" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{privilegioView}" value="#{privilegioView.outroGrupo}"  var="grupoDePrivilegio" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" converter="grupoDePrivilegioConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}"/>
+
+            </h:panelGrid>
+            <div class="EmptyBox20"/>
             <p:commandButton value="#{l.Copiar}" action="#{privilegioView.copiarDeOutroGrupo}" update=":conteudo"/>
 
         </p:dialog>
