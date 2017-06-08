@@ -24,8 +24,8 @@
                                          columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4">
 
                                 <p:outputLabel value="#{l.Id}"/>
-                                <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" update=":conteudo" value="#{contaDeEstoqueView.e}" var="contaDeEstoque" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoque.id}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true">
-                                    <p:ajax event="change" listener="#{contaDeEstoqueView.selecionaConta}"/>
+                                <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" process="@this" update=":conteudo" value="#{contaDeEstoqueView.e}" var="contaDeEstoqueBV" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoqueBV.id}" itemValue="#{contaDeEstoqueBV}" itemLabelTab="#{contaDeEstoqueBV.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true">
+                                    <p:ajax event="itemSelect" listener="#{contaDeEstoqueView.selecionaConta}" update=":conteudo"/>
                                 </a:inputTextDialog>
 
                                 <p:outputLabel value="#{l.Nome}"/>
@@ -49,14 +49,14 @@
 
                             <p:outputLabel value="#{l.Operacao_Fisica}"/>
                             <p:selectOneMenu id="TipoSituacao" value="#{contaDeEstoqueView.operacaoDeEstoque.operacaoFisica}">
-                                <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="#{l.Operacao_Fisica}" itemValue="#{Operacao_Fisica}" >
+                                <f:selectItems value="#{contaDeEstoqueView.operacaoFisica}" var="operacaoFisica" itemValue="#{operacaoFisica}" itemLabel="#{operacaoFisica.nome}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
 
                             <h:panelGrid columns="3" style="margin-top: -2px">
-                                <p:commandButton icon="fa fa-plus Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
-                                <p:commandButton icon="fa fa-refresh Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn" />     
-                                <p:commandButton icon="fa fa-trash-o Fs14 White" disabled="#{contaDeEstoqueView.e.id eq null ? true : false}" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn" />
+                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{contaDeEstoqueView.addOperacoesNaLista()}"  update=":conteudo"/>
+                                <p:commandButton icon="fa fa-refresh Fs14 White" action="#{contaDeEstoqueView.updateOperacoesNaLista()}" update=":conteudo" styleClass="green-btn" />     
+                                <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{contaDeEstoqueView.deleteOperacoesNaLista()}" update=":conteudo" styleClass="orange-btn" />
                             </h:panelGrid>
 
 
@@ -64,17 +64,17 @@
                         <div class="EmptyBox20"/>
                         <p:separator/>
 
-                        <p:dataTable id="OperacaoDeEstoqueDT" var="operacaoDeEstoque" value="#{contaDeEstoqueView.conta.operacaoDeEstoque}" rowKey="#{operacaoDeEstoque.id}" emptyMessage="#{l.Nao_Ha_Registros}"  
+                        <p:dataTable id="OperacaoDeEstoqueDT" var="model" value="#{contaDeEstoqueView.operacaoEstoqueList}" rowKey="#{model.id}" emptyMessage="#{l.Nao_Ha_Registros}"  
                                      reflow="true" selectionMode="single" selection="#{contaDeEstoqueView.operacaoDeEstoqueSelecionado}">
                             <p:ajax event="rowSelect" process="@this" listener="#{contaDeEstoqueView.selecionaOperacaoDeEstoque}" update=":conteudo"/>
-                            <p:column style="width: 10%; text-align: center" headerText="#{l.Id}" sortBy="#{operacaoDeEstoque.id}" colspan="1">
-                                <h:outputText value="#{operacaoDeEstoque.operacao.id}" />
+                            <p:column style="width: 10%; text-align: center" headerText="#{l.Id}" sortBy="#{model.id}" colspan="1">
+                                <h:outputText value="#{model.object.operacao.id}" />
                             </p:column>
-                            <p:column headerText="#{l.Operacao}" sortBy="#{operacaoDeEstoque.operacao.nome}" colspan="1">
-                                <h:outputText value="#{operacaoDeEstoque.operacao.nome}" />
+                            <p:column headerText="#{l.Operacao}" sortBy="#{model.object.operacao.nome}" colspan="2">
+                                <h:outputText value="#{model.object.operacao.nome}" />
                             </p:column>
-                            <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{operacaoDeEstoque.operacaoFisica}" colspan="2">
-                                <h:outputText  value="#{operacaoDeEstoque.operacaoFisica}" />
+                            <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{model.object.operacaoFisica.nome}" colspan="1">
+                                <h:outputText  value="#{model.object.operacaoFisica.nome}" />
                             </p:column>
                         </p:dataTable>
 
