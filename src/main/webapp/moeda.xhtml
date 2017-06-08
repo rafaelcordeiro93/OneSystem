@@ -18,14 +18,19 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
+                        <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.e}" update=":conteudo" var="moeda" itemLabel="#{moeda.id}" itemValue="#{moeda}" converter="moedaBVConverter" itemLabelTabVisible="false" editVisible="false" onlyNumber="true"/>
-                            
+                            <a:inputTextDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.e}" update=":conteudo" process="@this" var="moeda" itemLabel="#{moeda.id}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" converter="moedaBVConverter" itemLabelTabVisible="true" editVisible="false" onlyNumber="true"/>
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
+
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{moedaView.e.nome}"/>
 
@@ -45,11 +50,11 @@
                             </p:selectOneMenu>
 
                         </p:panelGrid>
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox20"/>
                         <p:separator/>
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{moedaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
