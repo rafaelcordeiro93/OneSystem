@@ -35,20 +35,14 @@
                     </div>
                 </a>
 
+                <!--Usuário --> 
                 <ul class="animated">
-                    <li role="menuitem">
-                        <p:commandButton id="btAbrirDialogoCaixa" action="#{dialogoCaixaView.abrirDialogo()}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{topBarView.redireciona}" />
-                        </p:commandButton>
-                        <a onclick="document.getElementById('btAbrirDialogoCaixa').click()" > <i class="fa fa-fw fa-briefcase"></i> <span>#{l.Logar_Caixa}</span> </a>
-                    </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/perfilUsuario.xhtml"> <i class="fa fa-fw fa-user-o"></i> <span>#{l.Perfil}</span> </a>
                     </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/login.xhtml"> <i class="fa fa-fw fa-sign-out"></i> <span>#{l.Logout}</span> </a>
                     </li>
-
                 </ul>
             </li>
 
@@ -59,9 +53,6 @@
                 <ul class="animated">
                     <li role="menuitem">
                         <a href="/OneSystem-war/configuracao.xhtml"> <i class="fa fa-fw fa-gears"></i> <span>#{l.Configuracoes}</span> </a>
-                    </li>
-                    <li role="menuitem">
-                        <a href="/OneSystem-war/operacoes.xhtml"> <i class="fa fa-fw fa-arrows"></i> <span>#{l.Operacoes}</span> </a>
                     </li>
                     <li role="menuitem">
                         <a href="/OneSystem-war/usuario.xhtml"> <i class="fa fa-fw fa-user"></i> <span>#{l.Usuarios}</span> </a>
@@ -82,6 +73,27 @@
                     </li>
                     -->
 
+                </ul>
+            </li>
+
+            <li>
+                <a href="#"> <i class="topbar-icon fa fa-bell-o">
+                    </i> <span class="topbar-item-name">#{l.Outros}</span> 
+                    <span class="topbar-badge animated rubberBand">1</span>
+                </a>
+                <ul class="animated">
+                    <li role="menuitem">
+                        <p:commandButton id="btAbrirDialogoCaixa" action="#{dialogoCaixaView.abrirDialogo()}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{topBarView.redireciona}" />
+                        </p:commandButton>
+                        <a onclick="document.getElementById('btAbrirDialogoCaixa').click()" > <i class="fa fa-fw fa-briefcase">
+                            </i> <span>#{l.Logar_Caixa}</span> 
+                            <span class="topbar-submenuitem-badge">Novo</span>
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <a href="/OneSystem-war/operacoes.xhtml"> <i class="fa fa-fw fa-arrows"></i> <span>#{l.Operacoes}</span> </a>
+                    </li>
                 </ul>
             </li>
 

@@ -10,13 +10,20 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MD5Util;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
@@ -75,6 +82,20 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
             }
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    public void deletsae() {
+        if (e != null && e.getId() != null) {
+            try {
+                FacesContext context = FacesContext.getCurrentInstance();
+                ExternalContext ec = context.getExternalContext();
+                ec.redirect("/OneSystem-war/login.xhtml");
+                deleteNoBanco((Usuario) e.construirComID(), e.getId());
+            } catch (DadoInvalidoException ex) {
+                ex.print();
+            } catch (IOException ex) {
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.Conta;
@@ -20,6 +21,7 @@ import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
+import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
@@ -37,8 +39,12 @@ import java.util.List;
 public class DadosIniciais {
 
     public static void main(String[] args) throws DadoInvalidoException {
-        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, null, null, "rauber@rrminds.com", null);
-        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, null, null, "cordeiro@rrminds.com", null);
+
+        Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comPais("Paraguai").comUF("PG").construir();
+        new AdicionaDAO<>().adiciona(city);
+
+        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "rauber@rrminds.com", null);
+        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "cordeiro@rrminds.com", null);
         new AdicionaDAO<Pessoa>().adiciona(cordeiro);
         new AdicionaDAO<Pessoa>().adiciona(rauber);
 

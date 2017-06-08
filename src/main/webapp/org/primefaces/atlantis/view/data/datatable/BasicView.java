@@ -35,7 +35,7 @@ public class BasicView implements Serializable {
 
     @PostConstruct
     public void init() {
-        cars = service.createCars(10);
+        cars = service.createCars(9);
     }
     
     public List<Car> getCars() {
