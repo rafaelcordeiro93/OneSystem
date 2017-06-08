@@ -5,10 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.BancoBV;
-import br.com.onesystem.war.service.BancoService;
+import br.com.onesystem.war.builder.TipoReceitaBV;
+import br.com.onesystem.war.service.TipoReceitaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -20,33 +20,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "bancoBVConverter", forClass = BancoBV.class)
-public class BancoBVConverter implements Converter, Serializable {
+@FacesConverter(value = "tipoReceitaBVConverter", forClass = TipoReceitaBV.class)
+public class TipoReceitaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Banco> lista = new BancoService().buscarBancos();
+                List<TipoReceita> lista = new TipoReceitaService().buscarTiposDeReceita();
                 if (StringUtils.containsLetter(value)) {
-                    for (Banco banco : lista) {
-                        if (banco.getNome().equals(value)) {
-                            return new BancoBV(banco);
+                    for (TipoReceita tipoReceita : lista) {
+                        if (tipoReceita.getNome().equals(value)) {
+                            return new TipoReceitaBV(tipoReceita);
                         }
                     }
                 } else {
-                    for (Banco banco : lista) {
-                        if (banco.getId().equals(new Long(value))) {
-                            return new BancoBV(banco);
+                    for (TipoReceita tipoReceita : lista) {
+                        if (tipoReceita.getId().equals(new Long(value))) {
+                            return new TipoReceitaBV(tipoReceita);
                         }
                     }
                 }
-                return new BancoBV();
+                return new TipoReceitaBV();
             } catch (Exception e) {
-                return new BancoBV();
+                return new TipoReceitaBV();
             }
         } else {
-            return new BancoBV();
+            return new TipoReceitaBV();
         }
     }
 
@@ -54,7 +54,7 @@ public class BancoBVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((BancoBV) object).getNome());
+                return String.valueOf(((TipoReceitaBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
