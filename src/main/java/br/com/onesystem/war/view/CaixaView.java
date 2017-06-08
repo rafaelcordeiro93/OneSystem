@@ -121,17 +121,18 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
 
     public void fecharCaixa() throws DadoInvalidoException {
         try {
-            Caixa ca = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
-            if (ca.getId().equals(e.getId())) {
-                SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+            if (e.getId() != null) {
+                Caixa ca = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+                if (ca != null && ca.getId().equals(e.getId())) {
+                    SessionUtil.remove("caixa", FacesContext.getCurrentInstance());
+                }
+                Caixa c = e.construirComID();
+                c.fecharCaixa();
+                new AtualizaDAO<>().atualiza(c);
+                InfoMessage.atualizado();
+                limparJanela();
+                populaCampos();
             }
-            Caixa c = e.construirComID();
-            c.fecharCaixa();
-            new AtualizaDAO<>().atualiza(c);
-            InfoMessage.atualizado();
-            limparJanela();
-            populaCampos();
-
         } catch (EDadoInvalidoException die) {
             die.print();
         }
