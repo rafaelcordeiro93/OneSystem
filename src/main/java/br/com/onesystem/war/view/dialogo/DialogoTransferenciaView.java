@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view.dialogo;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Baixa;
@@ -60,7 +61,7 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
         limparBaixa();
     }
 
-    public void inicializar(){
+    public void inicializar() {
         try {
             e.setEmissao(new Date());
             cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
@@ -77,9 +78,9 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("resizable", false);
-        opcoes.put("width", 700);
+        opcoes.put("width", 720);
         opcoes.put("draggable", true);
-        opcoes.put("height", 425);
+        opcoes.put("height", 475);
         opcoes.put("closable", false);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
@@ -94,8 +95,8 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
         if (obj instanceof TipoDespesa) {
             baixaBV.setDespesa((TipoDespesa) obj);
         } else if (obj instanceof Model) {
-            System.out.println("Baixa: " + (Baixa) ((Model) obj).getObject());
-            baixaBV = new BaixaBV((Baixa) ((Model) obj).getObject());
+            baixaSelecionada = (Model) obj;
+            baixaBV = new BaixaBV((Baixa) baixaSelecionada.getObject());
         }
     }
 
@@ -105,9 +106,9 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
             t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
             baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
 
-            addNoBanco(t);
-            limparJanela();
+            new AdicionaDAO<>().adiciona(t);
             RequestContext.getCurrentInstance().closeDialog(t);
+            limparJanela();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

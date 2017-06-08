@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.BaixaEmissaoComparator;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.ExtratoDeContaBV;
 import br.com.onesystem.war.service.BaixaService;
@@ -20,6 +21,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
@@ -85,6 +87,7 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
             atualizar();
         } else if (obj instanceof Transferencia) {
             atualizar();
+            InfoMessage.adicionado();
         }
     }
 

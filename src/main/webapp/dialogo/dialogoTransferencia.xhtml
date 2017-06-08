@@ -13,9 +13,12 @@
 
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
 
+            <h2 class="BigTopic">#{l.Transferencia}</h2>
+
+
             <div class="ui-g-12">
-                <p:outputLabel value="#{l.Data}"/>
-                <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid100" style="box-sizing: border-box" navigator="true" value="#{dialogoTransferenciaView.e.emissao}"/>
+                <p:outputLabel  class="ui-g-12" value="#{l.Data}: "/>
+                <p:calendar class="ui-g-12"  pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid100" style="box-sizing: border-box" navigator="true" value="#{dialogoTransferenciaView.e.emissao}"/>
                 <p:separator/>
             </div>
 
@@ -25,7 +28,7 @@
                     <p:outputLabel value="#{l.Origem}: "/>
                     <p:selectOneMenu  id="extratoOrigem" value="#{dialogoTransferenciaView.e.origem}" 
                                       converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
-                        <p:ajax listener="#{dialogoTransferenciaView.selecionaCotacaoDeOrigemConformeConta}" update="vlConvertido vlOriginal vlTarifa btnVlTarifa EXCTarifa"/>
+                        <p:ajax listener="#{dialogoTransferenciaView.selecionaCotacaoDeOrigemConformeConta}" update="vlConvertido vlOriginal vlTarifa btnVlTarifa btnVlTarifa-upd btnVlTarifa-del EXCTarifa"/>
                         <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
                         <f:selectItems value="#{dialogoTransferenciaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
                     </p:selectOneMenu>
@@ -63,17 +66,17 @@
                         <p:inputNumber placeholder="#{l.Valor}" id="vlTarifa" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" symbol="#{dialogoTransferenciaView.e.origem.moeda.sigla} " value="#{dialogoTransferenciaView.baixaBV.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
                         <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
                             <p:commandButton  id="btnVlTarifa" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-plus" action="#{dialogoTransferenciaView.addBaixa()}" update="tempDialog"/>
-                            <p:commandButton  disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-refresh" action="#{dialogoTransferenciaView.atualizaBaixa()}" update="tempDialog"/>
-                            <p:commandButton  disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-trash" action="#{dialogoTransferenciaView.deleteBaixa()}" update="tempDialog"/>
+                            <p:commandButton  id="btnVlTarifa-upd" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-refresh" action="#{dialogoTransferenciaView.atualizaBaixa()}" update="tempDialog"/>
+                            <p:commandButton  id="btnVlTarifa-del" disabled="#{dialogoTransferenciaView.e.origem eq null ? true : false}" icon="fa fa-trash" action="#{dialogoTransferenciaView.deleteBaixa()}" update="tempDialog" />
                         </p:panelGrid>                    
                     </p:panelGrid>
 
 
 
                     <p:dataTable id="EXCTarifa" var="model" value="#{dialogoTransferenciaView.baixas}" selectionMode="single"
-                                 emptyMessage="#{l.Nao_Ha_Registros}" rowKey="#{baixa.id}" reflow="true" selection="#{dialogoTransferenciaView.baixaSelecionada}" >
+                                 emptyMessage="#{l.Nao_Ha_Registros}" rowKey="#{model.id}" reflow="true">
 
-                        <p:ajax event="rowSelect" listener="#{dialogoTransferenciaView.selecionar}" update="tempDialog"/>
+                        <p:ajax event="rowSelect" listener="#{dialogoTransferenciaView.selecionar}"  process="@this" update="tempDialog:pgTarifa:pgTarifa-txt tempDialog:vlTarifa"/> 
 
                         <p:column headerText="#{l.Despesa}">
                             <h:outputText value="#{model.object.despesa.nome}"/>
