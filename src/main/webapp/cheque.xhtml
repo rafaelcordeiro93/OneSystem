@@ -3,7 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -23,45 +23,37 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="chequeid" size="26" value="#{chequeView.cheque.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{chequeView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoChequeView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaCheque}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>    
+                            <a:inputTextDialog id="chequeId" value="#{chequeView.e}" update=":conteudo" dialog="#{selecaoChequeView}" mbView="#{chequeView}" var="cheque" converter="chequeBVConverter" process="@this" itemLabel="#{cheque.id}" itemValue="#{cheque}" editVisible="false" itemLabelTab="#{cheque.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
 
-
-                            <p:outputLabel  value="#{l.Venda}" />
-                            <h:panelGrid columns="2"  style="margin-left: -1%">
-                                <p:inputText id="selecionaVenda" size="26" readonly="true"  value="#{chequeView.cheque.venda.id}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoMoedaView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaVenda}" process="@this" update="selecionaVenda" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <p:outputLabel  value="#{l.Nota}" />
+                            <a:inputTextDialog id="notaId" dialog="#{selecaoNotaEmitidaView}" mbView="#{chequeView}" value="#{chequeView.e.venda}" var="venda" itemLabel="#{venda.id}" itemValue="#{venda}" converter="notaEmitidaConverter" itemLabelTabVisible="true" itemLabelTab="#{venda.pessoa.nome}"/>
 
                             <p:outputLabel value="#{l.Cotacao}" />
-                            <p:selectOneMenu  id="MoedaSOM" value="#{chequeView.cheque.cotacao}" converter="cotacaoConverter">
-                                <f:selectItems  var="cotacao" value="#{chequeView.buscarListaDeCotacao()}" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{chequeView.cheque.cotacao}"/>
+                            <p:selectOneMenu  id="MoedaSOM" value="#{chequeView.e.cotacao}" converter="cotacaoConverter">
+                                <f:selectItems  var="cotacao" value="#{chequeView.buscarListaDeCotacao()}" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{chequeView.e.cotacao}"/>
                                 <p:ajax event="itemSelect" update=":conteudo:Valor :conteudo:Desconto :conteudo:Multas :conteudo:Juros"/>
                             </p:selectOneMenu>
 
-
                             <p:outputLabel  value="#{l.Valor}"/>
-                            <p:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.cheque.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.cheque.valor}"/>
+                            <p:inputNumber id="Valor" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.e.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.e.valor}"/>
+
+                            <p:outputLabel  value="#{l.Operacao_Financeira}"/>
+                            <p:selectOneMenu id="operacaoFinanceira" value="#{chequeView.e.operacaoFinanceira}">
+                                <f:selectItems value="#{chequeView.operacaoFinanceira}" var="#{l.Operacao_Financeira}" itemValue="#{Operacao_Financeira}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel  value="#{l.Tipo_Lancamento}"/>
+                            <p:selectOneMenu id="TIPOLANCEMENTO" value="#{chequeView.e.tipoLancamento}">
+                                <f:selectItems value="#{chequeView.tipoLancemento}" var="#{l.tipoLancamento}" itemValue="#{tipoLancamento}"/>
+                            </p:selectOneMenu>
 
                             <p:outputLabel  value="#{l.Emissao}" />
-                            <p:calendar value="#{chequeView.cheque.emissao}" pattern="dd/MM/yyyy HH:mm:ss" />
-
+                            <p:calendar value="#{chequeView.e.emissao}" pattern="dd/MM/yyyy HH:mm:ss" />
 
                             <p:outputLabel  value="#{l.Vencimento}" />
-                            <p:calendar value="#{chequeView.cheque.vencimento}" pattern="dd/MM/yyyy HH:mm:ss" />
+                            <p:calendar value="#{chequeView.e.vencimento}" pattern="dd/MM/yyyy HH:mm:ss" />
 
                         </p:panelGrid>
-
-
-
 
                         <div class="EmptyBox30"/>
 
@@ -73,29 +65,30 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel  value="#{l.Emitente}"/>
-                            <p:inputText value="#{chequeView.cheque.emitente}" />     
+                            <p:inputText value="#{chequeView.e.emitente}" />     
 
                             <p:outputLabel  value="#{l.Banco}" />
-                            <h:panelGrid columns="2"  style="margin-left: -1%">
-                                <p:inputText id="selecionaBanco" size="26" readonly="true"  value="#{chequeView.cheque.banco.nome}"/> 
-                                <p:commandButton  icon="fa fa-search Fs16 White" action="#{selecaoBancoView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{chequeView.selecionaBanco}" process="@this" update="selecionaBanco" />
-                                </p:commandButton>
-                            </h:panelGrid>
+                            <a:inputTextDialog id="bancoId" dialog="#{selecaoBancoView}" mbView="#{chequeView}" value="#{chequeView.e.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+
+                             <p:outputLabel  value="#{l.Pessoa}" />
+                             <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}" mbView="#{chequeView}" value="#{chequeView.e.pessoa}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
 
                             <p:outputLabel  value="#{l.Agencia}" style="text-align: right"/>
-                            <p:inputText value="#{chequeView.cheque.agencia}" />         
+                            <p:inputText value="#{chequeView.e.agencia}" />         
 
                             <p:outputLabel  value="#{l.Conta}" style="text-align: right"/>
-                            <p:inputText value="#{chequeView.cheque.conta}" />         
+                            <p:inputText value="#{chequeView.e.conta}" />         
 
                             <p:outputLabel  value="#{l.Numero_Cheque}" />
-                            <p:inputText value="#{chequeView.cheque.numeroCheque}" />         
+                            <p:inputText value="#{chequeView.e.numeroCheque}" />         
 
                             <p:outputLabel  value="#{l.Tipo_Situacao}"/>
-                            <p:selectOneMenu id="TipoSituacao" value="#{chequeView.cheque.tipoSituacao}">
+                            <p:selectOneMenu id="TipoSituacao" value="#{chequeView.e.tipoSituacao}">
                                 <f:selectItems value="#{chequeView.tipoSituacao}" var="#{l.Tipo_Situacao}" itemValue="#{TipoSituacao}"/>
                             </p:selectOneMenu>
+                            
+                            <p:outputLabel  value=""/>
+                             <p:outputLabel  value=""/>
 
                         </p:panelGrid>
 
@@ -108,17 +101,17 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel  value="#{l.Multas}" style="text-align: right"/>
-                            <p:inputNumber id="Multas" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.cheque.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.cheque.multas}"/>
+                            <p:inputNumber id="Multas" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.e.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.e.multas}"/>
 
                             <p:outputLabel  value="#{l.Juros}" style="text-align: right"/>
-                            <p:inputNumber id="Juros" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.cheque.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.cheque.juros}"/>
+                            <p:inputNumber id="Juros" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.e.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.e.juros}"/>
 
                             <p:outputLabel  value="#{l.Descontos}"/>
-                            <p:inputNumber id="Desconto" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.cheque.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.cheque.descontos}"/>
+                            <p:inputNumber id="Desconto" maxValue="9999999.99" minValue="0.00" styleClass="Wid90" symbol="#{chequeView.e.cotacao.conta.moeda.sigla}" decimalPlaces="2" value="#{chequeView.e.descontos}"/>
 
 
                             <p:outputLabel  value="#{l.Observacao}"/>
-                            <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{chequeView.cheque.historico}"/>
+                            <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{chequeView.e.historico}"/>
 
                         </p:panelGrid>
                         <div class="EmptyBox20"/>
@@ -134,7 +127,6 @@
                         <p:commandButton value="#{l.Atualizar}" action="#{chequeView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{chequeView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{chequeView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{chequeView.desfazer()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
                     </div>
                 </div>
             </div>          

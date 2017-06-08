@@ -1,23 +1,20 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -25,15 +22,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ChequeView implements Serializable {
+public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Serializable {
 
-    private ChequeBV cheque;
-    private Cheque chequeSelecionada;
     private Configuracao configuracao;
     private List<Cotacao> listaCotacao;
 
@@ -57,83 +51,31 @@ public class ChequeView implements Serializable {
         }
     }
 
-    public void add() {
-        try {
-            Cheque novoRegistro = cheque.construir();
-
-            new AdicionaDAO<>().adiciona(novoRegistro);
-            InfoMessage.adicionado();
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = (Object) event.getObject();
+        if (obj instanceof Cheque) {
+            e = new ChequeBV((Cheque) obj);
+        } else if (obj instanceof Banco) {
+            e.setBanco((Banco) obj);
+        } else if (obj instanceof NotaEmitida) {
+            e.setVenda((NotaEmitida) obj);
+        } else if (obj instanceof Pessoa) {
+            e.setPessoa((Pessoa) obj);
         }
-    }
 
-    public void update() {
-        try {
-
-            if (chequeSelecionada != null) {
-                Cheque chequeExistente = cheque.construirComID();
-
-                new AtualizaDAO<>().atualiza(chequeExistente);
-                InfoMessage.atualizado();
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("cheque_nao_encontrado"));
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
-
-    public void delete() {
-        try {
-            if (chequeSelecionada != null) {
-                new RemoveDAO<>().remove(chequeSelecionada, chequeSelecionada.getId());
-                InfoMessage.removido();
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
-        }
-    }
-
-    public void selecionaVenda(SelectEvent event) {
-        NotaEmitida notaSelecionado = (NotaEmitida) event.getObject();
-        cheque.setVenda(notaSelecionado);
-    }
-
-    public void selecionaBanco(SelectEvent event) {
-        Banco bancoSelecionado = (Banco) event.getObject();
-        cheque.setBanco(bancoSelecionado);
-    }
-
-    public void selecionaCheque(SelectEvent e) {
-        Cheque a = (Cheque) e.getObject();
-        cheque = new ChequeBV(a);
-        chequeSelecionada = a;
-    }
-
-    public void buscaPorId() {
-        Long id = cheque.getId();
-        if (id != null) {
-            try {
-                ChequeDAO dao = new ChequeDAO();
-                Cheque c = dao.buscarCheques().porId(id).resultado();
-                chequeSelecionada = c;
-                cheque = new ChequeBV(chequeSelecionada);
-            } catch (DadoInvalidoException die) {
-                limparJanela();
-                cheque.setId(id);
-                die.print();
-            }
-        }
     }
 
     public List<SituacaoDeCheque> getTipoSituacao() {
         return Arrays.asList(SituacaoDeCheque.values());
+    }
+
+    public List<OperacaoFinanceira> getOperacaoFinanceira() {
+        return Arrays.asList(OperacaoFinanceira.values());
+    }
+
+    public List<TipoLancamento> getTipoLancemento() {
+        return Arrays.asList(TipoLancamento.values());
     }
 
     public List<Cotacao> buscarListaDeCotacao() {
@@ -141,31 +83,9 @@ public class ChequeView implements Serializable {
         return listaCotacao;
     }
 
+    @Override
     public void limparJanela() {
-        cheque = new ChequeBV();
-        chequeSelecionada = null;
-    }
-
-    public void desfazer() {
-        if (chequeSelecionada != null) {
-            cheque = new ChequeBV(chequeSelecionada);
-        }
-    }
-
-    public ChequeBV getCheque() {
-        return cheque;
-    }
-
-    public void setCheque(ChequeBV cheque) {
-        this.cheque = cheque;
-    }
-
-    public Cheque getChequeSelecionada() {
-        return chequeSelecionada;
-    }
-
-    public void setChequeSelecionada(Cheque chequeSelecionada) {
-        this.chequeSelecionada = chequeSelecionada;
+        e = new ChequeBV();
     }
 
     public Configuracao getConfiguracao() {
@@ -191,7 +111,5 @@ public class ChequeView implements Serializable {
     public void setListaCotacao(List<Cotacao> listaCotacao) {
         this.listaCotacao = listaCotacao;
     }
-    
-    
 
 }

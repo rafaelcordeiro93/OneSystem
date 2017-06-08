@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class ChequeBV implements Serializable {
+public class ChequeBV implements Serializable, BuilderView<Cheque> {
 
     private Long id;
     private Nota nota;

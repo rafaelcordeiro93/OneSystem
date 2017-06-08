@@ -23,28 +23,38 @@
                             <a:inputTextDialog id="boletocartaoid" value="#{boletoDeCartaoView.e}" dialog="#{selecaoBoletoDeCartaoView}" mbView="#{boletoDeCartaoView}" update=":conteudo" var="boletoDeCartao" converter="boletoDeCartaoBVConverter" itemLabel="#{boletoDeCartao.id}" itemValue="#{boletoDeCartao}" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Venda}"/>
-                            <a:inputTextDialog id="selecionaNotaEmitida" value="#{boletoDeCartaoView.e.notaEmitida}" dialog="#{selecaoNotaEmitidaView}" mbView="#{boletoDeCartaoView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}"/>
+                            <a:inputTextDialog id="selecionaNotaEmitida" value="#{boletoDeCartaoView.e.nota}" dialog="#{selecaoNotaEmitidaView}" mbView="#{boletoDeCartaoView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}"/>
 
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="selecionaCartao" value="#{boletoDeCartaoView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{boletoDeCartaoView}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}"/>
+                            
                             <p:outputLabel value="#{l.Cartao}"/>
                             <a:inputTextDialog id="selecionaCartao" value="#{boletoDeCartaoView.e.cartao}" dialog="#{selecaoCartaoView}" mbView="#{boletoDeCartaoView}" var="cartao" converter="cartaoConverter" itemLabel="#{cartao.nome}" itemValue="#{cartao}"/>
+
+                            <p:outputLabel value="#{l.Cod_Transacao}"/>
+                            <p:inputText  value="#{boletoDeCartaoView.e.codigoTransacao}"/> 
 
                             <p:outputLabel value="#{l.Emissao}"/>
                             <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 "  value="#{boletoDeCartaoView.e.emissao}"/> 
 
-                            <p:outputLabel value="#{l.Numero_Dias}"/>
-                            <pe:inputNumber id="boletoDeCartaoNumeroDias" maxValue="999" minValue="0"  decimalPlaces="0" value="#{boletoDeCartaoView.e.dias}"/>
+                            <p:outputLabel value="#{l.Vencimento}"/>
+                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 "  value="#{boletoDeCartaoView.e.vencimento}"/>
 
                             <p:outputLabel value="#{l.Valor}"/>
                             <p:inputNumber id="boletoDeCartaoValor" maxValue="99999999.99" minValue="0.00" symbol="#{boletoDeCartaoView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" value="#{boletoDeCartaoView.e.valor}"/>
-
-                            <p:outputLabel value="#{l.Cod_Transacao}"/>
-                            <p:inputText  value="#{boletoDeCartaoView.e.codigoTransacao}"/> 
 
                             <p:outputLabel value="#{l.Tipo_Situacao}"/>
                             <p:selectOneMenu id="TipoSituacao" value="#{boletoDeCartaoView.e.situacao}">
                                 <f:selectItems value="#{boletoDeCartaoView.tipoSituacao}" var="#{l.Tipo_Sitiacao}" itemValue="#{TipoSituacao}" >
                                 </f:selectItems>
                             </p:selectOneMenu>
+                            
+                             <p:outputLabel value="#{l.Operacao_Financeira}"/>
+                             <p:selectOneMenu id="operacaofinanceira" value="#{boletoDeCartaoView.e.operacaoFinanceira}">
+                                 <f:selectItems value="#{boletoDeCartaoView.operacaoFinanceira}" var="#{l.OperacaoFinanceira}" itemValue="#{OperacaoFinanceira}" >
+                                </f:selectItems>
+                            </p:selectOneMenu>
+                            
                         </p:panelGrid>
                     </div>
 

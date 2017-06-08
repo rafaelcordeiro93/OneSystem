@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -58,6 +59,10 @@ public class BoletoDeCartaoView extends BasicMBImpl<BoletoDeCartao, BoletoDeCart
 
     public List<SituacaoDeCartao> getTipoSituacao() {
         return Arrays.asList(SituacaoDeCartao.values());
+    }
+
+    public List<OperacaoFinanceira> getOperacaoFinanceira() {
+        return Arrays.asList(OperacaoFinanceira.values());
     }
 
     public void limparJanela() {
