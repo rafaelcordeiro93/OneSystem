@@ -2,17 +2,13 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.builder.GrupoDePrivilegioBuilder;
-import br.com.onesystem.valueobjects.CaseType;
-import br.com.onesystem.services.CharacterType;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
+import java.io.Serializable;
 
-public class GrupoDePrivilegioBV {
+public class GrupoDePrivilegioBV implements Serializable, BuilderView<GrupoDePrivilegio> {
 
     private Long id;
-    @NotNull(message = "{nome_not_null}")
-    @Length(min = 3, max = 40, message = "{nome_lenght}")
-    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nome_type_letter_space}")
     private String nome;
 
     public GrupoDePrivilegioBV() {
@@ -22,7 +18,7 @@ public class GrupoDePrivilegioBV {
         this.id = grupo.getId();
         this.nome = grupo.getNome();
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -43,7 +39,8 @@ public class GrupoDePrivilegioBV {
         return new GrupoDePrivilegioBuilder().comNome(nome).contruir();
     }
 
-    public GrupoDePrivilegio construirComId() {
+    @Override
+    public GrupoDePrivilegio construirComID() throws DadoInvalidoException {
         return new GrupoDePrivilegioBuilder().comId(id).comNome(nome).contruir();
     }
 

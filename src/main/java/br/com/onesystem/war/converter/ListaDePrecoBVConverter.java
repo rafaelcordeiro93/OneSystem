@@ -5,49 +5,49 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TipoReceita;
+import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TipoReceitaService;
+import br.com.onesystem.war.builder.ListaDePrecoBV;
+import br.com.onesystem.war.service.ListaDePrecoService;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author Rafael
  */
-@FacesConverter(value = "tipoReceitaConverter", forClass = TipoReceita.class)
-public class TipoReceitaConverter implements Converter, Serializable {
+@FacesConverter(value = "listaDePrecoBVConverter", forClass = ListaDePrecoBV.class)
+public class ListaDePrecoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TipoReceita> lista = new TipoReceitaService().buscarTiposDeReceita();
+                List<ListaDePreco> lista = new ListaDePrecoService().buscarListaPrecos();
                 if (StringUtils.containsLetter(value)) {
-                    for (TipoReceita despesa : lista) {
-                        if (despesa.getNome().equals(value)) {
-                            return despesa;
+                    for (ListaDePreco listaDePreco : lista) {
+                        if (listaDePreco.getNome().equals(value)) {
+                            return new ListaDePrecoBV(listaDePreco);
                         }
                     }
                 } else {
-                    for (TipoReceita despesa : lista) {
-                        if (despesa.getId().equals(new Long(value))) {
-                            return despesa;
+                    for (ListaDePreco listaDePreco : lista) {
+                        if (listaDePreco.getId().equals(new Long(value))) {
+                            return new ListaDePrecoBV(listaDePreco);
                         }
                     }
                 }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma receita válida."));
+                return new ListaDePrecoBV();
+            } catch (Exception e) {
+                return new ListaDePrecoBV();
             }
         } else {
-            return null;
+            return new ListaDePrecoBV();
         }
     }
 
@@ -55,12 +55,12 @@ public class TipoReceitaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((TipoReceita) object).getNome());
+                return String.valueOf(((ListaDePrecoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

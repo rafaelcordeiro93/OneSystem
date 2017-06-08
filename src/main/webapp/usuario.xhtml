@@ -12,7 +12,7 @@
             <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4.7%" ><i class="fa fa-user-o Fs40" style="color: #848484"/> #{l.Usuarios}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-user-o Fs40" style="color: #848484"/> #{l.Usuarios}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
@@ -23,16 +23,17 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="usuarioID" dialog="#{selecaoUsuarioView}" mbView="#{usuarioView}" value="#{usuarioView.e}" update=":conteudo" converter="usuarioConverter" var="usuario" itemLabel="#{e.id}" itemValue="#{usuario}" editVisible="false"  itemLabelTab="#{e.pessoa.email}" itemLabelTabVisible="true" onlyNumber="true"/>
-                            
-                             <p:outputLabel value="#{l.Pessoa}"/>
-                             <a:inputTextDialog id="usuarioPessoa" value="#{usuarioView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{usuarioView}" update=":conteudo:growl" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true"/>
-                             
+                            <a:inputTextDialog id="usuarioID" value="#{usuarioView.e}" update=":conteudo" dialog="#{selecaoUsuarioView}" mbView="#{usuarioView}" var="usuario" converter="usuarioBVConverter" process="@this" itemLabel="#{usuario.id}" itemValue="#{usuario}" editVisible="false" onlyNumber="true" itemLabelTab="#{usuario.pessoa.email}" itemLabelTabVisible="true"/>
+
+
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="usuarioPessoa" value="#{usuarioView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{usuarioView}"  var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true"/>
+
                             <p:outputLabel value="#{l.Grupo_De_Privilegio}"/>
-                            <a:inputTextDialog id="usuarioPrevilegio" value="#{usuarioView.e.grupoPrivilegio}" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{usuarioView}" update=":conteudo:growl"  var="grupoDePrivilegio" converter="grupoDePrivilegioConverter" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}" editVisible="true"/>
-                            
+                            <a:inputTextDialog id="usuarioPrevilegio" value="#{usuarioView.e.grupoPrivilegio}" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{usuarioView}"  var="grupoDePrivilegio" converter="grupoDePrivilegioConverter" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}" editVisible="true"/>
+
                             <p:outputLabel value="#{l.Senha}"/>
-                            <p:password value="#{usuarioView.e.senha}" />                                            
+                            <p:password value="#{usuarioView.e.senha}" feedback="true" goodLabel="#{l.Senha_Boa}" strongLabel="#{l.Senha_Forte}"  weakLabel="#{l.Senha_Fraca}" promptLabel="#{l.Senha_Dica}"/>                                            
                         </p:panelGrid>
                         <p:separator/>
                     </div>
@@ -40,10 +41,10 @@
 
                     <div class="EmptyBox15"/>
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" action="#{usuarioView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{usuarioView.update()}" update=":conteudo" icon="fa fa-exchange Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{usuarioView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{usuarioView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Adicionar}" action="#{usuarioView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{usuarioView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-exchange Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{usuarioView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{usuarioView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
                 </div>
             </div>

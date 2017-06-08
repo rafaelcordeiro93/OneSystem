@@ -3,6 +3,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
@@ -17,46 +18,42 @@
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
+
+                        <div class="EmptyBox20"/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <h:panelGrid columns="2" style="margin-top: -2%;margin-left: -1%">
-                                <p:inputNumber id="cidadeid" size="26" value="#{grupoFinanceiroView.grupoFinanceiro.id}" decimalPlaces="0" decimalSeparator="" thousandSeparator="">
-                                    <p:ajax event="blur" listener="#{grupoFinanceiroView.buscaPorId}" update=":conteudo"/>
-                                </p:inputNumber>
-                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoGrupoFinanceiroView.abrirDialogo()}" process="@this" update="@none">
-                                    <p:ajax event="dialogReturn" listener="#{grupoFinanceiroView.selecionaGrupoFinanceiro}" update=":conteudo" process="@this"/>
-                                </p:commandButton>
-                            </h:panelGrid>     
+                            <a:inputTextDialog id="operacaoId" value="#{grupoFinanceiroView.e}" update=":conteudo" dialog="#{selecaoGrupoFinanceiroView}" mbView="#{grupoFinanceiroView}" var="grupoFinanceiro" converter="grupoFinanceiroBVConverter" process="@this" itemLabel="#{grupoFinanceiro.id}" itemValue="#{grupoFinanceiro}" editVisible="false" itemLabelTab="#{grupoFinanceiro.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
+
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{grupoFinanceiroView.grupoFinanceiro.nome}" maxlength="60"/>
+                            <p:inputText value="#{grupoFinanceiroView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Tipo_Operacao}"/>
-                            <p:selectOneRadio value="#{grupoFinanceiroView.grupoFinanceiro.naturezaFinanceira}"  layout="grid" columns="3">
+                            <p:selectOneRadio value="#{grupoFinanceiroView.e.naturezaFinanceira}"  layout="grid" columns="3">
                                 <f:selectItems value="#{grupoFinanceiroView.naturezasFinanceiras}" var="naturezaFinanceira" itemValue="#{naturezaFinanceira}"/>
                             </p:selectOneRadio>
 
                             <p:outputLabel value="#{l.Classificacao_Financeira}"/>
-                            <p:selectOneMenu value="#{grupoFinanceiroView.grupoFinanceiro.classificacaoFinanceira}">
+                            <p:selectOneMenu value="#{grupoFinanceiroView.e.classificacaoFinanceira}">
                                 <f:selectItems value="#{grupoFinanceiroView.classificacaoFinanceira}" var="classificacaoFinanceira" itemValue="#{classificacaoFinanceira}"/>
                             </p:selectOneMenu> 
 
                         </p:panelGrid>
 
-                        <div class="EmptyBox15"/>
+                        <div class="EmptyBox20"/>
 
                         <p:separator/>
                     </div>
 
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{grupoFinanceiroView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{grupoFinanceiroView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}" action="#{grupoFinanceiroView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{grupoFinanceiroView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        <p:commandButton value="#{l.Desfazer}" action="#{grupoFinanceiroView.desfazer()}"  styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-repeat Fs16 White" />
+
                     </div>
                 </div>
             </div>
