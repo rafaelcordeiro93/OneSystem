@@ -22,17 +22,13 @@
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3"> 
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="cotacao" value="#{cotacaoView.e}" dialog="#{selecaoCotacaoView}" mbView="#{cotacaoView}" process="@this" update="conteudo" var="cotacaoBV" converter="cotacaoBVConverter" itemLabel="#{cotacaoBV.id}" itemValue="#{cotacaoBV}" itemLabelTabVisible="true" itemLabelTab="#{cotacaoBV.conta.nome}" onlyNumber="true" editVisible="false"/>
-
-                        </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
-
+                            
                             <p:outputLabel  value="#{l.Conta}"/>
                             <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cotacaoView}" value="#{cotacaoView.e.conta}" update=":conteudo:Valor" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
 
