@@ -9,10 +9,10 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%"> 
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Cartao}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-credit-card-alt Fs40" style="color: #848484"/> #{l.Cartao}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
@@ -37,13 +37,13 @@
                             <p:inputText value="#{cartaoView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Conta}"/>
-                            <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{cartaoView}" value="#{cartaoView.e.conta}" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{cartaoView}" value="#{cartaoView.e.conta}" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
 
                             <p:outputLabel value="#{l.Despesa}"/>
-                            <a:inputTextDialog id="despesas" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.despesa}" var="despesa" itemLabel="#{despesa.nome}" itemValue="#{despesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{despesa.nome}"/>
+                            <a:inputTextDialog id="despesasId" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.despesa}" var="despesa" itemLabel="#{despesa.nome}" itemValue="#{despesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{despesa.nome}"/>
 
                             <p:outputLabel value="#{l.Juros}"/>
-                            <a:inputTextDialog id="juros" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.juros}" var="juros" itemLabel="#{juros.nome}" itemValue="#{despesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{juros.nome}"/>
+                            <a:inputTextDialog id="jurosId" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.juros}" var="juros" itemLabel="#{juros.nome}" itemValue="#{juros}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{juros.nome}"/>
 
                         </p:panelGrid>
                         <div class="EmptyBox20"/>
@@ -73,7 +73,7 @@
                         </p:panelGrid>
                         <div class="EmptyBox10"/>
 
-                        <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.cartao.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 80%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
+                        <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.e.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 80%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
                             <p:ajax event="rowSelect" process="@this" listener="#{cartaoView.selecionaTaxa}" update=":conteudo"/>
                             <p:column style="text-align: center" width="10%">
                                 <h:outputText value="#{taxa.id}" />
