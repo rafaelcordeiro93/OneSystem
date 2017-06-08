@@ -11,6 +11,7 @@ import br.com.onesystem.war.builder.GrupoFinanceiroBV;
 import br.com.onesystem.war.service.GrupoFinanceiroService;
 import java.io.Serializable;
 import java.util.List;
+import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,16 +21,21 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "grupoFinanceiroBVConverter", forClass = GrupoFinanceiro.class)
+@FacesConverter(value = "grupoFinanceiroBVConverter", forClass = GrupoFinanceiroBV.class)
 public class GrupoFinanceiroBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
-            GrupoFinanceiroService service = new GrupoFinanceiroService();
             try {
-                List<GrupoFinanceiro> lista = service.buscarGruposFinanceiros();
-                if (!StringUtils.containsLetter(value)) {
+                List<GrupoFinanceiro> lista = new GrupoFinanceiroService().buscarGruposFinanceiros();
+                if (StringUtils.containsLetter(value)) {
+                    for (GrupoFinanceiro grupoFinanceiro : lista) {
+                        if (grupoFinanceiro.getNome().equals(value)) {
+                            return new GrupoFinanceiroBV(grupoFinanceiro);
+                        }
+                    }
+                } else {
                     for (GrupoFinanceiro grupoFinanceiro : lista) {
                         if (grupoFinanceiro.getId().equals(new Long(value))) {
                             return new GrupoFinanceiroBV(grupoFinanceiro);

@@ -24,7 +24,9 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Grupo_De_Privilegio}"/> 
-                            <a:inputTextDialog id="grupoDePrivilegioID" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{privilegioView}" value="#{privilegioView.grupoSelecionado}" update=":conteudo" process="@this" var="grupoDePrivilegio" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" converter="grupoDePrivilegioConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}"/>
+                            <a:inputTextDialog id="grupoDePrivilegioID" dialog="#{selecaoGrupoDePrivilegioView}" mbView="#{privilegioView}" value="#{privilegioView.grupoSelecionado}" updateButtonSearch="conteudo" process="@this" var="grupoDePrivilegio" itemLabel="#{grupoDePrivilegio.nome}" itemValue="#{grupoDePrivilegio}" converter="grupoDePrivilegioConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoDePrivilegio.nome}">
+                                <p:ajax event="itemSelect" update="conteudo" listener="#{privilegioView.buscarPrivilegioLista}"/>
+                            </a:inputTextDialog>
 
                         </p:panelGrid>
                         <div class="EmptyBox20"/>
@@ -48,10 +50,10 @@
 
                             <p:ajax event="cellEdit" update=":conteudo:privDT"/>
 
-                            <p:column headerText="#{l.Janela}" sortBy="#{privilegioBV.janela.nome}" style="width: 30%">
+                            <p:column headerText="#{l.Janela}" sortBy="#{privilegioBV.janela.nome}" filterBy="#{privilegioBV.janela.nome}" filterMatchMode="contains" style="width: 30%">
                                 <h:outputText value="#{privilegioBV.janela.nome}"/>
                             </p:column>
-                            <p:column headerText="#{l.Modulo}" sortBy="#{privilegioBV.janela.modulo.nome}">
+                            <p:column headerText="#{l.Modulo}" sortBy="#{privilegioBV.janela.modulo.nome}" filterBy="#{privilegioBV.janela.modulo.nome}" filterMatchMode="contains">
                                 <h:outputText value="#{privilegioBV.janela.modulo.nome}"/>
                             </p:column>
                             <p:column headerText="#{l.Consultar}" style="text-align: center">

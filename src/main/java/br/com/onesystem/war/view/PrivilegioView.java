@@ -59,10 +59,14 @@ public class PrivilegioView extends BasicMBImpl<Privilegio, PrivilegioBV> implem
         String idComponent = event.getComponent().getId();
         if (obj instanceof GrupoDePrivilegio && "grupoDePrivilegioID-search".equals(idComponent)) {
             grupoSelecionado = (GrupoDePrivilegio) obj;
-            privilegioLista = service.buscarPrivilegioDoGrupo(grupoSelecionado);
+            buscarPrivilegioLista();
         } else if (obj instanceof GrupoDePrivilegio && "grupoDePrivilegioOutro-search".equals(idComponent)) {
             outroGrupo = (GrupoDePrivilegio) obj;
         }
+    }
+
+    public void buscarPrivilegioLista() { 
+        privilegioLista = service.buscarPrivilegioDoGrupo(grupoSelecionado);
     }
 
     public void save() {

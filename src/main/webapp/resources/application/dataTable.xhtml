@@ -15,7 +15,7 @@
     <composite:implementation>
         <h:form>
             <p:dataTable id="#{cc.attrs.id}" var="bean" value="#{cc.attrs.managedBeanName.beans}" selectionMode="single" selection="#{cc.attrs.managedBeanName.beanSelecionado}" rowKey="#{bean.id}"
-                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowStyleClass="#{cc.attrs.rowStyleClass}"
+                         rows="10" rowsPerPageTemplate="5,10,15,20" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowStyleClass="#{cc.attrs.rowStyleClass}"
                          filteredValue="#{cc.attrs.managedBeanName.beansFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
 
                 <p:ajax event="rowSelect" process="@this" listener="#{cc.attrs.managedBeanName.selecionar()}" />

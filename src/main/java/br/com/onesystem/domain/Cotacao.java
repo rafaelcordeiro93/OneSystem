@@ -5,9 +5,15 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -83,6 +89,12 @@ public class Cotacao implements Serializable {
 
     public Date getEmissao() {
         return emissao;
+    }
+
+    public String getEmissaoFormatada() {
+        LocalDateTime emissaoFormatada = LocalDateTime.ofInstant(emissao.toInstant(), ZoneId.systemDefault());
+        DateTimeFormatter formatador = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(new Locale("pt", "br"));
+        return emissaoFormatada.format(formatador);
     }
 
     private void ehValido() throws DadoInvalidoException {

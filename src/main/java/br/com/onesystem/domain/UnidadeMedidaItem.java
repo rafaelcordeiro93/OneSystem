@@ -35,7 +35,7 @@ public class UnidadeMedidaItem implements Serializable {
     @GeneratedValue(generator = "SEQ_UNIDADEMEDIDAMERCADORIA", strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull(message = "{sigla_not_null}")
-    @Length(min = 2, max = 3, message = "{sigla_length}")
+    @Length(min = 1, max = 4, message = "{sigla_length}")
     @Column(length = 3, nullable = false, unique = true)
     private String sigla;
     @NotNull(message = "{nome_not_null}")

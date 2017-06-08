@@ -3,6 +3,7 @@ package br.com.onesystem.war.service;
 import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.NumberUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,19 +29,19 @@ public class BaixaService implements Serializable {
     }
 
     public String buscarSaldoAnteriorFormatado(Date dataAnterior, Conta conta) {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(buscarSaldoAnterior(dataAnterior, conta));
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoAnterior(dataAnterior, conta));
     }
 
     public String buscarSaldoFinalFormatado(Date dataFinal, Conta conta) {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(buscarSaldoFinal(dataFinal, conta));
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoFinal(dataFinal, conta));
     }
 
     public String buscarEntradasPorDataEContaFormatado(Date dataInicial, Date dataFinal, Conta conta) {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(buscarEntradasPorDataEConta(dataInicial, dataFinal, conta));
+        return MoedaFormatter.format(conta.getMoeda(), buscarEntradasPorDataEConta(dataInicial, dataFinal, conta));
     }
 
     public String buscarSaidasPorDataEContaFormatado(Date dataInicial, Date dataFinal, Conta conta) {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(buscarSaidasPorDataEConta(dataInicial, dataFinal, conta));
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaidasPorDataEConta(dataInicial, dataFinal, conta));
     }
 
     public BigDecimal buscarEntradasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta) {
@@ -56,6 +57,6 @@ public class BaixaService implements Serializable {
     }
 
     public String buscarSaldoPorDataEContaFormatado(Date dataInicial, Date dataFinal, Conta conta) {
-        return conta.getMoeda().getSigla() + " " + NumberUtils.format(buscarSaldoPorDataEConta(dataInicial, dataFinal, conta));
-    }   
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoPorDataEConta(dataInicial, dataFinal, conta));
+    }
 }
