@@ -6,12 +6,9 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;

@@ -5,49 +5,48 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TipoReceita;
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TipoReceitaService;
+import br.com.onesystem.war.builder.GrupoFiscalBV;
+import br.com.onesystem.war.service.GrupoFiscalService;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author Rafael
  */
-@FacesConverter(value = "tipoReceitaConverter", forClass = TipoReceita.class)
-public class TipoReceitaConverter implements Converter, Serializable {
+@FacesConverter(value = "grupoFiscalBVConverter", forClass = GrupoFiscalBV.class)
+public class GrupoFiscalBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TipoReceita> lista = new TipoReceitaService().buscarTiposDeReceita();
+                List<GrupoFiscal> lista = new GrupoFiscalService().buscarGrupoFiscais();
                 if (StringUtils.containsLetter(value)) {
-                    for (TipoReceita despesa : lista) {
-                        if (despesa.getNome().equals(value)) {
-                            return despesa;
+                    for (GrupoFiscal grupoFiscal : lista) {
+                        if (grupoFiscal.getNome().equals(value)) {
+                            return new GrupoFiscalBV(grupoFiscal);
                         }
                     }
                 } else {
-                    for (TipoReceita despesa : lista) {
-                        if (despesa.getId().equals(new Long(value))) {
-                            return despesa;
+                    for (GrupoFiscal grupoFiscal : lista) {
+                        if (grupoFiscal.getId().equals(new Long(value))) {
+                            return new GrupoFiscalBV(grupoFiscal);
                         }
                     }
                 }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma receita válida."));
+                return new GrupoFiscalBV();
+            } catch (Exception e) {
+                return new GrupoFiscalBV();
             }
         } else {
-            return null;
+            return new GrupoFiscalBV();
         }
     }
 
@@ -55,12 +54,12 @@ public class TipoReceitaConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((TipoReceita) object).getNome());
+                return String.valueOf(((GrupoFiscalBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

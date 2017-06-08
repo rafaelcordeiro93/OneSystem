@@ -15,7 +15,6 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
 
 /**
  *
@@ -29,7 +28,13 @@ public class IVABVConverter implements Converter, Serializable {
         if (value != null && value.trim().length() > 0) {
             try {
                 List<IVA> lista = new IVAService().buscarIVAs();
-                if (!StringUtils.containsLetter(value)) {
+                if (StringUtils.containsLetter(value)) {
+                    for (IVA iva : lista) {
+                        if (iva.getNome().equals(value)) {
+                            return new IVABV(iva);
+                        }
+                    }
+                } else {
                     for (IVA iva : lista) {
                         if (iva.getId().equals(new Long(value))) {
                             return new IVABV(iva);

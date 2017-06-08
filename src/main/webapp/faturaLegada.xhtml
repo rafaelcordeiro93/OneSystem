@@ -31,7 +31,7 @@
 
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="faturaLegadaID" value="#{faturaLegadaView.e}" update=":conteudo" dialog="#{selecaoFaturaLegadaView}" mbView="#{faturaLegadaView}" var="faturaLegada" converter="faturaLegadaBVConverter" itemLabel="#{faturaLegada.id}" itemValue="#{faturaLegada}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="faturaLegadaID" value="#{faturaLegadaView.e}" update=":conteudo" dialog="#{selecaoFaturaLegadaView}" mbView="#{faturaLegadaView}" var="faturaLegada" converter="faturaLegadaBVConverter" process="@this" itemLabel="#{faturaLegada.id}" itemValue="#{faturaLegada}" editVisible="false" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Codigo}"/>
                             <p:inputText value="#{faturaLegadaView.e.codigo}"/>

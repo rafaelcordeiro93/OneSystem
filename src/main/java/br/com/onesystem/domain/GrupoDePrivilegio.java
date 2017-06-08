@@ -37,7 +37,7 @@ public class GrupoDePrivilegio implements Serializable {
     @Length(min = 3, max = 40, message = "{nome_lenght}")
     @CharacterType(value = CaseType.LETTER_SPACE, message = "{nome_type_letter_space}")
     private String nome;
-    @OneToMany(mappedBy = "grupoPrivilegio", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "grupoPrivilegio", cascade = {CascadeType.ALL})
     private List<Privilegio> listaPrivilegios;
     @OneToMany(mappedBy = "grupoPrivilegio")
     private List<Usuario> listaDeUsuarios;
