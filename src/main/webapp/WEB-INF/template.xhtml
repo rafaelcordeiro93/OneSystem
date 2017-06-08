@@ -11,7 +11,7 @@
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
             <meta name="apple-mobile-web-app-capable" content="yes" />
-            <meta name="theme-color" content="#{guestPreferences.themeColors[guestPreferences.layout]}" />
+            <meta name="theme-color" content="#{preferenciasDeUsuario.themeColors[preferenciasDeUsuario.layout]}" />
         </f:facet>
         <link rel="icon" href="#{resource['atlantis-layout/images/favicon.png']}" type="image/png"/>
         <title><ui:insert name="title">RR Minds</ui:insert></title>
@@ -23,7 +23,7 @@
 
     <h:body styleClass="main-body">
         <f:loadBundle basename="label_messages" var="l"/>
-        <div class="layout-wrapper #{guestPreferences.overlayMenu ? 'layout-overlay-menu' : null} #{guestPreferences.orientationRTL ? 'layout-rtl' : null}">
+        <div class="layout-wrapper #{preferenciasDeUsuario.overlayMenu ? 'layout-overlay-menu' : null} #{preferenciasDeUsuario.orientationRTL ? 'layout-rtl' : null}">
             <ui:include src="./topbar.xhtml" />
             <ui:include src="./menu.xhtml" />
 
@@ -51,7 +51,7 @@
 
         <h:outputStylesheet name="css/nanoscroller.css" library="atlantis-layout" />
         <h:outputStylesheet name="css/animate.css" library="atlantis-layout" />
-        <h:outputStylesheet name="css/layout-#{guestPreferences.layout}.css" library="atlantis-layout" />
+        <h:outputStylesheet name="css/layout-#{preferenciasDeUsuario.layout}.css" library="atlantis-layout" />
         <h:outputStylesheet name="css/core-layout.css" library="atlantis-layout" />
     </h:body>
 
