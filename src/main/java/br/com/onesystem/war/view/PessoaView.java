@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.war.builder.PessoaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
@@ -13,6 +14,8 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Serializable {
 
+    private Date dataMaximaDeNascimento = new Date();
+ 
     @PostConstruct
     public void init() {
         limparJanela();
@@ -45,6 +48,14 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
             this.e.setFantasiaCILabel("C.I.");
             this.e.setFantasiaCI("");
         }
+    }
+
+    public Date getDataMaximaDeNascimento() {
+        return dataMaximaDeNascimento;
+    }
+
+    public void setDataMaximaDeNascimento(Date dataMaximaDeNascimento) {
+        this.dataMaximaDeNascimento = dataMaximaDeNascimento;
     }
 
 }
