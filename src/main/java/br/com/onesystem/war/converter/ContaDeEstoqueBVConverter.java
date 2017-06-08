@@ -28,17 +28,9 @@ public class ContaDeEstoqueBVConverter implements Converter, Serializable {
         if (value != null && value.trim().length() > 0) {
             try {
                 List<ContaDeEstoque> lista = new ContaDeEstoqueService().buscarContaDeEstoque();
-                if (StringUtils.containsLetter(value)) {
-                    for (ContaDeEstoque contaDeEstoqueBV : lista) {
-                        if (contaDeEstoqueBV.getNome().equals(value)) {
-                            return new ContaDeEstoqueBV(contaDeEstoqueBV);
-                        }
-                    }
-                } else {
-                    for (ContaDeEstoque contaDeEstoqueBV : lista) {
-                        if (contaDeEstoqueBV.getId().equals(new Long(value))) {
-                            return new ContaDeEstoqueBV(contaDeEstoqueBV);
-                        }
+                for (ContaDeEstoque contaDeEstoqueBV : lista) {
+                    if (contaDeEstoqueBV.getId().equals(new Long(value))) {
+                        return new ContaDeEstoqueBV(contaDeEstoqueBV);
                     }
                 }
                 return new ContaDeEstoqueBV();
@@ -54,7 +46,7 @@ public class ContaDeEstoqueBVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((ContaDeEstoqueBV) object).getNome());
+                return String.valueOf(((ContaDeEstoqueBV) object).getId());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

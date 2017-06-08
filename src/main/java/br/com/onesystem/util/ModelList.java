@@ -28,12 +28,14 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
 
     public ModelList(List<T> data) {
         super(new ArrayList<Model>());
-        List<Model<T>> list = new ArrayList<>();
-        for (T t : data) {
-            Model<T> model = new Model<>(new Long(list.size()), t);
-            list.add(model);
+        if (data != null) {
+            List<Model<T>> list = new ArrayList<>();
+            for (T t : data) {
+                Model<T> model = new Model<>(new Long(list.size()), t);
+                list.add(model);
+            }
+            setWrappedData(list);
         }
-        setWrappedData(list);
     }
 
     @Override
