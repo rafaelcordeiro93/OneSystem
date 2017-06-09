@@ -20,16 +20,11 @@
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
-
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.e}" update=":conteudo" process="@this" var="moeda" itemLabel="#{moeda.id}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" converter="moedaBVConverter" itemLabelTabVisible="true" editVisible="false" onlyNumber="true"/>
-                        </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{moedaView.e.nome}"/>

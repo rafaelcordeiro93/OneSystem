@@ -19,10 +19,8 @@
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <div class="EmptyBox20"/>
-
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="receitaId" value="#{receitaView.e}" update=":conteudo" dialog="#{selecaoTipoReceitaView}" mbView="#{receitaView}" var="receita" converter="tipoReceitaBVConverter" process="@this" itemLabel="#{receita.id}" itemValue="#{receita}" editVisible="false" itemLabelTab="#{receita.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
