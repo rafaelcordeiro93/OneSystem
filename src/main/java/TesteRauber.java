@@ -1,23 +1,18 @@
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.ConfiguracaoContabil;
+import br.com.onesystem.dao.EstoqueDAO;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.domain.builder.ConfiguracaoContabilBuilder;
+import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Item;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.war.builder.ConfiguracaoContabilBV;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -32,12 +27,21 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
-        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naUltimaEmissao().porCotacaoBancaria().listaDeResultados();
-        System.out.println(new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).getConsulta());
-        List<Conta> contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+        ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
+        ConfiguracaoEstoque conf = serv.buscar();
+        Item item = new ArmazemDeRegistros<Item>(Item.class).find(new Long(1));
+
+        EstoqueDAO dao = new EstoqueDAO().porItem(item).porEmissao(new Date()).porNaoCancelado().porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
+                .porEstoqueAlterado();
+
+        System.out.println("Consulta" + dao.getConsulta());
         
-        cotacaoLista.forEach(System.out::println);
-        contaComCotacao.forEach(System.out::println);
+        dao.getParametros().forEach((k,v) -> {
+        System.out.println(k + " - " + v);} );
+        
+        List<Estoque> list = dao.listaResultados();
+        
+        list.forEach(System.out::println);
         
         System.out.println("Concluiu");
     }
