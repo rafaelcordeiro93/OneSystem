@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import org.primefaces.event.SelectEvent;
-
+ 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Serializable {

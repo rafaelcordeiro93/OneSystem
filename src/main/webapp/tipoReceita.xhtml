@@ -19,22 +19,20 @@
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="receitaId" value="#{receitaView.e}" update=":conteudo" dialog="#{selecaoTipoReceitaView}" mbView="#{receitaView}" var="receita" converter="tipoReceitaBVConverter" process="@this" itemLabel="#{receita.id}" itemValue="#{receita}" editVisible="false" itemLabelTab="#{receita.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
-                        </p:panelGrid>
 
-                        <div class="EmptyBox20"/>
-
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-2,ui-g-12 ui-md-3">
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{receitaView.e.nome}" maxlength="60" />
 
                             <p:outputLabel value="#{l.Grupo_Financeiro}"/>
                             <a:inputTextDialog id="grupo" dialog="#{selecaoGrupoFinanceiroView}" mbView="#{receitaView}" value="#{receitaView.e.grupoFinanceiro}" var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}" converter="grupoFinanceiroConverter" itemLabelTabVisible="true" itemLabelTab="#{grupo.nome}"/>
+                            
+                            <p:spacer/>
+                            <p:spacer/>
                         </p:panelGrid>
 
                         <div class="EmptyBox20"/>

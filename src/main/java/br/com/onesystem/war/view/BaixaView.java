@@ -9,15 +9,11 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**

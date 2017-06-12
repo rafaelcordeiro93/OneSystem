@@ -61,7 +61,8 @@ public class EstoqueDAO {
 
     public EstoqueDAO porNaoCancelado() {
         join += " left join e.itemDeNota.nota as nt left join e.itemDeCondicional.condicional as cd ";
-        where += " and (nt.estado <> :pEstado or cd.estado <> :pEstadoCondicional)";
+        where += " and ((e.itemDeNota is not null and nt.estado <> :pEstado) or (e.itemDeCondicional is not null and cd.estado <> :pEstadoCondicional)"
+                + " or (e.ajusteDeEstoque is not null))";
         parametros.put("pEstado", EstadoDeNota.CANCELADO);
         parametros.put("pEstadoCondicional", EstadoDeCondicional.CANCELADO);
         return this;
@@ -129,6 +130,10 @@ public class EstoqueDAO {
         return query + join + where;
     }
 
+    public Map<String, Object> getParametros() {
+        return parametros;
+    }
+    
     private Calendar getDataComHoraFimdoDia(Date emissao) {
         Calendar dataAtual = Calendar.getInstance();
         dataAtual.setTime(emissao);

@@ -43,7 +43,7 @@ public class ContaDeEstoque implements Serializable {
     public ContaDeEstoque() {
     }
 
-    public ContaDeEstoque(Long id, List<OperacaoDeEstoque> operacoesDeEstoque,String nome) throws DadoInvalidoException {
+    public ContaDeEstoque(Long id, List<OperacaoDeEstoque> operacoesDeEstoque, String nome) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.operacaoDeEstoque = operacoesDeEstoque;
@@ -56,9 +56,9 @@ public class ContaDeEstoque implements Serializable {
         this.operacaoDeEstoque.add(operacao);
     }
 
-    public void atualiza(OperacaoDeEstoque selecionado, OperacaoDeEstoque operacao) throws DadoInvalidoException {
+    public void atualiza(OperacaoDeEstoque operacao) throws DadoInvalidoException {
         validaOperacaoDeEstoqueExistente(true, operacao);
-        this.operacaoDeEstoque.set(this.operacaoDeEstoque.indexOf(selecionado), operacao);
+        this.operacaoDeEstoque.set(this.operacaoDeEstoque.indexOf(operacao), operacao);
     }
 
     public void remove(OperacaoDeEstoque selecionado) {
@@ -67,7 +67,9 @@ public class ContaDeEstoque implements Serializable {
 
     private void validaOperacaoDeEstoqueExistente(boolean update, OperacaoDeEstoque operacao) throws EDadoInvalidoException {
         if (!update) {
-
+            if (operacaoDeEstoque == null || operacaoDeEstoque.isEmpty()) {
+                operacaoDeEstoque = new ArrayList<>();
+            }
             for (OperacaoDeEstoque lista : operacaoDeEstoque) {
                 if (operacao.getOperacao().equals(lista.getOperacao())) {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("operacao_ja_existe"));

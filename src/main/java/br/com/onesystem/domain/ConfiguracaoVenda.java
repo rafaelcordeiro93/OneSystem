@@ -53,26 +53,8 @@ public class ConfiguracaoVenda implements Serializable {
         this.formaDeRecebimentoDevolucaoEmpresa = formaDeRecebimentoDevolucaoEmpresa;
         this.imprimeComanda = imprimeComanda;
         this.operacaoDeComanda = operacaoDeComanda;
-        if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
-                && buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
-            this.operacaoDeCondicional = operacaoDeCondicional;
-            if (!operacaoDeCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Condicional_Deve_Ser_Sem_Alteracao"));
-            }
-        } else if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
-                && !buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Condicional_Deve_Ser_Saida"));
-        }
-        if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
-                && buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
-            this.operacaoDeDevolucaoCondicional = operacaoDeDevolucaoCondicional;
-            if (!operacaoDeDevolucaoCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Devolucao_Condicional_Deve_Ser_Sem_Alteracao"));
-            }
-        } else if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
-                && !buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Devolucao_Condicional_Deve_Ser_Entrada"));
-        }
+        this.operacaoDeCondicional = operacaoDeCondicional;
+        this.operacaoDeDevolucaoCondicional = operacaoDeDevolucaoCondicional;
         ehValido();
     }
 
@@ -83,6 +65,24 @@ public class ConfiguracaoVenda implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
+        if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
+                && buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
+            if (!operacaoDeCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Condicional_Deve_Ser_Sem_Alteracao"));
+            }
+        } else if (operacaoDeCondicional != null && operacaoDeCondicional.getOperacaoDeEstoque() != null
+                && !buscaOperacaoDeEstoqueDa(operacaoDeCondicional).getOperacaoFisica().equals(OperacaoFisica.SAIDA)) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Condicional_Deve_Ser_Saida"));
+        }
+        if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
+                && buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
+            if (!operacaoDeDevolucaoCondicional.getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_Financeira_Devolucao_Condicional_Deve_Ser_Sem_Alteracao"));
+            }
+        } else if (operacaoDeDevolucaoCondicional != null && operacaoDeDevolucaoCondicional.getOperacaoDeEstoque() != null
+                && !buscaOperacaoDeEstoqueDa(operacaoDeDevolucaoCondicional).getOperacaoFisica().equals(OperacaoFisica.ENTRADA)) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Operacao_De_Estoque_Devolucao_Condicional_Deve_Ser_Entrada"));
+        }
         List<String> campos = Arrays.asList("formaDeRecebimentoDevolucaoEmpresa");
         new ValidadorDeCampos<>().valida(this, campos);
     }

@@ -20,25 +20,21 @@
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
-
-                        <p:outputLabel value="#{l.Id}"/>
-                        <a:inputTextDialog id="tipoDespesaID" value="#{tipoDespesaView.e}" dialog="#{selecaoTipoDespesaView}" mbView="#{tipoDespesaView}" update="conteudo" process="@this" var="tipoDespesa" converter="tipoDespesaBVConverter" itemLabel="#{tipoDespesa.id}" itemValue="#{tipoDespesa}"  itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" onlyNumber="true" editVisible="false"/>
-                        </p:panelGrid>
-
-
-                        <div class="EmptyBox20"/>
-
-
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3"> 
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="tipoDespesaID" value="#{tipoDespesaView.e}" dialog="#{selecaoTipoDespesaView}" mbView="#{tipoDespesaView}" update="conteudo" process="@this" var="tipoDespesa" converter="tipoDespesaBVConverter" itemLabel="#{tipoDespesa.id}" itemValue="#{tipoDespesa}"  itemLabelTab="#{tipoDespesa.nome}" itemLabelTabVisible="true" onlyNumber="true" editVisible="false"/>
+
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{tipoDespesaView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Grupo_Financeiro}"/>
                             <a:inputTextDialog id="tipoDespesaGrupoFinanceiro" value="#{tipoDespesaView.e.grupoFinanceiro}" dialog="#{selecaoGrupoFinanceiroDespesaView}" mbView="#{tipoDespesaView}" var="grupoFinanceiro" converter="grupoFinanceiroConverter" itemLabel="#{grupoFinanceiro.nome}" itemLabelTabVisible="true" itemLabelTab="#{grupoFinanceiro.nome}" itemValue="#{grupoFinanceiro}"/>
 
+                            <p:spacer/>
+                            <p:spacer/>
+                            
                         </p:panelGrid>
 
                         <div class="EmptyBox20"/>

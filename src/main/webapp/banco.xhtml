@@ -21,16 +21,12 @@
                         <p:separator/>
                         <div class="EmptyBox20"/> 
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="bancoId" value="#{bancoView.e}" dialog="#{selecaoBancoView}" mbView="#{bancoView}" update="conteudo" process="@this" var="banco" converter="bancoBVConverter" itemLabelTab="#{banco.nome}" itemLabelTabVisible="true" itemLabel="#{banco.id}" itemValue="#{banco}" onlyNumber="true" editVisible="false"/>
-
-                        </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Codigo}"/>
                             <p:inputText value="#{bancoView.e.codigo}" maxlength="80" />
