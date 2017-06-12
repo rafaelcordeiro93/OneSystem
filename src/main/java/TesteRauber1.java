@@ -36,7 +36,7 @@ import javax.inject.Inject;
  *
  * @author Rafael Fernando Rauber
  */
-public class TesteRauber {
+public class TesteRauber1 {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
