@@ -37,15 +37,13 @@
                 </pa:menu>
             </pa:tab>
 
-
-
             <pa:tab icon="fa fa-cubes" title="#{l.Estoque}">
                 <pa:menu widgetVar="mat">
                     <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
                     <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-cart-arrow-down" outcome="/notaRecebida" />
                     <p:menuitem value="#{l.Retificacao_De_Compra}" icon="fa fa-american-sign-language-interpreting" outcome="/retificacaoDeCompra" />
                     <p:menuitem value="#{l.Margem}" icon="fa fa-compress" outcome="/margem" /> 
-                    <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
+                    <p:menuitem value="#{l.Conhecimento_De_Frete} *" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
                     <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/ajusteDeEstoque" />
                     <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/contaDeEstoque" />
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
@@ -82,10 +80,10 @@
                         <p:menuitem value="#{l.Conta}" icon="fa fa-cc" outcome="/conta" />
                         <p:menuitem value="#{l.Tipo_Receita}" icon="fa fa-level-up" outcome="/tipoReceita" />
                         <p:menuitem value="#{l.Tipo_Despesa}" icon="fa fa-level-down" outcome="/tipoDespesa" />
-                        <p:menuitem value="#{l.Transferencia_De_Lucro}" icon="fa  fa-random" outcome="/transferenciaDespesaProvisionada" />
+                        <p:menuitem value="#{l.Transferencia_De_Lucro} *" icon="fa  fa-random" outcome="/transferenciaDespesaProvisionada" />
                         <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-share-alt-square" outcome="/grupoFinanceiro" />
-                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-sign-out" outcome="/despesaProvisionada" />
-                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-sign-in" outcome="/receitaProvisionada" />
+                        <p:menuitem value="#{l.Despesa_Provisionada} * " icon="fa fa-sign-out" outcome="/despesaProvisionada" />
+                        <p:menuitem value="#{l.Receita_Provisionada} * " icon="fa fa-sign-in" outcome="/receitaProvisionada" />
                         <p:menuitem value="#{l.Cartao}" icon="fa fa-credit-card-alt" outcome="/cartao" />
                         <p:menuitem value="#{l.Boleto_De_Cartao}" rendered="false" icon="fa fa-credit-card" outcome="/boletoDeCartao" />
                         <p:menuitem value="#{l.Cheque}" icon="fa fa-sticky-note" outcome="/cheque" />

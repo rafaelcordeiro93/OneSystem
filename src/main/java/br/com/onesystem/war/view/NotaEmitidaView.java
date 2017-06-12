@@ -154,7 +154,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             configuracao = configuracaoService.buscar();
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracaoEstoque = confEstoqueService.buscar();
-            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
+            cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -252,6 +252,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Gera as cobranca de acordo a sua modalidade.
             for (CobrancaBV p : cobrancas) {
+                p.setPessoa(notaEmitida.getPessoa());
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         nota.adiciona(p.construirBoletoDeCartao());
@@ -358,7 +359,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private void calculaTotaisFormaDeRecebimento() {
         if (notaEmitida.getFormaDeRecebimento() != null) {
             FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
-            if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
+            if (formaDeRecebimento.getPorcentagemDeEntrada() != null && formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
                     && notaEmitida.getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
                 BigDecimal cem = new BigDecimal(100);
                 BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);

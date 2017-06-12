@@ -28,31 +28,24 @@
 
                         <div class="EmptyBox10"/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog  id="caixaId" value="#{caixaView.e}" dialog="#{selecaoCaixaView}" 
                                                 mbView="#{caixaView}" var="caixa" converter="caixaBVConverter" itemLabel="#{caixa.id}" itemValue="#{caixa}" onlyNumber="true" editVisible="false" update="conteudo"/>
-                        </p:panelGrid>
-
-                        <div class="EmptyBox20"/>
-
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
 
                             <p:outputLabel value="#{l.Usuario}"/>
-                            <p:inputText id="caixaPessoa" readonly="true"  size="51" value="#{caixaView.e.usuario.pessoa.nome}"/>
+                            <p:inputText id="caixaPessoa" readonly="true" value="#{caixaView.e.usuario.pessoa.nome}"/>
 
                             <p:outputLabel value="#{l.Abertura}"/>
-                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{caixaView.e.abertura}"/>  
+                            <p:calendar  pattern="dd/MM/yyyy" readonly="true" pages="0" value="#{caixaView.e.abertura}" inputStyle="width:auto"  size="8"/>  
 
                             <p:outputLabel value="#{l.Fechamento}"/>
-                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{caixaView.e.fechamento}"/> 
+                            <p:calendar  pattern="dd/MM/yyyy" readonly="true" pages="0" value="#{caixaView.e.fechamento}"  inputStyle="width:auto"  size="8"/>   
 
                             <p:outputLabel value="#{l.Saldo}"/>
-                            <p:inputNumber id="Valor" maxValue="99999999999999999.99" minValue="0.00" readonly="#{caixaView.e.fechamento eq null ? false: true}" symbol="#{caixaView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" decimalSeparator="," thousandSeparator="." value="#{caixaView.e.saldo}"/>
-                          
-
+                            <p:inputNumber id="Valor" maxValue="999999.99" minValue="0.00" readonly="#{caixaView.e.fechamento eq null ? false: true}" symbol="#{caixaView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" decimalSeparator="," thousandSeparator="." value="#{caixaView.e.saldo}" size="8" inputStyle="width: auto"/>
                         </p:panelGrid>
                         <div class="EmptyBox10"/>
                         <p:separator/>
@@ -62,7 +55,7 @@
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" rendered="true" action="#{caixaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
                         <p:commandButton value="#{l.Atualizar}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Fechar_Caixa}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.fecharCaixa()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Fechar_Caixa}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.fecharCaixa()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-times Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{caixaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
 

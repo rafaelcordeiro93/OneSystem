@@ -21,7 +21,7 @@
 
                         <div class="EmptyBox20"/>
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-3">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="operacaoId" value="#{grupoFinanceiroView.e}" update=":conteudo" dialog="#{selecaoGrupoFinanceiroView}" mbView="#{grupoFinanceiroView}" var="grupoFinanceiro" converter="grupoFinanceiroBVConverter" process="@this" itemLabel="#{grupoFinanceiro.id}" itemValue="#{grupoFinanceiro}" editVisible="false" itemLabelTab="#{grupoFinanceiro.nome}" itemLabelTabVisible="true" onlyNumber="true"/>

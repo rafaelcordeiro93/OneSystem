@@ -1,11 +1,10 @@
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Banco;
-import br.com.onesystem.domain.ConfiguracaoContabil;
+import br.com.onesystem.dao.EstoqueDAO;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Deposito;
@@ -24,8 +23,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -59,15 +56,6 @@ public class TesteRauber {
         // ---------------------------------------------------------------------
         Deposito deposito = new ArmazemDeRegistros<Deposito>(Deposito.class).find(new Long(1));
         
-
-        // Item
-        AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
-        for(int i = 5236; i<= 500000 ; i++){
-        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
-        adicionaDAO.adiciona(item);
-        }
-        System.out.println("acabou!!!");
         
         
         
@@ -83,3 +71,12 @@ public class TesteRauber {
     }
 
 }
+
+        // Item
+        AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
+        for(int i = 5236; i<= 500000 ; i++){
+        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
+                grupoFiscal, unidade, null, null, null, null, null, null);
+        adicionaDAO.adiciona(item);
+        }
+        System.out.println("acabou!!!");
