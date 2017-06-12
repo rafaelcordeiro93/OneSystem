@@ -71,12 +71,3 @@ public class TesteRauber {
     }
 
 }
-
-        // Item
-        AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
-        for(int i = 5236; i<= 500000 ; i++){
-        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
-        adicionaDAO.adiciona(item);
-        }
-        System.out.println("acabou!!!");
