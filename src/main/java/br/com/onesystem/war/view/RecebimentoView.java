@@ -1,6 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -18,7 +17,7 @@ import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -40,7 +39,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private FormaDeCobrancaBV formaDeCobrancaBV;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private CotacaoService service;
 
     public void receber() {
         try {
@@ -61,7 +60,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void limparJanela() {
         try {
             e = new RecebimentoBV(new Date());
-            e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
         } catch (DadoInvalidoException die) {
@@ -70,7 +69,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
     }
 
     @Override
@@ -296,6 +295,14 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void setFormaDeCobrancaBV(FormaDeCobrancaBV formaDeCobrancaBV) {
         this.formaDeCobrancaBV = formaDeCobrancaBV;
+    }
+
+    public CotacaoService getService() {
+        return service;
+    }
+
+    public void setService(CotacaoService service) {
+        this.service = service;
     }
 
 }
