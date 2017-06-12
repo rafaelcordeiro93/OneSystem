@@ -1,9 +1,6 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ItemDAO;
-import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.Margem;
@@ -13,7 +10,6 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
-import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ItemBV;
@@ -36,14 +32,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable {
 
-    private Item eSelecionada;
     private PrecoDeItemBV precoDeItemBV;
     private boolean precoPorMargem = true;
     private Configuracao configuracao;
@@ -78,8 +72,8 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             ex.print();
         }
     }
-    
-     public void addPreco() {
+
+    public void addPreco() {
         try {
             validaMargem();
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
@@ -94,93 +88,45 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void limparJanela() {
         e = new ItemBV();
-        eSelecionada = null;
         estoqueLista = new ArrayList<SaldoDeEstoque>();
         limparJanelaPreco();
         tab = true;
     }
 
-    
-    
-
-    public void selecionaGrupoFiscal(SelectEvent event) {
-        GrupoFiscal grupo = (GrupoFiscal) event.getObject();
-        e.setGrupoFiscal(grupo);
-    }
-
-    public void selecionaGrupo(SelectEvent ev) {
-        e.setGrupo((Grupo) ev.getObject());
-    }
-
-    public void selecionaMarca(SelectEvent ev) {
-        e.setMarca((Marca) ev.getObject());
-    }
-
-    public void selecionaUnidadeMedida(SelectEvent ev) {
-        e.setUnidadeDeMedida((UnidadeMedidaItem) ev.getObject());
-    }
-    
-    public void selecionaListaDePreco(SelectEvent event) {
-        try {
-            if (e.getMargem() != null) {
-                calculaPreco();
-            }
-            ListaDePreco listaDePreco = (ListaDePreco) event.getObject();
-            precoDeItemBV.setListaDePreco(listaDePreco);
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
-    }
-
-    public void selecionaMargem(SelectEvent event) {
-        Margem g = (Margem) event.getObject();
-        e.setMargem(g);
-    }
-    
+      
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = (Object) event.getObject();
+        try {
+            Object obj = (Object) event.getObject();
+            if (obj instanceof Item) {
+                e = new ItemBV((Item) obj);
+                inicializaDados();
+                tab = false;
+            } else if (obj instanceof GrupoFiscal) {
+                e.setGrupoFiscal((GrupoFiscal) obj);
+            } else if (obj instanceof Grupo) {
+                e.setGrupo((Grupo) obj);
+            } else if (obj instanceof Marca) {
+                e.setMarca((Marca) obj);
+            } else if (obj instanceof Margem) {
+                e.setMargem((Margem) obj);
+            } else if (obj instanceof UnidadeMedidaItem) {
+                e.setUnidadeDeMedida((UnidadeMedidaItem) obj);
+            } else if (obj instanceof ListaDePreco) {
+                if (e.getMargem() != null) {
+                    calculaPreco();
+                }
+                precoDeItemBV.setListaDePreco((ListaDePreco) obj);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
 
-        if (obj instanceof Item) {
-           
-            eSelecionada = (Item) event.getObject();
-             e = new ItemBV(eSelecionada);
-            inicializaDados();
-            
-            tab = false;
         }
     }
-    
-     private void inicializaDados() {
-        inicializaEstoque();
-        inicializaPrecos();
-    }
-
-   
-
-    private void validaMargem() throws EDadoInvalidoException {
-        if (precoPorMargem && e.getMargem() == null) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("margem_not_null"));
-        }
-    }
-
-   
-
-    private void inicializaPrecos() {
-        precoDeItemBV.setItem(eSelecionada);
-        precoAtual = servicePrecoDeItem.buscaListaDePrecoAtual(eSelecionada);
-        precos = servicePrecoDeItem.buscaTodosPrecos(eSelecionada);
-    }
-
-    private void inicializaEstoque() {
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(eSelecionada, null);
-    }
-
-    
 
     private void calculaPreco() throws DadoInvalidoException {
         if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
-            CalculadoraDePreco calculadora = new CalculadoraDePreco(eSelecionada, configuracao.getTipoDeCalculoDeCusto());
+            CalculadoraDePreco calculadora = new CalculadoraDePreco(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
             precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
                     ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
         } else {
@@ -188,7 +134,29 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
-     public List<TipoItem> getTipoItem() {
+    private void inicializaDados() throws DadoInvalidoException {
+        inicializaEstoque();
+        inicializaPrecos();
+    }
+
+    private void validaMargem() throws EDadoInvalidoException {
+        if (precoPorMargem && e.getMargem() == null) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("margem_not_null"));
+        }
+    }
+
+    private void inicializaPrecos() throws DadoInvalidoException {
+        Item i = e.construirComID();
+        precoDeItemBV.setItem(i);
+        precoAtual = servicePrecoDeItem.buscaListaDePrecoAtual(i);
+        precos = servicePrecoDeItem.buscaTodosPrecos(i);
+    }
+
+    private void inicializaEstoque() throws DadoInvalidoException {
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(e.construirComID(), null);
+    }
+
+    public List<TipoItem> getTipoItem() {
         return Arrays.asList(TipoItem.values());
     }
 
@@ -196,22 +164,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         precoDeItemBV = new PrecoDeItemBV();
     }
 
-   
-
     public ItemBV getItem() {
         return e;
     }
 
     public void setItem(ItemBV e) {
         this.e = e;
-    }
-
-    public Item getItemSelecionada() {
-        return eSelecionada;
-    }
-
-    public void setItemSelecionada(Item eSelecionada) {
-        this.eSelecionada = eSelecionada;
     }
 
     public PrecoDeItemBV getPrecoDeItemBV() {
