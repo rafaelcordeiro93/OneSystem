@@ -8,7 +8,6 @@ package br.com.onesystem.domain;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -69,7 +68,7 @@ public class ValorPorCotacao implements Serializable {
 
     public void geraBaixaPor(Nota nota) throws DadoInvalidoException {
         this.nota = nota;
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(new BundleUtil().getLabel("NotaEmitida"))
+        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao())
                 .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
                 .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).construir();
     }

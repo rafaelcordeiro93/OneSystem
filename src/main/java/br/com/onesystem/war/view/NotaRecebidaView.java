@@ -115,7 +115,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
-            cotacao = service.getCotacaoPadrao(new Date());
+            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

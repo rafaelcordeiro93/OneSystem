@@ -19,7 +19,6 @@ import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.PagamentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -41,7 +40,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     private FormaDeCobrancaBV formaDeCobrancaBV;
 
     @Inject
-    private CotacaoService service;
+    private ConfiguracaoService serviceConf;
 
     public void pagar() {
         try {
@@ -62,7 +61,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void limparJanela() {
         try {
             e = new PagamentoBV(new Date());
-            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+            e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
         } catch (DadoInvalidoException die) {
@@ -71,7 +70,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+        e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
     }
 
     @Override
@@ -137,7 +136,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
         SessionUtil.put(ModalidadeDeCobranca.CREDITO, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
-
+ 
     public void abreDespesaProvisionada() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
@@ -299,12 +298,4 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
         this.formaDeCobrancaBV = formaDeCobrancaBV;
     }
 
-    public CotacaoService getService() {
-        return service;
-    }
-
-    public void setService(CotacaoService service) {
-        this.service = service;
-    }
-    
 }
