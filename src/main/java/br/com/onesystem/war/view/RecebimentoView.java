@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -60,7 +61,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     @Override
     public void limparJanela() {
         try {
-            e = new RecebimentoBV(new Date());
+            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();

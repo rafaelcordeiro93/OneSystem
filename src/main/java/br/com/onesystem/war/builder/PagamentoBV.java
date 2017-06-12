@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
@@ -30,12 +31,14 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
     private Cotacao cotacaoPadrao;
     private Date emissao;
+    private Caixa caixa;
 
     public PagamentoBV() {
     }
 
-    public PagamentoBV(Date emissao) {
+    public PagamentoBV(Date emissao, Caixa caixa) {
         this.emissao = emissao;
+        this.caixa = caixa;
     }
 
     public PagamentoBV(Pagamento r) {
@@ -45,6 +48,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.cotacaoPadrao = r.getCotacaoPadrao();
         this.emissao = r.getEmissao();
         this.totalEmDinheiro = r.getTotalEmDinheiro();
+        this.caixa = r.getCaixa();
     }
 
     public Long getId() {
@@ -95,16 +99,24 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.emissao = emissao;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+
     public Pagamento construir() throws DadoInvalidoException {
         return new PagamentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
                 .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 
     @Override
     public Pagamento construirComID() throws DadoInvalidoException {
         return new PagamentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
                 .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 

@@ -4,7 +4,6 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
@@ -21,14 +20,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCotacaoBV> implements Serializable {
 
     private List<ValorPorCotacaoBV> cotacoes;
@@ -93,19 +92,23 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         return MoedaFormatter.format(nota.getMoedaPadrao(), getTotalConvertidoRecebido());
     }
 
-    public void finalizar() throws DadoInvalidoException {
-        for (ValorPorCotacaoBV c : cotacoes) {
-            if (nota != null) {
-                constroiNota(c);
+    public void finalizar() {
+        try {
+            for (ValorPorCotacaoBV c : cotacoes) {
+                if (nota != null) {
+                    constroiNota(c);
+                }
             }
+            RequestContext.getCurrentInstance().closeDialog(nota);
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
-        RequestContext.getCurrentInstance().closeDialog(nota);
     }
 
     private void constroiNota(ValorPorCotacaoBV c) throws DadoInvalidoException {
         boolean entrou = false;
         for (ValorPorCotacao v : nota.getValorPorCotacao()) {
-            if (c.getId().equals(v.getId())) {
+            if (c.getCotacao().getConta().getMoeda().equals(v.getCotacao().getConta().getMoeda())) {
                 nota.atualiza(c.construirComId());
                 entrou = true;
                 break;

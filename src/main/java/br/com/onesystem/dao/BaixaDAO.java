@@ -1,6 +1,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Pessoa;
@@ -57,7 +58,7 @@ public class BaixaDAO {
         consulta += "and b.despesaProvisionada is not null ";
         return this;
     }
-    
+
     public BaixaDAO eComReceitaProvisionada() {
         consulta += "and b.receitaProvisionada is not null ";
         return this;
@@ -72,13 +73,13 @@ public class BaixaDAO {
         consulta += "and b.titulo.saldo < b.titulo.valor ";
         return this;
     }
-    
+
     public BaixaDAO eNaoCancelada() {
         consulta += "and b.estado <> :pNaoCancelada ";
         parametros.put("pNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
-    
+
     public BaixaDAO eCancelada() {
         consulta += "and b.estado = :pCancelada ";
         parametros.put("pCancelada", EstadoDeBaixa.CANCELADO);
@@ -94,8 +95,8 @@ public class BaixaDAO {
         consulta += "and b.despesaProvisionada is null ";
         return this;
     }
-    
-     public BaixaDAO eSemReceitaProvisionada() {
+
+    public BaixaDAO eSemReceitaProvisionada() {
         consulta += "and b.receitaProvisionada is null ";
         return this;
     }
@@ -128,7 +129,7 @@ public class BaixaDAO {
         consulta += "and b.despesaProvisionada.emissao between :pDataEDPInicial and :pDataEDPFinal ";
         return this;
     }
-    
+
     public BaixaDAO ePorEmissaoDaReceitaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataEDPInicial", dataInicial);
         parametros.put("pDataEDPFinal", dataFinal);
@@ -149,7 +150,7 @@ public class BaixaDAO {
         consulta += "and (b.despesaProvisionada.vencimento between :pDataVDPInicial and :pDataVDPFinal or b.despesaProvisionada.vencimento is null) ";
         return this;
     }
-    
+
     public BaixaDAO ePorVencimentoDeReceitaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataVDPInicial", dataInicial);
         parametros.put("pDataVDPFinal", dataFinal);
@@ -189,6 +190,14 @@ public class BaixaDAO {
         return this;
     }
 
+    public BaixaDAO ePorCaixa(Caixa caixa) {
+        if (caixa != null) {
+            parametros.put("pCaixa", caixa);
+            consulta += "and b.caixa = :pCaixa ";
+        }
+        return this;
+    }
+
     public BaixaDAO ePorPessoa(Pessoa pessoa) {
         if (pessoa != null) {
             parametros.put("pPessoa", pessoa);
@@ -201,8 +210,8 @@ public class BaixaDAO {
         consulta += "order by b.emissao asc ";
         return this;
     }
-    
-    public BaixaDAO orderByMoeda(){
+
+    public BaixaDAO orderByMoeda() {
         consulta += "order by b.conta.moeda asc";
         return this;
     }
@@ -210,6 +219,14 @@ public class BaixaDAO {
     public BigDecimal buscarSaldoAnterior(Date data, Conta conta) {
         BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
         BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal resultado = entradas.subtract(saidas);
+
+        return resultado;
+    }
+
+    public BigDecimal buscarSaldoAnterior(Date data, Conta conta, Caixa caixa) {
+        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;
@@ -227,6 +244,14 @@ public class BaixaDAO {
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta) {
         BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
         BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal resultado = entradas.subtract(saidas);
+
+        return resultado == null ? BigDecimal.ZERO : resultado;
+    }
+
+    public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
+        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;

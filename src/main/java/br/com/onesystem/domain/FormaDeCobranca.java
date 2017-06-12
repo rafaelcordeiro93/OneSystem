@@ -71,11 +71,14 @@ public class FormaDeCobranca implements Serializable {
     @ManyToOne
     private Cotacao cotacao;
 
+    @ManyToOne
+    private Caixa caixa;
+
     public FormaDeCobranca() {
     }
 
     public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
-            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento) throws DadoInvalidoException {
+            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento, Caixa caixa) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
         this.recebimento = recebimento;
@@ -86,6 +89,7 @@ public class FormaDeCobranca implements Serializable {
         this.observacao = observacao;
         this.cotacao = cotacao;
         this.pagamento = pagamento;
+        this.caixa = caixa;
         ehValido();
     }
 
@@ -135,6 +139,10 @@ public class FormaDeCobranca implements Serializable {
 
     public BigDecimal getMulta() {
         return multa;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
     }
 
     public BigDecimal getDesconto() {

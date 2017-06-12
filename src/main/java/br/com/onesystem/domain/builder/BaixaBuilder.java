@@ -6,6 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
@@ -54,9 +55,10 @@ public class BaixaBuilder {
     private CobrancaFixa cobrancaFixa;
     private ValorPorCotacao valorPorCotacao;
     private TipoDeCobranca tipoDeCobranca;
+    private Caixa caixa;
     private FormaDeCobranca formaDeCobranca;
 
-    public BaixaBuilder(){
+    public BaixaBuilder() {
     }
 
     public BaixaBuilder(Baixa baixa) {
@@ -78,11 +80,17 @@ public class BaixaBuilder {
         this.cobrancaFixa = baixa.getMovimentoFixo();
         this.valorPorCotacao = baixa.getValorPorCotacao();
         this.tipoDeCobranca = baixa.getTipoDeCobranca();
+        this.caixa = baixa.getCaixa();
         this.formaDeCobranca = baixa.getFormaDeCobranca();
     }
-    
+
     public BaixaBuilder comId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public BaixaBuilder comCaixa(Caixa caixa) {
+        this.caixa = caixa;
         return this;
     }
 
@@ -172,7 +180,7 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca);
+        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa);
     }
 
 }

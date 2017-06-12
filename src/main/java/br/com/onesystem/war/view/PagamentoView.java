@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -60,7 +61,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     @Override
     public void limparJanela() {
         try {
-            e = new PagamentoBV(new Date());
+            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
@@ -136,7 +137,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
         SessionUtil.put(ModalidadeDeCobranca.CREDITO, "modalidadeDeCobranca", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
- 
+
     public void abreDespesaProvisionada() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());

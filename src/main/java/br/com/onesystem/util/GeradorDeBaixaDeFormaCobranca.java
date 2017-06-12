@@ -6,9 +6,6 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Titulo;
@@ -17,7 +14,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  *
@@ -105,15 +101,15 @@ public class GeradorDeBaixaDeFormaCobranca {
     }
 
     private BaixaBuilder getCobrancaBuilder() {
-        Date emissao = new Date();
+        BaixaBuilder baixaBuilder = new BaixaBuilder();
         if (formaDeCobranca.getRecebimento() != null) {
-            emissao = formaDeCobranca.getRecebimento().getEmissao();
+            baixaBuilder.comEmissao(formaDeCobranca.getRecebimento().getEmissao()).comCaixa(formaDeCobranca.getRecebimento().getCaixa());
         } else {
-            emissao = formaDeCobranca.getPagamento().getEmissao();
+            baixaBuilder.comEmissao(formaDeCobranca.getPagamento().getEmissao()).comCaixa(formaDeCobranca.getPagamento().getCaixa());
         }
 
-        return new BaixaBuilder().
-                comCotacao(formaDeCobranca.getCotacao()).comEmissao(emissao).
+        return baixaBuilder.
+                comCotacao(formaDeCobranca.getCotacao()).
                 comCobranca(formaDeCobranca.getCobranca()).comFormaDeCobranca(formaDeCobranca).
                 comPessoa(formaDeCobranca.getCobranca().getPessoa());
     }

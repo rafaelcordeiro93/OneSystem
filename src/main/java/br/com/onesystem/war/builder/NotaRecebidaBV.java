@@ -1,6 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
@@ -54,6 +55,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Cotacao cotacao;
     private Integer numeroParcelas;
     private EstadoDeNota estado;
+    private Caixa caixa;
 
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
@@ -65,6 +67,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.formaDeRecebimento = nota.getFormaDeRecebimento();
         this.emissao = nota.getEmissao();
         this.estado = nota.getEstado();
+        this.caixa = nota.getCaixa();
         this.moedaPadrao = nota.getMoedaPadrao();
     }
 
@@ -207,6 +210,14 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return pessoa;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+    
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
     }
@@ -359,7 +370,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 
@@ -367,7 +378,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
     }
 

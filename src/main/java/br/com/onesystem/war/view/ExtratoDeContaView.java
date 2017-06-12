@@ -1,9 +1,12 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.ConfiguracaoFinanceiro;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Transferencia;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.BaixaEmissaoComparator;
 import br.com.onesystem.util.BundleUtil;
@@ -14,6 +17,7 @@ import br.com.onesystem.war.service.BaixaService;
 import br.com.onesystem.war.service.ConfiguracaoFinanceiroService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -21,7 +25,6 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
@@ -48,7 +51,7 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
         ConfiguracaoFinanceiro conf = serviceFinanceiro.buscar();
         extrato.setConta(conf == null ? null : conf.getContaPadrao());
         if (extrato.getConta() != null) {
-            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta());
+            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa());
             Collections.sort(baixas, new BaixaEmissaoComparator());
         }
     }
@@ -67,16 +70,17 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
             dataAtual.set(Calendar.MINUTE, 59);
             dataAtual.set(Calendar.SECOND, 59);
             extrato.setDataFinal(dataAtual.getTime());
-            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta());
+            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa());
             Collections.sort(baixas, new BaixaEmissaoComparator());
-        } catch (EDadoInvalidoException ex) {
+        } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
 
-    private void validaConta() throws EDadoInvalidoException {
+    private void validaConta() throws DadoInvalidoException {
         if (extrato.getConta() == null) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
+            baixas = new ArrayList<>();
+            throw new ADadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
         }
     }
 
@@ -88,6 +92,9 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
         } else if (obj instanceof Transferencia) {
             atualizar();
             InfoMessage.adicionado();
+        } else if (obj instanceof Caixa) {
+            this.extrato.setCaixa((Caixa) event.getObject());
+            atualizar();
         }
     }
 

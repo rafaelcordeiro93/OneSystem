@@ -89,6 +89,8 @@ public abstract class Nota implements Serializable {
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
     @OneToOne
     private Nota notaDeOrigem;
+    @ManyToOne(optional = false)
+    private Caixa caixa;
 
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
@@ -98,7 +100,7 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao) throws DadoInvalidoException {
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa) throws DadoInvalidoException {
         this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
@@ -117,6 +119,7 @@ public abstract class Nota implements Serializable {
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
         this.notaDeOrigem = notaDeOrigem;
+        this.caixa = caixa;
         if (id == null) {
             geraBaixaPorValorDeCotacao();
             geraCobrancas();
@@ -132,7 +135,12 @@ public abstract class Nota implements Serializable {
     }
 
     public void atualiza(ValorPorCotacao valor) throws DadoInvalidoException {
-        this.valorPorCotacao.set(valorPorCotacao.indexOf(valor), valor);
+        for (ValorPorCotacao v : valorPorCotacao) {
+            if (v.getCotacao().getConta().getMoeda().equals(v.getCotacao().getConta().getMoeda())) {
+                v.atualizaValor(valor.getValor());
+                v.atualizaValorDeBaixa(valor.getValor());
+            }
+        }
     }
 
     public void adiciona(Cobranca cobranca) throws DadoInvalidoException {
@@ -187,6 +195,10 @@ public abstract class Nota implements Serializable {
 
     public Operacao getOperacao() {
         return operacao;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
     }
 
     public FormaDeRecebimento getFormaDeRecebimento() {

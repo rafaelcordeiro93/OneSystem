@@ -6,6 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
@@ -53,9 +54,15 @@ public class NotaRecebidaBuilder {
     private BigDecimal aFaturar;
     private Nota notaDeOrigem;
     private Date emissao;
+    private Caixa caixa;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public NotaRecebidaBuilder comCaixa(Caixa caixa) {
+        this.caixa = caixa;
         return this;
     }
 
@@ -174,7 +181,7 @@ public class NotaRecebidaBuilder {
     }
 
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa);
     }
 
 }

@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -67,14 +68,27 @@ public class ValorPorCotacao implements Serializable {
     }
 
     public void geraBaixaPor(Nota nota) throws DadoInvalidoException {
+        BundleUtil msg = new BundleUtil();
+        String historico = nota instanceof NotaEmitida ? msg.getLabel("Nota_Emitida") : msg.getLabel("Nota_Recebida")
+                + " " + msg.getMessage("de") + " " + nota.getPessoa().getNome();
+
         this.nota = nota;
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao())
+        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
-                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).construir();
+                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
+                .comValorPorCotacao(this).construir();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void atualizaValor(BigDecimal valor) {
+        this.valor = valor;
+    }
+
+    public void atualizaValorDeBaixa(BigDecimal valor) {
+        baixa.atualizaValor(valor);
     }
 
     public Cotacao getCotacao() {

@@ -1,6 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
@@ -61,6 +62,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private Comanda comanda;
     private Condicional condicional;
     private EstadoDeNota estado;
+    private Caixa caixa;
 
     public NotaEmitidaBV(NotaEmitida nota) {
         this.id = nota.getId();
@@ -84,6 +86,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.aFaturar = nota.getaFaturar();
         this.totalEmDinheiro = nota.getTotalEmDinheiro();
         this.notaDeOrigem = nota.getNotaDeOrigem();
+        this.caixa = nota.getCaixa();
     }
 
     public NotaEmitidaBV() {
@@ -269,6 +272,14 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return itens;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+    
     public void setItens(List<ItemDeNota> itensEmitidos) {
         this.itens = itensEmitidos;
     }
@@ -475,7 +486,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
-                .comCondicional(condicional).comEmissao(emissao).construir();
+                .comCondicional(condicional).comEmissao(emissao).comCaixa(caixa).construir();
     }
 
     public NotaEmitida construirComID() throws DadoInvalidoException {
@@ -484,7 +495,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comNotaDeOrigem(notaDeOrigem).comOperacao(operacao).comOrcamento(orcamento)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comComanda(comanda)
-                .comCondicional(condicional).comEmissao(emissao).construir();
+                .comCondicional(condicional).comEmissao(emissao).comCaixa(caixa).construir();
     }
 
 }

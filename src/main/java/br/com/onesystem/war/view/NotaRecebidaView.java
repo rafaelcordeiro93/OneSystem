@@ -8,6 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
@@ -31,6 +32,7 @@ import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Money;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
@@ -122,18 +124,23 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     }
 
     public void limparJanela() {
-        notaRecebida = new NotaRecebidaBV();
-        notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
-        notaRecebida.setCotacao(cotacao);
-        creditoBV = new CreditoBV();
-        itemRecebido = new ItemDeNotaBV();
-        boletoDeCartao = new BoletoDeCartaoBV();
-        cobrancas = new ArrayList<>();
-        notaRecebidaSelecionada = null;
-        cheque = new ChequeBV();
-        inicializaCotacoes();
-        limparChequeEntrada();
-        cobrancaBV = new CobrancaBV();
+        try {
+            notaRecebida = new NotaRecebidaBV();
+            notaRecebida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
+            notaRecebida.setCotacao(cotacao);
+            creditoBV = new CreditoBV();
+            itemRecebido = new ItemDeNotaBV();
+            boletoDeCartao = new BoletoDeCartaoBV();
+            cobrancas = new ArrayList<>();
+            notaRecebidaSelecionada = null;
+            cheque = new ChequeBV();
+            inicializaCotacoes();
+            limparChequeEntrada();
+            cobrancaBV = new CobrancaBV();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     private void inicializaCotacoes() {

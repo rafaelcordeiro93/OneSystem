@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
@@ -29,7 +30,8 @@ public class FormaDeCobrancaBuilder {
     private BigDecimal desconto;
     private String observacao;
     private Cotacao cotacao;
-
+    private Caixa caixa;
+    
     public FormaDeCobrancaBuilder comId(Long id) {
         this.id = id;
         return this;
@@ -79,9 +81,14 @@ public class FormaDeCobrancaBuilder {
         this.cotacao = cotacao;
         return this;
     }
+    
+    public FormaDeCobrancaBuilder comCaixa(Caixa caixa){
+        this.caixa = caixa;
+        return this;
+    }
 
     public FormaDeCobranca construir() throws DadoInvalidoException {
-        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento);
+        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento, caixa);
     }
 
 }

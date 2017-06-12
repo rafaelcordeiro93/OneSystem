@@ -67,11 +67,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         faturaLegada = (FaturaLegada) SessionUtil.getObject("faturaLegada", FacesContext.getCurrentInstance());
 
-        if (model != null) {//FATURA LEGADA
-            cobranca = (Cobranca) model.getObject();
-            e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(((Titulo) cobranca).getFaturaLegada().getEmissao()).listaDeResultados();
-        } else if (faturaLegada != null) {
+       if (faturaLegada != null) {
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaLegada.getMoedaPadrao()).naMaiorEmissao(faturaLegada.getEmissao()).resultado());

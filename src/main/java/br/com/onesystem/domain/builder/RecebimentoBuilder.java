@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
@@ -26,6 +27,7 @@ public class RecebimentoBuilder {
     private BigDecimal totalEmDinheiro;
     private Cotacao cotacaoPadrao;
     private Date emissao;
+    private Caixa caixa;
 
     public RecebimentoBuilder comId(Long id) {
         this.id = id;
@@ -57,8 +59,13 @@ public class RecebimentoBuilder {
         return this;
     }
 
+    public RecebimentoBuilder comCaixa(Caixa caixa) {
+        this.caixa = caixa;
+        return this;
+    }
+
     public Recebimento construir() throws DadoInvalidoException {
-        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro);
+        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, caixa);
     }
 
 }

@@ -51,17 +51,21 @@ public class Pagamento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @ManyToOne
+    private Caixa caixa;
+
     public Pagamento() {
     }
 
     public Pagamento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
-            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro) {
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, Caixa caixa) {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
         this.cotacaoPadrao = cotacaoPadrao;
         this.emissao = emissao;
         this.totalEmDinheiro = totalEmDinheiro;
+        this.caixa = caixa;
     }
 
     public void ehValido() throws DadoInvalidoException {
@@ -123,6 +127,10 @@ public class Pagamento {
         return formasDeCobranca;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+    
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
     }

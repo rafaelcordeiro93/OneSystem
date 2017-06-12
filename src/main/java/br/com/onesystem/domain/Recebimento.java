@@ -49,17 +49,21 @@ public class Recebimento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @ManyToOne
+    private Caixa caixa;
+
     public Recebimento() {
     }
 
     public Recebimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
-            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro) {
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, Caixa caixa) {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
         this.cotacaoPadrao = cotacaoPadrao;
         this.emissao = emissao;
         this.totalEmDinheiro = totalEmDinheiro;
+        this.caixa = caixa;
     }
 
     public void ehValido() throws DadoInvalidoException {
@@ -111,6 +115,10 @@ public class Recebimento {
 
     public Long getId() {
         return id;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
     }
 
     public List<TipoDeCobranca> getTipoDeCobranca() {

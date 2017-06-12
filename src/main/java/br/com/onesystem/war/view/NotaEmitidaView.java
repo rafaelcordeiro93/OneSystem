@@ -8,6 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Comanda;
@@ -161,23 +162,28 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     public void limparJanela() {
-        notaEmitida = new NotaEmitidaBV();
-        notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
-        notaEmitida.setCotacao(cotacao);
-        comandaSelecionada = null;
-        creditoBV = new CreditoBV();
-        itemEmitido = new ItemDeNotaBV();
-        boletoDeCartao = new BoletoDeCartaoBV();
-        cobrancas = new ArrayList<>();
-        notaEmitidaSelecionada = null;
-        cheque = new ChequeBV();
-        inicializaCotacoes();
-        cobrancaBV = new CobrancaBV();
-        orcamento = null;
-        editarItensEParcelas = false;
-        limparChequeEntrada();
-        limparChequeParcelas();
-        limparItemDeNota();
+        try {
+            notaEmitida = new NotaEmitidaBV();
+            notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
+            notaEmitida.setCotacao(cotacao);
+            comandaSelecionada = null;
+            creditoBV = new CreditoBV();
+            itemEmitido = new ItemDeNotaBV();
+            boletoDeCartao = new BoletoDeCartaoBV();
+            cobrancas = new ArrayList<>();
+            notaEmitidaSelecionada = null;
+            cheque = new ChequeBV();
+            inicializaCotacoes();
+            cobrancaBV = new CobrancaBV();
+            orcamento = null;
+            editarItensEParcelas = false;
+            limparChequeEntrada();
+            limparChequeParcelas();
+            limparItemDeNota();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     private void inicializaCotacoes() {

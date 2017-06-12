@@ -5,13 +5,18 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Usuario;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.MD5Util;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.war.service.CaixaService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
@@ -28,29 +33,43 @@ public class LoginView implements Serializable {
     private List<Usuario> listaDeUsuarios;
     private String mensagem = null;
 
+    @Inject
+    private CaixaService service;
+
     public String logar() {
-        if (!listaDeUsuarios.isEmpty()) {
-            mensagem = null;
-            MD5Util criptografia = new MD5Util();
-            for (Usuario usuarioCadastrado : listaDeUsuarios) {
-                if (login != null && login.equals(usuarioCadastrado.getPessoa().getEmail())
-                        && senha != null && criptografia.md5Hex(senha).equals(usuarioCadastrado.getSenha())) {
-                    FacesContext context = FacesContext.getCurrentInstance();
-                    HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-                    session.setAttribute("minds.login.token", login);
-                    session.setAttribute("minds.nome.token", usuarioCadastrado.getPessoa().getNome());
-                    session.setAttribute("minds.GrupoPV.token", usuarioCadastrado.getGrupoDePrivilegio().getNome());
-                    return "dashboard?faces-redirect=true";
+        try {
+            if (!listaDeUsuarios.isEmpty()) {
+                mensagem = null;
+                MD5Util criptografia = new MD5Util();
+                for (Usuario usuarioCadastrado : listaDeUsuarios) {
+                    if (login != null && login.equals(usuarioCadastrado.getPessoa().getEmail())
+                            && senha != null && criptografia.md5Hex(senha).equals(usuarioCadastrado.getSenha())) {
+                        FacesContext context = FacesContext.getCurrentInstance();
+                        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+                        session.setAttribute("minds.login.token", login);
+                        session.setAttribute("minds.nome.token", usuarioCadastrado.getPessoa().getNome());
+                        session.setAttribute("minds.GrupoPV.token", usuarioCadastrado.getGrupoDePrivilegio().getNome());
+
+                        Caixa caixa = service.getCaixaAbertoDo(usuarioCadastrado);
+                        if (service.getCaixaAbertoDo(usuarioCadastrado) != null) {
+                            SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
+                        }
+
+                        return "dashboard?faces-redirect=true";
+                    }
                 }
+                mensagem = "Usuário ou senha inválidos!";
+                return null;
             }
-            mensagem = "Usuário ou senha inválidos!";
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
+            session.setAttribute("minds.login.token", "Anonymous");
+            session.setAttribute("minds.nome.token", "Anonymous");
+            return "dashboard?faces-redirect=true";
+        } catch (DadoInvalidoException die) {
+            die.print();
             return null;
         }
-        FacesContext context = FacesContext.getCurrentInstance();
-        HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
-        session.setAttribute("minds.login.token", "Anonymous");
-        session.setAttribute("minds.nome.token", "Anonymous");
-        return "dashboard?faces-redirect=true";
     }
 
     @PostConstruct

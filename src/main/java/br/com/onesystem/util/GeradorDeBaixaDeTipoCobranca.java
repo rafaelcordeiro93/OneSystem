@@ -106,15 +106,15 @@ public class GeradorDeBaixaDeTipoCobranca {
     }
 
     private BaixaBuilder getCobrancaBuilder() {
-        Date emissao = new Date();
+        BaixaBuilder baixaBuilder = new BaixaBuilder();
         if (tipoDeCobranca.getRecebimento() != null) {
-            emissao = tipoDeCobranca.getRecebimento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getRecebimento().getEmissao()).comCaixa(tipoDeCobranca.getRecebimento().getCaixa());
         } else {
-            emissao = tipoDeCobranca.getPagamento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getPagamento().getEmissao()).comCaixa(tipoDeCobranca.getPagamento().getCaixa());
         }
 
-        return new BaixaBuilder().
-                comCotacao(tipoDeCobranca.getCotacao()).comEmissao(emissao).
+        return baixaBuilder.
+                comCotacao(tipoDeCobranca.getCotacao()).
                 comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }
