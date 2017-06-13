@@ -8,13 +8,14 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.DespesaProvisionadaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class DespesaProvisionadaBV implements Serializable {
+public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaProvisionada> {
 
     private Long id;
     private Pessoa pessoa;
