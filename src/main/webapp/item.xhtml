@@ -17,17 +17,18 @@
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                        <p:tabView id="tabsItem">
-                            <p:tab title="#{l.Detalhes}">
+                        <p:tabView id="tabsItem" style="margin: none; border-color: none">
+                            <p:ajax event="tabChange" listener="#{itemView.onTabChange}" update="conteudo"/>
+                            <p:tab title="#{l.Detalhes}" >
 
-                                <div class="EmptyBox10"/>
+                                <div class="EmptyBox20"/>
 
                                 <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                              columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                                     <p:outputLabel value="#{l.Id}"/>
-                                    <a:inputTextDialog id="itemID" value="#{itemView.e}" update=":conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="item" converter="itemBVConverter" process="@this" itemLabel="#{item.id}" itemValue="#{item}" editVisible="false" itemLabelTab="#{item.nome}" itemLabelTabVisible="true" onlyNumber="true">
-                                        <p:ajax event="itemSelect" listener="#{itemView.selecionar}" update=":conteudo"/>                                                       
+                                    <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
+                                        <p:ajax event="itemSelect" listener="#{itemView.selecionaItem}" update=":conteudo"/>                                  
                                     </a:inputTextDialog>
 
                                     <p:outputLabel value="#{l.Ativo}"/>
@@ -70,7 +71,7 @@
 
 
                                     <p:outputLabel value="#{l.Margem}"/>
-                                    <a:inputTextDialog id="itemMargem" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}" itemValue="#{unidadeDeMedida}" converter="unidadeMedidaItemConverter" itemLabelTabVisible="true" itemLabelTab="#{unidadeDeMedida.nome}"/>
+                                    <a:inputTextDialog id="itemMargem" dialog="#{selecaoMargemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="margem" itemLabel="#{margem.nome}" itemValue="#{margem}" converter="margemConverter" itemLabelTabVisible="true" itemLabelTab="#{margem.nome}"/>
 
 
                                     <p:outputLabel value="#{l.Tipo_Item}"/>
@@ -80,18 +81,11 @@
 
                                 </p:panelGrid>
 
-                                <p:separator/>
-                                <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2, ui-g-12 ui-md-2,ui-g-12 ui-md-2">
-                                    <p:commandButton value="#{l.Adicionar}" style="size: 10px" action="#{itemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                    <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                    <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                    <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                </p:panelGrid>
+                                <div class="EmptyBox40"/>
 
                             </p:tab>
 
-                            <p:tab title="#{l.Estoque}" disabled="#{itemView.tab}">
+                            <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
 
                                 <h2 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h2>
                                 <h:panelGrid>
@@ -109,7 +103,7 @@
 
                             </p:tab>
 
-                            <p:tab id="tabPreco" title="#{l.Preco}" disabled="#{itemView.tab}">
+                            <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}">
 
 
                                 <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass="form-elements"
@@ -121,12 +115,11 @@
                                             <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
                                         </p:selectOneRadio>
 
-                                        
-                                         <div class="EmptyBox10"/>
-                                         <a:inputTextDialog id="itemListaPreco" update="itemListaPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}"/>
-                                               
-                                        
-                                        
+
+                                        <div class="EmptyBox10"/>
+                                        <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
+                                            <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
+                                        </a:inputTextDialog>
 
                                         <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
                                                        symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
@@ -190,14 +183,20 @@
 
                         </p:tabView>
                     </div>  
+
+                    <div class="EmptyBox20"/> 
+
+                    <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
+                        <div style="padding: 0% 0% 5% 8%">
+                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                            <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                            <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        </div> 
+                    </p:panelGrid>
                 </div>
             </div>
         </div>
-
-
-
-
-
     </ui:define>
 
 </ui:composition>

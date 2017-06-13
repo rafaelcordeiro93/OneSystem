@@ -33,6 +33,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TabChangeEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
@@ -46,6 +47,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private List<PrecoDeItem> precoAtual;
     private List<PrecoDeItem> precos;
     private boolean tab = true;
+    private boolean renderBotoes = true;
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
@@ -91,17 +93,16 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         estoqueLista = new ArrayList<SaldoDeEstoque>();
         limparJanelaPreco();
         tab = true;
+        renderBotoes = true;
     }
 
-      
     @Override
     public void selecionar(SelectEvent event) {
         try {
             Object obj = (Object) event.getObject();
             if (obj instanceof Item) {
                 e = new ItemBV((Item) obj);
-                inicializaDados();
-                tab = false;
+                selecionaItem();
             } else if (obj instanceof GrupoFiscal) {
                 e.setGrupoFiscal((GrupoFiscal) obj);
             } else if (obj instanceof Grupo) {
@@ -113,9 +114,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             } else if (obj instanceof UnidadeMedidaItem) {
                 e.setUnidadeDeMedida((UnidadeMedidaItem) obj);
             } else if (obj instanceof ListaDePreco) {
-                if (e.getMargem() != null) {
-                    calculaPreco();
-                }
+                calculaPreco();
                 precoDeItemBV.setListaDePreco((ListaDePreco) obj);
             }
         } catch (DadoInvalidoException die) {
@@ -124,13 +123,22 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
-    private void calculaPreco() throws DadoInvalidoException {
-        if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
-            CalculadoraDePreco calculadora = new CalculadoraDePreco(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
-            precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
-                    ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
-        } else {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+    public void selecionaItem() throws DadoInvalidoException {
+        if (e.getId() != null) {
+            inicializaDados();
+            tab = false;
+        }
+    }
+
+    public void calculaPreco() throws DadoInvalidoException {
+        if (e.getMargem() != null) {
+            if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
+                CalculadoraDePreco calculadora = new CalculadoraDePreco(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
+                precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
+                        ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+            }
         }
     }
 
@@ -150,6 +158,15 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         precoDeItemBV.setItem(i);
         precoAtual = servicePrecoDeItem.buscaListaDePrecoAtual(i);
         precos = servicePrecoDeItem.buscaTodosPrecos(i);
+    }
+
+    public void onTabChange(TabChangeEvent event) {
+        String str = event.getTab().getTitle();
+        if (str == new BundleUtil().getLabel("Preco") || str == new BundleUtil().getLabel("Estoque")) {
+            renderBotoes = false;
+        } else {
+            renderBotoes = true;
+        }
     }
 
     private void inicializaEstoque() throws DadoInvalidoException {
@@ -234,6 +251,14 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void setPrecoAtual(List<PrecoDeItem> precoAtual) {
         this.precoAtual = precoAtual;
+    }
+
+    public boolean isRenderBotoes() {
+        return renderBotoes;
+    }
+
+    public void setRenderBotoes(boolean renderBotoes) {
+        this.renderBotoes = renderBotoes;
     }
 
     public boolean isTab() {
