@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Moeda;
@@ -9,10 +10,13 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.DespesaProvisionadaBV;
-import br.com.onesystem.war.service.MoedaService;
+import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,10 +36,10 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
     private List<DespesaProvisionadaBV> parcelas;
     private Integer numeroParcelas;
     private Integer intervaloDias;
-    private List<Moeda> moedaLista;
+    private List<Cotacao> listaCotacao;
 
     @Inject
-    private MoedaService serviceMoeda;
+    private CotacaoService serviceCotacao;
 
     @PostConstruct
     public void init() {
@@ -44,15 +48,15 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
 
     public void add() {
         try {
+            e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             DespesaProvisionada novoRegistro = e.construir();
             new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
-
             for (DespesaProvisionadaBV n : parcelas) {
                 novoRegistro = n.construir();
                 new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
-
             }
-
+            InfoMessage.adicionado();
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -61,10 +65,11 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
     @Override
     public void limparJanela() {
         e = new DespesaProvisionadaBV();
+
         intervaloDias = null;
         numeroParcelas = null;
         parcelas = new ArrayList<DespesaProvisionadaBV>();
-        moedaLista = serviceMoeda.buscarMoedas();
+        listaCotacao = serviceCotacao.buscarTodasCotacoesDoDiaAtual();
     }
 
     @Override
@@ -77,7 +82,6 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
         } else if (obj instanceof TipoDespesa) {
             e.setDespesa((TipoDespesa) obj);
         }
-
     }
 
     public void gerarMaisParcelas() {
@@ -98,7 +102,8 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
                                 e.getCotacao(),
                                 null,
                                 null,
-                                e.getReferencia());
+                                e.getReferencia(),
+                                OperacaoFinanceira.SAIDA);
                 parcelas.add(dp);
             }
         } catch (Exception e) {
@@ -158,20 +163,20 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
         this.intervaloDias = intervaloDias;
     }
 
-    public List<Moeda> getMoedaLista() {
-        return moedaLista;
+    public List<Cotacao> getListaCotacao() {
+        return listaCotacao;
     }
 
-    public void setMoedaLista(List<Moeda> moedaLista) {
-        this.moedaLista = moedaLista;
+    public void setListaCotacao(List<Cotacao> listaCotacao) {
+        this.listaCotacao = listaCotacao;
     }
 
-    public MoedaService getServiceMoeda() {
-        return serviceMoeda;
+    public CotacaoService getServiceCotacao() {
+        return serviceCotacao;
     }
 
-    public void setServiceMoeda(MoedaService serviceMoeda) {
-        this.serviceMoeda = serviceMoeda;
+    public void setServiceCotacao(CotacaoService serviceCotacao) {
+        this.serviceCotacao = serviceCotacao;
     }
 
 }

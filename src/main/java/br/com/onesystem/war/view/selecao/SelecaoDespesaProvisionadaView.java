@@ -20,7 +20,7 @@ public class SelecaoDespesaProvisionadaView extends BasicCrudMBImpl<DespesaProvi
 
     @PostConstruct
     public void init() {
-        beans = service.buscarDespesaProvisionadasAPagar();
+        beans = service.buscarDespesaProvisionadas();
     }
 
     public void abrirDialogo() {
