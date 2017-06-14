@@ -19,10 +19,10 @@
                                    var="cheque" converter="chequeConverter" itemLabel="#{cheque.pessoa.nome}" itemValue="#{cheque}" itemLabelTabVisible="true" itemLabelTab="#{cheque.pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 1 ? true : false :false}" />
 
-                 <a:inputTextDialog id="inp-Cheque-pagamento" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoChequeEmitidoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                <a:inputTextDialog id="inp-Cheque-pagamento" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoChequeEmitidoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
                                    var="cheque" converter="chequeConverter" itemLabel="#{cheque.pessoa.nome}" itemValue="#{cheque}" itemLabelTabVisible="true" itemLabelTab="#{cheque.pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2 ? true : false :false}" />
-                
+
                 <p:outputLabel value="#{l.Cartao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}"/>
                 <a:inputTextDialog id="inp-Cartao" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoBoletoDeCartaoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
                                    var="cartao" converter="boletoDeCartaoConverter" itemLabel="#{cartao.pessoa.nome}" itemValue="#{cartao}" itemLabelTabVisible="true" itemLabelTab="#{cartao.pessoa.nome}" readonly="true" 
@@ -32,13 +32,13 @@
                 <a:inputTextDialog id="inp-Titulo" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloReceberView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
                                    var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 1 ? true : false :false}" />
-                
+
                 <a:inputTextDialog id="inp-Titulo-pagamento" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloPagarView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
                                    var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2 ? true : false :false}" />
 
                 <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"/>
-                <a:inputTextDialog id="inp-Credito" value="#{dialogoTipoDeCobrancaView.credito.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}" 
+                <a:inputTextDialog id="inp-Credito" value="#{dialogoTipoDeCobrancaView.credito.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog:formCobranca:saldoCredito"
                                    var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}" />
 
@@ -128,7 +128,7 @@
                                 <div class="ContainerIndent">
                                     <div class="Container100 Fs20 BoldGray FontRobotoRegular br">#{l.Saldo_Disponivel_Em_Credito}</div>
                                     <div class="Container100">
-                                        <h:outputText styleClass="DispBlock Fs24 FontRobotoLight Orange BorderBottom" value="#{dialogoTipoDeCobrancaView.saldoDeCredito}"/>
+                                        <h:outputText id="saldoCredito" styleClass="DispBlock Fs24 FontRobotoLight Orange BorderBottom" value="#{dialogoTipoDeCobrancaView.saldoDeCredito}"/>
                                     </div>
                                 </div>
                             </div>
@@ -189,15 +189,16 @@
                 <div id="valores" class="ui-g-12 ui-md-6 ui-lg-3">
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
-                        <p:outputLabel value="#{l.Banco}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3}"/>
-                        <p:selectOneMenu  id="dceBanco" value="#{dialogoTipoDeCobrancaView.e.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3}">
+                        <p:outputLabel value="#{l.Conta}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}"/>
+                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.conta.nome}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
+                        <p:selectOneMenu  id="dceBanco" value="#{dialogoTipoDeCobrancaView.e.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" rendered="false">
                             <p:ajax update="tempDialog" listener="#{dialogoTipoDeCobrancaView.selecionaCotacaoConformeConta}"/>
-                            <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
                             <f:selectItems value="#{dialogoTipoDeCobrancaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
                         </p:selectOneMenu>
 
-                        <p:outputLabel value="#{l.Cotacao}: "/>
-                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" >
+                        <p:outputLabel value="#{l.Cotacao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"/>
+                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1}" readonly="true"/>
+                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 1 ? true : false : false}" >
                             <p:ajax update="tempDialog"/>
                             <f:selectItems value="#{dialogoTipoDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
                         </p:selectOneMenu>
@@ -206,8 +207,8 @@
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4">
                         <p:outputLabel value="#{l.Valor_Recebido}:" styleClass="Blue"  />
-                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.valor}" minValue="0" maxValue="#{dialogoTipoDeCobrancaView.titulo.saldo}"
-                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.valor}" minValue="0" maxValue="#{dialogoTipoDeCobrancaView.titulo ne null ? dialogoTipoDeCobrancaView.titulo.saldo : dialogoTipoDeCobrancaView.cheque ne null ? dialogoTipoDeCobrancaView.cheque.valor : dialogoTipoDeCobrancaView.boletoDeCartao ne null ? dialogoTipoDeCobrancaView.boletoDeCartao.valor : ''}"
+                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." readonly="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2 ? true : false}" />
 
                         <p:outputLabel value="#{l.Juros}:" />
                         <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.juros}" minValue="0" disabled="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"

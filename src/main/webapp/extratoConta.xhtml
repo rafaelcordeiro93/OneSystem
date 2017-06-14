@@ -74,8 +74,8 @@
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column colspan="7" style="text-align:right; font-weight: normal" headerText="#{l.Saldo_Inicial}"/>
-                                    <p:column headerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoAnteriorFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.conta,  extratoDeContaView.extrato.caixa)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoAnterior(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.conta,  extratoDeContaView.extrato.caixa) ge 0 ? '#0288d1' : '#E53935'};
+                                    <p:column headerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAnteriorFormatado}"
+                                              style="color : #{extratoDeContaView.saldoAnterior ge 0 ? '#0288d1' : '#E53935'};
                                               font-weight: normal"/>
                                     <p:column colspan="1"/>
                                 </p:row>
@@ -111,8 +111,8 @@
                             </p:column>
 
                             <p:column style="text-align: center">
-                                <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : baixa.getSaldoFormatado(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta, baixa.caixa))}" 
-                                              style="color : #{baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta, baixa.caixa)) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.buscarSaldoAnterior(baixa)}" 
+                                              style="color : #{extratoDeContaView.buscarSaldoAnterior(baixa) ge 0 ? '#0288d1' : '#E53935'}" />
                             </p:column>
 
                             <p:column style="text-align: center;">
@@ -122,19 +122,19 @@
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="5" style="text-align:right" footerText="#{l.Totais}" />
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarEntradasPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa)}" 
-                                              style="color : #{extratoDeContaView.service.buscarEntradasPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa) ge 0 ? '#0288d1' : '#E53935'}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaidasPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaidasPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa) ge 0 ? '#0288d1' : '#E53935'}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradasFormatado}" 
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradas ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidasFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidas ge 0 ? '#E53935' : '#0288d1'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldo ge 0 ? '#0288d1' : '#E53935'}"/>
                                     <p:column colspan="1"/>
                                 </p:row>
                                 <p:row>
-                                    <p:column colspan="6" style="text-align:right" footerText="#{l.Saldo_Atual}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoFinalFormatado(extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoFinal(extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta, extratoDeContaView.extrato.caixa) ge 0 ? '#0288d1' : '#E53935'}"/>
-                                    <p:column colspan="2"/>
+                                    <p:column colspan="7" style="text-align:right" footerText="#{l.Saldo_Atual}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAcumuladoFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAcumulado ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column colspan="1"/>
                                 </p:row>
                             </p:columnGroup>
 

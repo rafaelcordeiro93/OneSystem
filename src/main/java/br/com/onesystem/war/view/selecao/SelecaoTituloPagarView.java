@@ -29,7 +29,7 @@ public class SelecaoTituloPagarView extends BasicCrudMBImpl<Titulo> implements S
 
     @Override
     public String abrirEdicao() {
-        return "";
+        return "/consultaCobranca";
     }
     
     @Override

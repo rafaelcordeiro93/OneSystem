@@ -20,6 +20,7 @@ import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.PagamentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -41,7 +42,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     private FormaDeCobrancaBV formaDeCobrancaBV;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private CotacaoService service;
 
     public void pagar() {
         try {
@@ -62,7 +63,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void limparJanela() {
         try {
             e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
-            e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
         } catch (DadoInvalidoException die) {
@@ -71,7 +72,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).resultado());
+        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
     }
 
     @Override
@@ -248,7 +249,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public BigDecimal getTotalEmDinheiro() {
         BigDecimal totalTipo = getTotalTipoNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalTipoNaCotacaoPadrao();
         BigDecimal totalForma = getTotalFormaNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalFormaNaCotacaoPadrao();
-        return totalTipo.subtract(totalForma);
+        return (totalTipo.subtract(getValorEmConta())).subtract(totalForma);
+
     }
 
     public Model getTipoSelecionado() {

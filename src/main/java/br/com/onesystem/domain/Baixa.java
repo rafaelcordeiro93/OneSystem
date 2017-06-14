@@ -190,17 +190,6 @@ public class Baixa implements Serializable, Movimento {
         return conhecimentoDeFrete;
     }
 
-    public String getSaldoFormatado(BigDecimal saldoAtual) {
-        switch (naturezaFinanceira) {
-            case ENTRADA:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.add(this.getValor()));
-            case SAIDA:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.subtract(this.getValor()));
-            default:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual);
-        }
-    }
-
     public BigDecimal getSaldo(BigDecimal saldoAtual) {
         if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
             return saldoAtual.add(this.getValor());

@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -47,6 +48,12 @@ public class CotacaoDAO {
         parametros.put("cId", id);
         return this;
     }
+    
+    public CotacaoDAO porConta(Conta conta) {
+        consulta += " and c.conta = :cConta ";
+        parametros.put("cConta", conta);
+        return this;
+    }
 
     public CotacaoDAO porMoeda(Moeda moeda) {
         consulta += " and c.conta.moeda = :cMoeda ";
@@ -80,8 +87,9 @@ public class CotacaoDAO {
         return this;
     }
 
-    public CotacaoDAO naUltimaEmissao() {
-        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct group by ct.conta) ";
+    public CotacaoDAO naUltimaEmissao(Date emissao) {
+        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct where ct.emissao <= :pUltimaEmissao group by ct.conta) ";
+        parametros.put("pUltimaEmissao", emissao);
         return this;
     }
 

@@ -206,8 +206,8 @@ public class BaixaDAO {
         return this;
     }
 
-    public BaixaDAO orderByEmissao() {
-        consulta += "order by b.emissao asc ";
+    public BaixaDAO orderByEmissaoEId() {
+        consulta += "order by b.emissao,b.id asc ";
         return this;
     }
 

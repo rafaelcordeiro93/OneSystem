@@ -200,7 +200,7 @@ public class TipoDeCobranca implements Serializable {
             } else if (cobranca instanceof Cheque) {
                 return new BundleUtil().getLabel("Cheque");
             } else if (cobranca instanceof BoletoDeCartao) {
-                return new BundleUtil().getLabel("Boleto_De_Cobranca");
+                return new BundleUtil().getLabel("Boleto_De_Cartao");
             } else {
                 return new BundleUtil().getLabel("Credito");
             }

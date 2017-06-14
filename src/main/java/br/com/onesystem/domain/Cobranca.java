@@ -91,6 +91,7 @@ public abstract class Cobranca implements Serializable {
 
     @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
     private Date vencimento;
 
     @ManyToOne

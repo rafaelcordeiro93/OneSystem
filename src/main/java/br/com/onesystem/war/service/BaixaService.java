@@ -14,16 +14,16 @@ import java.util.List;
 public class BaixaService implements Serializable {
 
     public List<Baixa> buscarBaixas() {
-        return new BaixaDAO().buscarBaixasW().orderByEmissao().listaDeResultados();
+        return new BaixaDAO().buscarBaixasW().orderByEmissaoEId().listaDeResultados();
     }
 
     public List<Baixa> buscarBaixasPelaData(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
             return new BaixaDAO().buscarBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
-                    .ePorCaixa(caixa).eNaoCancelada().orderByEmissao().listaDeResultados();
+                    .ePorCaixa(caixa).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         } else {
             return new BaixaDAO().buscarBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
-                    .eNaoCancelada().orderByEmissao().listaDeResultados();
+                    .eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         }
     }
 

@@ -55,6 +55,14 @@ public class BoletoDeCartao extends Cobranca implements Serializable {
         return ModalidadeDeCobranca.CARTAO;
     }
 
+    public void cancela() {
+        this.situacao = SituacaoDeCartao.CANCELADO;
+    }
+
+    public void quita() {
+        this.situacao = SituacaoDeCartao.QUITADO;
+    }
+
     public Cartao getCartao() {
         return cartao;
     }

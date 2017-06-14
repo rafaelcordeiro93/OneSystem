@@ -77,7 +77,19 @@ public class Cheque extends Cobranca implements Serializable {
     public ModalidadeDeCobranca getModalidade() {
         return ModalidadeDeCobranca.CHEQUE; 
     }
+    
+    public void cancela(){
+        this.tipoSituacao = SituacaoDeCheque.CANCELADO;
+    }
 
+    public void devolve(){
+        this.tipoSituacao = SituacaoDeCheque.DEVOLVIDO;
+    }
+    
+    public void desconta(){
+        this.tipoSituacao = SituacaoDeCheque.DESCONTADO;
+    }
+    
     public Banco getBanco() {
         return banco;
     }

@@ -29,7 +29,7 @@
                         <div class="EmptyBox10"/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog  id="caixaId" value="#{caixaView.e}" dialog="#{selecaoCaixaView}" 
@@ -38,14 +38,17 @@
                             <p:outputLabel value="#{l.Usuario}"/>
                             <p:inputText id="caixaPessoa" readonly="true" value="#{caixaView.e.usuario.pessoa.nome}"/>
 
+                            <p:outputLabel value="#{l.Descricao}"/>
+                            <p:inputText  value="#{caixaView.e.descricao}" maxlength="250"/>  
+
+                            <p:outputLabel value="#{l.Saldo}"/>
+                            <p:inputNumber id="Valor" maxValue="999999.99" minValue="0.00" readonly="#{caixaView.e.fechamento eq null ? false: true}" symbol="#{caixaView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" decimalSeparator="," thousandSeparator="." value="#{caixaView.e.saldo}" size="8" inputStyle="width: auto"/>
+
                             <p:outputLabel value="#{l.Abertura}"/>
                             <p:calendar  pattern="dd/MM/yyyy" readonly="true" pages="0" value="#{caixaView.e.abertura}" inputStyle="width:auto"  size="8"/>  
 
                             <p:outputLabel value="#{l.Fechamento}"/>
                             <p:calendar  pattern="dd/MM/yyyy" readonly="true" pages="0" value="#{caixaView.e.fechamento}"  inputStyle="width:auto"  size="8"/>   
-
-                            <p:outputLabel value="#{l.Saldo}"/>
-                            <p:inputNumber id="Valor" maxValue="999999.99" minValue="0.00" readonly="#{caixaView.e.fechamento eq null ? false: true}" symbol="#{caixaView.configuracao.moedaPadrao.sigla}" decimalPlaces="2" decimalSeparator="," thousandSeparator="." value="#{caixaView.e.saldo}" size="8" inputStyle="width: auto"/>
                         </p:panelGrid>
                         <div class="EmptyBox10"/>
                         <p:separator/>

@@ -30,6 +30,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_CAIXA",
@@ -46,6 +47,9 @@ public class Caixa implements Serializable {
     @Column(nullable = false)
     private BigDecimal saldo;
 
+    @Length(max = 250, message = "{descricao_length}")
+    private String descricao;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date abertura = new Date();
 
@@ -61,12 +65,13 @@ public class Caixa implements Serializable {
     public Caixa() {
     }
 
-    public Caixa(Long id, BigDecimal saldo, Usuario usuario, List<Cotacao> cotacao) throws DadoInvalidoException {
+    public Caixa(Long id, BigDecimal saldo, Usuario usuario, List<Cotacao> cotacao, String descricao) throws DadoInvalidoException {
         this.id = id;
         this.usuario = usuario;
         this.abertura = new Date();
         this.saldo = saldo;
         this.cotacao = cotacao;
+        this.descricao = descricao;
         ehValido();
     }
 
@@ -98,6 +103,10 @@ public class Caixa implements Serializable {
         return saldo;
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
+    
     public String getSaldoFormatado() throws EDadoInvalidoException {
         Configuracao cfg = new ConfiguracaoService().buscar();
         return MoedaFormatter.format(cfg.getMoedaPadrao(), getSaldo());
@@ -122,7 +131,7 @@ public class Caixa implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("usuario", "abertura", "fechamento", "saldo", "cotacao");
+        List<String> campos = Arrays.asList("usuario", "abertura", "fechamento", "saldo", "cotacao", "descricao");
         new ValidadorDeCampos<Caixa>().valida(this, campos);
     }
 

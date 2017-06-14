@@ -22,6 +22,7 @@ public class CaixaBuilder {
     private BigDecimal saldo;
     private Usuario usuario;
     private List<Cotacao> cotacao;
+    private String descricao;
 
     public CaixaBuilder comId(Long id) {
         this.id = id;
@@ -43,8 +44,13 @@ public class CaixaBuilder {
         return this;
     }
 
+    public CaixaBuilder comDescricao(String descricao) {
+        this.descricao = descricao;
+        return this;
+    }
+
     public Caixa construir() throws DadoInvalidoException {
-        return new Caixa(id, saldo, usuario, cotacao);
+        return new Caixa(id, saldo, usuario, cotacao, descricao);
     }
 
 }

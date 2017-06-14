@@ -57,9 +57,15 @@ public class GeradorDeBaixaDeTipoCobranca {
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
         if (tipoDeCobranca.getRecebimento() != null) {
-            builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo()).comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
+            if (tipoDeCobranca.getCobranca().getNota() != null) {
+                builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
+            }
+            builder.comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
         } else {
-            builder.comDespesa(tipoDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo()).comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
+            if (tipoDeCobranca.getCobranca().getNota() != null) {
+                builder.comDespesa(tipoDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
+            }
+            builder.comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
         }
 
         return builder.construir();

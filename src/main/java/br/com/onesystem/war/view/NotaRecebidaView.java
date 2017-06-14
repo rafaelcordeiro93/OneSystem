@@ -117,7 +117,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
-            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
+            cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -180,6 +180,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
+                if (boletoDeCartao.getCartao() != null) {
+                    boletoDeCartao.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(boletoDeCartao.getCartao().getConta()).naUltimaEmissao(notaRecebida.getEmissao()).resultado());
+                }
                 nota.adiciona(boletoDeCartao.construir());
             }
 
@@ -209,6 +212,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             for (CobrancaBV p : cobrancas) {
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
+                        if (p.getCartao() != null) {
+                            p.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(p.getCartao().getConta()).naUltimaEmissao(notaRecebida.getEmissao()).resultado());
+                        }
                         nota.adiciona(p.construirBoletoDeCartao());
                         break;
                     case CHEQUE:

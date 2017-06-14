@@ -182,7 +182,6 @@ public class CobrancaBV implements Serializable {
         this.moeda = p.getCotacao().getConta().getMoeda();
         this.dias = p.getDias() != null ? p.getDias().intValue() : 0;
         this.banco = p.getCotacao().getConta().getBanco();
-        
 
         if (p instanceof Cheque) {
             this.agencia = ((Cheque) p).getAgencia();

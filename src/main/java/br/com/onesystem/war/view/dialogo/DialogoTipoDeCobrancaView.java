@@ -171,7 +171,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         opcoes.put("resizable", false);
         opcoes.put("width", 670);
         opcoes.put("draggable", true);
-        opcoes.put("height", 425);
+        opcoes.put("height", 440);
         opcoes.put("closable", false);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
@@ -190,8 +190,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             titulo = (Titulo) c;
         } else if (c instanceof Cheque) {
             cheque = (Cheque) c;
+            e.setValor(cheque.getValor());
+            e.setCotacao(cheque.getCotacao());
+            e.setConta(cheque.getCotacao().getConta());
         } else if (c instanceof BoletoDeCartao) {
             boletoDeCartao = (BoletoDeCartao) c;
+            e.setValor(boletoDeCartao.getValor());
+            e.setCotacao(boletoDeCartao.getCotacao());
+            e.setConta(boletoDeCartao.getCotacao().getConta());
         }
     }
 
@@ -244,24 +250,27 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     }
 
     private void construir() throws DadoInvalidoException {
-        if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
+        if (modalidadeDeCobranca == ModalidadeDeCobranca.CARTAO) {
+            boletoDeCartao.quita();
+        } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CHEQUE) {
+            cheque.desconta();
+        } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO) {
             credito.setValor(e.getValor());
-            credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             credito.setEmissao(emissao);
+            credito.setVencimento(emissao);
             credito.setCotacao(e.getCotacao());
             credito.setHistorico(e.getObservacao());
-            e.setCobranca(credito.construirComID());
-        } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
-            credito.setValor(e.getValor());
-            credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
-            credito.setEmissao(emissao);
-            credito.setCotacao(e.getCotacao());
-            credito.setHistorico(e.getObservacao());
+            if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
+                credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
+                credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            }
             e.setCobranca(credito.construirComID());
         } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobrancaFixa.RECEITA_EVENTUAL) {
             receitaEventualBV.setCotacao(e.getCotacao());
             receitaEventualBV.setValor(e.getValor());
             receitaEventualBV.setEmissao(emissao);
+            receitaEventualBV.setVencimento(emissao);
             receitaEventualBV.setHistorico(e.getObservacao());
             receitaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             e.setCobrancaFixa(receitaEventualBV.construirComID());
@@ -269,6 +278,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             despesaEventualBV.setCotacao(e.getCotacao());
             despesaEventualBV.setValor(e.getValor());
             despesaEventualBV.setEmissao(emissao);
+            despesaEventualBV.setVencimento(emissao);
             despesaEventualBV.setHistorico(e.getObservacao());
             despesaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             e.setCobrancaFixa(despesaEventualBV.construirComID());

@@ -83,6 +83,7 @@
         <class>br.com.onesystem.domain.FaturaLegada</class>
         <class>br.com.onesystem.domain.Credito</class>
         <class>br.com.onesystem.domain.Recebimento</class>
+        <class>br.com.onesystem.domain.FormaDeCobranca</class>
         <class>br.com.onesystem.domain.TipoDeCobranca</class>
         <class>br.com.onesystem.domain.CobrancaFixa</class>
         <class>br.com.onesystem.domain.Pagamento</class>

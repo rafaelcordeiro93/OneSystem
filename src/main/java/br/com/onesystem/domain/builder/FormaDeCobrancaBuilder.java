@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 
 /**
@@ -31,7 +32,8 @@ public class FormaDeCobrancaBuilder {
     private String observacao;
     private Cotacao cotacao;
     private Caixa caixa;
-    
+    private OperacaoFinanceira operacaoFinanceira;
+
     public FormaDeCobrancaBuilder comId(Long id) {
         this.id = id;
         return this;
@@ -81,14 +83,19 @@ public class FormaDeCobrancaBuilder {
         this.cotacao = cotacao;
         return this;
     }
-    
-    public FormaDeCobrancaBuilder comCaixa(Caixa caixa){
+
+    public FormaDeCobrancaBuilder comCaixa(Caixa caixa) {
         this.caixa = caixa;
         return this;
     }
 
+    public FormaDeCobrancaBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+        return this;
+    }
+
     public FormaDeCobranca construir() throws DadoInvalidoException {
-        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento, caixa);
+        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento, caixa, operacaoFinanceira);
     }
 
 }
