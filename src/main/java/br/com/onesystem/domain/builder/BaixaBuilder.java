@@ -8,18 +8,21 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.CambioEmpresa;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
+import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -57,6 +60,9 @@ public class BaixaBuilder {
     private TipoDeCobranca tipoDeCobranca;
     private Caixa caixa;
     private FormaDeCobranca formaDeCobranca;
+    private DepositoBancario depositoBancario;
+    private SaqueBancario saqueBancario;
+    private CambioEmpresa cambioEmpresa;
 
     public BaixaBuilder() {
     }
@@ -179,8 +185,23 @@ public class BaixaBuilder {
         return this;
     }
 
+    public BaixaBuilder comDepositoBancario(DepositoBancario depositoBancario) {
+        this.depositoBancario = depositoBancario;
+        return this;
+    }
+
+    public BaixaBuilder comSaqueBancario(SaqueBancario saqueBancario) {
+        this.saqueBancario = saqueBancario;
+        return this;
+    }
+
+    public BaixaBuilder comCambioEmpresa(CambioEmpresa cambioEmpresa) {
+        this.cambioEmpresa = cambioEmpresa;
+        return this;
+    }
+
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa);
+        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, cambioEmpresa);
     }
 
 }

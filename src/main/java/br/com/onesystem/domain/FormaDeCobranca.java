@@ -42,7 +42,7 @@ public class FormaDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_FORMADECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cobranca cobranca;
 
     @ManyToOne
@@ -77,7 +77,7 @@ public class FormaDeCobranca implements Serializable {
 
     @ManyToOne
     private Caixa caixa;
-    
+
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira operacaoFinanceira;
@@ -85,7 +85,7 @@ public class FormaDeCobranca implements Serializable {
     public FormaDeCobranca() {
     }
 
-    public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor, 
+    public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
             BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento, Caixa caixa,
             OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
@@ -154,7 +154,7 @@ public class FormaDeCobranca implements Serializable {
     public OperacaoFinanceira getOperacaoFinanceira() {
         return operacaoFinanceira;
     }
-    
+
     public Caixa getCaixa() {
         return caixa;
     }

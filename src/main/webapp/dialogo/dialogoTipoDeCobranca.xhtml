@@ -189,10 +189,11 @@
                 <div id="valores" class="ui-g-12 ui-md-6 ui-lg-3">
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
-                        <p:outputLabel value="#{l.Conta}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}"/>
+                        <p:outputLabel value="#{l.Conta}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2 || dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa != null}"/>
                         <p:inputText value="#{dialogoTipoDeCobrancaView.e.conta.nome}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
-                        <p:selectOneMenu  id="dceBanco" value="#{dialogoTipoDeCobrancaView.e.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" rendered="false">
+                        <p:selectOneMenu  id="dceBanco" value="#{dialogoTipoDeCobrancaView.e.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa != null}">
                             <p:ajax update="tempDialog" listener="#{dialogoTipoDeCobrancaView.selecionaCotacaoConformeConta}"/>
+                            <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
                             <f:selectItems value="#{dialogoTipoDeCobrancaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
                         </p:selectOneMenu>
 

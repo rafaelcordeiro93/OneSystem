@@ -1,0 +1,69 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Deposito_Bancario}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+
+            <h2 class="BigTopic">#{l.Deposito_Bancario}</h2>
+
+
+            <div class="ui-g-12">
+                <p:outputLabel  class="ui-g-12" value="#{l.Data}: "/>
+                <p:calendar class="ui-g-12"  pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid100" style="box-sizing: border-box" navigator="true" value="#{dialogoDepositoBancarioView.e.emissao}"/>
+                <p:separator/>
+            </div>
+
+            <div class="ui-g-12">
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Origem}: "/>
+                    <p:selectOneMenu  id="extratoOrigem" value="#{dialogoDepositoBancarioView.e.origem}" 
+                                      converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
+                        <p:ajax listener="#{dialogoDepositoBancarioView.selecionaCotacaoDeOrigemConformeConta}" update="vlConvertido vlOriginal"/>
+                        <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                        <f:selectItems value="#{dialogoDepositoBancarioView.contaComCotacaoEmpresa}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome} - #{conta.moeda.sigla}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Destino}"/>
+                    <p:selectOneMenu  id="extratoDestino" value="#{dialogoDepositoBancarioView.e.destino}" converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
+                        <p:ajax listener="#{dialogoDepositoBancarioView.selecionaCotacaoDeDestinoConformeConta}" update="vlConvertido"/>
+                        <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                        <f:selectItems value="#{dialogoDepositoBancarioView.contaComCotacaoBancaria}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome} - #{conta.moeda.sigla}"/>
+                    </p:selectOneMenu>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Valor}"/>
+                    <p:inputNumber id="vlOriginal" inputStyleClass="Wid100" inputStyle="box-sizing: border-box" symbol="#{dialogoDepositoBancarioView.e.origem.moeda.sigla} " value="#{dialogoDepositoBancarioView.e.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Valor_Convertido}"/>
+                    <p:inputNumber id="vlConvertido" inputStyleClass="Wid100" inputStyle="box-sizing: border-box" symbol="#{dialogoDepositoBancarioView.e.destino.moeda.sigla} " value="#{dialogoDepositoBancarioView.e.valorConvertido}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
+                </div>
+
+            </div>
+
+            <section>
+
+                <div class="EmptyBox5"/>
+                <p:separator/>
+                <p:commandButton value="#{l.Transferir}" action="#{dialogoDepositoBancarioView.depositar}" update="tempDialog"/>
+                <p:commandButton value="#{l.Fechar}" action="#{dialogoDepositoBancarioView.fechar}" styleClass="orange-btn"/>
+            </section>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

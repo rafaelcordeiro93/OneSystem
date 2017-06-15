@@ -4,6 +4,7 @@ import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Conta;
@@ -226,10 +227,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     }
 
     public void selecionaCotacaoConformeConta() {
-        if (e.getConta() != null) {
-            e.setCotacao(cotacaoLista.stream().filter(c -> c.getConta().getMoeda().equals(e.getConta().getMoeda())).findFirst().get());
-        } else {
-            e.setCotacao(cotacaoPadrao);
+        try {
+            if (e.getConta() != null) {
+                e.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(e.getConta()).naUltimaEmissao(emissao).resultado());
+            } else {
+                e.setCotacao(cotacaoPadrao);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

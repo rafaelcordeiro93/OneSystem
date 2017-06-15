@@ -3,8 +3,11 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.CambioEmpresa;
 import br.com.onesystem.domain.ConfiguracaoFinanceiro;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.ADadoInvalidoException;
@@ -96,7 +99,8 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
         if (obj instanceof Conta) {
             this.extrato.setConta((Conta) event.getObject());
             atualizar();
-        } else if (obj instanceof Transferencia) {
+        } else if (obj instanceof Transferencia || obj instanceof DepositoBancario
+                || obj instanceof SaqueBancario || obj instanceof CambioEmpresa) {
             atualizar();
             InfoMessage.adicionado();
         } else if (obj instanceof Caixa) {
