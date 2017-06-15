@@ -5,17 +5,13 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
-import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -27,6 +23,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -83,6 +80,9 @@ public class TipoDeCobranca implements Serializable {
 
     @ManyToOne
     private Conta conta;
+
+    @OneToMany(mappedBy = "tipoDeCobranca", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<Baixa> baixas;
 
     public TipoDeCobranca() {
     }
@@ -222,6 +222,22 @@ public class TipoDeCobranca implements Serializable {
             return getTotal().divide(getCotacao().getValor(), 2, BigDecimal.ROUND_UP);
         } else {
             return BigDecimal.ZERO;
+        }
+    }
+
+    public EstadoDeLancamento getEstado() {
+        if (recebimento != null) {
+            return recebimento.getEstado();
+        } else if (pagamento != null) {
+            return pagamento.getEstado();
+        } else {
+            return null;
+        }
+    }
+
+    public void cancela() throws DadoInvalidoException {
+        for (Baixa b : baixas) {
+            b.cancela();
         }
     }
 

@@ -7,12 +7,15 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,17 +54,21 @@ public class Pagamento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoDeLancamento estado;
+
     public Pagamento() {
     }
 
     public Pagamento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
-            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro) {
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado) {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
         this.cotacaoPadrao = cotacaoPadrao;
         this.emissao = emissao;
         this.totalEmDinheiro = totalEmDinheiro;
+        this.estado = estado;
     }
 
     public void ehValido() throws DadoInvalidoException {
@@ -111,6 +118,20 @@ public class Pagamento {
         }
     }
 
+    public void efetiva() {
+        estado = EstadoDeLancamento.EFETIVADO;
+    }
+
+    public void cancela() throws DadoInvalidoException {
+        estado = EstadoDeLancamento.CANCELADO;
+        for (TipoDeCobranca t : tipoDeCobranca) {
+            t.cancela();
+        }
+        for (FormaDeCobranca f : formasDeCobranca) {
+            f.cancela();
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -133,6 +154,10 @@ public class Pagamento {
 
     public Date getEmissao() {
         return emissao;
+    }
+
+    public EstadoDeLancamento getEstado() {
+        return estado;
     }
 
     @Override

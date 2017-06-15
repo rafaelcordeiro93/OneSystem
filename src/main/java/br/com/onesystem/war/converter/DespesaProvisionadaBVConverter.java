@@ -28,17 +28,9 @@ public class DespesaProvisionadaBVConverter implements Converter, Serializable {
         if (value != null && value.trim().length() > 0) {
             try {
                 List<DespesaProvisionada> lista = new DespesaProvisionadaService().buscarDespesaProvisionadas();
-                if (StringUtils.containsLetter(value)) {
-                    for (DespesaProvisionada despesaProvisionada : lista) {
-                        if (despesaProvisionada.getHistorico().equals(value)) {
-                            return new DespesaProvisionadaBV(despesaProvisionada);
-                        }
-                    }
-                } else {
-                    for (DespesaProvisionada despesaProvisionada : lista) {
-                        if (despesaProvisionada.getId().equals(new Long(value))) {
-                            return new DespesaProvisionadaBV(despesaProvisionada);
-                        }
+                for (DespesaProvisionada despesaProvisionada : lista) {
+                    if (despesaProvisionada.getId().equals(new Long(value))) {
+                        return new DespesaProvisionadaBV(despesaProvisionada);
                     }
                 }
                 return new DespesaProvisionadaBV();
@@ -54,7 +46,7 @@ public class DespesaProvisionadaBVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((DespesaProvisionadaBV) object).getHistorico());
+                return String.valueOf(((DespesaProvisionadaBV) object).getId());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

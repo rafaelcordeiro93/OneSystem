@@ -77,6 +77,12 @@
                                      emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
                             <p:ajax event="cellEdit" update=":conteudo:despesaProvisionadaDTN" />
 
+                            <p:column headerText="#{l.Mes_De_Referencia}" sortBy="#{despesaProvisionadaBV.referencia}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.referenciaFormatado}" /></f:facet>
+                                    <f:facet name="input"><p:calendar pattern="MM/yyyy" mask="99/9999" value="#{despesaProvisionadaBV.referencia}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
                             <p:column headerText="#{l.Vencimento}" sortBy="#{despesaProvisionadaBV.vencimento}" >
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>

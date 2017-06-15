@@ -4,10 +4,8 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.InfoMessage;
@@ -15,7 +13,6 @@ import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.DespesaProvisionadaBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -49,8 +46,11 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
     public void add() {
         try {
             e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            if (e.getId() == null) {
+                DespesaProvisionada dp = e.construir();
+                new AdicionaDAO<DespesaProvisionada>().adiciona(dp);
+            }
             DespesaProvisionada novoRegistro = e.construir();
-            new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
             for (DespesaProvisionadaBV n : parcelas) {
                 novoRegistro = n.construir();
                 new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
@@ -65,7 +65,6 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
     @Override
     public void limparJanela() {
         e = new DespesaProvisionadaBV();
-
         intervaloDias = null;
         numeroParcelas = null;
         parcelas = new ArrayList<DespesaProvisionadaBV>();
@@ -102,7 +101,7 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
                                 e.getCotacao(),
                                 null,
                                 null,
-                                e.getReferencia(),
+                                adicionarMesNa(e.getReferencia(), i + 1),
                                 OperacaoFinanceira.SAIDA);
                 parcelas.add(dp);
             }
@@ -116,6 +115,13 @@ public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, De
         Calendar c = Calendar.getInstance();
         c.setTime(data);
         c.add(Calendar.DATE, dias);
+        return c.getTime();
+    }
+
+    private Date adicionarMesNa(Date data, Integer dias) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(data);
+        c.add(Calendar.MONTH, dias);
         return c.getTime();
     }
 

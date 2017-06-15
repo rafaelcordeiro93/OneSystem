@@ -109,6 +109,11 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(vencimento);
     }
+    
+    public String getReferenciaFormatado() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/yyyy");
+        return sdf.format(referencia);
+    }
 
     public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
