@@ -44,7 +44,7 @@
                             <p:outputLabel value="#{l.Moeda}"/>
                             <p:selectOneMenu id="dpDestino" value="#{despesaProvisionadaView.e.cotacao}" converter="cotacaoConverter">
                                 <f:selectItems value="#{despesaProvisionadaView.listaCotacao}"  var="cotacao" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{cotacao}"/>
-                                <p:ajax update="dpDestino valorDP"/>
+                                <p:ajax update="dpDestino valorDP" />
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Valor}"/>
@@ -91,8 +91,8 @@
                             </p:column>
                             <p:column headerText="#{l.Valor}" sortBy="#{despesaProvisionadaBV.valor}" >
                                 <p:cellEditor>
-                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.valor}" /></f:facet>
-                                    <f:facet name="input"><p:inputText value="#{despesaProvisionadaBV.valor}"/></f:facet>
+                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaView.e.cotacao.conta.moeda.sigla} #{despesaProvisionadaBV.valor}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value=" #{despesaProvisionadaBV.valor}"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
                         </p:dataTable>
