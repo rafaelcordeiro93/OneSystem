@@ -28,7 +28,7 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ReceitaProvisionadaView extends BasicMBImpl<ReceitaProvisionada, ReceitaProvisionadaBV> implements Serializable {
+public class ReceitaProvisionadaView extends BasicMBImpl<ReceitaProvisionada, ReceitaProvisionadaBV> implements Serializable { 
 
     private List<ReceitaProvisionadaBV> parcelas;
     private Integer numeroParcelas;
@@ -45,7 +45,7 @@ public class ReceitaProvisionadaView extends BasicMBImpl<ReceitaProvisionada, Re
 
     public void add() {
         try {
-            e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             if (e.getId() == null) {
                 ReceitaProvisionada dp = e.construir();
                 new AdicionaDAO<ReceitaProvisionada>().adiciona(dp);
@@ -99,7 +99,7 @@ public class ReceitaProvisionadaView extends BasicMBImpl<ReceitaProvisionada, Re
                                 e.getHistorico(),
                                 e.getCotacao(),
                                 adicionarMesNa(e.getReferencia(), i + 1),
-                                OperacaoFinanceira.SAIDA);
+                                OperacaoFinanceira.ENTRADA);
                 parcelas.add(dp);
             }
         } catch (Exception e) {
