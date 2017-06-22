@@ -159,6 +159,16 @@ public class DadosNecessarios implements Serializable {
                 getContaDeEstoque();
                 break;
             }
+            case "/despesaProvisionada.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                break;
+            }
+            case "/receitaProvisionada.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                break;
+            }
             default:
                 break;
         }

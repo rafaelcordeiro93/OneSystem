@@ -1,23 +1,20 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.DespesaProvisionadaBV;
-import br.com.onesystem.war.service.DespesaProvisionadaService;
-import br.com.onesystem.war.service.MoedaService;
+import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,94 +22,64 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class DespesaProvisionadaView implements Serializable {
+public class DespesaProvisionadaView extends BasicMBImpl<DespesaProvisionada, DespesaProvisionadaBV> implements Serializable {
 
-    private boolean panel;
-    private DespesaProvisionadaBV despesaProvisionada;
-    private DespesaProvisionada despesaProvisionadaSelecionado;
-    private List<DespesaProvisionada> despesaProvisionadaLista;
-    private List<DespesaProvisionada> gruposFinanceirosFiltrados;
     private List<DespesaProvisionadaBV> parcelas;
     private Integer numeroParcelas;
     private Integer intervaloDias;
+    private List<Cotacao> listaCotacao;
 
     @Inject
-    private DespesaProvisionadaService service;
-
-    @Inject
-    private MoedaService serviceMoeda;
-
-    private List<Moeda> moedaLista;
+    private CotacaoService serviceCotacao;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        despesaProvisionada = new DespesaProvisionadaBV();
-        despesaProvisionadaLista = service.buscarDespesaProvisionadas();
-        moedaLista = serviceMoeda.buscarMoedas();
     }
 
     public void add() {
         try {
-            DespesaProvisionada novoRegistro = despesaProvisionada.construir();
-            new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
-            despesaProvisionadaLista.add(novoRegistro);
+            e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            if (e.getId() == null) {
+                DespesaProvisionada dp = e.construir();
+                new AdicionaDAO<DespesaProvisionada>().adiciona(dp);
+            }
+            DespesaProvisionada novoRegistro = e.construir();
             for (DespesaProvisionadaBV n : parcelas) {
                 novoRegistro = n.construir();
                 new AdicionaDAO<DespesaProvisionada>().adiciona(novoRegistro);
-                despesaProvisionadaLista.add(novoRegistro);
             }
-            InfoMessage.print("Despesa Provisionada agregado con éxito!");
+            InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void update() {
-        try {
-            DespesaProvisionada despesaProvisionadaExistente = despesaProvisionada.construirComID();
-            if (despesaProvisionadaExistente.getId() != null) {
-                new AtualizaDAO<DespesaProvisionada>().atualiza(despesaProvisionadaExistente);
-                despesaProvisionadaLista.set(despesaProvisionadaLista.indexOf(despesaProvisionadaExistente),
-                        despesaProvisionadaExistente);
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(despesaProvisionadaExistente)) {
-                    gruposFinanceirosFiltrados.set(gruposFinanceirosFiltrados.indexOf(despesaProvisionadaExistente), despesaProvisionadaExistente);
-                }
-                InfoMessage.print("Despesa Provisionada cambiado con éxito!");
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("!La despesaProvisionada no se encontra registrada!");
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
+    @Override
+    public void limparJanela() {
+        e = new DespesaProvisionadaBV();
+        intervaloDias = null;
+        numeroParcelas = null;
+        parcelas = new ArrayList<DespesaProvisionadaBV>();
+        listaCotacao = serviceCotacao.buscarTodasCotacoesDoDiaAtual();
     }
 
-    public void delete() {
-        try {
-            if (despesaProvisionadaLista != null && despesaProvisionadaLista.contains(despesaProvisionada.construirComID())) {
-                new RemoveDAO<DespesaProvisionada>().remove(despesaProvisionada.construirComID(), despesaProvisionada.construirComID().getId());
-                despesaProvisionadaLista.remove(despesaProvisionada.construirComID());
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(despesaProvisionada.construirComID())) {
-                    gruposFinanceirosFiltrados.remove(despesaProvisionada.construirComID());
-                }
-                InfoMessage.print("DespesaProvisionada '" + this.despesaProvisionada.getId() + "' eliminada con éxito!");
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof DespesaProvisionada) {
+            e = new DespesaProvisionadaBV((DespesaProvisionada) obj);
+        } else if (obj instanceof Pessoa) {
+            e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof TipoDespesa) {
+            e.setDespesa((TipoDespesa) obj);
         }
     }
 
@@ -124,20 +91,21 @@ public class DespesaProvisionadaView implements Serializable {
                 count = count + intervaloDias;
                 DespesaProvisionadaBV dp
                         = new DespesaProvisionadaBV(retornarCodigo(),
-                                despesaProvisionada.getPessoa(),
-                                despesaProvisionada.getDespesa(),
-                                despesaProvisionada.getValor(),
-                                adicionarDiasNa(despesaProvisionada.getVencimento(), count),
-                                despesaProvisionada.getEmissao(),
-                                despesaProvisionada.getHistorico(),
+                                e.getPessoa(),
+                                e.getDespesa(),
+                                e.getValor(),
+                                adicionarDiasNa(e.getVencimento(), count),
+                                e.getEmissao(),
+                                e.getHistorico(),
                                 false,
-                                despesaProvisionada.getCotacao(),
+                                e.getCotacao(),
                                 null,
                                 null,
-                                despesaProvisionada.getReferencia());
+                                adicionarMesNa(e.getReferencia(), i + 1),
+                                OperacaoFinanceira.SAIDA);
                 parcelas.add(dp);
             }
-        } catch (NullPointerException npe) {
+        } catch (Exception e) {
             ErrorMessage.print(new BundleUtil().getMessage("Vencimento_idias_nparcelas_not_null"));
         }
 
@@ -147,6 +115,13 @@ public class DespesaProvisionadaView implements Serializable {
         Calendar c = Calendar.getInstance();
         c.setTime(data);
         c.add(Calendar.DATE, dias);
+        return c.getTime();
+    }
+
+    private Date adicionarMesNa(Date data, Integer dias) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(data);
+        c.add(Calendar.MONTH, dias);
         return c.getTime();
     }
 
@@ -168,97 +143,6 @@ public class DespesaProvisionadaView implements Serializable {
 
     public List<ClassificacaoFinanceira> getClassificacaoFinanceira() {
         return Arrays.asList(ClassificacaoFinanceira.values());
-    }
-
-    public void limparJanela() {
-        despesaProvisionada = new DespesaProvisionadaBV();
-        despesaProvisionadaSelecionado = new DespesaProvisionada();
-        intervaloDias = null;
-        numeroParcelas = null;
-        parcelas = new ArrayList<DespesaProvisionadaBV>();
-    }
-
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void selecionarMoeda(SelectEvent event) {
-        Moeda moeda = (Moeda) event.getObject();
-//        despesaProvisionada.setMoeda(moeda);
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        despesaProvisionada = new DespesaProvisionadaBV(despesaProvisionadaSelecionado);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
-    }
-
-    public void desfazer() {
-        if (despesaProvisionadaSelecionado != null) {
-            despesaProvisionada = new DespesaProvisionadaBV(despesaProvisionadaSelecionado);
-        }
-    }
-
-    public DespesaProvisionadaBV getDespesaProvisionada() {
-        return despesaProvisionada;
-    }
-
-    public void setDespesaProvisionada(DespesaProvisionadaBV despesaProvisionada) {
-        this.despesaProvisionada = despesaProvisionada;
-    }
-
-    public DespesaProvisionada getDespesaProvisionadaSelecionado() {
-        return despesaProvisionadaSelecionado;
-    }
-
-    public void setDespesaProvisionadaSelecionado(DespesaProvisionada despesaProvisionadaSelecionado) {
-        this.despesaProvisionadaSelecionado = despesaProvisionadaSelecionado;
-    }
-
-    public List<DespesaProvisionada> getDespesaProvisionadaLista() {
-        return despesaProvisionadaLista;
-    }
-
-    public void setDespesaProvisionadaLista(List<DespesaProvisionada> despesaProvisionadaLista) {
-        this.despesaProvisionadaLista = despesaProvisionadaLista;
-    }
-
-    public List<DespesaProvisionada> getGruposFinanceirosFiltrados() {
-        return gruposFinanceirosFiltrados;
-    }
-
-    public void setGruposFinanceirosFiltrados(List<DespesaProvisionada> gruposFinanceirosFiltrados) {
-        this.gruposFinanceirosFiltrados = gruposFinanceirosFiltrados;
-    }
-
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
-    }
-
-    public DespesaProvisionadaService getService() {
-        return service;
-    }
-
-    public void setService(DespesaProvisionadaService service) {
-        this.service = service;
-    }
-
-    public void selecionaPessoa(SelectEvent event) {
-        Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-        despesaProvisionada.setPessoa(pessoaSelecionada);
-    }
-
-    public void selecionaDespesa(SelectEvent event) {
-        TipoDespesa despesaSelecionada = (TipoDespesa) event.getObject();
-        despesaProvisionada.setDespesa(despesaSelecionada);
     }
 
     public List<DespesaProvisionadaBV> getParcelas() {
@@ -285,20 +169,20 @@ public class DespesaProvisionadaView implements Serializable {
         this.intervaloDias = intervaloDias;
     }
 
-    public List<Moeda> getMoedaLista() {
-        return moedaLista;
+    public List<Cotacao> getListaCotacao() {
+        return listaCotacao;
     }
 
-    public void setMoedaLista(List<Moeda> moedaLista) {
-        this.moedaLista = moedaLista;
+    public void setListaCotacao(List<Cotacao> listaCotacao) {
+        this.listaCotacao = listaCotacao;
     }
 
-    public MoedaService getServiceMoeda() {
-        return serviceMoeda;
+    public CotacaoService getServiceCotacao() {
+        return serviceCotacao;
     }
 
-    public void setServiceMoeda(MoedaService serviceMoeda) {
-        this.serviceMoeda = serviceMoeda;
+    public void setServiceCotacao(CotacaoService serviceCotacao) {
+        this.serviceCotacao = serviceCotacao;
     }
 
 }

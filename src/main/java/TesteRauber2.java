@@ -1,14 +1,16 @@
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.EstoqueDAO;
-import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ContaDAO;
+import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.IVA;
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -21,17 +23,20 @@ import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
- */ 
+ */
 /**
  *
  * @author Rafael Fernando Rauber
  */
-public class TesteRauber {
+public class TesteRauber2 {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
@@ -54,6 +59,15 @@ public class TesteRauber {
         // ---------------------------------------------------------------------
         Deposito deposito = new ArmazemDeRegistros<Deposito>(Deposito.class).find(new Long(1));
         
+
+        // Item
+        AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
+        for(int i = 5236; i<= 500000 ; i++){
+        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
+                grupoFiscal, unidade, null, null, null, null, null, null);
+        adicionaDAO.adiciona(item);
+        }
+        System.out.println("acabou!!!");
         
         
         

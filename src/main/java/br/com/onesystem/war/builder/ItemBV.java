@@ -1,33 +1,45 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemDeComanda;
+import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.Marca;
+import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 
-public class ItemBV implements Serializable {
+public class ItemBV implements Serializable, BuilderView<Item> {
 
     private Long id;
-    private String nome;
     private String barras;
-    private Grupo grupo;
-    private BigDecimal estoqueMaximo;
-    private boolean ativo = true;
-    private UnidadeMedidaItem unidadeMedida;
+    private String nome;
+    private String idFabricante;
     private TipoItem tipoItem;
     private String ncm;
-    private Marca marca;
-    private GrupoFiscal grupoFiscal;
-    private String idFabricante;
     private String idContabil;
+    private boolean ativo;
+    private GrupoFiscal grupoFiscal;
+    private UnidadeMedidaItem unidadeDeMedida;
+    private Marca marca;
+    private Grupo grupo;
     private BigDecimal estoqueMinimo;
+    private BigDecimal estoqueMaximo;
+    private List<AjusteDeEstoque> listaDeAjustes;
+    private List<ItemDeNota> itensEmitidos;
+    private List<ItemOrcado> itensOrcados;
+    private List<ItemDeComanda> itensDeComanda;
+    private List<PrecoDeItem> precos;
     private Margem margem;
     private Comissao comissao;
 
@@ -44,7 +56,7 @@ public class ItemBV implements Serializable {
         this.marca = itemSelecionado.getMarca();
         this.ncm = itemSelecionado.getNcm();
         this.tipoItem = itemSelecionado.getTipoItem();
-        this.unidadeMedida = itemSelecionado.getUnidadeDeMedida();
+        this.unidadeDeMedida = itemSelecionado.getUnidadeDeMedida();
         this.ativo = itemSelecionado.isAtivo();
         this.margem = itemSelecionado.getMargem();
         this.comissao = itemSelecionado.getComissao();
@@ -84,7 +96,7 @@ public class ItemBV implements Serializable {
     public void setComissao(Comissao comissao) {
         this.comissao = comissao;
     }
-    
+
     public Grupo getGrupo() {
         return grupo;
     }
@@ -117,13 +129,55 @@ public class ItemBV implements Serializable {
         this.ativo = ativo;
     }
 
-    public UnidadeMedidaItem getUnidadeMedida() {
-        return unidadeMedida;
+    public UnidadeMedidaItem getUnidadeDeMedida() {
+        return unidadeDeMedida;
     }
 
-    public void setUnidadeMedida(UnidadeMedidaItem unidadeMedida) {
-        this.unidadeMedida = unidadeMedida;
+    public void setUnidadeDeMedida(UnidadeMedidaItem unidadeDeMedida) {
+        this.unidadeDeMedida = unidadeDeMedida;
     }
+
+    public List<AjusteDeEstoque> getListaDeAjustes() {
+        return listaDeAjustes;
+    }
+
+    public void setListaDeAjustes(List<AjusteDeEstoque> listaDeAjustes) {
+        this.listaDeAjustes = listaDeAjustes;
+    }
+
+    public List<ItemDeNota> getItensEmitidos() {
+        return itensEmitidos;
+    }
+
+    public void setItensEmitidos(List<ItemDeNota> itensEmitidos) {
+        this.itensEmitidos = itensEmitidos;
+    }
+
+    public List<ItemOrcado> getItensOrcados() {
+        return itensOrcados;
+    }
+
+    public void setItensOrcados(List<ItemOrcado> itensOrcados) {
+        this.itensOrcados = itensOrcados;
+    }
+
+    public List<ItemDeComanda> getItensDeComanda() {
+        return itensDeComanda;
+    }
+
+    public void setItensDeComanda(List<ItemDeComanda> itensDeComanda) {
+        this.itensDeComanda = itensDeComanda;
+    }
+
+    public List<PrecoDeItem> getPrecos() {
+        return precos;
+    }
+
+    public void setPrecos(List<PrecoDeItem> precos) {
+        this.precos = precos;
+    }
+
+   
 
     public TipoItem getTipoItem() {
         return tipoItem;
@@ -182,10 +236,10 @@ public class ItemBV implements Serializable {
     }
 
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
+        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
+        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
     }
 }

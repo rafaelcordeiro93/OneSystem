@@ -24,10 +24,10 @@
                     <h:outputText value="#{bean.emissaoFormatadaSemHoras}" />
                 </p:column>
                 <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" footerText="#{l.Valor}" filterBy="#{bean.valor}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.valor}" />
+                    <h:outputText value="#{bean.cotacao.conta.moeda.sigla} #{bean.valor}" />
                 </p:column>
-                <p:column headerText="#{l.Receita}" sortBy="#{bean.receita.nome}" footerText="#{l.Receita}" filterBy="#{bean.receita.nome}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.receita.nome}" />
+                <p:column headerText="#{l.Receita}" sortBy="#{bean.tipoReceita.nome}" footerText="#{l.Receita}" filterBy="#{bean.tipoReceita.nome}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.tipoReceita.nome}" />
                 </p:column>
        </a:dataTable>
 

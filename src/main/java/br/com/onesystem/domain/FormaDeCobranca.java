@@ -10,6 +10,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeFormaCobranca;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,6 +25,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -75,6 +77,9 @@ public class FormaDeCobranca implements Serializable {
     @ManyToOne
     private Cotacao cotacao;
 
+    @OneToMany(mappedBy = "formaDeCobranca", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    private List<Baixa> baixas;
+
     @ManyToOne
     private Caixa caixa;
 
@@ -110,6 +115,12 @@ public class FormaDeCobranca implements Serializable {
 
     public void setRecebimento(Recebimento recebimento) {
         this.recebimento = recebimento;
+    }
+
+    public void cancela() throws DadoInvalidoException {
+        for (Baixa b : baixas) {
+            b.cancela();
+        }
     }
 
     public void geraBaixas() {
@@ -169,6 +180,16 @@ public class FormaDeCobranca implements Serializable {
 
     public Cotacao getCotacao() {
         return cotacao;
+    }
+
+    public EstadoDeLancamento getEstado() {
+        if (recebimento != null) {
+            return recebimento.getEstado();
+        } else if (pagamento != null) {
+            return pagamento.getEstado();
+        } else {
+            return null;
+        }
     }
 
     public BigDecimal getTotal() {

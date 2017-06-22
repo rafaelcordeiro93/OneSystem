@@ -7,12 +7,15 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,6 +52,9 @@ public class Recebimento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @Enumerated(EnumType.STRING)
+    private EstadoDeLancamento estado;
+
     @ManyToOne
     private Caixa caixa;
 
@@ -56,6 +62,7 @@ public class Recebimento {
     }
 
     public Recebimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado) {
             Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, Caixa caixa) {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
@@ -63,6 +70,7 @@ public class Recebimento {
         this.cotacaoPadrao = cotacaoPadrao;
         this.emissao = emissao;
         this.totalEmDinheiro = totalEmDinheiro;
+        this.estado = estado;
         this.caixa = caixa;
     }
 
@@ -113,6 +121,20 @@ public class Recebimento {
         }
     }
 
+    public void efetiva() {
+        estado = EstadoDeLancamento.EFETIVADO;
+    }
+
+    public void cancela() throws DadoInvalidoException {
+        estado = EstadoDeLancamento.CANCELADO;
+        for(TipoDeCobranca t : tipoDeCobranca){
+            t.cancela();
+        }
+        for(FormaDeCobranca f : formasDeCobranca){
+            f.cancela();
+        }
+    }
+
     public Long getId() {
         return id;
     }
@@ -139,6 +161,10 @@ public class Recebimento {
 
     public Date getEmissao() {
         return emissao;
+    }
+
+    public EstadoDeLancamento getEstado() {
+        return estado;
     }
 
     @Override
