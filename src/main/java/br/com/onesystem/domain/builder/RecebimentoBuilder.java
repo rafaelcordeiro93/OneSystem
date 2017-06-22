@@ -11,6 +11,7 @@ import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public class RecebimentoBuilder {
     private BigDecimal totalEmDinheiro;
     private Cotacao cotacaoPadrao;
     private Date emissao;
+    private EstadoDeLancamento estado;
     private Caixa caixa;
 
     public RecebimentoBuilder comId(Long id) {
@@ -59,13 +61,18 @@ public class RecebimentoBuilder {
         return this;
     }
 
+    public RecebimentoBuilder comEstadoDeLancamento(EstadoDeLancamento estado) {
+        this.estado = estado;
+        return this;
+    }
+
     public RecebimentoBuilder comCaixa(Caixa caixa) {
         this.caixa = caixa;
         return this;
     }
 
     public Recebimento construir() throws DadoInvalidoException {
-        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, caixa);
+        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa);
     }
 
 }

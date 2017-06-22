@@ -7,14 +7,13 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
-import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -31,6 +30,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
     private Cotacao cotacaoPadrao;
     private Date emissao;
+    private EstadoDeLancamento estado;
     private Caixa caixa;
 
     public PagamentoBV() {
@@ -48,6 +48,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.cotacaoPadrao = r.getCotacaoPadrao();
         this.emissao = r.getEmissao();
         this.totalEmDinheiro = r.getTotalEmDinheiro();
+        this.estado = r.getEstado();
         this.caixa = r.getCaixa();
     }
 
@@ -99,6 +100,14 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.emissao = emissao;
     }
 
+    public EstadoDeLancamento getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoDeLancamento estado) {
+        this.estado = estado;
+    
+    }
     public Caixa getCaixa() {
         return caixa;
     }
@@ -109,15 +118,15 @@ public class PagamentoBV implements BuilderView<Pagamento> {
 
     public Pagamento construir() throws DadoInvalidoException {
         return new PagamentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
-                .comTotalEmDinheiro(totalEmDinheiro).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 
     @Override
     public Pagamento construirComID() throws DadoInvalidoException {
         return new PagamentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
-                .comTotalEmDinheiro(totalEmDinheiro).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 
 }

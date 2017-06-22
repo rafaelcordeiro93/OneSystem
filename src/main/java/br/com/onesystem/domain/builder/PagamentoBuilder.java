@@ -11,6 +11,7 @@ import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public class PagamentoBuilder {
     private BigDecimal totalEmDinheiro;
     private Cotacao cotacaoPadrao;
     private Date emissao;
+    private EstadoDeLancamento estado;
     private Caixa caixa;
 
     public PagamentoBuilder comId(Long id) {
@@ -59,13 +61,18 @@ public class PagamentoBuilder {
         return this;
     }
 
+    public PagamentoBuilder comEstadoDeLancamento(EstadoDeLancamento estado) {
+        this.estado = estado;
+        return this;
+    }
+
     public PagamentoBuilder comCaixa(Caixa caixa) {
         this.caixa = caixa;
         return this;
     }
 
     public Pagamento construir() throws DadoInvalidoException {
-        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, caixa);
+        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa);
     }
 
 }

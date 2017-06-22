@@ -26,8 +26,8 @@
             <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" footerText="#{l.Valor}" filterBy="#{bean.valor}" filterMatchMode="contains">
                 <h:outputText value="#{bean.valor}" />
             </p:column>
-            <p:column headerText="#{l.Despesa}" sortBy="#{bean.despesa.nome}" footerText="#{l.Despesa}" filterBy="#{bean.despesa.nome}" filterMatchMode="contains">
-                <h:outputText value="#{bean.despesa.nome}" />
+            <p:column headerText="#{l.Despesa}" sortBy="#{bean.tipoDespesa.nome}" footerText="#{l.Despesa}" filterBy="#{bean.tipoDespesa.nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.tipoDespesa.nome}" />
             </p:column>
         </a:dataTable>
 

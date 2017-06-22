@@ -18,6 +18,10 @@ public class CotacaoService implements Serializable {
         return new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).porCotacaoEmpresa().listaDeResultados();
     }
 
+    public List<Cotacao> buscarTodasCotacoesDoDiaAtual() {
+        return new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
+    }
+
     public Cotacao getCotacaoPadrao(Date emissao) throws DadoInvalidoException {
         return new CotacaoDAO().buscarCotacoes().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado();
     }

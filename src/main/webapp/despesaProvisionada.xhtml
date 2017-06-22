@@ -3,147 +3,115 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
-        <div class="Container100">
-            <div class="ContainerIndent">
-                <div class="Card ShadowEffect">
-                    <div class="Container100">
-                        <div class="ContainerIndent">      
-                            <p:panel id="panelDT" visible="#{!despesaProvisionadaView.panel}" style="border: none">
-                                <p:dataTable id="despesaProvisionadaDT" var="despesaProvisionada" value="#{despesaProvisionadaView.despesaProvisionadaLista}" selectionMode="single" selection="#{despesaProvisionadaView.despesaProvisionadaSelecionado}" rowKey="#{despesaProvisionada.id}"
-                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             rowsPerPageTemplate="5,10,15" filteredValue="#{despesaProvisionadaView.gruposFinanceirosFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
-                                    <f:facet name="header">    
-                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{despesaProvisionadaView.abrirEdicao()}" title="#{l.Novo}" update=":conteudo"/>
-                                        #{l.Tabela_de_Despesa_Provisionada}
-                                    </f:facet>
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.7%" ><i class="fa fa-fw fa-sign-out Fs40" style="color: #848484"/> #{l.Despesa_Provisionada}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{despesaProvisionadaView.abrirEdicaoComDados()}" />
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
 
-                                    <p:column headerText="#{l.Id}" sortBy="#{despesaProvisionada.id}" filterBy="#{despesaProvisionada.id}" footerText="#{l.Id}" >                                        
-                                        <h:outputText value="#{despesaProvisionada.id}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Emissao}" sortBy="#{despesaProvisionada.emissaoFormatadaSemHoras}" filterBy="#{despesaProvisionada.emissaoFormatadaSemHoras}" footerText="#{l.Emissao}" >
-                                        <h:outputText value="#{despesaProvisionada.emissaoFormatadaSemHoras}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Vencimento}" sortBy="#{despesaProvisionada.vencimentoFormatadoSemHoras}" filterBy="#{despesaProvisionada.vencimentoFormatadoSemHoras}" footerText="#{l.Vencimento}" >
-                                        <h:outputText value="#{despesaProvisionada.vencimentoFormatadoSemHoras}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Pessoa}" sortBy="#{despesaProvisionada.pessoa.nome}" filterBy="#{despesaProvisionada.pessoa.nome}" footerText="#{l.Pessoa}" >
-                                        <h:outputText value="#{despesaProvisionada.pessoa.nome}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Despesa}" sortBy="#{despesaProvisionada.tipoDespesa.nome}" filterBy="#{despesaProvisiontipoDespesapesa.nome}" footerText="#{l.Despesa}" >
-                                        <h:outputText value="#{despesaProvitipoDespesa.despesa.nome}" />
-                                    </p:column>
-                                    <p:column headerText="#{l.Valor}" sortBy="#{despesaProvisionada.valor}" filterBy="#{despesaProvisionada.valor}" footerText="#{l.Valor}" >
-                                        <h:outputText value="#{despesaProvisionada.moeda.sigla} #{despesaProvisionada.valor}" />
-                                    </p:column>
-                                </p:dataTable>
-                            </p:panel>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
 
-                            <p:panel id="panelED" visible="#{despesaProvisionadaView.panel}" style="border: none">
-                                <h2 class="BigTopic">#{Edicao_de_Registro}</h2>
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="despesapID" value="#{despesaProvisionadaView.e}" update=":conteudo" dialog="#{selecaoDespesaProvisionadaView}" mbView="#{despesaProvisionadaView}" var="despesa" converter="despesaProvisionadaBVConverter" process="@this" itemLabel="#{despesa.id}" itemValue="#{despesa}" editVisible="false" itemLabelTab="#{despesa.historico}" itemLabelTabVisible="true" onlyNumber="true"/>
 
-                                <div class="Container100 Responsive100">
-                                    <div class="Container80 Responsive100">
-                                        <p:panelGrid columns="4" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText value="#{despesaProvisionadaView.despesaProvisionada.id}" placeholder="#{l.Id}" styleClass="Wid90" disabled="true"/>
-                                            <p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaView.despesaProvisionada.emissao}" placeholder="#{l.Emissao}" maxlength="60" size="25"/>
-                                            <h:panelGrid columns="2" style="margin-top: -2%;">
-                                                <p:inputText id="despesaPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{despesaProvisionadaView.despesaProvisionada.pessoa.nome}"/>
-                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
-                                                                 update="@none">
-                                                    <p:ajax event="dialogReturn" listener="#{despesaProvisionadaView.selecionaPessoa}"
-                                                            process="@this" update="despesaPessoa" />
-                                                </p:commandButton>
-                                            </h:panelGrid>
-                                            <h:panelGrid columns="2" style="margin-top: -2%;">
-                                                <p:inputText readonly="true" id="despesaProvisionadaDespesa" placeholder="#{l.Despesa}" value="#{despesaProvisionadaView.despesaProvisionada.despesa.nome}"/>
-                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
-                                                                 update="@none">
-                                                    <p:ajax event="dialogReturn" listener="#{despesaProvisionadaView.selecionaDespesa}"
-                                                            process="@this" update="despesaProvisionadaDespesa" />
-                                                </p:commandButton>
-                                            </h:panelGrid>
-                                            <p:inputText value="#{despesaProvisionadaView.despesaProvisionada.valor}" placeholder="#{l.Valor}" maxlength="60" styleClass="Wid90"/>
-                                            <p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaView.despesaProvisionada.vencimento}" placeholder="#{l.Vencimento}" size="25"/>                                            
-                                            <h:panelGrid columns="2">
-                                                <p:inputTextarea autoResize="true" placeholder="Escreva um comentário." counter="display"
-                                                                 counterTemplate="{0} caracteres restantes." rows="1" cols="49"
-                                                                 maxlength="150" value="#{despesaProvisionadaView.despesaProvisionada.historico}">
-                                                </p:inputTextarea>  
-                                            </h:panelGrid>
-                                            <h:outputText/>
-                                            <p:selectOneMenu id="dpDestino" value="#{despesaProvisionadaView.despesaProvisionada.moeda}" converter="moedaConverter">
-                                                <f:selectItems value="#{despesaProvisionadaView.moedaLista}" var="moeda" itemLabel="#{moeda.nome}" itemValue="#{moeda}"/>
-                                                <p:ajax update="dpDestino"/>
-                                            </p:selectOneMenu>                                                
-                                            <p:selectBooleanCheckbox disabled="true" itemLabel="#{l.Divisao_Lucro}"
-                                                                     value="#{despesaProvisionadaView.despesaProvisionada.divisaoLucroCambioCaixa}"/>
-                                            <h:outputText id="display" />
-                                            <h:outputText/> 
-                                        </p:panelGrid>
-                                    </div>
-                                </div>
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="despesaPessoa" dialog="#{selecaoPessoaView}" mbView="#{despesaProvisionadaView}" value="#{despesaProvisionadaView.e.pessoa}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
 
-                                <div class="EmptyBox5"/>
+                            <p:outputLabel value="#{l.Despesa}"/>
+                            <a:inputTextDialog id="despesaProvisionadaDespesa" dialog="#{selecaoTipoDespesaView}" mbView="#{despesaProvisionadaView}" value="#{despesaProvisionadaView.e.despesa}" var="despesa" itemLabel="#{despesa.nome}" itemValue="#{despesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{despesa.nome}"/>
 
-                                <p:separator/>
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaView.e.emissao}" maxlength="60" size="25"/>
 
-                                <h2 class="BigTopic">#{l.Gerar_Mais}</h2>
-                                <div class="Container100 Responsive100">
-                                    <div class="Responsive100" style="float: left; width: 50%">
-                                        <p:panelGrid columns="3" layout="grid" style="border:0px !important; background:none;" styleClass="FormContent">
-                                            <p:inputText placeholder="#{l.Numero_Parcelas}" value="#{despesaProvisionadaView.numeroParcelas}"/>
-                                            <p:inputText placeholder="#{l.Intervalo_De_Dias}" value="#{despesaProvisionadaView.intervaloDias}"/> 
-                                            <p:commandButton value="#{l.Gerar}" action="#{despesaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
-                                        </p:panelGrid>
-                                    </div>
-                                </div>
+                            <p:outputLabel value="#{l.Mes_De_Referencia}"/>
+                            <p:calendar pattern="MM/yyyy" mask="99/9999" value="#{despesaProvisionadaView.e.referencia}" />  
 
-                                <div class="EmptyBox5"/>
+                            <p:outputLabel value="#{l.Vencimento}"/>
+                            <p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaView.e.vencimento}" />  
 
-                                <div class="Container100 Responsive100">
-                                    <div class="Container40 Responsive100">
-                                        <p:dataTable id="despesaProvisionadaDTN" var="despesaProvisionadaBV" value="#{despesaProvisionadaView.parcelas}" rowKey="#{despesaProvisionadaBV.id}"
-                                                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
-                                            <p:ajax event="cellEdit" update=":conteudo:despesaProvisionadaDTN" />
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:selectOneMenu id="dpDestino" value="#{despesaProvisionadaView.e.cotacao}" converter="cotacaoConverter">
+                                <f:selectItems value="#{despesaProvisionadaView.listaCotacao}"  var="cotacao" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{cotacao}"/>
+                                <p:ajax update="dpDestino valorDP" />
+                            </p:selectOneMenu>
 
-                                            <p:column headerText="#{l.Vencimento}" sortBy="#{despesaProvisionadaBV.vencimento}" >
-                                                <p:cellEditor>
-                                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
-                                                    <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
-                                                </p:cellEditor>
-                                            </p:column>
-                                            <p:column headerText="#{l.Valor}" sortBy="#{despesaProvisionadaBV.valor}" >
-                                                <p:cellEditor>
-                                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.valor}" /></f:facet>
-                                                    <f:facet name="input"><p:inputText value="#{despesaProvisionadaBV.valor}"/></f:facet>
-                                                </p:cellEditor>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </div>
-                                </div>
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputNumber id="valorDP" value="#{despesaProvisionadaView.e.valor}" symbol="#{despesaProvisionadaView.e.cotacao.conta.moeda.sigla} " maxlength="60" decimalSeparator="," thousandSeparator="."/>
 
-                                <div class="EmptyBox5"/>
+                            <p:outputLabel value="#{l.Historico}"/>
+                            <p:inputTextarea autoResize="true" placeholder="Escreva um comentário." rows="1" maxlength="150" value="#{despesaProvisionadaView.e.historico}"/>
 
-                                <p:separator/>
+                            <p:outputLabel value="#{l.Divisao_Lucro}"/>
+                            <p:selectBooleanCheckbox disabled="true" value="#{despesaProvisionadaView.e.divisaoLucroCambioCaixa}"/>
 
-                                <p:commandButton value="#{l.Adicionar}" action="#{despesaProvisionadaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                                <p:commandButton value="#{l.Atualizar}" action="#{despesaProvisionadaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                                <p:commandButton value="#{l.Remover}" action="#{despesaProvisionadaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                                <p:commandButton value="#{l.Limpar}" action="#{despesaProvisionadaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                                <p:commandButton value="#{l.Desfazer}" action="#{despesaProvisionadaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
-                                                 styleClass="OrangeButton" />
-                                <p:commandButton value="#{l.Voltar}" action="#{despesaProvisionadaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
-                                                 immediate="true" styleClass="BrownButton" />
-                            </p:panel>   
+                        </p:panelGrid>
 
-                        </div>
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Gerar_Mais}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-2">
+                            <p:inputText placeholder="#{l.Numero_Parcelas}" value="#{despesaProvisionadaView.numeroParcelas}"/>
+                            <p:inputText placeholder="#{l.Intervalo_De_Dias}" value="#{despesaProvisionadaView.intervaloDias}"/> 
+                            <p:commandButton value="#{l.Gerar}" action="#{despesaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+
+
+                        <p:dataTable id="despesaProvisionadaDTN" var="despesaProvisionadaBV" value="#{despesaProvisionadaView.parcelas}" rowKey="#{despesaProvisionadaBV.id}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
+                            <p:ajax event="cellEdit" update=":conteudo:despesaProvisionadaDTN" />
+
+                            <p:column headerText="#{l.Mes_De_Referencia}" sortBy="#{despesaProvisionadaBV.referencia}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.referenciaFormatado}" /></f:facet>
+                                    <f:facet name="input"><p:calendar pattern="MM/yyyy" mask="99/9999" value="#{despesaProvisionadaBV.referencia}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Vencimento}" sortBy="#{despesaProvisionadaBV.vencimento}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                    <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{despesaProvisionadaBV.vencimento}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Valor}" sortBy="#{despesaProvisionadaBV.valor}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{despesaProvisionadaView.e.cotacao.conta.moeda.sigla} #{despesaProvisionadaBV.valor}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value=" #{despesaProvisionadaBV.valor}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+
                     </div>
+
+
+                    <div class="EmptyBox10"/>
+
+
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{despesaProvisionadaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{despesaProvisionadaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{despesaProvisionadaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{despesaProvisionadaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
                 </div>
             </div>
         </div>

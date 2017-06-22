@@ -1,23 +1,20 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.ReceitaProvisionadaBV;
-import br.com.onesystem.war.service.MoedaService;
-import br.com.onesystem.war.service.ReceitaProvisionadaService;
+import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,93 +22,64 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.inject.Inject;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ReceitaProvisionadaView implements Serializable {
+public class ReceitaProvisionadaView extends BasicMBImpl<ReceitaProvisionada, ReceitaProvisionadaBV> implements Serializable { 
 
-    private boolean panel;
-    private ReceitaProvisionadaBV receitaProvisionada;
-    private ReceitaProvisionada receitaProvisionadaSelecionado;
-    private List<ReceitaProvisionada> receitaProvisionadaLista;
-    private List<ReceitaProvisionada> gruposFinanceirosFiltrados;
     private List<ReceitaProvisionadaBV> parcelas;
     private Integer numeroParcelas;
     private Integer intervaloDias;
+    private List<Cotacao> listaCotacao;
 
-    @ManagedProperty("#{receitaProvisionadaService}")
-    private ReceitaProvisionadaService service;
-
-    @ManagedProperty("#{moedaService}")
-    private MoedaService serviceMoeda;
-
-    private List<Moeda> moedaLista;
+    @Inject
+    private CotacaoService serviceCotacao;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        receitaProvisionada = new ReceitaProvisionadaBV();
-        receitaProvisionadaLista = service.buscarReceitaProvisionadas();
-        moedaLista = serviceMoeda.buscarMoedas();
     }
 
     public void add() {
         try {
-            ReceitaProvisionada novoRegistro = receitaProvisionada.construir();
-            new AdicionaDAO<ReceitaProvisionada>().adiciona(novoRegistro);
-            receitaProvisionadaLista.add(novoRegistro);
+            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            if (e.getId() == null) {
+                ReceitaProvisionada dp = e.construir();
+                new AdicionaDAO<ReceitaProvisionada>().adiciona(dp);
+            }
+            ReceitaProvisionada novoRegistro = e.construir();
             for (ReceitaProvisionadaBV n : parcelas) {
                 novoRegistro = n.construir();
                 new AdicionaDAO<ReceitaProvisionada>().adiciona(novoRegistro);
-                receitaProvisionadaLista.add(novoRegistro);
             }
-            InfoMessage.print("Receita Provisionada agregado con éxito!");
+            InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void update() {
-        try {
-            ReceitaProvisionada receitaProvisionadaExistente = receitaProvisionada.construirComID();
-            if (receitaProvisionadaExistente.getId() != null) {
-                new AtualizaDAO<ReceitaProvisionada>().atualiza(receitaProvisionadaExistente);
-                receitaProvisionadaLista.set(receitaProvisionadaLista.indexOf(receitaProvisionadaExistente),
-                        receitaProvisionadaExistente);
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(receitaProvisionadaExistente)) {
-                    gruposFinanceirosFiltrados.set(gruposFinanceirosFiltrados.indexOf(receitaProvisionadaExistente), receitaProvisionadaExistente);
-                }
-                InfoMessage.print("Receita Provisionada cambiado con éxito!");
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("!La receitaProvisionada no se encontra registrada!");
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
+    @Override
+    public void limparJanela() {
+        e = new ReceitaProvisionadaBV();
+        intervaloDias = null;
+        numeroParcelas = null;
+        parcelas = new ArrayList<ReceitaProvisionadaBV>();
+        listaCotacao = serviceCotacao.buscarTodasCotacoesDoDiaAtual();
     }
 
-    public void delete() {
-        try {
-            if (receitaProvisionadaLista != null && receitaProvisionadaLista.contains(receitaProvisionada.construirComID())) {
-                new RemoveDAO<ReceitaProvisionada>().remove(receitaProvisionada.construirComID(), receitaProvisionada.construirComID().getId());
-                receitaProvisionadaLista.remove(receitaProvisionada.construirComID());
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(receitaProvisionada.construirComID())) {
-                    gruposFinanceirosFiltrados.remove(receitaProvisionada.construirComID());
-                }
-                InfoMessage.print("ReceitaProvisionada '" + this.receitaProvisionada.getId() + "' eliminada con éxito!");
-                limparJanela();
-            }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
+    @Override
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        if (obj instanceof ReceitaProvisionada) {
+            e = new ReceitaProvisionadaBV((ReceitaProvisionada) obj);
+        } else if (obj instanceof Pessoa) {
+            e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof TipoReceita) {
+            e.setReceita((TipoReceita) obj);
         }
     }
 
@@ -123,17 +91,18 @@ public class ReceitaProvisionadaView implements Serializable {
                 count = count + intervaloDias;
                 ReceitaProvisionadaBV dp
                         = new ReceitaProvisionadaBV(retornarCodigo(),
-                                receitaProvisionada.getPessoa(),
-                                receitaProvisionada.getReceita(),
-                                receitaProvisionada.getValor(),
-                                adicionarDiasNa(receitaProvisionada.getVencimento(), count),
-                                receitaProvisionada.getEmissao(),
-                                receitaProvisionada.getHistorico(),
-                                receitaProvisionada.getCotacao(),
-                                receitaProvisionada.getReferencia());
+                                e.getPessoa(),
+                                e.getReceita(),
+                                e.getValor(),
+                                adicionarDiasNa(e.getVencimento(), count),
+                                e.getEmissao(),
+                                e.getHistorico(),
+                                e.getCotacao(),
+                                adicionarMesNa(e.getReferencia(), i + 1),
+                                OperacaoFinanceira.ENTRADA);
                 parcelas.add(dp);
             }
-        } catch (NullPointerException npe) {
+        } catch (Exception e) {
             ErrorMessage.print(new BundleUtil().getMessage("Vencimento_idias_nparcelas_not_null"));
         }
 
@@ -143,6 +112,13 @@ public class ReceitaProvisionadaView implements Serializable {
         Calendar c = Calendar.getInstance();
         c.setTime(data);
         c.add(Calendar.DATE, dias);
+        return c.getTime();
+    }
+
+    private Date adicionarMesNa(Date data, Integer dias) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(data);
+        c.add(Calendar.MONTH, dias);
         return c.getTime();
     }
 
@@ -164,97 +140,6 @@ public class ReceitaProvisionadaView implements Serializable {
 
     public List<ClassificacaoFinanceira> getClassificacaoFinanceira() {
         return Arrays.asList(ClassificacaoFinanceira.values());
-    }
-
-    public void limparJanela() {
-        receitaProvisionada = new ReceitaProvisionadaBV();
-        receitaProvisionadaSelecionado = new ReceitaProvisionada();
-        intervaloDias = null;
-        numeroParcelas = null;
-        parcelas = new ArrayList<ReceitaProvisionadaBV>();
-    }
-
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        receitaProvisionada = new ReceitaProvisionadaBV(receitaProvisionadaSelecionado);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
-    }
-
-    public void desfazer() {
-        if (receitaProvisionadaSelecionado != null) {
-            receitaProvisionada = new ReceitaProvisionadaBV(receitaProvisionadaSelecionado);
-        }
-    }
-
-    public void selecionarMoeda(SelectEvent event) {
-        Moeda moeda = (Moeda) event.getObject();
-//        receitaProvisionada.setMoeda(moeda);
-    }
-
-    public ReceitaProvisionadaBV getReceitaProvisionada() {
-        return receitaProvisionada;
-    }
-
-    public void setReceitaProvisionada(ReceitaProvisionadaBV receitaProvisionada) {
-        this.receitaProvisionada = receitaProvisionada;
-    }
-
-    public ReceitaProvisionada getReceitaProvisionadaSelecionado() {
-        return receitaProvisionadaSelecionado;
-    }
-
-    public void setReceitaProvisionadaSelecionado(ReceitaProvisionada receitaProvisionadaSelecionado) {
-        this.receitaProvisionadaSelecionado = receitaProvisionadaSelecionado;
-    }
-
-    public List<ReceitaProvisionada> getReceitaProvisionadaLista() {
-        return receitaProvisionadaLista;
-    }
-
-    public void setReceitaProvisionadaLista(List<ReceitaProvisionada> receitaProvisionadaLista) {
-        this.receitaProvisionadaLista = receitaProvisionadaLista;
-    }
-
-    public List<ReceitaProvisionada> getGruposFinanceirosFiltrados() {
-        return gruposFinanceirosFiltrados;
-    }
-
-    public void setGruposFinanceirosFiltrados(List<ReceitaProvisionada> gruposFinanceirosFiltrados) {
-        this.gruposFinanceirosFiltrados = gruposFinanceirosFiltrados;
-    }
-
-    public boolean isPanel() {
-        return panel;
-    }
-
-    public void setPanel(boolean panel) {
-        this.panel = panel;
-    }
-
-    public ReceitaProvisionadaService getService() {
-        return service;
-    }
-
-    public void setService(ReceitaProvisionadaService service) {
-        this.service = service;
-    }
-
-    public void selecionaPessoa(SelectEvent event) {
-        Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-        receitaProvisionada.setPessoa(pessoaSelecionada);
-    }
-
-    public void selecionaReceita(SelectEvent event) {
-        TipoReceita receitaSelecionada = (TipoReceita) event.getObject();
-        receitaProvisionada.setReceita(receitaSelecionada);
     }
 
     public List<ReceitaProvisionadaBV> getParcelas() {
@@ -281,20 +166,20 @@ public class ReceitaProvisionadaView implements Serializable {
         this.intervaloDias = intervaloDias;
     }
 
-    public List<Moeda> getMoedaLista() {
-        return moedaLista;
+    public List<Cotacao> getListaCotacao() {
+        return listaCotacao;
     }
 
-    public void setMoedaLista(List<Moeda> moedaLista) {
-        this.moedaLista = moedaLista;
+    public void setListaCotacao(List<Cotacao> listaCotacao) {
+        this.listaCotacao = listaCotacao;
     }
 
-    public MoedaService getServiceMoeda() {
-        return serviceMoeda;
+    public CotacaoService getServiceCotacao() {
+        return serviceCotacao;
     }
 
-    public void setServiceMoeda(MoedaService serviceMoeda) {
-        this.serviceMoeda = serviceMoeda;
+    public void setServiceCotacao(CotacaoService serviceCotacao) {
+        this.serviceCotacao = serviceCotacao;
     }
 
 }
