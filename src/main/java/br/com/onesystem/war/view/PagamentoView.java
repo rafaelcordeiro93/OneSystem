@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -61,7 +62,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     @Override
     public void limparJanela() {
         try {
-            e = new PagamentoBV(new Date());
+            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
@@ -248,7 +249,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public BigDecimal getTotalEmDinheiro() {
         BigDecimal totalTipo = getTotalTipoNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalTipoNaCotacaoPadrao();
         BigDecimal totalForma = getTotalFormaNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalFormaNaCotacaoPadrao();
-        return totalTipo.subtract(totalForma);
+        return (totalTipo.subtract(getValorEmConta())).subtract(totalForma);
+
     }
 
     public Model getTipoSelecionado() {
@@ -299,12 +301,4 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
         this.formaDeCobrancaBV = formaDeCobrancaBV;
     }
 
-    public CotacaoService getService() {
-        return service;
-    }
-
-    public void setService(CotacaoService service) {
-        this.service = service;
-    }
-    
 }

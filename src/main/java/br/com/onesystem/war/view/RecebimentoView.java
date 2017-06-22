@@ -1,5 +1,7 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -17,6 +19,7 @@ import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -59,7 +62,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     @Override
     public void limparJanela() {
         try {
-            e = new RecebimentoBV(new Date());
+            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
@@ -246,7 +249,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public BigDecimal getTotalEmDinheiro() {
         BigDecimal totalTipo = getTotalTipoNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalTipoNaCotacaoPadrao();
         BigDecimal totalForma = getTotalFormaNaCotacaoPadrao() == null ? BigDecimal.ZERO : getTotalFormaNaCotacaoPadrao();
-        return totalTipo.subtract(totalForma);
+        return (totalTipo.subtract(getValorEmConta())).subtract(totalForma);
     }
 
     public Model getTipoSelecionado() {
@@ -295,14 +298,6 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void setFormaDeCobrancaBV(FormaDeCobrancaBV formaDeCobrancaBV) {
         this.formaDeCobrancaBV = formaDeCobrancaBV;
-    }
-
-    public CotacaoService getService() {
-        return service;
-    }
-
-    public void setService(CotacaoService service) {
-        this.service = service;
     }
 
 }

@@ -11,6 +11,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeFormaCobranca;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -18,6 +19,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,7 +44,7 @@ public class FormaDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_FORMADECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cobranca cobranca;
 
     @ManyToOne
@@ -77,11 +80,19 @@ public class FormaDeCobranca implements Serializable {
     @OneToMany(mappedBy = "formaDeCobranca", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
     private List<Baixa> baixas;
 
+    @ManyToOne
+    private Caixa caixa;
+
+    @NotNull(message = "{unidadeFinanceira_not_null}")
+    @Enumerated(EnumType.STRING)
+    private OperacaoFinanceira operacaoFinanceira;
+
     public FormaDeCobranca() {
     }
 
     public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
-            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento) throws DadoInvalidoException {
+            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento, Caixa caixa,
+            OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
         this.recebimento = recebimento;
@@ -92,11 +103,13 @@ public class FormaDeCobranca implements Serializable {
         this.observacao = observacao;
         this.cotacao = cotacao;
         this.pagamento = pagamento;
+        this.caixa = caixa;
+        this.operacaoFinanceira = operacaoFinanceira;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "juros", "desconto", "multa", "observacao");
+        List<String> campos = Arrays.asList("valor", "juros", "desconto", "multa", "observacao", "operacaoFinanceira");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -149,6 +162,14 @@ public class FormaDeCobranca implements Serializable {
         return multa;
     }
 
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
     public BigDecimal getDesconto() {
         return desconto;
     }
@@ -195,7 +216,7 @@ public class FormaDeCobranca implements Serializable {
             } else if (cobranca instanceof Cheque) {
                 return new BundleUtil().getLabel("Cheque");
             } else if (cobranca instanceof BoletoDeCartao) {
-                return new BundleUtil().getLabel("Boleto_De_Cobranca");
+                return new BundleUtil().getLabel("Boleto_De_Cartao");
             } else {
                 return new BundleUtil().getLabel("Credito");
             }

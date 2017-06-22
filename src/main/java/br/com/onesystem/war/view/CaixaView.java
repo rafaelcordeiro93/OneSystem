@@ -78,7 +78,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
 
     private void populaCampos() throws DadoInvalidoException {
         try {
-            e = new CaixaBV(new CaixaDAO().buscarCaixas().porUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
+            e = new CaixaBV(new CaixaDAO().buscarCaixas().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
             if (e.getId() != null) {
                 alteraEstadoCaixa();
                 return;

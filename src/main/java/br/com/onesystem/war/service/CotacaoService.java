@@ -2,7 +2,6 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
@@ -24,8 +23,7 @@ public class CotacaoService implements Serializable {
     }
 
     public Cotacao getCotacaoPadrao(Date emissao) throws DadoInvalidoException {
-        Configuracao configuracao = new ConfiguracaoService().buscar();
-        return new CotacaoDAO().buscarCotacoes().porCotacaoEmpresa().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(emissao).resultado();
+        return new CotacaoDAO().buscarCotacoes().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado();
     }
 
 }

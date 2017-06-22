@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -30,12 +31,14 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     private Cotacao cotacaoPadrao;
     private Date emissao;
     private EstadoDeLancamento estado;
+    private Caixa caixa;
 
     public PagamentoBV() {
     }
 
-    public PagamentoBV(Date emissao) {
+    public PagamentoBV(Date emissao, Caixa caixa) {
         this.emissao = emissao;
+        this.caixa = caixa;
     }
 
     public PagamentoBV(Pagamento r) {
@@ -46,6 +49,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.emissao = r.getEmissao();
         this.totalEmDinheiro = r.getTotalEmDinheiro();
         this.estado = r.getEstado();
+        this.caixa = r.getCaixa();
     }
 
     public Long getId() {
@@ -102,12 +106,20 @@ public class PagamentoBV implements BuilderView<Pagamento> {
 
     public void setEstado(EstadoDeLancamento estado) {
         this.estado = estado;
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
     }
 
     public Pagamento construir() throws DadoInvalidoException {
         return new PagamentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 
     @Override
@@ -115,6 +127,8 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         return new PagamentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
 
 }

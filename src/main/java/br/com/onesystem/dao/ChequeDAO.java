@@ -6,6 +6,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,15 +38,21 @@ public class ChequeDAO {
         parametros.put("bNome", cheque.getEmitente());
         return this;
     }
-    
-    public ChequeDAO porSituacao(SituacaoDeCheque situacaoDeCheque){
-        consulta += "and b.tipoSituacao = :pSituacao";
+
+    public ChequeDAO porEmissao(Date data) {
+        consulta += " and b.emissao = :bEmissao ";
+        parametros.put("bEmissao", data);
+        return this;
+    }
+
+    public ChequeDAO porSituacao(SituacaoDeCheque situacaoDeCheque) {
+        consulta += " and b.tipoSituacao = :pSituacao";
         parametros.put("pSituacao", situacaoDeCheque);
         return this;
     }
-    
-        public ChequeDAO porTipoLancamento(TipoLancamento tipoLancamento){
-        consulta += "and b.tipoLancamento = :pTipoLancamento";
+
+    public ChequeDAO porTipoLancamento(TipoLancamento tipoLancamento) {
+        consulta += " and b.tipoLancamento = :pTipoLancamento";
         parametros.put("pTipoLancamento", tipoLancamento);
         return this;
     }
@@ -62,11 +69,11 @@ public class ChequeDAO {
         limpar();
         return resultado;
     }
-    
-     public Cheque resultado() throws DadoInvalidoException {
+
+    public Cheque resultado() throws DadoInvalidoException {
         try {
             Cheque resultado = new ArmazemDeRegistros<Cheque>(Cheque.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);        
+                    .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {

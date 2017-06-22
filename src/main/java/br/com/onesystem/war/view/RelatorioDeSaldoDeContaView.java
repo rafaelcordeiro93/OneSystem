@@ -53,7 +53,7 @@ public class RelatorioDeSaldoDeContaView implements Serializable {
             validarDadosDeEntrada();
             List<SaldoDeConta> lista = new ArrayList<SaldoDeConta>();
             for (Conta conta : contas) {
-                BigDecimal res = service.buscarSaldoPorDataEConta(relatorio.getDataInicial(), relatorio.getDataFinal(), conta);
+                BigDecimal res = service.buscarSaldoPorDataEConta(relatorio.getDataInicial(), relatorio.getDataFinal(), conta, null);
                 SaldoDeConta saldo = new SaldoDeConta(conta, res);
                 lista.add(saldo);
             }

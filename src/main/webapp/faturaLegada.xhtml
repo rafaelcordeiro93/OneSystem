@@ -78,22 +78,22 @@
                                 <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
                                     <h:outputText value="#{model.id + 1}" />
                                 </p:column>
-                                <p:column headerText="#{l.Modalidade}" width="10%" styleClass="TexAlCenter">
+                                <p:column headerText="#{l.Modalidade}" styleClass="TexAlCenter">
                                     <h:outputText value="#{model.object.modalidade.nome}"/>
                                 </p:column>
-                                <p:column headerText="#{l.Vencimento}" width="10%" styleClass="TexAlCenter">                                    
+                                <p:column headerText="#{l.Vencimento}" styleClass="TexAlCenter">                                    
                                     <h:outputText id="vencimentoParcelaFormatado" value="#{model.object.vencimentoFormatadoSemHoras}"/>
                                 </p:column>
-                                <p:column headerText="#{l.Valor}" width="12%">
+                                <p:column headerText="#{l.Valor}" >
                                     <h:outputText id="dcpValorTxt" value="#{model.object.valorFormatado}"/>
                                 </p:column>                                   
-                                <p:column headerText="#{l.Detalhes}" width="30%" style="text-align: center;">
+                                <p:column headerText="#{l.Detalhes}" colspan="2" style="text-align: center;">
                                     <h:outputText id="parDetalhes" value="#{model.object.detalhes}"/>
                                 </p:column>
                                 <p:column headerText="#{l.Dias}">                                
                                     <h:outputText id="diasParcela" value="#{model.object.dias}"/>
                                 </p:column>
-                                <p:column headerText="#{l.Dia_Semana}">
+                                <p:column headerText="#{l.Dia_Semana}" colspan="2">
                                     <h:outputText id="diaDaSemana" value="#{model.object.diaDaSemana}"/>
                                 </p:column>
 
@@ -101,7 +101,7 @@
                                     <p:row>
                                         <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
                                         <p:column id="totalParcelas" footerText="#{faturaLegadaView.totalParcelas}"/>
-                                        <p:column colspan="3"/>
+                                        <p:column colspan="5"/>
                                     </p:row>                                  
                                 </p:columnGroup>
 

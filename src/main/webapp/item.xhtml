@@ -8,7 +8,6 @@
 
     <ui:define name="content">
 
-
         <div class="ui-g">
             <div class="ui-g-11" style="margin-left: 5%;margin-top: 3%">
                 <span class="tab" />
@@ -102,9 +101,7 @@
                                 </h:panelGrid>
 
                             </p:tab>
-
                             <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}">
-
 
                                 <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass="form-elements"
                                              columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
@@ -115,12 +112,10 @@
                                             <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
                                         </p:selectOneRadio>
 
-
                                         <div class="EmptyBox10"/>
                                         <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
                                             <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
                                         </a:inputTextDialog>
-
                                         <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
                                                        symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>

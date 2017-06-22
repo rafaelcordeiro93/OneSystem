@@ -47,7 +47,7 @@
 
                             <p:outputLabel value="#{l.Entrada}" />
                             <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.e.entrada}" >
-                                <p:ajax update="formaDeRecebimentoEntradaemDinheiro formaDeRecebimentoEntradaemCredito formaDeRecebimentoPercentualEntrada formaDeRecebimentoPadraoDeEntrada"/>
+                                <p:ajax update="formaDeRecebimentoEntradaemDinheiro formaDeRecebimentoEntradaemCredito formaDeRecebimentoPercentualEntrada formaDeRecebimentoPadraoDeEntrada formaDeRecebimentoEntradaemCheque formaDeRecebimentoEntradaemCartao"/>
                             </p:selectBooleanCheckbox>
 
                             <p:outputLabel value="#{l.Entrada_Dinheiro}" />
@@ -59,6 +59,12 @@
                             <p:outputLabel value="#{l.Percentual_Entrada}" />
                             <p:inputNumber id="formaDeRecebimentoPercentualEntrada" symbol="%" symbolPosition="rigth" disabled="#{!formaDeRecebimentoView.e.entrada}"  value="#{formaDeRecebimentoView.e.porcentagemDeEntrada}" maxValue="100" minValue="0" inputStyle="width:auto" size="3"/>
 
+                            <p:outputLabel value="#{l.Entrada_Cheque}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" disabled="#{!formaDeRecebimentoView.e.entrada}" value="#{formaDeRecebimentoView.e.entradaEmCheque}"/>
+
+                            <p:outputLabel value="#{l.Entrada_Cartao}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" disabled="#{!formaDeRecebimentoView.e.entrada}" value="#{formaDeRecebimentoView.e.entradaEmCartao}"/>
+
                             <p:outputLabel value="#{l.Padrao}" />
                             <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.e.formaPadraoDeEntrada}" disabled="#{!formaDeRecebimentoView.e.entrada}">
                                 <f:selectItems value="#{formaDeRecebimentoView.formaDeRecebimentoPadrao}" var="tipoFormaDeRecebimento" itemValue="#{tipoFormaDeRecebimento}" itemLabel="#{tipoFormaDeRecebimento.nome}" />
@@ -67,16 +73,6 @@
                             <p:spacer/>
                             <p:spacer/>
 
-                            <!-- Comentado pois a funcionalidade ainda não foi implementada
-                            
-
-                            <p:outputLabel value="#{l.Entrada_Cheque}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" value="#{formaDeRecebimentoView.e.entradaEmCheque}"/>
-
-                            <p:outputLabel value="#{l.Entrada_Cartao}" />
-                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" value="#{formaDeRecebimentoView.e.entradaEmCartao}"/>
-
-                            -->
                         </p:panelGrid>
 
                         <div class="EmptyBox20"/>

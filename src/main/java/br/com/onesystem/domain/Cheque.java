@@ -46,6 +46,8 @@ public class Cheque extends Cobranca implements Serializable {
     private BigDecimal descontos;
     @Column(nullable = true)
     private String emitente;
+    @ManyToOne
+    private DepositoBancario depositoBancario;
 
     public Cheque() {
     }
@@ -75,7 +77,23 @@ public class Cheque extends Cobranca implements Serializable {
 
     @Override
     public ModalidadeDeCobranca getModalidade() {
-        return ModalidadeDeCobranca.CHEQUE; 
+        return ModalidadeDeCobranca.CHEQUE;
+    }
+
+    public void cancela() {
+        this.tipoSituacao = SituacaoDeCheque.CANCELADO;
+    }
+
+    public void devolve() {
+        this.tipoSituacao = SituacaoDeCheque.DEVOLVIDO;
+    }
+
+    public void desconta() {
+        this.tipoSituacao = SituacaoDeCheque.DESCONTADO;
+    }
+
+    public void depositaNo(DepositoBancario deposito) {
+        this.depositoBancario = deposito;
     }
 
     public Banco getBanco() {

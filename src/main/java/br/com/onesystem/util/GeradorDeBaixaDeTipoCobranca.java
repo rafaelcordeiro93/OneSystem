@@ -57,9 +57,15 @@ public class GeradorDeBaixaDeTipoCobranca {
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
         if (tipoDeCobranca.getRecebimento() != null) {
-            builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo()).comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
+            if (tipoDeCobranca.getCobranca().getNota() != null) {
+                builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
+            }
+            builder.comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
         } else {
-            builder.comDespesa(tipoDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo()).comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
+            if (tipoDeCobranca.getCobranca().getNota() != null) {
+                builder.comDespesa(tipoDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
+            }
+            builder.comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
         }
 
         return builder.construir();
@@ -106,15 +112,15 @@ public class GeradorDeBaixaDeTipoCobranca {
     }
 
     private BaixaBuilder getCobrancaBuilder() {
-        Date emissao = new Date();
+        BaixaBuilder baixaBuilder = new BaixaBuilder();
         if (tipoDeCobranca.getRecebimento() != null) {
-            emissao = tipoDeCobranca.getRecebimento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getRecebimento().getEmissao()).comCaixa(tipoDeCobranca.getRecebimento().getCaixa());
         } else {
-            emissao = tipoDeCobranca.getPagamento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getPagamento().getEmissao()).comCaixa(tipoDeCobranca.getPagamento().getCaixa());
         }
 
-        return new BaixaBuilder().
-                comCotacao(tipoDeCobranca.getCotacao()).comEmissao(emissao).
+        return baixaBuilder.
+                comCotacao(tipoDeCobranca.getCotacao()).
                 comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }

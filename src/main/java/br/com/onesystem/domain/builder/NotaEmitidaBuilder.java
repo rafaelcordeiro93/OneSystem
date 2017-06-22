@@ -6,6 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemDeNota;
@@ -58,9 +59,15 @@ public class NotaEmitidaBuilder {
     private Comanda comanda;
     private Condicional condicional;
     private Date emissao;
+    private Caixa caixa;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public NotaEmitidaBuilder comCaixa(Caixa caixa) {
+        this.caixa = caixa;
         return this;
     }
 
@@ -85,7 +92,7 @@ public class NotaEmitidaBuilder {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
             }
             this.itens = itensCol;
-        }else{
+        } else {
             this.itens = itens;
         }
         return this;
@@ -194,7 +201,7 @@ public class NotaEmitidaBuilder {
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa);
     }
 
 }

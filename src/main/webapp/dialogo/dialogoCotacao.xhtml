@@ -14,50 +14,50 @@
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
 
             <p:dataTable id="valorPorCotacaoBVData" var="valorPorCotacaoBV" value="#{dialogoCotacaoView.cotacoes}" rowKey="#{valorPorCotacaoBV.id}"
-                             rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             paginatorPosition="bottom" paginatorAlwaysVisible="false"
-                             emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
+                         rows="5" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginatorPosition="bottom" paginatorAlwaysVisible="false"
+                         emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
 
-                    <p:column style="text-align: center; width: 7%" >                                         
-                        <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{valorPorCotacaoBV.cotacao.conta.moeda.bandeira}.png" />
-                    </p:column>
+                <p:column style="text-align: center; width: 7%" >                                         
+                    <h:graphicImage style="width: 35px; height: 25px;" library="img" name="#{valorPorCotacaoBV.cotacao.conta.moeda.bandeira}.png" />
+                </p:column>
 
-                    <p:column headerText="#{l.Cotacao}" style="text-align: right; width: 15%">                                        
-                        <h:outputText value="#{valorPorCotacaoBV.cotacao.valorFormatado}" />
-                    </p:column>
+                <p:column headerText="#{l.Cotacao}" style="text-align: right; width: 15%">                                        
+                    <h:outputText value="#{valorPorCotacaoBV.cotacao.valorFormatado}" />
+                </p:column>
 
-                    <p:column headerText="#{l.Conversao}">                                        
-                        <h:outputText value="#{valorPorCotacaoBV.valorConvertidoRestanteFormatado}" />
-                    </p:column>
+                <p:column headerText="#{l.Conversao}">                                        
+                    <h:outputText value="#{valorPorCotacaoBV.valorConvertidoRestanteFormatado}" />
+                </p:column>
 
-                    <p:column headerText="#{l.Valor}">  
-                        <p:cellEditor>
-                            <f:facet name="output"><h:outputText value="#{valorPorCotacaoBV.valorAReceberFormatado}"/></f:facet>
-                            <f:facet name="input">
-                                <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
-                                               value="#{valorPorCotacaoBV.valorAReceber}" symbol="#{valorPorCotacaoBV.cotacao.conta.moeda.sigla } ">                                           
-                                    <p:ajax event="blur" listener="#{dialogoCotacaoView.calculaCotacoes}" update="valorPorCotacaoBVData" />
-                                </p:inputNumber> 
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
+                <p:column headerText="#{l.Valor}">  
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{valorPorCotacaoBV.valorAReceberFormatado}"/></f:facet>
+                        <f:facet name="input">
+                            <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                           value="#{valorPorCotacaoBV.valorAReceber}" symbol="#{valorPorCotacaoBV.cotacao.conta.moeda.sigla } ">                                           
+                                <p:ajax event="blur" listener="#{dialogoCotacaoView.calculaCotacoes}" />
+                            </p:inputNumber> 
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
 
-                    <p:column headerText="#{l.Valor_Na_Moeda_Padrao}">
-                        <p:outputLabel value="#{valorPorCotacaoBV.valorConvertidoRecebidoView}"/>
-                    </p:column>   
+                <p:column headerText="#{l.Valor_Na_Moeda_Padrao}">
+                    <p:outputLabel value="#{valorPorCotacaoBV.valorConvertidoRecebidoView}"/>
+                </p:column>   
 
-                    <p:columnGroup type="footer">
-                        <p:row>
-                            <p:column colspan="4" style="text-align:right" footerText="#{l.Total}" />
-                            <p:column id="totalConvertidoRecebido" footerText="#{dialogoCotacaoView.totalConvertidoRecebidoFormatado}"/>
-                        </p:row>                                  
-                    </p:columnGroup>
+                <p:columnGroup type="footer">
+                    <p:row>
+                        <p:column colspan="4" style="text-align:right" footerText="#{l.Total}" />
+                        <p:column id="totalConvertidoRecebido" footerText="#{dialogoCotacaoView.totalConvertidoRecebidoFormatado}"/>
+                    </p:row>                                  
+                </p:columnGroup>
 
-                </p:dataTable>   
+            </p:dataTable>   
 
-                <div class="EmptyBox5"/>
+            <div class="EmptyBox5"/>
 
-                <p:commandButton value="#{l.Confirmar}" action="#{dialogoCotacaoView.finalizar()}" update=":tempDialog"/>
+            <p:commandButton value="#{l.Confirmar}" action="#{dialogoCotacaoView.finalizar()}" update=":tempDialog"/>
 
         </div>
 

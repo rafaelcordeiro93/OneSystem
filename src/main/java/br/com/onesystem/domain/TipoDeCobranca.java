@@ -42,10 +42,10 @@ public class TipoDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_TIPODECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cobranca cobranca;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private CobrancaFixa cobrancaFixa;
 
     @ManyToOne
@@ -200,7 +200,7 @@ public class TipoDeCobranca implements Serializable {
             } else if (cobranca instanceof Cheque) {
                 return new BundleUtil().getLabel("Cheque");
             } else if (cobranca instanceof BoletoDeCartao) {
-                return new BundleUtil().getLabel("Boleto_De_Cobranca");
+                return new BundleUtil().getLabel("Boleto_De_Cartao");
             } else {
                 return new BundleUtil().getLabel("Credito");
             }

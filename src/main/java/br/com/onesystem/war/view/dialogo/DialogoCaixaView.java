@@ -45,7 +45,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     private void popularLista() {
-        caixas = new CaixaDAO().buscarCaixas().porUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porEmAberto().listaDeResultados();
+        caixas = new CaixaDAO().buscarCaixas().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
     }
 
     public void reloadPage() throws IOException {
@@ -108,7 +108,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("resizable", false);
-        opcoes.put("width", "45%");
+        opcoes.put("width", "60%");
         opcoes.put("draggable", false);
         opcoes.put("height", 300);
         opcoes.put("closable", true);

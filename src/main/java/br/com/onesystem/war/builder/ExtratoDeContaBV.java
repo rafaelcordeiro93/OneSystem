@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Conta;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -8,8 +9,9 @@ import java.util.Date;
 public class ExtratoDeContaBV implements Serializable {
 
     private Date dataInicial;
-    private Date dataFinal;    
-     private Conta conta;
+    private Date dataFinal;
+    private Conta conta;
+    private Caixa caixa;
 
     public ExtratoDeContaBV() {
         Calendar dataAtual = Calendar.getInstance();
@@ -45,6 +47,14 @@ public class ExtratoDeContaBV implements Serializable {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
     }
     
 }

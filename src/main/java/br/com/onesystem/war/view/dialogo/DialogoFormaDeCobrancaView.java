@@ -2,7 +2,9 @@ package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Conta;
@@ -21,6 +23,11 @@ import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.war.builder.BoletoDeCartaoBV;
+import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -49,8 +56,8 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     private NaturezaFinanceira recebimentoOuPagamento;
     private CreditoBV credito;
     private Titulo titulo;
-    private BoletoDeCartao boletoDeCartao;
-    private Cheque cheque;
+    private BoletoDeCartaoBV boletoDeCartao;
+    private ChequeBV cheque;
     private Date emissao;
     private ModalidadeDeCobranca modalidadeDeCobranca;
     private Model<FormaDeCobranca> model;
@@ -81,6 +88,8 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         t = null;
         e = new FormaDeCobrancaBV();
         credito = new CreditoBV();
+        cheque = new ChequeBV();
+        boletoDeCartao = new BoletoDeCartaoBV();
     }
 
     private void buscaDaSessao() throws DadoInvalidoException {
@@ -105,13 +114,13 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     titulo = (Titulo) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.TITULO;
                 } else if (model.getObject().getCobranca() instanceof BoletoDeCartao) {
-                    boletoDeCartao = (BoletoDeCartao) model.getObject().getCobranca();
+                    boletoDeCartao = new BoletoDeCartaoBV((BoletoDeCartao) model.getObject().getCobranca());
                     modalidadeDeCobranca = ModalidadeDeCobranca.CARTAO;
                 } else if (model.getObject().getCobranca() instanceof Credito) {
                     credito = new CreditoBV((Credito) model.getObject().getCobranca());
                     modalidadeDeCobranca = ModalidadeDeCobranca.CREDITO;
                 } else {
-                    cheque = (Cheque) model.getObject().getCobranca();
+                    cheque = new ChequeBV((Cheque) model.getObject().getCobranca());
                     modalidadeDeCobranca = ModalidadeDeCobranca.CHEQUE;
                 }
             }
@@ -149,30 +158,37 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         Cobranca c = e.getCobranca();
         if (c instanceof Titulo) {
             titulo = (Titulo) c;
-        } else if (c instanceof Cheque) {
-            cheque = (Cheque) c;
-        } else if (c instanceof BoletoDeCartao) {
-            boletoDeCartao = (BoletoDeCartao) c;
         }
     }
 
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        String id = event.getComponent().getId();
-        if (obj instanceof Cobranca) {
-            e.setCobranca((Cobranca) event.getObject());
-            selecionaCobrancaNoObjeto();
-        } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
-            credito.setPessoa((Pessoa) obj);
-        }
-    }
-
-    public void selecionaCotacaoConformeConta() {
-        if (conta != null) {
-            e.setCotacao(cotacaoLista.stream().filter(c -> c.getConta().getMoeda().equals(conta.getMoeda())).findFirst().get());
-        } else {
-            e.setCotacao(cotacaoPadrao);
+        try {
+            Object obj = event.getObject();
+            String id = event.getComponent().getId();
+            if (obj instanceof Cobranca) {
+                e.setCobranca((Cobranca) event.getObject());
+                selecionaCobrancaNoObjeto();
+            } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
+                credito.setPessoa((Pessoa) obj);
+            } else if (obj instanceof Pessoa && id.equals("inp-Cheque-search")) {
+                cheque.setPessoa((Pessoa) obj);
+            } else if (obj instanceof Pessoa && id.equals("inp-PessoaCartao-search")) {
+                boletoDeCartao.setPessoa((Pessoa) obj);
+            } else if (obj instanceof Banco) {
+                cheque.setBanco((Banco) obj);
+            } else if (obj instanceof Cartao) {
+                Cotacao resultado = new CotacaoDAO().buscarCotacoes().porConta(((Cartao) obj).getConta()).naMaiorEmissao(emissao).resultado();
+                if (resultado != null) {
+                    boletoDeCartao.setCartao((Cartao) obj);
+                    boletoDeCartao.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(((Cartao) obj).getConta()).naUltimaEmissao(emissao).resultado());
+                    e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(((Cartao) obj).getConta().getMoeda()).porCotacaoEmpresa().naUltimaEmissao(emissao).resultado());
+                } else {
+                    throw new EDadoInvalidoException(new BundleUtil().getMessage("Cotacao_Da_Conta_Do_Cartao_Not_Null"));
+                }
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -193,20 +209,53 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     }
 
     private void construir() throws DadoInvalidoException {
-        if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
-            credito.setValor(e.getValor());
-            credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
-            credito.setEmissao(emissao);
-            credito.setCotacao(e.getCotacao());
-            credito.setHistorico(e.getObservacao());
-            e.setCobranca(credito.construirComID());
-        } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO && recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
-            credito.setValor(e.getValor());
-            credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
-            credito.setEmissao(emissao);
-            credito.setCotacao(e.getCotacao());
-            credito.setHistorico(e.getObservacao());
-            e.setCobranca(credito.construirComID());
+        if (null != modalidadeDeCobranca) {
+            switch (modalidadeDeCobranca) {
+                case TITULO:
+                    titulo.atualizaSaldo(e.getValor());
+                    e.setOperacaoFinanceira(titulo.getOperacaoFinanceira());
+                    e.setCobranca(titulo);
+                    break;
+                case CHEQUE:
+                    cheque.setValor(e.getValor());
+                    cheque.setHistorico(e.getObservacao());
+                    cheque.setCotacao(e.getCotacao());
+                    cheque.setTipoLancamento(TipoLancamento.RECEBIDA);
+                    cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
+                    if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
+                        cheque.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                    } else {
+                        cheque.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                    }
+                    e.setCobranca(cheque.construirComID());
+                    break;
+                case CARTAO:
+                    boletoDeCartao.setValor(e.getValor());
+                    boletoDeCartao.setSituacao(SituacaoDeCartao.ABERTO);
+                    boletoDeCartao.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                    e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                    e.setCobranca(boletoDeCartao.construirComID());
+                    break;
+                case CREDITO:
+                    credito.setValor(e.getValor());
+                    credito.setEmissao(emissao);
+                    credito.setVencimento(emissao);
+                    credito.setCotacao(e.getCotacao());
+                    credito.setHistorico(e.getObservacao());
+                    if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
+                        credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                    } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
+                        credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                    }
+                    e.setCobranca(credito.construirComID());
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -250,19 +299,19 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         this.titulo = titulo;
     }
 
-    public BoletoDeCartao getBoletoDeCartao() {
+    public BoletoDeCartaoBV getBoletoDeCartao() {
         return boletoDeCartao;
     }
 
-    public void setBoletoDeCartao(BoletoDeCartao boletoDeCartao) {
+    public void setBoletoDeCartao(BoletoDeCartaoBV boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
     }
 
-    public Cheque getCheque() {
+    public ChequeBV getCheque() {
         return cheque;
     }
 
-    public void setCheque(Cheque cheque) {
+    public void setCheque(ChequeBV cheque) {
         this.cheque = cheque;
     }
 

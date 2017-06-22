@@ -45,8 +45,8 @@ public class NotaEmitida extends Nota implements Serializable {
             Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
-            Comanda comanda, Condicional condicional, Date emissao) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao);
+            Comanda comanda, Condicional condicional, Date emissao, Caixa caixa) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa);
         this.orcamento = orcamento;
         this.comanda = comanda;
         this.condicional = condicional;

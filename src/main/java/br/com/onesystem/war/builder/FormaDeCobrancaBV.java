@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.builder.FormaDeCobrancaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 
 /**
@@ -31,6 +32,7 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
     private BigDecimal desconto;
     private String observacao;
     private Cotacao cotacao;
+    private OperacaoFinanceira operacaoFinanceira;
 
     public FormaDeCobrancaBV() {
     }
@@ -46,6 +48,7 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
         this.observacao = f.getObservacao();
         this.cotacao = f.getCotacao();
         this.pagamento = f.getPagamento();
+        this.operacaoFinanceira = f.getOperacaoFinanceira();
     }
 
     public Long getId() {
@@ -128,17 +131,25 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
         this.cotacao = cotacao;
     }
 
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
+    }
+
+    public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
+    }
+    
     public FormaDeCobranca construir() throws DadoInvalidoException {
         return new FormaDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comPagamento(pagamento).construir();
+                .comOperacaoFinanceira(operacaoFinanceira).comPagamento(pagamento).construir();
     }
 
     @Override
     public FormaDeCobranca construirComID() throws DadoInvalidoException {
         return new FormaDeCobrancaBuilder().comId(id).comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comPagamento(pagamento).construir();
+                .comOperacaoFinanceira(operacaoFinanceira).comPagamento(pagamento).construir();
     }
 
 }

@@ -45,7 +45,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
             tipoDeCobranca.getCobrancaFixa().adiciona(getDesconto(tipo));
         }
-        tipoDeCobranca.getCobrancaFixa().adiciona(getValor(tipo)); 
+        tipoDeCobranca.getCobrancaFixa().adiciona(getValor(tipo));
 
     }
 
@@ -103,15 +103,15 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
     }
 
     private BaixaBuilder getCobrancaFixaBuilder() {
-        Date emissao = new Date();
+        BaixaBuilder baixaBuilder = new BaixaBuilder();
         if (tipoDeCobranca.getRecebimento() != null) {
-            emissao = tipoDeCobranca.getRecebimento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getRecebimento().getEmissao()).comCaixa(tipoDeCobranca.getRecebimento().getCaixa());
         } else {
-            emissao = tipoDeCobranca.getPagamento().getEmissao();
+            baixaBuilder.comEmissao(tipoDeCobranca.getPagamento().getEmissao()).comCaixa(tipoDeCobranca.getPagamento().getCaixa());
         }
 
-        return new BaixaBuilder().
-                comCotacao(tipoDeCobranca.getCotacao()).comEmissao(emissao).
+        return baixaBuilder.
+                comCotacao(tipoDeCobranca.getCotacao()).
                 comCobrancaFixa(tipoDeCobranca.getCobrancaFixa()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobrancaFixa().getPessoa());
     }

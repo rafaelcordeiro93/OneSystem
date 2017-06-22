@@ -14,20 +14,30 @@
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
 
             <p:panelGrid columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12 ui-md-2 ui-lg-1,ui-g-12 ui-md-10 ui-lg-4">
-                <p:outputLabel value="#{l.Cheque}: " rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}"/>
-                <a:inputTextDialog id="inp-Cheque" value="#{dialogoFormaDeCobrancaView.e.cobranca}" dialog="#{selecaoChequeRecebidoAbertoView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
-                                   var="cheque" converter="chequeConverter" itemLabel="#{cheque.pessoa.nome}" itemValue="#{cheque}" itemLabelTabVisible="true" itemLabelTab="#{cheque.pessoa.nome}" readonly="true" 
-                                   rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}" />
+
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1 ? true : dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2 ? true : false}"/>
+                <a:inputTextDialog id="inp-Cheque" value="#{dialogoFormaDeCobrancaView.cheque.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
+                                   var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}" />
+
+                <a:inputTextDialog id="inp-PessoaCartao" value="#{dialogoFormaDeCobrancaView.boletoDeCartao.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
+                                   var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}" />
+
+                <p:outputLabel value="#{l.Banco}" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}" />
+                <a:inputTextDialog id="formaBanco" dialog="#{selecaoBancoView}" mbView="#{dialogoFormaDeCobrancaView}" value="#{dialogoFormaDeCobrancaView.cheque.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}" />
 
                 <p:outputLabel value="#{l.Cartao}: " rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}"/>
-                <a:inputTextDialog id="inp-Cartao" value="#{dialogoFormaDeCobrancaView.e.cobranca}" dialog="#{selecaoBoletoDeCartaoAbertoView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
-                                   var="cartao" converter="boletoDeCartaoConverter" itemLabel="#{cartao.pessoa.nome}" itemValue="#{cartao}" itemLabelTabVisible="true" itemLabelTab="#{cartao.pessoa.nome}" readonly="true" 
+                <a:inputTextDialog id="inp-Cartao" value="#{dialogoFormaDeCobrancaView.boletoDeCartao.cartao}" dialog="#{selecaoCartaoView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
+                                   var="cartao" converter="cartaoConverter" itemLabel="#{cartao.nome}" itemValue="#{cartao}" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}" readonly="true" 
                                    rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}" />
 
                 <p:outputLabel value="#{l.Titulo}: " rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}"/>
-                <a:inputTextDialog id="inp-Titulo" value="#{dialogoFormaDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloReceberView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
+                <a:inputTextDialog id="inp-Titulo-Rec" value="#{dialogoFormaDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloReceberView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
                                    var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
-                                   rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}" />
+                                   rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoFormaDeCobrancaView.recebimentoOuPagamento.id eq 2: false}" />
+
+                <a:inputTextDialog id="inp-Titulo-Pag" value="#{dialogoFormaDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloPagarView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
+                                   var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoFormaDeCobrancaView.recebimentoOuPagamento.id eq 1: false}" />
 
                 <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 4}"/>
                 <a:inputTextDialog id="inp-Credito" value="#{dialogoFormaDeCobrancaView.credito.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoFormaDeCobrancaView}" update="tempDialog" 
@@ -43,7 +53,7 @@
                     <div class="ui-g-12 ui-md-6 ui-lg-3" style="top: -20px !important">
 
                         <p:panelGrid id="cobranca" columns="1"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12"
-                                     rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca ne null ? dialogoFormaDeCobrancaView.modalidadeDeCobranca.id ne 4 : false}" >
+                                     rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca ne null ? dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3 : false}" >
 
                             <p:outputLabel value="#{l.Codigo}: #{dialogoFormaDeCobrancaView.e.cobranca.id}"/>
                             <p:outputLabel value="#{l.Pessoa}: #{dialogoFormaDeCobrancaView.e.cobranca.pessoa.nome}"/>
@@ -64,22 +74,47 @@
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="cheque" columns="1" rendered="#{dialogoFormaDeCobrancaView.cheque ne null}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="cheque" columns="1" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 1}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
-                            <p:outputLabel value="#{l.Banco}: #{dialogoFormaDeCobrancaView.cheque.banco.id} #{dialogoFormaDeCobrancaView.cheque.banco eq null ? '' : '-'} #{dialogoFormaDeCobrancaView.cheque.banco.nome}"/>
-                            <p:outputLabel value="#{l.Agencia}: #{dialogoFormaDeCobrancaView.cheque.agencia}"/>
-                            <p:outputLabel value="#{l.Conta}: #{dialogoFormaDeCobrancaView.cheque.conta}"/>
-                            <p:outputLabel value="#{l.Cheque}: #{dialogoFormaDeCobrancaView.cheque.numeroCheque}" styleClass="Blue"/>
-                            <p:outputLabel value="#{l.Situacao}: #{dialogoFormaDeCobrancaView.cheque.tipoSituacao}"/>
-                            <p:outputLabel value="#{l.Emitente}: #{dialogoFormaDeCobrancaView.cheque.emitente}"/>
+                            <p:panelGrid id="panelDetCheEnt" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-9">
+
+                                <p:outputLabel value="#{l.Agencia}"/>
+                                <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.agencia}" styleClass="Wid100"/>        
+
+                                <p:outputLabel value="#{l.Conta}"/>
+                                <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.conta}" styleClass="Wid100" />   
+
+                                <p:outputLabel value="#{l.Cheque}"/>
+                                <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.numeroCheque}" styleClass="Wid100" />   
+
+                                <p:outputLabel value="#{l.Vencimento}"/>
+                                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.vencimento}" size="7"/>
+
+                                <p:outputLabel value="#{l.Emitente}"/>
+                                <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.emitente}" styleClass="Wid100" />      
+
+                                <p:outputLabel value="#{l.Observacao}"/>
+                                <p:inputTextarea autoResize="true" rows="2" cols="26" styleClass="PaddingPx4"
+                                                 maxlength="200" value="#{dialogoFormaDeCobrancaView.cheque.historico}">
+                                </p:inputTextarea>
+
+                            </p:panelGrid>        
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="cartao" columns="1" rendered="#{dialogoFormaDeCobrancaView.boletoDeCartao ne null}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="cartao" columns="1"  rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
-                            <p:outputLabel value="#{l.Cartao}: #{dialogoFormaDeCobrancaView.boletoDeCartao.cartao.id} #{dialogoFormaDeCobrancaView.boletoDeCartao.cartao eq null ? '' : '-'} #{dialogoFormaDeCobrancaView.boletoDeCartao.cartao.nome}"/>
-                            <p:outputLabel value="#{l.Cod_Transacao}: #{dialogoFormaDeCobrancaView.boletoDeCartao.codigoTransacao}"/>
-                            <p:outputLabel value="#{l.Situacao}: #{dialogoFormaDeCobrancaView.boletoDeCartao.situacao}"/>
+                            <p:panelGrid id="panelDetCartao" columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                         columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-7">
+
+                                <p:outputLabel value="#{l.Cod_Transacao}:"/>
+                                <p:inputText id="detCodigoTransacao" value="#{dialogoFormaDeCobrancaView.boletoDeCartao.codigoTransacao}"/>  
+
+                                <p:outputLabel value="#{l.Vencimento}:"/>
+                                <p:calendar id="vencimentoCartao" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.boletoDeCartao.vencimento}" size="7"/>
+
+                            </p:panelGrid>
 
                         </p:panelGrid>
 
@@ -105,7 +140,8 @@
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
                         <p:outputLabel value="#{l.Cotacao}: "/>
-                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" >
+                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
+                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"  >
                             <p:ajax update="tempDialog"/>
                             <f:selectItems value="#{dialogoFormaDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
                         </p:selectOneMenu>
@@ -117,16 +153,16 @@
                         <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.valor}" minValue="0" maxValue="#{dialogoFormaDeCobrancaView.titulo.saldo}"
                                        symbol="#{dialogoFormaDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
 
-                        <p:outputLabel value="#{l.Juros}:" />
-                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.juros}" minValue="0" disabled="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                        <p:outputLabel value="#{l.Juros}:" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}" />
+                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.juros}" minValue="0" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}"
                                        symbol="#{dialogoFormaDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
 
-                        <p:outputLabel value="#{l.Multa}:"  />
-                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.multa}" minValue="0" disabled="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                        <p:outputLabel value="#{l.Multa}:"  rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}" />
+                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.multa}" minValue="0" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}"
                                        symbol="#{dialogoFormaDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
 
-                        <p:outputLabel value="#{l.Desconto}:" />
-                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.desconto}" minValue="0" disabled="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                        <p:outputLabel value="#{l.Desconto}:" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}" />
+                        <p:inputNumber value="#{dialogoFormaDeCobrancaView.e.desconto}" minValue="0" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 3}"
                                        symbol="#{dialogoFormaDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
 
                         <p:outputLabel value="#{l.Observacao}:" />

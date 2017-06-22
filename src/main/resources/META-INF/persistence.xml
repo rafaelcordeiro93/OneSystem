@@ -83,10 +83,14 @@
         <class>br.com.onesystem.domain.FaturaLegada</class>
         <class>br.com.onesystem.domain.Credito</class>
         <class>br.com.onesystem.domain.Recebimento</class>
+        <class>br.com.onesystem.domain.FormaDeCobranca</class>
         <class>br.com.onesystem.domain.TipoDeCobranca</class>
         <class>br.com.onesystem.domain.CobrancaFixa</class>
         <class>br.com.onesystem.domain.Pagamento</class>
         <class>br.com.onesystem.domain.ConfiguracaoContabil</class>
+        <class>br.com.onesystem.domain.SaqueBancario</class>
+        <class>br.com.onesystem.domain.DepositoBancario</class>
+        <class>br.com.onesystem.domain.CambioEmpresa</class>
 
         <properties>
             <!--  Propriedades JDBC  -->

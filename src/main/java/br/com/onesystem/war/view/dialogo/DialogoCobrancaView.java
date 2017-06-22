@@ -67,14 +67,10 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         faturaLegada = (FaturaLegada) SessionUtil.getObject("faturaLegada", FacesContext.getCurrentInstance());
 
-        if (model != null) {//FATURA LEGADA
-            cobranca = (Cobranca) model.getObject();
-            e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(((Titulo) cobranca).getFaturaLegada().getEmissao()).listaDeResultados();
-        } else if (faturaLegada != null) {
+       if (faturaLegada != null) {
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
-            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaLegada.getMoedaPadrao()).naMaiorEmissao(faturaLegada.getEmissao()).resultado());
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaLegada.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaLegada.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.EMITIDA);
             e.setMoeda(faturaLegada.getMoedaPadrao());
             e.setFaturaLegada(faturaLegada);
@@ -88,7 +84,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
-            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(nota.getMoedaPadrao()).naMaiorEmissao(nota.getEmissao()).resultado());
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(nota.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(nota.getEmissao()).resultado());
             e.setTipoLancamento(nota.getOperacao().getTipoNota());
             e.setMoeda(nota.getMoedaPadrao());
             e.setNota(nota);

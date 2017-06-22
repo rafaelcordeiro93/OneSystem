@@ -7,11 +7,6 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="head">
-        <h:outputScript>
-            function transferencia() {
-            document.getElementById("conteudo:transferencia-btn").click();
-            }
-        </h:outputScript>
     </ui:define>
 
     <ui:define name="content">
@@ -25,9 +20,8 @@
                     <div class="EmptyBox20"/>
                     <div class="ui-fluid">
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
-
+                        <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
 
                             <p:column>
                                 <p:outputLabel value="#{l.Periodo}"/>
@@ -41,6 +35,13 @@
 
                             <p:column>
                                 <p:spacer/>
+                                <a:inputTextDialog id="extratoCaixa" placeholder="#{l.Caixa}" dialog="#{selecaoCaixaView}" mbView="#{extratoDeContaView}" value="#{extratoDeContaView.extrato.caixa}" updateButtonSearch="conteudo" var="caixa" itemLabel="#{caixa.id}" itemValue="#{caixa}" converter="caixaConverter">
+                                    <p:ajax event="itemSelect" update="conteudo" listener="#{extratoDeContaView.atualizar()}" />
+                                </a:inputTextDialog>
+                            </p:column>
+
+                            <p:column>
+                                <p:spacer/>
                                 <a:inputTextDialog id="extratoConta" placeholder="#{l.Conta}" dialog="#{selecaoContaView}" mbView="#{extratoDeContaView}" value="#{extratoDeContaView.extrato.conta}" updateButtonSearch="conteudo" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}">
                                     <p:ajax event="itemSelect" update="conteudo" listener="#{extratoDeContaView.atualizar()}" />
                                 </a:inputTextDialog>
@@ -48,9 +49,18 @@
 
                             <p:column>
                                 <p:spacer/>
-                                <h:panelGrid columns="4" style="margin-top: -1.5%">
+                                <h:panelGrid columns="5" style="margin-top: -1.5%">
                                     <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="green-btn" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
                                     <p:commandButton id="transferencia-btn" value="#{l.Transferencia}" action="#{dialogoTransferenciaView.abrirDialogo}" process="@this" update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    </p:commandButton>
+                                    <p:commandButton id="deposito-btn" value="#{l.Deposito}" action="#{dialogoDepositoBancarioView.abrirDialogo}" process="@this" update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    </p:commandButton>
+                                    <p:commandButton id="saque-btn" value="#{l.Saque}" action="#{dialogoSaqueBancarioView.abrirDialogo()}" process="@this" update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    </p:commandButton>
+                                    <p:commandButton id="cambio-btn" value="#{l.Cambio_De_Moeda}" action="#{dialogoCambioEmpresaView.abrirDialogo()}" process="@this" update="@none" style="min-width: 130px;">
                                         <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
                                     </p:commandButton>
                                 </h:panelGrid>
@@ -67,9 +77,9 @@
 
                             <p:columnGroup type="header">
                                 <p:row>
-                                    <p:column colspan="6" style="text-align:right; font-weight: normal" headerText="#{l.Saldo_Inicial}"/>
-                                    <p:column headerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoAnteriorFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.conta)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoAnterior(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.conta) ge 0 ? '#0288d1' : '#E53935'};
+                                    <p:column colspan="7" style="text-align:right; font-weight: normal" headerText="#{l.Saldo_Inicial}"/>
+                                    <p:column headerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAnteriorFormatado}"
+                                              style="color : #{extratoDeContaView.saldoAnterior ge 0 ? '#0288d1' : '#E53935'};
                                               font-weight: normal"/>
                                     <p:column colspan="1"/>
                                 </p:row>
@@ -80,6 +90,7 @@
                                     <p:column headerText="#{l.Entradas}"/>
                                     <p:column headerText="#{l.Saidas}"/>
                                     <p:column headerText="#{l.Saldo}"/>
+                                    <p:column headerText="#{l.Caixa}"/>
                                 </p:row>
                             </p:columnGroup>
 
@@ -104,24 +115,29 @@
                             </p:column>
 
                             <p:column style="text-align: center">
-                                <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : baixa.getSaldoFormatado(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta))}" 
-                                              style="color : #{baixa.getSaldo(extratoDeContaView.service.buscarSaldoAnterior(baixa.emissao, extratoDeContaView.extrato.conta)) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.buscarSaldoAnterior(baixa)}" 
+                                              style="color : #{extratoDeContaView.buscarSaldoAnterior(baixa) ge 0 ? '#0288d1' : '#E53935'}" />
+                            </p:column>
+
+                            <p:column style="text-align: center;">
+                                <h:outputText value="#{baixa.caixa.id}"/>
                             </p:column>
 
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="5" style="text-align:right" footerText="#{l.Totais}" />
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarEntradasPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta)}" 
-                                              style="color : #{extratoDeContaView.service.buscarEntradasPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta) ge 0 ? '#0288d1' : '#E53935'}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaidasPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaidasPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta) ge 0 ? '#0288d1' : '#E53935'}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoPorDataEContaFormatado(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoPorDataEConta(extratoDeContaView.extrato.dataInicial, extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradasFormatado}" 
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradas ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidasFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidas ge 0 ? '#E53935' : '#0288d1'}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldo ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column colspan="1"/>
                                 </p:row>
                                 <p:row>
-                                    <p:column colspan="6" style="text-align:right" footerText="#{l.Saldo_Atual}"/>
-                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.service.buscarSaldoFinalFormatado(extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta)}"
-                                              style="color : #{extratoDeContaView.service.buscarSaldoFinal(extratoDeContaView.extrato.dataFinal, extratoDeContaView.extrato.conta) ge 0 ? '#0288d1' : '#E53935'}"/>
+                                    <p:column colspan="7" style="text-align:right" footerText="#{l.Saldo_Atual}"/>
+                                    <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAcumuladoFormatado}"
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoAcumulado ge 0 ? '#0288d1' : '#E53935'}"/>
                                     <p:column colspan="1"/>
                                 </p:row>
                             </p:columnGroup>

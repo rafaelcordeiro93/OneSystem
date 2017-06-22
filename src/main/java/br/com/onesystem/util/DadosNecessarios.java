@@ -6,6 +6,7 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
@@ -29,6 +30,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -77,6 +80,7 @@ public class DadosNecessarios implements Serializable {
                 getDespesaDeJuros();
                 getDespesaDeMultas();
                 getDespesaDeVariacaoCambial();
+                getCaixa();
                 break;
             }
             case "/desdobramentoDeVenda.xhtml": {
@@ -93,6 +97,7 @@ public class DadosNecessarios implements Serializable {
                 getDespesaDeJuros();
                 getDespesaDeMultas();
                 getDespesaDeVariacaoCambial();
+                getCaixa();
                 break;
             }
             case "/recebimento.xhtml": {
@@ -106,6 +111,7 @@ public class DadosNecessarios implements Serializable {
                 getDespesaDeJuros();
                 getDespesaDeMultas();
                 getDespesaDeVariacaoCambial();
+                getCaixa();
                 break;
             }
             case "/pagamento.xhtml": {
@@ -119,6 +125,7 @@ public class DadosNecessarios implements Serializable {
                 getDespesaDeJuros();
                 getDespesaDeMultas();
                 getDespesaDeVariacaoCambial();
+                getCaixa();
                 break;
             }
             case "/orcamento.xhtml": {
@@ -386,4 +393,19 @@ public class DadosNecessarios implements Serializable {
         }
     }
 
+    private Caixa getCaixa() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Caixa"), "/caixa.xhtml");
+        try {
+            Object object = SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+            if (object == null) {
+                throw new NullPointerException();
+            } else {
+                return (Caixa) object;
+            }
+        } catch (DadoInvalidoException | NullPointerException ex) {
+            bv.getLista().add(b.getMessage("Caixa_Deve_Estar_Logado"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
 }

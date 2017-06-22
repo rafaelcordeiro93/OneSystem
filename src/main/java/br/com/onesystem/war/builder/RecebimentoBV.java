@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -35,7 +36,14 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     }
     
     public RecebimentoBV(Date emissao) {
+    private Caixa caixa;
+
+    public RecebimentoBV() {
+    }
+
+    public RecebimentoBV(Date emissao, Caixa caixa) {
         this.emissao = emissao;
+        this.caixa = caixa;
     }
     
     public RecebimentoBV(Recebimento r) {
@@ -46,6 +54,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.emissao = r.getEmissao();
         this.totalEmDinheiro = r.getTotalEmDinheiro();
         this.estado = r.getEstado();
+        this.caixa = r.getCaixa();
     }
     
     public Long getId() {
@@ -108,6 +117,8 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         return new RecebimentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
     
     @Override
@@ -115,6 +126,8 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         return new RecebimentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).construir();
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comCaixa(caixa)
+                .comTotalEmDinheiro(totalEmDinheiro).construir();
     }
     
 }

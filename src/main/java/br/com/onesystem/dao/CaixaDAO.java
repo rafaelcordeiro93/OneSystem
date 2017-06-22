@@ -1,6 +1,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -32,13 +33,19 @@ public class CaixaDAO {
         return this;
     }
 
-    public CaixaDAO porUsuario(String usuario) {
-        consulta += " and c.usuario.pessoa.email = :cUsuario ";
+    public CaixaDAO porEmailDeUsuario(String usuario) {
+        consulta += " and c.usuario.pessoa.email = :cEmailDeUsuario ";
+        parametros.put("cEmailDeUsuario", usuario);
+        return this;
+    }
+
+    public CaixaDAO porUsuario(Usuario usuario) {
+        consulta += " and c.usuario = :cUsuario ";
         parametros.put("cUsuario", usuario);
         return this;
     }
 
-    public CaixaDAO porEmAberto() {
+    public CaixaDAO emAberto() {
         consulta += " and c.fechamento = null ";
         return this;
     }

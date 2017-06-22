@@ -8,6 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Comanda;
@@ -161,23 +162,28 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     }
 
     public void limparJanela() {
-        notaEmitida = new NotaEmitidaBV();
-        notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
-        notaEmitida.setCotacao(cotacao);
-        comandaSelecionada = null;
-        creditoBV = new CreditoBV();
-        itemEmitido = new ItemDeNotaBV();
-        boletoDeCartao = new BoletoDeCartaoBV();
-        cobrancas = new ArrayList<>();
-        notaEmitidaSelecionada = null;
-        cheque = new ChequeBV();
-        inicializaCotacoes();
-        cobrancaBV = new CobrancaBV();
-        orcamento = null;
-        editarItensEParcelas = false;
-        limparChequeEntrada();
-        limparChequeParcelas();
-        limparItemDeNota();
+        try {
+            notaEmitida = new NotaEmitidaBV();
+            notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
+            notaEmitida.setCotacao(cotacao);
+            comandaSelecionada = null;
+            creditoBV = new CreditoBV();
+            itemEmitido = new ItemDeNotaBV();
+            boletoDeCartao = new BoletoDeCartaoBV();
+            cobrancas = new ArrayList<>();
+            notaEmitidaSelecionada = null;
+            cheque = new ChequeBV();
+            inicializaCotacoes();
+            cobrancaBV = new CobrancaBV();
+            orcamento = null;
+            editarItensEParcelas = false;
+            limparChequeEntrada();
+            limparChequeParcelas();
+            limparItemDeNota();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     private void inicializaCotacoes() {
@@ -225,6 +231,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
+                if (boletoDeCartao.getCartao() != null) {
+                    boletoDeCartao.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(boletoDeCartao.getCartao().getConta()).naUltimaEmissao(notaEmitida.getEmissao()).resultado());
+                }
                 nota.adiciona(boletoDeCartao.construir());
             }
 
@@ -252,9 +261,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Gera as cobranca de acordo a sua modalidade.
             for (CobrancaBV p : cobrancas) {
-                p.setPessoa(notaEmitida.getPessoa());
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
+                        if (p.getCartao() != null) {
+                            Cotacao resultado = new CotacaoDAO().buscarCotacoes().porConta(p.getCartao().getConta()).naUltimaEmissao(notaEmitida.getEmissao()).resultado();
+                            if (resultado != null) {
+                                p.setCotacao(resultado);
+                            } else {
+                                throw new EDadoInvalidoException(new BundleUtil().getMessage("Cotacao_Da_Conta_Do_Cartao_Not_Null"));
+                            }
+                        }
                         nota.adiciona(p.construirBoletoDeCartao());
                         break;
                     case CHEQUE:
@@ -359,7 +375,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private void calculaTotaisFormaDeRecebimento() {
         if (notaEmitida.getFormaDeRecebimento() != null) {
             FormaDeRecebimento formaDeRecebimento = notaEmitida.getFormaDeRecebimento();
-            if (formaDeRecebimento.getPorcentagemDeEntrada() != null && formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
+            if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
                     && notaEmitida.getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
                 BigDecimal cem = new BigDecimal(100);
                 BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
@@ -475,7 +491,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
-                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).construir());
+                                .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

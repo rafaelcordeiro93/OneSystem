@@ -5,6 +5,8 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
@@ -17,6 +19,7 @@ import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -40,7 +43,11 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private ItemOrcadoBV itemOrcado;
     private ItemOrcado itemOrcadoSelecionado;
+    private Configuracao configuracao;
     private Cotacao cotacao;
+
+    @Inject
+    private ConfiguracaoService configuracaoService;
 
     @Inject
     private CotacaoService service;
@@ -54,7 +61,8 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void iniciarConfiguracoes() {
         try {
-            cotacao = service.getCotacaoPadrao(new Date());
+            configuracao = configuracaoService.buscar();
+            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -245,6 +253,22 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     public void setItemOrcadoSelecionado(ItemOrcado itemOrcadoSelecionado) {
         this.itemOrcadoSelecionado = itemOrcadoSelecionado;
+    }
+
+    public Configuracao getConfiguracao() {
+        return configuracao;
+    }
+
+    public void setConfiguracao(Configuracao configuracao) {
+        this.configuracao = configuracao;
+    }
+
+    public ConfiguracaoService getConfiguracaoService() {
+        return configuracaoService;
+    }
+
+    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
+        this.configuracaoService = configuracaoService;
     }
 
     public CotacaoService getService() {

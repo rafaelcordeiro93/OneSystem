@@ -13,6 +13,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -86,8 +87,10 @@ public class ItemDeNota implements Serializable {
 
     public void geraEstoque() throws DadoInvalidoException {
         estoques = new ArrayList<>();
+        List<OperacaoDeEstoque> listaDeOperacoes = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(nota.getOperacao());
         for (QuantidadeDeItemPorDeposito q : listaDeQuantidade) {
-            for (OperacaoDeEstoque operacaoDeEstoque : nota.getOperacao().getOperacaoDeEstoque()) {
+
+            for (OperacaoDeEstoque operacaoDeEstoque : listaDeOperacoes) {
                 Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade())
                         .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(this).construir();
                 // Adiciona no estoque

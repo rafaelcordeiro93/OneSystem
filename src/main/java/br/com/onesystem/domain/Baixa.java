@@ -108,6 +108,18 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private FormaDeCobranca formaDeCobranca;
 
+    @ManyToOne
+    private Caixa caixa;
+
+    @ManyToOne
+    private SaqueBancario saqueBancario;
+
+    @ManyToOne
+    private DepositoBancario depositoBancario;
+
+    @ManyToOne
+    private CambioEmpresa cambioEmpresa;
+
     public Baixa() {
     }
 
@@ -115,7 +127,8 @@ public class Baixa implements Serializable, Movimento {
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
             Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
-            TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
+            TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca,
+            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, CambioEmpresa cambioEmpresa) throws DadoInvalidoException {
         this.id = id;
         this.estado = EstadoDeBaixa.EM_DEFINICAO;
         this.valor = valor;
@@ -134,6 +147,10 @@ public class Baixa implements Serializable, Movimento {
         this.valorPorCotacao = valorPorCotacao;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formaDeCobranca = formaDeCobranca;
+        this.caixa = caixa;
+        this.depositoBancario = depositoBancario;
+        this.saqueBancario = saqueBancario;
+        this.cambioEmpresa = cambioEmpresa;
         ehValido();
     }
 
@@ -182,17 +199,6 @@ public class Baixa implements Serializable, Movimento {
 
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
-    }
-
-    public String getSaldoFormatado(BigDecimal saldoAtual) {
-        switch (naturezaFinanceira) {
-            case ENTRADA:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.add(this.getValor()));
-            case SAIDA:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual.subtract(this.getValor()));
-            default:
-                return MoedaFormatter.format(cotacao.getConta().getMoeda(), saldoAtual);
-        }
     }
 
     public BigDecimal getSaldo(BigDecimal saldoAtual) {
@@ -363,12 +369,24 @@ public class Baixa implements Serializable, Movimento {
         return pessoa;
     }
 
+    public SaqueBancario getSaqueBancario() {
+        return saqueBancario;
+    }
+
+    public DepositoBancario getDepositoBancario() {
+        return depositoBancario;
+    }
+
     public Cotacao getCotacao() {
         return cotacao;
     }
 
     public TipoReceita getReceita() {
         return receita;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
     }
 
     public TipoDeCobranca getTipoDeCobranca() {

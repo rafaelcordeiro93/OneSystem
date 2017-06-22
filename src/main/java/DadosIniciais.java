@@ -4,7 +4,10 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoContabil;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.ContaDeEstoque;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.GrupoDePrivilegio;
@@ -22,6 +25,7 @@ import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.builder.CidadeBuilder;
+import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
@@ -34,6 +38,7 @@ import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class DadosIniciais {
@@ -595,18 +600,51 @@ public class DadosIniciais {
         daoMoeda.adiciona(dolar);
         daoMoeda.adiciona(guarani);
 
+        //Conta de Estoque
+        // ---------------------------------------------------------------------
+        AdicionaDAO<ContaDeEstoque> contaDeEstoqueDao = new AdicionaDAO<ContaDeEstoque>();
+        ContaDeEstoque contaDaEmpresa = new ContaDeEstoqueBuilder().comNome("Estoque da empresa").construir();
+        ContaDeEstoque contaEstoqueDaEmpresa = new ContaDeEstoqueBuilder().comNome("Estoque da empresa em posse da empresa").construir();
+        ContaDeEstoque contaDaEmpresaEmPosseDeTerceiros = new ContaDeEstoqueBuilder().comNome("Estoque da empresa em posse de terceiros").construir();
+        ContaDeEstoque contaDeTerceiros = new ContaDeEstoqueBuilder().comNome("Estoque de terceiros em posse da empresa").construir();
+
+        contaDeEstoqueDao.adiciona(contaDaEmpresa);
+        contaDeEstoqueDao.adiciona(contaEstoqueDaEmpresa);
+        contaDeEstoqueDao.adiciona(contaDaEmpresaEmPosseDeTerceiros);
+        contaDeEstoqueDao.adiciona(contaDeTerceiros);
+
+        // Deposito
+        // ---------------------------------------------------------------------
+        Deposito deposito = new Deposito(null, "Depósito Exemplo");
+        new AdicionaDAO<>().adiciona(deposito);
+
         //Configuracao
+        // ---------------------------------------------------------------------
         Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO);
-        new AdicionaDAO<Configuracao>().adiciona(configuracao);
+        new AdicionaDAO<>().adiciona(configuracao);
+
+        //ConfiguracaoEstoque
+        // ---------------------------------------------------------------------
+        ConfiguracaoEstoque configuracaoEstoque = new ConfiguracaoEstoque(null, contaDaEmpresa, null, deposito);
+        new AdicionaDAO<>().adiciona(configuracaoEstoque);
 
         //ConfiguracaoContabil
+        // ---------------------------------------------------------------------
         ConfiguracaoContabil configuracaoContabil = new ConfiguracaoContabil(null, jurosRecebidos, multasRecebidas, descontosRecebidos, receitaCambial, jurosPagos, multasPagas, descontosConcedidos, despesaCambial);
-        new AdicionaDAO<ConfiguracaoContabil>().adiciona(configuracaoContabil);
+        new AdicionaDAO<>().adiciona(configuracaoContabil);
 
         // Conta
         // ---------------------------------------------------------------------
-        Conta conta = new Conta(null, "C/C 1222", banco, real);
-        new AdicionaDAO<Conta>().adiciona(conta);
+        AdicionaDAO<Conta> contaDao = new AdicionaDAO<Conta>();
+        Conta contaReal = new Conta(null, "C/C 1222", banco, real);
+        Conta contaDolar = new Conta(null, "C/C 1224", banco, dolar);
+        contaDao.adiciona(contaReal);
+        contaDao.adiciona(contaDolar);
+
+        //Cotacao
+        // ---------------------------------------------------------------------
+        Cotacao cotacao = new Cotacao(null, BigDecimal.ZERO, new Date(), contaDolar);
+        new AdicionaDAO<>().adiciona(cotacao);
 
         // Unidade De Medida Item
         // ---------------------------------------------------------------------
@@ -622,11 +660,6 @@ public class DadosIniciais {
         // ---------------------------------------------------------------------
         GrupoFiscal grupoFiscal = new GrupoFiscal(null, "IVA 10%", iva);
         new AdicionaDAO<GrupoFiscal>().adiciona(grupoFiscal);
-
-        // Deposito
-        // ---------------------------------------------------------------------
-        Deposito deposito = new Deposito(null, "Depósito Exemplo");
-        new AdicionaDAO<Deposito>().adiciona(deposito);
 
         // Item
         Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,

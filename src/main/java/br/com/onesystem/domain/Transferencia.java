@@ -71,10 +71,11 @@ public class Transferencia implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraBaixaDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        this.adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
-        this.adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
+        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
     }
 
+    /* Adiciona Baixa e as tarifas.*/
     public void adiciona(Baixa baixa) {
         try {
             BaixaBuilder b = new BaixaBuilder(baixa);

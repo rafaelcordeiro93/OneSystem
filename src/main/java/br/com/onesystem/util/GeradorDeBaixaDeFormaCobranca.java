@@ -6,9 +6,6 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Titulo;
@@ -17,7 +14,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  *
@@ -44,21 +40,26 @@ public class GeradorDeBaixaDeFormaCobranca {
             formaDeCobranca.getCobranca().adiciona(getDesconto(formaDeCobranca.getTipoDocumento()));
         }
         formaDeCobranca.getCobranca().adiciona(getValor(formaDeCobranca.getTipoDocumento()));
-
-        if (formaDeCobranca.getCobranca() instanceof Titulo) {
-            Titulo titulo = (Titulo) formaDeCobranca.getCobranca();
-            titulo.atualizaSaldo(formaDeCobranca.getValor());
-        }
     }
 
     private Baixa getValor(String forma) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
-        builder.comValor(formaDeCobranca.getValor()).comOperacaoFinanceira(formaDeCobranca.getCobranca().getOperacaoFinanceira());
+        builder.comValor(formaDeCobranca.getValor()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
         if (formaDeCobranca.getRecebimento() == null) {
-            builder.comReceita(formaDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo()).comHistorico(msg.getMessage("Recebimento_de") + " " + forma + getHistorico());
+            if (formaDeCobranca.getCobranca().getNota() != null) {
+                builder.comReceita(formaDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
+            }
+            builder.comHistorico(msg.getMessage("Recebimento_de") + " " + forma + getHistorico());
         } else {
-            builder.comDespesa(formaDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo()).comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico());
+            if (formaDeCobranca.getCobranca().getNota() != null) {
+                builder.comDespesa(formaDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
+            }
+            if (forma.equals("Cheque")) {
+                builder.comHistorico(msg.getMessage("Abatimento_de") + " " + forma + getHistorico());
+            } else {
+                builder.comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico());
+            }
         }
 
         return builder.construir();
@@ -67,7 +68,7 @@ public class GeradorDeBaixaDeFormaCobranca {
     private Baixa getDesconto(String forma) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(formaDeCobranca.getDesconto())
-                .comOperacaoFinanceira(formaDeCobranca.getCobranca().getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
+                .comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
 
         if (formaDeCobranca.getRecebimento() == null) {
             builder.comDespesa(conf.getDespesaDeDescontosConcedidos()).comHistorico(msg.getMessage("Desconto_concedido_sobre_recebimento_de") + " " + forma + getHistorico());
@@ -80,7 +81,7 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     private Baixa getMulta(String forma) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
-        builder.comValor(formaDeCobranca.getMulta()).comOperacaoFinanceira(formaDeCobranca.getCobranca().getOperacaoFinanceira());
+        builder.comValor(formaDeCobranca.getMulta()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
         if (formaDeCobranca.getRecebimento() == null) {
             builder.comReceita(conf.getReceitaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_recebimento_de") + " " + forma + getHistorico());
@@ -93,7 +94,7 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     private Baixa getJuros(String forma) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
-        builder.comValor(formaDeCobranca.getJuros()).comOperacaoFinanceira(formaDeCobranca.getCobranca().getOperacaoFinanceira());
+        builder.comValor(formaDeCobranca.getJuros()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
         if (formaDeCobranca.getRecebimento() == null) {
             builder.comReceita(conf.getReceitaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_recebimento_de") + " " + forma + getHistorico());
@@ -105,21 +106,22 @@ public class GeradorDeBaixaDeFormaCobranca {
     }
 
     private BaixaBuilder getCobrancaBuilder() {
-        Date emissao = new Date();
+        BaixaBuilder baixaBuilder = new BaixaBuilder();
         if (formaDeCobranca.getRecebimento() != null) {
-            emissao = formaDeCobranca.getRecebimento().getEmissao();
+            baixaBuilder.comEmissao(formaDeCobranca.getRecebimento().getEmissao()).comCaixa(formaDeCobranca.getRecebimento().getCaixa());
         } else {
-            emissao = formaDeCobranca.getPagamento().getEmissao();
+            baixaBuilder.comEmissao(formaDeCobranca.getPagamento().getEmissao()).comCaixa(formaDeCobranca.getPagamento().getCaixa());
         }
 
-        return new BaixaBuilder().
-                comCotacao(formaDeCobranca.getCotacao()).comEmissao(emissao).
+        return baixaBuilder.
+                comCotacao(formaDeCobranca.getCotacao()).
                 comCobranca(formaDeCobranca.getCobranca()).comFormaDeCobranca(formaDeCobranca).
                 comPessoa(formaDeCobranca.getCobranca().getPessoa());
     }
 
     private String getHistorico() {
-        return " " + formaDeCobranca.getCobranca().getId() + " " + msg.getMessage("de") + " " + formaDeCobranca.getCobranca().getPessoa().getNome();
+        String str = formaDeCobranca.getCobranca().getId() == null ? "" : formaDeCobranca.getCobranca().getId().toString() + " ";
+        return " " + str + msg.getMessage("de") + " " + formaDeCobranca.getCobranca().getPessoa().getNome();
     }
 
 }
