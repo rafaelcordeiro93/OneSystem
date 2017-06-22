@@ -10,7 +10,9 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.TipoOperacao;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,25 @@ public class NotaEmitidaDAO {
     public NotaEmitidaDAO porId(Long id) {
         consulta += " and n.id = :pId ";
         parametros.put("pId", id);
+        return this;
+    }
+
+    public NotaEmitidaDAO porEmissaoEntre(Date dataInicial, Date dataFinal) {
+        consulta += " and n.emissao between :pDataInicial and :pDataFinal ";
+        parametros.put("pDataInicial", dataInicial);
+        parametros.put("pDataFinal", dataFinal);
+        return this;
+    }
+
+    public NotaEmitidaDAO porEstado(EstadoDeNota estado) {
+        consulta += " and n.estado = :pEstado ";
+        parametros.put("pEstado", estado);
+        return this;
+    }
+    
+     public NotaEmitidaDAO porNaoCancelado() {
+        consulta += " and n.estado <> :pEstadoNaoCancelado ";
+        parametros.put("pEstadoNaoCancelado", EstadoDeNota.CANCELADO);
         return this;
     }
 
