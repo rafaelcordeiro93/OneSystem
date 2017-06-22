@@ -149,7 +149,9 @@ public class DadosIniciais {
 
         //Modulo Financeiro
         Janela receberValores = new Janela(null, "Receber Valores", "/recebimento.xhtml", fin);
+        Janela conRecebimento = new Janela(null, "Consulta Receber Valores", "/consultaRecebimento.xhtml", fin);
         Janela pagarValores = new Janela(null, "Pagar Valores", "/pagamento.xhtml", fin);
+        Janela conPagamentos = new Janela(null, "Consulta Pagar Valores", "/consultaPagamento.xhtml", fin);
         Janela extratoConta = new Janela(null, "Extrato Conta", "/extratoConta.xhtml", fin);
         Janela cotacoes = new Janela(null, "Cotacao", "/cotacao.xhtml", fin);
         Janela baixa = new Janela(null, "Baixa", "/baixa.xhtml", fin);
@@ -171,7 +173,9 @@ public class DadosIniciais {
         Janela faturaLegada = new Janela(null, "Fatura Legada", "/faturaLegada.xhtml", fin);
 
         daoJanela.adiciona(receberValores);
+        daoJanela.adiciona(conRecebimento);
         daoJanela.adiciona(pagarValores);
+        daoJanela.adiciona(conPagamentos);
         daoJanela.adiciona(extratoConta);
         daoJanela.adiciona(cotacoes);
         daoJanela.adiciona(baixa);
@@ -275,7 +279,9 @@ public class DadosIniciais {
                 new Privilegio(null, grupo, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jgrupoFiscal, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, receberValores, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, conRecebimento, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, pagarValores, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, conPagamentos, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, extratoConta, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cotacoes, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, baixa, true, true, true, true, grupoDePrivilegio),
