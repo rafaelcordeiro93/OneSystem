@@ -106,7 +106,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         modalidadeDeCobrancaFixa = (ModalidadeDeCobrancaFixa) SessionUtil.getObject("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         if (modalidadeDeCobranca != null || modalidadeDeCobrancaFixa != null) {
             emissao = (Date) SessionUtil.getObject("emissao", FacesContext.getCurrentInstance());
-            model = (Model<TipoDeCobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
+            model = (Model<TipoDeCobranca>) SessionUtil.getObject("modelTipo", FacesContext.getCurrentInstance());
             if (model != null) {
                 t = (TipoDeCobranca) model.getObject();
                 e = new TipoDeCobrancaBV(model.getObject());

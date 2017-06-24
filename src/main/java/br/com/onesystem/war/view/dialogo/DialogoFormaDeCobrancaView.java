@@ -97,7 +97,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         modalidadeDeCobranca = (ModalidadeDeCobranca) SessionUtil.getObject("modalidadeDeCobranca", FacesContext.getCurrentInstance());
         if (modalidadeDeCobranca != null) {
             emissao = (Date) SessionUtil.getObject("emissao", FacesContext.getCurrentInstance());
-            model = (Model<FormaDeCobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
+            model = (Model<FormaDeCobranca>) SessionUtil.getObject("modelForma", FacesContext.getCurrentInstance());
             if (model != null) {
                 t = (FormaDeCobranca) model.getObject();
                 e = new FormaDeCobrancaBV(model.getObject());

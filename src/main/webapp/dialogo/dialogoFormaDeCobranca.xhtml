@@ -140,8 +140,8 @@
 
                     <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
                         <p:outputLabel value="#{l.Cotacao}: "/>
-                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
-                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"  >
+                        <p:inputText value="#{dialogoFormaDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
+                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id ne 2}"  >
                             <p:ajax update="tempDialog"/>
                             <f:selectItems value="#{dialogoFormaDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
                         </p:selectOneMenu>

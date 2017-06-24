@@ -161,16 +161,16 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void adicionaTipoNaSessao(SelectEvent event) throws DadoInvalidoException {
         tipoSelecionado = (Model) event.getObject();
         if (tipoSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
-            SessionUtil.put(tipoSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelTipo", FacesContext.getCurrentInstance());
+            SessionUtil.put(tipoSelecionado, "modelTipo", FacesContext.getCurrentInstance());
         }
     }
 
     public void adicionaFormaNaSessao(SelectEvent event) throws DadoInvalidoException {
         formaSelecionado = (Model) event.getObject();
         if (formaSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
-            SessionUtil.put(formaSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelForma", FacesContext.getCurrentInstance());
+            SessionUtil.put(formaSelecionado, "modelForma", FacesContext.getCurrentInstance());
         }
     }
 
