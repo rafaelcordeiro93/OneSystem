@@ -164,6 +164,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void limparJanela() {
         try {
             notaEmitida = new NotaEmitidaBV();
+            notaEmitida.setEmissao(new Date());
             notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaEmitida.setCotacao(cotacao);
@@ -198,7 +199,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Operações para criação da entidade ----------------------   
     public void validaAFaturar() {
         try {
-            notaEmitida.setEmissao(new Date());
             nota = notaEmitida.construir();
             if (!notaEmitida.getOperacao().getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 // Se valor a faturar maior que zero deve exibir diálogo de confirmação

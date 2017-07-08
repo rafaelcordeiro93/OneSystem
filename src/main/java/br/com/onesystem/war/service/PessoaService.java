@@ -10,5 +10,9 @@ public class PessoaService implements Serializable {
     public List<Pessoa> buscarPessoas() {
         return new ArmazemDeRegistros<Pessoa>(Pessoa.class).listaTodosOsRegistros();
     }
+    
+    public void teste(){
+        System.out.println("Opa");
+    }
 
 }

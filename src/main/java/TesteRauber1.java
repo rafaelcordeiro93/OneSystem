@@ -43,34 +43,29 @@ public class TesteRauber1 {
         // Unidade De Medida Item
         // ---------------------------------------------------------------------
         UnidadeMedidaItem unidade = new ArmazemDeRegistros<UnidadeMedidaItem>(UnidadeMedidaItem.class).find(new Long(1));
-      
 
         // IVA
         // ---------------------------------------------------------------------
         IVA iva = new ArmazemDeRegistros<IVA>(IVA.class).find(new Long(1));
-       
 
         // Grupo Fiscal
         // ---------------------------------------------------------------------
         GrupoFiscal grupoFiscal = new ArmazemDeRegistros<GrupoFiscal>(GrupoFiscal.class).find(new Long(1));
-       
 
         // Deposito
         // ---------------------------------------------------------------------
         Deposito deposito = new ArmazemDeRegistros<Deposito>(Deposito.class).find(new Long(1));
-        
 
         // Item
         AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
-        for(int i = 5236; i<= 500000 ; i++){
-        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
-        adicionaDAO.adiciona(item);
+        for (int i = 14770; i <= 500000; i++) {
+            Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
+                    grupoFiscal, unidade, null, null, null, null, null, null);
+            adicionaDAO.adiciona(item);
+            System.out.println("Item: " + i);
         }
         System.out.println("acabou!!!");
-        
-        
-        
+
 //        
 //        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naUltimaEmissao().porCotacaoBancaria().listaDeResultados();
 //        System.out.println(new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).getConsulta());
