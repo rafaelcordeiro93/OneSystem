@@ -38,7 +38,7 @@ public class DashboardVendaView implements Serializable {
 
     private void criarGraficoDeVendas() {
         try {
-            
+
             Date ultimoDiaDoAno = Date.from(LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date primeiroDiaDoAnoAnterior = Date.from(LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
@@ -86,9 +86,6 @@ public class DashboardVendaView implements Serializable {
         BarChartModel model = new BarChartModel();
         LocalDate pAno = LocalDate.now().minusYears(1);
         LocalDate uAno = LocalDate.now();
-
-        String pAnoAbreviado = String.valueOf(pAno.getYear()).substring(2, 4);
-        String uAnoAbreviado = String.valueOf(uAno.getYear()).substring(2, 4);
 
         ChartSeries pAnoSerie = new ChartSeries();
         pAnoSerie.setLabel(String.valueOf(pAno.getYear()));

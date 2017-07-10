@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import java.util.List;

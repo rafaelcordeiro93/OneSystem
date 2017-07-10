@@ -115,7 +115,7 @@ public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
     public NotaEmitida resultado() throws DadoInvalidoException {
         try {
             NotaEmitida resultado = new ArmazemDeRegistros<NotaEmitida>(NotaEmitida.class)
-                    .resultadoUnicoDaConsulta(where, parametros);
+                    .resultadoUnicoDaConsulta(getConsulta(), parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {

@@ -157,9 +157,9 @@ public class RelatorioDeContaAReceberView implements Serializable {
     private List<Titulo> buscarTitulosAbertos() throws EDadoInvalidoException {
         List<Titulo> lista;
         if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
-            lista = tituloDAO.buscarTitulos().wAReceber().eAbertas().ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
+            lista = tituloDAO.aReceber().eAbertas().ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
-            lista = tituloDAO.buscarTitulos().wAReceber().eAbertas().ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
+            lista = tituloDAO.aReceber().eAbertas().ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_existem_dados"));
         }

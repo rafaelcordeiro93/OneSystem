@@ -3,6 +3,7 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,9 +31,9 @@ public class DespesaProvisionadaDAO {
     }
 
     public DespesaProvisionadaDAO wAPagar() {
-        consulta += "where 0 = (select count(*) from Baixa b where b.despesaProvisionada = dp.id and b.cancelada = :pBNaoCancelada) "
+        consulta += "where 0 = (select count(*) from Baixa b where b.cobrancaFixa = dp.id and b.estado = :pBNaoCancelada) "
                 + "and 0 = (select count(*) from TransferenciaDespesaProvisionada t where t.origem = dp.id) ";
-        parametros.put("pBNaoCancelada", false);
+        parametros.put("pBNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
 

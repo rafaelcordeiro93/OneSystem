@@ -18,7 +18,7 @@ public class DespesaProvisionadaService implements Serializable {
 
     public List<DespesaProvisionada> buscarDespesaProvisionadas() {
         return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().gerarDados();
-    }
+    } 
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagarDivisaoLucro() {
         return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().wAPagar().eComDivisaoDeLucro().gerarDados();

@@ -92,7 +92,7 @@
                             <p:column headerText="#{l.Valor}" sortBy="#{despesaProvisionadaBV.valor}" >
                                 <p:cellEditor>
                                     <f:facet name="output"><h:outputText value="#{despesaProvisionadaView.e.cotacao.conta.moeda.sigla} #{despesaProvisionadaBV.valor}" /></f:facet>
-                                    <f:facet name="input"><p:inputText value=" #{despesaProvisionadaBV.valor}"/></f:facet>
+                                    <f:facet name="input"><p:inputText value="#{despesaProvisionadaBV.valor}"/></f:facet>
                                 </p:cellEditor>
                             </p:column>
                         </p:dataTable>

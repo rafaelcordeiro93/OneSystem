@@ -17,7 +17,7 @@ public class NotaEmitidaService implements Serializable {
     public List<NotaEmitida> buscarNotasEmitidas() {
         return new ArmazemDeRegistros<>(NotaEmitida.class).listaTodosOsRegistros();
     }
-
+ 
     public List<NotaEmitida> buscarVendasDoPeriodo(Date dataInicial, Date dataFinal) throws DadoInvalidoException {
         return new NotaEmitidaDAO().porEmissaoEntre(dataInicial, dataFinal).porNaoCancelado().porTipoLancamento(TipoLancamento.EMITIDA).porOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
                 .porTiposDeOperacao(Arrays.asList(TipoOperacao.VENDA, TipoOperacao.VENDA_ENTREGA_FUTURA, TipoOperacao.VENDA_IMOBILIZADO)).ordenaPorEmissao().listaDeResultados();

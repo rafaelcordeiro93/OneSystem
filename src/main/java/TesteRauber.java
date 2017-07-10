@@ -1,16 +1,13 @@
 
-import br.com.onesystem.dao.NotaEmitidaDAO;
-import br.com.onesystem.domain.NotaEmitida;
-import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.dao.TituloDAO;
+import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.valueobjects.TipoOperacao;
-import br.com.onesystem.war.service.PessoaService;
+import br.com.onesystem.war.service.DespesaProvisionadaService;
+import br.com.onesystem.war.service.TituloService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -27,17 +24,21 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
-        Date primeiroDiaDoAnoAnterior = Date.from(LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date agora = new Date();
+        Date hoje = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date proximosSeisMeses = Date.from(LocalDate.now().plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        NotaEmitidaDAO dao = new NotaEmitidaDAO();
-        List<NotaEmitida> notas = dao.porEmissaoEntre(primeiroDiaDoAnoAnterior, agora).porNaoCancelado().porTipoLancamento(TipoLancamento.EMITIDA).porOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
-                .porTiposDeOperacao(Arrays.asList(TipoOperacao.VENDA, TipoOperacao.VENDA_ENTREGA_FUTURA, TipoOperacao.VENDA_IMOBILIZADO)).ordenaPorEmissao().listaDeResultados();
-
-        for (NotaEmitida n : notas) {
-            LocalDate data = n.getEmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            data.getMonth();
-        }
+        System.out.println("Hoje: " + hoje);
+        System.out.println("Proximos 6 meses: " + proximosSeisMeses);
+        System.out.println("Consulta: " + new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).getConsulta());
+        
+        List<Titulo> titulosAPagar = new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).listaDeResultados();
+        List<DespesaProvisionada> despesasAPagar = new DespesaProvisionadaService().buscarDespesaProvisionadasAPagarComVencimentoEntre(hoje, proximosSeisMeses);
+ 
+        System.out.println("Titulos: " + titulosAPagar.size());
+        titulosAPagar.forEach(System.out::println);
+        despesasAPagar.forEach(System.out::println);
+        
+        System.out.println("Consulta finalizada com sucesso!");
 
     }
 
