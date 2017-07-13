@@ -44,7 +44,6 @@ import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
-import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.NotaRecebidaBV;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
@@ -52,6 +51,7 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -127,6 +127,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             notaRecebida = new NotaRecebidaBV();
             notaRecebida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            notaRecebida.setUsuario(new UsuarioLogadoUtil().getUsuario());
             notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaRecebida.setCotacao(cotacao);
             creditoBV = new CreditoBV();

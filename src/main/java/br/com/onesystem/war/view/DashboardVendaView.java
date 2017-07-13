@@ -12,7 +12,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import org.primefaces.model.chart.Axis;
 import org.primefaces.model.chart.AxisType;
@@ -22,9 +22,10 @@ import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.BarChartModel;
 
 @Named
-@ViewScoped
+@RequestScoped
 public class DashboardVendaView implements Serializable {
 
+    private BundleUtil msg = new BundleUtil();
     private BigDecimal maiorValorTotal = BigDecimal.ZERO;
     private List<NotaEmitida> notasEmitidas;
     private BarChartModel vendas = new BarChartModel();
@@ -67,17 +68,25 @@ public class DashboardVendaView implements Serializable {
 
     private void criarModeloDeBarra() {
         Axis yAxis = vendas.getAxis(AxisType.Y);
+        Axis xAxis = vendas.getAxis(AxisType.X);
 
         vendas = inicializaModeloDeBarra();
         vendas.setExtender("skinBar");
-        vendas.setTitle("Vendas");
+        vendas.setTitle(msg.getLabel("Vendas"));
         vendas.setAnimate(true);
         vendas.setLegendPosition("ne");
         vendas.setShowPointLabels(true);
-        vendas.getAxes().put(AxisType.X, new CategoryAxis("Meses"));
+        vendas.getAxes().put(AxisType.X, new CategoryAxis(msg.getLabel("Meses")));
+        vendas.getAxes().get(AxisType.X).setTickAngle(-50);
 
+        xAxis = vendas.getAxis(AxisType.Y);
+        xAxis.setLabel(msg.getLabel("Meses"));
+        xAxis.setMin(0);
+        xAxis.setTickAngle(-50);
+        xAxis.setMax(maiorValorTotal.add(new BigDecimal(5000)));
+        
         yAxis = vendas.getAxis(AxisType.Y);
-        yAxis.setLabel("Total");
+        yAxis.setLabel(msg.getLabel("Total"));
         yAxis.setMin(0);
         yAxis.setMax(maiorValorTotal.add(new BigDecimal(5000)));
     }

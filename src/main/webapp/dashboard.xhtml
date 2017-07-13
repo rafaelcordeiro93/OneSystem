@@ -13,61 +13,61 @@
         <script type="text/javascript">
             //<![CDATA[
             function skinBar() {
-            this.cfg.shadow = false;
-            this.cfg.title = '';
-            this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
-            this.cfg.grid = {
-            background: '#ffffff',
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
+                this.cfg.grid = {
+                    background: '#ffffff',
                     borderColor: '#ffffff',
                     gridLineColor: '#F5F5F5',
                     shadow: false
-            };
-            this.cfg.axesDefaults = {
-            borderWidth: 0.1,
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
                     borderColor: 'bdbdbd',
                     rendererOptions: {
-                    textColor: '#666F77'
+                        textColor: '#666F77'
                     }
-            };
-            this.cfg.seriesDefaults = {
-            shadow: false,
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
                     lineWidth: 1,
                     renderer: $.jqplot.BarRenderer,
                     markerOptions: {
-                    shadow: false,
-                            size: 3,
-                            style: 'circle'
+                        shadow: false,
+                        size: 3,
+                        style: 'circle'
                     }
-            }
+                }
             }
 
             function skinLine() {
-            this.cfg.shadow = false;
-            this.cfg.title = '';
-            this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
-            this.cfg.grid = {
-            background: '#ffffff',
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
+                this.cfg.grid = {
+                    background: '#ffffff',
                     borderColor: '#ffffff',
                     gridLineColor: '#F5F5F5',
                     shadow: false
-            };
-            this.cfg.axesDefaults = {
-            borderWidth: 0.1,
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
                     borderColor: 'bdbdbd',
                     rendererOptions: {
-                    textColor: '#666F77'
+                        textColor: '#666F77'
                     }
-            };
-            this.cfg.seriesDefaults = {
-            shadow: false,
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
                     lineWidth: 3,
                     renderer: $.jqplot.LineRenderer,
                     markerOptions: {
-                    shadow: false,
-                            size: 10,
-                            style: 'circle'
+                        shadow: false,
+                        size: 10,
+                        style: 'circle'
                     }
-            }
+                }
             }
 
             //]]>  
@@ -95,13 +95,37 @@
                     </h:form>
                 </div>
             </div>
-            
+
             <div class="ui-g-12 ui-md-6">
                 <div class="card">
                     <h:form>
 
-                        <p:panel header="Gráfico de Contas a Pagar"  class="chart-panel">
-                            <p:chart type="bar" model="#{dashboardContasView.contas}" responsive="true" />
+                        <p:panel header="Gráfico de Contas a Pagar"  class="chart-panel" id="chartContasAPagar">
+                            <p:chart type="bar" model="#{dashboardContasView.contasAPagar}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico de Contas a Receber"  class="chart-panel">
+                            <p:chart type="bar" model="#{dashboardContasView.contasAReceber}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico Comparativo de Contas"  class="chart-panel">
+                            <p:chart type="line" model="#{dashboardContasView.comparativoDeContas}" responsive="true" />
                         </p:panel>
 
                     </h:form>

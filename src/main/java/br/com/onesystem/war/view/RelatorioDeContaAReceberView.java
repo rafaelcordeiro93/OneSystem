@@ -141,11 +141,11 @@ public class RelatorioDeContaAReceberView implements Serializable {
     private List<ReceitaProvisionada> buscaReceitasProvisionadasAReceber() throws EDadoInvalidoException {
         List<ReceitaProvisionada> lista;
         if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
-            lista = receitaProvisionadaDao.buscarReceitasProvisionadas().wAReceber()
+            lista = receitaProvisionadaDao.aReceber()
                     .ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal())
                     .ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
-            lista = receitaProvisionadaDao.buscarReceitasProvisionadas().wAReceber()
+            lista = receitaProvisionadaDao.aReceber()
                     .ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal())
                     .ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else {

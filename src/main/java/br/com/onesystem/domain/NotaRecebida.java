@@ -31,8 +31,8 @@ public class NotaRecebida extends Nota implements Serializable {
             Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao,
-            Caixa caixa) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa);
+            Caixa caixa, Usuario usuario) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
         if (id == null) {
             adicionaNoEstoque();
         }
