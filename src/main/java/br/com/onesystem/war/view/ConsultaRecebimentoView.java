@@ -37,6 +37,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     private Model formaSelecionado;
     private ModelList<TipoDeCobranca> tiposDeCobranca;
     private ModelList<FormaDeCobranca> formasDeCobranca;
+    private ModelList<TipoDeCobranca> tiposDeCobrancaDeletados;
+    private ModelList<FormaDeCobranca> formasDeCobrancaDeletados;
     private TipoDeCobrancaBV tipoDeCobrancaBV;
     private FormaDeCobrancaBV formaDeCobrancaBV;
 
@@ -56,6 +58,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             tiposDeCobranca.getList().forEach(tp -> recebimento.atualiza(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.atualiza(f));
             recebimento.ehValido();
+            tiposDeCobrancaDeletados.getList().forEach(tp -> recebimento.remove(tp));
+            formasDeCobrancaDeletados.getList().forEach(f -> recebimento.remove(f));
             updateNoBanco(recebimento);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -73,8 +77,6 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
 //            die.print();
 //        }
 //    }
-    
-    
 //    public void receber() {
 //        try {
 //            e.setTotalEmDinheiro(getTotalEmDinheiro());
@@ -89,7 +91,6 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
 //            die.print();
 //        }
 //    }
-
     @Override
     public void limparJanela() {
         try {
@@ -97,6 +98,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
+            tiposDeCobrancaDeletados = new ModelList<>();
+            formasDeCobrancaDeletados = new ModelList<>();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -112,7 +115,6 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             Object obj = event.getObject();
             if (obj instanceof Recebimento) {
                 e = new RecebimentoBV((Recebimento) obj);
-                System.out.println("tipos  " + e.getTiposDeCobranca() + "  formas  " + e.getFormasDeCobranca());
                 tiposDeCobranca = new ModelList<>(e.getTiposDeCobranca());
                 formasDeCobranca = new ModelList<>(e.getFormasDeCobranca());
             } else if (obj instanceof TipoDeCobranca) {
@@ -197,29 +199,31 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     public void adicionaTipoNaSessao(SelectEvent event) throws DadoInvalidoException {
         tipoSelecionado = (Model) event.getObject();
         if (tipoSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
-            SessionUtil.put(tipoSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelTipo", FacesContext.getCurrentInstance());
+            SessionUtil.put(tipoSelecionado, "modelTipo", FacesContext.getCurrentInstance());
         }
     }
 
     public void adicionaFormaNaSessao(SelectEvent event) throws DadoInvalidoException {
         formaSelecionado = (Model) event.getObject();
         if (formaSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
-            SessionUtil.put(formaSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelForma", FacesContext.getCurrentInstance());
+            SessionUtil.put(formaSelecionado, "modelForma", FacesContext.getCurrentInstance());
         }
     }
 
     public void removeTipo() throws FDadoInvalidoException {
         if (tipoSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelTipo", FacesContext.getCurrentInstance());
+            tiposDeCobrancaDeletados.add((TipoDeCobranca) tipoSelecionado.getObject());
             tiposDeCobranca.remove(tipoSelecionado);
         }
     }
 
     public void removeForma() throws FDadoInvalidoException {
         if (formaSelecionado != null) {
-            SessionUtil.remove("model", FacesContext.getCurrentInstance());
+            SessionUtil.remove("modelForma", FacesContext.getCurrentInstance());
+            formasDeCobrancaDeletados.add((FormaDeCobranca) formaSelecionado.getObject());
             formasDeCobranca.remove(formaSelecionado);
         }
     }
@@ -241,7 +245,11 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     }
 
     public String getTotalTipoNaCotacaoPadraoFormatado() {
-        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
+        try {
+            return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao()) == null ? "" : MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
+        } catch (NullPointerException npe) {
+            return "";
+        }
     }
 
     public BigDecimal getTotalFormaNaCotacaoPadrao() {
@@ -261,7 +269,11 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     }
 
     public String getTotalFormaNaCotacaoPadraoFormatado() {
-        return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalFormaNaCotacaoPadrao());
+        try {
+            return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalFormaNaCotacaoPadrao());
+        } catch (NullPointerException npe) {
+            return "";
+        }
     }
 
     public BigDecimal getValorEmConta() {

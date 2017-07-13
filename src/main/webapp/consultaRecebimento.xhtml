@@ -67,7 +67,7 @@
 
                         <div class="ui-g-12 ui-md-12 ui-lg-10">
                             <p:panelGrid columns="7" layout="grid" styleClass="ui-fluid Wid100 ui-panelgrid-blank form-group form-elements" >
-                                <p:commandButton value="#{l.Alterar}"  action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo}" process="@this" update="@none" >
+                                <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo}" process="@this" update="@none" >
                                     <p:ajax event="dialogReturn" listener="#{consultaRecebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
                                 </p:commandButton>
                                 <p:commandButton value="#{l.Remover}" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{consultaRecebimentoView.removeTipo}" styleClass="orange-btn" />
@@ -127,7 +127,7 @@
 
                     <div class="ui-g">
                         <div class="ui-g-12 ui-md-12 ui-lg-10">
-                            <p:commandButton value="#{l.Alterar}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo()}" process="@this" update="@none" >
+                            <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo()}" process="@this" update="@none" >
                                 <p:ajax event="dialogReturn" listener="#{consultaRecebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
                             </p:commandButton>
                            
