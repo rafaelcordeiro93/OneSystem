@@ -93,9 +93,13 @@
 
                         <div class="ui-fluid">
 
+                            <h:panelGrid columns="1" rendered="false">
+                                <p:outputLabel value="#{l.Emissao}" />
+                                <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3"/>
+                            </h:panelGrid>
 
-                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
-                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+                            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>

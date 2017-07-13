@@ -1,27 +1,10 @@
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.EstoqueDAO;
-import br.com.onesystem.domain.ConfiguracaoEstoque;
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.IVA;
-import br.com.onesystem.domain.Estoque;
-import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.domain.UnidadeMedidaItem;
-import br.com.onesystem.domain.builder.ConfiguracaoContabilBuilder;
-import br.com.onesystem.dao.NotaEmitidaDAO;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.dao.TituloDAO;
+import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoItem;
-import br.com.onesystem.war.builder.ConfiguracaoContabilBV;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
-import java.math.BigDecimal;
-import br.com.onesystem.valueobjects.EstadoDeNota;
+import br.com.onesystem.war.service.DespesaProvisionadaService;
+import br.com.onesystem.war.service.TituloService;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
@@ -41,11 +24,22 @@ public class TesteRauber {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
+        Date hoje = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date proximosSeisMeses = Date.from(LocalDate.now().plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-
+        System.out.println("Hoje: " + hoje);
+        System.out.println("Proximos 6 meses: " + proximosSeisMeses);
+        System.out.println("Consulta: " + new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).getConsulta());
         
-        Date ultimoDiaDoAno = Date.from(LocalDate.now().with(TemporalAdjusters.lastDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date primeiroDiaDoAnoAnterior = Date.from(LocalDate.now().minusYears(1).with(TemporalAdjusters.firstDayOfYear()).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        List<Titulo> titulosAPagar = new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).listaDeResultados();
+        List<DespesaProvisionada> despesasAPagar = new DespesaProvisionadaService().buscarDespesaProvisionadasAPagarComVencimentoEntre(hoje, proximosSeisMeses);
+ 
+        System.out.println("Titulos: " + titulosAPagar.size());
+        titulosAPagar.forEach(System.out::println);
+        despesasAPagar.forEach(System.out::println);
+        
+        System.out.println("Consulta finalizada com sucesso!");
+
     }
 
 }

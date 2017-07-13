@@ -155,9 +155,9 @@ public class RelatorioDeContaAPagarView implements Serializable {
     private List<Titulo> buscaTitulosAPagar() throws EDadoInvalidoException {
         List<Titulo> lista;
         if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
-            lista = tituloDAO.buscarTitulos().wAPagar().eAbertas().ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
+            lista = tituloDAO.aPagar().eAbertas().ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
-            lista = tituloDAO.buscarTitulos().wAPagar().eAbertas().ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
+            lista = tituloDAO.aPagar().eAbertas().ePorVencimento(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorPessoa(relatorio.getPessoa()).orderByMoeda().listaDeResultados();
         } else {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_existem_dados"));
         }

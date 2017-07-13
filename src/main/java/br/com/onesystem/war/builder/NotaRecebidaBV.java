@@ -4,6 +4,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Credito;
+import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
@@ -56,6 +57,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Integer numeroParcelas;
     private EstadoDeNota estado;
     private Caixa caixa;
+    private Usuario usuario;
 
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
@@ -217,7 +219,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     public void setCaixa(Caixa caixa) {
         this.caixa = caixa;
     }
-    
+
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
     }
@@ -366,12 +368,21 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.porcentagemDesconto = porcentagemDesconto;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
-                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
+                .comUsuairo(usuario).construir();
     }
 
     public NotaRecebida construirComID() throws DadoInvalidoException {
@@ -379,7 +390,8 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
-                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).construir();
+                .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
+                .comUsuairo(usuario).construir();
     }
 
 }

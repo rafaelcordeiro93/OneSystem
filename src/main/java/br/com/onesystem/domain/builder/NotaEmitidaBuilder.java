@@ -21,6 +21,7 @@ import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -60,6 +61,7 @@ public class NotaEmitidaBuilder {
     private Condicional condicional;
     private Date emissao;
     private Caixa caixa;
+    private Usuario usuario;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -200,8 +202,13 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
+    public NotaEmitidaBuilder comUsuairo(Usuario usuario) {
+        this.usuario = usuario;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa, usuario);
     }
 
 }

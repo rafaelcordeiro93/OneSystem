@@ -35,7 +35,36 @@
                     renderer: $.jqplot.BarRenderer,
                     markerOptions: {
                         shadow: false,
-                        size: 7,
+                        size: 3,
+                        style: 'circle'
+                    }
+                }
+            }
+
+            function skinLine() {
+                this.cfg.shadow = false;
+                this.cfg.title = '';
+                this.cfg.seriesColors = ['#68bafc', '#f97bb2'];
+                this.cfg.grid = {
+                    background: '#ffffff',
+                    borderColor: '#ffffff',
+                    gridLineColor: '#F5F5F5',
+                    shadow: false
+                };
+                this.cfg.axesDefaults = {
+                    borderWidth: 0.1,
+                    borderColor: 'bdbdbd',
+                    rendererOptions: {
+                        textColor: '#666F77'
+                    }
+                };
+                this.cfg.seriesDefaults = {
+                    shadow: false,
+                    lineWidth: 3,
+                    renderer: $.jqplot.LineRenderer,
+                    markerOptions: {
+                        shadow: false,
+                        size: 10,
                         style: 'circle'
                     }
                 }
@@ -55,6 +84,54 @@
     <ui:define name="content">
 
         <div class="ui-g dashboard">          
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico de Vendas" class="chart-panel">
+                            <p:chart type="bar" model="#{dashboardVendaView.vendas}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico de Contas a Pagar"  class="chart-panel" id="chartContasAPagar">
+                            <p:chart type="bar" model="#{dashboardContasView.contasAPagar}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico de Contas a Receber"  class="chart-panel">
+                            <p:chart type="bar" model="#{dashboardContasView.contasAReceber}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
+                        <p:panel header="Gráfico Comparativo de Contas"  class="chart-panel">
+                            <p:chart type="line" model="#{dashboardContasView.comparativoDeContas}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
             <div class="ui-g-12 ui-md-6 ui-lg-3">
                 <div class="ui-g card overview-box" style="padding: 16px !important;height: auto !important">
                     <span class="overview-box-title">Vendas na Empresa</span>
@@ -314,104 +391,104 @@
                         </li>
                     </ul>
                 </p:panel>
-                
-                  <div class="ui-g-12 ui-md-6 ui-lg-6 ui-fluid contact-form">
-                <p:panel header="Contact Us" style="min-height:440px">
-                    <div class="ui-g">
-                        <div class="ui-g-12">
-                            <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" autoWidth="false">
-                                <f:selectItem itemLabel="Select One" itemValue="" />
-                                <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
-                                <f:selectItem itemLabel="PS4" itemValue="PS4" />
-                                <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
-                            </p:selectOneMenu>
+
+                <div class="ui-g-12 ui-md-6 ui-lg-6 ui-fluid contact-form">
+                    <p:panel header="Contact Us" style="min-height:440px">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <p:selectOneMenu id="console" value="#{selectOneMenuView.console}" autoWidth="false">
+                                    <f:selectItem itemLabel="Select One" itemValue="" />
+                                    <f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+                                    <f:selectItem itemLabel="PS4" itemValue="PS4" />
+                                    <f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText placeholder="Name"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText placeholder="Email"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText placeholder="Age"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputText placeholder="Location"/>
+                            </div>
+                            <div class="ui-g-12">
+                                <p:inputTextarea placeholder="Message" cols="5"/>
+                            </div>
                         </div>
-                        <div class="ui-g-12">
-                            <p:inputText placeholder="Name"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText placeholder="Email"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText placeholder="Age"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputText placeholder="Location"/>
-                        </div>
-                        <div class="ui-g-12">
-                            <p:inputTextarea placeholder="Message" cols="5"/>
-                        </div>
-                    </div>
-                    <p:commandButton type="button" value="Send" icon="fa fa-paper-plane-o"></p:commandButton>
-                </p:panel>
-            </div>
-            <div class="ui-g-12 ui-lg-6 contacts">
-                <p:panel header="Contacts" style="min-height:440px">
-                    <ul>
-                        <li class="clearfix">
-                            <p:graphicImage name="images/profile-image.png" library="atlantis-layout" width="45"/>
-                            <div class="contact-info">
-                                <span class="name">Jane White (me)</span>
-                                <span class="location">jane@pf-atlantis.com</span>
-                            </div>
-                            <div class="contact-actions">
-                                <span class="connection-status online">online</span>
-                                <i class="fa fa-paper-plane-o"></i>
-                                <i class="fa fa-phone"></i>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <p:graphicImage name="images/avatar1.png" library="atlantis-layout" width="45"/>
-                            <div class="contact-info">
-                                <span class="name">Joshua Williams</span>
-                                <span class="location">joshua@pf-atlantis.com</span>
-                            </div>
-                            <div class="contact-actions">
-                                <span class="connection-status online">online</span>
-                                <i class="fa fa-paper-plane-o"></i>
-                                <i class="fa fa-phone"></i>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" width="45"/>
-                            <div class="contact-info">
-                                <span class="name">Emily Clark</span>
-                                <span class="location">emily@pf-atlantis.com</span>
-                            </div>
-                            <div class="contact-actions">
-                                <span class="connection-status offline">offline</span>
-                                <i class="fa fa-paper-plane-o"></i>
-                                <i class="fa fa-phone"></i>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <p:graphicImage name="images/avatar3.png" library="atlantis-layout" width="45"/>
-                            <div class="contact-info">
-                                <span class="name">Tim Johnson</span>
-                                <span class="location">tim@pf-atlantis.com</span>
-                            </div>                                
-                            <div class="contact-actions">
-                                <span class="connection-status online">online</span>
-                                <i class="fa fa-paper-plane-o"></i>
-                                <i class="fa fa-phone"></i>
-                            </div>
-                        </li>
-                        <li class="clearfix">
-                            <p:graphicImage name="images/avatar4.png" library="atlantis-layout" width="45"/>
-                            <div class="contact-info">
-                                <span class="name">David Stark</span>
-                                <span class="location">kelly@pf-atlantis.com</span>
-                            </div>
-                            <div class="contact-actions">
-                                <span class="connection-status offline">offline</span>
-                                <i class="fa fa-paper-plane-o"></i>
-                                <i class="fa fa-phone"></i>
-                            </div>
-                        </li>
-                    </ul>
-                </p:panel>
-            </div>
-                
+                        <p:commandButton type="button" value="Send" icon="fa fa-paper-plane-o"></p:commandButton>
+                    </p:panel>
+                </div>
+                <div class="ui-g-12 ui-lg-6 contacts">
+                    <p:panel header="Contacts" style="min-height:440px">
+                        <ul>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/profile-image.png" library="atlantis-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Jane White (me)</span>
+                                    <span class="location">jane@pf-atlantis.com</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <span class="connection-status online">online</span>
+                                    <i class="fa fa-paper-plane-o"></i>
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/avatar1.png" library="atlantis-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Joshua Williams</span>
+                                    <span class="location">joshua@pf-atlantis.com</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <span class="connection-status online">online</span>
+                                    <i class="fa fa-paper-plane-o"></i>
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/avatar2.png" library="atlantis-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Emily Clark</span>
+                                    <span class="location">emily@pf-atlantis.com</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <span class="connection-status offline">offline</span>
+                                    <i class="fa fa-paper-plane-o"></i>
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/avatar3.png" library="atlantis-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">Tim Johnson</span>
+                                    <span class="location">tim@pf-atlantis.com</span>
+                                </div>                                
+                                <div class="contact-actions">
+                                    <span class="connection-status online">online</span>
+                                    <i class="fa fa-paper-plane-o"></i>
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </li>
+                            <li class="clearfix">
+                                <p:graphicImage name="images/avatar4.png" library="atlantis-layout" width="45"/>
+                                <div class="contact-info">
+                                    <span class="name">David Stark</span>
+                                    <span class="location">kelly@pf-atlantis.com</span>
+                                </div>
+                                <div class="contact-actions">
+                                    <span class="connection-status offline">offline</span>
+                                    <i class="fa fa-paper-plane-o"></i>
+                                    <i class="fa fa-phone"></i>
+                                </div>
+                            </li>
+                        </ul>
+                    </p:panel>
+                </div>
+
             </div>
 
             <div class="ui-g-12 ui-md-4">

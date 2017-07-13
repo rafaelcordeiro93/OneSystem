@@ -5,24 +5,37 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 public class TituloService implements Serializable {
 
-    public List<Titulo> buscarTitulos(){
-        return new TituloDAO().buscarTitulos().listaDeResultados();
+    public List<Titulo> buscarTitulos() {
+        return new TituloDAO().listaDeResultados();
     }
-    
+
     public List<Titulo> buscarTitulosAReceber() {
-        return new TituloDAO().buscarTitulos().wAReceber().eAbertas().listaDeResultados();
+        return new TituloDAO().aReceber().eAbertas().listaDeResultados();
     }
-    
+
     public List<Titulo> buscarTitulosAPagar() {
-        return new TituloDAO().buscarTitulos().wAPagar().eAbertas().listaDeResultados();
+        return new TituloDAO().aPagar().eAbertas().listaDeResultados();
+    }
+
+    public List<Titulo> buscarTitulosComVencimentoEntre(Date dataInicial, Date dataFinal) {
+        return new TituloDAO().eAbertas().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
+    }
+
+    public List<Titulo> buscarTitulosAPagarComVencimentoEntre(Date dataInicial, Date dataFinal) {
+        return new TituloDAO().aPagar().eAbertas().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
+    }
+
+    public List<Titulo> buscarTitulosAReceberComVencimentoEntre(Date dataInicial, Date dataFinal) {
+        return new TituloDAO().aReceber().eAbertas().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
     }
 
     public List<SomaSaldoDeTituloPorMoedaReportTemplate> buscarSaldoDeTitulosAPagarDeRecepcaoPara(Pessoa pessoa) {
-        return new TituloDAO().buscarSaldoPorMoedaDeTitulos().wAPagar().eComRecepcao().ePorPessoa(pessoa).agrupadoPorMoeda().resultadoSomaPorMoeda();
+        return new TituloDAO().buscarSaldoPorMoedaDeTitulos().aPagar().eComRecepcao().ePorPessoa(pessoa).agrupadoPorMoeda().resultadoSomaPorMoeda();
     }
 
 }

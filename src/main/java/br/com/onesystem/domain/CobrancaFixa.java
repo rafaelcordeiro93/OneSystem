@@ -76,7 +76,7 @@ public abstract class CobrancaFixa implements Serializable {
     @Column(length = 250, nullable = true)
     private String historico;
 
-    @OneToMany(mappedBy = "movimentoFixo", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "cobrancaFixa", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
     @NotNull(message = "{referencia_not_null}")

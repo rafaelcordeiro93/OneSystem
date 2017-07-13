@@ -112,7 +112,7 @@ public class Cambio implements Serializable {
     }
 
     public void baixarContasAPagar() throws DadoInvalidoException {
-        List<Titulo> contasAPagar = new TituloDAO().buscarTitulos().wAPagar().eAbertas().ePorPessoa(contrato.getPessoa()).listaDeResultados();
+        List<Titulo> contasAPagar = new TituloDAO().aPagar().eAbertas().ePorPessoa(contrato.getPessoa()).listaDeResultados();
         BigDecimal resto = contrato.getValorCalculado();
 
         for (Titulo tituloAPagar : contasAPagar) {

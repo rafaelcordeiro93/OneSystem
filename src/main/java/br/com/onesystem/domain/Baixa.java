@@ -73,7 +73,7 @@ public class Baixa implements Serializable, Movimento {
     private Cobranca parcela;
 
     @ManyToOne
-    private CobrancaFixa movimentoFixo;
+    private CobrancaFixa cobrancaFixa;
 
     @ManyToOne
     private TipoDespesa despesa;
@@ -143,7 +143,7 @@ public class Baixa implements Serializable, Movimento {
         this.transferencia = transferencia;
         this.recepcao = recepcao;
         this.parcela = cobranca;
-        this.movimentoFixo = movimentoFixo;
+        this.cobrancaFixa = movimentoFixo;
         this.valorPorCotacao = valorPorCotacao;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formaDeCobranca = formaDeCobranca;
@@ -193,8 +193,8 @@ public class Baixa implements Serializable, Movimento {
         return historico;
     }
 
-    public CobrancaFixa getMovimentoFixo() {
-        return movimentoFixo;
+    public CobrancaFixa getCobrancaFixa() {
+        return cobrancaFixa;
     }
 
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
@@ -215,13 +215,13 @@ public class Baixa implements Serializable, Movimento {
         BundleUtil msg = new BundleUtil();
         if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
 
-            if (cambio != null && (movimentoFixo != null && !(movimentoFixo instanceof DespesaProvisionada))) {
+            if (cambio != null && (cobrancaFixa != null && !(cobrancaFixa instanceof DespesaProvisionada))) {
                 return geraMovimentacaoSaidaCambio(msg);
             } else if (recepcao != null) {
                 return geraMovimentacaoSaidaRecepcao(msg);
             } else if (transferencia != null && despesa == null) {
                 return geraMovimentacaoSaidaTransferencia(msg);
-            } else if (movimentoFixo != null && !(movimentoFixo instanceof DespesaProvisionada)) {
+            } else if (cobrancaFixa != null && !(cobrancaFixa instanceof DespesaProvisionada)) {
                 geraMovimentacaoDespesaProvisionada(msg);
             } else {
                 return geraMovimentacaoDespesa(msg);
@@ -233,7 +233,7 @@ public class Baixa implements Serializable, Movimento {
                 return geraMovimentacaoEntradaTransferencia(msg);
 //            } else if (parcela instanceof DespesaProvisionada) {
 //                return geraMovimentacaoEntradaDespesaProvisionada(msg);
-            } else if (movimentoFixo != null && !(movimentoFixo instanceof ReceitaProvisionada)) {
+            } else if (cobrancaFixa != null && !(cobrancaFixa instanceof ReceitaProvisionada)) {
                 return geraMovimentacaoReceitaProvisionada(msg);
             } else {
                 return geraMovimentacaoReceita(msg);
@@ -276,7 +276,7 @@ public class Baixa implements Serializable, Movimento {
         if (historico != null) {
             historicoFormatado = historico.length() > 25 ? historico.substring(0, 24) : historico;
         }
-        return ((DespesaProvisionada) movimentoFixo).getTipoDespesa().getNome() + " - " + historicoFormatado;
+        return ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome() + " - " + historicoFormatado;
     }
 
     private String geraMovimentacaoDespesa(BundleUtil msg) {
@@ -295,7 +295,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     private String geraMovimentacaoEntradaDespesaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Entrada_Lucro") + " de câmbio " + ((DespesaProvisionada) movimentoFixo).getCambio().getId();
+        return msg.getMessage("Entrada_Lucro") + " de câmbio " + ((DespesaProvisionada) cobrancaFixa).getCambio().getId();
     }
 
     private String geraMovimentacaoSaidaRecepcao(BundleUtil msg) {
@@ -304,19 +304,19 @@ public class Baixa implements Serializable, Movimento {
     }
 
     private String geraMovimentacaoReceitaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Recebimento_Receita_Provisionada") + " de " + ((ReceitaProvisionada) movimentoFixo).getPessoa().getNome();
+        return msg.getMessage("Recebimento_Receita_Provisionada") + " de " + ((ReceitaProvisionada) cobrancaFixa).getPessoa().getNome();
     }
 
     private String geraMovimentacaoSaidaCambio(BundleUtil msg) {
         if (parcela instanceof Titulo) {
-            List<Titulo> titulos = new TituloDAO().buscarTitulos().wAPagar().ePorCambio(cambio).listaDeResultados();
+            List<Titulo> titulos = new TituloDAO().aPagar().ePorCambio(cambio).listaDeResultados();
             for (Titulo t : titulos) {
                 if (((Titulo) parcela).getValor().equals(t.getValor())) {
                     return msg.getMessage("Pagamento_Comissao") + " " + cambio.getId();
                 }
             }
-        } else if (movimentoFixo instanceof DespesaProvisionada) {
-            return msg.getMessage("Pagamento_Despesa_Provisionada") + " de " + ((DespesaProvisionada) movimentoFixo).getTipoDespesa().getNome()
+        } else if (cobrancaFixa instanceof DespesaProvisionada) {
+            return msg.getMessage("Pagamento_Despesa_Provisionada") + " de " + ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome()
                     + " para " + pessoa.getNome();
         }
         String str = despesa != null ? despesa.getNome() : historico;
@@ -456,10 +456,10 @@ public class Baixa implements Serializable, Movimento {
             return receita.getNome();
         } else if (parcela instanceof Titulo) {
             return TipoOperacao.TITULO.getNome();
-        } else if (movimentoFixo instanceof DespesaProvisionada) {
-            return ((DespesaProvisionada) movimentoFixo).getTipoDespesa().getNome();
-        } else if (movimentoFixo instanceof ReceitaProvisionada) {
-            return ((ReceitaProvisionada) movimentoFixo).getPessoa().getNome();
+        } else if (cobrancaFixa instanceof DespesaProvisionada) {
+            return ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome();
+        } else if (cobrancaFixa instanceof ReceitaProvisionada) {
+            return ((ReceitaProvisionada) cobrancaFixa).getPessoa().getNome();
         } else {
             return TipoOperacao.AVULSO.getNome();
         }

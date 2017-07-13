@@ -19,6 +19,7 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -55,6 +56,7 @@ public class NotaRecebidaBuilder {
     private Nota notaDeOrigem;
     private Date emissao;
     private Caixa caixa;
+    private Usuario usuario;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -180,8 +182,13 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
+    public NotaRecebidaBuilder comUsuairo(Usuario usuario) {
+        this.usuario = usuario;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
     }
 
 }

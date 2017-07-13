@@ -83,7 +83,7 @@ public class BaixaBuilder {
         this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
         this.transferencia = baixa.getTransferencia();
         this.recepcao = baixa.getRecepcao();
-        this.cobrancaFixa = baixa.getMovimentoFixo();
+        this.cobrancaFixa = baixa.getCobrancaFixa();
         this.valorPorCotacao = baixa.getValorPorCotacao();
         this.tipoDeCobranca = baixa.getTipoDeCobranca();
         this.caixa = baixa.getCaixa();

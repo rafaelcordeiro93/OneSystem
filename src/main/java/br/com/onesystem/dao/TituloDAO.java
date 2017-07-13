@@ -3,6 +3,8 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -11,59 +13,55 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.NoResultException;
 
-public class TituloDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class TituloDAO extends GenericDAO<Titulo> {
 
     public TituloDAO() {
         limpar();
     }
 
-    private void limpar() {
-        consulta = "";
+    protected void limpar() {
+        query = "select t from Titulo t ";
+        join = " ";
+        where = " where t.id != 0 ";
+        order = " ";
+        group = " ";
         msg = new BundleUtil();
         parametros = new HashMap<String, Object>();
     }
 
-    public TituloDAO buscarTitulos() {
-        consulta += "select t from Titulo t ";
-        return this;
-    }
-
     public TituloDAO buscarSaldoPorMoedaDeTitulos() {
-        consulta += "select new br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate(t.moeda, sum(t.saldo)) from Titulo t ";
+        query = "select new br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate(t.moeda, sum(t.saldo)) from Titulo t ";
         return this;
     }
 
-    public TituloDAO wAPagar() {
-        consulta += "where t.operacaoFinanceira = :pOperacaoFinanceira ";
+    public TituloDAO aPagar() {
+        where += "and t.operacaoFinanceira = :pOperacaoFinanceira ";
         parametros.put("pOperacaoFinanceira", OperacaoFinanceira.SAIDA);
         return this;
     }
 
-    public TituloDAO wAReceber() {
-        consulta += "where t.operacaoFinanceira = :pOperacaoFinanceira ";
+    public TituloDAO aReceber() {
+        where += "and t.operacaoFinanceira = :pOperacaoFinanceira ";
         parametros.put("pOperacaoFinanceira", OperacaoFinanceira.ENTRADA);
         return this;
     }
 
     public TituloDAO eAbertas() {
-        consulta += "and t.saldo > :pSaldo ";
+        where += "and t.saldo > :pSaldo ";
         parametros.put("pSaldo", BigDecimal.ZERO);
         return this;
     }
 
     public TituloDAO ePagasOuRecebidas() {
-        consulta += "and t.saldo < t.valor ";
+        where += "and t.saldo < t.valor ";
         return this;
     }
 
     public TituloDAO ePorPessoa(Pessoa pessoa) {
         if (pessoa != null) {
-            consulta += "and t.pessoa = :pPessoa ";
+            where += "and t.pessoa = :pPessoa ";
             parametros.put("pPessoa", pessoa);
         }
         return this;
@@ -71,7 +69,7 @@ public class TituloDAO {
 
     public TituloDAO ePorCambio(Cambio cambio) {
         if (cambio != null) {
-            consulta += "and t.cambio = :pCambio ";
+            where += "and t.cambio = :pCambio ";
             parametros.put("pCambio", cambio);
         }
         return this;
@@ -81,47 +79,59 @@ public class TituloDAO {
         if (dataInicial != null || dataFinal != null) {
             parametros.put("pDataInicial", dataInicial);
             parametros.put("pDataFinal", dataFinal);
-            consulta += "and t.emissao between :pDataInicial and :pDataFinal ";
+            where += "and t.emissao between :pDataInicial and :pDataFinal ";
         }
         return this;
     }
-
+ 
     public TituloDAO ePorVencimento(Date dataInicial, Date dataFinal) {
         if (dataInicial == null || dataFinal == dataFinal) {
             parametros.put("pDataInicial", dataInicial);
             parametros.put("pDataFinal", dataFinal);
-            consulta += "and (t.vencimento between :pDataInicial and :pDataFinal or t.vencimento is null) ";
+            where += "and ((t.vencimento between :pDataInicial and :pDataFinal) or t.vencimento is null) ";
         }
         return this;
     }
 
     public TituloDAO eComRecepcao() {
-        consulta += "and t.recepcao is not null ";
+        where += "and t.recepcao is not null ";
         return this;
     }
 
     public TituloDAO agrupadoPorMoeda() {
-        consulta += "group by t.moeda ";
+        group += "group by t.moeda ";
         return this;
     }
-    
-    public TituloDAO orderByMoeda(){
-        consulta += "order by t.moeda asc ";
+
+    public TituloDAO orderByMoeda() {
+        order += "order by t.moeda asc ";
         return this;
     }
 
     public List<Titulo> listaDeResultados() {
         List<Titulo> resultado = new ArmazemDeRegistros<Titulo>(Titulo.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
+                .listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
     }
 
     public List<SomaSaldoDeTituloPorMoedaReportTemplate> resultadoSomaPorMoeda() {
         List<SomaSaldoDeTituloPorMoedaReportTemplate> resultado = new ArmazemDeRegistros<SomaSaldoDeTituloPorMoedaReportTemplate>(SomaSaldoDeTituloPorMoedaReportTemplate.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
+                .listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
+    }
+
+    @Override
+    public Titulo resultado() throws DadoInvalidoException {
+        try {
+            Titulo resultado = new ArmazemDeRegistros<Titulo>(Titulo.class)
+                    .resultadoUnicoDaConsulta(getConsulta(), parametros);
+            limpar();
+            return resultado;
+        } catch (NoResultException nre) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+        }
     }
 
 }
