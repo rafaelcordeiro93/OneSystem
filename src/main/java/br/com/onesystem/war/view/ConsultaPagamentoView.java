@@ -2,7 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.FormaDeCobranca;
-import br.com.onesystem.domain.Recebimento;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -17,7 +17,7 @@ import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
-import br.com.onesystem.war.builder.RecebimentoBV;
+import br.com.onesystem.war.builder.PagamentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -32,7 +32,7 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> implements Serializable {
+public class ConsultaPagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implements Serializable {
 
     private Model tipoSelecionado;
     private Model formaSelecionado;
@@ -55,18 +55,18 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     public void update() {
         try {
             e.setTotalEmDinheiro(getTotalEmDinheiro());
-            Recebimento recebimento = e.construirComID();
-            tiposDeCobranca.getList().forEach(tp -> recebimento.atualiza(tp));
-            formasDeCobranca.getList().forEach(f -> recebimento.atualiza(f));
+            Pagamento pagamento = e.construirComID();
+            tiposDeCobranca.getList().forEach(tp -> pagamento.atualiza(tp));
+            formasDeCobranca.getList().forEach(f -> pagamento.atualiza(f));
 
-            tiposDeCobranca.getList().forEach(tp -> recebimento.atualizaBaixas(tp));
-            formasDeCobranca.getList().forEach(f -> recebimento.atualizaBaixas(f));
+            tiposDeCobranca.getList().forEach(tp -> pagamento.atualizaBaixas(tp));
+            formasDeCobranca.getList().forEach(f -> pagamento.atualizaBaixas(f));
 
-            recebimento.ehValido();
-            tiposDeCobrancaDeletados.getList().forEach(tp -> recebimento.remove(tp));
-            formasDeCobrancaDeletados.getList().forEach(f -> recebimento.remove(f));
+            pagamento.ehValido();
+            tiposDeCobrancaDeletados.getList().forEach(tp -> pagamento.remove(tp));
+            formasDeCobrancaDeletados.getList().forEach(f -> pagamento.remove(f));
 
-            updateNoBanco(recebimento);
+            updateNoBanco(pagamento);
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -74,14 +74,14 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
 
     public void cancela() throws DadoInvalidoException {
         try {
-            Recebimento recebimento = e.construirComID();
-            if (recebimento.getEstado() == EstadoDeLancamento.CANCELADO) {
-                recebimento.efetiva();
-                recebimento.efetivaBaixas();
-                updateNoBanco(recebimento);
+            Pagamento pagamento = e.construirComID();
+            if (pagamento.getEstado() == EstadoDeLancamento.CANCELADO) {
+                pagamento.efetiva();
+                pagamento.efetivaBaixas();
+                updateNoBanco(pagamento);
             } else {
-                recebimento.cancela();
-                updateNoBanco(recebimento);
+                pagamento.cancela();
+                updateNoBanco(pagamento);
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -91,10 +91,10 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     @Override
     public void delete() {
         try {
-            Recebimento recebimento = e.construirComID();
-            tiposDeCobranca.getList().forEach(tp -> recebimento.remove(tp));
-            formasDeCobranca.getList().forEach(f -> recebimento.remove(f));
-            deleteNoBanco(recebimento, recebimento.getId());
+            Pagamento pagamento = e.construirComID();
+            tiposDeCobranca.getList().forEach(tp -> pagamento.remove(tp));
+            formasDeCobranca.getList().forEach(f -> pagamento.remove(f));
+            deleteNoBanco(pagamento, pagamento.getId());
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -103,7 +103,7 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     @Override
     public void limparJanela() {
         try {
-            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
@@ -122,8 +122,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     public void selecionar(SelectEvent event) {
         try {
             Object obj = event.getObject();
-            if (obj instanceof Recebimento) {
-                e = new RecebimentoBV((Recebimento) obj);
+            if (obj instanceof Pagamento) {
+                e = new PagamentoBV((Pagamento) obj);
                 tiposDeCobranca = new ModelList<>(e.getTiposDeCobranca());
                 formasDeCobranca = new ModelList<>(e.getFormasDeCobranca());
             } else if (obj instanceof TipoDeCobranca) {

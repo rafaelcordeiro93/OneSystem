@@ -5,6 +5,8 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
@@ -107,6 +109,20 @@ public class Recebimento {
         formasDeCobranca.set(formasDeCobranca.indexOf(forma), forma);
     }
 
+    public void atualizaBaixas(FormaDeCobranca forma) {
+        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorFormaDeCobranca(forma).listaDeResultados();
+        bx.forEach((b) -> {
+            b.atualizaValor(forma.getValor());
+        });
+    }
+
+    public void atualizaBaixas(TipoDeCobranca tipo) {
+        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorTipoDeCobranca(tipo).listaDeResultados();
+        bx.forEach((b) -> {
+            b.atualizaValor(tipo.getValor());
+        });
+    }
+
     public void remove(FormaDeCobranca forma) {
         formasDeCobranca.remove(forma);
     }
@@ -124,12 +140,21 @@ public class Recebimento {
         estado = EstadoDeLancamento.EFETIVADO;
     }
 
+    public void efetivaBaixas() throws DadoInvalidoException {
+        for (TipoDeCobranca t : tipoDeCobranca) {
+            t.descancelar();
+        }
+        for (FormaDeCobranca f : formasDeCobranca) {
+            f.descancelar();
+        }
+    }
+
     public void cancela() throws DadoInvalidoException {
         estado = EstadoDeLancamento.CANCELADO;
-        for(TipoDeCobranca t : tipoDeCobranca){
+        for (TipoDeCobranca t : tipoDeCobranca) {
             t.cancela();
         }
-        for(FormaDeCobranca f : formasDeCobranca){
+        for (FormaDeCobranca f : formasDeCobranca) {
             f.cancela();
         }
     }

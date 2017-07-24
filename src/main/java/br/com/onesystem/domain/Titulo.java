@@ -81,6 +81,10 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         this.saldo = saldo.add(valor);
     }
     
+     public void descancelarSaldoDeBaixa(BigDecimal valor) {
+        this.saldo = saldo.subtract(valor);
+    }
+    
     public BigDecimal atualizaSaldo(BigDecimal valor) throws DadoInvalidoException {
         if (valor.compareTo(saldo) == 1) {
             throw new EDadoInvalidoException("O valor deve ser menor ou igual ao saldo!");
