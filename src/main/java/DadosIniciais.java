@@ -171,6 +171,8 @@ public class DadosIniciais {
         Janela cheque = new Janela(null, "Cheque", "/cheque.xhtml", fin);
         Janela consultaCobranca = new Janela(null, "Consulta de Cobrança", "/consultaCobranca.xhtml", fin);
         Janela faturaLegada = new Janela(null, "Fatura Legada", "/faturaLegada.xhtml", fin);
+        Janela faturaEmitida = new Janela(null, "Fatura Emitida", "/faturaEmitida.xhtml", fin);
+        Janela faturaRecebida = new Janela(null, "Fatura Recebida", "/faturaRecebida.xhtml", fin);
 
         daoJanela.adiciona(receberValores);
         daoJanela.adiciona(conRecebimento);
@@ -195,6 +197,8 @@ public class DadosIniciais {
         daoJanela.adiciona(cheque);
         daoJanela.adiciona(consultaCobranca);
         daoJanela.adiciona(faturaLegada);
+        daoJanela.adiciona(faturaEmitida);
+        daoJanela.adiciona(faturaRecebida);
 
         //Modulo de Cambio
         Janela recepcao = new Janela(null, "Recepção", "/recepcao.xhtml", cam);
@@ -301,6 +305,8 @@ public class DadosIniciais {
                 new Privilegio(null, cheque, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaCobranca, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, faturaLegada, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, faturaEmitida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, faturaRecebida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, recepcao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, contraCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cambio, true, true, true, true, grupoDePrivilegio),

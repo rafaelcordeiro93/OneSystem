@@ -1,6 +1,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -63,6 +64,14 @@ public class TituloDAO extends GenericDAO<Titulo> {
         if (pessoa != null) {
             where += "and t.pessoa = :pPessoa ";
             parametros.put("pPessoa", pessoa);
+        }
+        return this;
+    }
+    
+     public TituloDAO ePorFaturaEmitida(FaturaEmitida fatura) {
+        if (fatura != null) {
+            where += "and t.faturaEmitida = :pFaturaEmitida ";
+            parametros.put("pFaturaEmitida", fatura);
         }
         return this;
     }

@@ -5,9 +5,10 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -19,16 +20,12 @@ import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
-import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -46,6 +43,9 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     private List<Cotacao> cotacaoLista;
     private Nota nota;
     private FaturaLegada faturaLegada;
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
+
     private Model<Cobranca> model;
 
     @Inject
@@ -58,16 +58,35 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         } catch (EDadoInvalidoException die) {
             die.print();
         } catch (DadoInvalidoException ex) {
-          ex.print();
+            ex.print();
         }
     }
 
     private void buscaDaSessao() throws DadoInvalidoException {
-
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         faturaLegada = (FaturaLegada) SessionUtil.getObject("faturaLegada", FacesContext.getCurrentInstance());
+        faturaEmitida = (FaturaEmitida) SessionUtil.getObject("faturaEmitida", FacesContext.getCurrentInstance());
+        faturaRecebida = (FaturaRecebida) SessionUtil.getObject("faturaRecebida", FacesContext.getCurrentInstance());
 
-       if (faturaLegada != null) {
+        if (model != null && faturaLegada != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
+            return;
+        }
+        if (model != null && faturaEmitida != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaEmitida.getEmissao()).listaDeResultados();
+            return;
+        }
+        if (model != null && faturaRecebida != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaRecebida.getEmissao()).listaDeResultados();
+            return;
+        }
+        if (faturaLegada != null) {
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaLegada.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaLegada.getEmissao()).resultado());
@@ -76,10 +95,35 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setFaturaLegada(faturaLegada);
             e.setPessoa(faturaLegada.getPessoa());
             modalidade = true;
-        } else if (model != null) { //NOTA
+            return;
+        }
+        if (faturaEmitida != null) {
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaEmitida.getEmissao()).listaDeResultados();
+            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaEmitida.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaEmitida.getEmissao()).resultado());
+            e.setTipoLancamento(TipoLancamento.EMITIDA);
+            e.setMoeda(faturaEmitida.getMoedaPadrao());
+            e.setFaturaEmitida(faturaEmitida);
+            e.setPessoa(faturaEmitida.getPessoa());
+            modalidade = true;
+            return;
+        }
+        if (faturaRecebida != null) {
+            cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaRecebida.getEmissao()).listaDeResultados();
+            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaRecebida.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaRecebida.getEmissao()).resultado());
+            e.setTipoLancamento(TipoLancamento.RECEBIDA);
+            e.setMoeda(faturaRecebida.getMoedaPadrao());
+            e.setFaturaRecebida(faturaRecebida);
+            e.setPessoa(faturaRecebida.getPessoa());
+            modalidade = true;
+            return;
+        }
+        if (model != null) { //NOTA
             cobranca = (Cobranca) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
+            return;
         } else {
             nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(nota.getEmissao()).listaDeResultados();

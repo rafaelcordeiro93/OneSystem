@@ -1,0 +1,34 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_Nota_Emitida}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="notaEmitidaDT" managedBeanName="#{selecaoNotaEmitidaAFaturarView}">
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.pessoa.nome}" filterBy="#{bean.pessoa.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.pessoa.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Emissao}" filterMatchMode="contains">
+                <h:outputText value="#{bean.emissao}" />
+            </p:column>
+            <p:column headerText="#{l.Operacao}" sortBy="#{bean.operacao.nome}" filterBy="#{bean.operacao.nome}" footerText="#{l.Operacao}" filterMatchMode="contains" >
+                <h:outputText value="#{bean.operacao.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Estado}" sortBy="#{bean.estado.nome}" filterBy="#{bean.estado.nome}" footerText="#{l.Estado}" filterMatchMode="contains">
+                <h:outputText value="#{bean.estado.nome}" />
+            </p:column>
+            <p:column headerText="#{l.A_Faturar}" sortBy="#{bean.aFaturar}" filterBy="#{bean.aFaturar}" footerText="#{l.A_Faturar}" filterMatchMode="contains">
+                <h:outputText value="#{bean.aFaturar}" />
+            </p:column>
+        </a:dataTable>
+
+    </ui:define>
+</ui:composition>

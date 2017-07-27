@@ -2,13 +2,12 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaLegada;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -42,6 +41,8 @@ public class TituloBuilder {
     private TipoFormaPagRec tipoFormaPagRec;
     private Cotacao cotacao;
     private FaturaLegada faturaLegada;
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
 
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Boolean entrada;
@@ -106,6 +107,16 @@ public class TituloBuilder {
         return this;
     }
 
+    public TituloBuilder comFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+        return this;
+    }
+
+    public TituloBuilder comFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+        return this;
+    }
+
     public TituloBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
@@ -133,7 +144,8 @@ public class TituloBuilder {
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, faturaLegada);
+                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete,
+                baixas, entrada, faturaLegada, faturaEmitida, faturaRecebida);
     }
 
 }

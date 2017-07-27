@@ -8,7 +8,6 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
@@ -17,13 +16,13 @@ import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeNotaBV;
@@ -57,6 +56,7 @@ public class NotaRecebidaBuilder {
     private Date emissao;
     private Caixa caixa;
     private Usuario usuario;
+    private FaturaRecebida faturaRecebida;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -187,8 +187,14 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
+    public NotaRecebidaBuilder comFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
+                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida);
     }
 
 }

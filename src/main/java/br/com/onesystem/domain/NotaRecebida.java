@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 /**
@@ -22,6 +23,9 @@ import javax.persistence.SequenceGenerator;
         sequenceName = "SEQ_NOTARECEBIDA")
 public class NotaRecebida extends Nota implements Serializable {
 
+    @ManyToOne
+    private FaturaRecebida faturaRecebida;
+
     public NotaRecebida() {
     }
 
@@ -31,8 +35,9 @@ public class NotaRecebida extends Nota implements Serializable {
             Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao,
-            Caixa caixa, Usuario usuario) throws DadoInvalidoException {
+            Caixa caixa, Usuario usuario, FaturaRecebida faturaRecebida) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
+        this.faturaRecebida = faturaRecebida;
         if (id == null) {
             adicionaNoEstoque();
         }
@@ -43,6 +48,14 @@ public class NotaRecebida extends Nota implements Serializable {
             i.setNota(this);
             i.geraEstoque();
         }
+    }
+
+    public FaturaRecebida getFaturaRecebida() {
+        return faturaRecebida;
+    }
+
+    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
     }
 
     @Override

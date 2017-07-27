@@ -6,7 +6,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Condicional;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -26,14 +26,14 @@ import javax.persistence.NoResultException;
  *
  * @author Rafael Fernando Rauber
  */
-public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
+public class NotaRecebidaDAO extends GenericDAO<NotaRecebida> {
 
-    public NotaEmitidaDAO() {
+    public NotaRecebidaDAO() {
         limpar();
     }
 
     protected void limpar() {
-        query = " select n from NotaEmitida n ";
+        query = " select n from NotaRecebida n ";
         join = " ";
         where = " where n.id != 0 ";
         order = " ";
@@ -42,56 +42,56 @@ public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
         parametros = new HashMap<String, Object>();
     }
 
-    public NotaEmitidaDAO porId(Long id) {
+    public NotaRecebidaDAO porId(Long id) {
         where += " and n.id = :pId ";
         parametros.put("pId", id);
         return this;
     }
 
-    public NotaEmitidaDAO porEmissaoEntre(Date dataInicial, Date dataFinal) {
+    public NotaRecebidaDAO porEmissaoEntre(Date dataInicial, Date dataFinal) {
         where += " and n.emissao between :pDataInicial and :pDataFinal ";
         parametros.put("pDataInicial", dataInicial);
         parametros.put("pDataFinal", dataFinal);
         return this;
     }
 
-    public NotaEmitidaDAO porEstado(EstadoDeNota estado) {
+    public NotaRecebidaDAO porEstado(EstadoDeNota estado) {
         where += " and n.estado = :pEstado ";
         parametros.put("pEstado", estado);
         return this;
     }
 
-    public NotaEmitidaDAO porNaoCancelado() {
+    public NotaRecebidaDAO porNaoCancelado() {
         where += " and n.estado <> :pEstadoNaoCancelado ";
         parametros.put("pEstadoNaoCancelado", EstadoDeNota.CANCELADO);
         return this;
     }
 
-    public NotaEmitidaDAO porTipoLancamento(TipoLancamento tipoLancamento) {
+    public NotaRecebidaDAO porTipoLancamento(TipoLancamento tipoLancamento) {
         where += " and n.operacao.tipoNota = :pTipoLancamento";
         parametros.put("pTipoLancamento", tipoLancamento);
         return this;
     }
 
-    public NotaEmitidaDAO porTipoOperacao(TipoOperacao tipoOperacao) {
+    public NotaRecebidaDAO porTipoOperacao(TipoOperacao tipoOperacao) {
         where += " and n.operacao.tipoOperacao = :pTipoOperacao";
         parametros.put("pTipoOperacao", tipoOperacao);
         return this;
     }
 
-    public NotaEmitidaDAO porOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+    public NotaRecebidaDAO porOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         where += " and n.operacao.operacaoFinanceira = :pOperacaoFinanceira";
         parametros.put("pOperacaoFinanceira", operacaoFinanceira);
         return this;
     }
 
-    public NotaEmitidaDAO porCondicional(Condicional condicional) {
+    public NotaRecebidaDAO porCondicional(Condicional condicional) {
         where += " and n.condicional = :pCondicional ";
         parametros.put("pCondicional", condicional);
         return this;
     }
 
-    public NotaEmitidaDAO porTiposDeOperacao(List<TipoOperacao> tiposDeOperacao) throws DadoInvalidoException {
+    public NotaRecebidaDAO porTiposDeOperacao(List<TipoOperacao> tiposDeOperacao) throws DadoInvalidoException {
         if (tiposDeOperacao != null && !tiposDeOperacao.isEmpty()) {
             where += " and n.operacao.tipoOperacao in :pTiposDeOperacao ";
             parametros.put("pTiposDeOperacao", tiposDeOperacao);
@@ -102,38 +102,38 @@ public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
         return this;
     }
 
-    public NotaEmitidaDAO porPessoa(Pessoa pessoa) {
+    public NotaRecebidaDAO porPessoa(Pessoa pessoa) {
         where += " and n.pessoa = :pPessoa";
         parametros.put("pPessoa", pessoa);
         return this;
     }
 
-    public NotaEmitidaDAO porAFaturarMaiorZero() {
+    public NotaRecebidaDAO porAFaturarMaiorZero() {
         where += " and n.aFaturar > :pZero ";
         parametros.put("pZero", BigDecimal.ZERO);
         return this;
     }
 
-    public NotaEmitidaDAO porSemFaturaEmitida() {
-        where += " and n.faturaEmitida = null ";
+    public NotaRecebidaDAO porSemFaturaRecebida() {
+        where += " and n.faturaRecebida = null ";
         return this;
     }
 
-    public NotaEmitidaDAO ordenaPorEmissao() {
+    public NotaRecebidaDAO ordenaPorEmissao() {
         order += " order by n.emissao";
         return this;
     }
 
-    public List<NotaEmitida> listaDeResultados() {
-        List<NotaEmitida> resultado = new ArmazemDeRegistros<>(NotaEmitida.class)
+    public List<NotaRecebida> listaDeResultados() {
+        List<NotaRecebida> resultado = new ArmazemDeRegistros<>(NotaRecebida.class)
                 .listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
     }
 
-    public NotaEmitida resultado() throws DadoInvalidoException {
+    public NotaRecebida resultado() throws DadoInvalidoException {
         try {
-            NotaEmitida resultado = new ArmazemDeRegistros<NotaEmitida>(NotaEmitida.class)
+            NotaRecebida resultado = new ArmazemDeRegistros<NotaRecebida>(NotaRecebida.class)
                     .resultadoUnicoDaConsulta(getConsulta(), parametros);
             limpar();
             return resultado;

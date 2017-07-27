@@ -81,6 +81,7 @@
         <class>br.com.onesystem.domain.ItemDeCondicional</class>
         <class>br.com.onesystem.domain.Caixa</class>
         <class>br.com.onesystem.domain.FaturaLegada</class>
+         <class>br.com.onesystem.domain.FaturaEmitida</class>
         <class>br.com.onesystem.domain.Credito</class>
         <class>br.com.onesystem.domain.Recebimento</class>
         <class>br.com.onesystem.domain.FormaDeCobranca</class>

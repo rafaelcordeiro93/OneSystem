@@ -15,10 +15,11 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Credito;
+import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -85,6 +86,8 @@ public class CobrancaBV implements Serializable {
     private List<Baixa> baixas;
     private Boolean entrada;
     private FaturaLegada faturaLegada;
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
 
     public CobrancaBV() {
         entrada = false;
@@ -205,6 +208,8 @@ public class CobrancaBV implements Serializable {
             this.recepcao = ((Titulo) p).getRecepcao();
             this.modalidadeDeCobranca = ((Titulo) p).getModalidade();
             this.faturaLegada = ((Titulo) p).getFaturaLegada();
+            this.faturaEmitida = ((Titulo) p).getFaturaEmitida();
+            this.faturaRecebida = ((Titulo) p).getFaturaRecebida();
         } else if (p instanceof Credito) {
             this.modalidadeDeCobranca = ((Credito) p).getModalidade();
         }
@@ -508,6 +513,22 @@ public class CobrancaBV implements Serializable {
         this.faturaLegada = faturaLegada;
     }
 
+    public FaturaEmitida getFaturaEmitida() {
+        return faturaEmitida;
+    }
+
+    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+    }
+
+    public FaturaRecebida getFaturaRecebida() {
+        return faturaRecebida;
+    }
+
+    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+    }
+
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
                 comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada)
@@ -553,7 +574,7 @@ public class CobrancaBV implements Serializable {
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas)
-                .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).construir();
+                .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).comFaturaEmitida(faturaEmitida).comFaturaRecebida(faturaRecebida).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {

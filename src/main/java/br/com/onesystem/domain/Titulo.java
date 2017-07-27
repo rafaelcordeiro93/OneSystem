@@ -47,12 +47,19 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     @ManyToOne
     private FaturaLegada faturaLegada;
 
+    @ManyToOne
+    private FaturaEmitida faturaEmitida;
+
+    @ManyToOne
+    private FaturaRecebida faturaRecebida;
+
     public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, FaturaLegada faturaLegada) throws DadoInvalidoException {
+            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, FaturaLegada faturaLegada, 
+            FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
@@ -60,6 +67,8 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         this.cambio = cambio;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.faturaLegada = faturaLegada;
+        this.faturaEmitida = faturaEmitida;
+        this.faturaRecebida = faturaRecebida;
         ehValido();
     }
 
@@ -72,6 +81,14 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         this.faturaLegada = faturaLegada;
     }
 
+    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+    }
+
+    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+    }
+
     @Override
     public ModalidadeDeCobranca getModalidade() {
         return ModalidadeDeCobranca.TITULO;
@@ -80,11 +97,11 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     public void cancelarSaldoDeBaixa(BigDecimal valor) {
         this.saldo = saldo.add(valor);
     }
-    
-     public void descancelarSaldoDeBaixa(BigDecimal valor) {
+
+    public void descancelarSaldoDeBaixa(BigDecimal valor) {
         this.saldo = saldo.subtract(valor);
     }
-    
+
     public BigDecimal atualizaSaldo(BigDecimal valor) throws DadoInvalidoException {
         if (valor.compareTo(saldo) == 1) {
             throw new EDadoInvalidoException("O valor deve ser menor ou igual ao saldo!");
@@ -132,6 +149,14 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
 
     public FaturaLegada getFaturaLegada() {
         return faturaLegada;
+    }
+
+    public FaturaEmitida getFaturaEmitida() {
+        return faturaEmitida;
+    }
+
+    public FaturaRecebida getFaturaRecebida() {
+        return faturaRecebida;
     }
 
     public Long getIdOrigem() {
