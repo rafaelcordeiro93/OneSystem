@@ -5,6 +5,8 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
@@ -25,6 +27,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
+import org.hibernate.Hibernate;
+import org.hibernate.validator.cdi.HibernateValidator;
 
 /**
  *
@@ -109,6 +113,20 @@ public class Pagamento {
         formasDeCobranca.set(formasDeCobranca.indexOf(forma), forma);
     }
 
+    public void atualizaBaixas(FormaDeCobranca forma) {
+        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorFormaDeCobranca(forma).listaDeResultados();
+        bx.forEach((b) -> {
+            b.atualizaValor(forma.getValor());
+        });
+    }
+
+    public void atualizaBaixas(TipoDeCobranca tipo) {
+        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorTipoDeCobranca(tipo).listaDeResultados();
+        bx.forEach((b) -> {
+            b.atualizaValor(tipo.getValor());
+        });
+    }
+
     public void remove(FormaDeCobranca forma) {
         formasDeCobranca.remove(forma);
     }
@@ -124,6 +142,15 @@ public class Pagamento {
 
     public void efetiva() {
         estado = EstadoDeLancamento.EFETIVADO;
+    }
+
+    public void efetivaBaixas() throws DadoInvalidoException {
+        for (TipoDeCobranca t : tipoDeCobranca) {
+            t.descancelar();
+        }
+        for (FormaDeCobranca f : formasDeCobranca) {
+            f.descancelar();
+        }
     }
 
     public void cancela() throws DadoInvalidoException {
@@ -151,7 +178,7 @@ public class Pagamento {
     public Caixa getCaixa() {
         return caixa;
     }
-    
+
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
     }

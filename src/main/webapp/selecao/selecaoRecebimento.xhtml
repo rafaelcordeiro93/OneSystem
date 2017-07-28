@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_De_Recebimento}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoRecebimentoView}">
+
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" footerText="#{l.Id}" filterBy="#{bean.id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Estado}" sortBy="#{bean.estado}" footerText="#{l.Nome}" filterBy="#{bean.estado}" filterMatchMode="contains">
+                <h:outputText value="#{bean.estado}" />
+            </p:column>                
+            <p:column headerText="#{l.Total}" sortBy="#{bean.totalEmDinheiro}" footerText="#{l.Total}" filterBy="#{bean.totalEmDinheiro}" filterMatchMode="contains">
+                <h:outputText value="#{bean.totalEmDinheiro}" />
+            </p:column>
+            <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissao}" footerText="#{l.Emissao}" filterBy="#{bean.emissao}" filterMatchMode="contains">
+                <h:outputText value="#{bean.emissao}" />
+            </p:column>
+        </a:dataTable>
+
+    </ui:define>
+</ui:composition>

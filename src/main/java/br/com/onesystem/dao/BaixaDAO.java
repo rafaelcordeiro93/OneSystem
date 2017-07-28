@@ -4,8 +4,10 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
+import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.JPAUtil;
@@ -202,6 +204,22 @@ public class BaixaDAO {
         if (pessoa != null) {
             parametros.put("pPessoa", pessoa);
             consulta += "and b.pessoa = :pPessoa ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorTipoDeCobranca(TipoDeCobranca tipo) {
+        if (tipo != null) {
+            parametros.put("pTipo", tipo);
+            consulta += "and b.tipoDeCobranca = :pTipo ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorFormaDeCobranca(FormaDeCobranca forma) {
+        if (forma != null) {
+            parametros.put("pForma", forma);
+            consulta += "and b.formaDeCobranca = :pForma ";
         }
         return this;
     }

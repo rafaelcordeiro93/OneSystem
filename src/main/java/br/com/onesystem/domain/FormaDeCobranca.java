@@ -77,7 +77,7 @@ public class FormaDeCobranca implements Serializable {
     @ManyToOne
     private Cotacao cotacao;
 
-    @OneToMany(mappedBy = "formaDeCobranca", cascade = {CascadeType.REMOVE, CascadeType.MERGE})
+    @OneToMany(mappedBy = "formaDeCobranca", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
     @ManyToOne
@@ -120,6 +120,12 @@ public class FormaDeCobranca implements Serializable {
     public void cancela() throws DadoInvalidoException {
         for (Baixa b : baixas) {
             b.cancela();
+        }
+    }
+    
+     public void descancelar() throws DadoInvalidoException {
+        for (Baixa b : baixas) {
+            b.descancela();
         }
     }
 
@@ -180,6 +186,10 @@ public class FormaDeCobranca implements Serializable {
 
     public Cotacao getCotacao() {
         return cotacao;
+    }
+
+    public List<Baixa> getBaixas() {
+        return baixas;
     }
 
     public EstadoDeLancamento getEstado() {

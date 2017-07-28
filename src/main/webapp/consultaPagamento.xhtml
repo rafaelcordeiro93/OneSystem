@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+
+                    <h2 class="BigTopic">#{l.Receber_Valores}</h2>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel value="#{l.Id}"/>
+                            </td>
+                            <td>
+                                <a:inputTextDialog id="pagamentoId" value="#{consultaPagamentoView.e}" dialog="#{selecaoPagamentoView}" mbView="#{consultaPagamentoView}" update=":conteudo" process="@this" var="pagamento" converter="pagamentoBVConverter"  itemLabel="#{pagamento.id}" itemValue="#{pagamento}" onlyNumber="true" editVisible="false"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p:separator/>
+
+                    <h:outputText value="#{l.Tipos_De_Pagamento}" />
+                    <p:dataTable id="pagamentoBaixa" var="m" value="#{consultaPagamentoView.tiposDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{consultaPagamentoView.tipoSelecionado}" rowStyleClass="#{m.object.cotacao eq null ? 'Red' : ''}" >
+
+                        <p:ajax event="rowSelect" listener="#{consultaPagamentoView.adicionaTipoNaSessao}" update="@this"/>
+
+                        <p:column headerText="#{l.Documento}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.id : m.object.cobrancaFixa.id}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Tipo_Documento}" colspan="2">
+                            <h:outputText value="#{m.object.tipoDocumento}" />
+                        </p:column>
+                        <p:column headerText="#{l.Nome}" colspan="3" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.pessoa.nome : m.object.cobrancaFixa.pessoa.nome}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Vencimento}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.vencimentoFormatadoSemHoras : m.object.cobrancaFixa.vencimentoFormatadoSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Emissao}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.emissaoFormatadaSemHoras : m.object.cobrancaFixa.emissaoFormatadaSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Observacao}" colspan="3">
+                            <h:outputText value="#{m.object.observacao}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Valor}">
+                            <h:outputText value="#{m.object.totalFormatado}"/>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column styleClass="Blue" footerText="#{consultaPagamentoView.totalTipoNaCotacaoPadraoFormatado}"/>
+                            </p:row>                                    
+                        </p:columnGroup>
+                    </p:dataTable>
+                    <p:separator/>
+
+                    <div class="ui-g">
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-10">
+                            <p:panelGrid columns="7" layout="grid" styleClass="ui-fluid Wid100 ui-panelgrid-blank form-group form-elements" >
+                                <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{consultaPagamentoView.abreTitulo}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn" listener="#{consultaPagamentoView.selecionar}" process="@this" update="pagamentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
+                                </p:commandButton>
+                                <p:commandButton value="#{l.Remover}" update="pagamentoBaixa valorEmDinheiro valorEmConta :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{consultaPagamentoView.removeTipo}" styleClass="orange-btn" />
+                            </p:panelGrid>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Conta}: "/>
+                                <p:inputNumber id="valorEmConta" value="#{consultaPagamentoView.valorEmConta}" symbol="#{consultaPagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                               thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
+
+                    <div class="EmptyBox15"/>
+                    <p:separator/>
+                    <div class="EmptyBox15"/>
+
+                    <h:outputText value="#{l.Forma_De_Pagamento}" />
+                    <p:dataTable id="formasPagamento" var="m" value="#{consultaPagamentoView.formasDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{consultaPagamentoView.formaSelecionado}">
+
+                        <p:ajax event="rowSelect" listener="#{consultaPagamentoView.adicionaFormaNaSessao}" update="@this" />
+
+
+                        <p:column headerText="#{l.Documento}" >
+                            <h:outputText value="#{m.object.id}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Tipo_Documento}" colspan="2">
+                            <h:outputText value="#{m.object.tipoDocumento}" />
+                        </p:column>
+                        <p:column headerText="#{l.Nome}" colspan="3" >
+                            <h:outputText value="#{m.object.cobranca.pessoa.nome}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Vencimento}" >
+                            <h:outputText value="#{m.object.cobranca.vencimentoFormatadoSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Emissao}" >
+                            <h:outputText value="#{m.object.cobranca.emissaoFormatadaSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Observacao}" colspan="3">
+                            <h:outputText value="#{m.object.observacao}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Valor}">
+                            <h:outputText value="#{m.object.totalFormatado}"/>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column styleClass="Blue" footerText="#{consultaPagamentoView.totalFormaNaCotacaoPadraoFormatado}"/>
+                            </p:row>                                    
+                        </p:columnGroup>
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12 ui-lg-10">
+                            <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{consultaPagamentoView.abreTitulo()}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{consultaPagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="#{l.Remover}" update="formasPagamento valorEmDinheiro :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{consultaPagamentoView.removeForma}" styleClass="orange-btn" />
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Dinheiro}: "/>
+                                <p:inputNumber id="valorEmDinheiro" value="#{consultaPagamentoView.totalEmDinheiro}" symbol="#{consultaPagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                               thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Atualizar}"  update="conteudo" icon="fa fa-refresh Fs16 White"  action="#{consultaPagamentoView.update()}" />
+                    <p:commandButton value="#{consultaPagamentoView.e.estado eq 'CANCELADO' ? l.Efetivar : l.Cancelar}"  update="conteudo" icon="fa fa-arrow-circle-down Fs16 White"  action="#{consultaPagamentoView.cancela()}" />
+                    <p:commandButton value="#{l.Remover}"  update="conteudo" icon="fa fa-trash Fs16 White"  action="#{consultaPagamentoView.delete()}" />
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

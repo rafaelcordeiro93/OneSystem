@@ -60,10 +60,10 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
     }
 
     public void addNovaParcela() throws DadoInvalidoException {
-        try{
-        SessionUtil.put(e.construir(), "faturaLegada", FacesContext.getCurrentInstance());
-        new DialogoCobrancaView().abrirDialogo();
-        }catch(EDadoInvalidoException die){
+        try {
+            SessionUtil.put(e.construir(), "faturaLegada", FacesContext.getCurrentInstance());
+            new DialogoCobrancaView().abrirDialogo();
+        } catch (EDadoInvalidoException die) {
             die.print();
         }
     }
@@ -82,7 +82,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             for (Titulo c : removidos) {
                 new RemoveDAO<>().remove(c, c.getId());
             }
-            SessionUtil.put(e.construir(), "faturaLegada", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException die) {
             die.print();
         }

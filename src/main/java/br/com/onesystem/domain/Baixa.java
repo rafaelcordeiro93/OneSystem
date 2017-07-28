@@ -253,6 +253,14 @@ public class Baixa implements Serializable, Movimento {
         this.dataCancelamento = new Date();
     }
 
+    public void descancela() throws EDadoInvalidoException {
+        if (parcela instanceof Titulo) {
+            ((Titulo) parcela).descancelarSaldoDeBaixa(valor);
+        }
+        this.estado = EstadoDeBaixa.EFETIVADO;
+        this.dataCancelamento = null;
+    }
+
     private String geraMovimentacaoReceita(BundleUtil msg) {
         String historicoFormatado = "";
         if (historico != null) {

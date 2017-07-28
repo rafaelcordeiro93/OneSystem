@@ -7,8 +7,8 @@
     xmlns:pa="http://primefaces.org/atlantis">
 
     <div class="layout-sidebar #{preferenciasDeUsuario.corMenuCSS}">
-     
-         <pa:tabMenu >
+
+        <pa:tabMenu >
 
             <pa:tab icon="fa fa-book" title="#{l.Arquivo}">
                 <pa:menu widgetVar="mat">
@@ -74,6 +74,8 @@
                     <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/caixa" />
                     <p:menuitem value="#{l.Forma_Recebimento}" icon="fa fa-download" outcome="/formaDeRecebimento" />
                     <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-file-archive-o" outcome="/faturaLegada" />
+                    <p:menuitem value="#{l.Fatura_Emitida}" icon="fa fa-caret-square-o-right" outcome="/faturaEmitida" />
+                    <p:menuitem value="#{l.Fatura_Recebida}" icon="fa fa-caret-square-o-left" outcome="/faturaRecebida" />
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
                         <p:menuitem value="#{l.Banco}" icon="fa fa-bank" outcome="/banco" />
                         <p:menuitem value="#{l.Moeda}" icon="fa fa-btc" outcome="/moeda" /> 
@@ -90,6 +92,8 @@
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">   
                         <p:menuitem value="#{l.Cobranca}" icon="fa fa-shield fa-rotate-270" outcome="/consultaCobranca" />
+                        <p:menuitem value="#{l.Pagamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaPagamento" />
+                        <p:menuitem value="#{l.Recebimentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaRecebimento" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>

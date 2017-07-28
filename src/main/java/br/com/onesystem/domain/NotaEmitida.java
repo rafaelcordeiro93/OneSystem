@@ -9,6 +9,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -35,6 +36,9 @@ public class NotaEmitida extends Nota implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Condicional condicional;
 
+    @ManyToOne
+    private FaturaEmitida faturaEmitida;
+
     public NotaEmitida() {
         emissao = new Date();
     }
@@ -46,16 +50,21 @@ public class NotaEmitida extends Nota implements Serializable {
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
             Comanda comanda, Condicional condicional, Date emissao, Caixa caixa,
-            Usuario usuario) throws DadoInvalidoException {
+            Usuario usuario, FaturaEmitida faturaEmitida) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
         this.orcamento = orcamento;
         this.comanda = comanda;
         this.condicional = condicional;
+        this.faturaEmitida = faturaEmitida;
         if (id == null) {
             adicionaNotaNaComanda();
             adicionaNotaNaCondicional();
             adicionaNoEstoque();
         }
+    }
+
+    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
     }
 
     public void adicionaNotaNaComanda() {
@@ -89,6 +98,10 @@ public class NotaEmitida extends Nota implements Serializable {
 
     public Condicional getCondicional() {
         return condicional;
+    }
+
+    public FaturaEmitida getFaturaEmitida() {
+        return faturaEmitida;
     }
 
     @Override

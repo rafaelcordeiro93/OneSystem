@@ -7,12 +7,14 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -86,7 +88,6 @@ public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
         }
         return this;
     }
-
     public NotaEmitidaDAO ordenaPorEmissao() {
         order += " order by notaEmitida.emissao";
         return this;

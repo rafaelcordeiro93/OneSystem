@@ -20,7 +20,7 @@
                         <h:panelGrid columns="4"  columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Modelo}"/>
-                          <!--  <a:inputTextDialog id="nomeID" value="#{relatorioDeBalancoFisicoView.modelo.id}" dialog="#{selecaoModeloDeRelatorioView}" mbView="#{relatorioDeBalancoFisicoView}" update=":conteudo"/> -->
+                          <!--  <a:inputTextDialog id="nomeID" value="#{relatorioDeBalancoFisicoView.modelo.id}" dialog="#{selecaoModeloDeRelatorioView}" mbView="#{relatorioDeBalancoFisicoView}" update=":conteudo"/>--> 
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{relatorioDeBalancoFisicoView.modelo.nome}" />
@@ -31,8 +31,8 @@
                             <h:panelGrid columns="1">
                                 <h:panelGrid columns="2" style="margin-left: -1%">                           
                                     <h:panelGrid columns="2" columnClasses="ui-g-10 ui-g-nopad Padding-right-Px2, ui-g-2 PaddingTop2Px">
-                              <!--          <a:inputTextDialog id="relatorioSaldoItem" value="#{relatorioDeBalancoFisicoView.relatorio.item.nome}" dialog="#{selecaoItemView}" mbView="#{relatorioDeBalancoFisicoView}" 
-                                                             update=":conteudo"/> -->
+                                         <!--  <a:inputTextDialog id="relatorioSaldoItem" value="#{relatorioDeBalancoFisicoView.relatorio.item.nome}" dialog="#{selecaoItemView}" mbView="#{relatorioDeBalancoFisicoView}" 
+                                                             update=":conteudo"/> --> 
                                         <p:commandButton action="#{relatorioDeBalancoFisicoView.removerItem()}" icon="fa fa-trash-o" update=":conteudo" styleClass="orange-btn"/>
                                     </h:panelGrid>
 

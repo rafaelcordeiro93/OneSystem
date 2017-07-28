@@ -81,7 +81,7 @@ public class TipoDeCobranca implements Serializable {
     @ManyToOne
     private Conta conta;
 
-    @OneToMany(mappedBy = "tipoDeCobranca", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "tipoDeCobranca", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
     public TipoDeCobranca() {
@@ -180,6 +180,10 @@ public class TipoDeCobranca implements Serializable {
         return cotacao;
     }
 
+    public List<Baixa> getBaixas() {
+        return baixas;
+    }
+
     public BigDecimal getTotal() {
         BigDecimal v = valor == null ? BigDecimal.ZERO : valor;
         BigDecimal j = juros == null ? BigDecimal.ZERO : juros;
@@ -238,6 +242,11 @@ public class TipoDeCobranca implements Serializable {
     public void cancela() throws DadoInvalidoException {
         for (Baixa b : baixas) {
             b.cancela();
+        }
+    }
+     public void descancelar() throws DadoInvalidoException {
+        for (Baixa b : baixas) {
+            b.descancela();
         }
     }
 
