@@ -100,6 +100,18 @@
                 <div class="card">
                     <h:form>
 
+                        <p:panel header="Vendas Por Vendedor no Mês" class="chart-panel">
+                            <p:chart type="bar" model="#{dashboardVendaView.vendasPorVendedor}" responsive="true" />
+                        </p:panel>
+
+                    </h:form>
+                </div>
+            </div>
+
+            <div class="ui-g-12 ui-md-6">
+                <div class="card">
+                    <h:form>
+
                         <p:panel header="Gráfico de Contas a Pagar"  class="chart-panel" id="chartContasAPagar">
                             <p:chart type="bar" model="#{dashboardContasView.contasAPagar}" responsive="true" />
                         </p:panel>

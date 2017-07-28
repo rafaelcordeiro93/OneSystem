@@ -11,19 +11,19 @@ import br.com.onesystem.util.BundleUtil;
  *
  * @author Rafael Fernando Rauber
  */
-public enum ModalidadeDeCobranca {
+public enum OperadorDeBusca {
 
-    CHEQUE(new Long(1), new BundleUtil().getLabel("Cheque")),
-    CARTAO(new Long(2), new BundleUtil().getLabel("Boleto_De_Cartao")),
-    TITULO(new Long(3), new BundleUtil().getLabel("Titulo")),
-    CREDITO(new Long(4), new BundleUtil().getLabel("Credito"));
+    AND(new Long(1), new BundleUtil().getLabel("e"), "and"),
+    OR(new Long(2), new BundleUtil().getLabel("ou"), "or");
 
     private Long id;
     private String nome;
+    private String operador;
 
-    private ModalidadeDeCobranca(Long id, String nome) {
+    private OperadorDeBusca(Long id, String nome, String operador) {
         this.id = id;
         this.nome = nome;
+        this.operador = operador;
     }
 
     public Long getId() {
@@ -34,9 +34,8 @@ public enum ModalidadeDeCobranca {
         return nome;
     }
 
-    @Override
-    public String toString() {
-        return nome;
+    public String getOperador() {
+        return operador;
     }
 
 }

@@ -220,6 +220,10 @@ public abstract class Cobranca implements Serializable {
         return baixas == null ? false : baixas.isEmpty() ? false : true;
     }
 
+    public List<FormaDeCobranca> getFormasDeCobranca() {
+        return formasDeCobranca;
+    }
+    
     public OperacaoFinanceira getOperacaoFinanceira() {
         return operacaoFinanceira;
     }

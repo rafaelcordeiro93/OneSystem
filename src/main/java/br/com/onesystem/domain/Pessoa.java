@@ -145,6 +145,13 @@ public abstract class Pessoa implements Serializable {
         return nome;
     }
 
+    public String getPrimeiroNomeEComecoDoSobrenome() {
+        if (nome.contains(" ")) {
+            return nome.substring(0, nome.indexOf(' ')) + (nome.substring(nome.lastIndexOf(' '), nome.lastIndexOf(' ') + 2) + '.');
+        }
+        return nome;
+    }
+
     public List<Contato> getContatos() {
         return contatos;
     }

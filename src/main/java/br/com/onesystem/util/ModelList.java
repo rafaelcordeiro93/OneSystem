@@ -83,6 +83,10 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
         list.remove(m);
     }
 
+    public void removeAll() {
+        setWrappedData(new ArrayList<>());
+    }
+
     public T get(int index) {
         return (T) getRowData(String.valueOf(index)).getObject();
     }
@@ -93,6 +97,16 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
 
     public List<T> getList() {
         return ((List<Model<T>>) getWrappedData()).stream().map(m -> m.getObject()).collect(Collectors.toList());
+    }
+
+    public void reorder(int fromIndex, int toIndex) {
+        List<Model<T>> list = (List<Model<T>>) getWrappedData();
+
+        if (toIndex >= fromIndex) {
+            Collections.rotate(list.subList(fromIndex, toIndex + 1), -1);
+        } else {
+            Collections.rotate(list.subList(toIndex, fromIndex + 1), 1);
+        }
     }
 
 }
