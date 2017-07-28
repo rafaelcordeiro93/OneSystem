@@ -3,8 +3,6 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SomaSaldoDeTituloPorMoedaReportTemplate;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -12,12 +10,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import javax.persistence.NoResultException;
 
 public class TituloDAO extends GenericDAO<Titulo> {
 
     public TituloDAO() {
+        super(Titulo.class);
         limpar();
     }
 
@@ -83,7 +80,7 @@ public class TituloDAO extends GenericDAO<Titulo> {
         }
         return this;
     }
- 
+
     public TituloDAO ePorVencimento(Date dataInicial, Date dataFinal) {
         if (dataInicial == null || dataFinal == dataFinal) {
             parametros.put("pDataInicial", dataInicial);
@@ -108,30 +105,11 @@ public class TituloDAO extends GenericDAO<Titulo> {
         return this;
     }
 
-    public List<Titulo> listaDeResultados() {
-        List<Titulo> resultado = new ArmazemDeRegistros<Titulo>(Titulo.class)
-                .listaRegistrosDaConsulta(getConsulta(), parametros);
-        limpar();
-        return resultado;
-    }
-
     public List<SomaSaldoDeTituloPorMoedaReportTemplate> resultadoSomaPorMoeda() {
         List<SomaSaldoDeTituloPorMoedaReportTemplate> resultado = new ArmazemDeRegistros<SomaSaldoDeTituloPorMoedaReportTemplate>(SomaSaldoDeTituloPorMoedaReportTemplate.class)
                 .listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
-    }
-
-    @Override
-    public Titulo resultado() throws DadoInvalidoException {
-        try {
-            Titulo resultado = new ArmazemDeRegistros<Titulo>(Titulo.class)
-                    .resultadoUnicoDaConsulta(getConsulta(), parametros);
-            limpar();
-            return resultado;
-        } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
-        }
     }
 
 }
