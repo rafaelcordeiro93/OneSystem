@@ -23,38 +23,38 @@
 
             <pa:tab icon="fa fa-shopping-cart" title="#{l.Vendas}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-cart-plus" outcome="/notaEmitida" />
-                    <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/orcamento" />
                     <p:menuitem value="#{l.Comanda}" icon="fa fa-superpowers" outcome="/comanda" />
                     <p:menuitem value="#{l.Condicional}" icon="fa fa-compress" outcome="/condicional" />
+                    <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-cart-plus" outcome="/notaEmitida" />
+                    <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/orcamento" />
                     <p:menuitem value="#{l.Retificacao_De_Venda}" icon="fa fa-american-sign-language-interpreting" outcome="/retificacaoDeVenda" />
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
-                        <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
-                        <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaOrcamento" />
                         <p:menuitem value="#{l.Comanda}" icon="fa fa-shield fa-rotate-270" outcome="/consultaComanda" />
                         <p:menuitem value="#{l.Condicional}" icon="fa fa-shield fa-rotate-270" outcome="/consultaCondicional" />
+                        <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
+                        <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaOrcamento" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>
 
             <pa:tab icon="fa fa-cubes" title="#{l.Estoque}">
                 <pa:menu widgetVar="mat">
+                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/ajusteDeEstoque" />
+                    <p:menuitem value="#{l.Conhecimento_De_Frete} *" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
+                    <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/contaDeEstoque" />
                     <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
                     <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-cart-arrow-down" outcome="/notaRecebida" />
                     <p:menuitem value="#{l.Retificacao_De_Compra}" icon="fa fa-american-sign-language-interpreting" outcome="/retificacaoDeCompra" />
-                    <p:menuitem value="#{l.Margem}" icon="fa fa-compress" outcome="/margem" /> 
-                    <p:menuitem value="#{l.Conhecimento_De_Frete} *" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
-                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/ajusteDeEstoque" />
-                    <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/contaDeEstoque" />
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
-                        <p:menuitem value="#{l.Unidade_Medida}" icon="fa fa-arrows-v" outcome="/unidadeMedidaItem" />
-                        <p:menuitem value="#{l.IVA}" icon="fa fa-strikethrough" outcome="/iva" />
-                        <p:menuitem value="#{l.Marca}" icon="fa fa-gg" outcome="/marca" />
-                        <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
-                        <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaDePreco" />
                         <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/comissao" />
+                        <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
                         <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/grupo" />
-                        <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />                            
+                        <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />  
+                        <p:menuitem value="#{l.IVA}" icon="fa fa-strikethrough" outcome="/iva" />
+                        <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaDePreco" />
+                        <p:menuitem value="#{l.Marca}" icon="fa fa-gg" outcome="/marca" />
+                        <p:menuitem value="#{l.Margem}" icon="fa fa-compress" outcome="/margem" /> 
+                        <p:menuitem value="#{l.Unidade_Medida}" icon="fa fa-arrows-v" outcome="/unidadeMedidaItem" />
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaRecebida" />
@@ -66,29 +66,29 @@
 
             <pa:tab icon="fa fa-balance-scale" title="#{l.Financeiro}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/recebimento"/>
-                    <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/pagamento" />  
-                    <p:menuitem value="#{l.Extrato_Conta}" icon="fa fa-file-text-o" outcome="/extratoConta" />                        
-                    <p:menuitem value="#{l.Cotacoes}" icon="fa fa-money" outcome="/cotacao" />
                     <p:menuitem value="#{l.Baixa}" icon="fa fa-retweet" outcome="/baixa" />
                     <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/caixa" />
-                    <p:menuitem value="#{l.Forma_Recebimento}" icon="fa fa-download" outcome="/formaDeRecebimento" />
-                    <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-file-archive-o" outcome="/faturaLegada" />
+                    <p:menuitem value="#{l.Cotacoes}" icon="fa fa-money" outcome="/cotacao" />
+                    <p:menuitem value="#{l.Extrato_Conta}" icon="fa fa-file-text-o" outcome="/extratoConta" />     
                     <p:menuitem value="#{l.Fatura_Emitida}" icon="fa fa-caret-square-o-right" outcome="/faturaEmitida" />
                     <p:menuitem value="#{l.Fatura_Recebida}" icon="fa fa-caret-square-o-left" outcome="/faturaRecebida" />
+                    <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-file-archive-o" outcome="/faturaLegada" />
+                    <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/pagamento" />  
+                    <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/recebimento"/>
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
                         <p:menuitem value="#{l.Banco}" icon="fa fa-bank" outcome="/banco" />
-                        <p:menuitem value="#{l.Moeda}" icon="fa fa-btc" outcome="/moeda" /> 
+                        <p:menuitem value="#{l.Boleto_De_Cartao}" rendered="false" icon="fa fa-credit-card" outcome="/boletoDeCartao" />
+                        <p:menuitem value="#{l.Cartao}" icon="fa fa-credit-card-alt" outcome="/cartao" />
+                        <p:menuitem value="#{l.Cheque}" icon="fa fa-sticky-note" outcome="/cheque" />
                         <p:menuitem value="#{l.Conta}" icon="fa fa-cc" outcome="/conta" />
+                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-sign-out" outcome="/despesaProvisionada" />
+                        <p:menuitem value="#{l.Forma_Recebimento}" icon="fa fa-download" outcome="/formaDeRecebimento" />
+                        <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-share-alt-square" outcome="/grupoFinanceiro" />
+                        <p:menuitem value="#{l.Moeda}" icon="fa fa-btc" outcome="/moeda" /> 
+                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-sign-in" outcome="/receitaProvisionada" />
                         <p:menuitem value="#{l.Tipo_Receita}" icon="fa fa-level-up" outcome="/tipoReceita" />
                         <p:menuitem value="#{l.Tipo_Despesa}" icon="fa fa-level-down" outcome="/tipoDespesa" />
                         <p:menuitem value="#{l.Transferencia_De_Lucro} *" icon="fa  fa-random" outcome="/transferenciaDespesaProvisionada" />
-                        <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-share-alt-square" outcome="/grupoFinanceiro" />
-                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-sign-out" outcome="/despesaProvisionada" />
-                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-sign-in" outcome="/receitaProvisionada" />
-                        <p:menuitem value="#{l.Cartao}" icon="fa fa-credit-card-alt" outcome="/cartao" />
-                        <p:menuitem value="#{l.Boleto_De_Cartao}" rendered="false" icon="fa fa-credit-card" outcome="/boletoDeCartao" />
-                        <p:menuitem value="#{l.Cheque}" icon="fa fa-sticky-note" outcome="/cheque" />
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">   
                         <p:menuitem value="#{l.Cobranca}" icon="fa fa-shield fa-rotate-270" outcome="/consultaCobranca" />
