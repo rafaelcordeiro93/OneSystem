@@ -2,7 +2,6 @@
 import br.com.onesystem.dao.CobrancaDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.FieldModel;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

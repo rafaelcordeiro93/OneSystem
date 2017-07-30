@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,24 +18,24 @@ import java.util.Objects;
  */
 public class FilterModel {
 
-    private FieldModel field;
+    private Coluna field;
     private List filters;
     private TipoDeBusca typeSearch;
     private Date filterDate;
 
-    public FilterModel(FieldModel field, List filters, TipoDeBusca typeSearch) {
+    public FilterModel(Coluna field, List filters, TipoDeBusca typeSearch) {
         this.field = field;
         this.filters = filters;
         this.typeSearch = typeSearch;
     }
 
-    public FilterModel(FieldModel field, Date filterDate, TipoDeBusca typeSearch) {
+    public FilterModel(Coluna field, Date filterDate, TipoDeBusca typeSearch) {
         this.field = field;
         this.filterDate = filterDate;
         this.typeSearch = typeSearch;
     }
 
-    public FieldModel getField() {
+    public Coluna getField() {
         return field;
     }
 

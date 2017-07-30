@@ -11,17 +11,11 @@ import br.com.onesystem.exception.DadoInvalidoException;
 public class ColunaBuilder {
 
     private Long ID;
-    private String key;
     private String nome;
     private ModeloDeRelatorio modeloDeRelatorio;
 
     public ColunaBuilder comID(Long ID) {
         this.ID = ID;
-        return this;
-    }
-
-    public ColunaBuilder comKey(String key) {
-        this.key = key;
         return this;
     }
 
@@ -36,7 +30,7 @@ public class ColunaBuilder {
     }
 
     public Coluna construir() throws DadoInvalidoException {
-        return new Coluna(ID, key, modeloDeRelatorio);
+        return new Coluna();
     }
 
 }

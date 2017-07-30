@@ -7,9 +7,9 @@ package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.GenericDAO;
+import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.FieldModel;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.FilterModel;
 import br.com.onesystem.util.Model;
@@ -46,15 +46,15 @@ public abstract class BasicMBReportImpl<T> {
     private List<String> consulta;
     private Date consultaDate;
     private List<FilterModel> filtros = new ArrayList<>();
-    private FieldModel campoSelecionado;
+    private Coluna campoSelecionado;
     private String campoSelecionadoString;
     private TipoDeBusca tipoDeBuscaSelecionada = TipoDeBusca.CONTENDO;
     private List<Model> modelDisponivelSelecionado = new ArrayList<>();
     private List<Model> modelExibidoSelecionado = new ArrayList<>();
     protected List<T> registros = new ArrayList<>();
-    private ModelList<FieldModel> campos = new ModelList<FieldModel>();
-    private ModelList<FieldModel> camposDisponiveis = new ModelList<FieldModel>();
-    private ModelList<FieldModel> camposExibidos = new ModelList<FieldModel>();
+    private ModelList<Coluna> campos = new ModelList<Coluna>();
+    private ModelList<Coluna> camposDisponiveis = new ModelList<Coluna>();
+    private ModelList<Coluna> camposExibidos = new ModelList<Coluna>();
     private List<Class> classes = new ArrayList<>();
     private HashMap<Class, String> mapPath = new HashMap<>();
     protected BundleUtil bundle = new BundleUtil();
@@ -136,7 +136,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        FieldModel novoCampo = new FieldModel(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
@@ -147,7 +147,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        FieldModel novoCampo = new FieldModel(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
@@ -162,28 +162,28 @@ public abstract class BasicMBReportImpl<T> {
     public void adicionarParaCampoExibido() {
         if (modelDisponivelSelecionado != null && !modelDisponivelSelecionado.isEmpty()) {
             for (Model m : modelDisponivelSelecionado) {
-                camposExibidos.add((FieldModel) m.getObject());
+                camposExibidos.add((Coluna) m.getObject());
                 camposDisponiveis.remove(m);
             }
         }
     }
 
     public void adicionarTodosParaCampoExibido() {
-        camposDisponiveis.forEach((m) -> camposExibidos.add((FieldModel) m.getObject()));
+        camposDisponiveis.forEach((m) -> camposExibidos.add((Coluna) m.getObject()));
         camposDisponiveis.removeAll();
     }
 
     public void excluirDeCampoExibido() {
         if (modelExibidoSelecionado != null && !modelExibidoSelecionado.isEmpty()) {
             for (Model m : modelExibidoSelecionado) {
-                camposDisponiveis.add((FieldModel) m.getObject());
+                camposDisponiveis.add((Coluna) m.getObject());
                 camposExibidos.remove(m);
             }
         }
     }
 
     public void excluirTodosDeCampoExibido() {
-        camposExibidos.forEach((m) -> camposDisponiveis.add((FieldModel) m.getObject()));
+        camposExibidos.forEach((m) -> camposDisponiveis.add((Coluna) m.getObject()));
         camposExibidos.removeAll();
     }
 
@@ -200,26 +200,26 @@ public abstract class BasicMBReportImpl<T> {
         return this;
     }
 
-    protected BasicMBReportImpl<T> addCampoPadrao(FieldModel campo) {
+    protected BasicMBReportImpl<T> addCampoPadrao(Coluna campo) {
         this.camposExibidos.add(campo);
         addCampo(campo);
         return this;
     }
 
-    private void addCampo(FieldModel campo) {
-        if (!((campo.getHeader() != null && campo.getHeader().toLowerCase().contains("format"))
-                || (campo.getProperty() != null && campo.getProperty().toLowerCase().contains("format"))
-                || (campo.getPropertyTwo() != null && campo.getPropertyTwo().toLowerCase().contains("format"))
-                || (campo.getPropertyThree() != null && campo.getPropertyThree().toLowerCase().contains("format"))
-                || (campo.getPropertyFour() != null && campo.getPropertyFour().toLowerCase().contains("format")))) {
+    private void addCampo(Coluna campo) {
+        if (!((campo.getNome() != null && campo.getNome().toLowerCase().contains("format"))
+                || (campo.getPropriedade() != null && campo.getPropriedade().toLowerCase().contains("format"))
+                || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
+                || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
+                || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
             this.campos.add(campo);
         }
     }
 
     public void filterField() {
         for (Model c : campos) {
-            if (((FieldModel) c.getObject()).getHeader().equals(campoSelecionadoString)) {
-                campoSelecionado = (FieldModel) c.getObject();
+            if (((Coluna) c.getObject()).getNome().equals(campoSelecionadoString)) {
+                campoSelecionado = (Coluna) c.getObject();
             }
         }
     }
@@ -246,12 +246,12 @@ public abstract class BasicMBReportImpl<T> {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Informe_Filtro_Pesquisa"));
             } else {
                 List filters = new ArrayList();
-                if (campoSelecionado.getType() != Date.class && !consulta.isEmpty()) {
+                if (campoSelecionado.getClasseOriginal() != Date.class && !consulta.isEmpty()) {
                     // Faz o tratamento dos filtros em seus devidos Tipos.
                     for (String s : consulta) {
-                        if (campoSelecionado.getType() == Long.class) {
+                        if (campoSelecionado.getClasseOriginal() == Long.class) {
                             filters.add(new Long(s));
-                        } else if (campoSelecionado.getType() == BigDecimal.class) {
+                        } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class) {
                             s = s.replaceAll(",", ".");
                             filters.add(new BigDecimal(s));
                         }
@@ -267,7 +267,7 @@ public abstract class BasicMBReportImpl<T> {
                 //Adiciona os filtros
                 FilterModel filtro = new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada);
                 if (filtros.contains(filtro)) {
-                    if (campoSelecionado.getType() != Date.class) {
+                    if (campoSelecionado.getClasseOriginal() != Date.class) {
                         for (String s : consulta) {
                             if (!filtros.get(filtros.indexOf(filtro)).getFilters().contains(s)) {
                                 filtros.get(filtros.indexOf(filtro)).getFilters().add(s);
@@ -277,7 +277,7 @@ public abstract class BasicMBReportImpl<T> {
                         filtros.get(filtros.indexOf(filtro)).setFilterDate(getConsultaDate());
                     }
                 } else {
-                    if (campoSelecionado.getType() != Date.class) {
+                    if (campoSelecionado.getClasseOriginal() != Date.class) {
                         filtros.add(new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada));
                     } else {
                         filtros.add(new FilterModel(campoSelecionado, getConsultaDate(), tipoDeBuscaSelecionada));
@@ -358,11 +358,11 @@ public abstract class BasicMBReportImpl<T> {
         this.consulta = consulta;
     }
 
-    public FieldModel getCampoSelecionado() {
+    public Coluna getCampoSelecionado() {
         return campoSelecionado;
     }
 
-    public void setCampoSelecionado(FieldModel campoSelecionado) {
+    public void setCampoSelecionado(Coluna campoSelecionado) {
         this.campoSelecionado = campoSelecionado;
     }
 
@@ -382,27 +382,27 @@ public abstract class BasicMBReportImpl<T> {
         this.modelExibidoSelecionado = modelExibidoSelecionado;
     }
 
-    public ModelList<FieldModel> getCampos() {
+    public ModelList<Coluna> getCampos() {
         return campos;
     }
 
-    public void setCampos(ModelList<FieldModel> campos) {
+    public void setCampos(ModelList<Coluna> campos) {
         this.campos = campos;
     }
 
-    public ModelList<FieldModel> getCamposDisponiveis() {
+    public ModelList<Coluna> getCamposDisponiveis() {
         return camposDisponiveis;
     }
 
-    public void setCamposDisponiveis(ModelList<FieldModel> camposDisponiveis) {
+    public void setCamposDisponiveis(ModelList<Coluna> camposDisponiveis) {
         this.camposDisponiveis = camposDisponiveis;
     }
 
-    public ModelList<FieldModel> getCamposExibidos() {
+    public ModelList<Coluna> getCamposExibidos() {
         return camposExibidos;
     }
 
-    public void setCamposExibidos(ModelList<FieldModel> camposExibidos) {
+    public void setCamposExibidos(ModelList<Coluna> camposExibidos) {
         this.camposExibidos = camposExibidos;
     }
 
@@ -443,7 +443,7 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public List<TipoDeBusca> getTiposDeBusca() {
-        if (campoSelecionado != null && (campoSelecionado.getType() == Date.class || campoSelecionado.getType() == Long.class || campoSelecionado.getType() == BigDecimal.class)) {
+        if (campoSelecionado != null && (campoSelecionado.getClasseOriginal() == Date.class || campoSelecionado.getClasseOriginal() == Long.class || campoSelecionado.getClasseOriginal() == BigDecimal.class)) {
             return Arrays.asList(
                     TipoDeBusca.DIFERENTE_DE,
                     TipoDeBusca.IGUAL_A,
@@ -451,7 +451,7 @@ public abstract class BasicMBReportImpl<T> {
                     TipoDeBusca.MAIOR_QUE,
                     TipoDeBusca.MENOR_OU_IGUAL_A,
                     TipoDeBusca.MENOR_QUE);
-        } else if (campoSelecionado != null && campoSelecionado.getType() == String.class) {
+        } else if (campoSelecionado != null && campoSelecionado.getClasseOriginal() == String.class) {
             return Arrays.asList(
                     TipoDeBusca.CONTENDO,
                     TipoDeBusca.DIFERENTE_DE,
@@ -488,7 +488,7 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public boolean isDate() {
-        return campoSelecionado == null ? false : campoSelecionado.getType() == Date.class;
+        return campoSelecionado == null ? false : campoSelecionado.getClasseOriginal() == Date.class;
     }
 
 }

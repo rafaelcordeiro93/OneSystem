@@ -202,21 +202,21 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
     }
 
     private void criarCampos() {
-        try {
-            camposSource = new ArrayList<>();
-            camposTarget = new ArrayList<>();
-            camposSource.add(new Coluna(null, "Id", null));
-            camposSource.add(new Coluna(null, "Nome", null));
-            camposSource.add(new Coluna(null, "Saldo", null));
-            camposSource.add(new Coluna(null, "Custo_Medio", null));
-            camposSource.add(new Coluna(null, "Custo_Total", null));
-            camposSource.add(new Coluna(null, "Marca", null));
-            camposSource.add(new Coluna(null, "Grupo", null));
-            camposSource.add(new Coluna(null, "Grupo_Fiscal", null));
-            campos = new DualListModel<Coluna>(camposSource, camposTarget);
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
+//        try {
+//            camposSource = new ArrayList<>();
+//            camposTarget = new ArrayList<>();
+////            camposSource.add(new Coluna(null, "Id", null));
+////            camposSource.add(new Coluna(null, "Nome", null));
+////            camposSource.add(new Coluna(null, "Saldo", null));
+////            camposSource.add(new Coluna(null, "Custo_Medio", null));
+////            camposSource.add(new Coluna(null, "Custo_Total", null));
+////            camposSource.add(new Coluna(null, "Marca", null));
+////            camposSource.add(new Coluna(null, "Grupo", null));
+////            camposSource.add(new Coluna(null, "Grupo_Fiscal", null));
+//            campos = new DualListModel<Coluna>(camposSource, camposTarget);
+//        } catch (DadoInvalidoException ex) {
+//            ex.print();
+//        }
     }
 
     @Override

@@ -88,8 +88,26 @@ public class NotaEmitidaDAO extends GenericDAO<NotaEmitida> {
         }
         return this;
     }
+
     public NotaEmitidaDAO ordenaPorEmissao() {
         order += " order by notaEmitida.emissao";
+        return this;
+    }
+
+    public NotaEmitidaDAO porPessoa(Pessoa pessoa) {
+        where += " and notaEmitida.pessoa = :pPessoa";
+        parametros.put("pPessoa", pessoa);
+        return this;
+    }
+
+    public NotaEmitidaDAO porAFaturarMaiorZero() {
+        where += " and notaEmitida.aFaturar > :pZero ";
+        parametros.put("pZero", BigDecimal.ZERO);
+        return this;
+    }
+
+    public NotaEmitidaDAO porSemFaturaEmitida() {
+        where += " and notaEmitida.faturaEmitida = null ";
         return this;
     }
 
