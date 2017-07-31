@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.war.service.impl.BasicMBReportImpl;
 import br.com.onesystem.dao.CobrancaDAO;
+import br.com.onesystem.dao.GenericDAO;
 import java.io.Serializable;
 import javax.inject.Named;
 import br.com.onesystem.domain.Cobranca;
@@ -28,5 +29,5 @@ public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implement
 
         initialize(Cobranca.class, CobrancaDAO.class);
     }
-
+    
 }
