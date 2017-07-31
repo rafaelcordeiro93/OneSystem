@@ -227,6 +227,7 @@ public class DadosIniciais {
         Janela relBalancoFisico = new Janela(null, "Relatório de Balanco Fisico", "/relatorioDeBalancoFisico.xhtml", rela);
 
         daoJanela.adiciona(relCambio);
+        daoJanela.adiciona(relConta);
         daoJanela.adiciona(relNotaEmitida);
         daoJanela.adiciona(relNotaRecebida);
         daoJanela.adiciona(relAjusteEstoque);
