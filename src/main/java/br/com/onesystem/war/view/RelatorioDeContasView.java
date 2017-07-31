@@ -29,5 +29,5 @@ public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implement
 
         initialize(Cobranca.class, CobrancaDAO.class);
     }
-    
+
 }

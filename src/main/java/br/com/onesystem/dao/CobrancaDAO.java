@@ -9,4 +9,10 @@ public class CobrancaDAO extends GenericDAO<Cobranca> {
         limpar();
     }
 
+    public CobrancaDAO consultaTitulos() {
+        query = "select titulo from Titulo titulo";
+        where = " where titulo.id != 0";
+        return this;
+    }
+
 }
