@@ -10,13 +10,11 @@ import java.util.Objects;
 public class ColunaBV implements Serializable {
 
     private Long id;
-    private String key;
     private String nome;
     private ModeloDeRelatorio modeloDeRelatorio;
 
     public ColunaBV(Coluna colunaSelecionada) {
         this.id = colunaSelecionada.getId();
-        this.key = colunaSelecionada.getKey();
         this.nome = colunaSelecionada.getNome();
         this.modeloDeRelatorio = colunaSelecionada.getModelo();
     }
@@ -30,14 +28,6 @@ public class ColunaBV implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getNome() {
@@ -57,29 +47,11 @@ public class ColunaBV implements Serializable {
     }
 
     public Coluna construir() throws DadoInvalidoException {
-        return new ColunaBuilder().comKey(key).comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
+        return new ColunaBuilder().comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
     }
 
     public Coluna construirComID() throws DadoInvalidoException {
-        return new ColunaBuilder().comID(id).comKey(key).comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final ColunaBV other = (ColunaBV) obj;
-        if (!Objects.equals(this.key, other.key)) {
-            return false;
-        }
-        return true;
+        return new ColunaBuilder().comID(id).comNome(nome).comModeloDeRelatorio(modeloDeRelatorio).construir();
     }
 
 }

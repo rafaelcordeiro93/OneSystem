@@ -177,7 +177,7 @@ public class DashboardContasView implements Serializable {
     }
 
     private void criarModeloDeContasAReceber() {
-        Axis yAxis = contasAPagar.getAxis(AxisType.Y);
+        Axis yAxis = contasAReceber.getAxis(AxisType.Y);
 
         contasAReceber = inicializaModeloDeContaAReceber();
         contasAReceber.setExtender("skinBar");

@@ -7,10 +7,18 @@ import br.com.onesystem.war.service.NotaEmitidaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.ZoneId;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
@@ -29,8 +37,10 @@ public class DashboardVendaView implements Serializable {
     private BigDecimal maiorValorTotal = BigDecimal.ZERO;
     private List<NotaEmitida> notasEmitidas;
     private BarChartModel vendas = new BarChartModel();
+    private BarChartModel vendasPorVendedor = new BarChartModel();
     private BigDecimal[] pTotal = new BigDecimal[12];
     private BigDecimal[] uTotal = new BigDecimal[12];
+    private HashMap<String, BigDecimal> vendedorTotal = new LinkedHashMap<String, BigDecimal>();
 
     @PostConstruct
     public void init() {
@@ -47,16 +57,25 @@ public class DashboardVendaView implements Serializable {
 
             formataDadosDeVendas();
             criarModeloDeBarra();
+            criaModeloDeVendasPorVendedor();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
     private void formataDadosDeVendas() {
+        Month mesAtual = LocalDate.now().getMonth();
         for (NotaEmitida n : notasEmitidas) {
             LocalDate data = n.getEmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             if (data.getYear() == LocalDate.now().getYear()) {
                 uTotal[data.getMonthValue() - 1] = n.getTotalNota();
+                if (data.getMonth() == mesAtual) {
+                    try {
+                        vendedorTotal.put(n.getUsuario().getPessoa().getPrimeiroNomeEComecoDoSobrenome(), vendedorTotal.get(n.getUsuario().getPessoa().getPrimeiroNomeEComecoDoSobrenome()).add(n.getTotalNota()));
+                    } catch (NullPointerException npe) {
+                        vendedorTotal.put(n.getUsuario().getPessoa().getPrimeiroNomeEComecoDoSobrenome(), n.getTotalNota());
+                    }
+                }
             } else {
                 pTotal[data.getMonthValue() - 1] = n.getTotalNota();
             }
@@ -84,7 +103,7 @@ public class DashboardVendaView implements Serializable {
         xAxis.setMin(0);
         xAxis.setTickAngle(-50);
         xAxis.setMax(maiorValorTotal.add(new BigDecimal(5000)));
-        
+
         yAxis = vendas.getAxis(AxisType.Y);
         yAxis.setLabel(msg.getLabel("Total"));
         yAxis.setMin(0);
@@ -132,12 +151,48 @@ public class DashboardVendaView implements Serializable {
         return model;
     }
 
+    private void criaModeloDeVendasPorVendedor() {
+        Axis yAxis = vendasPorVendedor.getAxis(AxisType.Y);
+
+        vendasPorVendedor = inicializaModeloDeVendasPorVendedor();
+        vendasPorVendedor.setExtender("skinBar");
+        vendasPorVendedor.setTitle(msg.getLabel("Vendas_por_Vendedor_no_Mes"));
+        vendasPorVendedor.setAnimate(true);
+        vendasPorVendedor.setLegendPosition("ne");
+        vendasPorVendedor.setShowPointLabels(true);
+        vendasPorVendedor.getAxes().put(AxisType.X, new CategoryAxis(msg.getLabel("Vendedores")));
+
+        yAxis = vendasPorVendedor.getAxis(AxisType.Y);
+        yAxis.setLabel(msg.getLabel("Total_Por_Vendedor"));
+        yAxis.setMin(0);
+        yAxis.setMax(maiorValorTotal.add(new BigDecimal(5000)));
+    }
+
+    private BarChartModel inicializaModeloDeVendasPorVendedor() {
+        BarChartModel model = new BarChartModel();
+
+        vendedorTotal.entrySet().stream().sorted(Map.Entry.comparingByValue((BigDecimal v1, BigDecimal v2) -> v2.compareTo(v1) )).limit(10).forEach(e -> {
+            ChartSeries c = new ChartSeries(e.getKey());
+            c.set("", e.getValue());
+            model.addSeries(c);
+        });
+        return model;
+    }
+
     public BarChartModel getVendas() {
         return vendas;
     }
 
     public void setVendas(BarChartModel vendas) {
         this.vendas = vendas;
+    }
+
+    public BarChartModel getVendasPorVendedor() {
+        return vendasPorVendedor;
+    }
+
+    public void setVendasPorVendedor(BarChartModel vendasPorVendedor) {
+        this.vendasPorVendedor = vendasPorVendedor;
     }
 
 }

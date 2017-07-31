@@ -232,6 +232,10 @@ public abstract class Nota implements Serializable {
         return cobrancas;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+    
     public List<Cobranca> getParcelas() {
         if (cobrancas != null) {
             List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());

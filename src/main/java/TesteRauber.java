@@ -1,13 +1,11 @@
 
-import br.com.onesystem.dao.TituloDAO;
-import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.dao.CobrancaDAO;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.war.service.DespesaProvisionadaService;
-import br.com.onesystem.war.service.TituloService;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
+import br.com.onesystem.valueobjects.TipoDeBusca;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -22,24 +20,18 @@ import java.util.List;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws DadoInvalidoException {
+    public static void main(String[] args) throws DadoInvalidoException, ClassNotFoundException, NoSuchFieldException, NoSuchMethodException {
 
-        Date hoje = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-        Date proximosSeisMeses = Date.from(LocalDate.now().plusMonths(5).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Class c = Cobranca.class;
+        System.out.println(c.getSimpleName().toLowerCase().substring(0, 1) + c.getSimpleName().substring(1));
 
-        System.out.println("Hoje: " + hoje);
-        System.out.println("Proximos 6 meses: " + proximosSeisMeses);
-        System.out.println("Consulta: " + new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).getConsulta());
-        
-        List<Titulo> titulosAPagar = new TituloDAO().aPagar().eAbertas().ePorVencimento(hoje, proximosSeisMeses).listaDeResultados();
-        List<DespesaProvisionada> despesasAPagar = new DespesaProvisionadaService().buscarDespesaProvisionadasAPagarComVencimentoEntre(hoje, proximosSeisMeses);
- 
-        System.out.println("Titulos: " + titulosAPagar.size());
-        titulosAPagar.forEach(System.out::println);
-        despesasAPagar.forEach(System.out::println);
-        
-        System.out.println("Consulta finalizada com sucesso!");
 
+//        FieldModel vencimento = new FieldModel("Vencimento (Cobrança)", "Cobrança", "vencimento", Cobranca.class);
+//        FieldModel pessoa = new FieldModel(null, null, "pessoa", "nome", Cobranca.class);
+//
+//        CobrancaDAO dao = new CobrancaDAO();
+//
+//        dao.filter(TipoDeBusca.CONTENDO, pessoa, Arrays.asList("cordeiro","rauber")).listaDeResultados().stream().forEach(System.out::println);
     }
 
 }

@@ -27,7 +27,7 @@ public class ColunaPickListConverter implements Converter {
             Object dualList = ((PickList) arg1).getValue();
             DualListModel<Coluna> dl = (DualListModel) dualList;
             for (Object o : dl.getSource()) {
-                String key = "" + ((Coluna) o).getKey();
+                String key = "" + ((Coluna) o).getNome();
                 if (arg2.equals(key)) {
                     ret = o;
                     break;
@@ -35,7 +35,7 @@ public class ColunaPickListConverter implements Converter {
             }
             if (ret == null) {
                 for (Object o : dl.getTarget()) {
-                    String key = "" + ((Coluna) o).getKey();
+                    String key = "" + ((Coluna) o).getNome();
                     if (arg2.equals(key)) {
                         ret = o;
                         break;
@@ -50,7 +50,7 @@ public class ColunaPickListConverter implements Converter {
     public String getAsString(FacesContext arg0, UIComponent arg1, Object arg2) {
         String str = "";
         if (arg2 instanceof Coluna) {
-            str = "" + ((Coluna) arg2).getKey();
+            str = "" + ((Coluna) arg2).getNome();
         }
         return str;
     }

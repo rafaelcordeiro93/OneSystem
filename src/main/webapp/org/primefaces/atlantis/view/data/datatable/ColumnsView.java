@@ -102,7 +102,7 @@ public class ColumnsView implements Serializable {
         createDynamicColumns();
     }
     
-    static public class ColumnModel implements Serializable {
+    static class ColumnModel implements Serializable {
 
         private String header;
         private String property;
