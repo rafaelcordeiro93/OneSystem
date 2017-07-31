@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.dao.NotaDAO;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.war.service.impl.BasicMBReportImpl;
@@ -28,6 +29,12 @@ public class RelatorioDeNotasEmitadasView extends BasicMBReportImpl<Nota> implem
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Nota"), "emissao", Nota.class, Date.class));
 
         initialize(Nota.class, NotaDAO.class);
+
+    }
+
+    @Override
+    protected void alteraConsulta(GenericDAO gDao) {
+        gDao = ((NotaDAO) gDao).consultaNotaEmitida();
     }
 
 }

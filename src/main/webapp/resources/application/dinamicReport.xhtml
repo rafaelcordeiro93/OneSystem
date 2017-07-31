@@ -64,12 +64,12 @@
             </p:column>
         </p:panelGrid>
 
-        <p:dialog widgetVar="exibirCampos" width="900" height="800">
+        <p:dialog widgetVar="exibirCampos" width="900" height="600">
 
             <h:panelGrid columns="3" style="height: 95%">
 
                 <p:dataTable id="campos" widgetVar="camposTable" var="m" value="#{cc.attrs.mbView.camposDisponiveis}" selectionMode="multiple" emptyMessage="#{l.Nao_Ha_Registros}" 
-                             rowKey="#{m.id}" reflow="true" style="border: none" scrollable="true" scrollHeight="600" selection="#{cc.attrs.mbView.modelDisponivelSelecionado}">
+                             rowKey="#{m.id}" reflow="true" style="border: none" scrollable="true" scrollHeight="400" selection="#{cc.attrs.mbView.modelDisponivelSelecionado}">
 
                     <f:facet name="header" >
                         <div align="right">
@@ -94,7 +94,7 @@
                 </p:panelGrid>
 
                 <p:dataTable id="camposExibidos" widgetVar="camposExibidosTable" var="m" value="#{cc.attrs.mbView.camposExibidos}" selectionMode="multiple" emptyMessage="#{l.Nao_Ha_Registros}"
-                             rowKey="#{m.id}" reflow="true" style="border: none" scrollable="true" scrollHeight="600" draggableRows="true" editMode="cell" 
+                             rowKey="#{m.id}" reflow="true" style="border: none" scrollable="true" scrollHeight="400" draggableRows="true" editMode="cell" 
                              editable="true" selection="#{cc.attrs.mbView.modelExibidoSelecionado}">
 
                     <p:ajax event="rowReorder" listener="#{cc.attrs.mbView.onRowReorder}"/>

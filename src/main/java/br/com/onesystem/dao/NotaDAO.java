@@ -5,17 +5,29 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Nota;
 
 /**
  *
- * @author Rafael Fernando Rauber
+ * @author Rafael Cordeiro
  */
-public class NotaDAO extends GenericDAO<NotaEmitida> {
+public class NotaDAO extends GenericDAO<Nota> {
 
     public NotaDAO() {
-        super(NotaEmitida.class);
+        super(Nota.class);
         limpar();
+    }
+
+    public NotaDAO consultaNotaEmitida() {
+        query = "select notaEmitida from NotaEmitida notaEmitida ";
+        where = " where notaEmitida.id != 0 ";
+        return this;
+    }
+
+    public NotaDAO consultaNotaRecebida() {
+        query = "select notaRecebida from NotaRecebida notaRecebida ";
+        where = " where notaRecebida.id != 0 ";
+        return this;
     }
 
 }
