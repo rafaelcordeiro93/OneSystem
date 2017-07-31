@@ -110,7 +110,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         }
         if (faturaRecebida != null) {
             cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(faturaRecebida.getEmissao()).listaDeResultados();
-            e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(faturaRecebida.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaRecebida.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.RECEBIDA);
             e.setMoeda(faturaRecebida.getMoedaPadrao());
