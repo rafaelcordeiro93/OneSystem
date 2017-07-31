@@ -5,9 +5,11 @@
  */
 package br.com.onesystem.domain;
 
+import ar.com.fdvs.dj.domain.DJCalculation;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,30 +35,34 @@ public class Coluna implements Serializable {
     private String propriedadeQuatro;
     @ManyToOne
     private ModeloDeRelatorio modelo;
+    @Enumerated
+    private DJCalculation totalizador;
 
     public Coluna() {
     }
 
-    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal) {
+    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
+        this.totalizador = totalizador;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
         this.propriedadeDois = propriedadeDois;
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
+        this.totalizador = totalizador;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
@@ -64,10 +70,11 @@ public class Coluna implements Serializable {
         this.propriedadeTres = propriedadeTres;
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
+        this.totalizador = totalizador;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
@@ -76,6 +83,7 @@ public class Coluna implements Serializable {
         this.propriedadeQuatro = propriedadeQuatro;
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
+        this.totalizador = totalizador;
         tamanho = 20;
     }
 

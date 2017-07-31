@@ -42,7 +42,8 @@
 
         <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
-            <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" />
+            <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" />
+            <p:commandButton value="#{l.Imprimir}" action="#{cc.attrs.mbView.imprimir}" update="#{cc.attrs.form}" icon="fa fa-print" />
         </p:panelGrid>
 
         <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">

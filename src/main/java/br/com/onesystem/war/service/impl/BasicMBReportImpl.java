@@ -12,6 +12,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.FilterModel;
+import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.TipoDeBusca;
@@ -136,7 +137,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
@@ -147,7 +148,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType());
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
@@ -299,7 +300,7 @@ public abstract class BasicMBReportImpl<T> {
         try {
             GenericDAO<T> gDao = (GenericDAO<T>) dao.newInstance();
             alteraConsulta(gDao);
-            
+
             if (!filtros.isEmpty()) {
                 for (FilterModel f : filtros) {
                     if (f.getFilterDate() == null) {
@@ -316,8 +317,12 @@ public abstract class BasicMBReportImpl<T> {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    protected void alteraConsulta(GenericDAO gDao){
+
+    protected void alteraConsulta(GenericDAO gDao) {
+    }
+
+    public void imprimir() {
+        ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
     }
 
 //    Implementação para ser feita quando for corrigido o componente
