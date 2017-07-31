@@ -210,6 +210,8 @@ public class DadosIniciais {
         daoJanela.adiciona(cambio);
 
         //Modulo de Relatorios
+        Janela relPessoas = new Janela(null, "Relatório de Pessoas", "/relatorioDePessoas.xhtml", rela);
+        Janela relConta = new Janela(null, "Relatório de Contas", "/relatorioDeContas.xhtml", rela);
         Janela relContaPagar = new Janela(null, "Relatório de Conta A Pagar", "/relatorioDeContaAPagar.xhtml", rela);
         Janela relContaReceber = new Janela(null, "Relatório de Conta A Receber", "/relatorioDeContaAReceber.xhtml", rela);
         Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/relatorioDeSaldoDeConta.xhtml", rela);
@@ -310,6 +312,8 @@ public class DadosIniciais {
                 new Privilegio(null, recepcao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, contraCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cambio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relConta, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relPessoas, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relContaPagar, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relContaReceber, true, true, true, true, grupoDePrivilegio),

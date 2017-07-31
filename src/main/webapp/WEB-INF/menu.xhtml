@@ -112,7 +112,15 @@
 
             <pa:tab icon="fa fa-line-chart" title="#{l.Relatorios}">
                 <pa:menu widgetVar="mat">
+                    <p:submenu label="#{l.Arquivo}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-minus" outcome="/relatorioDePessoas" />
+                    </p:submenu>
+                    <p:submenu label="#{l.Vendas}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/relatorioDeNotasEmitidas" />
+
+                    </p:submenu>
                     <p:submenu label="#{l.Financeiro}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Conta}" icon="fa fa-minus" outcome="/relatorioDeContas" />
                         <p:menuitem value="#{l.Conta_a_Pagar}" icon="fa fa-minus" outcome="/relatorioDeContaAPagar" />
                         <p:menuitem value="#{l.Conta_a_Receber}" icon="fa fa-plus" outcome="/relatorioDeContaAReceber" />
                         <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/relatorioDeSaldoDeConta" />
