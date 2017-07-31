@@ -136,6 +136,10 @@
                     <h:outputText value="#{l.Pesquisar_por_todos_campos}: " />
                     <p:inputText id="globalFilter" onkeyup="PF('objectsTable').filter()" style="width:150px; margin-right: 5px" placeholder="#{l.Pesquisar}"/>
                     <p:commandButton icon="fa fa-calculator" value="#{l.Exibir_Campos}" onclick="PF('exibirCampos').show()"/>
+                    <h:commandLink>
+                        <p:graphicImage name="/img/Excel.png" width="24" />
+                        <p:dataExporter type="xls" target="objects" fileName="Registros" />
+                    </h:commandLink>
                 </div>
             </f:facet>
 

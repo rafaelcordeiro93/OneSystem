@@ -80,7 +80,7 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     private void inicializarRegistros() throws InstantiationException, IllegalAccessException {
-        registros = new ArmazemDeRegistros<>((Class<T>) clazz).listaTodosOsRegistros();
+        buscaDadosDoBancoComFiltros();
     }
 
     private void inicializarCampos() throws ClassNotFoundException {
@@ -298,26 +298,26 @@ public abstract class BasicMBReportImpl<T> {
     private void buscaDadosDoBancoComFiltros() {
         try {
             GenericDAO<T> gDao = (GenericDAO<T>) dao.newInstance();
-            System.out.println(gDao.getConsulta());
-
-            for (FilterModel f : filtros) {
-                if (f.getFilterDate() == null) {
-                    gDao.filter(f.getTypeSearch(), f.getField(), f.getFilters());
-                } else {
-                    gDao.filter(f.getTypeSearch(), f.getField(), f.getFilterDate());
+            alteraConsulta(gDao);
+            
+            if (!filtros.isEmpty()) {
+                for (FilterModel f : filtros) {
+                    if (f.getFilterDate() == null) {
+                        gDao.filter(f.getTypeSearch(), f.getField(), f.getFilters());
+                    } else {
+                        gDao.filter(f.getTypeSearch(), f.getField(), f.getFilterDate());
+                    }
                 }
             }
 
-            gDao.getParametros().forEach((k, v) -> {
-                System.out.println(k + " - " + v);
-            });
-
-            System.out.println(gDao.getConsulta());
             registros = gDao.listaDeResultados();
         } catch (InstantiationException | IllegalAccessException ex) {
             FatalMessage.print("Erro de acesso ao inicializar dao chips: " + ex.getMessage(), ex);
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    protected void alteraConsulta(GenericDAO gDao){
     }
 
 //    Implementação para ser feita quando for corrigido o componente
