@@ -9,6 +9,7 @@ import ar.com.fdvs.dj.domain.DJCalculation;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -35,7 +36,6 @@ public class Coluna implements Serializable {
     private String propriedadeQuatro;
     @ManyToOne
     private ModeloDeRelatorio modelo;
-    @Enumerated
     private DJCalculation totalizador;
 
     public Coluna() {

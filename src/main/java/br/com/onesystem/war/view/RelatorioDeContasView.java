@@ -21,9 +21,9 @@ public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implement
         addExtraClass(Moeda.class, "cotacao.conta.moeda");
         addCampoPadrao(new Coluna("Id", "Cobrança", "id", Cobranca.class, Long.class, null));
         addCampoPadrao(new Coluna("Nome (Pessoa)", "Pessoa", "pessoa", "nome", Pessoa.class, String.class, null));
-        addCampoPadrao(new Coluna("Emissão Formatada Sem Horas", "Cobrança", "emissaoFormatadaSemHoras", Cobranca.class, String.class, null));
-        addCampoPadrao(new Coluna("Vencimento Formatado Sem Horas", "Cobrança", "vencimentoFormatadoSemHoras", Cobranca.class, String.class, null));
-        addCampoPadrao(new Coluna("Valor Formatado", "Cobrança", "valorFormatado", Cobranca.class, String.class, null));
+        addCampoPadrao(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, String.class, null));
+        addCampoPadrao(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, String.class, null));
+        addCampoPadrao(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, String.class, null));
 
         initialize(Cobranca.class, CobrancaDAO.class);
     }

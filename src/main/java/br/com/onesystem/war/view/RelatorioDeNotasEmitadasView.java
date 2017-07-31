@@ -23,10 +23,10 @@ public class RelatorioDeNotasEmitadasView extends BasicMBReportImpl<Nota> implem
         addExtraClass(Pessoa.class, "pessoa");
         addExtraClass(Operacao.class, "operacao");
         addExtraClass(NotaEmitida.class, "notaEmitida");
-        addCampoPadrao(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Nota"), "id", Nota.class, Long.class));
-        addCampoPadrao(new Coluna(bundle.getLabel("Operacao") + "(" + bundle.getLabel("Operacao") + ")", bundle.getLabel("Operacao"), "operacao", "nome", Operacao.class, String.class));
-        addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class));
-        addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Nota"), "emissao", Nota.class, Date.class));
+        addCampoPadrao(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Nota"), "id", Nota.class, Long.class, null));
+        addCampoPadrao(new Coluna(bundle.getLabel("Operacao") + "(" + bundle.getLabel("Operacao") + ")", bundle.getLabel("Operacao"), "operacao", "nome", Operacao.class, String.class, null));
+        addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class, null));
+        addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Nota"), "emissao", Nota.class, Date.class, null));
 
         initialize(Nota.class, NotaDAO.class);
 
