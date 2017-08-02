@@ -5,17 +5,19 @@
  */
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.domain.Coluna;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
+import br.com.onesystem.services.impl.MethodInaccessibleReport;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.FilterModel;
-import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.TipoDeBusca;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -32,6 +34,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javassist.Modifier;
 import javax.inject.Named;
+import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
 
@@ -59,6 +62,7 @@ public abstract class BasicMBReportImpl<T> {
     private List<Class> classes = new ArrayList<>();
     private HashMap<Class, String> mapPath = new HashMap<>();
     protected BundleUtil bundle = new BundleUtil();
+    private Coluna siglaMoeda;
 
     protected abstract void init();
 
@@ -111,11 +115,12 @@ public abstract class BasicMBReportImpl<T> {
             } catch (MissingResourceException mre) {
                 table = "??" + c.getSimpleName() + "??";
             }
+            //&& fieldsName.contains(m.getName().substring(3).substring(0, 1).toLowerCase() + m.getName().substring(4)) Summary Row
             List<String> fieldsName = Arrays.asList(c.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
             for (Method m : c.getMethods()) {
-                //&& fieldsName.contains(m.getName().substring(3).substring(0, 1).toLowerCase() + m.getName().substring(4)) -- Summary Row
                 if (m.getName().contains("get") && !"getClass".equals(m.getName()) && m.getReturnType() != List.class
-                        && m.getDeclaringClass().toString().substring(6).equals(c.getName()) && !m.getReturnType().toString().contains("domain")) {
+                        && m.getDeclaringClass().toString().substring(6).equals(c.getName()) && !m.getReturnType().toString().contains("domain")
+                        && !m.isAnnotationPresent(MethodInaccessibleReport.class)) {
 
                     //Busca caminho
                     String[] property = new String[4];
@@ -139,7 +144,6 @@ public abstract class BasicMBReportImpl<T> {
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
                         if (!camposExibidos.getList().contains(novoCampo)) {
-                            camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
                         }
                     } catch (MissingResourceException mre) {
@@ -150,7 +154,6 @@ public abstract class BasicMBReportImpl<T> {
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
                         if (!camposExibidos.getList().contains(novoCampo)) {
-                            camposDisponiveis.add(novoCampo);
                             addCampo(novoCampo);
                         }
                     }
@@ -198,6 +201,13 @@ public abstract class BasicMBReportImpl<T> {
     protected BasicMBReportImpl<T> addExtraClass(Class clazz, String path) {
         this.classes.add(clazz);
         this.mapPath.put(clazz, path);
+        if (clazz.equals(Moeda.class)) {
+            String[] property = new String[4];
+            String[] split = path.split("\\.");
+            System.arraycopy(split, 0, property, 0, split.length);
+            property[split.length] = "sigla";
+            siglaMoeda = new Coluna(null, null, property[0], property[1], property[2], property[3], this.clazz, clazz, null);
+        }
         return this;
     }
 
@@ -214,6 +224,7 @@ public abstract class BasicMBReportImpl<T> {
                 || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
                 || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
             this.campos.add(campo);
+            this.camposDisponiveis.add(campo);
         }
     }
 
@@ -323,6 +334,17 @@ public abstract class BasicMBReportImpl<T> {
 
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
+        try {
+            HashMap<String, Object> parametros = new HashMap<>();
+            parametros.put("TITULO_RELATORIO", "Relatório de Contas");
+            parametros.put("NOME_EMPRESA", "RR Minds Soluções em Tecnologia LTDA");
+
+            impressora.imprimir(registros, "Relatorio de Contas", camposExibidos.getList()).naWeb();
+        } catch (DRException ex) {
+            Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 //    Implementação para ser feita quando for corrigido o componente
@@ -494,6 +516,14 @@ public abstract class BasicMBReportImpl<T> {
 
     public boolean isDate() {
         return campoSelecionado == null ? false : campoSelecionado.getClasseOriginal() == Date.class;
+    }
+
+    public boolean isContainsMoeda() {
+        return mapPath.containsKey(Moeda.class);
+    }
+
+    public Coluna getSiglaMoeda() {
+        return siglaMoeda;
     }
 
 }
