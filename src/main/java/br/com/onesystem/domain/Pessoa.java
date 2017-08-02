@@ -4,6 +4,7 @@ import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.services.CharacterType;
+import br.com.onesystem.services.impl.MethodInaccessibleReport;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,6 +146,7 @@ public abstract class Pessoa implements Serializable {
         return nome;
     }
 
+    @MethodInaccessibleReport
     public String getPrimeiroNomeEComecoDoSobrenome() {
         if (nome.contains(" ")) {
             return nome.substring(0, nome.indexOf(' ')) + (nome.substring(nome.lastIndexOf(' '), nome.lastIndexOf(' ') + 2) + '.');
@@ -246,6 +248,7 @@ public abstract class Pessoa implements Serializable {
 
     public abstract String getDocumento();
 
+    @MethodInaccessibleReport
     public String getFirstNameLastName() {
         String firstName = nome;
         String lastName = "";

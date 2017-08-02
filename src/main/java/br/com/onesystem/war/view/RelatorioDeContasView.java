@@ -8,6 +8,8 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import java.math.BigDecimal;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 
 @Named
@@ -17,13 +19,16 @@ public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implement
     @PostConstruct
     @Override
     protected void init() {
+        Coluna pessoa = new Coluna("Nome (Pessoa)", "Pessoa", "pessoa", "nome", Pessoa.class, String.class, null);
+        pessoa.setTamanho(30);
+        
         addExtraClass(Pessoa.class, "pessoa");
         addExtraClass(Moeda.class, "cotacao.conta.moeda");
         addCampoPadrao(new Coluna("Id", "Cobrança", "id", Cobranca.class, Long.class, null));
-        addCampoPadrao(new Coluna("Nome (Pessoa)", "Pessoa", "pessoa", "nome", Pessoa.class, String.class, null));
-        addCampoPadrao(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, String.class, null));
-        addCampoPadrao(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, String.class, null));
-        addCampoPadrao(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, String.class, null));
+        addCampoPadrao(pessoa);
+        addCampoPadrao(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, Date.class, null));
+        addCampoPadrao(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class, null));
+        addCampoPadrao(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, null));
 
         initialize(Cobranca.class, CobrancaDAO.class);
     }

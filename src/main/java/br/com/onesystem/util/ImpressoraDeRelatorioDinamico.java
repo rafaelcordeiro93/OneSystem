@@ -1,138 +1,203 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.onesystem.util;
 
-import ar.com.fdvs.dj.core.DynamicJasperHelper;
-import ar.com.fdvs.dj.core.layout.ClassicLayoutManager;
-import ar.com.fdvs.dj.domain.DynamicReport;
-import ar.com.fdvs.dj.domain.Style;
-import ar.com.fdvs.dj.domain.builders.FastReportBuilder;
-import ar.com.fdvs.dj.domain.constants.Border;
-import ar.com.fdvs.dj.domain.constants.Font;
-import ar.com.fdvs.dj.domain.constants.HorizontalAlign;
-import ar.com.fdvs.dj.domain.constants.Transparency;
-import ar.com.fdvs.dj.domain.constants.VerticalAlign;
-import br.com.onesystem.reportTemplate.ColunaRepository;
+import br.com.onesystem.reportTemplate.*;
+import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.Coluna;
+import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.util.BundleUtil;
 import java.awt.Color;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
-import net.sf.jasperreports.engine.JRDataSource;
+import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import static net.sf.dynamicreports.report.builder.DynamicReports.*;
+import net.sf.dynamicreports.report.builder.MarginBuilder;
+import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.style.PaddingBuilder;
+import net.sf.dynamicreports.report.builder.style.StyleBuilder;
+import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
+import net.sf.dynamicreports.report.constant.HorizontalAlignment;
+import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
+import net.sf.dynamicreports.report.constant.VerticalAlignment;
+import net.sf.dynamicreports.report.constant.WhenNoDataType;
+import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 /**
- *
  * @author Rafael Fernando Rauber
+ * @date 01/08/2017
+ * @author Rafael Fernando Rauber
+ *
+ * Classe utilizada para impressão de relatórios dinamicamente.
  */
 public class ImpressoraDeRelatorioDinamico {
 
-    private FastReportBuilder builder;
+    private JasperReportBuilder relatorio = report(); // Cria um novo relatório.
+    private String nome;
+    private Map<String, Object> parametros;
 
     public ImpressoraDeRelatorioDinamico() {
     }
 
-    public void imprimir(List<?> lista, String nome, List<ColunaRepository> colunas, List<?> campos) throws JRException, IOException {
-        builder = new FastReportBuilder();
-        //Cria propriedades e colunas
-        propriedades(nome);
-        construirCampos(colunas, campos);
+    /**
+     *
+     * @param registros Lista tipada dos registros a serem impressos.
+     * @param nome Nome do relatório
+     * @param colunas Colunas a serem exibidas.
+     * @return Retorna o mesmo para que seja possível escolher entre imprimir na
+     * web ou no console.
+     */
+    public ImpressoraDeRelatorioDinamico imprimir(List registros, String nome, List<Coluna> colunas) {
+        this.nome = nome; // Recebe o nome do relatório
 
-        //Cria o relatório dinamico
-        DynamicReport dr = builder.build();
-        JRDataSource ds = new JRBeanCollectionDataSource(lista);
-        JasperPrint jp = DynamicJasperHelper.generateJasperPrint(dr, new ClassicLayoutManager(), ds);
+        criarColunas(colunas); //cria as colunas
+        margem(); //ajusta as margens
+        cabecalhoRodape(); //cria cabecalhoRodapé
+
+        relatorio.noData(Templates.createTitleComponent("NoData"), cmp.text(new BundleUtil().getLabel("Nao_Ha_Registros")));
+        relatorio.setDataSource(new JRBeanCollectionDataSource(registros)); //add registros
+        relatorio.setLocale(new Locale("pt", "BR"));
+
+        return this;
+
+    }
+
+    private void margem() {
+        // Para cada 1 de margem, é 0,04 cm - Comparação com Word - Margem Estreita.
+        // Top 1,28 cm | Bottom 1,32, Right e Left  1,20 cm 
+        MarginBuilder margem = margin().setRight(25).setLeft(25).setTop(32).setBottom(45);
+        relatorio.setPageMargin(margem);
+    }
+
+    public void naWeb() throws IOException, DRException {
         HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         res.setContentType("application/pdf");
-        res.addHeader("Content-disposition", "attachment; filename=" + nome + new Date()  + ".pdf");
-        JasperExportManager.exportReportToPdfStream(jp, res.getOutputStream());
+        res.addHeader("Content-disposition", "attachment; filename=" + nome + new Date() + ".pdf");
+        relatorio.toPdf(res.getOutputStream());
         FacesContext.getCurrentInstance().responseComplete();
     }
 
-    private void construirCampos(List<ColunaRepository> colunas, List<?> campos) {
-        for (Object c : campos) {
-            for (ColunaRepository cr : colunas) {
-                if (c.equals(cr.getColuna().getTitle())) {
-                    builder.addColumn(cr.getColuna());
-                    if (cr.getTotalizador() != null) {
-                        builder.addGlobalFooterVariable(cr.getColuna(), cr.getTotalizador());
-                    }
-                }
-            }
+    public void noConsole() {
+        try {
+            relatorio.show();
+        } catch (DRException ex) {
+            Logger.getLogger(ImpressoraDeRelatorioDinamico.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void propriedades(String nome) {
-        builder.setTitle(nome)
-                .setMargins(0, 0, 0, 0)
-                .setPrintBackgroundOnOddRows(true)
-                .setUseFullPageWidth(true)
-                .setReportName(nome)
-                .setAllowDetailSplit(true)
-                .setGrandTotalLegend(new BundleUtil().getLabel("Total"))
-                .setGrandTotalLegendStyle(getSubTitleStyle())
-                .setDefaultStyles(getTitleStyle(), null, getColumnHeaderStyle(), getColumnDetailsStyle());
+    /**
+     * @author Rafael Fernando Rauber
+     * @date 01/08/2017
+     *
+     * Cria as colunas NOME/CAMPO/TYPE CLASS Altera o estilo do Titulo das
+     * colunas Altera o estilo do DETAIL das colunas
+     *
+     * @param colunas
+     */
+    public void criarColunas(List<Coluna> colunas) {
+        //Gera as colunas
+        colunas.forEach((cl) -> {
+            TextColumnBuilder column = col.column(cl.getNome(), cl.getPropriedadeCompleta(), cl.getClasseOriginal());
+            column.setWidth(cl.getTamanho());
+            relatorio.addColumn(column);
+            if (cl.getClasseOriginal() == BigDecimal.class) {
+                AggregationSubtotalBuilder sum = sbt.sum(cl.getPropriedadeCompleta(), cl.getClasseOriginal(), column);
+                sum.setStyle(stl.style().setHorizontalAlignment(HorizontalAlignment.CENTER));
+                relatorio.subtotalsAtSummary(sum);
+            }
+        });
+
+        //Altera o estilo do Titulo das colunas
+        StyleBuilder brancoCentralizado = stl.style().setHorizontalAlignment(HorizontalAlignment.CENTER).setForegroundColor(Color.WHITE)
+                .setBackgroundColor(new Color(0, 162, 237)).setBorder(stl.penThin()).setPadding(8);
+
+        PaddingBuilder padding = stl.padding().setBottom(1).setTop(1);
+        StyleBuilder columnStyle = stl.style().setHorizontalAlignment(HorizontalAlignment.CENTER).setPadding(padding);
+
+        relatorio.setColumnTitleStyle(brancoCentralizado)
+                .setColumnStyle(columnStyle)
+                .highlightDetailOddRows();
     }
 
-    private Style getTitleStyle() {
+    public void cabecalhoRodape() {
 
-        Style headerStyle = new Style();
-        headerStyle.setBackgroundColor(new Color(35, 98, 201));
-        headerStyle.setPaddingBottom(new Integer(30));
-        headerStyle.setPaddingTop(new Integer(30));
-        headerStyle.setPaddingRight(new Integer(25));
-        headerStyle.setPaddingLeft(new Integer(25));
-        headerStyle.setHorizontalAlign(HorizontalAlign.LEFT);
-        headerStyle.setFont(new Font(30, "Open Sans", true));
-        headerStyle.setTextColor(Color.WHITE);
-        headerStyle.setTransparency(Transparency.OPAQUE);
-        return headerStyle;
+        //ESTILOS
+        StyleBuilder centeredStyle = stl.style()
+                .setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        StyleBuilder boldCenteredStyle = stl.style(stl.style().bold())
+                .setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        PaddingBuilder padding = stl.padding().setBottom(0).setTop(0);
+
+        //ESTILO DO TITULO
+        StyleBuilder titleStyle = stl.style(boldCenteredStyle)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setPadding(padding).setFontSize(15);
+
+        //ESTILO DO SUBTITULO
+        StyleBuilder subTitleStyle = stl.style(centeredStyle)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setPadding(padding).setFontSize(12);
+
+        //ESTILO DA IMAGEM
+        StyleBuilder imagemStyle = stl.style().setVerticalAlignment(VerticalAlignment.MIDDLE).
+                setPadding(stl.padding().setTop(9));
+
+        //CABEÇALHO
+        relatorio.title(
+                cmp.horizontalList()
+                        .add(
+                                cmp.image(getClass().getClassLoader().getResourceAsStream("logo.png")).setFixedDimension(60, 60).setStyle(imagemStyle),
+                                cmp.verticalList().add(cmp.text("Relatório de Contas").setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
+                                        cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
+                        .newRow()
+                        .add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10)));
+        //RODAPÉ
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+
+        relatorio.setPageFooterStyle(stl.style().setBackgroundColor(new Color(200, 200, 200)).setBorder(stl.penThin().setLineColor(new Color(230, 230, 230))));
+        relatorio.pageFooter(cmp.horizontalList()
+                .add(cmp.text(new BundleUtil().getLabel("Data") + ": " + sdf.format(new Date())).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT))
+                .add(cmp.pageXslashY().setHorizontalTextAlignment(HorizontalTextAlignment.RIGHT)));
+
     }
 
-    private Style getSubTitleStyle() {
-        Style subtitleStyle = new Style();
-        subtitleStyle.setBackgroundColor(new Color(35, 98, 201));
-        subtitleStyle.setPadding(new Integer(3));
-        subtitleStyle.setBorder(Border.THIN());
-        subtitleStyle.setTextColor(Color.WHITE);
-        subtitleStyle.setHorizontalAlign(HorizontalAlign.RIGHT);
-        subtitleStyle.setVerticalAlign(VerticalAlign.MIDDLE);
-        subtitleStyle.setFont(Font.ARIAL_SMALL);
-        subtitleStyle.setTransparency(Transparency.OPAQUE);
-        return subtitleStyle;
+    public ImpressoraDeRelatorioDinamico comParametros(Map<String, Object> parametros) {
+        this.parametros = parametros;
+        return this;
     }
 
-    private Style getColumnHeaderStyle() {
-        Style hStyle = new Style();
-        hStyle.setBorder(Border.THIN());
-        hStyle.setTransparent(false);
-        hStyle.setBackgroundColor(new Color(35, 98, 201));
-        hStyle.setTextColor(Color.WHITE);
-        hStyle.setBorderColor(Color.WHITE);
-        hStyle.setPadding(3);
-        hStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-        hStyle.setVerticalAlign(VerticalAlign.MIDDLE);
-        hStyle.setFont(Font.ARIAL_SMALL);
+    public static void main(String[] args) throws JRException, IOException {
 
-        return hStyle;
-    }
+        List<Cobranca> registros = new ArmazemDeRegistros<Cobranca>(Cobranca.class).listaTodosOsRegistros();
+        List<Coluna> colunas = new ArrayList<>();
+        Coluna pessoa = new Coluna("Nome (Pessoa)", "Pessoa", "pessoa", "nome", Pessoa.class, String.class, null);
+        pessoa.setTamanho(30);
+        
+        ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
 
-    private Style getColumnDetailsStyle() {
-        Style cStyle = new Style();
-        cStyle.setBorderLeft(Border.THIN());
-        cStyle.setBorderRight(Border.THIN());
-        cStyle.setFont(Font.ARIAL_SMALL);
-        cStyle.setHorizontalAlign(HorizontalAlign.CENTER);
-        cStyle.setVerticalAlign(VerticalAlign.TOP);
-        cStyle.setTextColor(Color.BLACK);
-        return cStyle;
+        colunas.add(new Coluna("Id", "Cobrança", "id", Cobranca.class, Long.class, null));
+        colunas.add(pessoa);
+        colunas.add(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, Date.class, null));
+        colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class, null));
+        colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, null));
+
+        impressora.imprimir(registros, "Report_Model", colunas).noConsole();
+
+        System.out.println("Imprimiu");
+
     }
 
 }

@@ -1,13 +1,9 @@
 
-import br.com.onesystem.dao.CobrancaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Cobranca;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoDeBusca;
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import net.sf.jasperreports.engine.JRException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,18 +16,17 @@ import java.util.List;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws DadoInvalidoException, ClassNotFoundException, NoSuchFieldException, NoSuchMethodException {
+    public static void main(String[] args) throws Exception {
+
+        String caminho = "cotacao.conta.moeda";
+        
+        Cobranca cobranca = new ArmazemDeRegistros<Cobranca>(Cobranca.class).find(new Long (1));
 
         Class c = Cobranca.class;
-        System.out.println(c.getSimpleName().toLowerCase().substring(0, 1) + c.getSimpleName().substring(1));
+        Method m = c.getMethod("getCotacao", null);
+        Object invoke = m.invoke(cobranca);
+        
 
-
-//        FieldModel vencimento = new FieldModel("Vencimento (Cobrança)", "Cobrança", "vencimento", Cobranca.class);
-//        FieldModel pessoa = new FieldModel(null, null, "pessoa", "nome", Cobranca.class);
-//
-//        CobrancaDAO dao = new CobrancaDAO();
-//
-//        dao.filter(TipoDeBusca.CONTENDO, pessoa, Arrays.asList("cordeiro","rauber")).listaDeResultados().stream().forEach(System.out::println);
     }
 
 }
