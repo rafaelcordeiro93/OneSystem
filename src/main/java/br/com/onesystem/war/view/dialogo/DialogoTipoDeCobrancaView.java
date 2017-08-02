@@ -157,9 +157,9 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             }
         }
 
-        cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+        cotacaoLista = new CotacaoDAO().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
+        cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
         e.setCotacao(cotacaoPadrao);
     }
 
@@ -229,7 +229,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     public void selecionaCotacaoConformeConta() {
         try {
             if (e.getConta() != null) {
-                e.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(e.getConta()).naUltimaEmissao(emissao).resultado());
+                e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naUltimaEmissao(emissao).resultado());
             } else {
                 e.setCotacao(cotacaoPadrao);
             }

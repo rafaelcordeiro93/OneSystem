@@ -344,7 +344,7 @@ public class CambioView implements Serializable {
     public void abrirEdicaoComDados() {
         panel = true;
         cambio = new CambioBV(cambioSelecionado);
-        baixaLista = new BaixaDAO().buscarBaixasW().eComDespesa().eDeCambio(cambioSelecionado).listaDeResultados();
+        baixaLista = new BaixaDAO().eComDespesa().eDeCambio(cambioSelecionado).listaDeResultados();
     }
 
     public void abrirBaixaEdicaoComDados() {

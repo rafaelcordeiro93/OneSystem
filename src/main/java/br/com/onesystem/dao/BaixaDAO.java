@@ -9,104 +9,92 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-public class BaixaDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class BaixaDAO extends GenericDAO<Baixa> {
 
     public BaixaDAO() {
+        super(Baixa.class);
         limpar();
-    }
-
-    public BaixaDAO buscarBaixasW() {
-        parametros.put("pValor", BigDecimal.ZERO);
-        consulta += "select b from Baixa b where b.valor >= :pValor ";
-        return this;
     }
 
     public BaixaDAO buscarTotalDeBaixasW() {
         parametros.put("pValor", BigDecimal.ZERO);
-        consulta += "select sum(b.valor) from Baixa b where b.valor >= :pValor ";
+        where += "select sum(baixa.valor) from Baixa baixa where baixa.valor >= :pValor ";
         return this;
     }
 
     public BaixaDAO eDeCambio(Cambio cambio) {
         if (cambio != null) {
             parametros.put("pCambio", cambio);
-            consulta += "and b.cambio = :pCambio ";
+            where += "and baixa.cambio = :pCambio ";
         }
         return this;
     }
 
     public BaixaDAO eComDespesa() {
-        consulta += "and b.despesa is not null ";
+        where += "and baixa.despesa is not null ";
         return this;
     }
 
     public BaixaDAO eComDespesaProvisionada() {
-        consulta += "and b.despesaProvisionada is not null ";
+        where += "and baixa.despesaProvisionada is not null ";
         return this;
     }
 
     public BaixaDAO eComReceitaProvisionada() {
-        consulta += "and b.receitaProvisionada is not null ";
+        where += "and baixa.receitaProvisionada is not null ";
         return this;
     }
 
     public BaixaDAO eComTitulo() {
-        consulta += "and b.titulo is not null ";
+        where += "and baixa.titulo is not null ";
         return this;
     }
 
     public BaixaDAO eComTituloPagoRecebido() {
-        consulta += "and b.titulo.saldo < b.titulo.valor ";
+        where += "and baixa.titulo.saldo < baixa.titulo.valor ";
         return this;
     }
 
     public BaixaDAO eNaoCancelada() {
-        consulta += "and b.estado <> :pNaoCancelada ";
+        where += "and baixa.estado <> :pNaoCancelada ";
         parametros.put("pNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
 
     public BaixaDAO eCancelada() {
-        consulta += "and b.estado = :pCancelada ";
+        where += "and baixa.estado = :pCancelada ";
         parametros.put("pCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
 
     public BaixaDAO eSemTitulo() {
-        consulta += "and b.titulo is null ";
+        where += "and baixa.titulo is null ";
         return this;
     }
 
     public BaixaDAO eSemDespesaProvisionada() {
-        consulta += "and b.despesaProvisionada is null ";
+        where += "and baixa.despesaProvisionada is null ";
         return this;
     }
 
     public BaixaDAO eSemReceitaProvisionada() {
-        consulta += "and b.receitaProvisionada is null ";
+        where += "and baixa.receitaProvisionada is null ";
         return this;
     }
 
     public BaixaDAO eDeRecepcao(Recepcao recepcao) {
         if (recepcao != null) {
             parametros.put("pRecepcao", recepcao);
-            consulta = "and b.recepcao = :pRecepcao ";
+            where = "and baixa.recepcao = :pRecepcao ";
         }
         return this;
     }
@@ -114,80 +102,80 @@ public class BaixaDAO {
     public BaixaDAO ePorEmissaoEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataInicial", dataInicial);
         parametros.put("pDataFinal", dataFinal);
-        consulta += "and b.emissao between :pDataInicial and :pDataFinal ";
+        where += "and baixa.emissao between :pDataInicial and :pDataFinal ";
         return this;
     }
 
     public BaixaDAO ePorEmissaoDoTituloEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataETInicial", dataInicial);
         parametros.put("pDataETFinal", dataFinal);
-        consulta += "and b.titulo.emissao between :pDataETInicial and :pDataETFinal ";
+        where += "and baixa.titulo.emissao between :pDataETInicial and :pDataETFinal ";
         return this;
     }
 
     public BaixaDAO ePorEmissaoDaDespesaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataEDPInicial", dataInicial);
         parametros.put("pDataEDPFinal", dataFinal);
-        consulta += "and b.despesaProvisionada.emissao between :pDataEDPInicial and :pDataEDPFinal ";
+        where += "and baixa.despesaProvisionada.emissao between :pDataEDPInicial and :pDataEDPFinal ";
         return this;
     }
 
     public BaixaDAO ePorEmissaoDaReceitaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataEDPInicial", dataInicial);
         parametros.put("pDataEDPFinal", dataFinal);
-        consulta += "and b.receitaProvisionada.emissao between :pDataEDPInicial and :pDataEDPFinal ";
+        where += "and baixa.receitaProvisionada.emissao between :pDataEDPInicial and :pDataEDPFinal ";
         return this;
     }
 
     public BaixaDAO ePorVencimentoDeTituloEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataVTInicial", dataInicial);
         parametros.put("pDataVTFinal", dataFinal);
-        consulta += "and (b.titulo.vencimento between :pDataVTInicial and :pDataVTFinal or b.titulo.vencimento is null) ";
+        where += "and (baixa.titulo.vencimento between :pDataVTInicial and :pDataVTFinal or baixa.titulo.vencimento is null) ";
         return this;
     }
 
     public BaixaDAO ePorVencimentoDeDespesaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataVDPInicial", dataInicial);
         parametros.put("pDataVDPFinal", dataFinal);
-        consulta += "and (b.despesaProvisionada.vencimento between :pDataVDPInicial and :pDataVDPFinal or b.despesaProvisionada.vencimento is null) ";
+        where += "and (baixa.despesaProvisionada.vencimento between :pDataVDPInicial and :pDataVDPFinal or baixa.despesaProvisionada.vencimento is null) ";
         return this;
     }
 
     public BaixaDAO ePorVencimentoDeReceitaProvisionadaEntre(Date dataInicial, Date dataFinal) {
         parametros.put("pDataVDPInicial", dataInicial);
         parametros.put("pDataVDPFinal", dataFinal);
-        consulta += "and (b.receitaProvisionada.vencimento between :pDataVDPInicial and :pDataVDPFinal or b.receitaProvisionada.vencimento is null) ";
+        where += "and (baixa.receitaProvisionada.vencimento between :pDataVDPInicial and :pDataVDPFinal or baixa.receitaProvisionada.vencimento is null) ";
         return this;
     }
 
     public BaixaDAO ePorEmissaoMenorIgualDa(Date data) {
         parametros.put("pData", data);
-        consulta += "and b.emissao <= :pData ";
+        where += "and baixa.emissao <= :pData ";
         return this;
     }
 
     public BaixaDAO ePorEmissaoMenorDa(Date data) {
         parametros.put("pMData", data);
-        consulta += "and b.emissao < :pMData ";
+        where += "and baixa.emissao < :pMData ";
         return this;
     }
 
     public BaixaDAO eEntrada() {
         parametros.put("pNaturezaFinanceira", OperacaoFinanceira.ENTRADA);
-        consulta += "and b.naturezaFinanceira = :pNaturezaFinanceira ";
+        where += "and baixa.naturezaFinanceira = :pNaturezaFinanceira ";
         return this;
     }
 
     public BaixaDAO eSaida() {
         parametros.put("pNaturezaSaida", OperacaoFinanceira.SAIDA);
-        consulta += "and b.naturezaFinanceira = :pNaturezaSaida ";
+        where += "and baixa.naturezaFinanceira = :pNaturezaSaida ";
         return this;
     }
 
     public BaixaDAO ePorConta(Conta conta) {
         if (conta != null) {
             parametros.put("pConta", conta);
-            consulta += "and b.cotacao.conta = :pConta ";
+            where += "and baixa.cotacao.conta = :pConta ";
         }
         return this;
     }
@@ -195,7 +183,7 @@ public class BaixaDAO {
     public BaixaDAO ePorCaixa(Caixa caixa) {
         if (caixa != null) {
             parametros.put("pCaixa", caixa);
-            consulta += "and b.caixa = :pCaixa ";
+            where += "and baixa.caixa = :pCaixa ";
         }
         return this;
     }
@@ -203,7 +191,15 @@ public class BaixaDAO {
     public BaixaDAO ePorPessoa(Pessoa pessoa) {
         if (pessoa != null) {
             parametros.put("pPessoa", pessoa);
-            consulta += "and b.pessoa = :pPessoa ";
+            where += "and baixa.pessoa = :pPessoa ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorValorPorCotacao(ValorPorCotacao valorPorCotacao) {
+        if (valorPorCotacao != null) {
+            parametros.put("pValorPorCotacao", valorPorCotacao);
+            where += "and baixa.valorPorCotacao = :pValorPorCotacao ";
         }
         return this;
     }
@@ -211,7 +207,7 @@ public class BaixaDAO {
     public BaixaDAO ePorTipoDeCobranca(TipoDeCobranca tipo) {
         if (tipo != null) {
             parametros.put("pTipo", tipo);
-            consulta += "and b.tipoDeCobranca = :pTipo ";
+            where += "and baixa.tipoDeCobranca = :pTipo ";
         }
         return this;
     }
@@ -219,18 +215,18 @@ public class BaixaDAO {
     public BaixaDAO ePorFormaDeCobranca(FormaDeCobranca forma) {
         if (forma != null) {
             parametros.put("pForma", forma);
-            consulta += "and b.formaDeCobranca = :pForma ";
+            where += "and baixa.formaDeCobranca = :pForma ";
         }
         return this;
     }
 
     public BaixaDAO orderByEmissaoEId() {
-        consulta += "order by b.emissao,b.id asc ";
+        where += "order by baixa.emissao,baixa.id asc ";
         return this;
     }
 
     public BaixaDAO orderByMoeda() {
-        consulta += "order by b.conta.moeda asc";
+        where += "order by baixa.conta.moeda asc";
         return this;
     }
 
@@ -277,38 +273,18 @@ public class BaixaDAO {
 
     public Date buscarUltimoPagamentoDe(Titulo titulo) {
         EntityManager manager = JPAUtil.getEntityManager();
-        String consulta = "select max(b.emissao) from Baixa b where b.titulo = :pTitulo and b.cancelada = :pNaoCancelada";
-        TypedQuery<Date> query = manager.createQuery(consulta, Date.class);
+        String where = "select max(baixa.emissao) from Baixa baixa where baixa.titulo = :pTitulo and baixa.cancelada = :pNaoCancelada";
+        TypedQuery<Date> query = manager.createQuery(where, Date.class);
         query.setParameter("pTitulo", titulo);
         query.setParameter("pNaoCancelada", false);
         return query.getSingleResult();
     }
 
-    public Baixa resultadoUnico() {
-        Baixa resultado = new ArmazemDeRegistros<Baixa>(Baixa.class)
-                .resultadoUnicoDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
-    }
-
-    public List<Baixa> listaDeResultados() {
-        List<Baixa> resultado = new ArmazemDeRegistros<Baixa>(Baixa.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
-    }
-
     public BigDecimal resultadoSomaTotal() {
         BigDecimal resultado = new ArmazemDeRegistros<BigDecimal>(BigDecimal.class)
-                .resultadoUnicoDaConsulta(consulta, parametros);
+                .resultadoUnicoDaConsulta(where, parametros);
         limpar();
         return resultado == null ? BigDecimal.ZERO : resultado;
-    }
-
-    private void limpar() {
-        consulta = "";
-        msg = new BundleUtil();
-        parametros = new HashMap<String, Object>();
     }
 
 }

@@ -1,5 +1,6 @@
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.NotaRecebida;
@@ -22,6 +23,8 @@ public class FaturaRecebidaBuilder {
     private Pessoa pessoa;
     private List<Titulo> titulo;
     private List<NotaRecebida> notaRecebida;
+    private List<ValorPorCotacao> valorPorCotacao;
+    private BigDecimal dinheiro;
 
     public FaturaRecebidaBuilder comID(Long ID) {
         this.id = ID;
@@ -58,8 +61,18 @@ public class FaturaRecebidaBuilder {
         return this;
     }
 
+    public FaturaRecebidaBuilder comValorPorCotacaos(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+        return this;
+    }
+
+    public FaturaRecebidaBuilder comDinheiro(BigDecimal dinheiro) {
+        this.dinheiro = dinheiro;
+        return this;
+    }
+
     public FaturaRecebida construir() throws DadoInvalidoException {
-        return new FaturaRecebida(id, codigo, total, emissao, pessoa, titulo, notaRecebida);
+        return new FaturaRecebida(id, codigo, total, emissao, pessoa, titulo, notaRecebida, valorPorCotacao, dinheiro);
     }
 
 }

@@ -5,13 +5,17 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.FaturaEmitidaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -45,6 +49,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
     private ModelList<Titulo> list;
     private List<NotaEmitida> notaEmitidaList;
     private List<NotaEmitida> notaEmitidaRemovidas;
+    private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaEmitida notaEmitidaSelecionada;
     private Pessoa pessoaNota;
 
@@ -62,26 +67,44 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             notaEmitidaList.forEach((n) -> {
                 f.adiciona(n);
             });
-            addNoBanco(f);
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);
+            });
+            new AdicionaDAO<>().adiciona(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+        InfoMessage.adicionado();
+        RequestContext.getCurrentInstance().update("conteudo");
+        limparJanela();
     }
 
     @Override
     public void update() {
         try {
-            List<Titulo> removidos = list.getRemovidos().stream().filter(m -> ((Titulo) m.getObject()).getId() != null).map(m -> (Titulo) m.getObject()).collect(Collectors.toList());
             FaturaEmitida f = e.construirComID();
+            List<Titulo> removidos = list.getRemovidos().stream().filter(m -> ((Titulo) m.getObject()).getId() != null).map(m -> (Titulo) m.getObject()).collect(Collectors.toList());
             removidos.forEach(c -> f.remove(c));
-            notaEmitidaRemovidas.forEach(c -> f.remove(c));
+            notaEmitidaRemovidas.forEach(n -> f.remove(n));
+            List<ValorPorCotacao> valoresARemover = new ValorPorCotacaoDAO().porFaturaEmitida(f).listaDeResultados();
+            if (valorPorCotacaoList.size() > 0) {
+                valoresARemover.forEach(v -> f.remove(v));
+            }
             list.getList().forEach((t) -> {
                 f.atualiza(t);
             });
             notaEmitidaList.forEach((n) -> {
                 f.atualiza(n);
             });
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);//Adiciona as os ValoresPorCotacão Novos
+            });
             new AtualizaDAO<>().atualiza(f);
+            if (valorPorCotacaoList.size() > 0) {
+                for (ValorPorCotacao v : valoresARemover) {
+                    new RemoveDAO<>().remove(v, v.getId());
+                }
+            }
             for (NotaEmitida ne : notaEmitidaRemovidas) {
                 ne.setFaturaEmitida(null);
                 new AtualizaDAO<>().atualiza(ne);
@@ -122,24 +145,26 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
         }
     }
 
+    public void validaDinheiro() throws DadoInvalidoException {
+        BigDecimal valorBanco = BigDecimal.ZERO; // Se existir valor em dinheiro abre a janela de cotações.     
+        if (e.getId() != null) {
+            valorBanco = new FaturaEmitidaDAO().porId(e.getId()).resultado().getDinheiro();
+        }
+        if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
+            SessionUtil.put(e.construir(), "faturaEmitida", FacesContext.getCurrentInstance());
+            RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else if (e.getId() == null) {
+            add();
+        } else {
+            update();
+        }
+    }
+
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         String cid = event.getComponent().getId();
         if (obj instanceof FaturaEmitida) {
-            limparJanela();
-            e = new FaturaEmitidaBV((FaturaEmitida) obj);
-            if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
-                notaEmitidaList = e.getNotaEmitida();
-            }
-            buscaPessoaNota();
-            if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
-                list = new ModelList<>(e.getTitulo());
-            }
-            try {
-                SessionUtil.put(e.construirComID(), "faturaEmitida", FacesContext.getCurrentInstance());
-            } catch (DadoInvalidoException ex) {
-                ex.print();
-            }
+            inicializaFaturaEmitida(obj);
         } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
             e.setPessoa((Pessoa) obj);
         } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
@@ -150,10 +175,34 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
         } else if (obj instanceof Titulo) {
             Titulo cb = (Titulo) obj;
             list.add(cb);
+        } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
+            valorPorCotacaoList = (List<ValorPorCotacao>) obj;
+            if (e.getId() != null) {
+                update();
+            } else {
+                add();
+            }
         } else if (obj instanceof Model) {
             Model m = (Model) obj;
             list.atualiza(m);
             modeloSelecionado = null;
+        }
+    }
+
+    private void inicializaFaturaEmitida(Object obj) {
+        limparJanela();
+        e = new FaturaEmitidaBV((FaturaEmitida) obj);
+        if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
+            notaEmitidaList = e.getNotaEmitida();
+        }
+        buscaPessoaNota();
+        if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
+            list = new ModelList<>(e.getTitulo());
+        }
+        try {
+            SessionUtil.put(e.construirComID(), "faturaEmitida", FacesContext.getCurrentInstance());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
     }
 
@@ -228,6 +277,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             list = new ModelList<>();
             notaEmitidaList = new ArrayList<>();
             notaEmitidaRemovidas = new ArrayList<>();
+            valorPorCotacaoList = new ArrayList<>();
             notaEmitidaSelecionada = null;
             pessoaNota = null;
             removePessoaSessao();

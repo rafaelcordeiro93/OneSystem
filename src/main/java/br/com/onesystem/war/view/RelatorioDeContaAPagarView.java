@@ -167,32 +167,32 @@ public class RelatorioDeContaAPagarView implements Serializable {
     private List<Baixa> buscarDadosPagos() {
         List<Baixa> lista;
         if (relatorio.getTipo() == TipoOperacao.DESPESA) {
-            lista = baixaDAO.buscarBaixasW().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorConta(relatorio.getConta()).ePorPessoa(relatorio.getPessoa())
+            lista = baixaDAO.ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal()).ePorConta(relatorio.getConta()).ePorPessoa(relatorio.getPessoa())
                     .eSaida().eSemTitulo().eSemDespesaProvisionada().eNaoCancelada().orderByMoeda().listaDeResultados();
         } else if (relatorio.getTipo() == TipoOperacao.TITULO) {
             if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
-                lista = baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoDoTituloEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoDoTituloEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
             } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
-                lista = baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorVencimentoDeTituloEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComTitulo().eComTituloPagoRecebido().eSaida().ePorVencimentoDeTituloEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
             } else {
-                lista = baixaDAO.buscarBaixasW().eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComTitulo().eComTituloPagoRecebido().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
             }
         } else if (relatorio.getTipo() == TipoOperacao.DESPESA_PROVISIONADA) {
             if (relatorio.getTipoBusca() == TipoBusca.EMISSAO) {
-                lista = baixaDAO.buscarBaixasW().eComDespesaProvisionada().eSaida().ePorEmissaoDaDespesaProvisionadaEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComDespesaProvisionada().eSaida().ePorEmissaoDaDespesaProvisionadaEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .ePorConta(relatorio.getConta()).ePorPessoa(relatorio.getPessoa()).eNaoCancelada().orderByMoeda().listaDeResultados();
             } else if (relatorio.getTipoBusca() == TipoBusca.VENCIMENTO) {
-                lista = baixaDAO.buscarBaixasW().eComDespesaProvisionada().ePorVencimentoDeDespesaProvisionadaEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComDespesaProvisionada().ePorVencimentoDeDespesaProvisionadaEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .eSaida().ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
             } else {
-                lista = baixaDAO.buscarBaixasW().eComDespesaProvisionada().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
+                lista = baixaDAO.eComDespesaProvisionada().eSaida().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal())
                         .ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
             }
         } else {
-            lista = baixaDAO.buscarBaixasW().ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal()).eSaida().ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
+            lista = baixaDAO.ePorEmissaoEntre(relatorio.getDataInicial(), relatorio.getDataFinal()).eSaida().ePorPessoa(relatorio.getPessoa()).ePorConta(relatorio.getConta()).eNaoCancelada().orderByMoeda().listaDeResultados();
         }
         nomeRelatorio = "RelatorioDeContasAPagarPagas";
         return lista;

@@ -9,11 +9,14 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -52,13 +55,21 @@ public class ValorPorCotacao implements Serializable {
     @ManyToOne
     private Nota nota;
 
+    @ManyToOne
+    private FaturaEmitida faturaEmitida;
+
+    @ManyToOne
+    private FaturaRecebida faturaRecebida;
+
     public ValorPorCotacao() {
     }
 
-    public ValorPorCotacao(Long id, Cotacao cotacao, BigDecimal valor) throws DadoInvalidoException {
+    public ValorPorCotacao(Long id, Cotacao cotacao, BigDecimal valor, FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida) throws DadoInvalidoException {
         this.id = id;
         this.cotacao = cotacao;
         this.valor = valor;
+        this.faturaEmitida = faturaEmitida;
+        this.faturaRecebida = faturaRecebida;
         ehValido();
     }
 
@@ -77,6 +88,26 @@ public class ValorPorCotacao implements Serializable {
                 .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
                 .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
                 .comValorPorCotacao(this).construir();
+    }
+
+    public void geraBaixaPor(FaturaEmitida faturaEmitida) throws DadoInvalidoException {
+        setFaturaEmitida(faturaEmitida);
+        BundleUtil msg = new BundleUtil();
+        String historico = msg.getMessage("Fatura_Emitida") + " " + msg.getMessage("de") + " " + faturaEmitida.getPessoa().getNome();
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(faturaEmitida.getEmissao()).comHistorico(historico)
+                .comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comPessoa(faturaEmitida.getPessoa())
+                .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
+    }
+
+    public void geraBaixaPor(FaturaRecebida faturaRecebida) throws DadoInvalidoException {
+        setFaturaRecebida(faturaRecebida);
+        BundleUtil msg = new BundleUtil();
+        String historico = msg.getMessage("Fatura_Recebida") + " " + msg.getMessage("de") + " " + faturaEmitida.getPessoa().getNome();
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(faturaRecebida.getEmissao()).comHistorico(historico)
+                .comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comPessoa(faturaRecebida.getPessoa())
+                .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
     }
 
     public Long getId() {
@@ -105,6 +136,22 @@ public class ValorPorCotacao implements Serializable {
 
     public Baixa getBaixa() {
         return baixa;
+    }
+
+    public FaturaEmitida getFaturaEmitida() {
+        return faturaEmitida;
+    }
+
+    public FaturaRecebida getFaturaRecebida() {
+        return faturaRecebida;
+    }
+
+    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+    }
+
+    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
     }
 
     @Override

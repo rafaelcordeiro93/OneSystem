@@ -2,6 +2,8 @@ package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -32,34 +34,57 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
 
     private List<ValorPorCotacaoBV> cotacoes;
     private Nota nota;
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
+    private BigDecimal dinheiro;
 
     @PostConstruct
     public void init() {
         try {
             limparJanela();
             buscaDaSessao();
-            if (nota != null) {
-                inicializaCotacoes();
-            }
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
+    /**
+     * @author Rafael Fernando Rauber
+     * @date
+     *
+     * Classe utilizada para buscar os objetos da sessão
+     */
     private void buscaDaSessao() throws DadoInvalidoException {
+        // Rafael Cordeiro - 01/08/2017 - Adequação para as classes de Fatura Emitida e Recebida
         nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+        if (nota != null) {
+            inicializaCotacoes(nota.getEmissao(), nota.getMoedaPadrao());
+            dinheiro = nota.getTotalEmDinheiro();
+            calculaCotacoes();
+            return;
+        }
+        faturaEmitida = (FaturaEmitida) SessionUtil.getObject("faturaEmitida", FacesContext.getCurrentInstance());
+        if (faturaEmitida != null) {
+            inicializaCotacoes(faturaEmitida.getEmissao(), faturaEmitida.getMoedaPadrao());
+            dinheiro = faturaEmitida.getDinheiro();
+            calculaCotacoes();
+            return;
+        }
+        faturaRecebida = (FaturaRecebida) SessionUtil.getObject("faturaRecebida", FacesContext.getCurrentInstance());
+        if (faturaRecebida != null) {
+            inicializaCotacoes(faturaRecebida.getEmissao(), faturaRecebida.getMoedaPadrao());
+            dinheiro = faturaRecebida.getDinheiro();
+            calculaCotacoes();
+            return;
+        }
+
     }
 
-    private void inicializaCotacoes() {
-        Date emissao = nota.getEmissao();
-        Moeda moedaPadrao = nota.getMoedaPadrao();
-
-        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naMaiorEmissao(emissao).listaDeResultados();
-        cotacoes = new ArrayList<>();
+    private void inicializaCotacoes(Date emissao, Moeda moedaPadrao) {
+        List<Cotacao> cotacaoLista = new CotacaoDAO().naMaiorEmissao(emissao).listaDeResultados();
         for (Cotacao c : cotacaoLista) {
             cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, moedaPadrao));
         }
-        calculaCotacoes();
     }
 
     /**
@@ -67,9 +92,8 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
      * cotação de cada moeda.
      */
     public void calculaCotacoes() {
-        BigDecimal totalEmDinheiro = nota.getTotalEmDinheiro();
         for (ValorPorCotacaoBV c : cotacoes) {
-            c.setTotal(totalEmDinheiro);
+            c.setTotal(dinheiro);
             c.setTotalConvertidoRecebido(getTotalConvertidoRecebido());
         }
         RequestContext.getCurrentInstance().update("tempDialog:valorPorCotacaoBVData");
@@ -89,17 +113,49 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     }
 
     public String getTotalConvertidoRecebidoFormatado() {
-        return MoedaFormatter.format(nota.getMoedaPadrao(), getTotalConvertidoRecebido());
+        Moeda moeda = buscarMoeda();
+        return MoedaFormatter.format(moeda, getTotalConvertidoRecebido());
+
+    }
+
+    public Moeda buscarMoeda() {
+        try {
+            if (nota != null) {
+                return nota.getMoedaPadrao();
+            }
+            if (faturaEmitida != null) {
+                return faturaEmitida.getMoedaPadrao();
+            }
+            if (faturaRecebida != null) {
+                return faturaRecebida.getMoedaPadrao();
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+        return null;
     }
 
     public void finalizar() {
         try {
-            for (ValorPorCotacaoBV c : cotacoes) {
-                if (nota != null) {
+            if (nota != null) {
+                for (ValorPorCotacaoBV c : cotacoes) {
                     constroiNota(c);
                 }
+                RequestContext.getCurrentInstance().closeDialog(nota);
+                return;
             }
-            RequestContext.getCurrentInstance().closeDialog(nota);
+            if (faturaEmitida != null) {
+                RequestContext.getCurrentInstance().closeDialog(constroiListValorPorCotacao());
+                return;
+            }
+            if (faturaRecebida != null) {
+                for (ValorPorCotacaoBV c : cotacoes) {
+                    constroiNota(c);
+                }
+                RequestContext.getCurrentInstance().closeDialog(faturaRecebida);
+                return;
+            }
+
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -117,6 +173,16 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         if (!entrou && c.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
             nota.adiciona(c.construir());
         }
+    }
+
+    private List<ValorPorCotacao> constroiListValorPorCotacao() throws DadoInvalidoException {
+        List<ValorPorCotacao> list = new ArrayList<>();
+        for (ValorPorCotacaoBV v : cotacoes) {
+            if (v.getValorAReceber().compareTo(BigDecimal.ZERO) > 0) {
+                list.add(v.construir());
+            }
+        }
+        return list;
     }
 
     public void abrirDialogo() {
@@ -145,6 +211,8 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     public void limparJanela() {
         cotacoes = new ArrayList<>();
         nota = null;
+        faturaEmitida = null;
+        faturaRecebida = null;
     }
 
     @Override
