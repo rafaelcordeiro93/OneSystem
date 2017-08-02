@@ -23,7 +23,7 @@ public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> imp
 
     @PostConstruct
     public void init() {
-        beans = new ChequeDAO().buscarCheques().porSituacao(SituacaoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        beans = new ChequeDAO().porSituacao(SituacaoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
     }
 
     public void abrirDialogo() {

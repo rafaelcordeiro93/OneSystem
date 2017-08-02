@@ -117,10 +117,17 @@
                     </p:submenu>
                     <p:submenu label="#{l.Vendas}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/relatorioDeNotasEmitidas" />
-
+                    </p:submenu>
+                    <p:submenu label="#{l.Estoque}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/relatorioDeNotasRecebidas" />
+                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/relatorioDeAjusteDeEstoque" />
+                        <p:menuitem value="#{l.Balanco_Fisico}" icon="fa fa-archive" outcome="/relatorioDeBalancoFisico" />
                     </p:submenu>
                     <p:submenu label="#{l.Financeiro}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Conta}" icon="fa fa-minus" outcome="/relatorioDeContas" />
+                        <p:menuitem value="#{l.Cheque}" icon="fa fa-minus" outcome="/relatorioDeCheques" />
+                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-minus" outcome="/relatorioDeDespesaProvisionada" />
+                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-minus" outcome="/relatorioDeReceitaProvisionada" />
                         <p:menuitem value="#{l.Conta_a_Pagar}" icon="fa fa-minus" outcome="/relatorioDeContaAPagar" />
                         <p:menuitem value="#{l.Conta_a_Receber}" icon="fa fa-plus" outcome="/relatorioDeContaAReceber" />
                         <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/relatorioDeSaldoDeConta" />
@@ -130,9 +137,6 @@
                         <p:menuitem value="#{l.Contrato_De_Cambio}" icon="fa fa-handshake-o" outcome="/relatorioDeContratoDeCambio" />
                         <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/relatorioDeCambio" />
                         <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/relatorioDeSaldoDeDivisaoDeLucro" />
-                    </p:submenu>
-                    <p:submenu label="#{l.Estoque}" icon="fa fa-table">
-                        <p:menuitem value="#{l.Balanco_Fisico}" icon="fa fa-archive" outcome="/relatorioDeBalancoFisico" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>

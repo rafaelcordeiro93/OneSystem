@@ -38,9 +38,9 @@ public class RelatorioDeSaldoDeDivisaoDeLucroView implements Serializable {
     public void imprimir() {
         try {
             DespesaProvisionadaDAO dao = new DespesaProvisionadaDAO();
-            List<DespesaProvisionada> dados = dao.buscarDespesasProvisionadas().wAPagar().eComDivisaoDeLucro()
+            List<DespesaProvisionada> dados = dao.wAPagar().eComDivisaoDeLucro()
                     .ePorPessoa(relatorio.getPessoa()).ePorEmissao(relatorio.getDataInicial(), relatorio.getDataFinal())
-                    .groupByPessoa().orderByMoeda().gerarDados();
+                    .groupByPessoa().orderByMoeda().listaDeResultados();
             impressora.imprimir(dados, "RelatorioDeSaldoDeDivisaoDeLucroCN");
         } catch (DadoInvalidoException die) {
             ErrorMessage.print("Erro ao gerar o Relatório: " + die.getMessage());
