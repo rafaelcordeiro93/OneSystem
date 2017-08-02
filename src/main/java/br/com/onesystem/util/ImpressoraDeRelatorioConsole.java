@@ -41,7 +41,8 @@ public class ImpressoraDeRelatorioConsole {
     }
 
     public void imprimir(List<?> lista, String relatorio) throws JRException {
-        JasperReport report = JasperCompileManager.compileReport(diretorio + relatorio + ".jrxml");
+//        JasperReport report = JasperCompileManager.compileReport(diretorio + relatorio + ".jrxml");
+        JasperReport report = JasperCompileManager.compileReport("C:\\Users\\Rafael\\JaspersoftWorkspace\\MyReports\\" + relatorio + ".jrxml");
         print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(lista));
     }
 

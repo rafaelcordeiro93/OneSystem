@@ -42,8 +42,9 @@
 
         <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
-            <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" />
-            <p:commandButton value="#{l.Imprimir}" action="#{cc.attrs.mbView.imprimir}" update="#{cc.attrs.form}" icon="fa fa-print" />
+            <h:panelGrid columns="2">
+                <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" />
+            </h:panelGrid>
         </p:panelGrid>
 
         <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
@@ -137,47 +138,94 @@
                     <h:outputText value="#{l.Pesquisar_por_todos_campos}: " />
                     <p:inputText id="globalFilter" onkeyup="PF('objectsTable').filter()" style="width:150px; margin-right: 5px" placeholder="#{l.Pesquisar}"/>
                     <p:commandButton icon="fa fa-calculator" value="#{l.Exibir_Campos}" onclick="PF('exibirCampos').show()"/>
-                    <h:commandLink title="Exportar para excel" style="margin-right: 15px">
+                    <h:commandLink title="Exportar para excel" style="margin-right: 23px">
                         <p:dataExporter type="xls" target="objects" fileName="Registros" />
                         <p:graphicImage name="/img/Excel.png" width="20" style="margin-top: 3px; position: absolute" />
+                    </h:commandLink>
+                    <h:commandLink title="Exportar para PDF" style="margin-right: 15px" action="#{cc.attrs.mbView.imprimir}" >
+                        <p:graphicImage name="/img/PDF.png" width="20" style="margin-top: 3px; position: absolute; margin-left: 3px" />
                     </h:commandLink>
                 </div>
             </f:facet>
 
-            <p:columns var="coluna" value="#{cc.attrs.mbView.camposExibidos.list}" 
-                       filterBy="#{object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                   : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                   coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                   coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                   object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                   coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                   coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                   coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                   object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                   coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                   coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                   coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                   object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : ''}"
-                       sortBy="#{coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                 coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                 coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                 object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}"
-                       headerText="#{coluna.nome}" footerText="#{coluna.nome}" style="width: #{coluna.tamanhoFormatado}" 
-                       >
-                <h:outputText value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                       : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                       object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                       coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                       object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                       coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                       object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" />
-            </p:columns>
+            <c:forEach var="coluna" items="#{cc.attrs.mbView.camposExibidos.list}" >
+                <p:column filterBy="#{object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                      : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                      coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                      coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                      coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                      coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                      coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                      coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                      coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                      coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : ''}"
+                          sortBy="#{coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                    coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                    coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                    object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}"
+                          headerText="#{coluna.nome}" footerText="#{coluna.nome}" style="width: #{coluna.tamanhoFormatado}"
+                          filterMatchMode="contains">
+
+                    <c:if test="#{coluna.classeOriginal.simpleName == 'BigDecimal' and cc.attrs.mbView.containsMoeda}" >
+                        <p:outputLabel value="#{cc.attrs.mbView.siglaMoeda.propriedadeDois eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade] : 
+                                                cc.attrs.mbView.siglaMoeda.propriedadeTres eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois] : 
+                                                cc.attrs.mbView.siglaMoeda.propriedadeQuatro eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres] : 
+                                                object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres][cc.attrs.mbView.siglaMoeda.propriedadeQuatro]}" />
+                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
+                            <f:convertNumber type="currency" pattern="##,###.00" transient="" /> 
+                        </p:outputLabel>
+                    </c:if>
+                    <c:if test="#{coluna.classeOriginal.simpleName == 'Date'}" >
+                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
+                            <f:convertDateTime pattern="dd/MM/yyyy" /> 
+                        </p:outputLabel>
+                    </c:if>
+                    <c:if test="#{coluna.classeOriginal.simpleName ne 'Date' and coluna.classeOriginal.simpleName ne 'BigDecimal'}" >
+                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
+                        </p:outputLabel>
+                    </c:if>
+                </p:column>
+
+            </c:forEach>
 
         </p:dataTable>
 

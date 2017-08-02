@@ -179,8 +179,8 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
                 camposSelecionados.add(c.getNome());
             }
 
-            impressora.imprimir(lista, new BundleUtil().getLabel("Relatorio_Balanco_Fisico"),
-                    new BalancoFisicoColumn().getColunas(), camposSelecionados);
+//            impressora.imprimir(lista, new BundleUtil().getLabel("Relatorio_Balanco_Fisico"),
+//                    new BalancoFisicoColumn().getColunas(), camposSelecionados);
 
         } catch (DadoInvalidoException die) {
             die.print();

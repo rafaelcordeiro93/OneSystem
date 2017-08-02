@@ -107,6 +107,10 @@ public class Coluna implements Serializable {
         return tamanho;
     }
 
+    public void setTamanho(Integer tamanho) {
+        this.tamanho = tamanho;
+    }
+
     public Class getClasseDeDeclaracao() {
         return classeDeDeclaracao;
     }

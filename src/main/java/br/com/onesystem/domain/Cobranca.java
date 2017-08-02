@@ -40,6 +40,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
+import br.com.onesystem.services.impl.Formatter;
 
 /**
  *
@@ -142,8 +143,13 @@ public abstract class Cobranca implements Serializable {
         return id;
     }
 
+    @Formatter(formatterMethod = "getValorFormatado")
     public BigDecimal getValor() {
         return valor;
+    }
+
+    public String getValorFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
     public Date getEmissao() {
@@ -223,13 +229,9 @@ public abstract class Cobranca implements Serializable {
     public List<FormaDeCobranca> getFormasDeCobranca() {
         return formasDeCobranca;
     }
-    
+
     public OperacaoFinanceira getOperacaoFinanceira() {
         return operacaoFinanceira;
-    }
-
-    public String getValorFormatado() {
-        return MoedaFormatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
     public String getEmissaoFormatada() {
