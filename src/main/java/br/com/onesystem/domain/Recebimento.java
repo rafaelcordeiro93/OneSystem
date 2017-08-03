@@ -110,14 +110,14 @@ public class Recebimento {
     }
 
     public void atualizaBaixas(FormaDeCobranca forma) {
-        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorFormaDeCobranca(forma).listaDeResultados();
+        List<Baixa> bx = new BaixaDAO().ePorFormaDeCobranca(forma).listaDeResultados();
         bx.forEach((b) -> {
             b.atualizaValor(forma.getValor());
         });
     }
 
     public void atualizaBaixas(TipoDeCobranca tipo) {
-        List<Baixa> bx = new BaixaDAO().buscarBaixasW().ePorTipoDeCobranca(tipo).listaDeResultados();
+        List<Baixa> bx = new BaixaDAO().ePorTipoDeCobranca(tipo).listaDeResultados();
         bx.forEach((b) -> {
             b.atualizaValor(tipo.getValor());
         });

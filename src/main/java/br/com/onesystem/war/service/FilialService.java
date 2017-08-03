@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FilialService implements Serializable {
 
-    public List<Filial> buscarFilials() {
+    public List<Filial> buscarFiliais() {
         return new ArmazemDeRegistros<Filial>(Filial.class).listaTodosOsRegistros();
     }
 }

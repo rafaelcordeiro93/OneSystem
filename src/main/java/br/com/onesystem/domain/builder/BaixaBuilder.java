@@ -13,14 +13,13 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -30,9 +29,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -201,7 +198,8 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia, recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, cambioEmpresa);
+        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
+                recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, cambioEmpresa);
     }
 
 }

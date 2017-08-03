@@ -6,6 +6,8 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
@@ -19,6 +21,8 @@ public class ValorPorCotacaoBuilder {
     private Long id;
     private Cotacao cotacao;
     private BigDecimal valor;
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
 
     public ValorPorCotacaoBuilder comCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
@@ -35,8 +39,18 @@ public class ValorPorCotacaoBuilder {
         return this;
     }
 
+    public ValorPorCotacaoBuilder comFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+        return this;
+    }
+
+    public ValorPorCotacaoBuilder comFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+        return this;
+    }
+
     public ValorPorCotacao construir() throws DadoInvalidoException {
-        return new ValorPorCotacao(id, cotacao, valor);
+        return new ValorPorCotacao(id, cotacao, valor, faturaEmitida, faturaRecebida);
     }
 
 }

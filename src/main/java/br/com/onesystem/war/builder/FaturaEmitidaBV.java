@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.FaturaEmitida;
@@ -12,6 +13,7 @@ import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +28,10 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     private BigDecimal total;
     private Date emissao = new Date();
     private Pessoa pessoa;
-    private List<Titulo> titulo;
-    private List<NotaEmitida> notaEmitida;
+    private List<Titulo> titulo = new ArrayList<>();
+    private List<NotaEmitida> notaEmitida = new ArrayList<>();
+    private List<ValorPorCotacao> valorPorCotacao = new ArrayList<>();
+    private BigDecimal dinheiro;
 
     public FaturaEmitidaBV(FaturaEmitida faturaEmitidaSelecionada) {
         this.id = faturaEmitidaSelecionada.getId();
@@ -37,6 +41,8 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
         this.pessoa = faturaEmitidaSelecionada.getPessoa();
         this.titulo = faturaEmitidaSelecionada.getTitulo();
         this.notaEmitida = faturaEmitidaSelecionada.getNotaEmitida();
+        this.valorPorCotacao = faturaEmitidaSelecionada.getValorPorCotacao();
+        this.dinheiro = faturaEmitidaSelecionada.getDinheiro();
     }
 
     public FaturaEmitidaBV() {
@@ -99,17 +105,33 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
         this.notaEmitida = notaEmitida;
     }
 
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
+    public void setValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+    }
+
+    public BigDecimal getDinheiro() {
+        return dinheiro;
+    }
+
+    public void setDinheiro(BigDecimal dinheiro) {
+        this.dinheiro = dinheiro;
+    }
+
     public String getMoedaPadrao() throws EDadoInvalidoException {
         Configuracao cfg = new ConfiguracaoService().buscar();
         return cfg.getMoedaPadrao().getSigla();
     }
 
     public FaturaEmitida construirComID() throws DadoInvalidoException {
-        return new FaturaEmitidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).construir();
+        return new FaturaEmitidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
     }
 
     public FaturaEmitida construir() throws DadoInvalidoException {
-        return new FaturaEmitidaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).construir();
+        return new FaturaEmitidaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
     }
 
 }

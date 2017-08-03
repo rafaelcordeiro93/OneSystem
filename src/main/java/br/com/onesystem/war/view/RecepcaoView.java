@@ -62,7 +62,7 @@ public class RecepcaoView implements Serializable {
             if (recepcaoExistente.getId() != null) {
                 recepcaoExistente.getTitulo().setValor(recepcaoExistente.getValor());
                 recepcaoExistente.getTitulo().setSaldo(recepcaoExistente.getValor());
-                Baixa baixa = new BaixaDAO().buscarBaixasW().eDeRecepcao(recepcaoExistente).eComTitulo().resultadoUnico();
+                Baixa baixa = new BaixaDAO().eDeRecepcao(recepcaoExistente).eComTitulo().resultado();
                 baixa.atualizaValor(recepcaoExistente.getValor());
 //                baixa.atualizaTotal(recepcaoExistente.getValor());
                 new AtualizaDAO<Recepcao>().atualiza(recepcaoExistente);

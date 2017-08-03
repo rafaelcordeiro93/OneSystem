@@ -20,7 +20,7 @@ public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serial
 
     @PostConstruct
     public void init() {
-        beans = service.buscarFilials();
+        beans = service.buscarFiliais();
     }
 
     public void abrirDialogo() {

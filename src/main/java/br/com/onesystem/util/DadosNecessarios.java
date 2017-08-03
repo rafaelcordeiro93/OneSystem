@@ -30,13 +30,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -168,6 +162,7 @@ public class DadosNecessarios implements Serializable {
             }
             case "/ajusteDeEstoque.xhtml": {
                 getMoedaPadrao();
+                getOperacoes();
                 getContaDeEstoque();
                 break;
             }
@@ -253,7 +248,7 @@ public class DadosNecessarios implements Serializable {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/cotacao.xhtml");
         try {
             if (moeda != null) {
-                Cotacao cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
+                Cotacao cotacao = new CotacaoDAO().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
                 if (cotacao == null) {
                     throw new FDadoInvalidoException("");
                 }

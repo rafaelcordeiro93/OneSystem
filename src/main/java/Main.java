@@ -47,7 +47,7 @@ public class Main {
         dataAtual.set(Calendar.SECOND, 59);
         Date dataFinal = dataAtual.getTime();
 
-        List<Baixa> resultados = baixaDAO.buscarBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().orderByMoeda().listaDeResultados();
+        List<Baixa> resultados = baixaDAO.ePorEmissaoEntre(dataInicial, dataFinal).eSaida().orderByMoeda().listaDeResultados();
 
         System.out.println("Res: " + resultados.size());
 

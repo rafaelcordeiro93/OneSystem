@@ -4,6 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
@@ -54,13 +57,17 @@ public class Filial implements Serializable {
     @Length(min = 2, max = 60, message = "{telefone_lenght}")
     @Column(length = 60, nullable = false)
     private String telefone;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date vencimento;
+    @Column(nullable = true)
+    private String serialKey;
 
     public Filial() {
     }
 
     public Filial(Long id, String nome, String razao_social, String fantasia,
             String ruc, String endereco, String bairro, Cidade cidade,
-            String telefone) throws DadoInvalidoException {
+            String telefone, Date vencimento, String serialKey) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.razao_social = razao_social;
@@ -70,6 +77,8 @@ public class Filial implements Serializable {
         this.endereco = endereco;
         this.bairro = bairro;
         this.telefone = telefone;
+        this.vencimento = vencimento;
+        this.serialKey = serialKey;
         ehValido();
     }
 
@@ -109,6 +118,14 @@ public class Filial implements Serializable {
         return telefone;
     }
 
+    public Date getVencimento() {
+        return vencimento;
+    }
+
+    public String getSerialKey() {
+        return serialKey;
+    }
+
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome");
         new ValidadorDeCampos<Filial>().valida(this, campos);
@@ -131,7 +148,7 @@ public class Filial implements Serializable {
 
     @Override
     public String toString() {
-        return "Filial{" + "id=" + id + ", nome=" + nome + ", razao_social=" + razao_social + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", bairro=" + bairro + ", cidade=" + cidade + ", telefone=" + telefone + '}';
+        return "Filial{" + "id=" + id + ", nome=" + nome + ", razao_social=" + razao_social + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", bairro=" + bairro + ", cidade=" + cidade + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + '}';
     }
 
 }

@@ -15,15 +15,15 @@ public class CotacaoService implements Serializable {
     }
 
     public List<Cotacao> buscarCotacoesDoDiaAtual() {
-        return new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).porCotacaoEmpresa().listaDeResultados();
+        return new CotacaoDAO().naEmissao(new Date()).porCotacaoEmpresa().listaDeResultados();
     }
 
     public List<Cotacao> buscarTodasCotacoesDoDiaAtual() {
-        return new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
+        return new CotacaoDAO().naEmissao(new Date()).listaDeResultados();
     }
 
     public Cotacao getCotacaoPadrao(Date emissao) throws DadoInvalidoException {
-        return new CotacaoDAO().buscarCotacoes().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado();
+        return new CotacaoDAO().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado();
     }
 
 }

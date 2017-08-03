@@ -64,8 +64,8 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
     public void inicializar() {
         try {
             e.setEmissao(new Date());
-            cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-            cotacaoLista = new CotacaoDAO().buscarCotacoes().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+            cotacaoLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
             contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         } catch (DadoInvalidoException die) {
         }

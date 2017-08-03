@@ -44,6 +44,10 @@ public class FaturaEmitida implements Serializable {
     @Column(nullable = true)
     private BigDecimal total;
 
+    @Min(value = 0, message = "{dinheiro}")
+    @Column(nullable = true)
+    private BigDecimal dinheiro;
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
@@ -57,10 +61,13 @@ public class FaturaEmitida implements Serializable {
     @OneToMany(mappedBy = "faturaEmitida", cascade = {CascadeType.ALL})
     private List<NotaEmitida> notaEmitida;
 
+    @OneToMany(mappedBy = "faturaEmitida", cascade = {CascadeType.ALL})
+    private List<ValorPorCotacao> valorPorCotacao;
+
     public FaturaEmitida() {
     }
 
-    public FaturaEmitida(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo, List<NotaEmitida> notaEmitida) throws DadoInvalidoException {
+    public FaturaEmitida(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo, List<NotaEmitida> notaEmitida, List<ValorPorCotacao> valorPorCotacao, BigDecimal dinheiro) throws DadoInvalidoException {
         this.id = id;
         this.codigo = codigo;
         this.total = total;
@@ -68,6 +75,8 @@ public class FaturaEmitida implements Serializable {
         this.pessoa = pessoa;
         this.titulo = titulo;
         this.notaEmitida = notaEmitida;
+        this.valorPorCotacao = valorPorCotacao;
+        this.dinheiro = dinheiro;
         ehValido();
     }
 
@@ -113,6 +122,35 @@ public class FaturaEmitida implements Serializable {
         notaEmitida.remove(n);
     }
 
+    public void adiciona(ValorPorCotacao v) {
+        try {
+            if (valorPorCotacao == null) {
+                valorPorCotacao = new ArrayList<>();
+            }
+            v.geraBaixaPor(this);//set a Fatura dentro do ValorPorCotacao e Gera as Baixas
+            valorPorCotacao.add(v);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void atualiza(ValorPorCotacao v) {
+        try {
+            if (valorPorCotacao.contains(v)) {
+                valorPorCotacao.set(valorPorCotacao.indexOf(v), v);
+            } else {
+                v.geraBaixaPor(this);
+                valorPorCotacao.add(v);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void remove(ValorPorCotacao v) {
+        valorPorCotacao.remove(v);
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa");
         new ValidadorDeCampos<FaturaEmitida>().valida(this, campos);
@@ -151,6 +189,14 @@ public class FaturaEmitida implements Serializable {
         return cfg.getMoedaPadrao();
     }
 
+    public BigDecimal getDinheiro() {
+        return dinheiro;
+    }
+
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -168,7 +214,7 @@ public class FaturaEmitida implements Serializable {
 
     @Override
     public String toString() {
-        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + '}';
+        return "FaturaEmitida{" + "id=" + id + ", codigo=" + codigo + ", total=" + total + ", dinheiro=" + dinheiro + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + ", notaEmitida=" + notaEmitida + ", valorPorCotacao=" + valorPorCotacao + '}';
     }
 
 }

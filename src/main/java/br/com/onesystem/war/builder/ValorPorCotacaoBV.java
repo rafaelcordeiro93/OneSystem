@@ -6,6 +6,8 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.ValorPorCotacaoBuilder;
@@ -20,20 +22,24 @@ import java.util.Objects;
  * @author Rafael Fernando Rauber
  */
 public class ValorPorCotacaoBV {
-    
+
     private Long id;
     private Cotacao cotacao;
     private BigDecimal valorAReceber;
     private BigDecimal total;
     private BigDecimal totalConvertidoRecebido;
     private Moeda moedaPadrao;
-    
+    private FaturaEmitida faturaEmitida;
+    private FaturaRecebida faturaRecebida;
+
     public ValorPorCotacaoBV(ValorPorCotacao v) {
         this.id = v.getId();
         this.cotacao = v.getCotacao();
         this.valorAReceber = v.getValor();
+        this.faturaEmitida = v.getFaturaEmitida();
+        this.faturaRecebida = v.getFaturaRecebida();
     }
-    
+
     public ValorPorCotacaoBV(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido, Moeda moedaPadrao) {
         this.id = cotacao.getId();
         this.cotacao = cotacao;
@@ -46,51 +52,67 @@ public class ValorPorCotacaoBV {
     public ValorPorCotacaoBV() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     public Cotacao getCotacao() {
         return cotacao;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
     }
-    
+
     public BigDecimal getValorAReceber() {
         return valorAReceber == null ? BigDecimal.ZERO : valorAReceber;
     }
-    
+
     public String getValorAReceberFormatado() {
         return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(getValorAReceber());
     }
-    
+
     public Long getId() {
         return id;
     }
-    
+
     public void setValorAReceber(BigDecimal valorAReceber) {
         this.valorAReceber = valorAReceber;
     }
-    
+
     public BigDecimal getTotal() {
         return total;
     }
-    
+
     public void setTotal(BigDecimal total) {
         this.total = total;
     }
-    
+
     public void setTotalConvertidoRecebido(BigDecimal totalConvertidoRecebido) {
         this.totalConvertidoRecebido = totalConvertidoRecebido;
     }
-    
+
     public String getValorConvertidoRestanteFormatado() {
         return NumberFormat.getCurrencyInstance(cotacao.getConta().getMoeda().getBandeira().getLocal()).format(getValorConvertidoRestante());
     }
-    
+
+    public FaturaEmitida getFaturaEmitida() {
+        return faturaEmitida;
+    }
+
+    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
+        this.faturaEmitida = faturaEmitida;
+    }
+
+    public FaturaRecebida getFaturaRecebida() {
+        return faturaRecebida;
+    }
+
+    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
+        this.faturaRecebida = faturaRecebida;
+    }
+
     public BigDecimal getValorConvertidoRestante() {
         if (total != null && totalConvertidoRecebido != null && cotacao.getValor() != null) {
             BigDecimal valorNaMoeda = totalConvertidoRecebido.multiply(cotacao.getValor(), MathContext.DECIMAL64);
@@ -117,7 +139,7 @@ public class ValorPorCotacaoBV {
             return valorAReceber.divide(cotacao.getValor(), 14, BigDecimal.ROUND_UP);
         }
     }
-    
+
     public String getValorConvertidoRecebidoView() {
         if (valorAReceber == null || valorAReceber == BigDecimal.ZERO) {
             return NumberFormat.getCurrencyInstance(moedaPadrao.getBandeira().getLocal()).format(BigDecimal.ZERO);
@@ -125,15 +147,15 @@ public class ValorPorCotacaoBV {
             return NumberFormat.getCurrencyInstance(moedaPadrao.getBandeira().getLocal()).format(valorAReceber.divide(cotacao.getValor(), 2, BigDecimal.ROUND_UP));
         }
     }
-    
+
     public ValorPorCotacao construir() throws DadoInvalidoException {
         return new ValorPorCotacaoBuilder().comCotacao(cotacao).comValor(valorAReceber).construir();
     }
-    
+
     public ValorPorCotacao construirComId() throws DadoInvalidoException {
         return new ValorPorCotacaoBuilder().comId(id).comCotacao(cotacao).comValor(valorAReceber).construir();
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
