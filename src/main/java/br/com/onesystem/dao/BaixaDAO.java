@@ -25,7 +25,9 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         limpar();
     }
 
-    public BaixaDAO buscarTotalDeBaixasW() {
+    public BaixaDAO selectSomaBaixaValor() {
+        query = "";
+        where = "";
         parametros.put("pValor", BigDecimal.ZERO);
         where += "select sum(baixa.valor) from Baixa baixa where baixa.valor >= :pValor ";
         return this;
@@ -231,16 +233,16 @@ public class BaixaDAO extends GenericDAO<Baixa> {
     }
 
     public BigDecimal buscarSaldoAnterior(Date data, Conta conta) {
-        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;
     }
 
     public BigDecimal buscarSaldoAnterior(Date data, Conta conta, Caixa caixa) {
-        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;
@@ -248,24 +250,24 @@ public class BaixaDAO extends GenericDAO<Baixa> {
 
     public BigDecimal buscarSaldoFinal(Date dataFinal, Conta conta) {
 
-        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoMenorIgualDa(dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoMenorIgualDa(dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta) {
-        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
-        BigDecimal entradas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = buscarTotalDeBaixasW().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;
@@ -282,7 +284,7 @@ public class BaixaDAO extends GenericDAO<Baixa> {
 
     public BigDecimal resultadoSomaTotal() {
         BigDecimal resultado = new ArmazemDeRegistros<BigDecimal>(BigDecimal.class)
-                .resultadoUnicoDaConsulta(where, parametros);
+                .resultadoUnicoDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
