@@ -9,19 +9,19 @@ import java.util.List;
 public class DespesaProvisionadaService implements Serializable {
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagar() {
-        return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().wAPagar().gerarDados();
+        return new DespesaProvisionadaDAO().wAPagar().listaDeResultados();
     }
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagarComVencimentoEntre(Date dataInicial, Date dataFinal) {
-        return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().wAPagar().ePorVencimento(dataInicial, dataFinal).gerarDados();
+        return new DespesaProvisionadaDAO().wAPagar().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
     }
 
     public List<DespesaProvisionada> buscarDespesaProvisionadas() {
-        return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().gerarDados();
+        return new DespesaProvisionadaDAO().listaDeResultados();
     } 
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagarDivisaoLucro() {
-        return new DespesaProvisionadaDAO().buscarDespesasProvisionadas().wAPagar().eComDivisaoDeLucro().gerarDados();
+        return new DespesaProvisionadaDAO().wAPagar().eComDivisaoDeLucro().listaDeResultados();
     }
 
 }

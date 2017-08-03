@@ -14,5 +14,11 @@ public class CobrancaDAO extends GenericDAO<Cobranca> {
         where = " where titulo.id != 0";
         return this;
     }
+    
+     public CobrancaDAO consultaCheques() {
+        query = "select cheque from Cheque cheque";
+        where = " where cheque.id != 0";
+        return this;
+    }
 
 }

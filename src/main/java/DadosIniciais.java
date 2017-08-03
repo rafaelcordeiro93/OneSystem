@@ -29,7 +29,6 @@ import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoBandeira;
 import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
@@ -212,6 +211,12 @@ public class DadosIniciais {
         //Modulo de Relatorios
         Janela relPessoas = new Janela(null, "Relatório de Pessoas", "/relatorioDePessoas.xhtml", rela);
         Janela relConta = new Janela(null, "Relatório de Contas", "/relatorioDeContas.xhtml", rela);
+        Janela relNotaEmitida = new Janela(null, "Relatório de Notas Emitidas", "/relatorioDeNotasEmitidas.xhtml", rela);
+        Janela relNotaRecebida = new Janela(null, "Relatório de Notas Recebidas", "/relatorioDeNotasRecebidas.xhtml", rela);
+        Janela relAjusteEstoque = new Janela(null, "Relatório de Ajuste de Estoque", "/relatorioDeAjusteDeEstoque.xhtml", rela);
+        Janela relCheques = new Janela(null, "Relatório de Cheques", "/relatorioDeCheques.xhtml", rela);
+        Janela relDespPro = new Janela(null, "Relatório de Despesas Provisionadas", "/relatorioDeDespesaProvisionada.xhtml", rela);
+        Janela relReceitPro = new Janela(null, "Relatório de Receitas Provisionadas", "/relatorioDeReceitaProvisionada.xhtml", rela);
         Janela relContaPagar = new Janela(null, "Relatório de Conta A Pagar", "/relatorioDeContaAPagar.xhtml", rela);
         Janela relContaReceber = new Janela(null, "Relatório de Conta A Receber", "/relatorioDeContaAReceber.xhtml", rela);
         Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/relatorioDeSaldoDeConta.xhtml", rela);
@@ -222,6 +227,14 @@ public class DadosIniciais {
         Janela relBalancoFisico = new Janela(null, "Relatório de Balanco Fisico", "/relatorioDeBalancoFisico.xhtml", rela);
 
         daoJanela.adiciona(relCambio);
+        daoJanela.adiciona(relPessoas);
+        daoJanela.adiciona(relConta);
+        daoJanela.adiciona(relNotaEmitida);
+        daoJanela.adiciona(relNotaRecebida);
+        daoJanela.adiciona(relAjusteEstoque);
+        daoJanela.adiciona(relCheques);
+        daoJanela.adiciona(relDespPro);
+        daoJanela.adiciona(relReceitPro);
         daoJanela.adiciona(relContaPagar);
         daoJanela.adiciona(relContaReceber);
         daoJanela.adiciona(relContrato);
@@ -315,6 +328,12 @@ public class DadosIniciais {
                 new Privilegio(null, relConta, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relPessoas, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relCambio, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relNotaEmitida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relNotaRecebida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relAjusteEstoque, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relCheques, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relDespPro, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relReceitPro, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relContaPagar, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relContaReceber, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relContrato, true, true, true, true, grupoDePrivilegio),

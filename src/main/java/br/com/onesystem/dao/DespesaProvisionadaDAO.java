@@ -2,37 +2,19 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-public class DespesaProvisionadaDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class DespesaProvisionadaDAO extends GenericDAO<DespesaProvisionada> {
 
     public DespesaProvisionadaDAO() {
+        super(DespesaProvisionada.class);
         limpar();
     }
 
-    private void limpar() {
-        consulta = "";
-        msg = new BundleUtil();
-        parametros = new HashMap<String, Object>();
-    }
-
-    public DespesaProvisionadaDAO buscarDespesasProvisionadas() {
-        consulta += "select dp from DespesaProvisionada dp ";
-        return this;
-    }
-
     public DespesaProvisionadaDAO wAPagar() {
-        consulta += "where 0 = (select count(*) from Baixa b where b.cobrancaFixa = dp.id and b.estado = :pBNaoCancelada) "
-                + "and 0 = (select count(*) from TransferenciaDespesaProvisionada t where t.origem = dp.id) ";
+        where += "and 0 = (select count(*) from Baixa baixa where baixa.cobrancaFixa = despesaProvisionada.id and baixa.estado = :pBNaoCancelada) "
+                + "and 0 = (select count(*) from TransferenciaDespesaProvisionada transferenciaDespesaProvisionada where transferenciaDespesaProvisionada.origem = despesaProvisionada.id) ";
         parametros.put("pBNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
@@ -41,7 +23,7 @@ public class DespesaProvisionadaDAO {
         if (dataInicial != null && dataFinal != null) {
             parametros.put("pDataInicial", dataInicial);
             parametros.put("pDataFinal", dataFinal);
-            consulta += "and dp.emissao between :pDataInicial and :pDataFinal ";
+            where += "and despesaProvisionada.emissao between :pDataInicial and :pDataFinal ";
         }
         return this;
     }
@@ -50,39 +32,32 @@ public class DespesaProvisionadaDAO {
         if (dataInicial != null && dataFinal != null) {
             parametros.put("pDataInicial", dataInicial);
             parametros.put("pDataFinal", dataFinal);
-            consulta += "and (dp.vencimento between :pDataInicial and :pDataFinal or dp.vencimento is null) ";
+            where += "and (despesaProvisionada.vencimento between :pDataInicial and :pDataFinal or despesaProvisionada.vencimento is null) ";
         }
         return this;
     }
 
     public DespesaProvisionadaDAO ePorPessoa(Pessoa pessoa) {
         if (pessoa != null) {
-            consulta += "and dp.pessoa = :pPessoa ";
+            where += "and despesaProvisionada.pessoa = :pPessoa ";
             parametros.put("pPessoa", pessoa);
         }
         return this;
     }
 
     public DespesaProvisionadaDAO eComDivisaoDeLucro() {
-        consulta += "and dp.pessoa.configuracaoCambio is not null ";
+        where += "and despesaProvisionada.pessoa.configuracaoCambio is not null ";
         return this;
     }
 
     public DespesaProvisionadaDAO groupByPessoa() {
-        consulta += "group by dp.pessoa, dp.id ";
-        return this;
-    }
-    
-    public DespesaProvisionadaDAO orderByMoeda(){
-        consulta += "order by dp.moeda asc ";
+        where += "group by despesaProvisionada.pessoa, despesaProvisionada.id ";
         return this;
     }
 
-    public List<DespesaProvisionada> gerarDados() {
-        List<DespesaProvisionada> resultado = new ArmazemDeRegistros<DespesaProvisionada>(DespesaProvisionada.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
+    public DespesaProvisionadaDAO orderByMoeda() {
+        where += "order by despesaProvisionada.moeda asc ";
+        return this;
     }
 
 }
