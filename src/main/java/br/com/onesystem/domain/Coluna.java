@@ -104,6 +104,9 @@ public class Coluna implements Serializable {
     }
 
     public Integer getTamanho() {
+        if (tamanho == null) {
+            tamanho = 20;
+        }
         return tamanho;
     }
 

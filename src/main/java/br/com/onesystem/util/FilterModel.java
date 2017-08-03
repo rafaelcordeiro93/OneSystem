@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
 
 /**
  *
@@ -19,11 +20,11 @@ import java.util.Objects;
 public class FilterModel {
 
     private Coluna field;
-    private List filters;
+    private SortedSet filters;
     private TipoDeBusca typeSearch;
     private Date filterDate;
 
-    public FilterModel(Coluna field, List filters, TipoDeBusca typeSearch) {
+    public FilterModel(Coluna field, SortedSet filters, TipoDeBusca typeSearch) {
         this.field = field;
         this.filters = filters;
         this.typeSearch = typeSearch;
@@ -39,7 +40,7 @@ public class FilterModel {
         return field;
     }
 
-    public List getFilters() {
+    public SortedSet getFilters() {
         return filters;
     }
 

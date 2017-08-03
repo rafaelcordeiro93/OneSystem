@@ -43,7 +43,7 @@
         <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <h:panelGrid columns="2">
-                <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" />
+                <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" onsuccess="PF('objectsTable').filter()" />
             </h:panelGrid>
         </p:panelGrid>
 
@@ -56,7 +56,7 @@
                         <p:outputLabel value="#{filterModel.field.nome} - #{filterModel.typeSearch.nome}  " /> 
                         <li class="ui-chips-token ui-state-active ui-corner-all" style="margin-top: -1px">
                             <span class="ui-chips-token-label">#{filterModel.filterDate ne null ? filterModel.filterDateFormat : filterModel.filters}</span>
-                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filterModel)}" update="#{cc.attrs.form}">
+                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filterModel)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
                                 <i class="ui-chips-token-icon ui-icon ui-icon-close" style="color: white;"/>
                             </p:commandLink>
                         </li>

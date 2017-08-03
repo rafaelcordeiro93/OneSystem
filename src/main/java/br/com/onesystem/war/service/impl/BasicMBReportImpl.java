@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -47,7 +49,7 @@ public abstract class BasicMBReportImpl<T> {
 
     private Class dao;
     private Class clazz;
-    private List<String> consulta;
+    private List<String> consulta = new ArrayList<>();
     private Date consultaDate;
     private List<FilterModel> filtros = new ArrayList<>();
     private Coluna campoSelecionado;
@@ -254,48 +256,49 @@ public abstract class BasicMBReportImpl<T> {
         try {
             if (campoSelecionado == null) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_Um_Campo_Para_Filtrar"));
-            } else if (consulta == null && consultaDate == null) {
+            } else if ((consulta == null || consulta.isEmpty()) && consultaDate == null) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Informe_Filtro_Pesquisa"));
             } else {
-                List filters = new ArrayList();
-                if (campoSelecionado.getClasseOriginal() != Date.class && !consulta.isEmpty()) {
-                    // Faz o tratamento dos filtros em seus devidos Tipos.
-                    for (String s : consulta) {
-                        if (campoSelecionado.getClasseOriginal() == Long.class) {
-                            filters.add(new Long(s));
-                        } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class) {
-                            s = s.replaceAll(",", ".");
-                            filters.add(new BigDecimal(s));
-                        }
-                    }
-
-                    if (filters.isEmpty()) {
-                        consulta.stream().map((s) -> s.toLowerCase()).forEachOrdered((s) -> {
-                            filters.add(s);
-                        });
-                    }
-                }
-
+                SortedSet filters = new TreeSet();
                 //Adiciona os filtros
                 FilterModel filtro = new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada);
-                if (filtros.contains(filtro)) {
-                    if (campoSelecionado.getClasseOriginal() != Date.class) {
-                        for (String s : consulta) {
-                            if (!filtros.get(filtros.indexOf(filtro)).getFilters().contains(s)) {
-                                filtros.get(filtros.indexOf(filtro)).getFilters().add(s);
-                            }
+
+                if (campoSelecionado.getClasseOriginal() != Date.class && !consulta.isEmpty()) {
+
+                    // Faz o tratamento dos filtros em seus devidos Tipos.
+                    for (String s : consulta) {
+                        //LONG ===============================================================================
+                        if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
+                            filters.add(new Long(s));
+                        } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
+                            filtros.get(filtros.indexOf(filtro)).getFilters().add(new Long(s));
+                        } //BIGDECIMAL =======================================================================
+                        else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
+                            s = s.replaceAll(",", ".");
+                            filters.add(new BigDecimal(s));
+                        } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
+                            s = s.replaceAll(",", ".");
+                            filtros.get(filtros.indexOf(filtro)).getFilters().add(new BigDecimal(s));
+                        } //STRING ============================================================================
+                        else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
+                            filters.add(s);
+                        } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
+                            filtros.get(filtros.indexOf(filtro)).getFilters().add(s);
                         }
-                    } else {
-                        filtros.get(filtros.indexOf(filtro)).setFilterDate(getConsultaDate());
                     }
-                } else {
-                    if (campoSelecionado.getClasseOriginal() != Date.class) {
+                    if (!filters.isEmpty()) {
                         filtros.add(new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada));
+                    }
+                } else if (campoSelecionado.getClasseOriginal() == Date.class && !consulta.isEmpty()) {
+                    //DATE ====================================================================================
+                    if (filtros.contains(filtro)) {
+                        filtros.get(filtros.indexOf(filtro)).setFilterDate(getConsultaDate());
                     } else {
                         filtros.add(new FilterModel(campoSelecionado, getConsultaDate(), tipoDeBuscaSelecionada));
                     }
                 }
 
+                //Se houver filtros, busca no Banco de Dados.
                 if (!filtros.isEmpty()) {
                     buscaDadosDoBancoComFiltros();
                 }
@@ -315,6 +318,7 @@ public abstract class BasicMBReportImpl<T> {
             if (!filtros.isEmpty()) {
                 for (FilterModel f : filtros) {
                     if (f.getFilterDate() == null) {
+                        f.getFilters().forEach(System.out::println);
                         gDao.filter(f.getTypeSearch(), f.getField(), f.getFilters());
                     } else {
                         gDao.filter(f.getTypeSearch(), f.getField(), f.getFilterDate());
@@ -322,7 +326,10 @@ public abstract class BasicMBReportImpl<T> {
                 }
             }
 
+            gDao.getParametros().forEach((k, v) -> System.out.println(k + " - " + v));
+            System.out.println("Consulta: " + gDao.getConsulta());
             registros = gDao.listaDeResultados();
+
         } catch (InstantiationException | IllegalAccessException ex) {
             FatalMessage.print("Erro de acesso ao inicializar dao chips: " + ex.getMessage(), ex);
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -335,10 +342,6 @@ public abstract class BasicMBReportImpl<T> {
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         try {
-            HashMap<String, Object> parametros = new HashMap<>();
-            parametros.put("TITULO_RELATORIO", "Relatório de Contas");
-            parametros.put("NOME_EMPRESA", "RR Minds Soluções em Tecnologia LTDA");
-
             impressora.imprimir(registros, "Relatorio de Contas", camposExibidos.getList()).naWeb();
         } catch (DRException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -525,5 +528,4 @@ public abstract class BasicMBReportImpl<T> {
     public Coluna getSiglaMoeda() {
         return siglaMoeda;
     }
-
 }
