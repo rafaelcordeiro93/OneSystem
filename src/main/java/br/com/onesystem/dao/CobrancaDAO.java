@@ -20,5 +20,10 @@ public class CobrancaDAO extends GenericDAO<Cobranca> {
         where = " where cheque.id != 0";
         return this;
     }
+     
+     public CobrancaDAO orderByNomeMoeda(){
+         order = " order by cobranca.cotacao.conta.moeda.nome ";
+         return this;
+     }
 
 }

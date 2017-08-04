@@ -9,8 +9,9 @@ import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.services.impl.FormatacaoNumeroRelatorio;
 import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
-import br.com.onesystem.services.impl.MethodInaccessibleReport;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.FilterModel;
@@ -39,6 +40,9 @@ import javax.inject.Named;
 import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
+import br.com.onesystem.valueobjects.Totalizador;
 
 /**
  *
@@ -54,7 +58,10 @@ public abstract class BasicMBReportImpl<T> {
     private List<FilterModel> filtros = new ArrayList<>();
     private Coluna campoSelecionado;
     private String campoSelecionadoString;
+    private String colunaParaTotalizadorString;
+    private Coluna colunaParaTotalizadorSelecionada;
     private TipoDeBusca tipoDeBuscaSelecionada = TipoDeBusca.CONTENDO;
+    private Totalizador totalizador;
     private List<Model> modelDisponivelSelecionado = new ArrayList<>();
     private List<Model> modelExibidoSelecionado = new ArrayList<>();
     protected List<T> registros = new ArrayList<>();
@@ -122,7 +129,7 @@ public abstract class BasicMBReportImpl<T> {
             for (Method m : c.getMethods()) {
                 if (m.getName().contains("get") && !"getClass".equals(m.getName()) && m.getReturnType() != List.class
                         && m.getDeclaringClass().toString().substring(6).equals(c.getName()) && !m.getReturnType().toString().contains("domain")
-                        && !m.isAnnotationPresent(MethodInaccessibleReport.class)) {
+                        && !m.isAnnotationPresent(MetodoInacessivelRelatorio.class)) {
 
                     //Busca caminho
                     String[] property = new String[4];
@@ -137,6 +144,9 @@ public abstract class BasicMBReportImpl<T> {
                         property[split.length] = property[split.length].substring(0, 1).toLowerCase() + property[split.length].substring(1);
                     }
 
+                    //Busca Formatacao
+                    TipoFormatacaoNumero formatador = m.isAnnotationPresent(FormatacaoNumeroRelatorio.class) ? m.getAnnotation(FormatacaoNumeroRelatorio.class).formatacaoNumero() : null;
+
                     //Adiciona nos camposDisponiveis
                     try {
                         String header = m.getName().substring(3);
@@ -144,7 +154,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             addCampo(novoCampo);
                         }
@@ -154,7 +164,7 @@ public abstract class BasicMBReportImpl<T> {
                         if (c != clazz) {
                             header = header + " (" + table + ")";
                         }
-                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), null);
+                        Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
                         if (!camposExibidos.getList().contains(novoCampo)) {
                             addCampo(novoCampo);
                         }
@@ -208,7 +218,7 @@ public abstract class BasicMBReportImpl<T> {
             String[] split = path.split("\\.");
             System.arraycopy(split, 0, property, 0, split.length);
             property[split.length] = "sigla";
-            siglaMoeda = new Coluna(null, null, property[0], property[1], property[2], property[3], this.clazz, clazz, null);
+            siglaMoeda = new Coluna(null, null, property[0], property[1], property[2], property[3], this.clazz, clazz);
         }
         return this;
     }
@@ -238,6 +248,19 @@ public abstract class BasicMBReportImpl<T> {
         }
     }
 
+    public void filterColumn() {
+        for (Model c : campos) {
+            if (((Coluna) c.getObject()).getNome().equals(colunaParaTotalizadorString)) {
+                colunaParaTotalizadorSelecionada = (Coluna) c.getObject();
+            }
+        }
+    }
+
+    public void delTotalizador(Coluna coluna) {
+        // Deleta totalizador na coluna
+        camposExibidos.getList().get(camposExibidos.getList().indexOf(coluna)).setTotalizador(null);
+    }
+
     public void delFilter(FilterModel filter) {
         try {
             filtros.remove(filter);
@@ -252,6 +275,11 @@ public abstract class BasicMBReportImpl<T> {
         }
     }
 
+    public void totalizar() {
+        //Seta o totalizador selecionado na coluna.
+        camposExibidos.getList().get(camposExibidos.getList().indexOf(colunaParaTotalizadorSelecionada)).setTotalizador(totalizador);
+    }
+
     public void pesquisar() {
         try {
             if (campoSelecionado == null) {
@@ -259,7 +287,10 @@ public abstract class BasicMBReportImpl<T> {
             } else if ((consulta == null || consulta.isEmpty()) && consultaDate == null) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Informe_Filtro_Pesquisa"));
             } else {
+
+                //Cria o conjunto de filtros
                 SortedSet filters = new TreeSet();
+
                 //Adiciona os filtros
                 FilterModel filtro = new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada);
 
@@ -318,7 +349,6 @@ public abstract class BasicMBReportImpl<T> {
             if (!filtros.isEmpty()) {
                 for (FilterModel f : filtros) {
                     if (f.getFilterDate() == null) {
-                        f.getFilters().forEach(System.out::println);
                         gDao.filter(f.getTypeSearch(), f.getField(), f.getFilters());
                     } else {
                         gDao.filter(f.getTypeSearch(), f.getField(), f.getFilterDate());
@@ -326,8 +356,6 @@ public abstract class BasicMBReportImpl<T> {
                 }
             }
 
-            gDao.getParametros().forEach((k, v) -> System.out.println(k + " - " + v));
-            System.out.println("Consulta: " + gDao.getConsulta());
             registros = gDao.listaDeResultados();
 
         } catch (InstantiationException | IllegalAccessException ex) {
@@ -342,10 +370,8 @@ public abstract class BasicMBReportImpl<T> {
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         try {
-            impressora.imprimir(registros, "Relatorio de Contas", camposExibidos.getList()).naWeb();
-        } catch (DRException ex) {
-            Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+            impressora.imprimir(registros, "Relatorio de Contas", camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+        } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -505,6 +531,10 @@ public abstract class BasicMBReportImpl<T> {
         return filtros;
     }
 
+    public List<Totalizador> getTotalizadores() {
+        return Arrays.asList(Totalizador.values());
+    }
+
     public Date getConsultaDate() {
         if (consultaDate == null) {
             return Date.from(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0).atZone(ZoneId.systemDefault()).toInstant());
@@ -528,4 +558,45 @@ public abstract class BasicMBReportImpl<T> {
     public Coluna getSiglaMoeda() {
         return siglaMoeda;
     }
+
+    public Totalizador getTotalizador() {
+        return totalizador;
+    }
+
+    public void setTotalizador(Totalizador totalizador) {
+        this.totalizador = totalizador;
+    }
+
+    public List<Coluna> getColunasParaTotalizadores() {
+        List<Coluna> camposParaTotalizadores = new ArrayList<>();
+        for (Coluna c : camposExibidos.getList()) {
+            if ((c.getClasseOriginal() == Long.class || c.getClasseOriginal() == BigDecimal.class || c.getClasseOriginal() == Integer.class || c.getClasseOriginal() == Double.class)
+                    && !getColunasTotalizadas().contains(c)) {
+                camposParaTotalizadores.add(c);
+            }
+        }
+
+        return camposParaTotalizadores;
+    }
+
+    public List<Coluna> getColunasTotalizadas() {
+        return camposExibidos.getList().stream().filter((c) -> c.getTotalizador() != null).collect(Collectors.toList());
+    }
+
+    public String getColunaParaTotalizadorString() {
+        return colunaParaTotalizadorString;
+    }
+
+    public void setColunaParaTotalizadorString(String colunaParaTotalizadorString) {
+        this.colunaParaTotalizadorString = colunaParaTotalizadorString;
+    }
+
+    public Coluna getColunaParaTotalizadorSelecionada() {
+        return colunaParaTotalizadorSelecionada;
+    }
+
+    public void setColunaParaTotalizadorSelecionada(Coluna colunaParaTotalizadorSelecionada) {
+        this.colunaParaTotalizadorSelecionada = colunaParaTotalizadorSelecionada;
+    }
+
 }

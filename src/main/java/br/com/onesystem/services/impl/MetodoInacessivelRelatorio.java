@@ -17,6 +17,6 @@ import java.lang.annotation.Target;
  */
 @Target({METHOD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface MethodInaccessibleReport {
+public @interface MetodoInacessivelRelatorio {
 
 }

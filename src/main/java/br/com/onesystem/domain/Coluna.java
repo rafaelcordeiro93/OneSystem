@@ -6,6 +6,8 @@
 package br.com.onesystem.domain;
 
 import ar.com.fdvs.dj.domain.DJCalculation;
+import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
+import br.com.onesystem.valueobjects.Totalizador;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
@@ -36,22 +38,64 @@ public class Coluna implements Serializable {
     private String propriedadeQuatro;
     @ManyToOne
     private ModeloDeRelatorio modelo;
-    private DJCalculation totalizador;
+    private Totalizador totalizador;
+    private TipoFormatacaoNumero tipoFormatadorNumero;
 
     public Coluna() {
     }
 
-    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
+    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        tamanho = 20;
+    }
+    
+    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
+        tamanho = 20;
+    }
+
+    public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
         this.totalizador = totalizador;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        tamanho = 20;
+    }
+    
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
+        tamanho = 20;
+    }
+
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
@@ -59,10 +103,34 @@ public class Coluna implements Serializable {
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
         this.totalizador = totalizador;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.propriedadeTres = propriedadeTres;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        tamanho = 20;
+    }
+
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.propriedadeTres = propriedadeTres;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
+        tamanho = 20;
+    }
+    
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
@@ -71,10 +139,36 @@ public class Coluna implements Serializable {
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
         this.totalizador = totalizador;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
 
-    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, DJCalculation totalizador) {
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.propriedadeTres = propriedadeTres;
+        this.propriedadeQuatro = propriedadeQuatro;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        tamanho = 20;
+    }
+
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.propriedadeTres = propriedadeTres;
+        this.propriedadeQuatro = propriedadeQuatro;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
+        tamanho = 20;
+    }
+    
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
         this.propriedade = propriedade;
@@ -84,6 +178,7 @@ public class Coluna implements Serializable {
         this.classeDeDeclaracao = classeDeDeclaracao;
         this.classeOriginal = classeOriginal;
         this.totalizador = totalizador;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
 
@@ -140,6 +235,22 @@ public class Coluna implements Serializable {
 
     public String getTamanhoFormatado() {
         return String.valueOf(tamanho) + "px";
+    }
+
+    public Totalizador getTotalizador() {
+        return totalizador;
+    }
+
+    public void setTotalizador(Totalizador totalizador) {
+        this.totalizador = totalizador;
+    }
+
+    public TipoFormatacaoNumero getTipoFormatadorNumero() {
+        return tipoFormatadorNumero;
+    }
+
+    public void setTipoFormatadorNumero(TipoFormatacaoNumero tipoFormatadorNumero) {
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
     }
 
     public String getPropriedadeCompleta() {
