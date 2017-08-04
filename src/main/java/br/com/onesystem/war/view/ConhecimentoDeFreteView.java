@@ -70,7 +70,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             valorPorCotacaoList.forEach((v) -> {
                 f.adiciona(v);
             });
-            new AdicionaDAO<>().adiciona(f);
+                      new AdicionaDAO<>().adiciona(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -264,7 +264,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
 
     public String getTotalAFaturar() throws EDadoInvalidoException {
         if (notaRecebidaList != null) {
-            BigDecimal valor = notaRecebidaList.stream().map(NotaRecebida::getaFaturar).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal valor = notaRecebidaList.stream().map(NotaRecebida::getTotalNota).reduce(BigDecimal.ZERO, BigDecimal::add);
             return e.getMoedaPadrao().getSigla() + valor.toString();
         }
         return e.getMoedaPadrao().getSigla();

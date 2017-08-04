@@ -41,6 +41,7 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
         this.operacao = c.getOperacao();
         this.valorFrete = c.getValorFrete();
         this.outrasdespesas = c.getOutrasdespesas();
+        this.dinheiro = c.getDinheiro();
         this.data = c.getData();
         this.emissao = c.getEmissao();
         this.titulo = c.getTitulo();
@@ -48,13 +49,14 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
         this.valorPorCotacao = c.getValorPorCotacao();
     }
 
-    public ConhecimentoDeFreteBV(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal outrasdespesas,
+    public ConhecimentoDeFreteBV(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal outrasdespesas, BigDecimal dinheiro,
             Date data, Date emissao, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao) {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
         this.valorFrete = valorFrete;
         this.outrasdespesas = outrasdespesas;
+        this.dinheiro = dinheiro;
         this.data = data;
         this.emissao = emissao;
         this.titulo = titulo;
@@ -158,13 +160,13 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
 
     public ConhecimentoDeFrete construir() throws DadoInvalidoException {
         return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao)
-                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro)
                 .comData(data).comEmissao(emissao).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public ConhecimentoDeFrete construirComID() throws DadoInvalidoException {
         return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao).comID(id)
-                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro)
                 .comData(data).comEmissao(emissao).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacao(valorPorCotacao).construir();
     }
 }

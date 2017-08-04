@@ -210,6 +210,7 @@ public class CobrancaBV implements Serializable {
             this.faturaLegada = ((Titulo) p).getFaturaLegada();
             this.faturaEmitida = ((Titulo) p).getFaturaEmitida();
             this.faturaRecebida = ((Titulo) p).getFaturaRecebida();
+            this.conhecimentoDeFrete = ((Titulo) p).getConhecimentoDeFrete();
         } else if (p instanceof Credito) {
             this.modalidadeDeCobranca = ((Credito) p).getModalidade();
         }
@@ -574,7 +575,7 @@ public class CobrancaBV implements Serializable {
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas)
-                .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).comFaturaEmitida(faturaEmitida).comFaturaRecebida(faturaRecebida).construir();
+                .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).comFaturaEmitida(faturaEmitida).comFaturaRecebida(faturaRecebida).comConhecimentoDeFrete(conhecimentoDeFrete).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {

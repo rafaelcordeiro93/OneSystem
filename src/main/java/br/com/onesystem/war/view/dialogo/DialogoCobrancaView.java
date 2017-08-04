@@ -4,6 +4,7 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaLegada;
@@ -45,6 +46,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     private FaturaLegada faturaLegada;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
     private Model<Cobranca> model;
 
@@ -115,6 +117,24 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setMoeda(faturaRecebida.getMoedaPadrao());
             e.setFaturaRecebida(faturaRecebida);
             e.setPessoa(faturaRecebida.getPessoa());
+            modalidade = true;
+            return;
+        }
+        conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", FacesContext.getCurrentInstance());
+        if (model != null && conhecimentoDeFrete != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
+            return;
+        }
+        if (conhecimentoDeFrete != null) {
+            cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
+            e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            e.setCotacao(new CotacaoDAO().porMoeda(conhecimentoDeFrete.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(conhecimentoDeFrete.getEmissao()).resultado());
+            e.setTipoLancamento(TipoLancamento.RECEBIDA);
+            e.setMoeda(conhecimentoDeFrete.getMoedaPadrao());
+            e.setConhecimentoDeFrete(conhecimentoDeFrete);
+            e.setPessoa(conhecimentoDeFrete.getPessoa());
             modalidade = true;
             return;
         }

@@ -243,4 +243,9 @@ public class ConhecimentoDeFrete implements Serializable {
         return this.id.equals(outro.id);
     }
 
+    @Override
+    public String toString() {
+        return "ConhecimentoDeFrete{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", valorFrete=" + valorFrete + ", outrasdespesas=" + outrasdespesas + ", dinheiro=" + dinheiro + ", data=" + data + ", emissao=" + emissao + ", titulo=" + titulo + ", notaRecebida=" + notaRecebida + ", valorPorCotacao=" + valorPorCotacao + '}';
+    }
+
 }

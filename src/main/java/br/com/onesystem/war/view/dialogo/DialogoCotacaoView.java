@@ -80,7 +80,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
             return;
         }
         conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", FacesContext.getCurrentInstance());
-        if (faturaRecebida != null) {
+        if (conhecimentoDeFrete != null) {
             inicializaCotacoes(conhecimentoDeFrete.getEmissao(), conhecimentoDeFrete.getMoedaPadrao());
             dinheiro = conhecimentoDeFrete.getDinheiro();
             calculaCotacoes();
@@ -130,14 +130,11 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         try {
             if (nota != null) {
                 return nota.getMoedaPadrao();
-            }
-            else if (faturaEmitida != null) {
+            } else if (faturaEmitida != null) {
                 return faturaEmitida.getMoedaPadrao();
-            }
-            else if (faturaRecebida != null) {
+            } else if (faturaRecebida != null) {
                 return faturaRecebida.getMoedaPadrao();
-            }
-            else if (conhecimentoDeFrete != null) {
+            } else if (conhecimentoDeFrete != null) {
                 return conhecimentoDeFrete.getMoedaPadrao();
             }
         } catch (DadoInvalidoException die) {
@@ -216,6 +213,8 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         nota = null;
         faturaEmitida = null;
         faturaRecebida = null;
+        conhecimentoDeFrete = null;
+        dinheiro = BigDecimal.ZERO;
     }
 
     @Override
