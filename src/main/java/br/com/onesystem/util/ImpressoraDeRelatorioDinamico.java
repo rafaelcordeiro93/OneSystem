@@ -315,7 +315,7 @@ public class ImpressoraDeRelatorioDinamico {
                 cmp.horizontalList()
                         .add(
                                 cmp.image(getClass().getClassLoader().getResourceAsStream("logo.png")).setFixedDimension(60, 60).setStyle(imagemStyle),
-                                cmp.verticalList().add(cmp.text("Relatório de Contas").setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
+                                cmp.verticalList().add(cmp.text(nome).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
                                         cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
                         .newRow()
                         .add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10)));

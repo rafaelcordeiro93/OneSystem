@@ -7,6 +7,7 @@ import br.com.onesystem.war.service.impl.BasicMBReportImpl;
 import java.io.Serializable;
 import javax.inject.Named;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.util.BundleUtil;
 import javax.annotation.PostConstruct;
 
 @Named
@@ -25,7 +26,7 @@ public class RelatorioDePessoasView extends BasicMBReportImpl<Pessoa> implements
         addCampoPadrao(new Coluna(bundle.getLabel("Bairro"), bundle.getLabel("Pessoa"), "bairro", Pessoa.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Cidade") + ")", bundle.getLabel("Cidade"), "cidade", "nome", Cidade.class, String.class, null));
 
-        initialize(Pessoa.class, PessoaDAO.class);
+        initialize(Pessoa.class, PessoaDAO.class, bundle.getLabel("Relatorio_de_Pessoas"));
     }
 
 }

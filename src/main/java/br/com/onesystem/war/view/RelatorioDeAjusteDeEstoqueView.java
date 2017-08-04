@@ -30,7 +30,7 @@ public class RelatorioDeAjusteDeEstoqueView extends BasicMBReportImpl<AjusteDeEs
         addCampoPadrao(new Coluna(bundle.getLabel("Quantidade"), bundle.getLabel("Ajuste_De_Estoque"), "quantidade", AjusteDeEstoque.class, Long.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Ajuste_De_Estoque"), "emissao", AjusteDeEstoque.class, Date.class, null));
 
-        initialize(AjusteDeEstoque.class, AjusteDeEstoqueDAO.class);
+        initialize(AjusteDeEstoque.class, AjusteDeEstoqueDAO.class, bundle.getLabel("Relatorio_De_Ajuste_De_Estoque"));
 
     }
 }

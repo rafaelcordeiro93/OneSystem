@@ -72,6 +72,7 @@ public abstract class BasicMBReportImpl<T> {
     private HashMap<Class, String> mapPath = new HashMap<>();
     protected BundleUtil bundle = new BundleUtil();
     private Coluna siglaMoeda;
+    private String nomeDoRelatorio;
 
     protected abstract void init();
 
@@ -82,10 +83,11 @@ public abstract class BasicMBReportImpl<T> {
      * @param clazz Classe.
      * @param dao Dao utilizado na classe
      */
-    protected void initialize(Class clazz, Class<? extends GenericDAO> dao) {
+    protected void initialize(Class clazz, Class<? extends GenericDAO> dao, String nomeDoRelatorio) {
         try {
             this.clazz = clazz;
             this.dao = dao;
+            this.nomeDoRelatorio = nomeDoRelatorio;
             inicializarRegistros();
             inicializarCampos();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException cnf) {
@@ -370,7 +372,7 @@ public abstract class BasicMBReportImpl<T> {
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         try {
-            impressora.imprimir(registros, "Relatorio de Contas", camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+            impressora.imprimir(registros, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }

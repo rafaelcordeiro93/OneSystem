@@ -8,6 +8,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,7 +17,7 @@ import javax.annotation.PostConstruct;
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implements Serializable {
-
+    
     @PostConstruct
     @Override
     protected void init() {
@@ -30,8 +31,8 @@ public class RelatorioDeContasView extends BasicMBReportImpl<Cobranca> implement
         addCampoPadrao(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, Date.class));
         addCampoPadrao(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
         addCampoPadrao(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA));
-
-        initialize(Cobranca.class, CobrancaDAO.class);
+        
+        initialize(Cobranca.class, CobrancaDAO.class, bundle.getLabel("Relatorio_De_Contas"));
     }
-
+    
 }
