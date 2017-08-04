@@ -15,14 +15,10 @@ import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.valueobjects.EstadoDeCondicional;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.CondicionalBV;
-import br.com.onesystem.war.service.CondicionalService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
@@ -38,7 +34,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
-import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -76,7 +71,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
         try {
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracao = configuracaoService.buscar();
-            cotacao = new CotacaoDAO().buscarCotacoes().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

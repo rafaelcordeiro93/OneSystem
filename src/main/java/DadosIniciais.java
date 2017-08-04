@@ -250,6 +250,7 @@ public class DadosIniciais {
         Janela jgrupoPrivilegio = new Janela(null, "Grupo de Privilegios", "/grupoPrivilegio.xhtml", admin);
         Janela privilegio = new Janela(null, "Privilégio", "/privilegio.xhtml", admin);
         Janela jconfigNecessario = new Janela(null, "Configuracao Necessaria", "/configuracaoNecessaria.xhtml", admin);
+        Janela filial = new Janela(null, "Filial", "/filial.xhtml", admin);
 
         daoJanela.adiciona(usuario);
         daoJanela.adiciona(jconfiguracao);
@@ -257,6 +258,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jgrupoPrivilegio);
         daoJanela.adiciona(privilegio);
         daoJanela.adiciona(jconfigNecessario);
+        daoJanela.adiciona(filial);
 
         //Modulo de Preferencias
         Janela perfilUsuario = new Janela(null, "Perfil", "/perfilUsuario.xhtml", pref);
@@ -344,6 +346,7 @@ public class DadosIniciais {
                 new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, filial, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, operacoes, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jgrupoPrivilegio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, privilegio, true, true, true, true, grupoDePrivilegio),

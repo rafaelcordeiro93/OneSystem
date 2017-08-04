@@ -8,125 +8,86 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.NoResultException;
 
 /**
  *
  * @author Rafael
  */
-public class CotacaoDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class CotacaoDAO extends GenericDAO<Cotacao> {
 
     public CotacaoDAO() {
+        super(Cotacao.class);
         limpar();
     }
 
-    private void limpar() {
-        consulta = "";
-        msg = new BundleUtil();
-        parametros = new HashMap<String, Object>();
-    }
-
-    public CotacaoDAO buscarCotacoes() {
-        consulta += "select c from Cotacao c where c.id > 0 ";
-        return this;
-    }
-
     public CotacaoDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
+        where += " and cotacao.id = :cId ";
         parametros.put("cId", id);
         return this;
     }
-    
+
     public CotacaoDAO porConta(Conta conta) {
-        consulta += " and c.conta = :cConta ";
+        where += " and cotacao.conta = :cConta ";
         parametros.put("cConta", conta);
         return this;
     }
 
     public CotacaoDAO porMoeda(Moeda moeda) {
-        consulta += " and c.conta.moeda = :cMoeda ";
+        where += " and cotacao.conta.moeda = :cMoeda ";
         parametros.put("cMoeda", moeda);
         return this;
     }
 
     public CotacaoDAO naEmissao(Date emissao) {
-        consulta += " and c.emissao between :pEmissao and :pEmissaoFinal";
+        where += " and cotacao.emissao between :pEmissao and :pEmissaoFinal";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
         parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
         return this;
     }
 
     public CotacaoDAO porCotacaoBancaria() {
-        consulta += " and c.conta.banco is not null ";
+        where += " and cotacao.conta.banco is not null ";
         return this;
     }
 
     public CotacaoDAO porCotacaoEmpresa() {
-        consulta += " and c.conta.banco is null ";
+        where += " and cotacao.conta.banco is null ";
         return this;
     }
 
     public CotacaoDAO naMaiorEmissao(Date emissao) {
-        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct "
+        where += " and cotacao.emissao in (select max(ct.emissao) from Cotacao ct "
                 + "where ct.emissao between :pEmissao and :pEmissaoFinal "
                 + "group by ct.conta) ";
         parametros.put("pEmissao", getDataComHoraZerada(emissao));
-        parametros.put("pEmissaoFinal", emissao);
+        parametros.put("pEmissaoFinal", getDataComHoraFimDoDia(emissao));
         return this;
     }
 
     public CotacaoDAO naUltimaEmissao(Date emissao) {
-        consulta += " and c.emissao in (select max(ct.emissao) from Cotacao ct where ct.emissao <= :pUltimaEmissao group by ct.conta) ";
+        where += " and cotacao.emissao in (select max(ct.emissao) from Cotacao ct where ct.emissao <= :pUltimaEmissao group by ct.conta) ";
         parametros.put("pUltimaEmissao", emissao);
         return this;
     }
 
     private Date getDataComHoraZerada(Date data) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(data);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
-        return c.getTime();
+        Calendar cotacao = Calendar.getInstance();
+        cotacao.setTime(data);
+        cotacao.set(Calendar.HOUR_OF_DAY, 0);
+        cotacao.set(Calendar.MINUTE, 0);
+        cotacao.set(Calendar.SECOND, 0);
+        return cotacao.getTime();
     }
 
     private Date getDataComHoraFimDoDia(Date data) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(data);
-        c.set(Calendar.HOUR_OF_DAY, 23);
-        c.set(Calendar.MINUTE, 59);
-        c.set(Calendar.SECOND, 59);
-        return c.getTime();
-    }
-
-    public List<Cotacao> listaDeResultados() {
-        List<Cotacao> resultado = new ArmazemDeRegistros<Cotacao>(Cotacao.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
-    }
-
-    public Cotacao resultado() throws DadoInvalidoException {
-        try {
-            Cotacao resultado = new ArmazemDeRegistros<Cotacao>(Cotacao.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);
-            limpar();
-            return resultado;
-        } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
-        }
+        Calendar cotacao = Calendar.getInstance();
+        cotacao.setTime(data);
+        cotacao.set(Calendar.HOUR_OF_DAY, 23);
+        cotacao.set(Calendar.MINUTE, 59);
+        cotacao.set(Calendar.SECOND, 59);
+        return cotacao.getTime();
     }
 
 }

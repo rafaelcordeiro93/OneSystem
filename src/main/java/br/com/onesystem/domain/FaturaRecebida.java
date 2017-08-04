@@ -29,36 +29,43 @@ import org.hibernate.validator.constraints.Length;
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_FATURARECEBIDA",
         sequenceName = "SEQ_FATURARECEBIDA")
 public class FaturaRecebida implements Serializable {
-
+    
     @Id
     @GeneratedValue(generator = "SEQ_FATURARECEBIDA", strategy = GenerationType.SEQUENCE)
     private Long id;
-
+    
     @Length(max = 80, message = "{codigo_lenght}")
     @Column(nullable = true, length = 80)
     private String codigo;
-
+    
     @Min(value = 0, message = "{total}")
     @Column(nullable = true)
     private BigDecimal total;
-
+    
+    @Min(value = 0, message = "{dinheiro}")
+    @Column(nullable = true)
+    private BigDecimal dinheiro;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
-
+    
     @NotNull(message = "{pessoa_not_null}")
     @ManyToOne
     private Pessoa pessoa;
-
+    
     @OneToMany(mappedBy = "faturaRecebida", cascade = {CascadeType.ALL})
     private List<Titulo> titulo;
-
+    
     @OneToMany(mappedBy = "faturaRecebida", cascade = {CascadeType.ALL})
     private List<NotaRecebida> notaRecebida;
-
+    
+    @OneToMany(mappedBy = "faturaRecebida", cascade = {CascadeType.ALL})
+    private List<ValorPorCotacao> valorPorCotacao;
+    
     public FaturaRecebida() {
     }
-
-    public FaturaRecebida(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo, List<NotaRecebida> notaRecebida) throws DadoInvalidoException {
+    
+    public FaturaRecebida(Long id, String codigo, BigDecimal total, Date emissao, Pessoa pessoa, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao, BigDecimal dinheiro) throws DadoInvalidoException {
         this.id = id;
         this.codigo = codigo;
         this.total = total;
@@ -66,9 +73,11 @@ public class FaturaRecebida implements Serializable {
         this.pessoa = pessoa;
         this.titulo = titulo;
         this.notaRecebida = notaRecebida;
+        this.valorPorCotacao = valorPorCotacao;
+        this.dinheiro = dinheiro;
         ehValido();
     }
-
+    
     public void adiciona(Titulo t) {
         if (titulo == null) {
             titulo = new ArrayList<>();
@@ -76,7 +85,7 @@ public class FaturaRecebida implements Serializable {
         t.setFaturaRecebida(this);
         titulo.add(t);
     }
-
+    
     public void atualiza(Titulo t) {
         if (titulo.contains(t)) {
             titulo.set(titulo.indexOf(t), t);
@@ -85,11 +94,11 @@ public class FaturaRecebida implements Serializable {
             titulo.add(t);
         }
     }
-
+    
     public void remove(Titulo t) {
         titulo.remove(t);
     }
-
+    
     public void adiciona(NotaRecebida n) {
         if (notaRecebida == null) {
             notaRecebida = new ArrayList<>();
@@ -97,7 +106,7 @@ public class FaturaRecebida implements Serializable {
         n.setFaturaRecebida(this);
         notaRecebida.add(n);
     }
-
+    
     public void atualiza(NotaRecebida n) {
         if (notaRecebida.contains(n)) {
             notaRecebida.set(notaRecebida.indexOf(n), n);
@@ -106,49 +115,86 @@ public class FaturaRecebida implements Serializable {
             notaRecebida.add(n);
         }
     }
-
+    
     public void remove(NotaRecebida n) {
         notaRecebida.remove(n);
     }
-
+    
+    public void adiciona(ValorPorCotacao b) {
+        try {
+            if (valorPorCotacao == null) {
+                valorPorCotacao = new ArrayList<>();
+            }
+            b.geraBaixaPor(this);
+            valorPorCotacao.add(b);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+    
+    public void atualiza(ValorPorCotacao b) {
+        try {
+            if (valorPorCotacao.contains(b)) {
+                valorPorCotacao.set(valorPorCotacao.indexOf(b), b);
+            } else {
+                b.geraBaixaPor(this);
+                valorPorCotacao.add(b);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+    
+    public void remove(ValorPorCotacao b) {
+        valorPorCotacao.remove(b);
+    }
+    
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("codigo", "total", "emissao", "pessoa");
         new ValidadorDeCampos<FaturaRecebida>().valida(this, campos);
     }
-
+    
     public Long getId() {
         return id;
     }
-
+    
     public String getCodigo() {
         return codigo;
     }
-
+    
     public BigDecimal getTotal() {
         return total;
     }
-
+    
     public Date getEmissao() {
         return emissao;
     }
-
+    
     public Pessoa getPessoa() {
         return pessoa;
     }
-
+    
     public List<Titulo> getTitulo() {
         return titulo;
     }
-
+    
     public List<NotaRecebida> getNotaRecebida() {
         return notaRecebida;
     }
-
+    
     public Moeda getMoedaPadrao() throws EDadoInvalidoException {
         Configuracao cfg = new ConfiguracaoService().buscar();
         return cfg.getMoedaPadrao();
     }
-
+    
+    public BigDecimal getDinheiro() {
+        return dinheiro;
+    }
+    
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -163,10 +209,10 @@ public class FaturaRecebida implements Serializable {
         }
         return this.id.equals(outro.id);
     }
-
+    
     @Override
     public String toString() {
-        return "FaturaLegada{" + "id=" + id + ", codigo=" + codigo + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + '}';
+        return "FaturaRecebida{" + "id=" + id + ", codigo=" + codigo + ", total=" + total + ", dinheiro=" + dinheiro + ", emissao=" + emissao + ", pessoa=" + pessoa + ", titulo=" + titulo + ", notaRecebida=" + notaRecebida + ", valorPorCotacao=" + valorPorCotacao + '}';
     }
-
+    
 }

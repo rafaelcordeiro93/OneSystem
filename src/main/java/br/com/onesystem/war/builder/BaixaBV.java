@@ -7,7 +7,6 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.CobrancaFixa;
-import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;

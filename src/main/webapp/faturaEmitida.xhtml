@@ -9,7 +9,9 @@
 
     <ui:define name="content">
 
-
+        <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+            <p:ajax event="dialogReturn" listener="#{faturaEmitidaView.selecionar}" process="@this"/>
+        </p:commandButton>
 
 
         <div class="ui-g">
@@ -42,8 +44,13 @@
                             <p:outputLabel value="#{l.Emissao}"/>
                             <p:calendar value="#{faturaEmitidaView.e.emissao}" pattern="dd/MM/yyyy"/>
 
+                            <p:outputLabel  value="#{l.Dinheiro}"/>
+                            <p:inputNumber id="dinheiro" value="#{faturaEmitidaView.e.dinheiro}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{faturaEmitidaView.e.moedaPadrao}"/>
+
                             <p:outputLabel  value="#{l.Total}"/>
                             <p:inputNumber id="total" value="#{faturaEmitidaView.e.total}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{faturaEmitidaView.e.moedaPadrao}"/>
+
+
 
                         </p:panelGrid>
 
@@ -167,8 +174,8 @@
 
                     <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}"  action="#{faturaEmitidaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
-                        <p:commandButton value="#{l.Atualizar}"  action="#{faturaEmitidaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Adicionar}"  action="#{faturaEmitidaView.validaDinheiro()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
+                        <p:commandButton value="#{l.Atualizar}"  action="#{faturaEmitidaView.validaDinheiro()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                         <p:commandButton value="#{l.Remover}"  action="#{faturaEmitidaView.delete()}" styleClass="Mar2 " update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{faturaEmitidaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>

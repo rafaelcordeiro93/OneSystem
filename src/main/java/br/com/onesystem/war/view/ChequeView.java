@@ -79,7 +79,7 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
     }
 
     public List<Cotacao> buscarListaDeCotacao() {
-        listaCotacao = new CotacaoDAO().buscarCotacoes().naEmissao(new Date()).listaDeResultados();
+        listaCotacao = new CotacaoDAO().naEmissao(new Date()).listaDeResultados();
         return listaCotacao;
     }
 

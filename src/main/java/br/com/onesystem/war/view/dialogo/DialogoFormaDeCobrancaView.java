@@ -126,9 +126,9 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
             }
         }
 
-        cotacaoLista = new CotacaoDAO().buscarCotacoes().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+        cotacaoLista = new CotacaoDAO().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        cotacaoPadrao = new CotacaoDAO().buscarCotacoes().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
+        cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
         e.setCotacao(cotacaoPadrao);
     }
 
@@ -178,11 +178,11 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
             } else if (obj instanceof Banco) {
                 cheque.setBanco((Banco) obj);
             } else if (obj instanceof Cartao) {
-                Cotacao resultado = new CotacaoDAO().buscarCotacoes().porConta(((Cartao) obj).getConta()).naMaiorEmissao(emissao).resultado();
+                Cotacao resultado = new CotacaoDAO().porConta(((Cartao) obj).getConta()).naMaiorEmissao(emissao).resultado();
                 if (resultado != null) {
                     boletoDeCartao.setCartao((Cartao) obj);
-                    boletoDeCartao.setCotacao(new CotacaoDAO().buscarCotacoes().porConta(((Cartao) obj).getConta()).naUltimaEmissao(emissao).resultado());
-                    e.setCotacao(new CotacaoDAO().buscarCotacoes().porMoeda(((Cartao) obj).getConta().getMoeda()).porCotacaoEmpresa().naUltimaEmissao(emissao).resultado());
+                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(((Cartao) obj).getConta()).naUltimaEmissao(emissao).resultado());
+                    e.setCotacao(new CotacaoDAO().porMoeda(((Cartao) obj).getConta().getMoeda()).porCotacaoEmpresa().naUltimaEmissao(emissao).resultado());
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("Cotacao_Da_Conta_Do_Cartao_Not_Null"));
                 }
