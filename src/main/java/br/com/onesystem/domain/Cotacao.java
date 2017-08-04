@@ -5,7 +5,6 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -47,8 +46,6 @@ public class Cotacao implements Serializable {
     private List<CobrancaFixa> movimentoFixos;
     @OneToMany(mappedBy = "cotacao")
     private List<Recepcao> recepcoes;
-    @OneToMany(mappedBy = "cotacao")
-    private List<ConhecimentoDeFrete> conhecimentoDeFretes;
     @OneToMany(mappedBy = "cotacao")
     private List<Orcamento> orcamentos;
     @OneToMany(mappedBy = "cotacao")

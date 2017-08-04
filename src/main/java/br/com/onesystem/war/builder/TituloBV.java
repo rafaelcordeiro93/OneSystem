@@ -3,7 +3,6 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
@@ -50,7 +49,7 @@ public class TituloBV implements Serializable {
 
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo,
             Date vencimento, Date emissao, OperacaoFinanceira unidadeFinanceira,
-            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao, ConhecimentoDeFrete conhecimentoDeFrete) {
+            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao) {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -64,16 +63,6 @@ public class TituloBV implements Serializable {
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.cotacao = cotacao;
-    }
-
-    public TituloBV(ConhecimentoDeFrete conhecimento) {
-
-        this.pessoa = conhecimento.getPessoa();
-        this.valor = conhecimento.getValorFrete();
-        this.conhecimentoDeFrete = conhecimento;
-        this.emissao = conhecimento.getEmissao();
-        this.cotacao = conhecimento.getCotacao();
-
     }
 
     public TituloBV() {

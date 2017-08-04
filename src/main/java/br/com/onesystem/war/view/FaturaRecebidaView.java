@@ -5,13 +5,17 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.FaturaRecebidaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -45,6 +49,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     private ModelList<Titulo> list;
     private List<NotaRecebida> notaRecebidaList;
     private List<NotaRecebida> notaRecebidaRemovidas;
+    private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
     private Pessoa pessoaNota;
 
@@ -62,10 +67,16 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             notaRecebidaList.forEach((n) -> {
                 f.adiciona(n);
             });
-            addNoBanco(f);
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);
+            });
+            new AdicionaDAO<>().adiciona(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+        InfoMessage.atualizado();
+        RequestContext.getCurrentInstance().update("conteudo");
+        limparJanela();
     }
 
     @Override
@@ -75,13 +86,25 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             FaturaRecebida f = e.construirComID();
             removidos.forEach(c -> f.remove(c));
             notaRecebidaRemovidas.forEach(c -> f.remove(c));
+            List<ValorPorCotacao> valoresARemover = new ValorPorCotacaoDAO().porFaturaRecebida(f).listaDeResultados();
+            if (valorPorCotacaoList.size() > 0) {
+                valoresARemover.forEach(v -> f.remove(v));
+            }
             list.getList().forEach((t) -> {
                 f.atualiza(t);
             });
             notaRecebidaList.forEach((n) -> {
                 f.atualiza(n);
             });
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);//Adiciona as os ValoresPorCotacão Novos
+            });
             new AtualizaDAO<>().atualiza(f);
+            if (valorPorCotacaoList.size() > 0) {
+                for (ValorPorCotacao v : valoresARemover) {
+                    new RemoveDAO<>().remove(v, v.getId());
+                }
+            }
             for (NotaRecebida ne : notaRecebidaRemovidas) {
                 ne.setFaturaRecebida(null);
                 new AtualizaDAO<>().atualiza(ne);
@@ -122,6 +145,21 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
         }
     }
 
+    public void validaDinheiro() throws DadoInvalidoException {
+        BigDecimal valorBanco = BigDecimal.ZERO; // Se existir valor em dinheiro abre a janela de cotações.     
+        if (e.getId() != null) {
+            valorBanco = new FaturaRecebidaDAO().porId(e.getId()).resultado().getDinheiro();
+        }
+        if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
+            SessionUtil.put(e.construir(), "faturaRecebida", FacesContext.getCurrentInstance());
+            RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else if (e.getId() == null) {
+            add();
+        } else {
+            update();
+        }
+    }
+
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         String cid = event.getComponent().getId();
@@ -150,6 +188,13 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
         } else if (obj instanceof Titulo) {
             Titulo cb = (Titulo) obj;
             list.add(cb);
+        } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
+            valorPorCotacaoList = (List<ValorPorCotacao>) obj;
+            if (e.getId() != null) {
+                update();
+            } else {
+                add();
+            }
         } else if (obj instanceof Model) {
             Model m = (Model) obj;
             list.atualiza(m);
@@ -228,6 +273,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             list = new ModelList<>();
             notaRecebidaList = new ArrayList<>();
             notaRecebidaRemovidas = new ArrayList<>();
+            valorPorCotacaoList = new ArrayList<>();
             notaRecebidaSelecionada = null;
             pessoaNota = null;
             removePessoaSessao();

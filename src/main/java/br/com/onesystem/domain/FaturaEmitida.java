@@ -146,6 +146,21 @@ public class FaturaEmitida implements Serializable {
             die.print();
         }
     }
+//    public void atualiza(ValorPorCotacao valor) {
+//        try {
+//            for (ValorPorCotacao v : valorPorCotacao) {
+//                if (v.getCotacao().getConta().getMoeda().equals(v.getCotacao().getConta().getMoeda())) {
+//                    v.atualizaValor(valor.getValor());
+//                    v.atualizaValorDeBaixa(valor.getValor());
+//                } else {
+//                    v.geraBaixaPor(this);
+//                    valorPorCotacao.add(v);
+//                }
+//            }
+//        } catch (DadoInvalidoException die) {
+//            die.print();
+//        }
+//    }
 
     public void remove(ValorPorCotacao v) {
         valorPorCotacao.remove(v);

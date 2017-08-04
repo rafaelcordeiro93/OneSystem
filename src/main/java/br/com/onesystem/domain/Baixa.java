@@ -87,9 +87,6 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private Cambio cambio;
 
-    @ManyToOne
-    private ConhecimentoDeFrete conhecimentoDeFrete;
-
     @ManyToOne(cascade = CascadeType.MERGE)
     private Transferencia transferencia;
 
@@ -195,10 +192,6 @@ public class Baixa implements Serializable, Movimento {
 
     public CobrancaFixa getCobrancaFixa() {
         return cobrancaFixa;
-    }
-
-    public ConhecimentoDeFrete getConhecimentoDeFrete() {
-        return conhecimentoDeFrete;
     }
 
     public BigDecimal getSaldo(BigDecimal saldoAtual) {
@@ -491,8 +484,7 @@ public class Baixa implements Serializable, Movimento {
                 + ", perfilDeValor=" + (parcela != null ? parcela.getId() : null)
                 + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
                 + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
-                + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", conhecimentoDeFrete="
-                + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null)
+                + ", cambio=" + (cambio != null ? cambio.getId() : null)
                 + ", transferencia=" + (transferencia != null ? transferencia.getId() : null)
                 + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", estado=" + estado + '}';
     }

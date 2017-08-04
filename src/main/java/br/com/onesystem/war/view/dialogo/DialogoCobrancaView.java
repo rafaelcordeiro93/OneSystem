@@ -65,25 +65,10 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     private void buscaDaSessao() throws DadoInvalidoException {
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         faturaLegada = (FaturaLegada) SessionUtil.getObject("faturaLegada", FacesContext.getCurrentInstance());
-        faturaEmitida = (FaturaEmitida) SessionUtil.getObject("faturaEmitida", FacesContext.getCurrentInstance());
-        faturaRecebida = (FaturaRecebida) SessionUtil.getObject("faturaRecebida", FacesContext.getCurrentInstance());
-
         if (model != null && faturaLegada != null) {
             cobranca = (Cobranca) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().naEmissao(faturaLegada.getEmissao()).listaDeResultados();
-            return;
-        }
-        if (model != null && faturaEmitida != null) {
-            cobranca = (Cobranca) model.getObject();
-            e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().naEmissao(faturaEmitida.getEmissao()).listaDeResultados();
-            return;
-        }
-        if (model != null && faturaRecebida != null) {
-            cobranca = (Cobranca) model.getObject();
-            e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().naEmissao(faturaRecebida.getEmissao()).listaDeResultados();
             return;
         }
         if (faturaLegada != null) {
@@ -97,6 +82,13 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             modalidade = true;
             return;
         }
+        faturaEmitida = (FaturaEmitida) SessionUtil.getObject("faturaEmitida", FacesContext.getCurrentInstance());
+        if (model != null && faturaEmitida != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().naEmissao(faturaEmitida.getEmissao()).listaDeResultados();
+            return;
+        }
         if (faturaEmitida != null) {
             cotacaoLista = new CotacaoDAO().naEmissao(faturaEmitida.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
@@ -106,6 +98,13 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setFaturaEmitida(faturaEmitida);
             e.setPessoa(faturaEmitida.getPessoa());
             modalidade = true;
+            return;
+        }
+        faturaRecebida = (FaturaRecebida) SessionUtil.getObject("faturaRecebida", FacesContext.getCurrentInstance());
+        if (model != null && faturaRecebida != null) {
+            cobranca = (Cobranca) model.getObject();
+            e = new CobrancaBV(cobranca);
+            cotacaoLista = new CotacaoDAO().naEmissao(faturaRecebida.getEmissao()).listaDeResultados();
             return;
         }
         if (faturaRecebida != null) {
@@ -124,8 +123,10 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
             return;
-        } else {
-            nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+        }
+        nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+        if (nota != null) {
+
             cotacaoLista = new CotacaoDAO().naEmissao(nota.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
             e.setCotacao(new CotacaoDAO().porMoeda(nota.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(nota.getEmissao()).resultado());

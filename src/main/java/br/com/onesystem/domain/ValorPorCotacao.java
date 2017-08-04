@@ -61,15 +61,19 @@ public class ValorPorCotacao implements Serializable {
     @ManyToOne
     private FaturaRecebida faturaRecebida;
 
+    @ManyToOne
+    private ConhecimentoDeFrete conhecimentoDeFrete;
+
     public ValorPorCotacao() {
     }
 
-    public ValorPorCotacao(Long id, Cotacao cotacao, BigDecimal valor, FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida) throws DadoInvalidoException {
+    public ValorPorCotacao(Long id, Cotacao cotacao, BigDecimal valor, FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida, ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
         this.id = id;
         this.cotacao = cotacao;
         this.valor = valor;
         this.faturaEmitida = faturaEmitida;
         this.faturaRecebida = faturaRecebida;
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
         ehValido();
     }
 
@@ -103,10 +107,20 @@ public class ValorPorCotacao implements Serializable {
     public void geraBaixaPor(FaturaRecebida faturaRecebida) throws DadoInvalidoException {
         setFaturaRecebida(faturaRecebida);
         BundleUtil msg = new BundleUtil();
-        String historico = msg.getMessage("Fatura_Recebida") + " " + msg.getMessage("de") + " " + faturaEmitida.getPessoa().getNome();
+        String historico = msg.getMessage("Fatura_Recebida") + " " + msg.getMessage("de") + " " + faturaRecebida.getPessoa().getNome();
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
         baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(faturaRecebida.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comPessoa(faturaRecebida.getPessoa())
+                .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
+    }
+
+    public void geraBaixaPor(ConhecimentoDeFrete conhecimentoDeFrete) throws DadoInvalidoException {
+        setConhecimentoDeFrete(conhecimentoDeFrete);
+        BundleUtil msg = new BundleUtil();
+        String historico = msg.getMessage("Conhecimento_De_Frete") + " " + msg.getMessage("de") + " " + conhecimentoDeFrete.getPessoa().getNome();
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(conhecimentoDeFrete.getEmissao()).comHistorico(historico)
+                .comOperacaoFinanceira(conhecimentoDeFrete.getOperacao().getOperacaoFinanceira()).comPessoa(conhecimentoDeFrete.getPessoa())
                 .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
     }
 
@@ -152,6 +166,14 @@ public class ValorPorCotacao implements Serializable {
 
     public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
         this.faturaRecebida = faturaRecebida;
+    }
+
+    public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
     }
 
     @Override

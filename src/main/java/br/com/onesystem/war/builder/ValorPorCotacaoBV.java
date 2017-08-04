@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaRecebida;
@@ -31,6 +32,7 @@ public class ValorPorCotacaoBV {
     private Moeda moedaPadrao;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
     public ValorPorCotacaoBV(ValorPorCotacao v) {
         this.id = v.getId();
@@ -38,6 +40,7 @@ public class ValorPorCotacaoBV {
         this.valorAReceber = v.getValor();
         this.faturaEmitida = v.getFaturaEmitida();
         this.faturaRecebida = v.getFaturaRecebida();
+        this.conhecimentoDeFrete = v.getConhecimentoDeFrete();
     }
 
     public ValorPorCotacaoBV(Cotacao cotacao, BigDecimal valorAReceber, BigDecimal total, BigDecimal totalConvertidoRecebido, Moeda moedaPadrao) {
@@ -111,6 +114,14 @@ public class ValorPorCotacaoBV {
 
     public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
         this.faturaRecebida = faturaRecebida;
+    }
+
+    public ConhecimentoDeFrete getConhecimentoDeFrete() {
+        return conhecimentoDeFrete;
+    }
+
+    public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
 
     public BigDecimal getValorConvertidoRestante() {

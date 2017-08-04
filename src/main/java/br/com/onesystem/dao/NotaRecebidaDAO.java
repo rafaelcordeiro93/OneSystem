@@ -101,6 +101,11 @@ public class NotaRecebidaDAO extends GenericDAO<NotaRecebida> {
         return this;
     }
 
+    public NotaRecebidaDAO porConhecimentoDeFreteNaoInformado() {
+        where += " and notaRecebida.conhecimentoDeFrete = null ";
+        return this;
+    }
+
     public NotaRecebidaDAO porSemFaturaRecebida() {
         where += " and notaRecebida.faturaRecebida = null ";
         return this;

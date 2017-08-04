@@ -43,7 +43,6 @@ public class TituloBuilder {
     private FaturaLegada faturaLegada;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
-
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Boolean entrada;
 

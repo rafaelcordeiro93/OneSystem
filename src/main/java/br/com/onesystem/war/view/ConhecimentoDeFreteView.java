@@ -1,314 +1,308 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.ConhecimentoDeFreteDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.dao.ValorPorCotacaoDAO;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.FatalMessage;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
-import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
-import br.com.onesystem.valueobjects.NaturezaFinanceira;
-import br.com.onesystem.war.builder.BaixaBV;
+import br.com.onesystem.util.ModelList;
+import br.com.onesystem.util.Model;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.ConhecimentoDeFreteBV;
-import br.com.onesystem.war.builder.TituloBV;
-import br.com.onesystem.war.service.MoedaService;
-import br.com.onesystem.war.service.ConhecimentoDeFreteService;
+import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.dialogo.DialogoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
+/**
+ *
+ * @author Rafael Cordeiro
+ */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ConhecimentoDeFreteView implements Serializable {
+public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, ConhecimentoDeFreteBV> implements Serializable {
 
-    private boolean panel;
-    private ConhecimentoDeFreteBV conhecimentoDeFrete;
-    private ConhecimentoDeFrete conhecimentoDeFreteSelecionado;
-    private List<ConhecimentoDeFrete> conhecimentoDeFreteLista;
-    private List<ConhecimentoDeFrete> gruposFinanceirosFiltrados;
-    private TituloBV titulos;
-    private List<TituloBV> parcelas;
-    private BaixaBV baixa;
-
-    private BigDecimal total;
-    private BigDecimal numeroParcela;
-    private Integer intervaloDias;
-
-    @ManagedProperty("#{conhecimentoDeFreteService}")
-    private ConhecimentoDeFreteService service;
-
-    @ManagedProperty("#{moedaService}")
-    private MoedaService serviceMoeda;
-
-    private List<Moeda> moedaLista;
+    private Model<Titulo> modeloSelecionado;
+    private ModelList<Titulo> list;
+    private List<NotaRecebida> notaRecebidaList;
+    private List<NotaRecebida> notaRecebidaRemovidas;
+    private List<ValorPorCotacao> valorPorCotacaoList;
+    private NotaRecebida notaRecebidaSelecionada;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        panel = false;
-        conhecimentoDeFrete = new ConhecimentoDeFreteBV();
-        conhecimentoDeFreteLista = service.buscarConhecimentoDeFreteService();
-        moedaLista = serviceMoeda.buscarMoedas();
     }
 
     public void add() {
         try {
-            ConhecimentoDeFrete novoRegistro = conhecimentoDeFrete.construir();
-            Titulo novoTitulo = titulos.construir();
-            new AdicionaDAO<ConhecimentoDeFrete>().adiciona(novoRegistro);
-            conhecimentoDeFreteLista.add(novoRegistro);
-            for (TituloBV n : parcelas) {
-                novoTitulo = n.construir();
-            }
-            InfoMessage.print("Receita Provisionada agregado con éxito!");
-            limparJanela();
-        } catch (DadoInvalidoException die) {
-            die.print();
+            ConhecimentoDeFrete f = e.construir();
+            list.getList().forEach((t) -> {
+                f.adiciona(t);
+            });
+            notaRecebidaList.forEach((n) -> {
+                f.adiciona(n);
+            });
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);
+            });
+            new AdicionaDAO<>().adiciona(f);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
+        InfoMessage.atualizado();
+        RequestContext.getCurrentInstance().update("conteudo");
+        limparJanela();
     }
 
+    @Override
     public void update() {
         try {
-            ConhecimentoDeFrete conhecimentoDeFreteExistente = conhecimentoDeFrete.construirComID();
-            if (conhecimentoDeFreteExistente.getId() != null) {
-                new AtualizaDAO<ConhecimentoDeFrete>().atualiza(conhecimentoDeFreteExistente);
-                conhecimentoDeFreteLista.set(conhecimentoDeFreteLista.indexOf(conhecimentoDeFreteExistente),
-                        conhecimentoDeFreteExistente);
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(conhecimentoDeFreteExistente)) {
-                    gruposFinanceirosFiltrados.set(gruposFinanceirosFiltrados.indexOf(conhecimentoDeFreteExistente), conhecimentoDeFreteExistente);
-                }
-                InfoMessage.print("Receita Provisionada cambiado con éxito!");
-                limparJanela();
-            } else {
-                throw new EDadoInvalidoException("!La conhecimentoDeFrete no se encontra registrada!");
+            List<Titulo> removidos = list.getRemovidos().stream().filter(m -> ((Titulo) m.getObject()).getId() != null).map(m -> (Titulo) m.getObject()).collect(Collectors.toList());
+            ConhecimentoDeFrete f = e.construirComID();
+            removidos.forEach(c -> f.remove(c));
+            notaRecebidaRemovidas.forEach(c -> f.remove(c));
+            List<ValorPorCotacao> valoresARemover = new ValorPorCotacaoDAO().porConhecimentoDeFrete(f).listaDeResultados();
+            if (valorPorCotacaoList.size() > 0) {
+                valoresARemover.forEach(v -> f.remove(v));
             }
+            list.getList().forEach((t) -> {
+                f.atualiza(t);
+            });
+            notaRecebidaList.forEach((n) -> {
+                f.atualiza(n);
+            });
+            valorPorCotacaoList.forEach((v) -> {
+                f.adiciona(v);//Adiciona as os ValoresPorCotacão Novos
+            });
+            new AtualizaDAO<>().atualiza(f);
+            if (valorPorCotacaoList.size() > 0) {
+                for (ValorPorCotacao v : valoresARemover) {
+                    new RemoveDAO<>().remove(v, v.getId());
+                }
+            }
+            for (NotaRecebida ne : notaRecebidaRemovidas) {
+                ne.setConhecimentoDeFrete(null);
+                new AtualizaDAO<>().atualiza(ne);
+            }
+            for (Titulo c : removidos) {
+                new RemoveDAO<>().remove(c, c.getId());
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+        InfoMessage.atualizado();
+        RequestContext.getCurrentInstance().update("conteudo");
+        limparJanela();
+    }
+
+    @Override
+    public void delete() {
+        try {
+            for (NotaRecebida ne : e.getNotaRecebida()) {
+                ne.setConhecimentoDeFrete(null);
+                new AtualizaDAO<>().atualiza(ne);
+            }
+            e.setNotaRecebida(null);
+            ConhecimentoDeFrete f = e.construirComID();
+            new AtualizaDAO<>().atualiza(f);
+            deleteNoBanco(f, f.getId());
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void delete() {
+    public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (conhecimentoDeFreteLista != null && conhecimentoDeFreteLista.contains(conhecimentoDeFrete.construirComID())) {
-                new RemoveDAO<ConhecimentoDeFrete>().remove(conhecimentoDeFrete.construirComID(), conhecimentoDeFrete.construirComID().getId());
-                conhecimentoDeFreteLista.remove(conhecimentoDeFrete.construirComID());
-                if (gruposFinanceirosFiltrados != null && gruposFinanceirosFiltrados.contains(conhecimentoDeFrete.construirComID())) {
-                    gruposFinanceirosFiltrados.remove(conhecimentoDeFrete.construirComID());
-                }
-                InfoMessage.print("ConhecimentoDeFrete '" + this.conhecimentoDeFrete.getId() + "' eliminada con éxito!");
-                limparJanela();
+            SessionUtil.put(e.construir(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());
+            new DialogoCobrancaView().abrirDialogo();
+        } catch (EDadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void validaDinheiro() throws DadoInvalidoException {
+        BigDecimal valorBanco = BigDecimal.ZERO; // Se existir valor em dinheiro abre a janela de cotações.     
+        if (e.getId() != null) {
+            valorBanco = new ConhecimentoDeFreteDAO().porId(e.getId()).resultado().getDinheiro();
+        }
+        if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
+            SessionUtil.put(e.construir(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());
+            RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else if (e.getId() == null) {
+            add();
+        } else {
+            update();
+        }
+    }
+
+    public void selecionar(SelectEvent event) {
+        Object obj = event.getObject();
+        String cid = event.getComponent().getId();
+        if (obj instanceof ConhecimentoDeFrete) {
+            limparJanela();
+            e = new ConhecimentoDeFreteBV((ConhecimentoDeFrete) obj);
+            if (e.getNotaRecebida().size() > 0 && e.getNotaRecebida() != null) {
+                notaRecebidaList = e.getNotaRecebida();
             }
-        } catch (DadoInvalidoException di) {
-            di.print();
-        } catch (ConstraintViolationException pe) {
-            FatalMessage.print(pe.getMessage(), pe.getCause());
+            if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
+                list = new ModelList<>(e.getTitulo());
+            }
+            try {
+                SessionUtil.put(e.construirComID(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());
+            } catch (DadoInvalidoException ex) {
+                ex.print();
+            }
+        } else if (obj instanceof Operacao) {
+            e.setOperacao((Operacao) obj);
+        } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
+            e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof NotaRecebida) {
+            addNotaRecebidaNaLista((NotaRecebida) obj);
+        } else if (obj instanceof Titulo) {
+            Titulo cb = (Titulo) obj;
+            list.add(cb);
+        } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
+            valorPorCotacaoList = (List<ValorPorCotacao>) obj;
+            if (e.getId() != null) {
+                update();
+            } else {
+                add();
+            }
+        } else if (obj instanceof Model) {
+            Model m = (Model) obj;
+            list.atualiza(m);
+            modeloSelecionado = null;
         }
     }
 
-    public void CarnePagamento(BigDecimal numeroParcela, BigDecimal total) {
-        parcelas = new ArrayList<TituloBV>();
-        Integer count = new Integer(0);
-
-        this.numeroParcela = numeroParcela;
-        this.total = total;
-
-        BigDecimal parcela = total.divide(numeroParcela);
-
-        for (int i = 1; i <= numeroParcela.intValue(); i++) {
-            count = count + intervaloDias;
-//           TituloBV dp = new TituloBV(null , conhecimentoDeFrete.getPessoa(),null,parcela, null,null,
-//                        conhecimentoDeFrete.getEmissao(),null, null, null, null ,conhecimentoDeFrete.getMoeda(), conhecimentoDeFreteSelecionado);
-//            parcelas.add(dp);
+    private void addNotaRecebidaNaLista(NotaRecebida n) {
+        if (!notaRecebidaList.contains(n)) {
+            notaRecebidaList.add(n);
         }
     }
 
-    private Date adicionarDiasNa(Date data, Integer dias) {
-        Calendar c = Calendar.getInstance();
-        c.setTime(data);
-        c.add(Calendar.DATE, dias);
-        return c.getTime();
-    }
-
-    private Long retornarCodigo() {
-        Long id = (long) 1;
-        if (!parcelas.isEmpty()) {
-            for (TituloBV dp : parcelas) {
-                if (dp.getId() >= id) {
-                    id = dp.getId() + 1;
-                }
+    public void removerNotaDaLista() {
+        if (notaRecebidaSelecionada != null) {
+            notaRecebidaList.remove(notaRecebidaSelecionada);
+            if (e.getId() != null) {
+                notaRecebidaRemovidas.add(notaRecebidaSelecionada);
             }
         }
-        return id;
     }
 
-    public List<NaturezaFinanceira> getNaturezasFinanceiras() {
-        return Arrays.asList(NaturezaFinanceira.values());
+    public boolean habilitaBotaoPessoa() {
+        if (notaRecebidaList.size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public List<ClassificacaoFinanceira> getClassificacaoFinanceira() {
-        return Arrays.asList(ClassificacaoFinanceira.values());
+    public void remover() {
+        list.remove(modeloSelecionado);
+        modeloSelecionado = null;
+    }
+
+    public void selecionaParcela(SelectEvent event) {
+        try {
+            modeloSelecionado = (Model<Titulo>) event.getObject();
+            removeDaSessao();
+            SessionUtil.put(modeloSelecionado, "model", FacesContext.getCurrentInstance());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     public void limparJanela() {
-        conhecimentoDeFrete = new ConhecimentoDeFreteBV();
-        conhecimentoDeFreteSelecionado = new ConhecimentoDeFrete();
-        intervaloDias = null;
-        numeroParcela = null;
-        //parcelas = new ArrayList<TituloBV>();
-    }
-
-    public void abrirEdicao() {
-        limparJanela();
-        panel = true;
-    }
-
-    public void abrirEdicaoComDados() {
-        panel = true;
-        conhecimentoDeFrete = new ConhecimentoDeFreteBV(conhecimentoDeFreteSelecionado);
-    }
-
-    public void fecharEdicao() {
-        panel = false;
-    }
-
-    public void desfazer() {
-        if (conhecimentoDeFreteSelecionado != null) {
-            conhecimentoDeFrete = new ConhecimentoDeFreteBV(conhecimentoDeFreteSelecionado);
+        try {
+            removeDaSessao();
+            SessionUtil.remove("conhecimentoDeFrete", FacesContext.getCurrentInstance());
+            e = new ConhecimentoDeFreteBV();
+            modeloSelecionado = null;
+            list = new ModelList<>();
+            notaRecebidaList = new ArrayList<>();
+            notaRecebidaRemovidas = new ArrayList<>();
+            valorPorCotacaoList = new ArrayList<>();
+            notaRecebidaSelecionada = null;
+        } catch (FDadoInvalidoException ex) {
+            ex.print();
         }
     }
 
-    public ConhecimentoDeFreteBV getConhecimentoDeFrete() {
-        return conhecimentoDeFrete;
+    public String getTotalParcelas() throws EDadoInvalidoException {
+        if (list != null) {
+            BigDecimal valor = list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            return e.getMoedaPadrao().getSigla() + valor.toString();
+        }
+        return e.getMoedaPadrao().getSigla();
     }
 
-    public void setConhecimentoDeFrete(ConhecimentoDeFreteBV conhecimentoDeFrete) {
-        this.conhecimentoDeFrete = conhecimentoDeFrete;
+    public String getTotalAFaturar() throws EDadoInvalidoException {
+        if (notaRecebidaList != null) {
+            BigDecimal valor = notaRecebidaList.stream().map(NotaRecebida::getaFaturar).reduce(BigDecimal.ZERO, BigDecimal::add);
+            return e.getMoedaPadrao().getSigla() + valor.toString();
+        }
+        return e.getMoedaPadrao().getSigla();
     }
 
-    public ConhecimentoDeFrete getConhecimentoDeFreteSelecionado() {
-        return conhecimentoDeFreteSelecionado;
+    public void removeDaSessao() throws FDadoInvalidoException {
+        SessionUtil.remove("model", FacesContext.getCurrentInstance());
     }
 
-    public void setConhecimentoDeFreteSelecionado(ConhecimentoDeFrete conhecimentoDeFreteSelecionado) {
-        this.conhecimentoDeFreteSelecionado = conhecimentoDeFreteSelecionado;
+    public ModelList<Titulo> getList() {
+        return list;
     }
 
-    public List<ConhecimentoDeFrete> getConhecimentoDeFreteLista() {
-        return conhecimentoDeFreteLista;
+    public void setList(ModelList<Titulo> list) {
+        this.list = list;
     }
 
-    public void setConhecimentoDeFreteLista(List<ConhecimentoDeFrete> conhecimentoDeFreteLista) {
-        this.conhecimentoDeFreteLista = conhecimentoDeFreteLista;
+    public Model getModelo() {
+        return modeloSelecionado;
     }
 
-    public List<ConhecimentoDeFrete> getGruposFinanceirosFiltrados() {
-        return gruposFinanceirosFiltrados;
+    public void setModelo(Model modelo) {
+        this.modeloSelecionado = modelo;
     }
 
-    public void setGruposFinanceirosFiltrados(List<ConhecimentoDeFrete> gruposFinanceirosFiltrados) {
-        this.gruposFinanceirosFiltrados = gruposFinanceirosFiltrados;
+    public NotaRecebida getNotaRecebidaSelecionada() {
+        return notaRecebidaSelecionada;
     }
 
-    public boolean isPanel() {
-        return panel;
+    public void setNotaRecebidaSelecionada(NotaRecebida notaRecebidaSelecionada) {
+        this.notaRecebidaSelecionada = notaRecebidaSelecionada;
     }
 
-    public void setPanel(boolean panel) {
-        this.panel = panel;
+    public List<NotaRecebida> getNotaRecebidaList() {
+        return notaRecebidaList;
     }
 
-    public ConhecimentoDeFreteService getService() {
-        return service;
+    public void setNotaRecebidaList(List<NotaRecebida> notaRecebidaList) {
+        this.notaRecebidaList = notaRecebidaList;
     }
-
-    public void setService(ConhecimentoDeFreteService service) {
-        this.service = service;
-    }
-
-    public void selecionarMoeda(SelectEvent event) {
-        Moeda moeda = (Moeda) event.getObject();
-//        conhecimentoDeFrete.setMoeda(moeda);
-    }
-
-    public void selecionaPessoa(SelectEvent event) {
-        Pessoa pessoaSelecionada = (Pessoa) event.getObject();
-        conhecimentoDeFrete.setPessoa(pessoaSelecionada);
-    }
-
-    public void selecionaOperacao(SelectEvent event) {
-        Operacao operacaoSelecionada = (Operacao) event.getObject();
-        conhecimentoDeFrete.setOperacao(operacaoSelecionada);
-    }
-
-    public TituloBV getTitulos() {
-        return titulos;
-    }
-
-    public void setTitulos(TituloBV titulos) {
-        this.titulos = titulos;
-    }
-
-    public List<TituloBV> getParcelas() {
-        return parcelas;
-    }
-
-    public void setParcelas(List<TituloBV> parcelas) {
-        this.parcelas = parcelas;
-    }
-
-    public BigDecimal getNumeroParcela() {
-        return numeroParcela;
-    }
-
-    public void setNumeroParcela(BigDecimal numeroParcela) {
-        this.numeroParcela = numeroParcela;
-    }
-
-    public Integer getIntervaloDias() {
-        return intervaloDias;
-    }
-
-    public void setIntervaloDias(Integer intervaloDias) {
-        this.intervaloDias = intervaloDias;
-    }
-
-    public List<Moeda> getMoedaLista() {
-        return moedaLista;
-    }
-
-    public void setMoedaLista(List<Moeda> moedaLista) {
-        this.moedaLista = moedaLista;
-    }
-
-    public MoedaService getServiceMoeda() {
-        return serviceMoeda;
-    }
-
-    public BaixaBV getBaixa() {
-        return baixa;
-    }
-
-    public void setBaixa(BaixaBV baixa) {
-        this.baixa = baixa;
-    }
-
-    public void setServiceMoeda(MoedaService serviceMoeda) {
-        this.serviceMoeda = serviceMoeda;
-    }
-
 }
