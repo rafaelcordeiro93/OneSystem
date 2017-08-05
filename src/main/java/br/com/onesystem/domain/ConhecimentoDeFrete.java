@@ -1,17 +1,19 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
-import br.com.onesystem.valueobjects.TipoOperacao;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,14 +21,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
 
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONHECIMENTODEFRETE",
@@ -46,13 +46,18 @@ public class ConhecimentoDeFrete implements Serializable {
 
     @Min(value = 0, message = "{valor_min}")
     @Max(value = 999999999, message = "{valor_max}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal valorFrete;
 
     @Min(value = 0, message = "{valor_min}")
     @Max(value = 999999999, message = "{valor_max}")
-    @Column(nullable = false)
+    @Column(nullable = true)
     private BigDecimal outrasdespesas;
+
+    @Min(value = 0, message = "{valor_min}")
+    @Max(value = 999999999, message = "{valor_max}")
+    @Column(nullable = true)
+    private BigDecimal dinheiro;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date data;
@@ -60,31 +65,103 @@ public class ConhecimentoDeFrete implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = Calendar.getInstance().getTime();
 
-    @NotNull(message = "cotacao_not_null")
-    @ManyToOne(optional = false)
-    private Cotacao cotacao;
-
-    @OneToMany(mappedBy = "conhecimentoDeFrete")
-    private List<Baixa> baixa;
-
-    @OneToMany(mappedBy = "conhecimentoDeFrete")
+    @OneToMany(mappedBy = "conhecimentoDeFrete", cascade = {CascadeType.ALL})
     private List<Titulo> titulo;
+
+    @OneToMany(mappedBy = "conhecimentoDeFrete", cascade = {CascadeType.ALL})
+    private List<NotaRecebida> notaRecebida;
+
+    @OneToMany(mappedBy = "conhecimentoDeFrete", cascade = {CascadeType.ALL})
+    private List<ValorPorCotacao> valorPorCotacao;
 
     public ConhecimentoDeFrete() {
     }
 
     public ConhecimentoDeFrete(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal despesas,
-            Date data, Date emissao, Cotacao cotacao) throws DadoInvalidoException {
+            BigDecimal dinheiro, Date data, Date emissao, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
         this.valorFrete = valorFrete;
         this.outrasdespesas = despesas;
+        this.dinheiro = dinheiro;
         this.data = data;
         this.emissao = emissao;
-        this.cotacao = cotacao;
-
+        this.titulo = titulo;
+        this.notaRecebida = notaRecebida;
+        this.valorPorCotacao = valorPorCotacao;
         ehValido();
+    }
+
+    public void adiciona(Titulo t) {
+        if (titulo == null) {
+            titulo = new ArrayList<>();
+        }
+        t.setConhecimentoDeFrete(this);
+        titulo.add(t);
+    }
+
+    public void atualiza(Titulo t) {
+        if (titulo.contains(t)) {
+            titulo.set(titulo.indexOf(t), t);
+        } else {
+            t.setConhecimentoDeFrete(this);
+            titulo.add(t);
+        }
+    }
+
+    public void remove(Titulo t) {
+        titulo.remove(t);
+    }
+
+    public void adiciona(NotaRecebida n) {
+        if (notaRecebida == null) {
+            notaRecebida = new ArrayList<>();
+        }
+        n.setConhecimentoDeFrete(this);
+        notaRecebida.add(n);
+    }
+
+    public void atualiza(NotaRecebida n) {
+        if (notaRecebida.contains(n)) {
+            notaRecebida.set(notaRecebida.indexOf(n), n);
+        } else {
+            n.setConhecimentoDeFrete(this);
+            notaRecebida.add(n);
+        }
+    }
+
+    public void remove(NotaRecebida n) {
+        notaRecebida.remove(n);
+    }
+
+    public void adiciona(ValorPorCotacao b) {
+        try {
+            if (valorPorCotacao == null) {
+                valorPorCotacao = new ArrayList<>();
+            }
+            b.geraBaixaPor(this);
+            valorPorCotacao.add(b);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void atualiza(ValorPorCotacao b) {
+        try {
+            if (valorPorCotacao.contains(b)) {
+                valorPorCotacao.set(valorPorCotacao.indexOf(b), b);
+            } else {
+                b.geraBaixaPor(this);
+                valorPorCotacao.add(b);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void remove(ValorPorCotacao b) {
+        valorPorCotacao.remove(b);
     }
 
     public Long getId() {
@@ -107,6 +184,10 @@ public class ConhecimentoDeFrete implements Serializable {
         return outrasdespesas;
     }
 
+    public BigDecimal getDinheiro() {
+        return dinheiro;
+    }
+
     public Date getData() {
         return data;
     }
@@ -115,21 +196,26 @@ public class ConhecimentoDeFrete implements Serializable {
         return emissao;
     }
 
-    public List<Baixa> getBaixa() {
-        return baixa;
-    }
-
-    public Cotacao getCotacao() {
-        return cotacao;
-    }
-
     public List<Titulo> getTitulo() {
         return titulo;
     }
 
+    public List<NotaRecebida> getNotaRecebida() {
+        return notaRecebida;
+    }
+
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "historico", "cotacao");
+        List<String> campos = Arrays.asList("valorFrete", "outrasdespesas", "dinheiro", "pessoa");
         new ValidadorDeCampos<ConhecimentoDeFrete>().valida(this, campos);
+    }
+
+    public Moeda getMoedaPadrao() throws EDadoInvalidoException {
+        Configuracao cfg = new ConfiguracaoService().buscar();
+        return cfg.getMoedaPadrao();
     }
 
     public String getValorFormatado() {
@@ -155,6 +241,11 @@ public class ConhecimentoDeFrete implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    @Override
+    public String toString() {
+        return "ConhecimentoDeFrete{" + "id=" + id + ", pessoa=" + pessoa + ", operacao=" + operacao + ", valorFrete=" + valorFrete + ", outrasdespesas=" + outrasdespesas + ", dinheiro=" + dinheiro + ", data=" + data + ", emissao=" + emissao + ", titulo=" + titulo + ", notaRecebida=" + notaRecebida + ", valorPorCotacao=" + valorPorCotacao + '}';
     }
 
 }

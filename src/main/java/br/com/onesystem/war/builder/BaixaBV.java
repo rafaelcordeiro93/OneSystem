@@ -2,7 +2,6 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
@@ -37,7 +36,6 @@ public class BaixaBV implements Serializable {
     private TipoReceita receita;
     private Pessoa pessoa;
     private Cambio cambio;
-    private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado;
@@ -63,8 +61,7 @@ public class BaixaBV implements Serializable {
         this.perfilDeValor = baixa.getParcela();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
-        this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
-        this.cotacao = baixa.getCotacao();
+              this.cotacao = baixa.getCotacao();
         this.valorPorCotacao = baixa.getValorPorCotacao();
     }
 
@@ -197,14 +194,6 @@ public class BaixaBV implements Serializable {
         this.cambio = cambio;
     }
 
-    public ConhecimentoDeFrete getConhecimentoDeFrete() {
-        return conhecimentoDeFrete;
-    }
-
-    public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
-        this.conhecimentoDeFrete = conhecimentoDeFrete;
-    }
-
     public Transferencia getTransferencia() {
         return transferencia;
     }
@@ -238,14 +227,14 @@ public class BaixaBV implements Serializable {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+        return new BaixaBuilder().comCambio(cambio)
                 .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).
                 comHistorico(historico).comOperacaoFinanceira(naturezaFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
                 .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
-        return new BaixaBuilder().comCambio(cambio).comConhecimentoDeFrete(conhecimentoDeFrete)
+        return new BaixaBuilder().comCambio(cambio)
                 .comCotacao(cotacao).comDespesa(despesa).comId(id)
                 .comEmissao(emissao).comHistorico(historico).comCobrancaFixa(movimentoFixo)
                 .comOperacaoFinanceira(naturezaFinanceira)

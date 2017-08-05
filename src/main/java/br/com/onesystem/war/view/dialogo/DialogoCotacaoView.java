@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view.dialogo;
 
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaRecebida;
@@ -36,6 +37,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     private Nota nota;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
     private BigDecimal dinheiro;
 
     @PostConstruct
@@ -77,7 +79,13 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
             calculaCotacoes();
             return;
         }
-
+        conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", FacesContext.getCurrentInstance());
+        if (conhecimentoDeFrete != null) {
+            inicializaCotacoes(conhecimentoDeFrete.getEmissao(), conhecimentoDeFrete.getMoedaPadrao());
+            dinheiro = conhecimentoDeFrete.getDinheiro();
+            calculaCotacoes();
+            return;
+        }
     }
 
     private void inicializaCotacoes(Date emissao, Moeda moedaPadrao) {
@@ -122,12 +130,12 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         try {
             if (nota != null) {
                 return nota.getMoedaPadrao();
-            }
-            if (faturaEmitida != null) {
+            } else if (faturaEmitida != null) {
                 return faturaEmitida.getMoedaPadrao();
-            }
-            if (faturaRecebida != null) {
+            } else if (faturaRecebida != null) {
                 return faturaRecebida.getMoedaPadrao();
+            } else if (conhecimentoDeFrete != null) {
+                return conhecimentoDeFrete.getMoedaPadrao();
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -144,18 +152,10 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
                 RequestContext.getCurrentInstance().closeDialog(nota);
                 return;
             }
-            if (faturaEmitida != null) {
+            if (faturaEmitida != null || faturaRecebida != null || conhecimentoDeFrete != null) {
                 RequestContext.getCurrentInstance().closeDialog(constroiListValorPorCotacao());
                 return;
             }
-            if (faturaRecebida != null) {
-                for (ValorPorCotacaoBV c : cotacoes) {
-                    constroiNota(c);
-                }
-                RequestContext.getCurrentInstance().closeDialog(faturaRecebida);
-                return;
-            }
-
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -213,6 +213,8 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         nota = null;
         faturaEmitida = null;
         faturaRecebida = null;
+        conhecimentoDeFrete = null;
+        dinheiro = BigDecimal.ZERO;
     }
 
     @Override

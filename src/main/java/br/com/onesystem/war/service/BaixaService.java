@@ -5,7 +5,6 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.util.NumberUtils;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -61,17 +60,17 @@ public class BaixaService implements Serializable {
 
     public BigDecimal buscarEntradasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().buscarTotalDeBaixasW().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
         } else {
-            return new BaixaDAO().buscarTotalDeBaixasW().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
         }
     }
 
     public BigDecimal buscarSaidasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().buscarTotalDeBaixasW().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
         } else {
-            return new BaixaDAO().buscarTotalDeBaixasW().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
         }
     }
 

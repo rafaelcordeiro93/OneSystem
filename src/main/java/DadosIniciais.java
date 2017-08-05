@@ -66,7 +66,7 @@ public class DadosIniciais {
         Modulo login = new Modulo(null, "Login");
         Modulo admin = new Modulo(null, "Administrativo");
         Modulo estoque = new Modulo(null, "Estoque");
-        Modulo notas = new Modulo(null, "Notas");
+        Modulo vendas = new Modulo(null, "Vendas");
 
         daoModulo.adiciona(arq);
         daoModulo.adiciona(fin);
@@ -76,7 +76,7 @@ public class DadosIniciais {
         daoModulo.adiciona(pref);
         daoModulo.adiciona(login);
         daoModulo.adiciona(estoque);
-        daoModulo.adiciona(notas);
+        daoModulo.adiciona(vendas);
 
         // -- Adiciona Módulos
         AdicionaDAO<Janela> daoJanela = new AdicionaDAO<>();
@@ -93,15 +93,15 @@ public class DadosIniciais {
         daoJanela.adiciona(jpessoaimport);
 
         //Modulo de Notas
-        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", arq);
-        Janela consultaNotaSaida = new Janela(null, "Consulta Nota de Saida", "/consultaNotaEmitida.xhtml", arq);
-        Janela orcamento = new Janela(null, "Orçamento", "/orcamento.xhtml", arq);
-        Janela consultaOrcamento = new Janela(null, "Consulta Orçamento", "/consultaOrcamento.xhtml", arq);
-        Janela comanda = new Janela(null, "Comanda", "/comanda.xhtml", arq);
-        Janela consultaComanda = new Janela(null, "Consulta Comanda", "/consultaComanda.xhtml", arq);
-        Janela condicional = new Janela(null, "Condicional", "/condicional.xhtml", arq);
-        Janela consultaCondicional = new Janela(null, "Consulta Condicional", "/consultaCondicional.xhtml", arq);
-        Janela retificacaoDeVenda = new Janela(null, "Retificação de Venda", "/retificacaoDeVenda.xhtml", arq);
+        Janela notaSaida = new Janela(null, "Nota de Saida", "/notaEmitida.xhtml", vendas);
+        Janela consultaNotaSaida = new Janela(null, "Consulta Nota de Saida", "/consultaNotaEmitida.xhtml", vendas);
+        Janela orcamento = new Janela(null, "Orçamento", "/orcamento.xhtml", vendas);
+        Janela consultaOrcamento = new Janela(null, "Consulta Orçamento", "/consultaOrcamento.xhtml", vendas);
+        Janela comanda = new Janela(null, "Comanda", "/comanda.xhtml", vendas);
+        Janela consultaComanda = new Janela(null, "Consulta Comanda", "/consultaComanda.xhtml", vendas);
+        Janela condicional = new Janela(null, "Condicional", "/condicional.xhtml", vendas);
+        Janela consultaCondicional = new Janela(null, "Consulta Condicional", "/consultaCondicional.xhtml", vendas);
+        Janela retificacaoDeVenda = new Janela(null, "Retificação de Venda", "/retificacaoDeVenda.xhtml", vendas);
 
         daoJanela.adiciona(notaSaida);
         daoJanela.adiciona(consultaNotaSaida);
@@ -129,6 +129,7 @@ public class DadosIniciais {
         Janela jgrupoFiscal = new Janela(null, "Grupo Fiscal", "/grupoFiscal.xhtml", estoque);
         Janela notaRecebida = new Janela(null, "Nota Recebida", "/notaRecebida.xhtml", estoque);
         Janela consultaNotaRecebida = new Janela(null, "Consulta Nota Recebida", "/consultaNotaRecebida.xhtml", estoque);
+        Janela retificacaoDeCompra = new Janela(null, "Retificação de Venda", "/retificacaoDeCompra.xhtml", estoque);
 
         daoJanela.adiciona(jitem);
         daoJanela.adiciona(margem);
@@ -145,6 +146,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jgrupoFiscal);
         daoJanela.adiciona(notaRecebida);
         daoJanela.adiciona(consultaNotaRecebida);
+        daoJanela.adiciona(retificacaoDeCompra);
 
         //Modulo Financeiro
         Janela receberValores = new Janela(null, "Receber Valores", "/recebimento.xhtml", fin);
@@ -287,6 +289,7 @@ public class DadosIniciais {
                 new Privilegio(null, jitem, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, notaRecebida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaNotaRecebida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, retificacaoDeCompra, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, margem, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, conhecimentoFrete, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, ajusteEstoque, true, true, true, true, grupoDePrivilegio),

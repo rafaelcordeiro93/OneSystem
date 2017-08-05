@@ -9,14 +9,11 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.CambioEmpresa;
-import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.DepositoBancario;
-import br.com.onesystem.domain.FaturaEmitida;
-import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
@@ -48,7 +45,6 @@ public class BaixaBuilder {
     private TipoReceita receita;
     private Pessoa pessoa;
     private Cambio cambio;
-    private ConhecimentoDeFrete conhecimentoDeFrete;
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado;
@@ -77,7 +73,6 @@ public class BaixaBuilder {
         this.receita = baixa.getReceita();
         this.pessoa = baixa.getPessoa();
         this.cambio = baixa.getCambio();
-        this.conhecimentoDeFrete = baixa.getConhecimentoDeFrete();
         this.transferencia = baixa.getTransferencia();
         this.recepcao = baixa.getRecepcao();
         this.cobrancaFixa = baixa.getCobrancaFixa();
@@ -139,11 +134,6 @@ public class BaixaBuilder {
 
     public BaixaBuilder comCambio(Cambio cambio) {
         this.cambio = cambio;
-        return this;
-    }
-
-    public BaixaBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
-        this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
     }
 

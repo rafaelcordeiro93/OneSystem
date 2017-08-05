@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ConhecimentoDeFreteService implements Serializable {
 
-    public List<ConhecimentoDeFrete> buscarConhecimentoDeFreteService() {
+    public List<ConhecimentoDeFrete> buscarConhecimentoDeFrete() {
         return new ArmazemDeRegistros<ConhecimentoDeFrete>(ConhecimentoDeFrete.class).listaTodosOsRegistros();
     }
     

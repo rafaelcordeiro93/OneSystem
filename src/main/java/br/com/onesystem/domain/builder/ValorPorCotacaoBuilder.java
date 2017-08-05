@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.domain.builder;
 
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaRecebida;
@@ -23,6 +24,7 @@ public class ValorPorCotacaoBuilder {
     private BigDecimal valor;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
+    private ConhecimentoDeFrete conhecimentoDeFrete;
 
     public ValorPorCotacaoBuilder comCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
@@ -49,8 +51,13 @@ public class ValorPorCotacaoBuilder {
         return this;
     }
 
+    public ValorPorCotacaoBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        this.conhecimentoDeFrete = conhecimentoDeFrete;
+        return this;
+    }
+
     public ValorPorCotacao construir() throws DadoInvalidoException {
-        return new ValorPorCotacao(id, cotacao, valor, faturaEmitida, faturaRecebida);
+        return new ValorPorCotacao(id, cotacao, valor, faturaEmitida, faturaRecebida, conhecimentoDeFrete);
     }
 
 }

@@ -5,8 +5,10 @@
  */
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.FaturaRecebida;
 
 /**
  *
@@ -31,6 +33,22 @@ public class ValorPorCotacaoDAO extends GenericDAO<ValorPorCotacao> {
         if (faturaEmitida != null) {
             where += " and valorPorCotacao.faturaEmitida = :cFaturaEmitida ";
             parametros.put("cFaturaEmitida", faturaEmitida);
+        }
+        return this;
+    }
+
+    public ValorPorCotacaoDAO porFaturaRecebida(FaturaRecebida faturaRecebida) {
+        if (faturaRecebida != null) {
+            where += " and valorPorCotacao.faturaRecebida = :cFaturaRecebida ";
+            parametros.put("cFaturaRecebida", faturaRecebida);
+        }
+        return this;
+    }
+
+    public ValorPorCotacaoDAO porConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
+        if (conhecimentoDeFrete != null) {
+            where += " and valorPorCotacao.conhecimentoDeFrete = :cConhecimentoDeFrete ";
+            parametros.put("cConhecimentoDeFrete", conhecimentoDeFrete);
         }
         return this;
     }
