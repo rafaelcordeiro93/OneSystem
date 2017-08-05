@@ -43,6 +43,10 @@ import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.Totalizador;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -65,6 +69,7 @@ public abstract class BasicMBReportImpl<T> {
     private List<Model> modelDisponivelSelecionado = new ArrayList<>();
     private List<Model> modelExibidoSelecionado = new ArrayList<>();
     protected List<T> registros = new ArrayList<>();
+    protected List<T> registrosFiltrados = new ArrayList<>();
     private ModelList<Coluna> campos = new ModelList<Coluna>();
     private ModelList<Coluna> camposDisponiveis = new ModelList<Coluna>();
     private ModelList<Coluna> camposExibidos = new ModelList<Coluna>();
@@ -372,7 +377,11 @@ public abstract class BasicMBReportImpl<T> {
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         try {
-            impressora.imprimir(registros, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+            if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
+                impressora.imprimir(registros, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+            } else {
+                impressora.imprimir(registrosFiltrados, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+            }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -501,7 +510,9 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public List<TipoDeBusca> getTiposDeBusca() {
-        if (campoSelecionado != null && (campoSelecionado.getClasseOriginal() == Date.class || campoSelecionado.getClasseOriginal() == Long.class || campoSelecionado.getClasseOriginal() == BigDecimal.class)) {
+        if (campoSelecionado != null && (campoSelecionado.getClasseOriginal() == Date.class
+                || campoSelecionado.getClasseOriginal() == Long.class
+                || campoSelecionado.getClasseOriginal() == BigDecimal.class)) {
             return Arrays.asList(
                     TipoDeBusca.DIFERENTE_DE,
                     TipoDeBusca.IGUAL_A,
@@ -509,6 +520,7 @@ public abstract class BasicMBReportImpl<T> {
                     TipoDeBusca.MAIOR_QUE,
                     TipoDeBusca.MENOR_OU_IGUAL_A,
                     TipoDeBusca.MENOR_QUE);
+
         } else if (campoSelecionado != null && campoSelecionado.getClasseOriginal() == String.class) {
             return Arrays.asList(
                     TipoDeBusca.CONTENDO,
@@ -554,7 +566,8 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public boolean isContainsMoeda() {
-        return mapPath.containsKey(Moeda.class);
+        return mapPath.containsKey(Moeda.class
+        );
     }
 
     public Coluna getSiglaMoeda() {
@@ -571,8 +584,12 @@ public abstract class BasicMBReportImpl<T> {
 
     public List<Coluna> getColunasParaTotalizadores() {
         List<Coluna> camposParaTotalizadores = new ArrayList<>();
+
         for (Coluna c : camposExibidos.getList()) {
-            if ((c.getClasseOriginal() == Long.class || c.getClasseOriginal() == BigDecimal.class || c.getClasseOriginal() == Integer.class || c.getClasseOriginal() == Double.class)
+            if ((c.getClasseOriginal() == Long.class
+                    || c.getClasseOriginal() == BigDecimal.class
+                    || c.getClasseOriginal() == Integer.class
+                    || c.getClasseOriginal() == Double.class)
                     && !getColunasTotalizadas().contains(c)) {
                 camposParaTotalizadores.add(c);
             }
@@ -599,6 +616,35 @@ public abstract class BasicMBReportImpl<T> {
 
     public void setColunaParaTotalizadorSelecionada(Coluna colunaParaTotalizadorSelecionada) {
         this.colunaParaTotalizadorSelecionada = colunaParaTotalizadorSelecionada;
+    }
+
+    public String
+            customFormat(Object obj) {
+
+        if (obj.getClass() == BigDecimal.class) {
+
+            NumberFormat numberFormat = NumberFormat.getInstance();
+            numberFormat.setMinimumFractionDigits(2);
+
+            return numberFormat.format((BigDecimal) obj);
+
+        } else if (obj.getClass() == Timestamp.class
+                || obj.getClass() == Date.class) {
+            Date date = (Date) obj;
+            if (date != null) {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                return dateFormat.format(date);
+            }
+        }
+        return obj.toString();
+    }
+
+    public List<T> getRegistrosFiltrados() {
+        return registrosFiltrados;
+    }
+
+    public void setRegistrosFiltrados(List<T> registrosFiltrados) {
+        this.registrosFiltrados = registrosFiltrados;
     }
 
 }

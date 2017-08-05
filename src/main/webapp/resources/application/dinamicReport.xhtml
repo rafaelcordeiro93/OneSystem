@@ -175,7 +175,7 @@
 
 
         <p:dataTable id="objects" widgetVar="objectsTable" var="object" value="#{cc.attrs.mbView.registros}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
-                     rowKey="#{object.id}" reflow="true" style="border: none" >
+                     rowKey="#{object.id}" reflow="true" style="border: none" filteredValue="#{cc.attrs.mbView.registrosFiltrados}" >
 
             <f:facet name="header" >
                 <div align="right">
@@ -193,7 +193,7 @@
             </f:facet>
 
             <c:forEach var="coluna" items="#{cc.attrs.mbView.camposExibidos.list}" >
-                <p:column filterBy="#{object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                <p:column filterBy="#{cc.attrs.mbView.customFormat(object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
                                       : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
@@ -205,7 +205,7 @@
                                       coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : ''}"
+                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : '')}"
                           sortBy="#{coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                     coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                     coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
@@ -213,64 +213,34 @@
                           headerText="#{coluna.nome}" footerText="#{coluna.nome}" style="width: #{coluna.tamanhoFormatado}"
                           filterMatchMode="contains">
 
-                    <c:if test="#{coluna.classeOriginal.simpleName == 'BigDecimal' and cc.attrs.mbView.containsMoeda}" >
-                        <p:outputLabel value="#{cc.attrs.mbView.siglaMoeda.propriedadeDois eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade] : 
-                                                cc.attrs.mbView.siglaMoeda.propriedadeTres eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois] : 
-                                                cc.attrs.mbView.siglaMoeda.propriedadeQuatro eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres] : 
-                                                object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres][cc.attrs.mbView.siglaMoeda.propriedadeQuatro]}" />
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                            <f:convertNumber type="currency" pattern="##,###.00" transient="" /> 
-                        </p:outputLabel>
-                    </c:if>
-                    <c:if test="#{coluna.classeOriginal.simpleName == 'Date'}" >
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" /> 
-                        </p:outputLabel>
-                    </c:if>
-                    <c:if test="#{coluna.classeOriginal.simpleName ne 'Date' and coluna.classeOriginal.simpleName ne 'BigDecimal'}" >
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                        </p:outputLabel>
-                    </c:if>
+                    <p:outputLabel rendered="#{coluna.classeOriginal.simpleName == 'BigDecimal' and cc.attrs.mbView.containsMoeda}" value="#{cc.attrs.mbView.siglaMoeda.propriedadeDois eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade] : 
+                                               cc.attrs.mbView.siglaMoeda.propriedadeTres eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois] : 
+                                               cc.attrs.mbView.siglaMoeda.propriedadeQuatro eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres] : 
+                                               object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres][cc.attrs.mbView.siglaMoeda.propriedadeQuatro]}" />
+                    <p:outputLabel value="#{cc.attrs.mbView.customFormat(coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                            : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                            coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                            coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro])}" >
+                    </p:outputLabel>
                 </p:column>
 
             </c:forEach>
 
+            <p:summaryRow>
+                <p:column colspan="4" style="text-align: right">
+                        <h:outputText value="Total"/>
+                    </p:column>
+                </p:summaryRow>
+            
         </p:dataTable>
 
     </composite:implementation>
