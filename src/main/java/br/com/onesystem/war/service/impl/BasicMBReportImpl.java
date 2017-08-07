@@ -5,7 +5,10 @@
  */
 package br.com.onesystem.war.service.impl;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.GenericDAO;
+import br.com.onesystem.dao.ModeloDeRelatorioDAO;
+import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -14,7 +17,9 @@ import br.com.onesystem.services.impl.FormatacaoNumeroRelatorio;
 import br.com.onesystem.util.ImpressoraDeRelatorioDinamico;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
-import br.com.onesystem.util.FilterModel;
+import br.com.onesystem.domain.FiltroDeRelatorio;
+import br.com.onesystem.domain.ModeloDeRelatorio;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.TipoDeBusca;
@@ -41,12 +46,18 @@ import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
+import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import org.primefaces.component.datatable.DataTable;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -59,7 +70,7 @@ public abstract class BasicMBReportImpl<T> {
     private Class clazz;
     private List<String> consulta = new ArrayList<>();
     private Date consultaDate;
-    private List<FilterModel> filtros = new ArrayList<>();
+    private List<FiltroDeRelatorio> filtros = new ArrayList<>();
     private Coluna campoSelecionado;
     private String campoSelecionadoString;
     private String colunaParaTotalizadorString;
@@ -77,22 +88,25 @@ public abstract class BasicMBReportImpl<T> {
     private HashMap<Class, String> mapPath = new HashMap<>();
     protected BundleUtil bundle = new BundleUtil();
     private Coluna siglaMoeda;
-    private String nomeDoRelatorio;
+    private TipoRelatorio tipoRelatorio;
+    private String modeloDeRelatorioSelecionadoString;
+    private List<ModeloDeRelatorio> modelosDeRelatorio;
 
     protected abstract void init();
 
     /**
-     * Deve obrigatóriamente chamar o métodos
+     * Deve obrigatóriamente chamar os métodos
      * inicializarRegistros,inicializarCampos
      *
      * @param clazz Classe.
      * @param dao Dao utilizado na classe
+     * @param tipoRelatorio
      */
-    protected void initialize(Class clazz, Class<? extends GenericDAO> dao, String nomeDoRelatorio) {
+    protected void initialize(Class clazz, Class<? extends GenericDAO> dao, TipoRelatorio tipoRelatorio) {
         try {
             this.clazz = clazz;
             this.dao = dao;
-            this.nomeDoRelatorio = nomeDoRelatorio;
+            this.tipoRelatorio = tipoRelatorio;
             inicializarRegistros();
             inicializarCampos();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException cnf) {
@@ -102,6 +116,7 @@ public abstract class BasicMBReportImpl<T> {
 
     private void inicializarRegistros() throws InstantiationException, IllegalAccessException {
         buscaDadosDoBancoComFiltros();
+        modelosDeRelatorio = new ModeloDeRelatorioDAO().porTipoRelatorio(tipoRelatorio).listaDeResultados();
     }
 
     private void inicializarCampos() throws ClassNotFoundException {
@@ -177,7 +192,7 @@ public abstract class BasicMBReportImpl<T> {
                         }
                     }
                 }
-            }
+            };
 
         }
     }
@@ -268,7 +283,7 @@ public abstract class BasicMBReportImpl<T> {
         camposExibidos.getList().get(camposExibidos.getList().indexOf(coluna)).setTotalizador(null);
     }
 
-    public void delFilter(FilterModel filter) {
+    public void delFilter(FiltroDeRelatorio filter) {
         try {
             filtros.remove(filter);
             if (!filtros.isEmpty()) {
@@ -299,7 +314,7 @@ public abstract class BasicMBReportImpl<T> {
                 SortedSet filters = new TreeSet();
 
                 //Adiciona os filtros
-                FilterModel filtro = new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada);
+                FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, campoSelecionado, tipoDeBuscaSelecionada);
 
                 if (campoSelecionado.getClasseOriginal() != Date.class && !consulta.isEmpty()) {
 
@@ -307,32 +322,32 @@ public abstract class BasicMBReportImpl<T> {
                     for (String s : consulta) {
                         //LONG ===============================================================================
                         if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
-                            filters.add(new Long(s));
+                            filtro.add(new Long(s));
                         } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).getFilters().add(new Long(s));
+                            filtros.get(filtros.indexOf(filtro)).add(new Long(s));
                         } //BIGDECIMAL =======================================================================
                         else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
                             s = s.replaceAll(",", ".");
-                            filters.add(new BigDecimal(s));
+                            filtro.add(new BigDecimal(s));
                         } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
                             s = s.replaceAll(",", ".");
-                            filtros.get(filtros.indexOf(filtro)).getFilters().add(new BigDecimal(s));
+                            filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
                         } //STRING ============================================================================
                         else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
-                            filters.add(s);
+                            filtro.add(s);
                         } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).getFilters().add(s);
+                            filtros.get(filtros.indexOf(filtro)).add(s);
                         }
                     }
-                    if (!filters.isEmpty()) {
-                        filtros.add(new FilterModel(campoSelecionado, filters, tipoDeBuscaSelecionada));
+                    if (!filtro.getFiltros().isEmpty()) {
+                        filtros.add(filtro);
                     }
                 } else if (campoSelecionado.getClasseOriginal() == Date.class && !consulta.isEmpty()) {
                     //DATE ====================================================================================
                     if (filtros.contains(filtro)) {
-                        filtros.get(filtros.indexOf(filtro)).setFilterDate(getConsultaDate());
+                        filtros.get(filtros.indexOf(filtro)).setFiltroDeData(getConsultaDate());
                     } else {
-                        filtros.add(new FilterModel(campoSelecionado, getConsultaDate(), tipoDeBuscaSelecionada));
+                        filtros.add(new FiltroDeRelatorio(null, campoSelecionado, getConsultaDate(), tipoDeBuscaSelecionada));
                     }
                 }
 
@@ -354,16 +369,17 @@ public abstract class BasicMBReportImpl<T> {
             alteraConsulta(gDao);
 
             if (!filtros.isEmpty()) {
-                for (FilterModel f : filtros) {
-                    if (f.getFilterDate() == null) {
-                        gDao.filter(f.getTypeSearch(), f.getField(), f.getFilters());
+                for (FiltroDeRelatorio f : filtros) {
+                    if (f.getFiltroDeData() == null) {
+                        gDao.filter(f.getTipoDaBusca(), f.getColuna(), f.getFiltros());
                     } else {
-                        gDao.filter(f.getTypeSearch(), f.getField(), f.getFilterDate());
+                        gDao.filter(f.getTipoDaBusca(), f.getColuna(), f.getFiltroDeData());
                     }
                 }
             }
 
             registros = gDao.listaDeResultados();
+            registrosFiltrados = registros;
 
         } catch (InstantiationException | IllegalAccessException ex) {
             FatalMessage.print("Erro de acesso ao inicializar dao chips: " + ex.getMessage(), ex);
@@ -378,45 +394,121 @@ public abstract class BasicMBReportImpl<T> {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         try {
             if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
-                impressora.imprimir(registros, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registros, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             } else {
-                impressora.imprimir(registrosFiltrados, nomeDoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registrosFiltrados, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-//    Implementação para ser feita quando for corrigido o componente
-//    Summary Row
-//    
-//    public void onSummaryRow(Object filter) {
-//        FacesContext facesContext = FacesContext.getCurrentInstance();
-//        ELContext elContext = facesContext.getELContext();
-//        ELResolver elResolver = elContext.getELResolver();
-//
-//        DataTable table = (DataTable) facesContext.getViewRoot().findComponent(":conteudo:cobrancas");
-//
-//        UIColumn sortColumn = table.getSortColumn();
-//        ValueExpression expression = sortColumn.getValueExpression("sortBy");
-//        ValueReference reference = ValueExpressionAnalyzer.getReference(elContext, expression);
-//        String property = (String) reference.getProperty();
-//        System.out.println("Propert: " + property);
-//
-//        BigDecimal total = BigDecimal.ZERO;
-//        List<?> rowList = (List<?>) table.getValue();
-//        for (Object row : rowList) {
-//            Object value = elResolver.getValue(elContext, row, property);
-//            if (filter.equals(value)) {
-//                // THIS IS THE ONLY POINT TO CUSTOMIZE
-//                total = ((Cobranca) row).getValor().add(total);
-//            }
-//        }
-//
-//        List<UIComponent> children = table.getSummaryRow().getChildren();
-//        UIComponent column = children.get(children.size() - 1);
-//        column.getAttributes().put("total", total);
-//    }
+    public void salvarModeloDeRelatorio() {
+        try {
+            if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
+
+                //Cria novo modelo
+                ModeloDeRelatorio modelo = new ModeloDeRelatorio(null, modeloDeRelatorioSelecionadoString, tipoRelatorio);
+
+                //Exclui o  modelo
+                for (ModeloDeRelatorio m : modelosDeRelatorio) {
+                    if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
+                        new RemoveDAO<>().remove(m, m.getId());
+                    }
+                }
+
+                //Adiciona campos exibidos
+                camposExibidos.getList().forEach((c) -> {
+                    modelo.adicionaColunaExibida(c);
+                });
+
+                //Adiciona filtros
+                filtros.forEach((f) -> {
+                    modelo.adicionaFiltro(f);
+                });
+
+                //Adiciona no banco novo registro
+                new AdicionaDAO<>().adiciona(modelo);
+                modelosDeRelatorio.add(modelo);
+
+                InfoMessage.adicionado();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void selecionaModelo() {
+        if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
+
+            for (ModeloDeRelatorio m : modelosDeRelatorio) {
+                if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
+                    limpaFiltrosECampos();
+                    //Adiciona Filtros
+                    if (m.getFiltroDeRelatorio() != null) {
+                        for (FiltroDeRelatorio f : m.getFiltroDeRelatorio()) {
+                            f.setId(null);
+                            filtros.add(f);
+                        }
+                    }
+
+                    //Adiciona Colunas
+                    if (m.getColunasExibidas() != null) {
+                        for (Coluna c : m.getColunasExibidas()) {
+                            for (Model model : camposDisponiveis) {
+                                if (((Coluna) model.getObject()).getPropriedadeCompleta().equalsIgnoreCase(c.getPropriedadeCompleta())) {
+                                    c.setId(null);
+                                    camposDisponiveis.remove(model);
+                                    camposExibidos.add(c);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    buscaDadosDoBancoComFiltros();
+                    break;
+                }
+            }
+        }
+    }
+
+    private void limpaFiltrosECampos() {
+        camposExibidos.forEach(c -> camposDisponiveis.add((Coluna) c.getObject()));
+        camposExibidos = new ModelList<>();
+        filtros = new ArrayList<>();
+    }
+
+    public void excluirModelo() {
+        try {
+            if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
+
+                //Exclui modelo existente
+                for (ModeloDeRelatorio m : modelosDeRelatorio) {
+                    if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
+                        new RemoveDAO<>().remove(m, m.getId());
+                        limpaFiltrosECampos();
+                        init();
+                        //Limpa o campo do modelo inicializa campos padros e busca dados do banco.
+                        modeloDeRelatorioSelecionadoString = "";
+                        buscaDadosDoBancoComFiltros();
+                        InfoMessage.removido();
+                        break;
+                    }
+                }
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void limparJanela() {
+        modeloDeRelatorioSelecionadoString = "";
+        limpaFiltrosECampos();
+        init();
+        buscaDadosDoBancoComFiltros();
+    }
+
     public List<String> getConsulta() {
         return consulta;
     }
@@ -541,7 +633,7 @@ public abstract class BasicMBReportImpl<T> {
         this.campoSelecionadoString = campoSelecionadoString;
     }
 
-    public List<FilterModel> getFiltros() {
+    public List<FiltroDeRelatorio> getFiltros() {
         return filtros;
     }
 
@@ -645,6 +737,18 @@ public abstract class BasicMBReportImpl<T> {
 
     public void setRegistrosFiltrados(List<T> registrosFiltrados) {
         this.registrosFiltrados = registrosFiltrados;
+    }
+
+    public List<ModeloDeRelatorio> getModelosDeRelatorio() {
+        return modelosDeRelatorio;
+    }
+
+    public String getModeloDeRelatorioSelecionadoString() {
+        return modeloDeRelatorioSelecionadoString;
+    }
+
+    public void setModeloDeRelatorioSelecionadoString(String modeloDeRelatorioSelecionadoString) {
+        this.modeloDeRelatorioSelecionadoString = modeloDeRelatorioSelecionadoString;
     }
 
 }

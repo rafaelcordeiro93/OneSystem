@@ -4,6 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -32,21 +33,38 @@ public class ModeloDeRelatorio implements Serializable {
     @Length(max = 60, message = "{nome_lenght}")
     @Column(length = 60, nullable = false)
     private String nome;
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo") 
-    private List<Coluna> colunas;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo")
+    private List<Coluna> colunasExibidas;
     @NotNull(message = "{tipo_relatorio_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoRelatorio tipoRelatorio;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo")
+    private List<FiltroDeRelatorio> filtroDeRelatorio;
 
     public ModeloDeRelatorio() {
     }
 
-    public ModeloDeRelatorio(Long id, String nome, List<Coluna> colunas, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
+    public ModeloDeRelatorio(Long id, String nome, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.colunas = colunas;
         this.tipoRelatorio = tipoRelatorio;
         ehValido();
+    }
+
+    public void adicionaColunaExibida(Coluna colunaExibida) {
+        if (colunasExibidas == null) {
+            this.colunasExibidas = new ArrayList<>();
+        }
+        colunaExibida.setModelo(this);
+        colunasExibidas.add(colunaExibida);
+    }
+
+    public void adicionaFiltro(FiltroDeRelatorio filtro) {
+        if (filtroDeRelatorio == null) {
+            this.filtroDeRelatorio = new ArrayList<>();
+        }
+        filtro.setModelo(this);
+        filtroDeRelatorio.add(filtro);
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -66,12 +84,16 @@ public class ModeloDeRelatorio implements Serializable {
         return tipoRelatorio;
     }
 
-    public List<Coluna> getColunas() {
-        return colunas;
+    public List<Coluna> getColunasExibidas() {
+        return colunasExibidas;
     }
 
-    public void setColunas(List<Coluna> colunas) {
-        this.colunas = colunas;
+    public void setColunasExibidas(List<Coluna> colunasExibidas) {
+        this.colunasExibidas = colunasExibidas;
+    }
+
+    public List<FiltroDeRelatorio> getFiltroDeRelatorio() {
+        return filtroDeRelatorio;
     }
 
     @Override
@@ -90,11 +112,6 @@ public class ModeloDeRelatorio implements Serializable {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "TemplateRelatorios{" + "id=" + id + ", nome=" + nome + ", tipoRelatorio=" + tipoRelatorio + '}';
     }
 
 }

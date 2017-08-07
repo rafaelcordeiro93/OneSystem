@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
@@ -33,7 +34,7 @@ public class RelatorioDeReceitaProvisionadaView extends BasicMBReportImpl<Cobran
         addCampoPadrao(new Coluna(bundle.getLabel("Tipo_Despesa") + "(" + bundle.getLabel("Receita_Provisionada") + ")", bundle.getLabel("Receita_Provisionada"), "tipoReceita", "nome", ReceitaProvisionada.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca_Fixa"), "emissao", CobrancaFixa.class, Date.class, null));
 
-        initialize(CobrancaFixa.class, CobrancaFixaDAO.class, bundle.getLabel("Relatorio_De_Receita_Provisionada"));
+        initialize(CobrancaFixa.class, CobrancaFixaDAO.class, TipoRelatorio.RECEITAS_PROVISIONADAS);
 
     }
 
