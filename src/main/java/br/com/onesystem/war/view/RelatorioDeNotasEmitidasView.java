@@ -16,7 +16,7 @@ import javax.annotation.PostConstruct;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class RelatorioDeNotasEmitIdasView extends BasicMBReportImpl<Nota> implements Serializable {
+public class RelatorioDeNotasEmitidasView extends BasicMBReportImpl<Nota> implements Serializable {
 
     @PostConstruct
     @Override
