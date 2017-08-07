@@ -90,7 +90,7 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
             colunasSelecionadas.add(colunaBV.construir());
         }
 
-        novoRegistro.setColunas(colunasSelecionadas);
+        novoRegistro.setColunasExibidas(colunasSelecionadas);
     }
 
     public void update() {
@@ -123,9 +123,9 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
         }
         for (ColunaBV cl : listacoluna) {
             try {
-                modeloExistente.getColunas().set(modeloExistente.getColunas().indexOf(cl.construirComID()), cl.construirComID());
+                modeloExistente.getColunasExibidas().set(modeloExistente.getColunasExibidas().indexOf(cl.construirComID()), cl.construirComID());
             } catch (ArrayIndexOutOfBoundsException aiob) {
-                modeloExistente.getColunas().add(cl.construirComID());
+                modeloExistente.getColunasExibidas().add(cl.construirComID());
                 continue;
             }
         }
@@ -134,14 +134,14 @@ public class RelatorioDeBalancoFisicoView extends BasicMBImpl implements Seriali
     private void deletaColunas(ModeloDeRelatorio modeloExistente) throws PersistenceException, DadoInvalidoException {
         List<Coluna> colunasDeletar = new ArrayList<>();
 
-        for (Coluna o : modeloExistente.getColunas()) {
+        for (Coluna o : modeloExistente.getColunasExibidas()) {
             if (!campos.getTarget().contains(o)) {
                 colunasDeletar.add(o);
             }
         }
 
         for (Coluna o : colunasDeletar) {
-            modeloExistente.getColunas().remove(o);
+            modeloExistente.getColunasExibidas().remove(o);
             new RemoveDAO<Coluna>().remove(o, o.getId());
         }
     }

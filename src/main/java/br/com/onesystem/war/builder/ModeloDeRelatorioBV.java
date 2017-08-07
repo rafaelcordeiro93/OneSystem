@@ -19,7 +19,7 @@ public class ModeloDeRelatorioBV implements Serializable {
     public ModeloDeRelatorioBV(ModeloDeRelatorio modeloSelecionado) {
         this.id = modeloSelecionado.getId();
         this.nome = modeloSelecionado.getNome();
-        this.colunas = modeloSelecionado.getColunas();
+        this.colunas = modeloSelecionado.getColunasExibidas();
         this.tipoRelatorio = modeloSelecionado.getTipoRelatorio();
     }
 

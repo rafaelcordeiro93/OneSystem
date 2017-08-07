@@ -17,45 +17,60 @@
 
         <f:loadBundle basename="label_messages" var="l"/>
 
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
+            <p:outputLabel value="#{l.Modelo}:"/>
+            <p:selectOneMenu id="modelo" value="#{selectOneMenuView.city}" effect="fold" editable="true">
+                <f:selectItem itemLabel="#{l.Selecione}" />
+                <f:selectItems value="#{selectOneMenuView.cities}" />
+            </p:selectOneMenu>
+            <p:commandButton value="#{l.Salvar}" />
+        </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:separator/>
+
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:outputLabel value="#{l.Filtrar_Por}:"/>
             <p:selectOneMenu id="camposParaFiltrar" value="#{cc.attrs.mbView.campoSelecionadoString}">
                 <p:ajax listener="#{cc.attrs.mbView.filterField}" update="#{cc.attrs.form}" />
                 <f:selectItem itemLabel="#{l.Selecione}" />
                 <f:selectItems value="#{cc.attrs.mbView.campos.list}" var="fieldModel" itemValue="#{fieldModel.nome}" itemLabel="#{fieldModel.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
             <p:outputLabel value="#{l.Tipo_de_Busca}:"/>
             <p:selectOneMenu id="tiposDeBusca" value="#{cc.attrs.mbView.tipoDeBuscaSelecionada}">
                 <f:selectItems value="#{cc.attrs.mbView.tiposDeBusca}" var="tipoDeBusca" itemValue="#{tipoDeBusca}" itemLabel="#{tipoDeBusca.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
             <p:outputLabel value="#{l.Consulta}:"/>
             <p:chips id="chipsFilter" value="#{cc.attrs.mbView.consulta}" 
                      rendered="#{!cc.attrs.mbView.date}" />
             <p:calendar id="dateFilter" pattern="dd/MM/yyyy" value="#{cc.attrs.mbView.consultaDate}" size="9" navigator="true" pages="3"
                         rendered="#{cc.attrs.mbView.date}" maskAutoClear="true" />
+            <p:spacer/>
+
 
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <h:panelGrid columns="2">
                 <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" onsuccess="PF('objectsTable').filter()" />
             </h:panelGrid>
+            <p:spacer/>
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <p:column>
-                <c:forEach var="filterModel" items="#{cc.attrs.mbView.filtros}" >
+                <c:forEach var="filtroDeRelatorio" items="#{cc.attrs.mbView.filtros}" >
 
                     <ul class="ui-chips-container">
-                        <p:outputLabel value="#{filterModel.field.nome} - #{filterModel.typeSearch.nome}  " /> 
+                        <p:outputLabel value="#{filtroDeRelatorio.coluna.nome} - #{filtroDeRelatorio.tipoDaBusca.nome}  " /> 
                         <li class="ui-chips-token ui-state-active ui-corner-all" style="margin-top: -1px">
-                            <span class="ui-chips-token-label">#{filterModel.filterDate ne null ? filterModel.filterDateFormat : filterModel.filters}</span>
-                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filterModel)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
+                            <span class="ui-chips-token-label">#{filtroDeRelatorio.filtroDeData ne null ? filtroDeRelatorio.filtroDeDataFormatado : filtroDeRelatorio.filtros}</span>
+                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filtroDeRelatorio)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
                                 <i class="ui-chips-token-icon ui-icon ui-icon-close" style="color: white;"/>
                             </p:commandLink>
                         </li>
@@ -63,11 +78,12 @@
 
                 </c:forEach>
             </p:column>
+            <p:spacer/>
         </p:panelGrid>
 
         <p:separator/>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
 
             <p:outputLabel value="#{l.Totalizar_Por}:"/>
             <p:selectOneMenu id="camposParaTotalizadores" value="#{cc.attrs.mbView.colunaParaTotalizadorString}">
@@ -75,23 +91,26 @@
                 <f:selectItem itemLabel="#{l.Nenhum}" />
                 <f:selectItems value="#{cc.attrs.mbView.colunasParaTotalizadores}" var="coluna" itemValue="#{coluna.nome}" itemLabel="#{coluna.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
             <p:outputLabel value="#{l.Totalizador}:"/>
             <p:selectOneMenu id="tiposDeTotalizadores" value="#{cc.attrs.mbView.totalizador}">
                 <f:selectItem itemLabel="#{l.Nenhum}" />
                 <f:selectItems value="#{cc.attrs.mbView.totalizadores}" var="totalizador" itemValue="#{totalizador}" itemLabel="#{totalizador.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <h:panelGrid columns="2">
                 <p:commandButton value="#{l.Totalizar}" action="#{cc.attrs.mbView.totalizar}" update="#{cc.attrs.form}" icon="fa fa-plus" onsuccess="PF('objectsTable').filter()" />
             </h:panelGrid>
+            <p:spacer/>
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-1,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <p:column>
                 <c:forEach var="coluna" items="#{cc.attrs.mbView.colunasTotalizadas}" >
@@ -108,6 +127,7 @@
 
                 </c:forEach>
             </p:column>
+            <p:spacer/>
         </p:panelGrid>
 
         <p:dialog widgetVar="exibirCampos" width="900" height="600">
@@ -237,10 +257,10 @@
 
             <p:summaryRow>
                 <p:column colspan="4" style="text-align: right">
-                        <h:outputText value="Total"/>
-                    </p:column>
-                </p:summaryRow>
-            
+                    <h:outputText value="Total"/>
+                </p:column>
+            </p:summaryRow>
+
         </p:dataTable>
 
     </composite:implementation>

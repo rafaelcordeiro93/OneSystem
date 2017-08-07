@@ -75,7 +75,7 @@ public class ModeloDeRelatorioDAO {
         List<ModeloDeRelatorio> resultado = new ArmazemDeRegistros<ModeloDeRelatorio>(ModeloDeRelatorio.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         for (ModeloDeRelatorio tr : resultado) {
-            for (Coluna cl : tr.getColunas()) {
+            for (Coluna cl : tr.getColunasExibidas()) {
                 colunas.add(cl);
             }
         }

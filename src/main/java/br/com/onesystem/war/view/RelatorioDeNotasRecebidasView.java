@@ -10,6 +10,7 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
@@ -28,7 +29,7 @@ public class RelatorioDeNotasRecebidasView extends BasicMBReportImpl<Nota> imple
         addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Nota"), "emissao", Nota.class, Date.class, null));
 
-        initialize(Nota.class, NotaDAO.class, bundle.getLabel("Relatorio_de_Notas_Recebidas"));
+        initialize(Nota.class, NotaDAO.class, TipoRelatorio.NOTAS_RECEBIDAS);
 
     }
 
