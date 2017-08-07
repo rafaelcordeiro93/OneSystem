@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"                
+                xmlns:a="http://java.sun.com/jsf/composite/application">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Ajuste_De_Estoque}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="margem" value="#{ajusteDeEstoqueView.e}" dialog="#{selecaoAjusteDeEstoqueView}" mbView="#{ajusteDeEstoqueView}" process="@this" update=":conteudo" var="ajusteDeEstoque" converter="ajusteDeEstoqueBVConverter" itemLabel="#{ajusteDeEstoque.id}" itemValue="#{ajusteDeEstoque}" onlyNumber="true" editVisible="false"/>
+                            
+                            <p:outputLabel value="#{l.Data}"/>
+                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.e.emissao}"/> 
+                            
+                            <p:outputLabel value="#{l.Operacao}"/>
+                            <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.e.operacao}" dialog="#{selecaoOperacaoOutrosView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+
+                            <p:outputLabel value="#{l.Item}"/>
+                            <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.e.item}" dialog="#{selecaoItemView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
+
+                            <p:outputLabel value="#{l.Deposito}"/>
+                            <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.e.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+
+                            <p:outputLabel value="#{l.Quantidade}"/>
+                            <p:inputNumber id="quantidadeId" symbol="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.e.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.casasDecimais}" />
+
+                            <p:outputLabel value="#{l.Custo}"/>
+                            <p:inputNumber symbol="#{ajusteDeEstoqueView.configuracao.moedaPadrao.sigla} " value="#{ajusteDeEstoqueView.e.custo}" decimalPlaces="2" />
+
+                            <p:outputLabel value="#{l.Observacao}"/>
+                            <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{ajusteDeEstoqueView.e.observacao}"/>
+
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                    </div>
+
+                    <div class="EmptyBox10"/>
+
+
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('operacaoAjusteDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog>
+
+
+    </ui:define>
+
+</ui:composition>

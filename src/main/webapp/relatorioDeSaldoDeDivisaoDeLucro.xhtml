@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100 Responsive100">
+                        <div class="ContainerIndent">  
+
+                            <h2 class="BigTopic">#{l.Relatorio_de_Saldo_de_Divisao_de_Lucro}</h2>
+
+                            <p:panelGrid columns="5" layout="grid" style="border: none" styleClass="FormContent">
+                                <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeSaldoDeDivisaoDeLucroView.relatorio.dataInicial}" placeholder="#{l.Data_Inicial}"/> 
+                                <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" navigator="true" value="#{relatorioDeSaldoDeDivisaoDeLucroView.relatorio.dataFinal}" placeholder="#{l.Data_Final}"/> 
+
+                                <h:panelGrid columns="3" style="margin-left: -1%;margin-top: -1.5%">
+                                    <p:inputText id="relatorioSaldoPessoa" readonly="true" placeholder="#{l.Pessoa}" value="#{relatorioDeSaldoDeDivisaoDeLucroView.relatorio.pessoa.nome}"/>
+                                    <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                                     update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{relatorioDeSaldoDeDivisaoDeLucroView.selecionaPessoa}"
+                                                process="@this" update="relatorioSaldoPessoa" />
+                                    </p:commandButton>
+                                    <p:commandButton action="#{relatorioDeSaldoDeDivisaoDeLucroView.removePessoa()}" icon="fa fa-trash-o Fs16 White" update=":conteudo" styleClass="RedButton"/>
+                                </h:panelGrid>
+                                <h:outputText/>
+                                <h:outputText/>
+                            </p:panelGrid>
+                            <div class="Container50 Responsive100">
+                                <p:commandButton value="#{l.Imprimir}" action="#{relatorioDeSaldoDeDivisaoDeLucroView.imprimir()}" icon="fa fa-print Fs16 White" update=":conteudo" 
+                                                 ajax="false"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

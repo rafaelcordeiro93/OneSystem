@@ -1,0 +1,245 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Cobranca}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+
+            <p:panelGrid columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12 ui-md-2 ui-lg-1,ui-g-12 ui-md-10 ui-lg-4">
+                <p:outputLabel value="#{l.Cheque}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1}"/>
+                <a:inputTextDialog id="inp-Cheque" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoChequeRecebidoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                                   var="cheque" converter="chequeConverter" itemLabel="#{cheque.pessoa.nome}" itemValue="#{cheque}" itemLabelTabVisible="true" itemLabelTab="#{cheque.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 1 ? true : false :false}" />
+
+                <a:inputTextDialog id="inp-Cheque-pagamento" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoChequeEmitidoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                                   var="cheque" converter="chequeConverter" itemLabel="#{cheque.pessoa.nome}" itemValue="#{cheque}" itemLabelTabVisible="true" itemLabelTab="#{cheque.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2 ? true : false :false}" />
+
+                <p:outputLabel value="#{l.Cartao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}"/>
+                <a:inputTextDialog id="inp-Cartao" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoBoletoDeCartaoAbertoView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                                   var="cartao" converter="boletoDeCartaoConverter" itemLabel="#{cartao.pessoa.nome}" itemValue="#{cartao}" itemLabelTabVisible="true" itemLabelTab="#{cartao.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 1 ? true : false :false}" />
+
+                <p:outputLabel value="#{l.Titulo}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3}"/>
+                <a:inputTextDialog id="inp-Titulo" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloReceberView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                                   var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 1 ? true : false :false}" />
+
+                <a:inputTextDialog id="inp-Titulo-pagamento" value="#{dialogoTipoDeCobrancaView.e.cobranca}" dialog="#{selecaoTituloPagarView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog" 
+                                   var="titulo" converter="tituloConverter" itemLabel="#{titulo.pessoa.nome}" itemValue="#{titulo}" itemLabelTabVisible="true" itemLabelTab="#{titulo.pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3 ? dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2 ? true : false :false}" />
+
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"/>
+                <a:inputTextDialog id="inp-Credito" value="#{dialogoTipoDeCobrancaView.credito.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}" update="tempDialog:formCobranca:saldoCredito"
+                                   var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}" />
+
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}"  />
+                <a:inputTextDialog id="inp-despesaPessoa" value="#{dialogoTipoDeCobrancaView.despesaEventualBV.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}"
+                                   var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true"  
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+
+                <p:outputLabel value="#{l.Despesa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+                <a:inputTextDialog id="despesa" value="#{dialogoTipoDeCobrancaView.despesaEventualBV.despesa}" dialog="#{selecaoTipoDespesaView}" mbView="#{dialogoTipoDeCobrancaView}"
+                                   var="tipoDespesa" converter="tipoDespesaConverter" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+
+                <p:outputLabel value="#{l.Despesa_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}" />
+                <a:inputTextDialog id="despesaProvisionada" value="#{dialogoTipoDeCobrancaView.despesaProvisionada}" dialog="#{selecaoDespesaProvisionadaView}" mbView="#{dialogoTipoDeCobrancaView}" 
+                                   var="despesaProvisionada" converter="despesaProvisionadaConverter" itemLabel="#{despesaProvisionada.id}" itemValue="#{despesaProvisionada}" readonly="true" update="tempDialog"
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}"/>
+
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+                <a:inputTextDialog id="inp-receitaPessoa" value="#{dialogoTipoDeCobrancaView.receitaEventualBV.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}" 
+                                   var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+
+                <p:outputLabel value="#{l.Receita}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+                <a:inputTextDialog id="receita" value="#{dialogoTipoDeCobrancaView.receitaEventualBV.receita}" dialog="#{selecaoTipoReceitaView}" mbView="#{dialogoTipoDeCobrancaView}"
+                                   var="tipoReceita" converter="tipoReceitaConverter" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}" readonly="true" 
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}"/>
+
+                <p:outputLabel value="#{l.Receita_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}" />
+                <a:inputTextDialog id="receitaProvisionada" value="#{dialogoTipoDeCobrancaView.receitaProvisionada}" dialog="#{selecaoReceitaProvisionadaView}" mbView="#{dialogoTipoDeCobrancaView}" 
+                                   var="receitaProvisionada" converter="receitaProvisionadaConverter" itemLabel="#{receitaProvisionada.id}" itemValue="#{receitaProvisionada}" readonly="true" update="tempDialog"
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}"/>
+
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <div class="ui-g">
+                <h:form id="formCobranca" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca ne null ? true : dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa ne null}">
+                    <div class="ui-g-12 ui-md-6 ui-lg-3" style="top: -20px !important">
+
+                        <p:panelGrid id="cobranca" columns="1"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12"
+                                     rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca ne null ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 4 : false}" >
+
+                            <p:outputLabel value="#{l.Codigo}: #{dialogoTipoDeCobrancaView.e.cobranca.id}"/>
+                            <p:outputLabel value="#{l.Pessoa}: #{dialogoTipoDeCobrancaView.e.cobranca.pessoa.nome}"/>
+                            <p:outputLabel value="#{l.Nota}: #{dialogoTipoDeCobrancaView.e.cobranca.nota.id}"/>
+                            <p:outputLabel value="#{l.Emissao}: #{dialogoTipoDeCobrancaView.e.cobranca.emissaoFormatadaSemHoras}"/>
+                            <p:outputLabel value="#{l.Vencimento}: #{dialogoTipoDeCobrancaView.e.cobranca.vencimentoFormatadoSemHoras}"/>                
+                            <p:outputLabel value="#{l.Historico}: #{dialogoTipoDeCobrancaView.e.cobranca.historico}"/> 
+                            <p:outputLabel value="#{l.Valor}: #{dialogoTipoDeCobrancaView.e.cobranca.valorFormatado}" styleClass="Blue"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="titulo" columns="2" rendered="#{dialogoTipoDeCobrancaView.titulo ne null}"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:outputLabel rendered="#{dialogoTipoDeCobrancaView.titulo.conhecimentoDeFrete ne null}" value="#{l.Conhecimento_De_Frete}: #{dialogoTipoDeCobrancaView.titulo.conhecimentoDeFrete.id}"/>
+                            <p:outputLabel rendered="#{dialogoTipoDeCobrancaView.titulo.recepcao ne null}" value="#{l.Recepcao}: #{dialogoTipoDeCobrancaView.titulo.recepcao.id}"/>
+                            <p:outputLabel rendered="#{dialogoTipoDeCobrancaView.titulo.cambio ne null}" value="#{l.Cambio}: #{dialogoTipoDeCobrancaView.titulo.cambio.id}"/>
+                            <p:outputLabel value="#{l.Saldo}: #{dialogoTipoDeCobrancaView.titulo.saldoFormatado}" styleClass="Blue"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="cheque" columns="1" rendered="#{dialogoTipoDeCobrancaView.cheque ne null}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:outputLabel value="#{l.Banco}: #{dialogoTipoDeCobrancaView.cheque.banco.id} #{dialogoTipoDeCobrancaView.cheque.banco eq null ? '' : '-'} #{dialogoTipoDeCobrancaView.cheque.banco.nome}"/>
+                            <p:outputLabel value="#{l.Agencia}: #{dialogoTipoDeCobrancaView.cheque.agencia}"/>
+                            <p:outputLabel value="#{l.Conta}: #{dialogoTipoDeCobrancaView.cheque.conta}"/>
+                            <p:outputLabel value="#{l.Cheque}: #{dialogoTipoDeCobrancaView.cheque.numeroCheque}" styleClass="Blue"/>
+                            <p:outputLabel value="#{l.Situacao}: #{dialogoTipoDeCobrancaView.cheque.tipoSituacao}"/>
+                            <p:outputLabel value="#{l.Emitente}: #{dialogoTipoDeCobrancaView.cheque.emitente}"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="cartao" columns="1" rendered="#{dialogoTipoDeCobrancaView.boletoDeCartao ne null}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:outputLabel value="#{l.Cartao}: #{dialogoTipoDeCobrancaView.boletoDeCartao.cartao.id} #{dialogoTipoDeCobrancaView.boletoDeCartao.cartao eq null ? '' : '-'} #{dialogoTipoDeCobrancaView.boletoDeCartao.cartao.nome}"/>
+                            <p:outputLabel value="#{l.Cod_Transacao}: #{dialogoTipoDeCobrancaView.boletoDeCartao.codigoTransacao}"/>
+                            <p:outputLabel value="#{l.Situacao}: #{dialogoTipoDeCobrancaView.boletoDeCartao.situacao}"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="credito" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+
+                            <div class="Container100 Responsive100">
+                                <div class="ContainerIndent">
+                                    <div class="Container100 Fs20 BoldGray FontRobotoRegular br">#{l.Saldo_Disponivel_Em_Credito}</div>
+                                    <div class="Container100">
+                                        <h:outputText id="saldoCredito" styleClass="DispBlock Fs24 FontRobotoLight Orange BorderBottom" value="#{dialogoTipoDeCobrancaView.saldoDeCredito}"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="cobrancaFixa" columns="1"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12"
+                                     rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2 ? true : false}">
+
+                            <p:outputLabel value="#{l.Codigo}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.id}"/>
+                            <p:outputLabel value="#{l.Pessoa}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.pessoa.nome}"/>
+                            <p:outputLabel value="#{l.Emissao}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.emissaoFormatadaSemHoras}"/>
+                            <p:outputLabel value="#{l.Historico}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.historico}"/> 
+                            <p:outputLabel value="#{l.Valor}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.valorFormatado}" styleClass="Blue"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="despesaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-4">
+
+                                <p:outputLabel value="#{l.Mes_Referencia}: "/> 
+                                <p:calendar pattern="MM/yyyy" disabledWeekends="true" navigator="true" mask="99/9999" maskAutoClear="true" converterMessage="#{l.Nao_e_uma_data}" size="5" value="#{dialogoTipoDeCobrancaView.despesaEventualBV.referencia}"/>
+
+                            </p:panelGrid>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="despesaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:outputLabel value="#{l.Referencia}  #{dialogoTipoDeCobrancaView.despesaProvisionada.referencia}" />
+                            <p:outputLabel value="#{l.Vencimento}: #{dialogoTipoDeCobrancaView.despesaProvisionada.vencimentoFormatadoSemHoras}"/>                
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="receitaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-4">
+
+                                <p:outputLabel value="#{l.Mes_Referencia}: "/> 
+                                <p:calendar pattern="MM/yyyy"  pagedate="true" navigator="true" mask="99/9999" converterMessage="#{l.Nao_e_uma_data}" size="5" value="#{dialogoTipoDeCobrancaView.receitaEventualBV.referencia}"/>
+
+                            </p:panelGrid>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid id="receitaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+
+                            <p:outputLabel value="#{l.Referencia}  #{dialogoTipoDeCobrancaView.despesaProvisionada.referencia}" />
+                            <p:outputLabel value="#{l.Vencimento}: #{dialogoTipoDeCobrancaView.receitaProvisionada.vencimentoFormatadoSemHoras}"/>                
+
+                        </p:panelGrid>
+
+                    </div>
+                </h:form>            
+
+                <!-- Valores  -->
+                <div id="valores" class="ui-g-12 ui-md-6 ui-lg-3">
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4 ui-fluid">
+                        <p:outputLabel value="#{l.Conta}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2 || dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa != null}"/>
+                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.conta.nome}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
+                        <p:selectOneMenu  id="dceBanco" value="#{dialogoTipoDeCobrancaView.e.conta}" converter="contaConverter" styleClass="Wid100" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa != null}">
+                            <p:ajax update="tempDialog" listener="#{dialogoTipoDeCobrancaView.selecionaCotacaoConformeConta}"/>
+                            <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                            <f:selectItems value="#{dialogoTipoDeCobrancaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
+                        </p:selectOneMenu>
+
+                        <p:outputLabel value="#{l.Cotacao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"/>
+                        <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1}" readonly="true"/>
+                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 1 ? true : false : false}" >
+                            <p:ajax update="tempDialog"/>
+                            <f:selectItems value="#{dialogoTipoDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+
+                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-4">
+                        <p:outputLabel value="#{l.Valor_Recebido}:" styleClass="Blue"  />
+                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.valor}" minValue="0" maxValue="#{dialogoTipoDeCobrancaView.titulo ne null ? dialogoTipoDeCobrancaView.titulo.saldo : dialogoTipoDeCobrancaView.cheque ne null ? dialogoTipoDeCobrancaView.cheque.valor : dialogoTipoDeCobrancaView.boletoDeCartao ne null ? dialogoTipoDeCobrancaView.boletoDeCartao.valor : ''}"
+                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." readonly="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 2 ? true : false}" />
+
+                        <p:outputLabel value="#{l.Juros}:" />
+                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.juros}" minValue="0" disabled="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+
+                        <p:outputLabel value="#{l.Multa}:"  />
+                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.multa}" minValue="0" disabled="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+
+                        <p:outputLabel value="#{l.Desconto}:" />
+                        <p:inputNumber value="#{dialogoTipoDeCobrancaView.e.desconto}" minValue="0" disabled="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}"
+                                       symbol="#{dialogoTipoDeCobrancaView.e.cotacao.conta.moeda.sigla} " decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+
+                        <p:outputLabel value="#{l.Observacao}:" />
+                        <p:inputTextarea rows="3" value="#{dialogoTipoDeCobrancaView.e.observacao}" placeholder="#{l.Escreva_uma_observacao}"/>
+                    </p:panelGrid>
+
+                </div>
+            </div>
+
+            <section>
+
+                <p:separator/>
+
+                <p:commandButton value="#{l.Salvar}" action="#{dialogoTipoDeCobrancaView.salvar}" update="msg"/>
+                <p:commandButton value="#{l.Fechar}" action="#{dialogoTipoDeCobrancaView.fechar}" update="msg" styleClass="orange-btn"/>
+
+            </section>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

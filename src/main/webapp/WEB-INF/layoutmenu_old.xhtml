@@ -1,0 +1,378 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/atlantis">
+
+    <div class="layout-sidebar #{preferenciasDeUsuario.corMenuCSS}">
+        <pa:tabMenu>
+            <pa:tab icon="fa fa-connectdevelop" title="Minds">
+                <pa:menu widgetVar="mat">
+                    <p:menuitem id="om_dashboard" value="Dashboard" icon="fa fa-fw fa-home" outcome="/dashboard"/>
+
+                    <p:submenu label="#{l.Arquivo}" icon="fa fa-files-o">
+                        <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/cidade" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/cidade.xhtml')}" />
+                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/pessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/pessoa.xhtml')}" />   
+                        <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/importarPessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/importarPessoa.xhtml')}" />    
+                    </p:submenu>
+                    <p:submenu label="#{l.Vendas}" icon="fa fa-shopping-cart">
+                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-shopping-cart" outcome="/notaEmitida" />
+                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/orcamento" />
+                        <p:menuitem value="#{l.Comanda}" icon="fa fa-superpowers" outcome="/comanda" />
+                        <p:menuitem value="#{l.Condicional}" icon="fa fa-compress" outcome="/condicional" />
+                        <p:menuitem value="#{l.Retificacao_De_Venda}" icon="fa fa-american-sign-language-interpreting" outcome="/retificacaoDeVenda" />
+                        <p:submenu label="#{l.Consultar}" icon="fa fa-book">
+                            <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaEmitida" />
+                            <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/consultaOrcamento" />
+                            <p:menuitem value="#{l.Comanda}" icon="fa fa-shield fa-rotate-270" outcome="/consultaComanda" />
+                            <p:menuitem value="#{l.Condicional}" icon="fa fa-shield fa-rotate-270" outcome="/consultaCondicional" />
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:submenu label="#{l.Estoque}" icon="fa fa-table">              
+                        <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/item" />
+                        <p:menuitem value="#{l.Nota_Recebida}" icon="icon-attach_money" outcome="/notaRecebida" />
+                        <p:menuitem value="#{l.Retificacao_De_Compra}" icon="fa fa-american-sign-language-interpreting" outcome="/retificacaoDeCompra" />
+                        <p:menuitem value="#{l.Margem}" icon="icon-attach_money" outcome="/margem" /> 
+                        <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/conhecimentoDeFrete" />
+                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="icon-edit" outcome="/ajusteDeEstoque" />
+                        <p:menuitem value="#{l.Conta_De_Estoque}" icon="icon-edit" outcome="/contaDeEstoque" />
+                        <p:submenu label="#{l.Cadastros}" icon="icon-library_books">
+                            <p:menuitem value="#{l.Unidade_Medida}" icon="icon-dns" outcome="/unidadeMedidaItem" />
+                            <p:menuitem value="#{l.IVA}" icon="fa fa-strikethrough" outcome="/iva" />
+                            <p:menuitem value="#{l.Marca}" icon="fa fa-gg" outcome="/marca" />
+                            <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
+                            <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaDePreco" />
+                            <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/comissao" />
+                            <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/grupo" />
+                            <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />                            
+                        </p:submenu>
+                        <p:submenu label="#{l.Consultar}" icon="fa fa-book">
+                            <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/consultaNotaRecebida" />
+                        </p:submenu>
+                    </p:submenu>
+
+                    <p:submenu label="#{l.Financeiro}" icon="icon-attach_money">                    
+                        <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/recebimento" />
+                        <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/pagamento" />  
+                        <p:menuitem value="#{l.Extrato_Conta}" icon="fa fa-file-text-o" outcome="/extratoConta" />                        
+                        <p:menuitem value="#{l.Cotacoes}" icon="fa fa-money" outcome="/cotacao" />
+                        <p:menuitem value="#{l.Baixa}" icon="fa fa-file-archive-o" outcome="/baixa" />
+                        <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/caixa" />
+                        <p:menuitem value="#{l.Forma_Recebimento}" icon="fa fa-file-archive-o" outcome="/formaDeRecebimento" />
+                        <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-briefcase" outcome="/faturaLegada" />
+                        <p:submenu label="#{l.Cadastros}" icon="icon-library_books">
+                            <p:menuitem value="#{l.Banco}" icon="fa fa-bank" outcome="/banco" />
+                            <p:menuitem value="#{l.Moeda}" icon="icon-attach_money" outcome="/moeda" /> 
+                            <p:menuitem value="#{l.Conta}" icon="fa fa-file-archive-o" outcome="/conta" />
+                            <p:menuitem value="#{l.Tipo_Receita}" icon="fa fa-file-text-o" outcome="/tipoReceita" />
+                            <p:menuitem value="#{l.Tipo_Despesa}" icon="fa fa-file-text-o" outcome="/tipoDespesa" />
+                            <p:menuitem value="#{l.Transferencia_De_Lucro}" icon="fa  fa-exchange" outcome="/transferenciaDespesaProvisionada" />
+                            <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-file-text-o" outcome="/grupoFinanceiro" />
+                            <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-file-text-o" outcome="/despesaProvisionada" />
+                            <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-file-text-o" outcome="/receitaProvisionada" />
+                            <p:menuitem value="#{l.Cartao}" icon="fa fa-file-text-o" outcome="/cartao" />
+                            <p:menuitem value="#{l.Boleto_De_Cartao}" icon="fa fa-file-text-o" outcome="/boletoDeCartao" />
+                            <p:menuitem value="#{l.Cheque}" icon="fa fa-file-text-o" outcome="/cheque" />
+                        </p:submenu>
+                        <p:submenu label="#{l.Consultar}" icon="icon-library_books">   
+                            <p:menuitem value="#{l.Cobranca}" icon="fa fa-file-text-o" outcome="/consultaCobranca" />
+                        </p:submenu>
+
+
+
+                    </p:submenu>
+
+                    <p:submenu label="#{l.Cambio}" icon="fa fa-exchange">
+                        <p:menuitem value="#{l.Recepcao}" icon="fa fa-money" outcome="/recepcao" />
+                        <p:menuitem value="#{l.Contrato_De_Cambio}" icon="icon-paper" outcome="/contratoDeCambio" />
+                        <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/cambio" />
+                    </p:submenu>
+
+                    <p:submenu label="#{l.Relatorios}" icon="fa fa-list-alt">
+                        <p:submenu label="#{l.Financeiro}" icon="icon-attach_money">
+                            <p:menuitem value="#{l.Conta_a_Pagar}" icon="fa fa-minus" outcome="/relatorioDeContaAPagar" />
+                            <p:menuitem value="#{l.Conta_a_Receber}" icon="fa fa-plus" outcome="/relatorioDeContaAReceber" />
+                            <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/relatorioDeSaldoDeConta" />
+                        </p:submenu>
+                        <p:submenu label="#{l.Cambio}" icon="fa fa-exchange">
+                            <p:menuitem value="#{l.Recepcao}" icon="fa fa-money" outcome="/relatorioDeRecepcao" />
+                            <p:menuitem value="#{l.Contrato_De_Cambio}" icon="icon-paper" outcome="/relatorioDeContratoDeCambio" />
+                            <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/relatorioDeCambio" />
+                            <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/relatorioDeSaldoDeDivisaoDeLucro" />
+                        </p:submenu>
+                        <p:submenu label="#{l.Estoque}" icon="fa fa-table">
+                            <p:menuitem value="#{l.Balanco_Fisico}" icon="fa fa-money" outcome="/relatorioDeBalancoFisico" />
+                        </p:submenu>
+                    </p:submenu>
+                </pa:menu>
+            </pa:tab>
+            <pa:tab icon="fa fa-cube" title="Features">
+                <h:form id="menu-form">
+                    <pa:menu widgetVar="me">
+                        <p:menuitem id="om_dashboard" value="Dashboard" icon="fa fa-fw fa-home" outcome="/dashboard"/>
+                        <p:submenu id="um_customization2" label="Menu Modes" icon="fa fa-fw fa-bars">
+
+                            <p:menuitem id="menu3" value="Inline Menu" icon="fa fa-fw fa-bars" actionListener="#{preferenciasDeUsuario.setOverlayMenu(false)}" ajax="false"/>
+                            <p:menuitem id="menu4" value="Overlay Menu" icon="fa fa-fw fa-bars" actionListener="#{preferenciasDeUsuario.setOverlayMenu(true)}" ajax="false"/>
+                        </p:submenu>
+                        <p:submenu id="om_orientation" label="Orientation" icon="fa fa-fw fa-align-right">
+                            <p:menuitem id="om_rtl" value="RTL" icon="fa fa-fw fa-align-right" actionListener="#{preferenciasDeUsuario.setOrientationRTL(true)}" ajax="false" />
+                            <p:menuitem id="om_ltr" value="LTR" icon="fa fa-fw fa-align-left" actionListener="#{preferenciasDeUsuario.setOrientationRTL(false)}" ajax="false" />
+                        </p:submenu>
+                        <p:submenu id="um_customization1" label="Layout Colors" icon="fa fa-fw fa-paint-brush">
+                            <p:menuitem id="layout-color0" value="White" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('white')}" ajax="false"/>
+                            <p:menuitem id="layout-color1" value="Dark" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('dark')}" ajax="false"/>
+                            <p:menuitem id="layout-color2" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('blue')}" ajax="false"/>
+                            <p:menuitem id="layout-color3" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('pink')}" ajax="false"/>
+                            <p:menuitem id="layout-color4" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('steel')}" ajax="false"/>
+                            <p:menuitem id="layout-color5" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('orange')}" ajax="false"/>
+                            <p:menuitem id="layout-color6" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('green')}" ajax="false"/>
+                            <p:menuitem id="layout-color7" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('turquoise')}" ajax="false"/>
+                            <p:menuitem id="layout-color8" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('purple')}" ajax="false"/>
+                            <p:menuitem id="layout-color9" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setLayout('cyan')}" ajax="false"/>
+                        </p:submenu>
+                        <p:submenu id="um_themes" label="Themes" icon="fa fa-fw fa-paint-brush">
+                            <p:menuitem id="theme1" value="Blue" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('blue')}" ajax="false" />
+                            <p:menuitem id="theme2" value="Pink" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('pink')}" ajax="false" />
+                            <p:menuitem id="theme3" value="Steel" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('steel')}" ajax="false" />
+                            <p:menuitem id="theme4" value="Orange" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('orange')}" ajax="false" />
+                            <p:menuitem id="theme5" value="Green" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('green')}" ajax="false" />
+                            <p:menuitem id="theme6" value="Turquoise" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('turquoise')}" ajax="false" />
+                            <p:menuitem id="theme7" value="Purple" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('purple')}" ajax="false" />
+                            <p:menuitem id="theme8" value="Cyan" icon="fa fa-fw fa-paint-brush" actionListener="#{preferenciasDeUsuario.setTheme('cyan')}" ajax="false" />
+                        </p:submenu>
+                        <p:submenu id="om_components" label="Components" icon="fa fa-fw fa-sitemap">
+                            <p:menuitem id="om_sample" value="Sample Page" icon="fa fa-fw fa-columns" outcome="/sample" />
+                            <p:menuitem id="om_forms" value="Forms" icon="fa fa-fw fa-code" outcome="/forms" />
+                            <p:menuitem id="om_data" value="Data" icon="fa fa-fw fa-table" outcome="/data" />
+                            <p:menuitem id="om_panels" value="Panels" icon="fa fa-fw fa-list-alt" outcome="/panel" />
+                            <p:menuitem id="om_overlays" value="Overlays" icon="fa fa-fw fa-square" outcome="/overlay" />
+                            <p:menuitem id="om_menus" value="Menus" icon="fa fa-fw fa-minus-square-o" outcome="/menu" />
+                            <p:menuitem id="om_messages" value="Messages" icon="fa fa-fw fa-circle-o-notch" outcome="/messages" />
+                            <p:menuitem id="om_charts" value="Charts" icon="fa fa-fw fa-area-chart" outcome="/charts" />
+                            <p:menuitem id="om_file" value="File" icon="fa fa-fw fa-arrow-circle-o-up" outcome="/file" />
+                            <p:menuitem id="om_misc" value="Misc" icon="fa fa-fw fa-user-secret" outcome="/misc" />
+                        </p:submenu>
+                        <p:menuitem id="om_db_landing" value="Landing" icon="fa fa-fw fa-certificate" outcome="/landing"/>
+                        <p:submenu id="om_default" label="Template Pages" icon="fa fa-fw fa-life-saver">
+                            <p:menuitem id="om_empty" value="Empty Page" icon="fa fa-fw fa-square-o" outcome="/empty" />
+                            <p:menuitem id="om_login" value="Login Page" icon="fa fa-fw fa-sign-in" outcome="/login" />
+                            <p:menuitem id="om_error" value="Error Page" icon="fa fa-fw fa-exclamation-circle" outcome="/error" />
+                            <p:menuitem id="om_404" value="404 Page" icon="fa fa-fw fa-times" outcome="/404" />
+                            <p:menuitem id="om_access" value="Access Denied Page" icon="fa fa-fw fa-exclamation-triangle" outcome="/access" />
+                        </p:submenu>
+                        <p:submenu id="om_hierarchy" label="Menu Hierarchy" icon="fa fa-fw fa-gg">
+                            <p:submenu id="om_sm1" label="Submenu 1" icon="fa fa-fw fa-sign-in">
+                                <p:submenu id="om_sm11" label="Submenu 1.1" icon="fa fa-fw fa-sign-in">
+                                    <p:menuitem id="om_lnk111" value="Link 1.1.1" icon="fa fa-fw fa-sign-in" url="#" />
+                                    <p:menuitem id="om_lnk112" value="Link 1.1.2" icon="fa fa-fw fa-sign-in" url="#" />
+                                    <p:menuitem id="om_lnk113" value="Link 1.1.3" icon="fa fa-fw fa-sign-in" url="#" />
+                                </p:submenu>
+                                <p:submenu id="om_sm12" label="Submenu 1.2" icon="fa fa-fw fa-sign-in">
+                                    <p:menuitem id="om_lnk121" value="Link 1.2.1" icon="fa fa-fw fa-sign-in" url="#" />
+                                </p:submenu>
+                            </p:submenu>
+                            <p:submenu id="om_sm2" label="Submenu 2" icon="fa fa-fw fa-sign-in">
+                                <p:submenu id="om_sm21" label="Submenu 2.1" icon="fa fa-fw fa-sign-in">
+                                    <p:menuitem id="om_lnk211" value="Link 2.1.1" icon="fa fa-fw fa-sign-in" url="#" />
+                                    <p:menuitem id="om_lnk212" value="Link 2.1.2" icon="fa fa-fw fa-sign-in" url="#" />
+                                </p:submenu>
+                                <p:submenu id="om_sm22" label="Submenu 2.2" icon="fa fa-fw fa-sign-in">
+                                    <p:menuitem id="om_lnk221" value="Link 2.2.1" icon="fa fa-fw fa-sign-in" url="#" />
+                                </p:submenu>
+                            </p:submenu>
+                        </p:submenu>
+                        <p:menuitem id="om_doc" value="Documentation" icon="fa fa-fw fa-book" outcome="/docs"/>
+                    </pa:menu>
+                </h:form>
+            </pa:tab>
+
+            <pa:tab icon="fa fa-inbox" title="Inbox">
+                <div class="inbox-tab">
+                    <ul>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar1.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Joshua Williams</span>
+                            <span class="message">Reports attached</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar1.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Joshua Williams</span>
+                            <span class="message">About the meeting</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Emily Clark</span>
+                            <span class="message">TODO Update</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar3.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Tim Johnson</span>
+                            <span class="message">Expense Reports</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar4.png" library="atlantis-layout" width="45"/>
+                            <span class="name">David Stark</span>
+                            <span class="message">Rating Reviews</span>
+                        </li>
+                    </ul>
+
+                    <div class="inbox-labels">
+                        <span>Labels</span>
+                        <ul>
+                            <li class="clearfix">
+                                <span class="inbox-label">Work</span>
+                                <span class="inbox-label-badge">4</span>
+                            </li>
+                            <li class="clearfix">
+                                <span class="inbox-label">Personel</span>
+                                <span class="inbox-label-badge">2</span>
+                            </li>
+                            <li class="clearfix">
+                                <span class="inbox-label">Shared</span>
+                                <span class="inbox-label-badge">3</span>
+                            </li>
+                            <li class="clearfix">
+                                <span class="inbox-label">General</span>
+                                <span class="inbox-label-badge">5</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </pa:tab>
+
+            <pa:tab icon="fa fa-calendar-o" title="Calendar">
+                <div class="calendar-tab">
+                    <ul>
+                        <li class="clearfix">
+                            <div class="calendar-event-date">
+                                <span>21</span>
+                                <span>OCT</span>
+                            </div>
+                            <div class="calendar-event-detail">
+                                <span class="calendar-event-title">Project Meeting</span>
+                                <i class="fa fa-map-marker"></i>
+                                <span class="calendar-event-location">Chicago</span>
+                                <span class="calendar-event-rsvp calendar-event-rsvp-yes">Going</span>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="calendar-event-date">
+                                <span>13</span>
+                                <span>NOV</span>
+                            </div>
+                            <div class="calendar-event-detail">
+                                <span class="calendar-event-title">Presentation 1</span>
+                                <i class="fa fa-map-marker"></i>
+                                <span class="calendar-event-location">New York</span>
+                                <span class="calendar-event-rsvp calendar-event-rsvp-yes">Going</span>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="calendar-event-date">
+                                <span>01</span>
+                                <span>DEC</span>
+                            </div>
+                            <div class="calendar-event-detail">
+                                <span class="calendar-event-title">Presentation 2</span>
+                                <i class="fa fa-map-marker"></i>
+                                <span class="calendar-event-location">New York</span>
+                                <span class="calendar-event-rsvp calendar-event-rsvp-maybe">Maybe</span>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <div class="calendar-event-date">
+                                <span>25</span>
+                                <span>DEC</span>
+                            </div>
+                            <div class="calendar-event-detail">
+                                <span class="calendar-event-title">New Year Party</span>
+                                <i class="fa fa-map-marker"></i>
+                                <span class="calendar-event-location">San Francisco</span>
+                                <span class="calendar-event-rsvp calendar-event-rsvp-maybe">Maybe</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </pa:tab>
+
+            <pa:tab icon="fa fa-sliders" title="Projects">
+                <div class="projects-tab">
+                    <ul>
+                        <li class="clearfix">
+                            <i class="fa fa-github"></i>
+                            <span class="project-title">GitHub Tasks</span>
+                            <span>3 open, 4 closed</span>
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 50%"></div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="fa fa-youtube"></i>
+                            <span class="project-title">YouTube Videos</span>
+                            <span>12 new, 2 subscribers</span>
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 20%"></div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="fa fa-twitter"></i>
+                            <span class="project-title">Twitter Posts</span>
+                            <span>24 new messages</span>
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 65%"></div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="fa fa-facebook"></i>
+                            <span class="project-title">Facebook Messages</span>
+                            <span>8 total, 4 unread</span>
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 80%"></div>
+                            </div>
+                        </li>
+                        <li class="clearfix">
+                            <i class="fa fa-linkedin"></i>
+                            <span class="project-title">Linkedin Contacts</span>
+                            <span>90 total</span>
+                            <div class="project-progressbar">
+                                <div class="project-progressbar-value" style="width: 90%"></div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </pa:tab>
+
+            <pa:tab icon="fa fa-users" title="Team">
+                <div class="team-tab">
+                    <ul>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar1.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Joshua Williams</span>
+                            <span class="location">New York, USA</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar2.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Emily Clark</span>
+                            <span class="location">Paris, France</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar3.png" library="atlantis-layout" width="45"/>
+                            <span class="name">Tim Johnson</span>
+                            <span class="location">London, UK</span>
+                        </li>
+                        <li class="clearfix">
+                            <p:graphicImage name="images/avatar4.png" library="atlantis-layout" width="45"/>
+                            <span class="name">David Stark</span>
+                            <span class="location">San Francisco, USA</span>
+                        </li>
+                    </ul>
+                </div>
+            </pa:tab>
+        </pa:tabMenu>        
+    </div>
+
+</ui:composition>

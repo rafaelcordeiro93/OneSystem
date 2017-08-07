@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+    <ui:define name="title">#{l.Selecao_De_Depositos}</ui:define>
+
+    <ui:define name="content">
+        <p:dataTable id="quantidadeDeItemPorDepositoViewData" var="quantidadeDeItemPorDeposito" value="#{quantidadeDeItemView.lista}" rowKey="#{quantidadeDeItemPorDeposito.id}"
+                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true">
+
+            <p:column headerText="#{l.Deposito}" footerText="#{l.Deposito}" style="width: 45%" >                                        
+                <h:outputText value="#{quantidadeDeItemPorDeposito.saldoDeEstoque.deposito.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Saldo}" footerText="#{l.Saldo}"  style="width: 30%">
+                <h:outputText value="#{quantidadeDeItemPorDeposito.saldoDeEstoque.saldo}" />
+            </p:column>
+            <p:column styleClass="TexAlCenter" headerText="#{l.Quantidade}" footerText="#{l.Quantidade}" style="width: 25%">
+                <p:cellEditor>
+                    <f:facet name="output"><h:outputText value="#{quantidadeDeItemPorDeposito.quantidade}" /></f:facet>
+                    <f:facet name="input"><p:inputText styleClass="TexAlCenter" value="#{quantidadeDeItemPorDeposito.quantidade}"/></f:facet>
+                </p:cellEditor>
+            </p:column>
+
+        </p:dataTable>
+
+        <p:commandButton value="#{l.Salvar}" process="@this" action="#{quantidadeDeItemView.selecionar()}" />
+    </ui:define>
+</ui:composition>

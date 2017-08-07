@@ -1,0 +1,197 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-11" style="margin-left: 5%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Item}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <p:tabView id="tabsItem" style="margin: none; border-color: none">
+                            <p:ajax event="tabChange" listener="#{itemView.onTabChange}" update="conteudo"/>
+                            <p:tab title="#{l.Detalhes}" >
+
+                                <div class="EmptyBox20"/>
+
+                                <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel value="#{l.Id}"/>
+                                    <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
+                                        <p:ajax event="itemSelect" listener="#{itemView.selecionaItem}" update=":conteudo"/>                                  
+                                    </a:inputTextDialog>
+
+                                    <p:outputLabel value="#{l.Ativo}"/>
+                                    <p:selectBooleanCheckbox id="itemStatus" value="#{itemView.e.ativo}"/>
+
+                                    <p:outputLabel  value="#{l.Nome}"/>
+                                    <p:inputText value="#{itemView.e.nome}" />
+
+                                    <p:outputLabel value="#{l.Id_Fabricante}"/>
+                                    <p:inputText value="#{itemView.e.idFabricante}" />
+
+                                    <p:outputLabel value="#{l.Id_Contabil}"/>
+                                    <p:inputText value="#{itemView.e.idContabil}" />
+
+                                    <p:outputLabel value="#{l.Codigo_De_Barras}"/>
+                                    <p:inputNumber value="#{itemView.e.ncm}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+
+                                    <p:outputLabel value="#{l.Ncm}"/>
+                                    <p:inputNumber value="#{itemView.e.ncm}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+
+                                    <p:outputLabel value="#{l.Estoque_Minimo}"/>
+                                    <p:inputNumber value="#{itemView.e.estoqueMinimo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+
+                                    <p:outputLabel value="#{l.Estoque_Maximo}"/>
+                                    <p:inputNumber value="#{itemView.e.estoqueMaximo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+
+                                    <p:outputLabel value="#{l.Grupo_Fiscal}"/>
+                                    <a:inputTextDialog id="itemGrupoFiscal" dialog="#{selecaoGrupoFiscalView}" mbView="#{itemView}" value="#{itemView.e.grupoFiscal}" var="grupoFiscal" itemLabel="#{grupoFiscal.nome}" itemValue="#{grupoFiscal}" converter="grupoFiscalConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoFiscal.nome}"/>
+
+                                    <p:outputLabel value="#{l.Grupo}"/>
+                                    <a:inputTextDialog id="itemGrupo" dialog="#{selecaoGrupoView}" mbView="#{itemView}" value="#{itemView.e.grupo}" var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}" converter="grupoConverter" itemLabelTabVisible="true" itemLabelTab="#{grupo.nome}"/>
+
+
+                                    <p:outputLabel value="#{l.Marca}"/>
+                                    <a:inputTextDialog id="itemMarca" dialog="#{selecaoMarcaView}" mbView="#{itemView}" value="#{itemView.e.marca}" var="marca" itemLabel="#{marca.nome}" itemValue="#{marca}" converter="marcaConverter" itemLabelTabVisible="true" itemLabelTab="#{marca.nome}"/>
+
+
+                                    <p:outputLabel value="#{l.Unidade_Medida}"/>
+                                    <a:inputTextDialog id="itemUN" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{itemView}" value="#{itemView.e.unidadeDeMedida}" var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}" itemValue="#{unidadeDeMedida}" converter="unidadeMedidaItemConverter" itemLabelTabVisible="true" itemLabelTab="#{unidadeDeMedida.nome}"/>
+
+
+                                    <p:outputLabel value="#{l.Margem}"/>
+                                    <a:inputTextDialog id="itemMargem" dialog="#{selecaoMargemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="margem" itemLabel="#{margem.nome}" itemValue="#{margem}" converter="margemConverter" itemLabelTabVisible="true" itemLabelTab="#{margem.nome}"/>
+
+
+                                    <p:outputLabel value="#{l.Tipo_Item}"/>
+                                    <p:selectOneMenu value="#{itemView.e.tipoItem}" >
+                                        <f:selectItems value="#{itemView.tipoItem}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
+                                    </p:selectOneMenu>
+
+                                </p:panelGrid>
+
+                                <div class="EmptyBox40"/>
+
+                            </p:tab>
+
+                            <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
+
+                                <h2 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h2>
+                                <h:panelGrid>
+
+                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 60%">
+                                        <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
+                                            <h:outputText value="#{estoque.deposito.nome}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Saldo}" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="#{l.Saldo}" >
+                                            <h:outputText value="#{estoque.saldo}" />
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </h:panelGrid>
+
+                            </p:tab>
+                            <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}">
+
+                                <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass="form-elements"
+                                             columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
+                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">   
+                                        <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
+                                            <p:ajax update="itemPreco"/>
+                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="true" />
+                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
+                                        </p:selectOneRadio>
+
+                                        <div class="EmptyBox10"/>
+                                        <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
+                                            <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
+                                        </a:inputTextDialog>
+                                        <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
+                                                       symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
+                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                        </p:inputNumber> 
+
+                                        <p:calendar value="#{itemView.precoDeItemBV.dataDeExpiracao}" navigator="true" pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99" yearRange="c-0:c+100" placeholder="#{l.Data_Expiracao}" 
+                                                    locale="pt" showWeek="true"/>
+
+                                        <p:commandButton value="#{l.Adicionar}" action="#{itemView.addPreco()}" update="itemPanelPreco precos :conteudo:growl" icon="fa fa-plus Fs16 White"/>
+
+                                    </p:panelGrid>   
+
+                                    <h:panelGrid columns="1" style="width: 100%; right: 0px;">
+                                        <h:outputText value="#{l.Preco_Atual}"/> 
+                                        <p:dataTable id="precoAtual" var="precoDeItem" value="#{itemView.precoAtual}"
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                            <p:column headerText="#{l.Lista_De_Preco}">                                        
+                                                <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Valor}">
+                                                <h:outputText value="#{precoDeItem.valor}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Emissao}">
+                                                <h:outputText value="#{precoDeItem.emissao}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Data_Expiracao}">
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </h:panelGrid>
+                                </p:panelGrid>
+
+                                <p:separator/>
+
+                                <h:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements">
+                                    <h:outputText value="#{l.Historico}"/>
+                                    <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" rowsPerPageTemplate="15,30,50,100"
+                                                 rows="15" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:column headerText="#{l.Lista_De_Preco}" filterBy="#{precoDeItem.listaDePreco.nome}" filterMatchMode="contains" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
+                                            <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
+                                            <h:outputText value="#{precoDeItem.valor}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
+                                            <h:outputText value="#{precoDeItem.emissao}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
+                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                        </p:column>
+                                    </p:dataTable>
+
+                                </h:panelGrid>
+
+                            </p:tab>
+
+                        </p:tabView>
+                    </div>  
+
+                    <div class="EmptyBox20"/> 
+
+                    <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
+                        <div style="padding: 0% 0% 5% 8%">
+                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                            <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                            <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        </div> 
+                    </p:panelGrid>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+
+</ui:composition>

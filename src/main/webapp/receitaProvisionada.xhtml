@@ -1,0 +1,120 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.7%" ><i class="fa fa-fw fa-sign-out Fs40" style="color: #848484"/> #{l.Receita_Provisionada}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="receitapID" value="#{receitaProvisionadaView.e}" update=":conteudo" dialog="#{selecaoReceitaProvisionadaView}" mbView="#{receitaProvisionadaView}" var="receita" converter="receitaProvisionadaBVConverter" process="@this" itemLabel="#{receita.id}" itemValue="#{receita}" editVisible="false" itemLabelTab="#{receita.historico}" itemLabelTabVisible="true" onlyNumber="true"/>
+
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="receitaPessoa" dialog="#{selecaoPessoaView}" mbView="#{receitaProvisionadaView}" value="#{receitaProvisionadaView.e.pessoa}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
+
+                            <p:outputLabel value="#{l.Receita}"/>
+                            <a:inputTextDialog id="receitaProvisionadaReceita" dialog="#{selecaoTipoReceitaView}" mbView="#{receitaProvisionadaView}" value="#{receitaProvisionadaView.e.receita}" var="receita" itemLabel="#{receita.nome}" itemValue="#{receita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{receita.nome}"/>
+
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar pattern="dd/MM/yyyy" value="#{receitaProvisionadaView.e.emissao}" maxlength="60" size="25"/>
+
+                            <p:outputLabel value="#{l.Mes_De_Referencia}"/>
+                            <p:calendar pattern="MM/yyyy" mask="99/9999" value="#{receitaProvisionadaView.e.referencia}" />  
+
+                            <p:outputLabel value="#{l.Vencimento}"/>
+                            <p:calendar pattern="dd/MM/yyyy" value="#{receitaProvisionadaView.e.vencimento}" />  
+
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:selectOneMenu id="dpDestino" value="#{receitaProvisionadaView.e.cotacao}" converter="cotacaoConverter">
+                                <f:selectItems value="#{receitaProvisionadaView.listaCotacao}"  var="cotacao" itemLabel="#{cotacao.conta.moeda.nome}" itemValue="#{cotacao}"/>
+                                <p:ajax update="dpDestino valorDP" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputNumber id="valorDP" value="#{receitaProvisionadaView.e.valor}" symbol="#{receitaProvisionadaView.e.cotacao.conta.moeda.sigla} " maxlength="60" decimalSeparator="," thousandSeparator="."/>
+
+                            <p:outputLabel value="#{l.Historico}"/>
+                            <p:inputTextarea autoResize="true" placeholder="Escreva um comentário." rows="1" maxlength="150" value="#{receitaProvisionadaView.e.historico}"/>
+
+                            <p:outputLabel value=""/>
+                            <p:outputLabel value=""/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Gerar_Mais}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-2">
+                            <p:inputText placeholder="#{l.Numero_Parcelas}" value="#{receitaProvisionadaView.numeroParcelas}"/>
+                            <p:inputText placeholder="#{l.Intervalo_De_Dias}" value="#{receitaProvisionadaView.intervaloDias}"/> 
+                            <p:commandButton value="#{l.Gerar}" action="#{receitaProvisionadaView.gerarMaisParcelas()}" update=":conteudo"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+
+
+                        <p:dataTable id="receitaProvisionadaDTN" var="receitaProvisionadaBV" value="#{receitaProvisionadaView.parcelas}" rowKey="#{receitaProvisionadaBV.id}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" editMode="cell" editable="true" style="border: none">
+                            <p:ajax event="cellEdit" update=":conteudo:receitaProvisionadaDTN" />
+
+                            <p:column headerText="#{l.Mes_De_Referencia}" sortBy="#{receitaProvisionadaBV.referencia}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{receitaProvisionadaBV.referenciaFormatado}" /></f:facet>
+                                    <f:facet name="input"><p:calendar pattern="MM/yyyy" mask="99/9999" value="#{receitaProvisionadaBV.referencia}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Vencimento}" sortBy="#{receitaProvisionadaBV.vencimento}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{receitaProvisionadaBV.vencimentoFormatado}" /></f:facet>
+                                    <f:facet name="input"><p:calendar pattern="dd/MM/yyyy" value="#{receitaProvisionadaBV.vencimento}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="#{l.Valor}" sortBy="#{receitaProvisionadaBV.valor}" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText value="#{receitaProvisionadaView.e.cotacao.conta.moeda.sigla} #{receitaProvisionadaBV.valor}" /></f:facet>
+                                    <f:facet name="input"><p:inputText value=" #{receitaProvisionadaBV.valor}"/></f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                        </p:dataTable>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+
+                    </div>
+
+
+                    <div class="EmptyBox10"/>
+
+
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{receitaProvisionadaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{receitaProvisionadaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{receitaProvisionadaView.delete()}" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{receitaProvisionadaView.limparJanela()}" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

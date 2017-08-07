@@ -1,0 +1,136 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-bank Fs40" style="color: #848484"/> #{l.Baixa}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <div class="EmptyBox20"/>
+                        <div class="ui-g">
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-5" styleDiv="padding: 2px !important" placeholder="#{l.Id}" id="baixaId" value="#{baixaView.e}" dialog="#{selecaoBaixaView}" mbView="#{baixaView}" var="baixa" converter="baixaBVConverter" itemLabel="#{baixa.id}" itemValue="#{baixa}" onlyNumber="true" editVisible="false" update="conteudo"/>
+                            <p:commandButton value="#{l.Cancelar}" actionListener="#{baixaView.cancela}" icon="fa fa-ban"
+                                             styleClass="orange-btn" style="width: auto !important" update=":conteudo"
+                                             rendered="#{baixaView.e.estado ne null ? (baixaView.e.estado eq 'EFETIVADO' ? 'false' : (baixaView.e.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
+                        </div>
+                        <div class="EmptyBox5"/>
+                        <div style="padding-bottom: 2px">
+                            <p:outputLabel  value="#{l.Estado}: "/>
+                            <p:outputLabel class="#{baixaView.e.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    baixaView.e.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    baixaView.e.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{baixaView.e.estado.nome}
+                            </p:outputLabel>
+
+                            <div class="EmptyBox10"/>
+
+                            <p:panelGrid rendered="#{baixaView.e.estado eq 'CANCELADO' ? true : false}" columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-2">
+
+                                <p:outputLabel value="#{l.Data_Cancelamento}: "/>
+                                <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{baixaView.e.dataCancelamento}"/> 
+                            </p:panelGrid>
+                        </div>
+
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <p:inputText id="baixaPessoa" readonly="true"  size="51" value="#{baixaView.e.pessoa.nome}"/>
+
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar  pattern="dd/MM/yyyy" disabled="true" value="#{baixaView.e.emissao}"/>                          
+
+                            <p:outputLabel value="#{l.Natureza_Financeira}"/>
+                            <p:inputText id="baixaUnidadeFinanceira" readonly="true" value="#{baixaView.e.naturezaFinanceira.nome}"/>
+
+                            <p:outputLabel value="#{l.Historico}"/>
+                            <p:inputTextarea readonly="#{baixaView.e.estado eq 'CANCELADO' ? true : false}" autoResize="true" rows="4" cols="68" maxlength="150" value="#{baixaView.e.historico}"/>
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+
+                        <h4 style="font-size: 15px" >#{l.Tipos}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Despesa}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.despesa.nome}"/>
+
+                            <p:outputLabel value="#{l.Receita}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.receita.nome}"/>
+
+                            <p:outputLabel value="#{l.Cambio}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.cambio.id}"/>
+
+                            <p:outputLabel value="#{l.Recepcao}"/>
+                            <p:inputText  readonly="true"  value="#{baixaView.e.recepcao.id}"/>
+
+                            <p:outputLabel value="#{l.Transferencia}"/>
+                            <p:inputText  readonly="true"   value="#{baixaView.e.transferencia.id}"/>
+
+                            <p:spacer/>
+                            <p:spacer/>
+                            
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+                        <h4 style="font-size: 15px" >#{l.Forma_De_Pagamento}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.cotacao.conta.nome}"/>
+
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.cotacao.conta.moeda.nome}"/>
+
+                            <p:outputLabel value="#{l.Valor_Por_Cotacao}"/>
+                            <p:inputText readonly="true" value="#{baixaView.e.valorPorCotacao.valor}"/>
+
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputText readonly="true"  value="#{baixaView.e.valor eq 0 ? '' : baixaView.e.valor}"/>
+
+
+                        </p:panelGrid>
+                        <div class="EmptyBox10"/>
+
+                        <p:separator/>
+
+                    </div>
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton rendered="#{baixaView.e.estado eq 'CANCELADO' ? false : true}" value="#{l.Atualizar}" action="#{baixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{baixaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{baixaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,140 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Forma_De_Recebimento}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoFormaDeRecebimentoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e}" var="formaDeRecebimento" itemLabel="#{formaDeRecebimento.id}" itemValue="#{formaDeRecebimento}" converter="formaDeRecebimentoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="true"/>
+
+                        </p:panelGrid>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-1">
+                            <p:outputLabel value="#{l.Nome}" />
+                            <p:inputText value="#{formaDeRecebimentoView.e.nome}"  maxlength="60"/>
+
+                            <p:outputLabel value="#{l.Ativo}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoAtiva" value="#{formaDeRecebimentoView.e.ativo}"/>
+                        </p:panelGrid>
+
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Entrada}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Entrada}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntrada" value="#{formaDeRecebimentoView.e.entrada}" >
+                                <p:ajax update="formaDeRecebimentoEntradaemDinheiro formaDeRecebimentoEntradaemCredito formaDeRecebimentoPercentualEntrada formaDeRecebimentoPadraoDeEntrada formaDeRecebimentoEntradaemCheque formaDeRecebimentoEntradaemCartao"/>
+                            </p:selectBooleanCheckbox>
+
+                            <p:outputLabel value="#{l.Entrada_Dinheiro}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemDinheiro" disabled="#{!formaDeRecebimentoView.e.entrada}"  value="#{formaDeRecebimentoView.e.entradaEmDinheiro}"/>
+
+                            <p:outputLabel value="#{l.Entrada_Credito}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCredito" disabled="#{!formaDeRecebimentoView.e.entrada}" value="#{formaDeRecebimentoView.e.entradaEmCredito}"/>
+
+                            <p:outputLabel value="#{l.Percentual_Entrada}" />
+                            <p:inputNumber id="formaDeRecebimentoPercentualEntrada" symbol="%" symbolPosition="rigth" disabled="#{!formaDeRecebimentoView.e.entrada}"  value="#{formaDeRecebimentoView.e.porcentagemDeEntrada}" maxValue="100" minValue="0" inputStyle="width:auto" size="3"/>
+
+                            <p:outputLabel value="#{l.Entrada_Cheque}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCheque" disabled="#{!formaDeRecebimentoView.e.entrada}" value="#{formaDeRecebimentoView.e.entradaEmCheque}"/>
+
+                            <p:outputLabel value="#{l.Entrada_Cartao}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoEntradaemCartao" disabled="#{!formaDeRecebimentoView.e.entrada}" value="#{formaDeRecebimentoView.e.entradaEmCartao}"/>
+
+                            <p:outputLabel value="#{l.Padrao}" />
+                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeEntrada" value="#{formaDeRecebimentoView.e.formaPadraoDeEntrada}" disabled="#{!formaDeRecebimentoView.e.entrada}">
+                                <f:selectItems value="#{formaDeRecebimentoView.formaDeRecebimentoPadrao}" var="tipoFormaDeRecebimento" itemValue="#{tipoFormaDeRecebimento}" itemLabel="#{tipoFormaDeRecebimento.nome}" />
+                            </p:selectOneMenu>
+
+                            <p:spacer/>
+                            <p:spacer/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Parcelas}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-grc-2 ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+
+                            <p:outputLabel value="#{l.Parcela_Cheque}" />
+                            <p:selectBooleanCheckbox id="formaDeRecebimentoParcelaemCheque" value="#{formaDeRecebimentoView.e.parcelaEmCheque}"/>
+
+                            <p:outputLabel value="#{l.Parcela_Cartao}" />
+                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemCartao" value="#{formaDeRecebimentoView.e.parcelaEmCartao}"/>
+
+                            <p:outputLabel value="#{l.Parcela_Conta}" />
+                            <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemConta" value="#{formaDeRecebimentoView.e.parcelaEmConta}"/>
+
+                            <p:outputLabel value="#{l.Padrao}" />
+                            <p:selectOneMenu  id="formaDeRecebimentoPadraoDeParcela" value="#{formaDeRecebimentoView.e.formaPadraoDeRecebimentoParcela}">
+                                <f:selectItems value="#{formaDeRecebimentoView.tipoFormaDeRecebimentoPadraoParcela}" var="tipoFormaDeRecebimento" itemValue="#{tipoFormaDeRecebimento}" itemLabel="#{tipoFormaDeRecebimento.nome}" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{l.Minimo_Parcelas}" />
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.minimoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
+
+                            <p:outputLabel value="#{l.Maximo_Parcelas}" /> 
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.maximoDeParcelas}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />  
+
+                            <p:outputLabel value="#{l.Cartao}"/>
+                            <a:inputTextDialog id="formaRecCartaoParcela" dialog="#{selecaoCartaoView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}"/>
+
+                            <p:outputLabel value="#{l.Primeira_Parcela}" />
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.diasPrimeiraParcela}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />
+
+                            <p:outputLabel value="#{l.Periodicidade}" />
+                            <p:inputNumber  value="#{formaDeRecebimentoView.e.periodicidade}" maxValue="999" minValue="0" thousandSeparator="" decimalSeparator="" />   
+
+                            <p:outputLabel value="#{l.Tipo_Periodicidade}" />  
+                            <p:selectOneMenu id="formaDeRecebimentoTipoPeriodicidade" value="#{formaDeRecebimentoView.e.tipoPeriodicidade}">
+                                <f:selectItems value="#{formaDeRecebimentoView.tipoPeriodicidade}" var="tipoPeriodicidade"  itemValue="#{tipoPeriodicidade}" itemLabel="#{tipoPeriodicidade.nome}" >
+                                </f:selectItems>
+                            </p:selectOneMenu>
+
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                    </div>
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{formaDeRecebimentoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{formaDeRecebimentoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{formaDeRecebimentoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{formaDeRecebimentoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

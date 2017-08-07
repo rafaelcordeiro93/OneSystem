@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%"> 
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-credit-card-alt Fs40" style="color: #848484"/> #{l.Cartao}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="cartaoid" value="#{cartaoView.e}" update=":conteudo" dialog="#{selecaoCartaoView}" mbView="#{cartaoView}" var="cartao" converter="cartaoBVConverter" process="@this" itemLabel="#{cartao.id}" itemValue="#{cartao}" editVisible="false" itemLabelTab="#{cartao.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{cartaoView.e.nome}" maxlength="60"/>
+
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <a:inputTextDialog id="contaId" dialog="#{selecaoContaView}" mbView="#{cartaoView}" value="#{cartaoView.e.conta}" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+
+                            <p:outputLabel value="#{l.Despesa}"/>
+                            <a:inputTextDialog id="despesasId" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.despesa}" var="despesa" itemLabel="#{despesa.nome}" itemValue="#{despesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{despesa.nome}"/>
+
+                            <p:outputLabel value="#{l.Juros}"/>
+                            <a:inputTextDialog id="jurosId" dialog="#{selecaoTipoDespesaView}" mbView="#{cartaoView}" value="#{cartaoView.e.juros}" var="juros" itemLabel="#{juros.nome}" itemValue="#{juros}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{juros.nome}"/>
+
+                            <p:spacer/>
+                            <p:spacer/>
+
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Taxas}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <h:form id="formTaxa">
+                            <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements "
+                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-1,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-1" >
+
+                                <p:outputLabel value="#{l.Numero_Dias}"/>
+                                <p:inputNumber id="cartaoNumeroDias" maxValue="999" minValue="0" decimalPlaces="0" value="#{cartaoView.taxa.numeroDias}">
+                                    <p:ajax event="blur"/>
+                                </p:inputNumber>     
+
+                                <p:outputLabel value="#{l.Taxa}"/>
+                                <p:inputNumber id="cartaoTaxa" maxValue="999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="% " decimalPlaces="2" value="#{cartaoView.taxa.taxa}">
+                                    <p:ajax event="blur"/>
+                                </p:inputNumber>        
+
+                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                    <p:commandButton icon="fa fa-plus Fs16 White" action="#{cartaoView.addTaxaNaLista()}"  update=":conteudo"/>
+                                    <p:commandButton icon="fa fa-refresh Fs16 White" action="#{cartaoView.updateTaxaNaLista()}" update=":conteudo" styleClass="green-btn"/>     
+                                    <p:commandButton icon="fa fa-trash-o Fs16 White" action="#{cartaoView.deleteTaxaNaLista()}" update=":conteudo" styleClass="orange-btn"/>
+                                </p:panelGrid>
+                            </p:panelGrid>
+                        </h:form>
+
+                        <div class="EmptyBox10"/>
+
+                        <p:dataTable id="TaxaDT" var="taxa" value="#{cartaoView.e.taxaDeAdministracao}" rowKey="#{taxa.id}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 30%" reflow="true" selectionMode="single" selection="#{cartaoView.taxaSelecionado}">
+                            <p:ajax event="rowSelect" process="@this" listener="#{cartaoView.selecionaTaxa}" update="@form"/>
+                            <p:column style="text-align: center" width="20%">
+                                <h:outputText value="#{taxa.id}" />
+                            </p:column>
+                            <p:column style="text-align: center" headerText="#{l.Dias}" sortBy="#{taxa.numeroDias}">
+                                <h:outputText value="#{taxa.numeroDias}" />
+                            </p:column>
+                            <p:column style="text-align: center" headerText="#{l.Taxa}" sortBy="#{taxa.taxa}">
+                                <h:outputText  value="#{taxa.taxa} %" />
+                            </p:column>
+                        </p:dataTable>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+                    </div>
+
+
+
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{cartaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{cartaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{cartaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{cartaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

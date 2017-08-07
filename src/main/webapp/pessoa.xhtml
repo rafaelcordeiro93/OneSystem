@@ -1,0 +1,155 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD"> 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4%" ><i class="fa fa-user-o Fs40" style="color: #848484"/> #{l.Pessoa}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid" style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+
+                            <p:outputLabel value="#{l.Id}"/>                            
+                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="true"/>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{pessoaView.e.nome}" maxlength="80"/>
+
+                            <p:outputLabel value="#{l.Tipo}"/>
+                            <p:selectOneRadio id="pessoaTipo" value="#{pessoaView.e.fisicaJuridica}">
+                                <f:selectItem itemLabel="#{l.Fisica}" itemValue="false" />
+                                <f:selectItem itemLabel="#{l.Juridica}" itemValue="true" />
+                                <p:ajax update=":conteudo:pessoaCI
+                                        :conteudo:pessoaNascimento
+                                        :conteudo:pessoaConjuge
+                                        :conteudo:pessoaCILabel" listener="#{pessoaView.fisicaJuridicaOnSelect()}"/>
+                            </p:selectOneRadio>
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel id="pessoaCILabel" value="#{pessoaView.e.fantasiaCILabel}"/> 
+                            <p:inputText id="pessoaCI"  value="#{pessoaView.e.fantasiaCI}"/>
+
+                            <p:outputLabel value="#{l.Ruc}"/>
+                            <p:inputText value="#{pessoaView.e.ruc}"/>
+
+                            <p:outputLabel value="#{l.Conjuge}"/>
+                            <p:inputText id="pessoaConjuge" disabled="#{pessoaView.e.fisicaJuridica}" value="#{pessoaView.e.conjuge}" />
+
+                            <p:outputLabel  value="#{l.Nascimento}"/>
+                            <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.e.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.e.nascimento}" maxdate="#{pessoaView.dataMaximaDeNascimento}" inputStyle="width:auto" size="8"/> 
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="8" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid70"
+                                     columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1,ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1, ui-g-12 ui-md-2 ui-grc-2 TexAlRight,ui-g-12 ui-md-1">
+
+                            <p:outputLabel value="#{l.Transportador}"/>
+                            <p:selectBooleanCheckbox  value="#{pessoaView.e.categoriaTransportador}"/>
+
+                            <p:outputLabel value="#{l.Cliente}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.e.categoriaCliente}" />
+
+                            <p:outputLabel value="#{l.Fornecedor}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.e.categoriaFornecedor}"/>
+
+                            <p:outputLabel value="#{l.Vendedor}"/>
+                            <p:selectBooleanCheckbox   value="#{pessoaView.e.categoriaVendedor}"/>
+
+
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+
+                        <h4 style="font-size: 15px" >#{l.Contato}</h4>
+                        <p:separator/>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2">
+
+                            <p:outputLabel value="#{l.Telefone}"/>
+                            <p:inputMask mask="(99) 9999-9999?9"  value="#{pessoaView.e.telefone}" />
+
+                        </p:panelGrid>
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+
+                            <p:outputLabel value="#{l.Contato}"/>
+                            <p:inputText value="#{pessoaView.e.contato}" />
+
+                            <p:outputLabel value="#{l.Email}"/>
+                            <p:inputText  value="#{pessoaView.e.email}"/>                      
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+                        <h4 style="font-size: 15px">#{l.Endereco}</h4>
+                        <p:separator/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5, ui-grc-1 ui-g-12 ui-md-1,ui-g-12 ui-md-5">
+
+                            <p:outputLabel value="#{l.Endereco}"/>
+                            <p:inputText value="#{pessoaView.e.direcao}"/>
+
+                            <p:outputLabel value="#{l.Bairro}"/>
+                            <p:inputText  value="#{pessoaView.e.bairro}"/>
+
+                            <p:outputLabel value="#{l.Cidade}"/>
+                            <a:inputTextDialog id="cidadeId" mbView="#{pessoaView}" dialog="#{selecaoCidadeView}" value="#{pessoaView.e.cidade}" update=":conteudo:pessoaUf :conteudo:pessoaPais" converter="cidadeConverter" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" editVisible="true" itemLabelTab="#{cidade.nome}" itemLabelTabVisible="true"/>
+
+                            <p:outputLabel value="#{l.Uf}"/>
+                            <p:inputText id="pessoaUf" value="#{pessoaView.e.cidade.uf}" readonly="true" />
+
+                            <p:outputLabel value="#{l.Pais}"/>
+                            <p:inputText id="pessoaPais" value="#{pessoaView.e.cidade.pais}" readonly="true" />
+
+                            <p:spacer/>
+                            <p:spacer/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                    </div>
+                    <div class="EmptyBox20"/>
+
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{pessoaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{pessoaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{pessoaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

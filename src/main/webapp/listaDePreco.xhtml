@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 3%" ><i class="fa fa-list Fs40" style="color: #848484"/> #{l.Lista_Preco}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="operacaoId" value="#{listaDePrecoView.e}" update=":conteudo" dialog="#{selecaoListaDePrecoView}" mbView="#{listaDePrecoView}" var="listaDePreco" converter="listaDePrecoBVConverter" process="@this" itemLabel="#{listaDePreco.id}" itemValue="#{listaDePreco}" editVisible="false" itemLabelTab="#{listaDePreco.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{listaDePrecoView.e.nome}"/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+
+                        <p:separator/>
+                    </div>
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{listaDePrecoView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{listaDePrecoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{listaDePrecoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{listaDePrecoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

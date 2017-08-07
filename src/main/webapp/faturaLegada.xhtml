@@ -1,0 +1,130 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+
+
+
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 7%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-briefcase Fs40" style="color: #848484"/> #{l.Fatura_Legada}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+
+
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
+
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="faturaLegadaID" value="#{faturaLegadaView.e}" update=":conteudo" dialog="#{selecaoFaturaLegadaView}" mbView="#{faturaLegadaView}" var="faturaLegada" converter="faturaLegadaBVConverter" process="@this" itemLabel="#{faturaLegada.id}" itemValue="#{faturaLegada}" editVisible="false" onlyNumber="true"/>
+
+                            <p:outputLabel value="#{l.Codigo}"/>
+                            <p:inputText value="#{faturaLegadaView.e.codigo}"/>
+
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="pessoaID" value="#{faturaLegadaView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{faturaLegadaView}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
+
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar value="#{faturaLegadaView.e.emissao}" pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel value="#{l.Total}"/>
+                            <p:inputNumber value="#{faturaLegadaView.e.total}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{faturaLegadaView.e.moedaPadrao}"/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+
+
+
+                        <!--  ================================================   -->
+                        <!--  ===================== Parcelas =====================   -->
+                        <!--  ================================================   -->
+
+                        <div class="ui-g">  
+
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{faturaLegadaView.addNovaParcela}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn"  listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
+                                </p:commandButton>
+                                <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
+                                    <p:ajax event="dialogReturn" listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
+                                </p:commandButton>
+                                <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{faturaLegadaView.remover}" styleClass="orange-btn"  update="parcelas"/>
+                            </p:panelGrid>
+
+                            <p:dataTable id="parcelas" var="model" value="#{faturaLegadaView.list}"
+                                         styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" disabledSelection="#{model.object.possuiPagamento}"
+                                         paginatorAlwaysVisible="false" rows="12" paginator="true" rowStyleClass="#{model.object.possuiPagamento ? 'rowSoftBlue' : ''}"
+                                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                <p:ajax event="rowSelect" listener="#{faturaLegadaView.selecionaParcela}" update="@this" />
+
+                                <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                    <h:outputText value="#{model.id + 1}" />
+                                </p:column>
+                                <p:column headerText="#{l.Modalidade}" styleClass="TexAlCenter">
+                                    <h:outputText value="#{model.object.modalidade.nome}"/>
+                                </p:column>
+                                <p:column headerText="#{l.Vencimento}" styleClass="TexAlCenter">                                    
+                                    <h:outputText id="vencimentoParcelaFormatado" value="#{model.object.vencimentoFormatadoSemHoras}"/>
+                                </p:column>
+                                <p:column headerText="#{l.Valor}" >
+                                    <h:outputText id="dcpValorTxt" value="#{model.object.valorFormatado}"/>
+                                </p:column>                                   
+                                <p:column headerText="#{l.Detalhes}" colspan="2" style="text-align: center;">
+                                    <h:outputText id="parDetalhes" value="#{model.object.detalhes}"/>
+                                </p:column>
+                                <p:column headerText="#{l.Dias}">                                
+                                    <h:outputText id="diasParcela" value="#{model.object.dias}"/>
+                                </p:column>
+                                <p:column headerText="#{l.Dia_Semana}" colspan="2">
+                                    <h:outputText id="diaDaSemana" value="#{model.object.diaDaSemana}"/>
+                                </p:column>
+
+                                <p:columnGroup type="footer">
+                                    <p:row>
+                                        <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
+                                        <p:column id="totalParcelas" footerText="#{faturaLegadaView.totalParcelas}"/>
+                                        <p:column colspan="5"/>
+                                    </p:row>                                  
+                                </p:columnGroup>
+
+                            </p:dataTable>
+                        </div>
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                    </div>
+
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}"  action="#{faturaLegadaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
+                        <p:commandButton value="#{l.Atualizar}"  action="#{faturaLegadaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}"  action="#{faturaLegadaView.delete()}" styleClass="Mar2 " update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{faturaLegadaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

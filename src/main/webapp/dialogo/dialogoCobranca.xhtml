@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Cobranca}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+            <p:panelGrid columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-4,ui-g-8">
+
+                <p:outputLabel value="#{l.Id}:" />
+                <p:outputLabel id="idCobranca" value="#{dialogoCobrancaView.e.id}" />
+
+                <p:outputLabel value="#{l.Modalidade}:" />
+                <p:selectOneMenu  id="modalidadeCobranca" disabled="#{dialogoCobrancaView.modalidade}" value="#{dialogoCobrancaView.e.modalidadeDeCobranca}" converter="modalidadeCobrancaConverter">
+                    <p:ajax update="@form" />                                            
+                    <f:selectItems value="#{dialogoCobrancaView.modalidadesDeCobranca}" var="modalidadeDeCobranca" itemValue="#{modalidadeDeCobranca}" itemLabel="#{modalidadeDeCobranca.nome}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{l.Vencimento}:" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id ne 4}"/>
+                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{dialogoCobrancaView.e.vencimento}" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id ne 4}">
+                </p:calendar>
+
+                <p:outputLabel value="#{l.Cotacao}"/>
+                <p:selectOneMenu  id="dceCotacao" value="#{dialogoCobrancaView.e.cotacao}" converter="cotacaoConverter" >
+                    <f:selectItems value="#{dialogoCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
+                </p:selectOneMenu>
+
+                <p:outputLabel value="#{l.Valor}:"/>
+                <p:inputNumber id="dcpValorInp" maxValue="999999999999.99" minValue="0.00" value="#{dialogoCobrancaView.e.valor}" inputStyleClass="Wid100"
+                               decimalSeparator="," thousandSeparator="." symbol="#{dialogoCobrancaView.e.cotacao.conta.moeda.sigla}">
+                </p:inputNumber> 
+
+            </p:panelGrid>
+
+            <p:panelGrid id="cheque" columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id eq 1 ? true : false}"
+                         columnClasses="ui-g-4,ui-g-8">
+
+                <p:outputLabel value="#{l.Banco}"/>
+                <a:inputTextDialog id="banco" dialog="#{selecaoBancoView}" mbView="#{dialogoCobrancaView}" value="#{dialogoCobrancaView.e.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+
+                <p:outputLabel value="#{l.Agencia}"/>
+                <p:inputText value="#{dialogoCobrancaView.e.agencia}" styleClass="Wid100" />        
+
+                <p:outputLabel value="#{l.Conta}"/>
+                <p:inputText value="#{dialogoCobrancaView.e.conta}" styleClass="Wid100"/>   
+
+                <p:outputLabel value="#{l.Cheque}"/>
+                <p:inputText value="#{dialogoCobrancaView.e.numeroCheque}" styleClass="Wid100" />   
+
+                <p:outputLabel value="#{l.Emitente}"/>
+                <p:inputText value="#{dialogoCobrancaView.e.emitente}" styleClass="Wid100"/>      
+
+                <p:outputLabel value="#{l.Observacao}"/>
+                <p:inputTextarea autoResize="true" rows="2" cols="28" styleClass="PaddingPx4"
+                                 maxlength="200" value="#{dialogoCobrancaView.e.observacao}">
+                </p:inputTextarea>
+
+            </p:panelGrid>        
+
+            <p:panelGrid id="boledoDecartao" columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements" rendered="#{dialogoCobrancaView.e.modalidadeDeCobranca.id eq 2 ? true : false}"
+                         columnClasses="ui-g-4,ui-g-8">
+
+                <p:outputLabel value="#{l.Cartao}" />
+                <a:inputTextDialog id="cartao" dialog="#{selecaoCartaoView}" mbView="#{notaEmitidaView}" value="#{dialogoCobrancaView.e.cartao}" var="cartao" itemLabel="#{cartao.nome}" itemValue="#{cartao}" converter="cartaoConverter" itemLabelTabVisible="true" itemLabelTab="#{cartao.nome}"/>
+
+                <p:outputLabel value="#{l.Cod_Transacao}"/>
+                <p:inputText  value="#{dialogoCobrancaView.e.codigoTransacao}" styleClass="Wid100" />  
+
+
+            </p:panelGrid>        
+
+            <section>
+
+                <p:separator/>
+
+                <p:commandButton value="#{l.Salvar}" action="#{dialogoCobrancaView.salvar()}" update="msg"/>
+
+            </section>
+
+        </div>
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,190 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+            <p:ajax event="dialogReturn" listener="#{conhecimentoDeFreteView.selecionar}" process="@this"/>
+        </p:commandButton>
+
+
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 7%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4.5%" ><i class="fa fa-shopping-cart Fs40" style="color: #848484"/> #{l.Conhecimento_De_Frete}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+
+
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-3">
+
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="conhecimentoDeFreteID" value="#{conhecimentoDeFreteView.e}" update=":conteudo" dialog="#{selecaoConhecimentoDeFreteView}" mbView="#{conhecimentoDeFreteView}" var="conhecimentoDeFrete" converter="conhecimentoDeFreteBVConverter" process="@this"  itemLabel="#{conhecimentoDeFrete.id}" itemValue="#{conhecimentoDeFrete}" editVisible="false" onlyNumber="true"/>
+
+                            <p:outputLabel value="#{l.Operacao}"/>
+                            <a:inputTextDialog id="neOpera" value="#{conhecimentoDeFreteView.e.operacao}" dialog="#{selecaoOperacaoNotaRecebidaView}" mbView="#{conhecimentoDeFreteView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+
+                            <p:outputLabel value="#{l.Pessoa}"/>
+                            <a:inputTextDialog id="pessoaID" value="#{conhecimentoDeFreteView.e.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{conhecimentoDeFreteView}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
+
+                            <p:outputLabel value="#{l.Data}"/>
+                            <p:calendar value="#{conhecimentoDeFreteView.e.data}" pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar value="#{conhecimentoDeFreteView.e.emissao}" pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel  value="#{l.Valor_Frete}"/>
+                            <p:inputNumber id="valorFrete" value="#{conhecimentoDeFreteView.e.valorFrete}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{conhecimentoDeFreteView.e.moedaPadrao.sigla}"/>
+
+                            <p:outputLabel  value="#{l.Outras_Despesas}"/>
+                            <p:inputNumber id="outrasDespesas" value="#{conhecimentoDeFreteView.e.outrasdespesas}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{conhecimentoDeFreteView.e.moedaPadrao.sigla}"/>
+
+                            <p:outputLabel  value="#{l.Dinheiro}"/>
+                            <p:inputNumber id="dinheiro" value="#{conhecimentoDeFreteView.e.dinheiro}" maxValue="999999999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{conhecimentoDeFreteView.e.moedaPadrao.sigla}"/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+
+                        <p:tabView id="tabView">
+
+                            <!--  ================================================   -->
+                            <!--  ===================== NotaEmitida =====================   -->
+                            <!--  ================================================   -->
+                            <p:tab title="Notas">
+                                <div class="ui-g">
+                                    <div class="EmptyBox10"/>
+
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                 columnClasses="ui-g-12 ui-md-10 ,ui-g-12 ui-md-2">
+
+                                        <p:commandButton icon="fa fa-plus Fs14 White" value="#{l.Nota_Recebida}" actionListener="#{selecaoNotaRecebidaConhecimentoDeFreteView.abrirDialogo()}" process="@this" update="@none" styleClass="green-btn">
+                                            <p:ajax event="dialogReturn" listener="#{conhecimentoDeFreteView.selecionar}" process="@this" update=":conteudo:tabView:notasConhecimento " />
+                                        </p:commandButton>
+
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{conhecimentoDeFreteView.removerNotaDaLista()}" styleClass="orange-btn"  update=":conteudo:tabView:notasConhecimento :conteudo"/>
+                                    </p:panelGrid>
+
+                                    <div class="EmptyBox20"/>
+                                    <p:dataTable id="notasConhecimento" var="notaRecebida" value="#{conhecimentoDeFreteView.notaRecebidaList}" rowKey="#{notaRecebida.id}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="border: none; display: inline-block" reflow="true" selectionMode="single" selection="#{conhecimentoDeFreteView.notaRecebidaSelecionada}">
+                                        <p:column style="width: 5%; text-align: center">
+                                            <h:outputText value="#{notaRecebida.id}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Emissao}" sortBy="#{notaRecebida.emissao}"  colspan="1">
+                                            <h:outputText value="#{notaRecebida.emissao}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Estado}" sortBy="#{notaRecebida.estado}"  colspan="1">
+                                            <h:outputText value="#{notaRecebida.estado}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Total}" sortBy="#{notaRecebida.totalNota}"  colspan="1">
+                                            <h:outputText value="#{notaRecebida.totalNota}" />
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
+                                                <p:column id="totalParcelas" footerText="#{conhecimentoDeFreteView.totalAFaturar}"/>
+
+                                            </p:row>                                  
+                                        </p:columnGroup>
+                                    </p:dataTable>
+
+
+                                </div>  
+                            </p:tab>
+
+                            <!--  ================================================   -->
+                            <!--  ===================== Parcelas =====================   -->
+                            <!--  ================================================   -->
+                            <p:tab title="Contas a Receber">
+                                <div class="ui-g">  
+
+                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{conhecimentoDeFreteView.removeDaSessao}" actionListener="#{conhecimentoDeFreteView.addNovaParcela}" process="@this" update="@none" >
+                                            <p:ajax event="dialogReturn"  listener="#{conhecimentoDeFreteView.selecionar}" process="@this" update="parcelas"/>
+                                        </p:commandButton>
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
+                                            <p:ajax event="dialogReturn" listener="#{conhecimentoDeFreteView.selecionar}" process="@this" update="parcelas"/>
+                                        </p:commandButton>
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{conhecimentoDeFreteView.remover}" styleClass="orange-btn"  update="parcelas"/>
+                                    </p:panelGrid>
+
+                                    <p:dataTable id="parcelas" var="model" value="#{conhecimentoDeFreteView.list}"
+                                                 styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" disabledSelection="#{model.object.possuiPagamento}"
+                                                 paginatorAlwaysVisible="false" rows="12" paginator="true" rowStyleClass="#{model.object.possuiPagamento ? 'rowSoftBlue' : ''}"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:ajax event="rowSelect" listener="#{conhecimentoDeFreteView.selecionaParcela}" update="@this" />
+
+                                        <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                            <h:outputText value="#{model.id + 1}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Modalidade}" styleClass="TexAlCenter">
+                                            <h:outputText value="#{model.object.modalidade.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Vencimento}" styleClass="TexAlCenter">                                    
+                                            <h:outputText id="vencimentoParcelaFormatado" value="#{model.object.vencimentoFormatadoSemHoras}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Valor}" >
+                                            <h:outputText id="dcpValorTxt" value="#{model.object.valorFormatado}"/>
+                                        </p:column>                                   
+                                        <p:column headerText="#{l.Detalhes}" colspan="2" style="text-align: center;">
+                                            <h:outputText id="parDetalhes" value="#{model.object.detalhes}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Dias}">                                
+                                            <h:outputText id="diasParcela" value="#{model.object.dias}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Dia_Semana}" colspan="2">
+                                            <h:outputText id="diaDaSemana" value="#{model.object.diaDaSemana}"/>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
+                                                <p:column id="totalParcelas" footerText="#{conhecimentoDeFreteView.totalParcelas}"/>
+                                                <p:column colspan="5"/>
+                                            </p:row>                                  
+                                        </p:columnGroup>
+
+                                    </p:dataTable>
+                                </div>
+                            </p:tab>
+                        </p:tabView>
+
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                    </div>
+
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}"  action="#{conhecimentoDeFreteView.validaDinheiro()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
+                        <p:commandButton value="#{l.Atualizar}"  action="#{conhecimentoDeFreteView.validaDinheiro()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}"  action="#{conhecimentoDeFreteView.delete()}" styleClass="Mar2 " update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{conhecimentoDeFreteView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

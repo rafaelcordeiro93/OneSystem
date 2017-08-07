@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_De_Lista_De_Preco}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoListaDePrecoView}">
+                
+                <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" >                                        
+                    <h:outputText value="#{bean.id}" />
+                </p:column>
+                <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" >
+                    <h:outputText value="#{bean.nome}" />
+                </p:column>
+     </a:dataTable>
+
+    </ui:define>
+</ui:composition>

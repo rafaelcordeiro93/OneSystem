@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-01-14T19:59:09 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_de_Cambio" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f856bea6-d443-4127-aa67-e08f8faa8f28">
+	<property name="ireport.zoom" value="1.4641000000000157"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="412"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<field name="pessoa.nome" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="emissao" class="java.util.Date"/>
+	<field name="conta.nome" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<variable name="valorCalculado_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valorNegociado_2" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="taxaNegociada_1" class="java.math.BigDecimal" calculation="Average">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="valor_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+	</variable>
+	<background>
+		<band height="802">
+			<image scaleImage="FillFrame" vAlign="Top">
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="74" width="555" height="707" uuid="b09af65e-facd-4260-9c46-9eaa2652d43c"/>
+				<imageExpression><![CDATA["d:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem\\src\\main\\resources\\relatorios\\triangle-blue.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="72">
+			<frame>
+				<reportElement mode="Opaque" x="-20" y="-20" width="595" height="92" backcolor="#0277BD" uuid="72becc9c-efb9-48df-83fa-16cf506e42b1"/>
+				<staticText>
+					<reportElement x="20" y="20" width="565" height="43" forecolor="#FFFFFF" uuid="24ed6ccc-5dd7-471c-90f0-6adc865be292"/>
+					<textElement>
+						<font fontName="Roboto Lt" size="34" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Relatório de Recepção]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="1"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement mode="Opaque" x="0" y="1" width="62" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="a362551d-1207-49fb-ae5d-c9d5f2e33a8f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Id]]></text>
+			</staticText>
+			<line>
+				<reportElement x="-20" y="22" width="595" height="1" forecolor="#666666" uuid="977b1ab7-78b8-4c85-aa61-104fdb45a215"/>
+			</line>
+			<staticText>
+				<reportElement mode="Opaque" x="63" y="1" width="214" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="3ee76fbd-57f4-486f-b72a-472b7f38c077"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pessoa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="278" y="1" width="61" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="1bd91397-5b86-4b84-b647-f4d84be63eb0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emissão]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="340" y="1" width="103" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="88fe916c-7084-418e-8eea-3520e4bc71d8"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Conta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="444" y="1" width="110" height="20" forecolor="#FFFFFF" backcolor="#0277BD" uuid="63523295-38da-4eb4-a6a8-b1734f935b23"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField pattern="$ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="444" y="-1" width="110" height="20" uuid="91a98606-355a-46d1-92fc-2328506bf149"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="1" y="0" width="61" height="20" uuid="8c85bc97-cc2c-4ef8-afdb-e6d01526d268"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="19" width="555" height="1" uuid="d796b25a-09b7-4170-93fd-d7d353b8a042"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement x="63" y="0" width="214" height="20" uuid="abea539b-3f13-417a-93ca-be4822e3e1cd"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pessoa.nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="278" y="0" width="61" height="20" uuid="50d64d05-ad7f-4c3d-966e-32a3c2089d3d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{emissao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="340" y="0" width="103" height="20" uuid="738c6bf8-1e78-4ee9-8d79-95c98f854363"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Roboto Lt" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{conta.nome}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="17">
+			<textField>
+				<reportElement mode="Opaque" x="0" y="4" width="515" height="13" backcolor="#E6E6E6" uuid="0ec944b4-d7c1-445a-b4a4-71fad0801ddf"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement mode="Opaque" x="515" y="4" width="40" height="13" backcolor="#E6E6E6" uuid="b39dfae2-7953-46cc-89ef-67ce38856ce0"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="4" width="219" height="13" uuid="0a2585be-b055-4214-a248-728c1685c965"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="21">
+			<staticText>
+				<reportElement x="312" y="0" width="28" height="20" uuid="ee2fa4c7-7aca-4b39-80fb-9505be5de45f"/>
+				<box topPadding="0" leftPadding="0" bottomPadding="0">
+					<pen lineWidth="2.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<text><![CDATA[Total:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="340" y="1" width="212" height="19" uuid="824c9af4-e6e4-43ea-b6df-29e12bc421fc"/>
+				<box>
+					<pen lineWidth="1.0" lineStyle="Dotted"/>
+					<topPen lineWidth="0.0" lineStyle="Dotted"/>
+					<leftPen lineWidth="0.0" lineStyle="Dotted"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dotted"/>
+					<rightPen lineWidth="0.0" lineStyle="Dotted"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font fontName="Roboto Lt"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{valor_1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_de_Despesas_Provisionadas}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoDespesaProvisionadaCambioView}">
+
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" footerText="#{l.Id}" filterBy="#{bean.id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.pessoa.nome}" footerText="#{l.Nome}" filterBy="#{bean.pessoa.nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.pessoa.nome}" />
+            </p:column>                
+            <p:column headerText="#{l.Vencimento}" sortBy="#{bean.vencimentoFormatadoSemHoras}" footerText="#{l.Vencimento}" filterBy="#{bean.vencimentoFormatadoSemHoras}" filterMatchMode="contains">
+                <h:outputText value="#{bean.vencimentoFormatadoSemHoras}" />
+            </p:column>
+            <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissaoFormatadaSemHoras}" footerText="#{l.Emissao}" filterBy="#{bean.emissaoFormatadaSemHoras}" filterMatchMode="contains">
+                <h:outputText value="#{bean.emissaoFormatadaSemHoras}" />
+            </p:column>
+            <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" footerText="#{l.Valor}" filterBy="#{bean.valor}" filterMatchMode="contains">
+                <h:outputText value="#{bean.valor}" />
+            </p:column>
+            <p:column headerText="#{l.Despesa}" sortBy="#{bean.despesa.nome}" footerText="#{l.Despesa}" filterBy="#{bean.despesa.nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.despesa.nome}" />
+            </p:column>
+        </a:dataTable>
+
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.IVA}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="ivaID" value="#{IVAView.e}" update=":conteudo" dialog="#{selecaoIVAView}" mbView="#{IVAView}" var="iva" converter="ivaBVConverter" process="@this" itemLabel="#{iva.id}" itemValue="#{iva}" editVisible="false" onlyNumber="true" itemLabelTab="#{iva.nome}" itemLabelTabVisible="true"/>
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{iVAView.e.nome}" maxlength="60"/>
+
+                            <p:outputLabel value="#{l.IVA}"/>
+                            <p:inputText value="#{iVAView.e.iva}" maxlength="2"/>
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+
+                        <p:separator/>
+                    </div>
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+
+                        <p:commandButton value="#{l.Adicionar}" action="#{iVAView.add()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{iVAView.update()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{iVAView.delete()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{iVAView.limparJanela()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

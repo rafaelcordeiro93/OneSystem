@@ -1,0 +1,158 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <div class="card">
+
+                    <h2 class="BigTopic">#{l.Receber_Valores}</h2>
+
+                    <table>
+                        <tr>
+                            <td>
+                                <p:outputLabel value="#{l.Id}"/>
+                            </td>
+                            <td>
+                                <a:inputTextDialog id="recebimentoId" value="#{consultaRecebimentoView.e}" dialog="#{selecaoRecebimentoView}" mbView="#{consultaRecebimentoView}" update=":conteudo" process="@this" var="recebimento" converter="recebimentoBVConverter"  itemLabel="#{recebimento.id}" itemValue="#{recebimento}" onlyNumber="true" editVisible="false"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <p:separator/>
+
+                    <h:outputText value="#{l.Tipos_De_Recebimento}" />
+                    <p:dataTable id="recebimentoBaixa" var="m" value="#{consultaRecebimentoView.tiposDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{consultaRecebimentoView.tipoSelecionado}" rowStyleClass="#{m.object.cotacao eq null ? 'Red' : ''}" >
+
+                        <p:ajax event="rowSelect" listener="#{consultaRecebimentoView.adicionaTipoNaSessao}" update="@this"/>
+
+                        <p:column headerText="#{l.Documento}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.id : m.object.cobrancaFixa.id}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Tipo_Documento}" colspan="2">
+                            <h:outputText value="#{m.object.tipoDocumento}" />
+                        </p:column>
+                        <p:column headerText="#{l.Nome}" colspan="3" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.pessoa.nome : m.object.cobrancaFixa.pessoa.nome}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Vencimento}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.vencimentoFormatadoSemHoras : m.object.cobrancaFixa.vencimentoFormatadoSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Emissao}" >
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.emissaoFormatadaSemHoras : m.object.cobrancaFixa.emissaoFormatadaSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Observacao}" colspan="3">
+                            <h:outputText value="#{m.object.observacao}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Valor}">
+                            <h:outputText value="#{m.object.totalFormatado}"/>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column styleClass="Blue" footerText="#{consultaRecebimentoView.totalTipoNaCotacaoPadraoFormatado}"/>
+                            </p:row>                                    
+                        </p:columnGroup>
+                    </p:dataTable>
+                    <p:separator/>
+
+                    <div class="ui-g">
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-10">
+                            <p:panelGrid columns="7" layout="grid" styleClass="ui-fluid Wid100 ui-panelgrid-blank form-group form-elements" >
+                                <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoTipoDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn" listener="#{consultaRecebimentoView.selecionar}" process="@this" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl"/>
+                                </p:commandButton>
+                                <p:commandButton value="#{l.Remover}" update="recebimentoBaixa valorEmDinheiro valorEmConta :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{consultaRecebimentoView.removeTipo}" styleClass="orange-btn" />
+                            </p:panelGrid>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Conta}: "/>
+                                <p:inputNumber id="valorEmConta" value="#{consultaRecebimentoView.valorEmConta}" symbol="#{consultaRecebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                               thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
+
+                    <div class="EmptyBox15"/>
+                    <p:separator/>
+                    <div class="EmptyBox15"/>
+
+                    <h:outputText value="#{l.Forma_De_Recebimento}" />
+                    <p:dataTable id="formasPagamento" var="m" value="#{consultaRecebimentoView.formasDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
+                                 rowKey="#{m.id}" reflow="true" style="border: none" selection="#{consultaRecebimentoView.formaSelecionado}">
+
+                        <p:ajax event="rowSelect" listener="#{consultaRecebimentoView.adicionaFormaNaSessao}" update="@this" />
+
+
+                        <p:column headerText="#{l.Documento}" >
+                            <h:outputText value="#{m.object.id}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Tipo_Documento}" colspan="2">
+                            <h:outputText value="#{m.object.tipoDocumento}" />
+                        </p:column>
+                        <p:column headerText="#{l.Nome}" colspan="3" >
+                            <h:outputText value="#{m.object.cobranca.pessoa.nome}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Vencimento}" >
+                            <h:outputText value="#{m.object.cobranca.vencimentoFormatadoSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Emissao}" >
+                            <h:outputText value="#{m.object.cobranca.emissaoFormatadaSemHoras}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Observacao}" colspan="3">
+                            <h:outputText value="#{m.object.observacao}"/>
+                        </p:column>
+                        <p:column headerText="#{l.Valor}">
+                            <h:outputText value="#{m.object.totalFormatado}"/>
+                        </p:column>
+                        <p:columnGroup type="footer">
+                            <p:row>
+                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column styleClass="Blue" footerText="#{consultaRecebimentoView.totalFormaNaCotacaoPadraoFormatado}"/>
+                            </p:row>                                    
+                        </p:columnGroup>
+                    </p:dataTable>
+
+                    <p:separator/>
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12 ui-lg-10">
+                            <p:commandButton value="#{l.Alterar}"  icon="fa fa-refresh Fs16 White" action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{consultaRecebimentoView.abreTitulo()}" process="@this" update="@none" >
+                                <p:ajax event="dialogReturn" listener="#{consultaRecebimentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                            </p:commandButton>
+
+                            <p:commandButton value="#{l.Remover}" update="formasPagamento valorEmDinheiro :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{consultaRecebimentoView.removeForma}" styleClass="orange-btn" />
+                        </div>
+
+                        <div class="ui-g-12 ui-md-12 ui-lg-2">
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Dinheiro}: "/>
+                                <p:inputNumber id="valorEmDinheiro" value="#{consultaRecebimentoView.totalEmDinheiro}" symbol="#{consultaRecebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                               thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
+                            </p:panelGrid>
+                        </div>
+                    </div>
+
+                    <p:separator/>
+
+                    <p:commandButton value="#{l.Atualizar}"  update="conteudo" icon="fa fa-refresh Fs16 White"  action="#{consultaRecebimentoView.update()}" />
+                    <p:commandButton value="#{consultaRecebimentoView.e.estado eq 'CANCELADO' ? l.Efetivar : l.Cancelar}"  update="conteudo" icon="fa fa-arrow-circle-down Fs16 White"  action="#{consultaRecebimentoView.cancela()}" />
+                    <p:commandButton value="#{l.Remover}"  update="conteudo" icon="fa fa-trash Fs16 White"  action="#{consultaRecebimentoView.delete()}" />
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>

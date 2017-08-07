@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:composite="http://java.sun.com/jsf/composite">
+
+    <composite:interface>
+        <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
+        <composite:attribute name="value" required="true" shortDescription="Valor exibido no InputText." />
+        <composite:attribute name="placeholder" shortDescription="Nome exibido no campo."/>
+        <composite:attribute name="decimalPlaces" shortDescription="Casas decimais permitidas no campo."/>
+        <composite:attribute name="decimalSeparator" shortDescription="Separador de casas decimais."/>
+        <composite:attribute name="thousandSeparator" shortDescription="Separador de casas de milhares."/>
+        <composite:attribute name="symbol" shortDescription="Símbolo exibido no campo."/>
+        <composite:attribute name="symbolPosition" shortDescription="Posição do símbolo exibido no campo."/>
+        <composite:attribute name="maxValue" shortDescription="Valor máximo inserido no campo."/>
+        <composite:attribute name="minValue" shortDescription="Valor mínimo inserido no campo."/>
+        <composite:attribute name="style" shortDescription="Estilo CSS aplicado quando renderizado o componente."/>
+        <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
+        <composite:clientBehavior event="blur" targets="#{cc.attrs.id}-txt" name="blur"/>
+    </composite:interface>
+
+    <composite:implementation>
+
+        <f:loadBundle basename="label_messages" var="l"/>
+
+        <div class="submit-line md-inputfield ">
+            <p:inputNumber id="#{cc.attrs.id}-txt"  symbol="#{cc.attrs.symbol}" value="#{cc.attrs.value}"  decimalSeparator="#{cc.attrs.decimalSeparator}" thousandSeparator="#{cc.attrs.thousandSeparator}"
+                           decimalPlaces="#{cc.attrs.decimalPlaces}" symbolPosition="#{cc.attrs.symbolPosition}" maxValue="#{cc.attrs.maxValue}"
+                           minValue="#{cc.attrs.minValue}"  styleClass="#{cc.attrs.styleClass}" style="#{cc.attrs.style}"/>
+            <p:outputLabel value="#{cc.attrs.placeholder}"/>
+        </div>
+
+    </composite:implementation>
+
+</html>

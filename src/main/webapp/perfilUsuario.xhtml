@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5.2%" ><i class="fa fa-user Fs40" style="color: #848484"/> #{l.Perfil}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:inputText value="#{perfilUsuarioView.pessoa.nome}" />
+
+                            <p:outputLabel value="#{l.Email}"/>
+                            <p:inputText value="#{perfilUsuarioView.pessoa.email}" />
+
+                            <p:outputLabel value="#{l.Telefone}"/>
+                            <p:inputMask mask="(99) 9999-9999?9"  value="#{perfilUsuarioView.pessoa.telefone}" />
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Alterar_Senha}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                            <p:outputLabel value="#{l.Senha_Atual}"/>
+                            <p:password value="#{perfilUsuarioView.senhaVelha}" />       
+
+                            <p:outputLabel value="#{l.Senha_Nova}"/>
+                            <p:password value="#{perfilUsuarioView.usuario.senha}" />    
+
+                            <p:outputLabel value="#{l.Senha_Confirma}"/>
+                            <p:password value="#{perfilUsuarioView.senhaConfirma}" />    
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Aparencia_Sistema}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
+                            <p:outputLabel value="#{l.Cor_Tema}"/>
+                            <p:selectOneMenu id="sonCorTema" value="#{perfilUsuarioView.usuario.corTema}" style="width:125px">
+                                <f:selectItem itemLabel="Blue" itemValue="blue" />
+                                <f:selectItem itemLabel="Cyan" itemValue="cyan" />
+                                <f:selectItem itemLabel="Green" itemValue="green" />
+                                <f:selectItem itemLabel="Orange" itemValue="orange" />
+                                <f:selectItem itemLabel="Pink" itemValue="pink" />
+                                <f:selectItem itemLabel="Purple" itemValue="purple" />
+                                <f:selectItem itemLabel="Steel" itemValue="steel" />
+                                <f:selectItem itemLabel="Turquise" itemValue="turquoise" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{l.Cor_Layout}"/>
+
+                            <p:selectOneMenu id="sonCorLayout" value="#{perfilUsuarioView.usuario.corLayout}" style="width:125px">
+                                <f:selectItem itemLabel="White" itemValue="white" />
+                                <f:selectItem itemLabel="Dark" itemValue="dark" />
+                                <f:selectItem itemLabel="Cyan" itemValue="cyan" />
+                                <f:selectItem itemLabel="Blue" itemValue="blue" />
+                                <f:selectItem itemLabel="Green" itemValue="green" />
+                                <f:selectItem itemLabel="Orange" itemValue="orange" />
+                                <f:selectItem itemLabel="Pink" itemValue="pink" />
+                                <f:selectItem itemLabel="Purple" itemValue="purple" />
+                                <f:selectItem itemLabel="Steel" itemValue="steel" />
+                                <f:selectItem itemLabel="Turquise" itemValue="turquoise" />
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{l.Menu_Overlay}"/>
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.overlayMenu}" />
+
+                            <p:outputLabel value="#{l.Cor_Menu}"/>
+                            <p:selectOneMenu id="corMenu" value="#{perfilUsuarioView.usuario.corMenu}">
+                                <f:selectItems value="#{perfilUsuarioView.coresDeMenu}" var="tipoCorMenu" itemValue="#{tipoCorMenu}" itemLabel="#{tipoCorMenu}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel value="#{l.Menu_Inverso}"/>
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.orientationRTL}" />
+
+                        </p:panelGrid>
+
+                        <p:separator/>
+                    </div>
+
+
+                    <div class="EmptyBox20"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Atualizar}" action="#{perfilUsuarioView.update()}" icon="fa fa-exchange Fs16 White"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

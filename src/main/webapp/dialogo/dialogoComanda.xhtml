@@ -1,0 +1,139 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Comanda}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+            <h2 class="BigTopic">#{l.Comanda}</h2>
+            <div class="EmptyBox5"/>
+
+            <div class="ui-fluid">
+
+                <div id="orcamento" class="ui-g">
+                    <p:outputLabel value="#{l.Comanda}: "/>
+                    <p:outputLabel value=" #{dialogoComandaView.comanda.id}"/>
+                </div>
+
+                <p:separator/>
+
+                <div class="ui-g">
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Id}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.comanda.id}"/>
+
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Numero_Comanda}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.comanda.numeroComanda}"/>
+
+                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
+                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.comanda.listaDePreco.id} #{dialogoComandaView.comanda.listaDePreco ne null ? '-' : ''}  #{dialogoComandaView.comanda.listaDePreco.nome}"/>
+                </div>
+
+                <p:tabView style="border: 1px solid #d8d8d8;" id="tabs">
+
+                    <p:tab title="#{l.Itens}" id="itemTabComanda">
+
+                        <p:dataTable id="ItensDeComandaComanda" var="itemDeComandaBV" value="#{dialogoComandaView.itensDeComanda}" rowKey="#{itemDeComandaBV.id}"
+                                     emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" style="font-size: 12px;" tableStyle="padding: 2px !important" rowStyleClass="#{itemDeComandaBV.comparaQuantidadeDevolucao eq 0 ? 'rowGreen' : itemDeComandaBV.comparaQuantidadeDevolucao eq 1 ? '' : 'rowRed'}">
+
+                            <f:facet name="header">
+                                #{l.Itens}
+                            </f:facet>
+
+                            <p:column style="width: 5%; text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Id}" sortBy="#{itemDeComandaBV.item.id}"  colspan="1" >
+                                <h:outputText value="#{itemDeComandaBV.item.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Nome}" sortBy="#{itemDeComandaBV.item.nome}" colspan="3">
+                                <h:outputText value="#{itemDeComandaBV.item.nome}" />
+                            </p:column>
+                            <p:column headerText="#{l.UN}" sortBy="#{itemDeComandaBV.item.unidadeDeMedida.sigla}" colspan="1" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.item.unidadeDeMedida.sigla}" />
+                            </p:column>
+                            <p:column headerText="#{l.QTDE}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.quantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Unitario}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.unitarioFormatado}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeComandaBV.totalFormatado}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.totalFormatado   }" />
+                            </p:column>
+                            <p:column headerText="#{l.Faturado}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.totalListaSaldoDeQuantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.A_Faturar}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.totalListaDeQuantidade}" />
+                            </p:column>
+                            <p:column headerText="#{l.Total}" sortBy="#{itemDeComandaBV.valorTotalListaDeQuantidadeFormatado}" style=" text-align: center">
+                                <h:outputText value="#{itemDeComandaBV.valorTotalListaDeQuantidadeFormatado   }" />
+                            </p:column>                            
+
+                            <p:column headerText="+" width="7%" style="text-align: center;">
+                                <p:commandLink id="attr-btn" action="#{dialogoComandaView.atribuiItemASessao(itemDeComandaBV)}"><i class="fa fa-plus Fs10"/></p:commandLink>
+
+                                <p:commandButton id="exibeQuantidade-btn" action="#{quantidadeDeItemView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                    <p:ajax event="dialogReturn" listener="#{dialogoComandaView.selecionar}" process="@this" update="@form"/>
+                                </p:commandButton>
+
+                            </p:column>
+
+                            <p:columnGroup type="footer">
+                                <p:row>
+                                    <p:column colspan="1" footerText="#{dialogoComandaView.comanda.itensDeComanda.size() eq 0 ? '' : dialogoComandaView.comanda.itensDeComanda.size()}" />
+                                    <p:column colspan="8"/>
+                                    <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
+                                    <p:column colspan="2" footerText="#{dialogoComandaView.comanda.totalItensFormatado}"/>
+                                    <p:column colspan="1"/>
+                                </p:row>
+                            </p:columnGroup> 
+
+                        </p:dataTable>
+
+                    </p:tab>
+
+                    <p:tab id="pagamentos" title="#{l.Pagamentos}">
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoComandaView.comanda.acrescimoFormatado}" />                             
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Comanda}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoComandaView.comanda.totalComandaFormatado}" />    
+                        </div>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoComandaView.comanda.descontoFormatado}" />
+
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoComandaView.comanda.despesaCobrancaFormatado}" />
+                        </div>
+
+                        <div class="ui-g">
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
+                            <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{dialogoComandaView.comanda.freteFormatado}" />
+                        </div>                           
+
+                    </p:tab>
+
+                </p:tabView>
+
+            </div>
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Salvar}" action="#{dialogoComandaView.salvar}" update="tempDialog:msg"/>
+
+        </div>  
+
+    </ui:define>
+</ui:composition>

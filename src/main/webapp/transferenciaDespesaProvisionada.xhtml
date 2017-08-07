@@ -1,0 +1,113 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="Container100">
+            <div class="ContainerIndent">
+                <div class="Card ShadowEffect  ">
+                    <div class="Container100">
+                        <div class="ContainerIndent">      
+                            <p:panel id="panelDT" visible="#{!transferenciaDespesaProvisionadaView.panel}" style="border: none">
+                                <p:dataTable id="transferenciaDespesaProvisionadaDT" var="transferenciaDespesaProvisionada" value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadaLista}" selectionMode="single" selection="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadaSelecionada}" rowKey="#{transferenciaDespesaProvisionada.id}"
+                                             rows="10" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             rowsPerPageTemplate="5,10,15" filteredValue="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionadasFiltradas}" emptyMessage="#{l.Nao_Ha_Registros}">
+                                    <f:facet name="header">    
+                                        <p:commandButton icon="fa fa-plus Fs16 White" action="#{transferenciaDespesaProvisionadaView.abrirEdicao()}" title="#{l.Novo}" update="conteudo"/>
+                                        #{l.Tabela_de_Transferencia_Lucro}
+                                    </f:facet>
+
+                                    <p:ajax event="rowSelect" update=":conteudo" listener="#{transferenciaDespesaProvisionadaView.abrirEdicaoComDados()}" />
+
+                                    <p:column headerText="#{l.Id}" sortBy="#{transferenciaDespesaProvisionada.id}" filterBy="#{transferenciaDespesaProvisionada.id}" footerText="#{l.Id}" >                                        
+                                        <h:outputText value="#{transferenciaDespesaProvisionada.id}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{l.Origem}" sortBy="#{transferenciaDespesaProvisionada.origem.pessoa.nome}" filterBy="#{transferenciaDespesaProvisionada.origem.pessoa.nome}" footerText="#{l.Origem}" >                                        
+                                        <h:outputText value="#{transferenciaDespesaProvisionada.origem.pessoa.nome}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{l.Destino}" sortBy="#{transferenciaDespesaProvisionada.destino.pessoa.nome}" filterBy="#{transferenciaDespesaProvisionada.destino.pessoa.nome}" footerText="#{l.Destino}" >                                        
+                                        <h:outputText value="#{transferenciaDespesaProvisionada.destino.pessoa.nome}" />
+                                    </p:column>
+
+                                    <p:column headerText="#{l.Emissao}" sortBy="#{transferenciaDespesaProvisionada.emissao}" filterBy="#{transferenciaDespesaProvisionada.emissao}" footerText="#{l.Emissao}" >                                        
+                                        <h:outputText value="#{transferenciaDespesaProvisionada.emissao}" />
+                                    </p:column>
+
+                                </p:dataTable>
+                            </p:panel>
+
+
+                            <p:panel id="panelED" visible="#{transferenciaDespesaProvisionadaView.panel}" style="border: none">
+                                <h2 class="BigTopic">#{l.Edicao_De_Registro}</h2>
+
+                                    <div class="Container100 Responsive100">
+                                        <div class="Container85 Responsive100">
+                                            
+                                            <p:panelGrid columns="5" layout="grid" style="border: none">
+                                            
+                                            <p:inputText value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.id}" placeholder="#{l.Id}" disabled="true"/>
+
+                                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" styleClass="Wid90" navigator="true" disabled="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.id eq null? false : true}"
+                                                        value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.emissao}"/> 
+
+                                            <h:panelGrid columns="2" style="margin-top: -1.3%">
+                                                <p:inputText id="transferenciaDespesaProvisionadaOrigem" readonly="true" placeholder="#{l.Origem}" value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.origem.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoDespesaProvisionadaView.abrirDialogo()}" process="@this"
+                                                                 update="@none" disabled="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.id eq null? false : true}">
+                                                    <p:ajax event="dialogReturn" listener="#{transferenciaDespesaProvisionadaView.selecionaDespesaProvisionada}"
+                                                            process="@this" update="transferenciaDespesaProvisionadaOrigem"/>
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <h:panelGrid columns="2" style="margin-top: -1.3%">
+                                                <p:inputText id="transferenciaDespesaProvisionadaPessoa" readonly="true" placeholder="#{l.Destino}" value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.pessoa.nome}"/>
+                                                <p:commandButton icon="fa fa-search Fs16 White" action="#{selecaoPessoaCambioView.abrirDialogo()}" process="@this"
+                                                                 update="@none" disabled="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.id eq null? false : true}">
+                                                    <p:ajax event="dialogReturn" listener="#{transferenciaDespesaProvisionadaView.selecionaPessoa}"
+                                                            process="@this" update="transferenciaDespesaProvisionadaPessoa" />
+                                                </p:commandButton>
+                                            </h:panelGrid>
+
+                                            <p:outputLabel/>
+                                            
+                                            <p:inputTextarea value="#{transferenciaDespesaProvisionadaView.transferenciaDespesaProvisionada.motivo}" cols="45"
+                                                             counter="display" counterTemplate="{0} caracteres restantes." maxlength="250" placeholder="#{l.Motivo}"/>                                                
+                                            <p:outputLabel/>
+                                            <p:outputLabel/>
+                                            <p:outputLabel/>
+                                            <p:outputLabel/>
+                                            <h:outputText id="display" />
+                                            </p:panelGrid>                                            
+                                            
+                                        </div>
+                                    </div>
+
+                                
+
+                                <div class="EmptyBox5"/>
+
+                                <p:separator/>
+
+                                <p:commandButton value="#{l.Adicionar}" action="#{transferenciaDespesaProvisionadaView.add()}" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                                <p:commandButton value="#{l.Atualizar}" action="#{transferenciaDespesaProvisionadaView.update()}" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                                <p:commandButton value="#{l.Desfazer}" action="#{transferenciaDespesaProvisionadaView.desfazer()}" update=":conteudo" icon="fa fa-repeat Fs16 White"
+                                                 styleClass="OrangeButton" />
+                                <p:commandButton value="#{l.Voltar}" action="#{transferenciaDespesaProvisionadaView.fecharEdicao()}" update=":conteudo" icon="fa fa-mail-reply Fs16 White"
+                                                 immediate="true" styleClass="BrownButton" />
+                            </p:panel>   
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
