@@ -11,7 +11,6 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
@@ -34,7 +33,7 @@ public class RelatorioDeChequesView extends BasicMBReportImpl<Cobranca> implemen
         addCampoPadrao(new Coluna(bundle.getLabel("Emitente") + "(" + bundle.getLabel("Cheque") + ")", bundle.getLabel("Cheque"), "emitente", Cheque.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class, null));
 
-        initialize(Cobranca.class, CobrancaDAO.class, TipoRelatorio.CHEQUES);
+        initialize(Cobranca.class, CobrancaDAO.class, bundle.getLabel("Relatorio_De_Cheques"));
 
     }
 

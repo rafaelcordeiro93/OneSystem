@@ -10,13 +10,12 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class RelatorioDeNotasEmitIdasView extends BasicMBReportImpl<Nota> implements Serializable {
+public class RelatorioDeNotasEmitadasView extends BasicMBReportImpl<Nota> implements Serializable {
 
     @PostConstruct
     @Override
@@ -29,7 +28,7 @@ public class RelatorioDeNotasEmitIdasView extends BasicMBReportImpl<Nota> implem
         addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Nota"), "emissao", Nota.class, Date.class, null));
 
-        initialize(Nota.class, NotaDAO.class, TipoRelatorio.NOTAS_EMITIDAS);
+        initialize(Nota.class, NotaDAO.class, bundle.getLabel("Relatorio_de_Notas_Emitidas"));
 
     }
 

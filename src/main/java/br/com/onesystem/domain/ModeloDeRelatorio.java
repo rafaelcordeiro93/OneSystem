@@ -32,23 +32,20 @@ public class ModeloDeRelatorio implements Serializable {
     @Length(max = 60, message = "{nome_lenght}")
     @Column(length = 60, nullable = false)
     private String nome;
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo")
-    private List<Coluna> colunasExibidas;
+    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo") 
+    private List<Coluna> colunas;
     @NotNull(message = "{tipo_relatorio_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoRelatorio tipoRelatorio;
-    @OneToMany(cascade = {CascadeType.ALL}, mappedBy = "modelo")
-    private List<FiltroDeRelatorio> filtroDeRelatorio;
 
     public ModeloDeRelatorio() {
     }
 
-    public ModeloDeRelatorio(Long id, String nome, List<Coluna> colunasExibidas, List<FiltroDeRelatorio> filtroDeRelatorio, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
+    public ModeloDeRelatorio(Long id, String nome, List<Coluna> colunas, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.colunasExibidas = colunasExibidas;
+        this.colunas = colunas;
         this.tipoRelatorio = tipoRelatorio;
-        this.filtroDeRelatorio = filtroDeRelatorio;
         ehValido();
     }
 
@@ -69,16 +66,12 @@ public class ModeloDeRelatorio implements Serializable {
         return tipoRelatorio;
     }
 
-    public List<Coluna> getColunasExibidas() {
-        return colunasExibidas;
+    public List<Coluna> getColunas() {
+        return colunas;
     }
 
-    public void setColunasExibidas(List<Coluna> colunasExibidas) {
-        this.colunasExibidas = colunasExibidas;
-    }
-
-    public List<FiltroDeRelatorio> getFiltroDeRelatorio() {
-        return filtroDeRelatorio;
+    public void setColunas(List<Coluna> colunas) {
+        this.colunas = colunas;
     }
 
     @Override

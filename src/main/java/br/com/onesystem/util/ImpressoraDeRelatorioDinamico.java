@@ -8,7 +8,6 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
-import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
 import java.awt.Color;
 import java.io.IOException;
@@ -54,8 +53,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 public class ImpressoraDeRelatorioDinamico {
 
     private JasperReportBuilder relatorio = report(); // Cria um novo relatório.
+    private String nome;
     private Map<String, Object> parametros;
-    private TipoRelatorio tipoRelatorio;
 
     public ImpressoraDeRelatorioDinamico() {
     }
@@ -70,7 +69,7 @@ public class ImpressoraDeRelatorioDinamico {
      * web ou no console.
      * @throws br.com.onesystem.exception.impl.FDadoInvalidoException
      */
-    public ImpressoraDeRelatorioDinamico imprimir(List registros, TipoRelatorio tipoRelatorio, List<Coluna> colunas, String caminhoDaMoeda) throws FDadoInvalidoException {
+    public ImpressoraDeRelatorioDinamico imprimir(List registros, String nome, List<Coluna> colunas, String caminhoDaMoeda) throws FDadoInvalidoException {
         SubreportBuilder subreport;
         List<Moeda> moedas = new ArrayList<>();
         if (caminhoDaMoeda != null) {
@@ -83,7 +82,7 @@ public class ImpressoraDeRelatorioDinamico {
                     .setDataSource(new SubreportDataSourceExpression(registros));
         }
 
-        this.tipoRelatorio = tipoRelatorio; // Recebe o nome do relatório
+        this.nome = nome; // Recebe o nome do relatório
 
         margem(); //ajusta as margens
         cabecalhoRodape(); //cria cabecalhoRodapé
@@ -191,7 +190,7 @@ public class ImpressoraDeRelatorioDinamico {
     public void naWeb() throws IOException, DRException {
         HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         res.setContentType("application/pdf");
-        res.addHeader("Content-disposition", "attachment; filename=" + tipoRelatorio.getNome() + new Date() + ".pdf");
+        res.addHeader("Content-disposition", "attachment; filename=" + nome + new Date() + ".pdf");
         relatorio.toPdf(res.getOutputStream());
         FacesContext.getCurrentInstance().responseComplete();
     }
@@ -314,7 +313,7 @@ public class ImpressoraDeRelatorioDinamico {
                 cmp.horizontalList()
                         .add(
                                 cmp.image(getClass().getClassLoader().getResourceAsStream("logo.png")).setFixedDimension(60, 60).setStyle(imagemStyle),
-                                cmp.verticalList().add(cmp.text(tipoRelatorio.getNome()).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
+                                cmp.verticalList().add(cmp.text(nome).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
                                         cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
                         .newRow()
                         .add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10)));
@@ -401,7 +400,7 @@ public class ImpressoraDeRelatorioDinamico {
         colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
         colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        impressora.imprimir(registros, TipoRelatorio.CONTAS, colunas, "cotacao.conta.moeda").noConsole();
+        impressora.imprimir(registros, "Report_Model", colunas, "cotacao.conta.moeda").noConsole();
 
         System.out.println("Imprimiu");
 

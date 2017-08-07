@@ -81,7 +81,7 @@
         <class>br.com.onesystem.domain.ItemDeCondicional</class>
         <class>br.com.onesystem.domain.Caixa</class>
         <class>br.com.onesystem.domain.FaturaLegada</class>
-        <class>br.com.onesystem.domain.FaturaEmitida</class>
+         <class>br.com.onesystem.domain.FaturaEmitida</class>
         <class>br.com.onesystem.domain.Credito</class>
         <class>br.com.onesystem.domain.Recebimento</class>
         <class>br.com.onesystem.domain.FormaDeCobranca</class>
@@ -92,7 +92,6 @@
         <class>br.com.onesystem.domain.SaqueBancario</class>
         <class>br.com.onesystem.domain.DepositoBancario</class>
         <class>br.com.onesystem.domain.CambioEmpresa</class>
-        <class>br.com.onesystem.domain.FiltroDeRelatorio</class>
 
         <properties>
             <!--  Propriedades JDBC  -->

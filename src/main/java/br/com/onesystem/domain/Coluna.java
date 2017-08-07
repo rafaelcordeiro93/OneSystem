@@ -5,11 +5,14 @@
  */
 package br.com.onesystem.domain;
 
+import ar.com.fdvs.dj.domain.DJCalculation;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.Totalizador;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,10 +36,10 @@ public class Coluna implements Serializable {
     private String propriedadeDois;
     private String propriedadeTres;
     private String propriedadeQuatro;
-    private Totalizador totalizador;
-    private TipoFormatacaoNumero tipoFormatadorNumero;
     @ManyToOne
     private ModeloDeRelatorio modelo;
+    private Totalizador totalizador;
+    private TipoFormatacaoNumero tipoFormatadorNumero;
 
     public Coluna() {
     }
@@ -49,7 +52,7 @@ public class Coluna implements Serializable {
         this.classeOriginal = classeOriginal;
         tamanho = 20;
     }
-
+    
     public Coluna(String nome, String tabela, String propriedade, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
         this.nome = nome;
         this.tabela = tabela;
@@ -80,7 +83,7 @@ public class Coluna implements Serializable {
         this.classeOriginal = classeOriginal;
         tamanho = 20;
     }
-
+    
     public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero) {
         this.nome = nome;
         this.tabela = tabela;
@@ -126,7 +129,7 @@ public class Coluna implements Serializable {
         this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
-
+    
     public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
@@ -164,7 +167,7 @@ public class Coluna implements Serializable {
         this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
     }
-
+    
     public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador) {
         this.nome = nome;
         this.tabela = tabela;
@@ -177,26 +180,6 @@ public class Coluna implements Serializable {
         this.totalizador = totalizador;
         this.tipoFormatadorNumero = tipoFormatadorNumero;
         tamanho = 20;
-    }
-
-    public Coluna(Long id, String nome, String tabela, Integer tamanho, Class classeDeDeclaracao, Class classeOriginal, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Totalizador totalizador, TipoFormatacaoNumero tipoFormatadorNumero, ModeloDeRelatorio modelo) {
-        this.id = id;
-        this.nome = nome;
-        this.tabela = tabela;
-        this.tamanho = tamanho;
-        this.classeDeDeclaracao = classeDeDeclaracao;
-        this.classeOriginal = classeOriginal;
-        this.propriedade = propriedade;
-        this.propriedadeDois = propriedadeDois;
-        this.propriedadeTres = propriedadeTres;
-        this.propriedadeQuatro = propriedadeQuatro;
-        this.totalizador = totalizador;
-        this.tipoFormatadorNumero = tipoFormatadorNumero;
-        this.modelo = modelo;
-    }
-
-    public void setModelo(ModeloDeRelatorio modelo) {
-        this.modelo = modelo;
     }
 
     public Long getId() {
