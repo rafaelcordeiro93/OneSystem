@@ -17,19 +17,15 @@ import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 import org.hibernate.validator.constraints.Length;
 
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_IVA",
-        sequenceName = "SEQ_IVA")
-@NamedQueries({
-    @NamedQuery(name = "IVA.findByDescription", query = "select i from IVA i where i.nome = :pNome")})
-public class IVA implements Serializable {
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_TABELADETRIBUTACAO",
+        sequenceName = "SEQ_TABELADETRIBUTACAO")
+public class TabelaDeTributacao implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "SEQ_IVA", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_TABELADETRIBUTACAO", strategy = GenerationType.SEQUENCE)
     private Long id;
     @NotNull(message = "{IVA_not_null}")
     @Max(value = 100, message = "{IVA_max}")
@@ -40,13 +36,13 @@ public class IVA implements Serializable {
     @Length(max = 60, min = 4, message = "{nome_length}")
     @Column(nullable = false, length = 60)
     private String nome;
-    @OneToMany(mappedBy = "iva")
-    private List<GrupoFiscal> listaGrupos;
+    @OneToMany(mappedBy = "tabelaDeTributacao")
+    private List<SituacaoFiscal> situacoesFiscais;
 
-    public IVA() {
+    public TabelaDeTributacao() {
     }
 
-    public IVA(Long id, BigDecimal iva, String nome) throws DadoInvalidoException {
+    public TabelaDeTributacao(Long id, BigDecimal iva, String nome) throws DadoInvalidoException {
         this.id = id;
         this.iva = iva;
         this.nome = nome;
@@ -58,7 +54,7 @@ public class IVA implements Serializable {
     }
 
     public BigDecimal getIva() {
-        if(iva == null){
+        if (iva == null) {
             return BigDecimal.ZERO;
         }
         return iva;
@@ -70,7 +66,7 @@ public class IVA implements Serializable {
 
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("iva", "nome");
-        new ValidadorDeCampos<IVA>().valida(this, campos);
+        new ValidadorDeCampos<TabelaDeTributacao>().valida(this, campos);
     }
 
     @Override
@@ -78,10 +74,10 @@ public class IVA implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof IVA)) {
+        if (!(objeto instanceof TabelaDeTributacao)) {
             return false;
         }
-        IVA outro = (IVA) objeto;
+        TabelaDeTributacao outro = (TabelaDeTributacao) objeto;
         if (this.id == null) {
             return false;
         }
@@ -90,7 +86,7 @@ public class IVA implements Serializable {
 
     @Override
     public String toString() {
-        return "IVA{" + "ID=" + id + ", iva=" + iva + ", nome=" + nome + '}';
+        return "TabelaDeTributacao{" + "ID=" + id + ", iva=" + iva + ", nome=" + nome + '}';
     }
 
 }

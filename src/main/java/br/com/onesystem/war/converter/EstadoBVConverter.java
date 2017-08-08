@@ -5,10 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TabelaDeTributacao;
+import br.com.onesystem.domain.Estado;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.IVABV;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.builder.EstadoBV;
+import br.com.onesystem.war.service.EstadoService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -20,33 +20,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaBVConverter", forClass = IVABV.class)
-public class IVABVConverter implements Converter, Serializable {
+@FacesConverter(value = "estadoBVConverter", forClass = EstadoBV.class)
+public class EstadoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TabelaDeTributacao> lista = new IVAService().buscarIVAs();
+                List<Estado> lista = new EstadoService().buscarEstados();
                 if (StringUtils.containsLetter(value)) {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getNome().equals(value)) {
-                            return new IVABV(iva);
+                    for (Estado estado : lista) {
+                        if (estado.getNome().equals(value)) {
+                            return new EstadoBV(estado);
                         }
                     }
                 } else {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getId().equals(new Long(value))) {
-                            return new IVABV(iva);
+                    for (Estado estado : lista) {
+                        if (estado.getId().equals(new Long(value))) {
+                            return new EstadoBV(estado);
                         }
                     }
                 }
-                return new IVABV();
+                return new EstadoBV();
             } catch (Exception e) {
-                return new IVABV();
+                return new EstadoBV();
             }
         } else {
-            return new IVABV();
+            return new EstadoBV();
         }
     }
 
@@ -54,7 +54,7 @@ public class IVABVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVABV) object).getNome());
+                return String.valueOf(((EstadoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

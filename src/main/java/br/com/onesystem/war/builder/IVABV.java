@@ -1,18 +1,18 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class IVABV implements Serializable, BuilderView<IVA> {
+public class IVABV implements Serializable, BuilderView<TabelaDeTributacao> {
 
     private Long id;
     private String nome;   
     private BigDecimal iva;
 
-    public IVABV(IVA ivaSelecionado) {
+    public IVABV(TabelaDeTributacao ivaSelecionado) {
         this.id = ivaSelecionado.getId();
         this.nome = ivaSelecionado.getNome();
         this.iva = ivaSelecionado.getIva();
@@ -45,11 +45,11 @@ public class IVABV implements Serializable, BuilderView<IVA> {
         this.iva = iva;
     }
 
-     public IVA construir() throws DadoInvalidoException {
-        return new IVA(null, iva, nome);
+     public TabelaDeTributacao construir() throws DadoInvalidoException {
+        return new TabelaDeTributacao(null, iva, nome);
     }
 
-    public IVA construirComID() throws DadoInvalidoException {
-        return new IVA(id, iva, nome);
+    public TabelaDeTributacao construirComID() throws DadoInvalidoException {
+        return new TabelaDeTributacao(id, iva, nome);
     }
 }

@@ -1,7 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.war.builder.GrupoFiscalBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -23,8 +23,8 @@ public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal, GrupoFiscalBV> imp
         Object obj = (Object) event.getObject();
         if (obj instanceof GrupoFiscal) {
             e = new GrupoFiscalBV((GrupoFiscal) obj);
-        } else if (obj instanceof IVA) {
-            e.setIva((IVA) obj);
+        } else if (obj instanceof TabelaDeTributacao) {
+            e.setIva((TabelaDeTributacao) obj);
         }        
     }
     

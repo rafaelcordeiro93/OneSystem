@@ -1,4 +1,6 @@
 
+import br.com.onesystem.domain.builder.EstadoBuilder;
+import br.com.onesystem.domain.builder.PaisBuilder;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cidade;
@@ -9,16 +11,18 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Estado;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Janela;
 import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.Pais;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.Privilegio;
@@ -51,9 +55,19 @@ public class DadosIniciais {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
+        //Bundle ====================================================
         BundleUtil msg = new BundleUtil();
-        
-        Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comPais("Paraguai").comUF("PG").construir();
+
+        //País ====================================================
+        Pais pais = new PaisBuilder().comNome("Paraguai").comCodigoPais(new Long(12)).comCodigoReceita(new Long(32)).construir();
+        new AdicionaDAO<>().adiciona(pais);
+
+        //Estado ====================================================
+        Estado estado = new EstadoBuilder().comNome("Alto Paraná").comPais(pais).comSigla("CD").construir();
+        new AdicionaDAO<>().adiciona(estado);
+
+        //Cidade ====================================================
+        Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comEstado(estado).construir();
         new AdicionaDAO<>().adiciona(city);
 
         Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "rauber@rrminds.com", null);
@@ -92,11 +106,15 @@ public class DadosIniciais {
 
         //Modulo de Arquivo
         Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
+        Janela jpais = new Janela(null, "País", "/pais.xhtml", arq);
+        Janela jestado = new Janela(null, "Estado", "/estado.xhtml", arq);
         Janela cidade = new Janela(null, "Cidade", "/cidade.xhtml", arq);
         Janela jpessoa = new Janela(null, "Pessoa", "/pessoa.xhtml", arq);
         Janela jpessoaimport = new Janela(null, "Importador de Pessoas", "/importarPessoa.xhtml", arq);
 
         daoJanela.adiciona(dashboard);
+        daoJanela.adiciona(jpais);
+        daoJanela.adiciona(jestado);
         daoJanela.adiciona(cidade);
         daoJanela.adiciona(jpessoa);
         daoJanela.adiciona(jpessoaimport);
@@ -363,6 +381,8 @@ public class DadosIniciais {
                 new Privilegio(null, jgrupoPrivilegio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, privilegio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, perfilUsuario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jestado, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jpais, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio)
         );
 
@@ -414,7 +434,7 @@ public class DadosIniciais {
         TipoDespesa multasPagas = new TipoDespesa(null, "Multas Pagas", depf);
         TipoDespesa despesaCambial = new TipoDespesa(null, "Despesa com variação cambial", tot);
         TipoDespesa comprasNormais = new TipoDespesa(null, "Compras Normais", ope);
-        
+
         daoDespesa.adiciona(descontosConcedidos);
         daoDespesa.adiciona(jurosPagos);
         daoDespesa.adiciona(multasPagas);
@@ -702,10 +722,10 @@ public class DadosIniciais {
         UnidadeMedidaItem unidade = new UnidadeMedidaItem(null, "Unidade", "UN", 0);
         new AdicionaDAO<UnidadeMedidaItem>().adiciona(unidade);
 
-        // IVA
+        // TabelaDeTributacao
         // ---------------------------------------------------------------------
-        IVA iva = new IVA(null, new BigDecimal(10), "IVA 10%");
-        new AdicionaDAO<IVA>().adiciona(iva);
+        TabelaDeTributacao iva = new TabelaDeTributacao(null, new BigDecimal(10), "IVA 10%");
+        new AdicionaDAO<TabelaDeTributacao>().adiciona(iva);
 
         // Grupo Fiscal
         // ---------------------------------------------------------------------
@@ -718,19 +738,17 @@ public class DadosIniciais {
         new AdicionaDAO<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");
-        
+
         //Operação
         //------------------------------------------------------------------------
-        Operacao compraNormal = new OperacaoBuilder()
-                .comNome(msg.getLabel("Compra_Normal"))
-                .comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
-                .comTipoOperacao(TipoOperacao.COMPRA_NORMAL)
-                .comTipoNota(TipoLancamento.RECEBIDA)
-                .comTipoContabil(TipoContabil.NAO_CONTABILIZAR)
-                .comCompraAVista(comprasNormais)
-                .comCompraAPrazo(comprasNormais).construir();
-                
-        
+//        Operacao compraNormal = new OperacaoBuilder()
+//                .comNome(msg.getLabel("Compra_Normal"))
+//                .comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
+//                .comTipoOperacao(TipoOperacao.COMPRA_NORMAL)
+//                .comTipoNota(TipoLancamento.RECEBIDA)
+//                .comTipoContabil(TipoContabil.NAO_CONTABILIZAR)
+//                .comCompraAVista(comprasNormais)
+//                .comCompraAPrazo(comprasNormais).construir();
     }
 
 }

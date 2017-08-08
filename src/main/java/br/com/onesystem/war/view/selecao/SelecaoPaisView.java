@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.TabelaDeTributacao;
+import br.com.onesystem.domain.Pais;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.service.PaisService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,35 +13,35 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implements Serializable {
+public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializable {
 
     @Inject
-    private IVAService service;
+    private PaisService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarIVAs();
+        beans = service.buscarPaiss();
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoIVA");
+        exibirNaTela("selecaoPais");
     }
     
     @Override
     public String abrirEdicao() {
-        return "iva";
+        return "pais";
     }
     
-    @Override
-    public List<TabelaDeTributacao> complete(String query) {
-        List<TabelaDeTributacao> listaFIltrada = new ArrayList<>();
-        for (TabelaDeTributacao b : beans) {
+     @Override
+    public List<Pais> complete(String query) {
+        List<Pais> listaFIltrada = new ArrayList<>();
+        for (Pais b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);
             }
         }
         if (!StringUtils.containsLetter(query)) {
-            for (TabelaDeTributacao m : beans) {
+            for (Pais m : beans) {
                 if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
                     listaFIltrada.add(m);
                 }
@@ -50,11 +50,11 @@ public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implemen
         return listaFIltrada;
     }
 
-    public IVAService getService() {
+    public PaisService getService() {
         return service;
     }
 
-    public void setService(IVAService service) {
+    public void setService(PaisService service) {
         this.service = service;
     }
 }
