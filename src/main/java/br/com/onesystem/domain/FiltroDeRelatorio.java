@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,6 +16,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -89,6 +92,19 @@ public class FiltroDeRelatorio implements Serializable {
         }
     }
 
+    public void addEnum(String e) {
+        boolean encontrou = false;
+        for (ParametroDeFiltroDeRelatorio p : parametros) {
+            if (p.getParametroEnum().equalsIgnoreCase(e)) {
+                encontrou = true;
+                break;
+            }
+        }
+        if (!encontrou) {
+            parametros.add(new ParametroDeFiltroDeRelatorio(null, this, e));
+        }
+    }
+
     public void setModelo(ModeloDeRelatorio modelo) {
         this.modelo = modelo;
     }
@@ -108,10 +124,46 @@ public class FiltroDeRelatorio implements Serializable {
             filtros.add(
                     p.getParametroLong() != null ? p.getParametroLong()
                     : p.getParametroBigDecimal() != null ? p.getParametroBigDecimal()
-                    : p.getParametroString() != null ? p.getParametroString() : null);
+                    : p.getParametroString() != null ? p.getParametroString()
+                    : p.getParametroEnum() != null ? getEnum(p.getParametroEnum()) : null);
         });
 
         return filtros;
+    }
+
+    public SortedSet getFiltrosFormatados() {
+        SortedSet filtros = new TreeSet();
+
+        parametros.forEach((p) -> {
+            filtros.add(
+                    p.getParametroLong() != null ? getPattern(p.getParametroLong())
+                    : p.getParametroBigDecimal() != null ? getPattern(p.getParametroBigDecimal())
+                    : p.getParametroString() != null ? p.getParametroString()
+                    : p.getParametroEnum() != null ? getEnumName(getEnum(p.getParametroEnum())) : null);
+        });
+
+        return filtros;
+    }
+
+    private Enum getEnum(String str) {
+        return Enum.valueOf((Class<? extends Enum>) coluna.getClasseOriginal(), str);
+    }
+
+    private String getEnumName(Enum enums) {
+        try {
+            return enums.getClass().getMethod("getNome", null).invoke(enums, null).toString();
+        } catch (Exception ex) {
+            return enums.toString();
+        }
+    }
+
+    private String getPattern(Object obj) {
+        if (obj.getClass() == Long.class) {
+            NumberFormat nf = NumberFormat.getIntegerInstance();
+            return nf.format(obj);
+        } else {
+            return NumberFormat.getNumberInstance().format(obj);
+        }
     }
 
     public TipoDeBusca getTipoDaBusca() {

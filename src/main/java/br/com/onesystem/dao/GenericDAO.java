@@ -87,12 +87,13 @@ public abstract class GenericDAO<T> {
         SortedSet<String> conjuntoString = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof String ? (TreeSet<String>) filtro : null;
         SortedSet<Long> conjuntoLong = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Long ? (TreeSet<Long>) filtro : null;
         SortedSet<BigDecimal> conjuntoBigDecimal = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof BigDecimal ? (TreeSet<BigDecimal>) filtro : null;
+        SortedSet<Enum> conjuntoEnum = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Enum ? (TreeSet<Enum>) filtro : null;
 
         String igualOuIn = filtro instanceof SortedSet ? "in" : "=";
         String diferenteOuNotIn = filtro instanceof SortedSet ? "not in" : "!=";
 
         String parametro = ":p" + tipo + "_" + campo.getPropriedadeCompleta().substring(0, 1).toUpperCase() + campo.getPropriedadeCompleta().substring(1).replaceAll("\\.", "_");
-        
+
         if (tipo == TipoDeBusca.IGUAL_A) {
             if (conjuntoString != null) {
                 where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + igualOuIn + " lower(" + parametro + ")";
@@ -103,7 +104,7 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + igualOuIn + " " + parametro + "";
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
             }
         } else if (tipo == TipoDeBusca.DIFERENTE_DE) {
             if (conjuntoString != null) {
@@ -115,7 +116,7 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + diferenteOuNotIn + " " + parametro;
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
             }
             parametros.put(parametro.substring(1), conjuntoString != null ? conjuntoString : conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : date != null ? date : null);
         } else if (conjuntoString != null && (tipo == TipoDeBusca.INICIANDO || tipo == TipoDeBusca.TERMINANDO || tipo == TipoDeBusca.CONTENDO)) {

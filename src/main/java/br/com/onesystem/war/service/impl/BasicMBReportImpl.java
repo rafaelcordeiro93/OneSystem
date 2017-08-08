@@ -6,6 +6,7 @@
 package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
 import br.com.onesystem.dao.RemoveDAO;
@@ -91,6 +92,8 @@ public abstract class BasicMBReportImpl<T> {
     private TipoRelatorio tipoRelatorio;
     private String modeloDeRelatorioSelecionadoString;
     private List<ModeloDeRelatorio> modelosDeRelatorio;
+    private List<String> enumeracoesSelecionadas = new ArrayList<>();
+    private List<Enum> enumeracoesOpcoes = new ArrayList<>();
 
     protected abstract void init();
 
@@ -266,6 +269,14 @@ public abstract class BasicMBReportImpl<T> {
         for (Model c : campos) {
             if (((Coluna) c.getObject()).getNome().equals(campoSelecionadoString)) {
                 campoSelecionado = (Coluna) c.getObject();
+                if (campoSelecionado.getClasseOriginal().isEnum()) {
+                    enumeracoesSelecionadas = new ArrayList<>();
+                    enumeracoesOpcoes = new ArrayList<>();
+                    for (Object o : campoSelecionado.getClasseOriginal().getEnumConstants()) {
+                        Enum e = (Enum) o;
+                        enumeracoesOpcoes.add(e);
+                    }
+                }
             }
         }
     }
@@ -306,19 +317,16 @@ public abstract class BasicMBReportImpl<T> {
         try {
             if (campoSelecionado == null) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_Um_Campo_Para_Filtrar"));
-            } else if ((consulta == null || consulta.isEmpty()) && consultaDate == null) {
+            } else if ((consulta == null || consulta.isEmpty()) && consultaDate == null && (enumeracoesSelecionadas == null || enumeracoesSelecionadas.isEmpty())) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Informe_Filtro_Pesquisa"));
             } else {
-
-                //Cria o conjunto de filtros
-                SortedSet filters = new TreeSet();
 
                 //Adiciona os filtros
                 FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, campoSelecionado, tipoDeBuscaSelecionada);
 
-                if (campoSelecionado.getClasseOriginal() != Date.class && !consulta.isEmpty()) {
+                if (campoSelecionado.getClasseOriginal() != Date.class && (!consulta.isEmpty() || (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()))) {
 
-                    // Faz o tratamento dos filtros em seus devidos Tipos.
+                    // Faz o tratamento dos filtros em String para seus devidos Tipos.
                     for (String s : consulta) {
                         //LONG ===============================================================================
                         if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
@@ -339,10 +347,21 @@ public abstract class BasicMBReportImpl<T> {
                             filtros.get(filtros.indexOf(filtro)).add(s);
                         }
                     }
+
+                    // Faz o tratamento para os filtros de Enum
+                    for (String s : enumeracoesSelecionadas) {
+                        //Enum ====================================================================================
+                        if (!filtros.contains(filtro)) {
+                            filtro.addEnum(s);
+                        } else if (filtros.contains(filtro)) {
+                            filtros.get(filtros.indexOf(filtro)).addEnum(s);
+                        }
+                    }
+
                     if (!filtro.getFiltros().isEmpty()) {
                         filtros.add(filtro);
                     }
-                } else if (campoSelecionado.getClasseOriginal() == Date.class && !consulta.isEmpty()) {
+                } else if (campoSelecionado.getClasseOriginal() == Date.class) {
                     //DATE ====================================================================================
                     if (filtros.contains(filtro)) {
                         filtros.get(filtros.indexOf(filtro)).setFiltroDeData(getConsultaDate());
@@ -350,7 +369,6 @@ public abstract class BasicMBReportImpl<T> {
                         filtros.add(new FiltroDeRelatorio(null, campoSelecionado, getConsultaDate(), tipoDeBuscaSelecionada));
                     }
                 }
-
                 //Se houver filtros, busca no Banco de Dados.
                 if (!filtros.isEmpty()) {
                     buscaDadosDoBancoComFiltros();
@@ -413,7 +431,8 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        new RemoveDAO<>().remove(m, m.getId());
+                        ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
+                        new RemoveDAO<>().remove(find, find.getId());
                     }
                 }
 
@@ -486,7 +505,8 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui modelo existente
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        new RemoveDAO<>().remove(m, m.getId());
+                        ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
+                        new RemoveDAO<>().remove(find, find.getId());
                         limpaFiltrosECampos();
                         init();
                         //Limpa o campo do modelo inicializa campos padros e busca dados do banco.
@@ -606,8 +626,8 @@ public abstract class BasicMBReportImpl<T> {
                 || campoSelecionado.getClasseOriginal() == Long.class
                 || campoSelecionado.getClasseOriginal() == BigDecimal.class)) {
             return Arrays.asList(
-                    TipoDeBusca.DIFERENTE_DE,
                     TipoDeBusca.IGUAL_A,
+                    TipoDeBusca.DIFERENTE_DE,
                     TipoDeBusca.MAIOR_OU_IGUAL_A,
                     TipoDeBusca.MAIOR_QUE,
                     TipoDeBusca.MENOR_OU_IGUAL_A,
@@ -620,6 +640,10 @@ public abstract class BasicMBReportImpl<T> {
                     TipoDeBusca.IGUAL_A,
                     TipoDeBusca.INICIANDO,
                     TipoDeBusca.TERMINANDO);
+        } else if (campoSelecionado != null && campoSelecionado.getClasseOriginal().isEnum()) {
+            return Arrays.asList(
+                    TipoDeBusca.IGUAL_A,
+                    TipoDeBusca.DIFERENTE_DE);
         } else {
             return Arrays.asList(TipoDeBusca.values());
         }
@@ -653,8 +677,16 @@ public abstract class BasicMBReportImpl<T> {
         this.consultaDate = consultaDate;
     }
 
-    public boolean isDate() {
-        return campoSelecionado == null ? false : campoSelecionado.getClasseOriginal() == Date.class;
+    public int getTypeField() {
+        if (campoSelecionado == null) {
+            return 1;
+        } else if (campoSelecionado.getClasseOriginal() == Date.class) {
+            return 2;
+        } else if (campoSelecionado.getClasseOriginal().isEnum()) {
+            return 3;
+        } else {
+            return 1;
+        }
     }
 
     public boolean isContainsMoeda() {
@@ -710,25 +742,30 @@ public abstract class BasicMBReportImpl<T> {
         this.colunaParaTotalizadorSelecionada = colunaParaTotalizadorSelecionada;
     }
 
-    public String
-            customFormat(Object obj) {
+    public String customFormat(Object obj) {
+        try {
+            if (obj.getClass() == BigDecimal.class) {
 
-        if (obj.getClass() == BigDecimal.class) {
+                NumberFormat numberFormat = NumberFormat.getInstance();
+                numberFormat.setMinimumFractionDigits(2);
 
-            NumberFormat numberFormat = NumberFormat.getInstance();
-            numberFormat.setMinimumFractionDigits(2);
+                return numberFormat.format((BigDecimal) obj);
 
-            return numberFormat.format((BigDecimal) obj);
-
-        } else if (obj.getClass() == Timestamp.class
-                || obj.getClass() == Date.class) {
-            Date date = (Date) obj;
-            if (date != null) {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                return dateFormat.format(date);
+            } else if (obj.getClass() == Timestamp.class
+                    || obj.getClass() == Date.class) {
+                Date date = (Date) obj;
+                if (date != null) {
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                    return dateFormat.format(date);
+                }
+            } else if (obj.getClass().isEnum()) {
+                Enum o = (Enum) obj;
+                return o.getClass().getMethod("getNome", null).invoke(o, null).toString();
             }
+            return obj.toString();
+        } catch (Exception ex) {
+            return obj.toString();
         }
-        return obj.toString();
     }
 
     public List<T> getRegistrosFiltrados() {
@@ -749,6 +786,18 @@ public abstract class BasicMBReportImpl<T> {
 
     public void setModeloDeRelatorioSelecionadoString(String modeloDeRelatorioSelecionadoString) {
         this.modeloDeRelatorioSelecionadoString = modeloDeRelatorioSelecionadoString;
+    }
+
+    public List<String> getEnumeracoesSelecionadas() {
+        return enumeracoesSelecionadas;
+    }
+
+    public List<Enum> getEnumeracoesOpcoes() {
+        return enumeracoesOpcoes;
+    }
+
+    public void setEnumeracoesSelecionadas(List<String> enumeracoesSelecionadas) {
+        this.enumeracoesSelecionadas = enumeracoesSelecionadas;
     }
 
 }

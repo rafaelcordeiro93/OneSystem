@@ -18,6 +18,7 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Janela;
 import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.Privilegio;
@@ -26,14 +27,20 @@ import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
+import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoBandeira;
+import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoCorMenu;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.valueobjects.TipoItem;
+import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -44,6 +51,8 @@ public class DadosIniciais {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
+        BundleUtil msg = new BundleUtil();
+        
         Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comPais("Paraguai").comUF("PG").construir();
         new AdicionaDAO<>().adiciona(city);
 
@@ -404,11 +413,13 @@ public class DadosIniciais {
         TipoDespesa jurosPagos = new TipoDespesa(null, "Juros Pagos", tot);
         TipoDespesa multasPagas = new TipoDespesa(null, "Multas Pagas", depf);
         TipoDespesa despesaCambial = new TipoDespesa(null, "Despesa com variação cambial", tot);
-
+        TipoDespesa comprasNormais = new TipoDespesa(null, "Compras Normais", ope);
+        
         daoDespesa.adiciona(descontosConcedidos);
         daoDespesa.adiciona(jurosPagos);
         daoDespesa.adiciona(multasPagas);
         daoDespesa.adiciona(despesaCambial);
+        daoDespesa.adiciona(comprasNormais);
         daoDespesa.adiciona(new TipoDespesa(null, "Ajuste de Saldo Inicial", aje));
         daoDespesa.adiciona(new TipoDespesa(null, "PIS Sobre Faturamento", imp));
         daoDespesa.adiciona(new TipoDespesa(null, "COFINS Sobre Faturamento", imp));
@@ -479,7 +490,6 @@ public class DadosIniciais {
         daoDespesa.adiciona(new TipoDespesa(null, "Sinistros", depo));
         daoDespesa.adiciona(new TipoDespesa(null, "Perdas com Estoque", depo));
         daoDespesa.adiciona(new TipoDespesa(null, "Outras nao Operacionais", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Compras Normais", ope));
         daoDespesa.adiciona(new TipoDespesa(null, "Compras em Consignacao", ope));
         daoDespesa.adiciona(new TipoDespesa(null, "Compras de Ativo Imobilizado", opi));
         daoDespesa.adiciona(new TipoDespesa(null, "Compras p/ Recebimento Futuro", ope));
@@ -708,6 +718,19 @@ public class DadosIniciais {
         new AdicionaDAO<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");
+        
+        //Operação
+        //------------------------------------------------------------------------
+        Operacao compraNormal = new OperacaoBuilder()
+                .comNome(msg.getLabel("Compra_Normal"))
+                .comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
+                .comTipoOperacao(TipoOperacao.COMPRA_NORMAL)
+                .comTipoNota(TipoLancamento.RECEBIDA)
+                .comTipoContabil(TipoContabil.NAO_CONTABILIZAR)
+                .comCompraAVista(comprasNormais)
+                .comCompraAPrazo(comprasNormais).construir();
+                
+        
     }
 
 }
