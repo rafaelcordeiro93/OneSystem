@@ -5,6 +5,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -12,7 +13,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,10 +59,17 @@ public class Transferencia implements Serializable {
     @OneToMany(mappedBy = "transferencia", cascade = {CascadeType.ALL})
     private List<Baixa> baixas;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "{tipo_lancamento_not_null}")
+    private TipoLancamentoBancario tipoLancamentoBancario;
+
+    @Column(nullable = true)
+    private boolean estornado;
+
     public Transferencia() {
     }
 
-    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, Date emissao) throws DadoInvalidoException {
+    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, Date emissao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado) throws DadoInvalidoException {
         this.id = id;
         this.origem = origem;
         this.destino = destino;
@@ -66,6 +77,8 @@ public class Transferencia implements Serializable {
         this.valorConvertido = valorConvertido;
         this.baixas = baixas;
         this.emissao = emissao;
+        this.tipoLancamentoBancario = tipoLancamentoBancario;
+        this.estornado = estornado;
         ehValido();
     }
 
@@ -75,6 +88,12 @@ public class Transferencia implements Serializable {
         adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
     }
 
+    /* Deve ser utilizado para gerar a baixa da transferência */
+    public void geraEstornoDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
+        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
+        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+    }
+
     /* Adiciona Baixa e as tarifas.*/
     public void adiciona(Baixa baixa) {
         try {
@@ -82,6 +101,7 @@ public class Transferencia implements Serializable {
             if (baixas == null) {
                 this.baixas = new ArrayList<>();
             }
+            verificaEstorno(baixa, b);
             b.comTransferencia(this);
             geraHistorico(baixa, b);
             b.comEmissao(emissao);
@@ -91,13 +111,24 @@ public class Transferencia implements Serializable {
         }
     }
 
+    private void verificaEstorno(Baixa baixa, BaixaBuilder b) {
+        if (baixa.getDespesa() != null && this.tipoLancamentoBancario.equals(TipoLancamentoBancario.ESTORNO)) {
+            b.comOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+        }
+    }
+
     private void geraHistorico(Baixa baixa, BaixaBuilder b) {
         BundleUtil msg = new BundleUtil();
-        if (baixa.getDespesa() == null) {
+        if (baixa.getDespesa() == null && this.tipoLancamentoBancario == TipoLancamentoBancario.LANCAMENTO) {
             b.comHistorico(msg.getLabel("Transferencia") + " " + msg.getLabel("de") + " (" + origem.getId() + " - " + origem.getNome() + ") "
                     + msg.getLabel("para") + " (" + destino.getId() + " - " + destino.getNome() + ")");
-        } else {
+        } else if (baixa.getDespesa() == null && this.tipoLancamentoBancario == TipoLancamentoBancario.ESTORNO) {
+            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " (" + destino.getId() + " - " + destino.getNome() + ") "
+                    + msg.getLabel("para") + " (" + origem.getId() + " - " + origem.getNome() + ")");
+        } else if (this.tipoLancamentoBancario == TipoLancamentoBancario.LANCAMENTO) {
             b.comHistorico(msg.getLabel("Tarifa") + " " + msg.getLabel("de") + " " + baixa.getDespesa().getNome() + " " + msg.getLabel("de") + " " + msg.getLabel("Transferencia"));
+        } else if (this.tipoLancamentoBancario == TipoLancamentoBancario.ESTORNO) {
+            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " " + msg.getLabel("Tarifa") + " " + msg.getLabel("de") + " " + baixa.getDespesa().getNome() + " " + msg.getLabel("de") + " " + msg.getLabel("Transferencia"));
         }
     }
 
@@ -133,9 +164,17 @@ public class Transferencia implements Serializable {
         return emissao;
     }
 
+    public TipoLancamentoBancario getTipoLancamentoBancario() {
+        return tipoLancamentoBancario;
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("origem", "destino", "valor", "valorConvertido");
         new ValidadorDeCampos<Transferencia>().valida(this, campos);
+    }
+
+    public boolean isEstornado() {
+        return estornado;
     }
 
     @Override

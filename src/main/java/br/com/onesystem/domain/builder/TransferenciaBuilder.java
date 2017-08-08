@@ -7,12 +7,9 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.FormaDeCobranca;
-import br.com.onesystem.domain.Pagamento;
-import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +27,8 @@ public class TransferenciaBuilder {
     private BigDecimal valorConvertido;
     private List<Baixa> baixas;
     private Date emissao;
+    private TipoLancamentoBancario tipoLancamentoBancario;
+    private boolean estornado;
 
     public TransferenciaBuilder comId(Long id) {
         this.id = id;
@@ -66,8 +65,18 @@ public class TransferenciaBuilder {
         return this;
     }
 
+    public TransferenciaBuilder comTipoLancamentoBancario(TipoLancamentoBancario tipoLancamentoBancario) {
+        this.tipoLancamentoBancario = tipoLancamentoBancario;
+        return this;
+    }
+
+    public TransferenciaBuilder comEstornado(boolean estornado) {
+        this.estornado = estornado;
+        return this;
+    }
+
     public Transferencia construir() throws DadoInvalidoException {
-        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao);
+        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao, tipoLancamentoBancario, estornado);
     }
 
 }

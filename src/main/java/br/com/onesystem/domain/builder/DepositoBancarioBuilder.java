@@ -10,6 +10,7 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,9 @@ public class DepositoBancarioBuilder {
     private List<Cheque> cheques;
     private Date emissao;
     private String observacao;
+    private TipoLancamentoBancario tipoLancamentoBancario;
+    private boolean estornado;
+    private Long idRelacaoEstorno;
 
     public DepositoBancarioBuilder comId(Long id) {
         this.id = id;
@@ -75,8 +79,23 @@ public class DepositoBancarioBuilder {
         return this;
     }
 
+    public DepositoBancarioBuilder comTipoLancamentoBancario(TipoLancamentoBancario tipoLancamentoBancario) {
+        this.tipoLancamentoBancario = tipoLancamentoBancario;
+        return this;
+    }
+
+    public DepositoBancarioBuilder comEstornado(boolean estornado) {
+        this.estornado = estornado;
+        return this;
+    }
+
+    public DepositoBancarioBuilder comIdRelacaoEstorno(Long idEstorno) {
+        this.idRelacaoEstorno = idEstorno;
+        return this;
+    }
+
     public DepositoBancario construir() throws DadoInvalidoException {
-        return new DepositoBancario(id, emissao, origem, destino, valor, valorConvertido, baixas, cheques, observacao);
+        return new DepositoBancario(id, emissao, origem, destino, valor, valorConvertido, baixas, cheques, observacao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
     }
 
 }

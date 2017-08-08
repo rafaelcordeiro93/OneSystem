@@ -8,6 +8,7 @@ import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.builder.DepositoBancarioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -25,6 +26,10 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
     private BigDecimal valorConvertido;
     private List<Baixa> baixas;
     private List<Cheque> cheques;
+    private TipoLancamentoBancario tipoLancamentoBancario;
+    private boolean estornado = false;
+    private String observacao;
+    private Long idRelacaoEstorno;
 
     public DepositoBancarioBV() {
     }
@@ -37,6 +42,10 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.valorConvertido = dp.getValorConvertido();
         this.baixas = dp.getBaixas();
         this.emissao = dp.getEmissao();
+        this.tipoLancamentoBancario = dp.getTipoLancamentoBancario();
+        this.estornado = dp.isEstornado();
+        this.observacao = dp.getObservacao();
+        this.idRelacaoEstorno = dp.getIdRelacaoEstorno();
     }
 
     public Long getId() {
@@ -111,15 +120,57 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.emissao = emissao;
     }
 
+    public List<Cheque> getCheques() {
+        return cheques;
+    }
+
+    public void setCheques(List<Cheque> cheques) {
+        this.cheques = cheques;
+    }
+
+    public TipoLancamentoBancario getTipoLancamentoBancario() {
+        return tipoLancamentoBancario;
+    }
+
+    public void setTipoLancamentoBancario(TipoLancamentoBancario tipoLancamentoBancario) {
+        this.tipoLancamentoBancario = tipoLancamentoBancario;
+    }
+
+    public boolean isEstornado() {
+        return estornado;
+    }
+
+    public void setEstornado(boolean estornado) {
+        this.estornado = estornado;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public Long getIdRelacaoEstorno() {
+        return idRelacaoEstorno;
+    }
+
+    public void setIdRelacaoEstorno(Long idRelacaoEstorno) {
+        this.idRelacaoEstorno = idRelacaoEstorno;
+    }
+
     public DepositoBancario construir() throws DadoInvalidoException {
         return new DepositoBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor)
-                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comCheques(cheques).construir();
+                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comCheques(cheques)
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
 
     @Override
     public DepositoBancario construirComID() throws DadoInvalidoException {
         return new DepositoBancarioBuilder().comId(id).comDestino(destino).comOrigem(origem).comCheques(cheques).
-                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas).construir();
+                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas)
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
 
 }

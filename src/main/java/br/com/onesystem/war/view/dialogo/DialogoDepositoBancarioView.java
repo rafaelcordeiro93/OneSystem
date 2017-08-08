@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.DepositoBancarioBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -46,6 +47,7 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
     public void limparJanela() {
         t = null;
         e = new DepositoBancarioBV();
+        e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
     }
 
     public void inicializar() {
@@ -86,7 +88,6 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
         try {
             t = e.construir();
             t.geraBaixaDeDeposito(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
-
             new AdicionaDAO<>().adiciona(t);
             RequestContext.getCurrentInstance().closeDialog(t);
             limparJanela();

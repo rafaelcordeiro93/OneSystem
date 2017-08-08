@@ -195,6 +195,11 @@ public class DadosNecessarios implements Serializable {
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
+            case "/extratoConta.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                break;
+            }
             default:
                 break;
         }
