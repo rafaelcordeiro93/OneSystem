@@ -11,10 +11,10 @@ import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -103,9 +104,8 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
     public void transferir() {
         try {
             t = e.construir();
-            t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
-            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
-
+            gerarBaixas();
+            gerarTaxas();
             new AdicionaDAO<>().adiciona(t);
             RequestContext.getCurrentInstance().closeDialog(t);
             limparJanela();
@@ -114,9 +114,33 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
         }
     }
 
+    private void gerarTaxas() {
+        if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.LANCAMENTO)) {
+            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
+        } else {
+            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
+        }
+    }
+
+    private void gerarBaixas() throws DadoInvalidoException {
+        if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.LANCAMENTO)) {
+            t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
+        } else {
+            t.geraEstornoDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
+        }
+    }
+
     public void fechar() {
         limparJanela();
         RequestContext.getCurrentInstance().closeDialog(null);
+    }
+
+    public void estorno(ValueChangeEvent event) {
+        if ((boolean) event.getNewValue() == true) {
+            e.setTipoLancamentoBancario(TipoLancamentoBancario.ESTORNO);
+        } else {
+            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
+        }
     }
 
     public void addBaixa() {

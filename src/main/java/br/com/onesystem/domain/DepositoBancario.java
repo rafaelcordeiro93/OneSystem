@@ -10,6 +10,8 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
+import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +19,10 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -71,10 +76,21 @@ public class DepositoBancario implements Serializable {
     @Length(message = "{observacao_length}", max = 255)
     private String observacao;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "{tipo_lancamento_not_null}")
+    private TipoLancamentoBancario tipoLancamentoBancario;
+
+    @Column(nullable = true)
+    private boolean estornado;
+
+    @Column(nullable = true)
+    private Long idRelacaoEstorno;
+
     public DepositoBancario() {
     }
 
-    public DepositoBancario(Long id, Date emissao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, List<Cheque> cheques, String observacao) throws DadoInvalidoException {
+    public DepositoBancario(Long id, Date emissao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas,
+            List<Cheque> cheques, String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.origem = origem;
@@ -84,6 +100,9 @@ public class DepositoBancario implements Serializable {
         this.baixas = baixas;
         this.observacao = observacao;
         this.cheques = cheques;
+        this.tipoLancamentoBancario = tipoLancamentoBancario;
+        this.estornado = estornado;
+        this.idRelacaoEstorno = idRelacaoEstorno;
         ehValido();
     }
 
@@ -96,6 +115,16 @@ public class DepositoBancario implements Serializable {
     public void geraBaixaDeDeposito(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
         adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
         adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+    }
+
+    /* Deve ser utilizado para gerar a baixa da transferência */
+    public void geraEstornoDoDepositoCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
+        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
+        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+    }
+    
+    public void setIdRelacaoEstorno(DepositoBancario d){
+        this.idRelacaoEstorno = d.getId();
     }
 
     /* Adiciona Baixa*/
@@ -116,8 +145,13 @@ public class DepositoBancario implements Serializable {
 
     private void geraHistorico(BaixaBuilder b) {
         BundleUtil msg = new BundleUtil();
-        b.comHistorico(msg.getLabel("Deposito") + " " + msg.getLabel("de") + " (" + origem.getId() + " - " + origem.getNome() + ") "
-                + msg.getLabel("para") + " (" + destino.getId() + " - " + destino.getNome() + ")");
+        if (this.tipoLancamentoBancario == TipoLancamentoBancario.LANCAMENTO) {
+            b.comHistorico(msg.getLabel("Deposito") + " " + msg.getLabel("de") + " (" + origem.getId() + " - " + origem.getNome() + ") "
+                    + msg.getLabel("para") + " (" + destino.getId() + " - " + destino.getNome() + ")");
+        } else {
+            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " (" + destino.getId() + " - " + destino.getNome() + ") "
+                    + msg.getLabel("para") + " (" + origem.getId() + " - " + origem.getNome() + ")");
+        }
     }
 
     public Long getId() {
@@ -190,6 +224,18 @@ public class DepositoBancario implements Serializable {
 
     public void setObservacao(String observacao) {
         this.observacao = observacao;
+    }
+
+    public TipoLancamentoBancario getTipoLancamentoBancario() {
+        return tipoLancamentoBancario;
+    }
+
+    public boolean isEstornado() {
+        return estornado;
+    }
+
+    public Long getIdRelacaoEstorno() {
+        return idRelacaoEstorno;
     }
 
     @Override
