@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.IVAService;
 import java.io.Serializable;
@@ -21,22 +21,22 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaConverter", forClass = IVA.class)
+@FacesConverter(value = "ivaConverter", forClass = TabelaDeTributacao.class)
 public class IVAConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<IVA> lista = new IVAService().buscarIVAs();
+                List<TabelaDeTributacao> lista = new IVAService().buscarIVAs();
                 if (StringUtils.containsLetter(value)) {
-                    for (IVA iva : lista) {
+                    for (TabelaDeTributacao iva : lista) {
                         if (iva.getNome().equals(value)) {
                             return iva;
                         }
                     }
                 } else {
-                    for (IVA iva : lista) {
+                    for (TabelaDeTributacao iva : lista) {
                         if (iva.getId().equals(new Long(value))) {
                             return iva;
                         }
@@ -55,7 +55,7 @@ public class IVAConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVA) object).getNome());
+                return String.valueOf(((TabelaDeTributacao) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

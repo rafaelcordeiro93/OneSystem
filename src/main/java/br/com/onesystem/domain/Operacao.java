@@ -84,10 +84,12 @@ public class Operacao implements Serializable {
     private List<Nota> notas;
     @OneToMany(mappedBy = "operacao")
     private List<AjusteDeEstoque> ajustes;
+    @OneToMany(mappedBy = "operacao")
+    private List<SituacaoFiscal> situacoesFiscais;
 
     public Operacao() {
     }
-    
+
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
             TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,

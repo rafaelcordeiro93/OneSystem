@@ -1,6 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Estado;
 import br.com.onesystem.exception.DadoInvalidoException;
 
 /**
@@ -11,8 +12,7 @@ public class CidadeBuilder {
 
     private Long ID;
     private String nome;
-    private String uf;
-    private String pais;
+    private Estado estado;
 
     public CidadeBuilder comID(Long ID) {
         this.ID = ID;
@@ -24,18 +24,13 @@ public class CidadeBuilder {
         return this;
     }
 
-    public CidadeBuilder comUF(String uf) {
-        this.uf = uf;
-        return this;
-    }
-
-    public CidadeBuilder comPais(String pais) {
-        this.pais = pais;
+    public CidadeBuilder comEstado(Estado estado) {
+        this.estado = estado;
         return this;
     }
 
     public Cidade construir() throws DadoInvalidoException {
-        return new Cidade(ID, nome, uf, pais);
+        return new Cidade(ID, nome, estado);
     }
 
 }

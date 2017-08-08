@@ -13,13 +13,13 @@
             <pa:tab icon="fa fa-book" title="#{l.Arquivo}">
                 <pa:menu widgetVar="mat">
                     <p:menuitem value="#{l.Dashboard}" icon="fa fa-fw fa-home" outcome="/dashboard"/>
+                    <p:menuitem value="#{l.País}"  icon="fa fa-flag-o" outcome="/pais" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/pais.xhtml')}" />
+                    <p:menuitem value="#{l.Estado}"  icon="fa fa-flag-checkered" outcome="/estado" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/estado.xhtml')}" />
                     <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/cidade" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/cidade.xhtml')}" />
                     <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/pessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/pessoa.xhtml')}" />   
                     <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/importarPessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/importarPessoa.xhtml')}" />    
                 </pa:menu>
             </pa:tab>
-
-
 
             <pa:tab icon="fa fa-shopping-cart" title="#{l.Vendas}">
                 <pa:menu widgetVar="mat">
@@ -49,8 +49,6 @@
                         <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/comissao" />
                         <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/deposito" />
                         <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/grupo" />
-                        <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />  
-                        <p:menuitem value="#{l.IVA}" icon="fa fa-strikethrough" outcome="/iva" />
                         <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/listaDePreco" />
                         <p:menuitem value="#{l.Marca}" icon="fa fa-gg" outcome="/marca" />
                         <p:menuitem value="#{l.Margem}" icon="fa fa-compress" outcome="/margem" /> 
@@ -64,7 +62,7 @@
 
 
 
-            <pa:tab icon="fa fa-balance-scale" title="#{l.Financeiro}">
+            <pa:tab icon="fa fa-money" title="#{l.Financeiro}">
                 <pa:menu widgetVar="mat">
                     <p:menuitem value="#{l.Baixa}" icon="fa fa-retweet" outcome="/baixa" />
                     <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/caixa" />
@@ -99,7 +97,13 @@
                 </pa:menu>
             </pa:tab>
 
-
+            <pa:tab icon="fa fa-balance-scale" title="#{l.Contabil}">
+                <pa:menu widgetVar="mat">
+                    <p:menuitem value="#{l.Operacoes}" icon="fa fa-fw fa-arrows" outcome="/operacoes" />
+                    <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/grupoFiscal" />  
+                    <p:menuitem value="#{l.Tabela_de_Tributacao}" icon="fa fa-strikethrough" outcome="/iva" />
+                </pa:menu>
+            </pa:tab>
 
             <pa:tab icon="fa fa-exchange" title="#{l.Cambio}">
                 <pa:menu widgetVar="mat">
@@ -108,8 +112,6 @@
                     <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/cambio" />
                 </pa:menu>
             </pa:tab>
-
-
 
             <pa:tab icon="fa fa-line-chart" title="#{l.Relatorios}">
                 <pa:menu widgetVar="mat">

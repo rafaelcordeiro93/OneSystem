@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.IVAService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -13,7 +13,7 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoIVAView extends BasicCrudMBImpl<IVA> implements Serializable {
+public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implements Serializable {
 
     @Inject
     private IVAService service;
@@ -33,15 +33,15 @@ public class SelecaoIVAView extends BasicCrudMBImpl<IVA> implements Serializable
     }
     
     @Override
-    public List<IVA> complete(String query) {
-        List<IVA> listaFIltrada = new ArrayList<>();
-        for (IVA b : beans) {
+    public List<TabelaDeTributacao> complete(String query) {
+        List<TabelaDeTributacao> listaFIltrada = new ArrayList<>();
+        for (TabelaDeTributacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);
             }
         }
         if (!StringUtils.containsLetter(query)) {
-            for (IVA m : beans) {
+            for (TabelaDeTributacao m : beans) {
                 if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
                     listaFIltrada.add(m);
                 }

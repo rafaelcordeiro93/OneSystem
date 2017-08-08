@@ -39,7 +39,8 @@ public class CalculadoraDePreco {
         BigDecimal cem = new BigDecimal(100);
         BigDecimal soma = item.getMargem().getCustoFixo().add(item.getMargem().getEmbalagem()).
                 add(item.getMargem().getFrete()).add(item.getMargem().getOutrosCustos()).
-                add(item.getMargem().getMargem()).add(item.getGrupoFiscal() != null ? item.getGrupoFiscal().getIva().getIva() : BigDecimal.ZERO).
+                add(item.getMargem().getMargem()).add(item.getGrupoFiscal() != null ? item.getGrupoFiscal().getTabelaDeTributacaoPadrao() != null
+                ? item.getGrupoFiscal().getTabelaDeTributacaoPadrao().getIva() : BigDecimal.ZERO : BigDecimal.ZERO).
                 add(item.getComissao() != null ? item.getComissao().getComissaoRepresentante() : BigDecimal.ZERO).
                 add(item.getComissao() != null ? item.getComissao().getComissaoVendedor() : BigDecimal.ZERO);
         if (soma.compareTo(cem) >= 0) {

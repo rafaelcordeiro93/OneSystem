@@ -6,13 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ModeloDeRelatorio;
-import br.com.onesystem.war.service.ModeloDeRelatorioService;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -24,21 +20,10 @@ public class ModeloDeRelatorioConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ModeloDeRelatorio> lista = new ModeloDeRelatorioService().buscarModeloDeRelatorio();
-                for (ModeloDeRelatorio mdr : lista) {
-                    if (mdr.getId().equals(new Long(value))) {
-                        return mdr;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            return (ModeloDeRelatorio) uic.getAttributes().get(value);
         }
+        return null;
     }
 
     @Override

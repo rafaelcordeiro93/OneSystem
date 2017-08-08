@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.IVABV;
 import br.com.onesystem.war.service.IVAService;
@@ -27,15 +27,15 @@ public class IVABVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<IVA> lista = new IVAService().buscarIVAs();
+                List<TabelaDeTributacao> lista = new IVAService().buscarIVAs();
                 if (StringUtils.containsLetter(value)) {
-                    for (IVA iva : lista) {
+                    for (TabelaDeTributacao iva : lista) {
                         if (iva.getNome().equals(value)) {
                             return new IVABV(iva);
                         }
                     }
                 } else {
-                    for (IVA iva : lista) {
+                    for (TabelaDeTributacao iva : lista) {
                         if (iva.getId().equals(new Long(value))) {
                             return new IVABV(iva);
                         }

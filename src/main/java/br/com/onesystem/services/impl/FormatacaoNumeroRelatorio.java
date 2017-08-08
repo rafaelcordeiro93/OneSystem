@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package br.com.onesystem.services.impl;
 
+import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.METHOD;
 import java.lang.annotation.Retention;
@@ -18,8 +18,8 @@ import java.lang.annotation.Target;
  */
 @Target({METHOD, ANNOTATION_TYPE})
 @Retention(RUNTIME)
-public @interface Formatter {
-    
-    public String formatterMethod();
+public @interface FormatacaoNumeroRelatorio {
+
+    public TipoFormatacaoNumero formatacaoNumero();
 
 }

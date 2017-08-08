@@ -1,6 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
@@ -18,45 +17,68 @@
 
         <f:loadBundle basename="label_messages" var="l"/>
 
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
+            <p:outputLabel value="#{l.Modelo}:"/>
+            <p:selectOneMenu id="modelo" value="#{cc.attrs.mbView.modeloDeRelatorioSelecionadoString}" editable="true" filter="true" filterMatchMode="contains" >
+                <p:ajax event="change" listener="#{cc.attrs.mbView.selecionaModelo}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()" />
+                <f:selectItem itemLabel="#{l.Selecione}" />
+                <f:selectItems value="#{cc.attrs.mbView.modelosDeRelatorio}" var="modeloDeRelatorio" itemLabel="#{modeloDeRelatorio.nome}" itemValue="#{modeloDeRelatorio.nome}" />
+            </p:selectOneMenu>
+            <p:panelGrid columns="3">
+                <p:commandButton icon="fa fa-floppy-o" value="#{l.Salvar}" action="#{cc.attrs.mbView.salvarModeloDeRelatorio}" update="#{cc.attrs.form}" />
+                <p:commandButton icon="fa fa-refresh" value="#{l.Limpar}" action="#{cc.attrs.mbView.limparJanela}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()"/>
+                <p:commandButton icon="fa fa-trash-o Fs14 White" styleClass="orange-btn" action="#{cc.attrs.mbView.excluirModelo}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()" />
+            </p:panelGrid>
+        </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:separator/>
+
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:outputLabel value="#{l.Filtrar_Por}:"/>
-            <p:selectOneMenu id="camposParaFiltrar" value="#{cc.attrs.mbView.campoSelecionadoString}">
-                <p:ajax listener="#{cc.attrs.mbView.filterField}" update="#{cc.attrs.form}" />
+            <p:selectOneMenu id="camposParaFiltrar" value="#{cc.attrs.mbView.campoSelecionadoString}" filter="true" filterMatchMode="contains" >
+                <p:ajax listener="#{cc.attrs.mbView.filterField}" update="#{cc.attrs.form}"/>
                 <f:selectItem itemLabel="#{l.Selecione}" />
                 <f:selectItems value="#{cc.attrs.mbView.campos.list}" var="fieldModel" itemValue="#{fieldModel.nome}" itemLabel="#{fieldModel.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
             <p:outputLabel value="#{l.Tipo_de_Busca}:"/>
             <p:selectOneMenu id="tiposDeBusca" value="#{cc.attrs.mbView.tipoDeBuscaSelecionada}">
                 <f:selectItems value="#{cc.attrs.mbView.tiposDeBusca}" var="tipoDeBusca" itemValue="#{tipoDeBusca}" itemLabel="#{tipoDeBusca.nome}" />
             </p:selectOneMenu>
+            <p:spacer/>
 
             <p:outputLabel value="#{l.Consulta}:"/>
             <p:chips id="chipsFilter" value="#{cc.attrs.mbView.consulta}" 
-                     rendered="#{!cc.attrs.mbView.date}" />
+                     rendered="#{cc.attrs.mbView.typeField eq 1}" />
             <p:calendar id="dateFilter" pattern="dd/MM/yyyy" value="#{cc.attrs.mbView.consultaDate}" size="9" navigator="true" pages="3"
-                        rendered="#{cc.attrs.mbView.date}" maskAutoClear="true" />
+                        rendered="#{cc.attrs.mbView.typeField eq 2}" maskAutoClear="true" />
+            <p:selectManyMenu id="manyMenuFilter" rendered="#{cc.attrs.mbView.typeField eq 3}" value="#{cc.attrs.mbView.enumeracoesSelecionadas}" showCheckbox="true" >
+                <f:selectItems value="#{cc.attrs.mbView.enumeracoesOpcoes}" var="opcao" itemLabel="#{opcao.nome}" itemValue="#{opcao}" />
+            </p:selectManyMenu>
+            <p:spacer/>
+
 
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <h:panelGrid columns="2">
                 <p:commandButton value="#{l.Pesquisar}" action="#{cc.attrs.mbView.pesquisar}" update="#{cc.attrs.form}" icon="fa fa-search" onsuccess="PF('objectsTable').filter()" />
             </h:panelGrid>
+            <p:spacer/>
         </p:panelGrid>
 
-        <p:panelGrid columns="2" style="width: 50%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-10 ui-fluid" styleClass="ui-panelgrid-blank form-group form-elements">
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
             <p:spacer/>
             <p:column>
-                <c:forEach var="filterModel" items="#{cc.attrs.mbView.filtros}" >
+                <c:forEach var="filtroDeRelatorio" items="#{cc.attrs.mbView.filtros}" >
 
                     <ul class="ui-chips-container">
-                        <p:outputLabel value="#{filterModel.field.nome} - #{filterModel.typeSearch.nome}  " /> 
+                        <p:outputLabel value="#{filtroDeRelatorio.coluna.nome} - #{filtroDeRelatorio.tipoDaBusca.nome}  " /> 
                         <li class="ui-chips-token ui-state-active ui-corner-all" style="margin-top: -1px">
-                            <span class="ui-chips-token-label">#{filterModel.filterDate ne null ? filterModel.filterDateFormat : filterModel.filters}</span>
-                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filterModel)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
+                            <span class="ui-chips-token-label">#{filtroDeRelatorio.filtroDeData ne null ? filtroDeRelatorio.filtroDeDataFormatado : filtroDeRelatorio.filtrosFormatados}</span>
+                            <p:commandLink action="#{cc.attrs.mbView.delFilter(filtroDeRelatorio)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
                                 <i class="ui-chips-token-icon ui-icon ui-icon-close" style="color: white;"/>
                             </p:commandLink>
                         </li>
@@ -64,6 +86,56 @@
 
                 </c:forEach>
             </p:column>
+            <p:spacer/>
+        </p:panelGrid>
+
+        <p:separator/>
+
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
+
+            <p:outputLabel value="#{l.Totalizar_Por}:"/>
+            <p:selectOneMenu id="camposParaTotalizadores" value="#{cc.attrs.mbView.colunaParaTotalizadorString}">
+                <p:ajax listener="#{cc.attrs.mbView.filterColumn}" update="#{cc.attrs.form}" />
+                <f:selectItem itemLabel="#{l.Nenhum}" />
+                <f:selectItems value="#{cc.attrs.mbView.colunasParaTotalizadores}" var="coluna" itemValue="#{coluna.nome}" itemLabel="#{coluna.nome}" />
+            </p:selectOneMenu>
+            <p:spacer/>
+
+            <p:outputLabel value="#{l.Totalizador}:"/>
+            <p:selectOneMenu id="tiposDeTotalizadores" value="#{cc.attrs.mbView.totalizador}">
+                <f:selectItem itemLabel="#{l.Nenhum}" />
+                <f:selectItems value="#{cc.attrs.mbView.totalizadores}" var="totalizador" itemValue="#{totalizador}" itemLabel="#{totalizador.nome}" />
+            </p:selectOneMenu>
+            <p:spacer/>
+
+        </p:panelGrid>
+
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
+            <p:spacer/>
+            <h:panelGrid columns="2">
+                <p:commandButton value="#{l.Totalizar}" action="#{cc.attrs.mbView.totalizar}" update="#{cc.attrs.form}" icon="fa fa-plus" onsuccess="PF('objectsTable').filter()" />
+            </h:panelGrid>
+            <p:spacer/>
+        </p:panelGrid>
+
+        <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
+            <p:spacer/>
+            <p:column>
+                <c:forEach var="coluna" items="#{cc.attrs.mbView.colunasTotalizadas}" >
+
+                    <ul class="ui-chips-container">
+                        <p:outputLabel value="#{coluna.nome}: " /> 
+                        <li  class="ui-chips-token ui-state-active ui-corner-all" style="margin-top: -1px">
+                            <span class="ui-chips-token-label">#{coluna.totalizador.nome}</span>
+                            <p:commandLink action="#{cc.attrs.mbView.delTotalizador(coluna)}" update="#{cc.attrs.form}" onsuccess="PF('objectsTable').filter()" >
+                                <i class="ui-chips-token-icon ui-icon ui-icon-close" style="color: white;"/>
+                            </p:commandLink>
+                        </li>
+                    </ul>
+
+                </c:forEach>
+            </p:column>
+            <p:spacer/>
         </p:panelGrid>
 
         <p:dialog widgetVar="exibirCampos" width="900" height="600">
@@ -125,13 +197,14 @@
 
             </h:panelGrid>
 
-            <p:commandButton value="#{l.Confirmar}" update="objects" process="@parent" onclick="PF('exibirCampos').hide()"/>
+            <p:commandButton value="#{l.Confirmar}" update="objects camposParaTotalizadores" process="@parent" onclick="PF('exibirCampos').hide()"/>
 
         </p:dialog>
 
 
         <p:dataTable id="objects" widgetVar="objectsTable" var="object" value="#{cc.attrs.mbView.registros}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
-                     rowKey="#{object.id}" reflow="true" style="border: none" >
+                     rowKey="#{object.id}" reflow="true" style="border: none" filteredValue="#{cc.attrs.mbView.registrosFiltrados}"
+                     rows="500" rowsPerPageTemplate="100,500,1000,10000" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowStyleClass="#{cc.attrs.rowStyleClass}">
 
             <f:facet name="header" >
                 <div align="right">
@@ -149,7 +222,7 @@
             </f:facet>
 
             <c:forEach var="coluna" items="#{cc.attrs.mbView.camposExibidos.list}" >
-                <p:column filterBy="#{object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                <p:column filterBy="#{cc.attrs.mbView.customFormat(object ne null ? coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
                                       : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
@@ -161,7 +234,7 @@
                                       coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                       coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                       coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : ''}"
+                                      object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : '')}"
                           sortBy="#{coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
                                     coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
                                     coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
@@ -169,60 +242,24 @@
                           headerText="#{coluna.nome}" footerText="#{coluna.nome}" style="width: #{coluna.tamanhoFormatado}"
                           filterMatchMode="contains">
 
-                    <c:if test="#{coluna.classeOriginal.simpleName == 'BigDecimal' and cc.attrs.mbView.containsMoeda}" >
-                        <p:outputLabel value="#{cc.attrs.mbView.siglaMoeda.propriedadeDois eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade] : 
-                                                cc.attrs.mbView.siglaMoeda.propriedadeTres eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois] : 
-                                                cc.attrs.mbView.siglaMoeda.propriedadeQuatro eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres] : 
-                                                object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres][cc.attrs.mbView.siglaMoeda.propriedadeQuatro]}" />
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                            <f:convertNumber type="currency" pattern="##,###.00" transient="" /> 
-                        </p:outputLabel>
-                    </c:if>
-                    <c:if test="#{coluna.classeOriginal.simpleName == 'Date'}" >
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                            <f:convertDateTime pattern="dd/MM/yyyy" /> 
-                        </p:outputLabel>
-                    </c:if>
-                    <c:if test="#{coluna.classeOriginal.simpleName ne 'Date' and coluna.classeOriginal.simpleName ne 'BigDecimal'}" >
-                        <p:outputLabel value="#{coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
-                                                : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
-                                                coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
-                                                coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
-                                                coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
-                                                object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro]}" >
-                        </p:outputLabel>
-                    </c:if>
+                    <p:outputLabel rendered="#{coluna.classeOriginal.simpleName == 'BigDecimal' and cc.attrs.mbView.containsMoeda}" value="#{cc.attrs.mbView.siglaMoeda.propriedadeDois eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade] : 
+                                               cc.attrs.mbView.siglaMoeda.propriedadeTres eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois] : 
+                                               cc.attrs.mbView.siglaMoeda.propriedadeQuatro eq null ? object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres] : 
+                                               object[cc.attrs.mbView.siglaMoeda.propriedade][cc.attrs.mbView.siglaMoeda.propriedadeDois][cc.attrs.mbView.siglaMoeda.propriedadeTres][cc.attrs.mbView.siglaMoeda.propriedadeQuatro]}" />
+                    <p:outputLabel value="#{cc.attrs.mbView.customFormat(coluna.classeDeDeclaracao ne cc.attrs.mbView.clazz ? coluna.classeDeDeclaracao ne object.class ? !cc.attrs.mbView.mapPath.containsKey(coluna.classeDeDeclaracao) ? ' ' 
+                                            : coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] :  
+                                            coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro] : 
+                                            coluna.propriedadeDois eq null ? object[coluna.propriedade] : 
+                                            coluna.propriedadeTres eq null ? object[coluna.propriedade][coluna.propriedadeDois] : 
+                                            coluna.propriedadeQuatro eq null ? object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres] : 
+                                            object[coluna.propriedade][coluna.propriedadeDois][coluna.propriedadeTres][coluna.propriedadeQuatro])}" >
+                    </p:outputLabel>
                 </p:column>
 
             </c:forEach>

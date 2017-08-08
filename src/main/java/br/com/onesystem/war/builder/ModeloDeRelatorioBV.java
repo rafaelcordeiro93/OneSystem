@@ -19,7 +19,7 @@ public class ModeloDeRelatorioBV implements Serializable {
     public ModeloDeRelatorioBV(ModeloDeRelatorio modeloSelecionado) {
         this.id = modeloSelecionado.getId();
         this.nome = modeloSelecionado.getNome();
-        this.colunas = modeloSelecionado.getColunas();
+        this.colunas = modeloSelecionado.getColunasExibidas();
         this.tipoRelatorio = modeloSelecionado.getTipoRelatorio();
     }
 
@@ -59,10 +59,10 @@ public class ModeloDeRelatorioBV implements Serializable {
     }
 
     public ModeloDeRelatorio construir() throws DadoInvalidoException {
-        return new ModeloDeRelatorioBuilder().comNome(nome).comColunas(colunas).comTipoRelatorio(tipoRelatorio).construir();
+        return new ModeloDeRelatorioBuilder().comNome(nome).comTipoRelatorio(tipoRelatorio).construir();
     }
 
     public ModeloDeRelatorio construirComID() throws DadoInvalidoException {
-        return new ModeloDeRelatorioBuilder().comID(id).comNome(nome).comColunas(colunas).comTipoRelatorio(tipoRelatorio).construir();
+        return new ModeloDeRelatorioBuilder().comID(id).comNome(nome).comTipoRelatorio(tipoRelatorio).construir();
     }
 }

@@ -10,7 +10,7 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -45,9 +45,9 @@ public class TesteRauber3 {
         UnidadeMedidaItem unidade = new ArmazemDeRegistros<UnidadeMedidaItem>(UnidadeMedidaItem.class).find(new Long(1));
       
 
-        // IVA
+        // TabelaDeTributacao
         // ---------------------------------------------------------------------
-        IVA iva = new ArmazemDeRegistros<IVA>(IVA.class).find(new Long(1));
+        TabelaDeTributacao iva = new ArmazemDeRegistros<TabelaDeTributacao>(TabelaDeTributacao.class).find(new Long(1));
        
 
         // Grupo Fiscal

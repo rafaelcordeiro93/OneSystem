@@ -1,6 +1,6 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -36,22 +36,22 @@ public class IvaDAO {
         return this;
     }
 
-    public IvaDAO porNome(IVA deposito) {
+    public IvaDAO porNome(TabelaDeTributacao deposito) {
         consulta += " and d.nome = :dNome ";
         parametros.put("dNome", deposito.getNome());
         return this;
     }
 
-    public List<IVA> listaDeResultados() {
-        List<IVA> resultado = new ArmazemDeRegistros<IVA>(IVA.class)
+    public List<TabelaDeTributacao> listaDeResultados() {
+        List<TabelaDeTributacao> resultado = new ArmazemDeRegistros<TabelaDeTributacao>(TabelaDeTributacao.class)
                 .listaRegistrosDaConsulta(consulta, parametros);
         limpar();
         return resultado;
     }
 
-    public IVA resultado() throws DadoInvalidoException {
+    public TabelaDeTributacao resultado() throws DadoInvalidoException {
         try {
-            IVA resultado = new ArmazemDeRegistros<IVA>(IVA.class)
+            TabelaDeTributacao resultado = new ArmazemDeRegistros<TabelaDeTributacao>(TabelaDeTributacao.class)
                     .resultadoUnicoDaConsulta(consulta, parametros);
             limpar();
             return resultado;

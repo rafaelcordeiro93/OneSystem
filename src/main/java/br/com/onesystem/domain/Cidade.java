@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -35,27 +36,18 @@ public class Cidade implements Serializable {
     @CharacterType(value = CaseType.LETTER_SPACE, message = "{nome_type_letter_space}")
     @Column(nullable = false, length = 60)
     private String nome;
-    @NotNull(message = "{uf_not_null}")
-    @Length(max = 2, min = 2, message = "{uf_length}")
-    @CharacterType(value = CaseType.LETTER, message = "{uf_type_letter}")
-    @Column(nullable = false, length = 2)
-    private String uf;
-    @NotNull(message = "{pais_not_null}")
-    @Length(max = 80, min = 3, message = "{pais_lenght}")
-    @CharacterType(value = CaseType.LETTER_SPACE, message = "{pais_type_letter_space}")
-    @Column(nullable = false, length = 80)
-    private String pais;
     @OneToMany(mappedBy = "cidade", fetch = FetchType.LAZY)
     private List<Pessoa> listadePessoas;
+    @ManyToOne
+    private Estado estado;
 
     public Cidade() {
     }
 
-    public Cidade(Long id, String nome, String uf, String pais) throws DadoInvalidoException {
+    public Cidade(Long id, String nome, Estado estado) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.uf = uf;
-        this.pais = pais;
+        this.estado = estado;
         ehValido();
     }
 
@@ -75,24 +67,12 @@ public class Cidade implements Serializable {
         this.nome = nome;
     }
 
-    public String getUf() {
-        return uf;
-    }
-
-    public void setUf(String uf) {
-        this.uf = uf;
-    }
-
-    public String getPais() {
-        return pais;
-    }
-
-    public void setPais(String pais) {
-        this.pais = pais;
+    public Estado getEstado() {
+        return estado;
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "uf", "pais");
+        List<String> campos = Arrays.asList("nome");
         new ValidadorDeCampos<Cidade>().valida(this, campos);
     }
 
@@ -113,7 +93,7 @@ public class Cidade implements Serializable {
 
     @Override
     public String toString() {
-        return "Cidade{" + "id=" + id + ", nome=" + nome + ", uf=" + uf + ", pais=" + pais + '}';
+        return "Cidade{" + "id=" + id + ", nome=" + nome + '}';
     }
 
 }
