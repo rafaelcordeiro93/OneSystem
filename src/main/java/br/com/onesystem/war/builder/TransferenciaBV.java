@@ -26,6 +26,8 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
     private List<Baixa> baixas;
     private TipoLancamentoBancario tipoLancamentoBancario;
     private boolean estornado = false;
+    private String observacao;
+    private Long idRelacaoEstorno;
     
     public TransferenciaBV() {
     }
@@ -40,6 +42,7 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
         this.emissao = transferencia.getEmissao();
         this.tipoLancamentoBancario = transferencia.getTipoLancamentoBancario();
         this.estornado = transferencia.isEstornado();
+        this.idRelacaoEstorno = transferencia.getIdRelacaoEstorno();
     }
     
     public Long getId() {
@@ -130,17 +133,33 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
         this.estornado = estornado;
     }
     
+    public String getObservacao() {
+        return observacao;
+    }
+    
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+    
+    public Long getIdRelacaoEstorno() {
+        return idRelacaoEstorno;
+    }
+    
+    public void setIdRelacaoEstorno(Long idRelacaoEstorno) {
+        this.idRelacaoEstorno = idRelacaoEstorno;
+    }
+    
     public Transferencia construir() throws DadoInvalidoException {
         return new TransferenciaBuilder().comDestino(destino).comOrigem(origem).comValor(valor)
                 .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
     
     @Override
     public Transferencia construirComID() throws DadoInvalidoException {
         return new TransferenciaBuilder().comId(id).comDestino(destino).comOrigem(origem).
                 comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comBaixas(baixas).comEstornado(estornado).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comBaixas(baixas).comIdRelacaoEstorno(idRelacaoEstorno).comEstornado(estornado).construir();
     }
     
 }

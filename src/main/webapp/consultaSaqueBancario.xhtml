@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+        <div class="ui-g">
+            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-bank Fs40" style="color: #848484"/> #{l.Saque_Bancario}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+
+                        <div class="EmptyBox20"/>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+                            <p:outputLabel value="#{l.Id}"/>
+                            <a:inputTextDialog id="saqueBancarioId" value="#{consultaSaqueBancarioView.e}" dialog="#{selecaoSaqueBancarioView}" mbView="#{consultaSaqueBancarioView}" var="saqueBancario" converter="saqueBancarioBVConverter" itemLabel="#{saqueBancario.id}" itemValue="#{saqueBancario}" onlyNumber="true" editVisible="false" update="conteudo" process="@this"/>
+
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar pattern="dd/MM/yyyy" style="box-sizing: border-box" navigator="false" readonly="true" value="#{consultaSaqueBancarioView.e.emissao}"/>
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Origem}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <p:inputText readonly="true"  value="#{consultaSaqueBancarioView.e.origem.nome}"/>
+
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:inputText readonly="true"  value="#{consultaSaqueBancarioView.e.origem.moeda.nome}"/>
+
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputText readonly="true" value="#{consultaSaqueBancarioView.e.origem.moeda.sigla} #{consultaSaqueBancarioView.e.valor}"/>
+                            <p:spacer/><p:spacer/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox20"/>
+                        <h4 style="font-size: 15px" >#{l.Destino}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+
+                            <p:outputLabel value="#{l.Conta}"/>
+                            <p:inputText readonly="true"  value="#{consultaSaqueBancarioView.e.destino.nome}"/>
+
+                            <p:outputLabel value="#{l.Moeda}"/>
+                            <p:inputText readonly="true"  value="#{consultaSaqueBancarioView.e.destino.moeda.nome}"/>
+
+                            <p:outputLabel value="#{l.Valor}"/>
+                            <p:inputText readonly="true" value="#{consultaSaqueBancarioView.e.destino.moeda.sigla} #{consultaSaqueBancarioView.e.valorConvertido}"/>
+                            <p:spacer/><p:spacer/>
+                        </p:panelGrid>
+                        <div class="EmptyBox10"/>
+
+                        <p:separator/>
+
+                    </div> 
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Remover}" action="#{consultaSaqueBancarioView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{consultaSaqueBancarioView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
