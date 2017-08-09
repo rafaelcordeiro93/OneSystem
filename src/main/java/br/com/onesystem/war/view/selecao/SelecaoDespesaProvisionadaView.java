@@ -24,12 +24,12 @@ public class SelecaoDespesaProvisionadaView extends BasicCrudMBImpl<DespesaProvi
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoDespesaProvisionada");
+        exibirNaTela("financeiro/selecao/selecaoDespesaProvisionada");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/despesaProvisionada";
+        return "/menu/financeiro/cadastros/despesaProvisionada";
     }
 
     @Override

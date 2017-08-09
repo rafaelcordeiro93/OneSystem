@@ -25,12 +25,12 @@ public class SelecaoFaturaLegadaView extends BasicCrudMBImpl<FaturaLegada> imple
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoFaturaLegada");
+        exibirNaTela("financeiro/selecao/selecaoFaturaLegada");
     }
 
     @Override
     public String abrirEdicao() {
-        return "faturaLegada";
+        return "/menu/financeiro/faturaLegada";
     }
 
     @Override

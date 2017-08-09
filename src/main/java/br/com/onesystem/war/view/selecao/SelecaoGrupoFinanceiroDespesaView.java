@@ -24,12 +24,12 @@ public class SelecaoGrupoFinanceiroDespesaView extends BasicCrudMBImpl<GrupoFina
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoGrupoFinanceiroDespesa");
+        exibirNaTela("contabil/selecao/selecaoGrupoFinanceiroDespesa");
     }
     
     @Override
     public String abrirEdicao() {
-        return "grupoFinanceiro";
+        return "/menu/contabil/grupoFinanceiro";
     }
 
     @Override

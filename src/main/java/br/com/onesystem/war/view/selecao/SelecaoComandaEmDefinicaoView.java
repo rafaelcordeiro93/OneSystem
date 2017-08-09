@@ -26,12 +26,12 @@ public class SelecaoComandaEmDefinicaoView extends BasicCrudMBImpl<Comanda> impl
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoComandaEmDefinicao");
+        exibirNaTela("vendas/selecao/selecaoComandaEmDefinicao");
     }
 
     @Override
     public String abrirEdicao() {
-        return "comanda";
+        return "/menu/vendas/comanda";
     }
 
     @Override

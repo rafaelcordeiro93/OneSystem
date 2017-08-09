@@ -25,12 +25,12 @@ public class SelecaoBaixaView extends BasicCrudMBImpl<Baixa> implements Serializ
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoBaixa");
+        exibirNaTela("financeiro/selecao/selecaoBaixa");
     }
 
     @Override
     public String abrirEdicao() {
-        return "baixa";
+        return "/menu/financeiro/baixa";
     }
 
     @Override

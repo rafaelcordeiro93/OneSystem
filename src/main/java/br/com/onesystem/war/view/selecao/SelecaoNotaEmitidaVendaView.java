@@ -32,7 +32,7 @@ public class SelecaoNotaEmitidaVendaView extends BasicCrudMBImpl<NotaEmitida> im
 
     @Override
     public String abrirEdicao() {
-        return "notaEmitida";
+        return "/menu/vendas/notaEmitida";
     }
 
     @Override

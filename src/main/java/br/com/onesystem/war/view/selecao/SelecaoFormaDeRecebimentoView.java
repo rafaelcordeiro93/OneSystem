@@ -24,12 +24,12 @@ public class SelecaoFormaDeRecebimentoView extends BasicCrudMBImpl<FormaDeRecebi
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoFormaDeRecebimento");
+        exibirNaTela("financeiro/selecao/selecaoFormaDeRecebimento");
     }
     
     @Override
     public String abrirEdicao() {
-        return "formaDeRecebimento";
+        return "/menu/financeiro/cadastros/formaDeRecebimento";
     }
     
     @Override

@@ -175,7 +175,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCobranca", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoCobranca", opcoes, null);
     }
 
     public List<ModalidadeDeCobranca> getModalidadesDeCobranca() {

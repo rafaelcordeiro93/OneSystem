@@ -24,12 +24,12 @@ public class SelecaoGrupoDePrivilegioView extends BasicCrudMBImpl<GrupoDePrivile
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoGrupoPrivilegio");
+        exibirNaTela("topbar/preferencias/selecao/selecaoGrupoPrivilegio");
     }
 
     @Override
     public String abrirEdicao() {
-        return "grupoPrivilegio";
+        return "/menu/topbar/preferencias/grupoPrivilegio";
     }
     
     @Override

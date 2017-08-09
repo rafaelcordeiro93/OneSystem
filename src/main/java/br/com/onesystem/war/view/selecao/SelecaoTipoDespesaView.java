@@ -24,12 +24,12 @@ public class SelecaoTipoDespesaView extends BasicCrudMBImpl<TipoDespesa> impleme
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoTipoDespesa");
+        exibirNaTela("contabil/selecao/selecaoTipoDespesa");
     }
     
     @Override
     public String abrirEdicao() {
-        return "/tipoDespesa";
+        return "/menu/contabil/tipoDespesa";
     }
     
     @Override

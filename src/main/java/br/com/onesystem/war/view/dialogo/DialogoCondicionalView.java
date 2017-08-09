@@ -85,7 +85,7 @@ public class DialogoCondicionalView extends BasicMBImpl<Condicional, ItemDeCondi
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCondicional", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoCondicional", opcoes, null);
     }
 
     private void abrirJanelaQuantidade() {

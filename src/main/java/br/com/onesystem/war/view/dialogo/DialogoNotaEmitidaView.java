@@ -89,7 +89,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoNotaEmitida", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoNotaEmitida", opcoes, null);
     }
 
     @Override

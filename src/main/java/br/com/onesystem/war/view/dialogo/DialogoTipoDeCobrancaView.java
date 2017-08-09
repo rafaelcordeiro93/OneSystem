@@ -178,7 +178,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoTipoDeCobranca", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoTipoDeCobranca", opcoes, null);
     }
 
     public List<ModalidadeDeCobranca> getModalidadesDeCobranca() {

@@ -25,12 +25,12 @@ public class SelecaoComandaView extends BasicCrudMBImpl<Comanda> implements Seri
     
     @Override
     public void abrirDialogo() {  
-        exibirNaTela("selecaoComanda");
+        exibirNaTela("vendas/selecao/selecaoComanda");
     }
 
     @Override
     public String abrirEdicao() {
-        return "comanda";
+        return "/menu/vendas/comanda";
     }
 
     @Override

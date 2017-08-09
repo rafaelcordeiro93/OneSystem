@@ -27,12 +27,12 @@ public class SelecaoCobrancaView extends BasicCrudMBImpl<Cobranca> implements Se
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoCobranca");
+        exibirNaTela("financeiro/selecao/selecaoCobranca");
     }
 
     @Override
     public String abrirEdicao() {
-        return "cobranca";
+        return "/menu/financeiro/consultar/consultaCobranca";
     }
 
     @Override

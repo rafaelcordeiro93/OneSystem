@@ -97,7 +97,7 @@ public class DialogoComandaView extends BasicMBImpl<Comanda, ItemDeComandaBV> im
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoComanda", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoComanda", opcoes, null);
     }
 
     @Override

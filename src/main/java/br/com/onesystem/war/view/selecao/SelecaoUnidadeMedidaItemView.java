@@ -24,12 +24,12 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoUnidadeMedidaItem");
+        exibirNaTela("/estoque/selecao/selecaoUnidadeMedidaItem");
     }
 
     @Override
     public String abrirEdicao(){
-        return "unidadeMedidaItem";
+        return "/menu/estoque/cadastros/unidadeMedidaItem";
     }
     
      @Override

@@ -70,7 +70,7 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoOrcamento", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoOrcamento", opcoes, null);
     }
 
     @Override

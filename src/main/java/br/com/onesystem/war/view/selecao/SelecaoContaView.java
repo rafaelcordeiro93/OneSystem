@@ -24,12 +24,12 @@ public class SelecaoContaView extends BasicCrudMBImpl<Conta> implements Serializ
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoConta");
+        exibirNaTela("financeiro/selecao/selecaoConta");
     }
 
     @Override
     public String abrirEdicao() {
-        return "conta";
+        return "/menu/financeiro/cadastros/conta";
     }
 
     @Override

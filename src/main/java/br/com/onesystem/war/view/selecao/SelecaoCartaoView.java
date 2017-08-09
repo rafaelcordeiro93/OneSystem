@@ -24,12 +24,12 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoCartao");
+        exibirNaTela("financeiro/selecao/selecaoCartao");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/cartao";
+        return "/menu/financeiro/cadastros/cartao";
     }
     
      @Override

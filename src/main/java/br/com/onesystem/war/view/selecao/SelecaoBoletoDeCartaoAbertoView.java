@@ -26,12 +26,12 @@ public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCar
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoBoletoDeCartaoAberto");
+        exibirNaTela("financeiro/selecao/selecaoBoletoDeCartaoAberto");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/boletoDeCartao";
+        return "/menu/financeiro/cadastros/boletoDeCartao";
     }
 
     public BoletoDeCartaoService getService() {

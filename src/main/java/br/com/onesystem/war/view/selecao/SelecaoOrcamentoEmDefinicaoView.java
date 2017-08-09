@@ -26,12 +26,12 @@ public class SelecaoOrcamentoEmDefinicaoView extends BasicCrudMBImpl<Orcamento> 
     
     @Override
     public void abrirDialogo() {  
-        exibirNaTela("selecaoOrcamentoEmDefinicao");
+        exibirNaTela("vendas/selecao/selecaoOrcamentoEmDefinicao");
     }
 
     @Override
     public String abrirEdicao() {
-        return "orcamento";
+        return "/menu/vendas/orcamento";
     }
 
     @Override

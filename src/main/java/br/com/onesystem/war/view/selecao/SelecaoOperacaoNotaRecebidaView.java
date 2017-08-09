@@ -22,12 +22,12 @@ public class SelecaoOperacaoNotaRecebidaView extends BasicCrudMBImpl<Operacao> i
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoOperacaoNotaRecebida");
+        exibirNaTela("contabil/selecao/selecaoOperacaoNotaRecebida");
     }
 
     @Override
     public String abrirEdicao() {
-        return "operacoes";
+        return "/menu/contabil/operacoes";
     }
 
     @Override

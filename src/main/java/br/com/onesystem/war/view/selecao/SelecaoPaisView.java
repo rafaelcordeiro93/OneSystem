@@ -24,12 +24,12 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoPais");
+        exibirNaTela("arquivo/selecao/selecaoPais");
     }
     
     @Override
     public String abrirEdicao() {
-        return "pais";
+        return "/menu/arquivo/pais";
     }
     
      @Override

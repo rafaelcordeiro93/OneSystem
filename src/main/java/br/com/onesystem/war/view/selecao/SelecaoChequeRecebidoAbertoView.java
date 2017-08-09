@@ -27,12 +27,12 @@ public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> imp
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoChequeRecebidoAberto");
+        exibirNaTela("financeiro/selecao/selecaoChequeRecebidoAberto");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/cheque";
+        return "/menu/financeiro/cadastros/cheque";
     }
 
     @Override

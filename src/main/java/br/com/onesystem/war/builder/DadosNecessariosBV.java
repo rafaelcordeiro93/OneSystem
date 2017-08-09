@@ -16,7 +16,6 @@ import java.util.List;
 public class DadosNecessariosBV implements Serializable {
 
     private List<String> lista = new ArrayList<String>();
-    ;
     private String janela;
     private String caminho;
 

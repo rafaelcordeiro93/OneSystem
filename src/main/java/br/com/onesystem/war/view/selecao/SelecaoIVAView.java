@@ -24,12 +24,12 @@ public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implemen
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoIVA");
+        exibirNaTela("contabil/selecao/selecaoIVA");
     }
     
     @Override
     public String abrirEdicao() {
-        return "iva";
+        return "/menu/contabil/iva";
     }
     
     @Override

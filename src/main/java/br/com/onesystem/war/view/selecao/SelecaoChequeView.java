@@ -24,12 +24,12 @@ public class SelecaoChequeView extends BasicCrudMBImpl<Cheque> implements Serial
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoCheque");
+        exibirNaTela("financeiro/selecao/selecaoCheque");
     }
     
     @Override
     public String abrirEdicao() {
-        return "/cheque";
+        return "/menu/financeiro/cadastros/cheque";
     }
     
      @Override

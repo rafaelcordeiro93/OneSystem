@@ -26,12 +26,12 @@ public class SelecaoNotaRecebidaConhecimentoDeFreteView extends BasicCrudMBImpl<
 
      @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoNotaRecebidaConhecimentoDeFrete");
+        exibirNaTela("estoque/selecao/selecaoNotaRecebidaConhecimentoDeFrete");
     }
 
     @Override
     public String abrirEdicao() {
-        return "notaRecebida";
+        return "/menu/estoque/notaRecebida";
     }
 
     @Override

@@ -25,12 +25,12 @@ public class SelecaoUsuarioView extends BasicCrudMBImpl<Usuario> implements Seri
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoUsuario");
+        exibirNaTela("topbar/preferencias/selecao/selecaoUsuario");
     }
 
     @Override
     public String abrirEdicao() {
-            return "usuario";
+            return "/menu/topbar/preferencias/usuario";
     }
 
     @Override

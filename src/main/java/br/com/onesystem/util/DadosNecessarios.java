@@ -60,7 +60,7 @@ public class DadosNecessarios implements Serializable {
     public List<DadosNecessariosBV> valida(String janela) {
         init();
         switch (janela) {
-            case "/notaEmitida.xhtml": {
+            case "/menu/vendas/notaEmitida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getContaDeEstoque();
@@ -77,7 +77,7 @@ public class DadosNecessarios implements Serializable {
                 getCaixa();
                 break;
             }
-            case "/notaRecebida.xhtml": {
+            case "/menu/estoque/notaRecebida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getContaDeEstoque();
@@ -93,7 +93,7 @@ public class DadosNecessarios implements Serializable {
                 getCaixa();
                 break;
             }
-            case "/desdobramentoDeVenda.xhtml": {
+            case "/menu/vendas/retificacaoDeVenda.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getContaDeEstoque();
@@ -110,7 +110,7 @@ public class DadosNecessarios implements Serializable {
                 getCaixa();
                 break;
             }
-            case "/recebimento.xhtml": {
+            case "/menu/financeiro/recebimento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getReceitaDeDescontosObtidos();
@@ -124,7 +124,7 @@ public class DadosNecessarios implements Serializable {
                 getCaixa();
                 break;
             }
-            case "/pagamento.xhtml": {
+            case "/menu/financeiro/pagamento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getReceitaDeDescontosObtidos();
@@ -138,64 +138,64 @@ public class DadosNecessarios implements Serializable {
                 getCaixa();
                 break;
             }
-            case "/orcamento.xhtml": {
+            case "/menu/vendas/orcamento.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/comanda.xhtml": {
+            case "/menu/vendas/comanda.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
 //                getOperacaoDeComanda(); Implantação Futura
                 break;
             }
-            case "/condicional.xhtml": {
+            case "/menu/vendas/condicional.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 getOperacaoDeCondicional();
                 break;
             }
-            case "/relatorioDeBalancoFisico.xhtml": {
+            case "/menu/relatorios/estoque/relatorioDeBalancoFisico.xhtml": {
                 getMoedaPadrao();
                 getContaDeEstoque();
                 break;
             }
-            case "/ajusteDeEstoque.xhtml": {
+            case "/menu/estoque/ajusteDeEstoque.xhtml": {
                 getMoedaPadrao();
                 getOperacoes();
                 getContaDeEstoque();
                 break;
             }
-            case "/item.xhtml": {
+            case "/menu/estoque/item.xhtml": {
                 getContaDeEstoque();
                 break;
             }
-            case "/despesaProvisionada.xhtml": {
+            case "/menu/financeiro/cadastros/despesaProvisionada.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/receitaProvisionada.xhtml": {
+            case "/menu/financeiro/cadastros/receitaProvisionada.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/faturaLegada.xhtml": {
+            case "/menu/financeiro/faturaLegada.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/faturaEmitida.xhtml": {
+            case "/menu/financeiro/faturaEmitida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/faturaRecebida.xhtml": {
+            case "/menu/financeiro/faturaRecebida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
-            case "/extratoConta.xhtml": {
+            case "/menu/financeiro/extratoConta.xhtml": {
                 Moeda moeda = getMoedaPadrao();
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
@@ -207,7 +207,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private ContaDeEstoque getContaDeEstoque() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoEstoque.getContaDeEstoqueEmpresa() == null) {
                 throw new NullPointerException();
@@ -221,7 +221,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Moeda getMoedaPadrao() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracao.getMoedaPadrao() == null) {
                 throw new NullPointerException();
@@ -235,7 +235,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private FormaDeRecebimento getFormaRecebimentoDevolucaoPadraoEmpresa() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
 
             if (configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa() == null) {
@@ -250,7 +250,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Cotacao getCotacaoEmMoedaPadrao(Moeda moeda) {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/cotacao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/menu/financeiro/cotacao.xhtml");
         try {
             if (moeda != null) {
                 Cotacao cotacao = new CotacaoDAO().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
@@ -269,7 +269,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Operacao getOperacaoDeComanda() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoVenda.getOperacaoDeComanda() == null) {
                 throw new NullPointerException();
@@ -283,7 +283,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Operacao getOperacaoDeCondicional() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoVenda.getOperacaoDeCondicional() == null) {
                 throw new NullPointerException();
@@ -297,7 +297,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private List<Operacao> getOperacoes() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/operacoes.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/menu/contabil/operacoes.xhtml");
         try {
             OperacaoService operacaoService = new OperacaoService();
             List<Operacao> operacoes = operacaoService.buscar();
@@ -313,7 +313,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoReceita getReceitaDeJuros() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getReceitaDeJuros() == null) {
                 throw new NullPointerException();
@@ -327,7 +327,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoReceita getReceitaDeMultas() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getReceitaDeMultas() == null) {
                 throw new NullPointerException();
@@ -341,7 +341,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoReceita getReceitaDeDescontosObtidos() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getReceitaDeDescontosObtidos() == null) {
                 throw new NullPointerException();
@@ -355,7 +355,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoReceita getReceitaDeVariacaoCambial() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getReceitaDeVariacaoCambial() == null) {
                 throw new NullPointerException();
@@ -369,7 +369,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoDespesa getDespesaDeDescontosConcedidos() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getDespesaDeDescontosConcedidos() == null) {
                 throw new NullPointerException();
@@ -383,7 +383,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoDespesa getDespesaDeJuros() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getDespesaDeJuros() == null) {
                 throw new NullPointerException();
@@ -397,7 +397,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoDespesa getDespesaDeMultas() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getDespesaDeMultas() == null) {
                 throw new NullPointerException();
@@ -411,7 +411,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private TipoDespesa getDespesaDeVariacaoCambial() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/configuracao.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
         try {
             if (configuracaoContabil.getDespesaDeVariacaoCambial() == null) {
                 throw new NullPointerException();
@@ -425,7 +425,7 @@ public class DadosNecessarios implements Serializable {
     }
 
     private Caixa getCaixa() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Caixa"), "/caixa.xhtml");
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Caixa"), "/menu/financeiro/caixa.xhtml");
         try {
             Object object = SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
             if (object == null) {

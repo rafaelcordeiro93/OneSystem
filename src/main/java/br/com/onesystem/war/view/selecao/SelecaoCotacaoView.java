@@ -24,12 +24,12 @@ public class SelecaoCotacaoView extends BasicCrudMBImpl<Cotacao> implements Seri
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoCotacao");
+        exibirNaTela("financeiro/selecao/selecaoCotacao");
     }
 
     @Override
     public String abrirEdicao() {
-        return "cotacao";
+        return "/menu/financeiro/cotacao";
     }
     
     @Override

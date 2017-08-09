@@ -25,12 +25,12 @@ public class SelecaoAjusteDeEstoqueView extends BasicCrudMBImpl<AjusteDeEstoque>
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoAjusteDeEstoque");
+        exibirNaTela("/estoque/selecaoselecaoAjusteDeEstoque");
     }
 
     @Override
     public String abrirEdicao() {
-        return "ajusteDeEstoque";
+        return "/menu/estoque/ajusteDeEstoque";
     }
 
     @Override

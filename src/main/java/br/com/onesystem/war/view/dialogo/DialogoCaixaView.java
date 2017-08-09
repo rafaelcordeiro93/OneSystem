@@ -116,7 +116,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCaixa", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoCaixa", opcoes, null);
     }
 
     @Override
