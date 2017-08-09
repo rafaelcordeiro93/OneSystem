@@ -24,12 +24,12 @@ public class SelecaoRecebimentoView extends BasicCrudMBImpl<Recebimento> impleme
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoRecebimento");
+        exibirNaTela("financeiro/selecao/selecaoRecebimento");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/receitaProvisionada";
+        return "/menu/financeiro/cadastros/receitaProvisionada";
     }
     
     @Override

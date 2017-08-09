@@ -25,11 +25,11 @@ public class SelecaoTipoReceitaView extends BasicCrudMBImpl<TipoReceita> impleme
 
     @Override
     public String abrirEdicao() {
-        return "/tipoReceita";
+        return "/menu/contabil/tipoReceita";
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoTipoReceita");
+        exibirNaTela("contabil/selecao/selecaoTipoReceita");
     }
 
     @Override

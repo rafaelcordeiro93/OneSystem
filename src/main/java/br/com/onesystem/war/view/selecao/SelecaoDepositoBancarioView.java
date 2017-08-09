@@ -25,12 +25,12 @@ public class SelecaoDepositoBancarioView extends BasicCrudMBImpl<DepositoBancari
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoDepositoBancario");
+        exibirNaTela("financeiro/selecao/selecaoDepositoBancario");
     }
 
     @Override
     public String abrirEdicao() {
-        return "depositoBancario";
+        return "/menu/financeiro/consultar/consultaDepositoBancario";
     }
 
     @Override

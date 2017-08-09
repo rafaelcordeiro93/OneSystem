@@ -18,7 +18,6 @@ public enum OperacaoFinanceira {
 
     private Long id;
     private String nome;
-    private String tipoUnidadeUP;
 
     private OperacaoFinanceira(Long id, String nome) {
         this.id = id;

@@ -23,12 +23,12 @@ public class SelecaoOperacaoCondicionalView extends BasicCrudMBImpl<Operacao> im
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoOperacaoCondicional");
+        exibirNaTela("contabil/selecao/selecaoOperacaoCondicional");
     }
 
     @Override
     public String abrirEdicao() {
-        return "operacoes";
+        return "/menu/contabil/operacoes";
     }
 
     @Override

@@ -72,12 +72,12 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDep
         opcoes.put("closable", true);
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("/selecao/" + selecao, opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/menu/estoque/selecao/" + selecao, opcoes, null);
     }
 
     @Override
     public String abrirEdicao() {
-        return "item";
+        return "/menu/estoque/item";
     }
 
     public void criaLista() {

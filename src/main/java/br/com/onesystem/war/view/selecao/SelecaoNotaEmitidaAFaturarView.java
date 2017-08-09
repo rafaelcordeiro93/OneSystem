@@ -39,12 +39,12 @@ public class SelecaoNotaEmitidaAFaturarView extends BasicCrudMBImpl<NotaEmitida>
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoNotaEmitidaAFaturar");
+        exibirNaTela("vendas/selecao/selecaoNotaEmitidaAFaturar");
     }
 
     @Override
     public String abrirEdicao() {
-        return "notaEmitida";
+        return "/menu/vendas/notaEmitida";
     }
 
     @Override

@@ -200,7 +200,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
 
-        RequestContext.getCurrentInstance().openDialog("dialogo/dialogoCotacao", opcoes, null);
+        RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoCotacao", opcoes, null);
     }
 
     public List<ModalidadeDeCobranca> getModalidadesDeCobranca() {

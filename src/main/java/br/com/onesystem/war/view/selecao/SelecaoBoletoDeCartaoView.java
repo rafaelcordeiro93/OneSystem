@@ -24,12 +24,12 @@ public class SelecaoBoletoDeCartaoView extends BasicCrudMBImpl<BoletoDeCartao> i
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoBoletoDeCartao");
+        exibirNaTela("financeiro/selecao/selecaoBoletoDeCartao");
     }
     
     @Override
     public String abrirEdicao() {
-        return "boletoDeCartao";
+        return "/menu/financeiro/cadastros/boletoDeCartao";
     }
 
     public BoletoDeCartaoService getService() {

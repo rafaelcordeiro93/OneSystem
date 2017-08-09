@@ -24,12 +24,12 @@ public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serial
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoFilial");
+        exibirNaTela("topbar/preferencias/selecao/selecaoFilial");
     }
     
     @Override
     public String abrirEdicao() {
-        return "filial";
+        return "/menu/topbar/preferencias/filial";
     }
     
     @Override

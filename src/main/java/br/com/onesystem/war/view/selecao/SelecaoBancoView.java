@@ -25,12 +25,12 @@ public class SelecaoBancoView extends BasicCrudMBImpl<Banco> implements Serializ
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoBanco");
+        exibirNaTela("financeiro/selecao/selecaoBanco");
     }
     
     @Override
     public String abrirEdicao() {
-        return "/banco";
+        return "/menu/financeiro/cadastros/banco";
     }
     
     @Override

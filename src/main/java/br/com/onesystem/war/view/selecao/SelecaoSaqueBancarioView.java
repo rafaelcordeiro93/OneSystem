@@ -25,12 +25,12 @@ public class SelecaoSaqueBancarioView extends BasicCrudMBImpl<SaqueBancario> imp
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoSaqueBancario");
+        exibirNaTela("financeiro/selecao/selecaoSaqueBancario");
     }
 
     @Override
     public String abrirEdicao() {
-        return "saqueBancario";
+        return "/menu/financeiro/consultar/saqueBancario";
     }
 
     @Override

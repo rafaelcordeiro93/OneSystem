@@ -24,12 +24,12 @@ public class SelecaoDepositoView extends BasicCrudMBImpl<Deposito> implements Se
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoDeposito");
+        exibirNaTela("estoque/selecao/selecaoDeposito");
     }
     
     @Override
     public String abrirEdicao() {
-        return "deposito";
+        return "/menu/estoque/cadastros/deposito";
     }
     
     @Override

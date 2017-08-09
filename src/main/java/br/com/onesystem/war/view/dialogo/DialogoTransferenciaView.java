@@ -103,6 +103,7 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
 
     public void transferir() {
         try {
+            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
             t = e.construir();
             t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
             baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));

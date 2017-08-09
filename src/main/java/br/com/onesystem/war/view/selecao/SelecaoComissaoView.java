@@ -24,12 +24,12 @@ public class SelecaoComissaoView extends BasicCrudMBImpl<Comissao> implements Se
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoComissao");
+        exibirNaTela("estoque/selecao/selecaoComissao");
     }
     
     @Override
     public String abrirEdicao() {
-        return "comissao";
+        return "/menu/estoque/cadastros/comissao";
     }
 
     @Override

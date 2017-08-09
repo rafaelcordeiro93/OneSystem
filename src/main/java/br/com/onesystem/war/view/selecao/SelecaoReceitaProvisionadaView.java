@@ -24,12 +24,12 @@ public class SelecaoReceitaProvisionadaView extends BasicCrudMBImpl<ReceitaProvi
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoReceitaProvisionada");
+        exibirNaTela("financeiro/selecao/selecaoReceitaProvisionada");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/receitaProvisionada";
+        return "/menu/financeiro/cadastros/receitaProvisionada";
     }
     
     @Override

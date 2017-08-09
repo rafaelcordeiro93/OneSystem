@@ -77,6 +77,20 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
         list.remove(index);
     }
 
+    public void remove(T t) {
+        List<Model<T>> list = (List<Model<T>>) getWrappedData();
+        Model m = getRowData(String.valueOf(indexOf(t)));
+        System.out.println("Model: " + m);
+        removidos.add(m);
+        list.remove(m);
+    }
+
+    public int indexOf(T t) {
+        List<Model<T>> list = (List<Model<T>>) getWrappedData();
+        Model<T> modelFind = list.stream().filter((m) -> m.getObject().equals(t)).findAny().get();
+        return list.indexOf(modelFind);
+    }
+
     public void remove(Model m) {
         List<Model<T>> list = (List<Model<T>>) getWrappedData();
         removidos.add(m);

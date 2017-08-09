@@ -7,20 +7,25 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.TransferenciaDAO;
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
+import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -34,8 +39,11 @@ import org.primefaces.event.SelectEvent;
 public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, TransferenciaBV> implements Serializable {
 
     private TransferenciaBV transferenciaEstornada;
+    private Cotacao cotacaoPadrao;
     private List<Cotacao> cotacaoBancariaLista;
-    private List<Cotacao> cotacaoEmpresaLista;
+
+    @Inject
+    private ConfiguracaoService serviceConf;
 
     @PostConstruct
     public void init() {
@@ -43,15 +51,18 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
     }
 
     public void inicializar() {
-        cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
-        cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+        try {
+            cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     @Override
     public void limparJanela() {
         e = new TransferenciaBV();
         transferenciaEstornada = new TransferenciaBV();
-        cotacaoEmpresaLista = new ArrayList<>();
         cotacaoBancariaLista = new ArrayList<>();
     }
 
@@ -72,9 +83,10 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
             transferenciaEstornada.setEstornado(true);
             transferenciaEstornada.setIdRelacaoEstorno(e.getId());
             Transferencia d = transferenciaEstornada.construir();
-            d.geraEstornoDaTransferenciaCom(transferenciaEstornada.getCotacaoDeOrigem(), transferenciaEstornada.getCotacaoDeDestino());
-            new AdicionaDAO<>().adiciona(d);
-            atualizaTransferencia(d);
+            d.geraEstornoDaTransferenciaCom(transferenciaEstornada.getCotacaoDeOrigem(), transferenciaEstornada.getCotacaoDeDestino());//Cria os Estorno dos Valores Tranferidos entre as Contas.
+            estornaTaxas(d);//Cria os Estorno das Taxas Bancarias que Haviam sido cobradas.
+            new AdicionaDAO<>().adiciona(d);//Adiciona a Transferencia Estornada
+            atualizaTransferencia(d);//Atualiza a Tranferencia Lançamento 
             InfoMessage.atualizado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
@@ -82,12 +94,32 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
         }
     }
 
+    public void estornaTaxas(Transferencia d) {
+        try {
+            List<Baixa> baixas = new BaixaDAO().ePorTransferencia(e.construirComID()).eComDespesa().listaDeResultados();
+            for (Baixa b : baixas) {
+                BaixaBV bv = new BaixaBV(b);
+                bv.setId(null);
+                bv.setHistorico(null);
+                bv.setTransferencia(null);
+                bv.setEmissao(null);
+                d.adiciona(bv.construir());
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
     public void selecionaCotacao() {
         if (transferenciaEstornada.getDestino() != null) {
-            transferenciaEstornada.setCotacaoDeDestino(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(e.getDestino())).findFirst().get());
+            transferenciaEstornada.setCotacaoDeDestino(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(transferenciaEstornada.getDestino())).findFirst().get());
+        } else {
+            transferenciaEstornada.setCotacaoDeDestino(cotacaoPadrao);
         }
         if (transferenciaEstornada.getOrigem() != null) {
-            transferenciaEstornada.setCotacaoDeOrigem(cotacaoEmpresaLista.stream().filter(c -> c.getConta().equals(e.getOrigem())).findFirst().get());
+            transferenciaEstornada.setCotacaoDeOrigem(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(transferenciaEstornada.getOrigem())).findFirst().get());
+        } else {
+            transferenciaEstornada.setCotacaoDeOrigem(cotacaoPadrao);
         }
     }
 
@@ -105,7 +137,9 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
     public void delete() {
         try {
             t = e.construirComID();
-            cancelaEstorno();
+            if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.ESTORNO)) {
+                cancelaEstorno();
+            }
             deleteNoBanco(t, t.getId());
         } catch (DadoInvalidoException ex) {
             ex.print();

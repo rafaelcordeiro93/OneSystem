@@ -5,8 +5,6 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.domain.Margem;
-import br.com.onesystem.domain.IVA;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
@@ -18,6 +16,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -38,17 +37,18 @@ public class GrupoFiscal implements Serializable {
     @Length(min = 4, max = 120, message = "{nome_lenght}")
     @Column(nullable = false, length = 120)
     private String nome;
-    @NotNull(message = "{IVA_not_null}")
-    @ManyToOne(optional = false)
-    private IVA iva;
+    @OneToMany(mappedBy = "grupoFiscal")
+    private List<SituacaoFiscal> situacoesFiscais;
+    @ManyToOne
+    private TabelaDeTributacao tabelaDeTributacaoPadrao;
 
     public GrupoFiscal() {
     }
 
-    public GrupoFiscal(Long id, String nome, IVA iva) throws DadoInvalidoException {
+    public GrupoFiscal(Long id, String nome, TabelaDeTributacao tabelaDeTributacaoPadrao) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.iva = iva;
+        this.tabelaDeTributacaoPadrao = tabelaDeTributacaoPadrao;
         ehValido();
     }
 
@@ -60,17 +60,17 @@ public class GrupoFiscal implements Serializable {
         return nome;
     }
 
-    public IVA getIva() {
-        return iva;
+    public TabelaDeTributacao getTabelaDeTributacaoPadrao() {
+        return tabelaDeTributacaoPadrao;
     }
 
     @Override
     public String toString() {
-        return "GrupoFiscal{" + "id=" + id + ", nome=" + nome + ", iva=" + iva + '}';
+        return "GrupoFiscal{" + "id=" + id + ", nome=" + nome + '}';
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "iva");
+        List<String> campos = Arrays.asList("nome");
         new ValidadorDeCampos<GrupoFiscal>().valida(this, campos);
     }
 

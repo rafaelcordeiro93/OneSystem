@@ -73,7 +73,7 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
         try {
             comandasAbertas = service.buscarComandasNo(EstadoDeComanda.EM_DEFINICAO);
             configuracao = configuracaoService.buscar();
-            cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naUltimaEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

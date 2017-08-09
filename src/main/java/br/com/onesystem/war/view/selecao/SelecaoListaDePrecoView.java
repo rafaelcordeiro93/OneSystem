@@ -24,12 +24,12 @@ public class SelecaoListaDePrecoView extends BasicCrudMBImpl<ListaDePreco> imple
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoListaDePreco");
+        exibirNaTela("estoque/selecao/selecaoListaDePreco");
     }
 
     @Override
     public String abrirEdicao() {
-        return "listaDePreco";
+        return "/menu/estoque/cadastros/listaDePreco";
     }
     
     @Override

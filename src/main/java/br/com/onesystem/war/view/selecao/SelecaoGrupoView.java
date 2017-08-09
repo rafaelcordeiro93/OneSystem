@@ -24,12 +24,12 @@ public class SelecaoGrupoView extends BasicCrudMBImpl<Grupo> implements Serializ
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoGrupo");
+        exibirNaTela("estoque/selecao/selecaoGrupo");
     }
     
     @Override
     public String abrirEdicao() {
-        return "grupo";
+        return "/menu/estoque/cadastros/grupo";
     }
     
     @Override

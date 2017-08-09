@@ -25,12 +25,12 @@ public class SelecaoCondicionalView extends BasicCrudMBImpl<Condicional> impleme
     
     @Override
     public void abrirDialogo() {  
-        exibirNaTela("selecaoCondicional");
+        exibirNaTela("vendas/selecao/selecaoCondicional");
     }
 
     @Override
     public String abrirEdicao() {
-        return "condicional";
+        return "/menu/vendas/condicional";
     }
 
     @Override

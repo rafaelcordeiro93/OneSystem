@@ -1,7 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.GrupoFiscal;
-import br.com.onesystem.domain.IVA;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 
 /**
@@ -12,7 +12,8 @@ public class GrupoFiscalBuilder {
 
     private Long id;
     private String nome;
-    private IVA iva;
+    private TabelaDeTributacao iva;
+    private TabelaDeTributacao tabelaDeTributacaoPadrao;
 
     public GrupoFiscalBuilder comID(Long ID) {
         this.id = ID;
@@ -24,13 +25,13 @@ public class GrupoFiscalBuilder {
         return this;
     }
 
-    public GrupoFiscalBuilder comIVA(IVA iva) {
-        this.iva = iva;
+    public GrupoFiscalBuilder comTabelaDeTributacaoPadrao(TabelaDeTributacao tabelaDeTributacaoPadrao) {
+        this.tabelaDeTributacaoPadrao = tabelaDeTributacaoPadrao;
         return this;
     }
 
     public GrupoFiscal construir() throws DadoInvalidoException {
-        return new GrupoFiscal(id, nome, iva);
+        return new GrupoFiscal(id, nome, tabelaDeTributacaoPadrao);
     }
 
 }

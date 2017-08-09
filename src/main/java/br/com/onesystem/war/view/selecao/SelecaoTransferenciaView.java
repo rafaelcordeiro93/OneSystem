@@ -25,12 +25,12 @@ public class SelecaoTransferenciaView extends BasicCrudMBImpl<Transferencia> imp
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoTransferencia");
+        exibirNaTela("financeiro/selecao/selecaoTransferencia");
     }
 
     @Override
     public String abrirEdicao() {
-        return "transferencia";
+        return "/menu/financeiro/consultar/transferencia";
     }
 
     @Override

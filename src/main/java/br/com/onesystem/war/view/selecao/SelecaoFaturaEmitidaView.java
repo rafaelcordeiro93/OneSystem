@@ -25,12 +25,12 @@ public class SelecaoFaturaEmitidaView extends BasicCrudMBImpl<FaturaEmitida> imp
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoFaturaEmitida");
+        exibirNaTela("financeiro/selecao/selecaoFaturaEmitida");
     }
 
     @Override
     public String abrirEdicao() {
-        return "faturaEmitida";
+        return "/menu/financeiro/faturaEmitida";
     }
 
     @Override

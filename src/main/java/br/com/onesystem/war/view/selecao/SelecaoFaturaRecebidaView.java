@@ -25,12 +25,12 @@ public class SelecaoFaturaRecebidaView extends BasicCrudMBImpl<FaturaRecebida> i
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoFaturaRecebida");
+        exibirNaTela("financeiro/selecao/selecaoFaturaRecebida");
     }
 
     @Override
     public String abrirEdicao() {
-        return "faturaRecebida";
+        return "/menu/financeiro/faturaRecebida";
     }
 
     @Override

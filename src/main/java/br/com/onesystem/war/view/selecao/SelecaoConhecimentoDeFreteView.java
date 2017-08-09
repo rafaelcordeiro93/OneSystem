@@ -24,12 +24,12 @@ public class SelecaoConhecimentoDeFreteView extends BasicCrudMBImpl<Conhecimento
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoConhecimentoDeFrete");
+        exibirNaTela("estoque/selecao/selecaoConhecimentoDeFrete");
     }
 
     @Override
     public String abrirEdicao() {
-        return "conhecimentoDeFrete";
+        return "/menu/estoque/conhecimentoDeFrete";
     }
 
     @Override

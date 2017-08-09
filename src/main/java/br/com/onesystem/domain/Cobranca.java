@@ -40,7 +40,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import br.com.onesystem.services.impl.Formatter;
+import br.com.onesystem.services.impl.FormatacaoNumeroRelatorio;
+import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 
 /**
  *
@@ -143,7 +144,7 @@ public abstract class Cobranca implements Serializable {
         return id;
     }
 
-    @Formatter(formatterMethod = "getValorFormatado")
+    @FormatacaoNumeroRelatorio(formatacaoNumero = TipoFormatacaoNumero.MOEDA)
     public BigDecimal getValor() {
         return valor;
     }

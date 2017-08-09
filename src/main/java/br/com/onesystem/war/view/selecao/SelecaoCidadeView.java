@@ -24,12 +24,12 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoCidade");
+        exibirNaTela("arquivo/selecao/selecaoCidade");
     }
     
     @Override
     public String abrirEdicao() {
-        return "cidade";
+        return "/menu/arquivo/cidade";
     }
     
      @Override

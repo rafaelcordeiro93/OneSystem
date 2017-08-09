@@ -25,12 +25,12 @@ public class SelecaoOperacaoView extends BasicCrudMBImpl<Operacao> implements Se
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoOperacao");
+        exibirNaTela("contabil/selecao/selecaoOperacao");
     }
     
     @Override
     public String abrirEdicao(){
-        return "operacoes";
+        return "/menu/contabil/operacoes";
     }
     
     @Override

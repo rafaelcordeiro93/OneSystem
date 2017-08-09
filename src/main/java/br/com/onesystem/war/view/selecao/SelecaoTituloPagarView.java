@@ -24,12 +24,12 @@ public class SelecaoTituloPagarView extends BasicCrudMBImpl<Titulo> implements S
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoTituloPagar");
+        exibirNaTela("financeiro/selecao/selecaoTituloPagar");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/consultaCobranca";
+        return "/menu/financeiro/consultar/consultaCobranca";
     }
     
     @Override

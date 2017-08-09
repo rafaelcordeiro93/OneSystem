@@ -25,12 +25,12 @@ public class SelecaoMarcaView extends BasicCrudMBImpl<Marca> implements Serializ
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoMarca");
+        exibirNaTela("estoque/selecao/selecaoMarca");
     }
     
     @Override
     public String abrirEdicao() {
-        return "marca";
+        return "/menu/estoque/cadastros/marca";
     }
     
      @Override

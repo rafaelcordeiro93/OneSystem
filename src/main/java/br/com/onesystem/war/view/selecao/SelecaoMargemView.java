@@ -25,12 +25,12 @@ public class SelecaoMargemView extends BasicCrudMBImpl<Margem> implements Serial
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoMargem");
+        exibirNaTela("estoque/selecao/selecaoMargem");
     }
     
     @Override
     public String abrirEdicao() {
-        return "margem";
+        return "/menu/estoque/cadastros/margem";
     }
     
      @Override

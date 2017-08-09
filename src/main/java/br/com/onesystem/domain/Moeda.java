@@ -98,4 +98,9 @@ public class Moeda implements Serializable {
         new ValidadorDeCampos<Moeda>().valida(this, campos);
     }
 
+    @Override
+    public String toString() {
+        return "Moeda{" + "id=" + id + ", nome=" + nome + ", sigla=" + sigla + ", bandeira=" + bandeira + '}';
+    }
+
 }

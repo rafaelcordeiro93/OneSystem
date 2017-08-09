@@ -25,12 +25,12 @@ public class SelecaoGrupoDeMargemView extends BasicCrudMBImpl<Margem> implements
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoGrupoDeMargem");
+        exibirNaTela("estoque/selecao/selecaoGrupoDeMargem");
     }
     
     @Override
     public String abrirEdicao() {
-        return "margem";
+        return "/menu/estoque/cadastros/margem";
     }
     
     @Override

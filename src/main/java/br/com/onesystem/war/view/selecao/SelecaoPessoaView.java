@@ -25,12 +25,12 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoPessoa");
+        exibirNaTela("arquivo/selecao/selecaoPessoa");
     }
     
     @Override
     public String abrirEdicao() {
-        return "/pessoa";
+        return "/menu/arquivo/pessoa";
     }
     
     @Override

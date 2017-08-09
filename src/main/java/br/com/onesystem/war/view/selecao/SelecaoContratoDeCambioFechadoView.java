@@ -24,12 +24,12 @@ public class SelecaoContratoDeCambioFechadoView extends BasicCrudMBImpl<Contrato
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoContratoDeCambioFechado");
+        exibirNaTela("cambio/selecao/selecaoContratoDeCambioFechado");
     }
 
     @Override
     public String abrirEdicao() {
-        return "contratoDeCambio";
+        return "/menu/cambio/contratoDeCambio";
     }
 
     @Override

@@ -24,12 +24,12 @@ public class SelecaoTituloReceberView extends BasicCrudMBImpl<Titulo> implements
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoTituloReceber");
+        exibirNaTela("financeiro/selecao/selecaoTituloReceber");
     }
 
     @Override
     public String abrirEdicao() {
-        return "/consultaCobranca";
+        return "/menu/financeiro/consultar/consultaCobranca";
     }
  
     @Override

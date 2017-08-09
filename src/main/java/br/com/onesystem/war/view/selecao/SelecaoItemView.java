@@ -25,12 +25,12 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
 
     @Override
     public void abrirDialogo() {
-        exibirNaTela("selecaoItem");
+        exibirNaTela("estoque/selecao/selecaoItem");
     }
     
     @Override
     public String abrirEdicao() {
-        return "item";
+        return "/menu/estoque/item";
     }
     
     @Override

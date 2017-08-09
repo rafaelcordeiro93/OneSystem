@@ -24,12 +24,12 @@ public class SelecaoMoedaView extends BasicCrudMBImpl<Moeda> implements Serializ
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoMoeda");
+        exibirNaTela("financeiro/selecao/selecaoMoeda");
     }
     
     @Override
     public String abrirEdicao() {
-        return "moeda";
+        return "/menu/financeiro/cadastros/moeda";
     }
     
     @Override

@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.valueobjects.TipoRelatorio;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 
@@ -33,7 +34,7 @@ public class RelatorioDeDespesaProvisionadaView extends BasicMBReportImpl<Cobran
         addCampoPadrao(new Coluna(bundle.getLabel("Tipo_Despesa") + "(" + bundle.getLabel("Despesa_Provisionada") + ")", bundle.getLabel("Despesa_Provisionada"), "tipoDespesa", "nome", DespesaProvisionada.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca_Fixa"), "emissao", CobrancaFixa.class, Date.class, null));
 
-        initialize(CobrancaFixa.class, CobrancaFixaDAO.class);
+        initialize(CobrancaFixa.class, CobrancaFixaDAO.class, TipoRelatorio.DESPESAS_PROVISIONADAS);
 
     }
 

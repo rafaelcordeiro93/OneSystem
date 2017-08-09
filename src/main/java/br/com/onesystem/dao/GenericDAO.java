@@ -81,105 +81,19 @@ public abstract class GenericDAO<T> {
         }
     }
 
-// Utilizado para vários tipos de filtros, no entanto não necessário, porém fica comentado 
-// para se houver necessidade em futuro próximo - Data Atual: 26/07/2017.
-//
-//    public GenericDAO filter(TipoDeBusca tipo, FieldModel campo, Object parametro) {
-//        String ALIAS = query.split(" ")[4];
-//        String ps = parametro instanceof String ? (String) parametro : null;
-//        Long pl = parametro instanceof Long ? (Long) parametro : null;
-//        BigDecimal pb = parametro instanceof BigDecimal ? (BigDecimal) parametro : null;
-//        Date dt = parametro instanceof Date ? (Date) parametro : null;
-//        List<String> ls = parametro instanceof List && !((List) parametro).isEmpty() && ((List) parametro).get(0) instanceof String ? (List) parametro : null;
-//        List<Long> ll = parametro instanceof List && !((List) parametro).isEmpty() && ((List) parametro).get(0) instanceof Long ? (List) parametro : null;
-//        List<BigDecimal> lb = parametro instanceof List && !((List) parametro).isEmpty() && ((List) parametro).get(0) instanceof BigDecimal ? (List) parametro : null;
-//
-//        String igualOuIn = parametro instanceof List ? "in" : "=";
-//        String p = ":p" + campo.getPropriedadeCompleta().substring(0, 1).toUpperCase() + campo.getPropriedadeCompleta().substring(1).replaceAll("\\.", "_");
-//
-//        if (tipo == TipoDeBusca.IGUAL_A) {
-//            if (ps != null || ls != null) {
-//                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + igualOuIn + " lower(" + p + ")";
-//            } else {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + igualOuIn + " " + p + "";
-//            }
-//            parametros.put(p.substring(1), ps != null ? ps : pl != null ? pl : pb != null ? pb : ls != null ? ls : ll != null ? ll : lb != null ? lb : dt != null ? dt : null);
-//        } else if (tipo == TipoDeBusca.DIFERENTE_DE) {
-//            if (ps != null || ls != null) {
-//                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") != lower(" + p + ")";
-//            } else {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " != " + p + "";
-//            }
-//            parametros.put(p.substring(1), ps != null ? ps : pl != null ? pl : pb != null ? pb : ls != null ? ls : ll != null ? ll : lb != null ? lb : dt != null ? dt : null);
-//        } else if (tipo == TipoDeBusca.INICIANDO) {
-//            if (ls == null) {
-//                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                parametros.put(p.substring(1), ps + "%");
-//            } else {
-//                String s = " and ";
-//                for (int i = 0; i < ls.size(); i++) {
-//                    p = p + "_" + i;
-//                    where += s + "lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                    parametros.put(p.substring(1), ls.get(i) + "%");
-//                    s = " or ";
-//                }
-//                where += ")";
-//            }
-//        } else if (tipo == TipoDeBusca.TERMINANDO) {
-//            if (ls == null) {
-//                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                parametros.put(p.substring(1), "%" + ps);
-//            } else {
-//                String s = " and ";
-//                for (int i = 0; i < ls.size(); i++) {
-//                    p = p + "_" + i;
-//                    where += s + "lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                    parametros.put(p.substring(1), "%" + ls.get(i));
-//                    s = " or ";
-//                }
-//                where += ")";
-//            }
-//        } else if (tipo == TipoDeBusca.CONTENDO) {
-//            if (ls == null) {
-//                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                parametros.put(p.substring(1), "%" + ps + "%");
-//            } else {
-//                String s = " and ";
-//                for (int i = 0; i < ls.size(); i++) {
-//                    p = p + "_" + i;
-//                    where += s + "lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + p + ")";
-//                    parametros.put(p.substring(1), "%" + ls.get(i) + "%");
-//                    s = " or ";
-//                }
-//                where += ")";
-//            }
-//        } else if (parametro instanceof Long || parametro instanceof BigDecimal || parametro instanceof Date) {
-//            if (tipo == TipoDeBusca.MAIOR_QUE) {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " > " + p;
-//            } else if (tipo == TipoDeBusca.MAIOR_OU_IGUAL_A) {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " >= " + p;
-//            } else if (tipo == TipoDeBusca.MENOR_QUE) {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " < " + p;
-//            } else if (tipo == TipoDeBusca.MENOR_OU_IGUAL_A) {
-//                where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " <= " + p;
-//            }
-//            parametros.put(p.substring(1), pl != null ? pl : pb != null ? pb : dt != null ? dt : null);
-//        }
-//
-//        return this;
-//    }
     public GenericDAO filter(TipoDeBusca tipo, Coluna campo, Object filtro) {
         String ALIAS = query.split(" ")[4];
         Date date = filtro instanceof Date ? (Date) filtro : null;
         SortedSet<String> conjuntoString = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof String ? (TreeSet<String>) filtro : null;
         SortedSet<Long> conjuntoLong = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Long ? (TreeSet<Long>) filtro : null;
         SortedSet<BigDecimal> conjuntoBigDecimal = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof BigDecimal ? (TreeSet<BigDecimal>) filtro : null;
+        SortedSet<Enum> conjuntoEnum = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Enum ? (TreeSet<Enum>) filtro : null;
 
         String igualOuIn = filtro instanceof SortedSet ? "in" : "=";
         String diferenteOuNotIn = filtro instanceof SortedSet ? "not in" : "!=";
 
-        String parametro = ":p" + tipo.getNome() + "_" + campo.getPropriedadeCompleta().substring(0, 1).toUpperCase() + campo.getPropriedadeCompleta().substring(1).replaceAll("\\.", "_");
-        
+        String parametro = ":p" + tipo + "_" + campo.getPropriedadeCompleta().substring(0, 1).toUpperCase() + campo.getPropriedadeCompleta().substring(1).replaceAll("\\.", "_");
+
         if (tipo == TipoDeBusca.IGUAL_A) {
             if (conjuntoString != null) {
                 where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + igualOuIn + " lower(" + parametro + ")";
@@ -190,7 +104,7 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + igualOuIn + " " + parametro + "";
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
             }
         } else if (tipo == TipoDeBusca.DIFERENTE_DE) {
             if (conjuntoString != null) {
@@ -202,7 +116,7 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + diferenteOuNotIn + " " + parametro;
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
             }
             parametros.put(parametro.substring(1), conjuntoString != null ? conjuntoString : conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : date != null ? date : null);
         } else if (conjuntoString != null && (tipo == TipoDeBusca.INICIANDO || tipo == TipoDeBusca.TERMINANDO || tipo == TipoDeBusca.CONTENDO)) {

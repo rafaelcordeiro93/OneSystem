@@ -24,12 +24,12 @@ public class SelecaoContaDeEstoqueView extends BasicCrudMBImpl<ContaDeEstoque> i
     }
 
     public void abrirDialogo() {
-        exibirNaTela("selecaoContaDeEstoque");
+        exibirNaTela("estoque/selecao/selecaoContaDeEstoque");
     }
 
     @Override
     public String abrirEdicao() {
-        return "contaDeEstoque";
+        return "/menu/estoque/contaDeEstoque";
     }
     
     @Override
