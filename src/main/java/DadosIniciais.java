@@ -233,7 +233,7 @@ public class DadosIniciais {
         Janela grupoFinance = new Janela(null, "Grupo Financeiro", "/menu/contabil/grupoFinanceiro.xhtml", con);
         Janela jgrupoFiscal = new Janela(null, "Grupo Fiscal", "/menu/contabil/grupoFiscal.xhtml", con);
         Janela operacoes = new Janela(null, "Operacoes", "/menu/contabil/operacoes.xhtml", con);
-        Janela jiva = new Janela(null, "IVA", "/menu/contabil/iva.xhtml", con);
+        Janela jiva = new Janela(null, "Tabela De Tributação", "/menu/contabil/tabelaDeTributacao.xhtml", con);
 
         daoJanela.adiciona(jiva);
         daoJanela.adiciona(tipoDespesa);

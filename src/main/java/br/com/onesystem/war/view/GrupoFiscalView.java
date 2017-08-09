@@ -24,7 +24,7 @@ public class GrupoFiscalView extends BasicMBImpl<GrupoFiscal, GrupoFiscalBV> imp
         if (obj instanceof GrupoFiscal) {
             e = new GrupoFiscalBV((GrupoFiscal) obj);
         } else if (obj instanceof TabelaDeTributacao) {
-            e.setIva((TabelaDeTributacao) obj);
+            e.setTabelaDeTributacao((TabelaDeTributacao) obj);
         }        
     }
     

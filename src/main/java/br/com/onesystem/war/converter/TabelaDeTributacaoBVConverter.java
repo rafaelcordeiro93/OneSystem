@@ -7,8 +7,8 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.builder.IVABV;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.builder.TabelaDeTributacaoBV;
+import br.com.onesystem.war.service.TabelaDeTributacaoService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.component.UIComponent;
@@ -20,33 +20,33 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaBVConverter", forClass = IVABV.class)
-public class IVABVConverter implements Converter, Serializable {
+@FacesConverter(value = "tabelaDeTributacaoBVConverter", forClass = TabelaDeTributacaoBV.class)
+public class TabelaDeTributacaoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TabelaDeTributacao> lista = new IVAService().buscarIVAs();
+                List<TabelaDeTributacao> lista = new TabelaDeTributacaoService().buscarTabelasDeTributacao();
                 if (StringUtils.containsLetter(value)) {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getNome().equals(value)) {
-                            return new IVABV(iva);
+                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
+                        if (tabelaDeTributacao.getNome().equals(value)) {
+                            return new TabelaDeTributacaoBV(tabelaDeTributacao);
                         }
                     }
                 } else {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getId().equals(new Long(value))) {
-                            return new IVABV(iva);
+                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
+                        if (tabelaDeTributacao.getId().equals(new Long(value))) {
+                            return new TabelaDeTributacaoBV(tabelaDeTributacao);
                         }
                     }
                 }
-                return new IVABV();
+                return new TabelaDeTributacaoBV();
             } catch (Exception e) {
-                return new IVABV();
+                return new TabelaDeTributacaoBV();
             }
         } else {
-            return new IVABV();
+            return new TabelaDeTributacaoBV();
         }
     }
 
@@ -54,7 +54,7 @@ public class IVABVConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((IVABV) object).getNome());
+                return String.valueOf(((TabelaDeTributacaoBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

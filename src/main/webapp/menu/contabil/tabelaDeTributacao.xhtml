@@ -12,7 +12,7 @@
             <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.IVA}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-strikethrough Fs40" style="color: #848484"/> #{l.Tabela_de_Tributacao}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
@@ -23,13 +23,13 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="ivaID" value="#{IVAView.e}" update=":conteudo" dialog="#{selecaoIVAView}" mbView="#{IVAView}" var="iva" converter="ivaBVConverter" process="@this" itemLabel="#{iva.id}" itemValue="#{iva}" editVisible="false" onlyNumber="true" itemLabelTab="#{iva.nome}" itemLabelTabVisible="true"/>
+                            <a:inputTextDialog id="tabelaDeTributacaoID" value="#{tabelaDeTributacaoView.e}" update=":conteudo" dialog="#{selecaoTabelaDeTributacaoView}" mbView="#{tabelaDeTributacaoView}" var="tabelaDeTributacao" converter="tabelaDeTributacaoBVConverter" process="@this" itemLabel="#{tabelaDeTributacao.id}" itemValue="#{tabelaDeTributacao}" editVisible="false" onlyNumber="true" itemLabelTab="#{tabelaDeTributacao.nome}" itemLabelTabVisible="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{iVAView.e.nome}" maxlength="60"/>
+                            <p:inputText value="#{tabelaDeTributacaoView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.IVA}"/>
-                            <p:inputText value="#{iVAView.e.iva}" maxlength="2"/>
+                            <p:inputText value="#{tabelaDeTributacaoView.e.iva}" maxlength="2"/>
                         </p:panelGrid>
                         <div class="EmptyBox20"/>
 
@@ -39,10 +39,10 @@
                     <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
 
-                        <p:commandButton value="#{l.Adicionar}" action="#{iVAView.add()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{iVAView.update()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{iVAView.delete()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{iVAView.limparJanela()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Adicionar}" action="#{tabelaDeTributacaoView.add()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{tabelaDeTributacaoView.update()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{tabelaDeTributacaoView.delete()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{tabelaDeTributacaoView.limparJanela()}"   styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
 
                 </div>

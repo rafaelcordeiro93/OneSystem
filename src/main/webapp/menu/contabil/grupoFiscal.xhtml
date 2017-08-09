@@ -29,7 +29,7 @@
                             <p:inputText value="#{grupoFiscalView.e.nome}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.IVA}"/>
-                            <a:inputTextDialog id="grupoFiscalIVA" dialog="#{selecaoIVAView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.e.iva}" var="iva" itemLabel="#{iva.nome}" itemValue="#{iva}" converter="ivaConverter" itemLabelTabVisible="true" itemLabelTab="#{iva.nome}"/>
+                            <a:inputTextDialog id="grupoFiscalTabelaDeTributacao" dialog="#{selecaoTabelaDeTributacaoView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.e.tabelaDeTributacao}" var="tabelaDeTributacao" itemLabel="#{tabelaDeTributacao.nome}" itemValue="#{tabelaDeTributacao}" converter="tabelaDeTributacaoConverter" itemLabelTabVisible="true" itemLabelTab="#{tabelaDeTributacao.nome}"/>
 
 
                         </p:panelGrid>

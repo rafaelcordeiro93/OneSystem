@@ -6,10 +6,10 @@
                 template="/WEB-INF/templateDialog.xhtml">
 
 
-    <ui:define name="title">#{l.Selecao_De_IVA}</ui:define>
+    <ui:define name="title">#{l.Selecao_De_Tabela_De_Tributacao}</ui:define>
 
     <ui:define name="content">
-        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoIVAView}">
+        <a:dataTable id="tabelaDeTributacaoDT" managedBeanName="#{selecaoTabelaDeTributacaoView}">
 
             <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                 <h:outputText value="#{bean.id}" />
