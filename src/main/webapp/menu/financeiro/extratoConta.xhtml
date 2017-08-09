@@ -60,6 +60,9 @@
                                     <p:commandButton id="saque-btn" value="#{l.Saque}" action="#{dialogoSaqueBancarioView.abrirDialogo()}" process="@this" update="@none">
                                         <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
                                     </p:commandButton>
+                                    <p:commandButton id="lancamento-btn" value="#{l.Lancamento}" action="#{dialogoLancamentoBancarioView.abrirDialogo()}" process="@this" update="@none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    </p:commandButton>
                                     <p:commandButton id="cambio-btn" value="#{l.Cambio_De_Moeda}" action="#{dialogoCambioEmpresaView.abrirDialogo()}" process="@this" update="@none" style="min-width: 130px;">
                                         <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
                                     </p:commandButton>

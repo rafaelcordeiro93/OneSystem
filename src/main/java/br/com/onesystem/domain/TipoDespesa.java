@@ -47,6 +47,8 @@ public class TipoDespesa implements Serializable {
     private List<Operacao> comprasAPrazo;
     @OneToMany(mappedBy = "tipoDespesa")
     private List<DespesaEventual> despesasEventuals;
+    @OneToMany(mappedBy = "despesa")
+    private List<LancamentoBancario> lancamentoBancario;
 
     public TipoDespesa() {
     }
@@ -76,6 +78,10 @@ public class TipoDespesa implements Serializable {
 
     public List<DespesaProvisionada> getDespesasProvisionadas() {
         return despesasProvisionadas;
+    }
+
+    public List<LancamentoBancario> getLancamentoBancario() {
+        return lancamentoBancario;
     }
 
     private void ehValido() throws DadoInvalidoException {
