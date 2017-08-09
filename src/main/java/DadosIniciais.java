@@ -108,7 +108,7 @@ public class DadosIniciais {
 
         //Modulo de Arquivo
         Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
-        
+
         Janela jpais = new Janela(null, "País", "/menu/arquivo/pais.xhtml", arq);
         Janela jestado = new Janela(null, "Estado", "/menu/arquivo/estado.xhtml", arq);
         Janela cidade = new Janela(null, "Cidade", "/menu/arquivo/cidade.xhtml", arq);
@@ -200,9 +200,10 @@ public class DadosIniciais {
 
         Janela consultaCobranca = new Janela(null, "Consulta de Cobrança", "/menu/financeiro/consultar/consultaCobranca.xhtml", fin);
         Janela consultaDepositoBancario = new Janela(null, "Consulta Depósito Bancário", "/menu/financeiro/consultar/consultaDepositoBancario.xhtml", fin);
+        Janela consultaSaqueBancario = new Janela(null, "Consulta Saque Bancário", "/menu/financeiro/consultar/consultaSaqueBancario.xhtml", fin);
+        Janela consultaTransferencia = new Janela(null, "Consulta Transferência Bancária", "/menu/financeiro/consultar/consultaTransferencia.xhtml", fin);
         Janela conRecebimento = new Janela(null, "Consulta Receber Valores", "/menu/financeiro/consultar/consultaRecebimento.xhtml", fin);
         Janela conPagamentos = new Janela(null, "Consulta Pagar Valores", "/menu/financeiro/consultar/consultaPagamento.xhtml", fin);
-
 
         daoJanela.adiciona(receberValores);
         daoJanela.adiciona(conRecebimento);
@@ -226,6 +227,9 @@ public class DadosIniciais {
         daoJanela.adiciona(faturaLegada);
         daoJanela.adiciona(faturaEmitida);
         daoJanela.adiciona(faturaRecebida);
+        daoJanela.adiciona(consultaDepositoBancario);
+        daoJanela.adiciona(consultaSaqueBancario);
+        daoJanela.adiciona(consultaTransferencia);
 
         //Modulo Contábil
         Janela tipoReceita = new Janela(null, "Tipo Receita", "/menu/contabil/tipoReceita.xhtml", con);
@@ -375,6 +379,9 @@ public class DadosIniciais {
                 new Privilegio(null, faturaLegada, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, faturaEmitida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, faturaRecebida, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaDepositoBancario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaSaqueBancario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaTransferencia, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, recepcao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, contraCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cambio, true, true, true, true, grupoDePrivilegio),

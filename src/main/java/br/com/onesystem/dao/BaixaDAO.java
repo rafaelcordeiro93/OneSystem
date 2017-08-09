@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
+import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
@@ -194,6 +195,14 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         if (pessoa != null) {
             parametros.put("pPessoa", pessoa);
             where += "and baixa.pessoa = :pPessoa ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorTransferencia(Transferencia transferencia) {
+        if (transferencia != null) {
+            parametros.put("pTransferencia", transferencia);
+            where += "and baixa.transferencia = :pTransferencia ";
         }
         return this;
     }
