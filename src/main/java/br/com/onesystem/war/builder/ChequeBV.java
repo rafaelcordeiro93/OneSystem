@@ -10,6 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -37,6 +38,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
     private Pessoa pessoa;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public ChequeBV(Cheque c) {
         this.id = c.getId();
@@ -59,6 +61,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.pessoa = c.getPessoa();
         this.operacaoFinanceira = c.getOperacaoFinanceira();
         this.entrada = c.getEntrada();
+        this.situacaoDeCobranca = c.getSituacaoDeCobranca();
     }
 
     public ChequeBV() {
@@ -224,17 +227,25 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.entrada = entrada;
     }      
 
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
+    }
+
+    public void setSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+    }
+    
     public Cheque construir() throws DadoInvalidoException {
         return new ChequeBuilder().comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
                 .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comTipoLancamento(tipoLancamento).comEntrada(entrada).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 }

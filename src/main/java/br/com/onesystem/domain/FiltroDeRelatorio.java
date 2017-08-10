@@ -126,6 +126,10 @@ public class FiltroDeRelatorio implements Serializable {
         this.modelo = modelo;
     }
 
+    public void setColuna(Coluna coluna) {
+        this.coluna = coluna;
+    }
+    
     public Coluna getColuna() {
         return coluna;
     }

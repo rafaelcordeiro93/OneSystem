@@ -67,6 +67,10 @@ public class ParametroDeFiltroDeRelatorio implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setFiltroDeRelatorio(FiltroDeRelatorio filtroDeRelatorio) {
         this.filtroDeRelatorio = filtroDeRelatorio;
     }

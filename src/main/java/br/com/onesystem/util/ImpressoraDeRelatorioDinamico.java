@@ -321,7 +321,10 @@ public class ImpressoraDeRelatorioDinamico {
                         cmp.verticalList().add(cmp.text(nomeRelatorio).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
                                 cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
                 .newRow()
-                .add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10));
+                .add(cmp.line())
+                .newRow()
+                .add(cmp.verticalGap(10));
+        //.add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10));
     }
 
     public void rodape() {

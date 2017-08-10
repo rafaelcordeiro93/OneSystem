@@ -250,13 +250,21 @@ public class Baixa implements Serializable, Movimento {
         if (parcela instanceof Titulo) {
             ((Titulo) parcela).cancelarSaldoDeBaixa(valor);
         }
+        if (parcela instanceof Cobranca) {
+            ((Cobranca) parcela).atualizaSituacao();
+        }
+
         this.estado = EstadoDeBaixa.CANCELADO;
+
         this.dataCancelamento = new Date();
     }
 
     public void descancela() throws EDadoInvalidoException {
         if (parcela instanceof Titulo) {
             ((Titulo) parcela).descancelarSaldoDeBaixa(valor);
+        }
+        if (parcela instanceof Cobranca) {
+            ((Cobranca) parcela).atualizaSituacao();
         }
         this.estado = EstadoDeBaixa.EFETIVADO;
         this.dataCancelamento = null;

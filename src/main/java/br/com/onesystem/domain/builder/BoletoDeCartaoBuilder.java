@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +34,7 @@ public class BoletoDeCartaoBuilder {
     private List<Baixa> baixas;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public BoletoDeCartaoBuilder() {
     }
@@ -107,8 +109,13 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
+    public BoletoDeCartaoBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
+
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca);
     }
 
 }

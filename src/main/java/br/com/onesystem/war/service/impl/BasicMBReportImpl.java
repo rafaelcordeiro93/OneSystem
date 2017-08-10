@@ -323,42 +323,46 @@ public abstract class BasicMBReportImpl<T> {
                 //Adiciona os filtros
                 FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, new ColunaBV(campoSelecionado).construir(), tipoDeBuscaSelecionada);
 
-                if (campoSelecionado.getClasseOriginal() != Date.class && (!consulta.isEmpty() || (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()))) {
+                if (campoSelecionado.getClasseOriginal() != Date.class) {
 
-                    // Faz o tratamento dos filtros em String para seus devidos Tipos.
-                    for (String s : consulta) {
-                        //LONG ===============================================================================
-                        if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
-                            filtro.add(new Long(s));
-                        } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(new Long(s));
-                        } else //Integer ===============================================================================
-                        if (campoSelecionado.getClasseOriginal() == Integer.class && !filtros.contains(filtro)) {
-                            filtro.add(new Integer(s));
-                        } else if (campoSelecionado.getClasseOriginal() == Integer.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(new Integer(s));
-                        } //BIGDECIMAL =======================================================================
-                        else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
-                            s = s.replaceAll(",", ".");
-                            filtro.add(new BigDecimal(s));
-                        } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
-                            s = s.replaceAll(",", ".");
-                            filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
-                        } //STRING ============================================================================
-                        else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
-                            filtro.add(s);
-                        } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(s);
+                    if (consulta != null && !consulta.isEmpty()) {
+                        // Faz o tratamento dos filtros em String para seus devidos Tipos.
+                        for (String s : consulta) {
+                            //LONG ===============================================================================
+                            if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
+                                filtro.add(new Long(s));
+                            } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(new Long(s));
+                            } else //Integer ===============================================================================
+                            if (campoSelecionado.getClasseOriginal() == Integer.class && !filtros.contains(filtro)) {
+                                filtro.add(new Integer(s));
+                            } else if (campoSelecionado.getClasseOriginal() == Integer.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(new Integer(s));
+                            } //BIGDECIMAL =======================================================================
+                            else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
+                                s = s.replaceAll(",", ".");
+                                filtro.add(new BigDecimal(s));
+                            } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
+                                s = s.replaceAll(",", ".");
+                                filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
+                            } //STRING ============================================================================
+                            else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
+                                filtro.add(s);
+                            } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(s);
+                            }
                         }
                     }
 
-                    // Faz o tratamento para os filtros de Enum
-                    for (String s : enumeracoesSelecionadas) {
-                        //Enum ====================================================================================
-                        if (!filtros.contains(filtro)) {
-                            filtro.add(filtro.getEnum(s));
-                        } else if (filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(filtro.getEnum(s));
+                    if (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()) {
+                        // Faz o tratamento para os filtros de Enum
+                        for (String s : enumeracoesSelecionadas) {
+                            //Enum ====================================================================================
+                            if (!filtros.contains(filtro)) {
+                                filtro.add(filtro.getEnum(s));
+                            } else if (filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(filtro.getEnum(s));
+                            }
                         }
                     }
 
@@ -432,13 +436,21 @@ public abstract class BasicMBReportImpl<T> {
 
                 //Cria novo modelo
                 ModeloDeRelatorio modelo = new ModeloDeRelatorioBuilder().comNome(modeloDeRelatorioSelecionadoString).comTipoRelatorio(tipoRelatorio).construir();
+                ModeloDeRelatorio modeloRemovido = null; // * Necessario para não soltar CuncurrentException
 
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
                         ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
                         new RemoveDAO<>().remove(find, find.getId());
+                        modeloRemovido = m; // * Necessario para não soltar CuncurrentException
+                        break;
                     }
+                }
+
+                // * Necessario para não soltar CuncurrentException
+                if (modeloRemovido != null) {
+                    modelosDeRelatorio.remove(modeloRemovido);
                 }
 
                 //Adiciona Colunas
@@ -452,8 +464,14 @@ public abstract class BasicMBReportImpl<T> {
                     FiltroDeRelatorio filtro = new FiltroDeRelatorioBV(f).construir();
                     //Adiciona filtro dentro dos parametros - Cascade
                     for (ParametroDeFiltroDeRelatorio p : filtro.getParametros()) {
+                        p.setId(null);
                         p.setFiltroDeRelatorio(filtro);
                     }
+                    //Altera coluna do filtro para que não tenha modelo e ser persistida como filtro.
+                    Coluna col = new ColunaBV(filtro.getColuna()).construir();
+                    col.setModelo(null);
+                    filtro.setColuna(col);
+
                     modelo.addFiltro(filtro);
                 }
 
@@ -464,6 +482,7 @@ public abstract class BasicMBReportImpl<T> {
                 InfoMessage.adicionado();
             }
         } catch (DadoInvalidoException ex) {
+            ex.printConsole();
             ex.print();
         }
     }

@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -30,6 +31,7 @@ public class CreditoBuilder {
     private List<Baixa> baixas;
     private Cotacao cotacao;
     private Boolean entrada;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public CreditoBuilder comId(Long id) {
         this.id = id;
@@ -86,8 +88,13 @@ public class CreditoBuilder {
         return this;
     }
 
+    public CreditoBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
+
     public Credito construir() throws DadoInvalidoException {
-        return new Credito(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
+        return new Credito(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
     }
 
 }

@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -42,6 +43,7 @@ public class ChequeBuilder {
     private Boolean entrada;
     private Nota nota;
     private String historico;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
@@ -152,9 +154,14 @@ public class ChequeBuilder {
         this.historico = historico;
         return this;
     }
+    
+     public ChequeBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
 
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada);
+        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca);
     }
 
 }

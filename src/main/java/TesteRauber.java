@@ -11,6 +11,7 @@ import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
@@ -40,31 +41,35 @@ public class TesteRauber {
         BundleUtil msg = new BundleUtil();
         AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
-//      //Relatório de Contas a Pagar.
-        //========================================================
-        ModeloDeRelatorio relatorioDeContasAPagar = new ModeloDeRelatorioBuilder()
-                .comNome(TipoRelatorio.CONTAS.getNome())
+        ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Receber"))
                 .comTipoRelatorio(TipoRelatorio.CONTAS)
                 .construir();
-        
-        //Filtros
-        Coluna colOperacaoFinanceira = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
-        FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
-        filtro.add(OperacaoFinanceira.SAIDA);
 
-        relatorioDeContasAPagar.addFiltro(filtro);
+        //Filtros
+        Coluna colOperacaoFinanceiracCAR = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        FiltroDeRelatorio filtroOFCAR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCAR, TipoDeBusca.IGUAL_A);
+        filtroOFCAR.add(OperacaoFinanceira.ENTRADA);
+
+        Coluna colSituacaoDeCobrancaCAR = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        FiltroDeRelatorio filtroSDCCAR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCAR, TipoDeBusca.IGUAL_A);
+        filtroSDCCAR.add(SituacaoDeCobranca.ABERTO);
+
+        relatorioDeContasAReceber.addFiltro(filtroOFCAR);
+        relatorioDeContasAReceber.addFiltro(filtroSDCCAR);
 
         //Colunas Exibidas
-        Coluna pessoa = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, TipoRelatorio.class);
-        pessoa.setTamanho(30);
+        Coluna pessoaCAR = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        pessoaCAR.setTamanho(30);
 
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
-        relatorioDeContasAPagar.addColunaExibida(pessoa);
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAReceber.addColunaExibida(pessoaCAR);
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
+        modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
+
 
     }
 }

@@ -47,6 +47,7 @@ import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFisica;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoBandeira;
 import br.com.onesystem.valueobjects.TipoContabil;
 import br.com.onesystem.valueobjects.TipoCorMenu;
@@ -60,6 +61,7 @@ import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -874,7 +876,7 @@ public class DadosIniciais {
         //Modelo de Relatórios
         AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
-         //Relatório de Contas a Pagar.
+        //Relatório de Contas a Pagar.
         //========================================================
         ModeloDeRelatorio relatorioDeContasAPagar = new ModeloDeRelatorioBuilder()
                 .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Pagar"))
@@ -883,10 +885,15 @@ public class DadosIniciais {
 
         //Filtros
         Coluna colOperacaoFinanceira = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
-        FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
-        filtro.add(OperacaoFinanceira.SAIDA);
+        FiltroDeRelatorio filtroOF = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
+        filtroOF.add(OperacaoFinanceira.SAIDA);
 
-        relatorioDeContasAPagar.addFiltro(filtro);
+        Coluna colSituacaoDeCobranca = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        FiltroDeRelatorio filtroSDC = new FiltroDeRelatorio(null, colSituacaoDeCobranca, TipoDeBusca.IGUAL_A);
+        filtroSDC.add(SituacaoDeCobranca.ABERTO);
+
+        relatorioDeContasAPagar.addFiltro(filtroOF);
+        relatorioDeContasAPagar.addFiltro(filtroSDC);
 
         //Colunas Exibidas
         Coluna pessoa = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
@@ -900,6 +907,36 @@ public class DadosIniciais {
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
 
+        //========================================================
+        //Relatório de Contas a Receber
+        ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Receber"))
+                .comTipoRelatorio(TipoRelatorio.CONTAS)
+                .construir();
+
+        //Filtros
+        Coluna colOperacaoFinanceiracCAR = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        FiltroDeRelatorio filtroOFCAR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCAR, TipoDeBusca.IGUAL_A);
+        filtroOFCAR.add(OperacaoFinanceira.ENTRADA);
+
+        Coluna colSituacaoDeCobrancaCAR = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        FiltroDeRelatorio filtroSDCCAR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCAR, TipoDeBusca.IGUAL_A);
+        filtroSDCCAR.add(SituacaoDeCobranca.ABERTO);
+
+        relatorioDeContasAReceber.addFiltro(filtroOFCAR);
+        relatorioDeContasAReceber.addFiltro(filtroSDCCAR);
+
+        //Colunas Exibidas
+        Coluna pessoaCAR = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        pessoaCAR.setTamanho(30);
+
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAReceber.addColunaExibida(pessoaCAR);
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
     }
 
 }
