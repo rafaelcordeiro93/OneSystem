@@ -20,6 +20,9 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.domain.FiltroDeRelatorio;
 import br.com.onesystem.domain.ModeloDeRelatorio;
+import br.com.onesystem.domain.ParametroDeFiltroDeRelatorio;
+import br.com.onesystem.domain.builder.ColunaBuilder;
+import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
@@ -36,8 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -51,14 +52,12 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import br.com.onesystem.war.builder.ColunaBV;
+import br.com.onesystem.war.builder.FiltroDeRelatorioBV;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -150,7 +149,7 @@ public abstract class BasicMBReportImpl<T> {
                 table = "??" + c.getSimpleName() + "??";
             }
             //&& fieldsName.contains(m.getName().substring(3).substring(0, 1).toLowerCase() + m.getName().substring(4)) Summary Row
-            List<String> fieldsName = Arrays.asList(c.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
+//            List<String> fieldsName = Arrays.asList(c.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
             for (Method m : c.getMethods()) {
                 if (m.getName().contains("get") && !"getClass".equals(m.getName()) && m.getReturnType() != List.class
                         && m.getDeclaringClass().toString().substring(6).equals(c.getName()) && !m.getReturnType().toString().contains("domain")
@@ -322,7 +321,7 @@ public abstract class BasicMBReportImpl<T> {
             } else {
 
                 //Adiciona os filtros
-                FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, campoSelecionado, tipoDeBuscaSelecionada);
+                FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, new ColunaBV(campoSelecionado).construir(), tipoDeBuscaSelecionada);
 
                 if (campoSelecionado.getClasseOriginal() != Date.class && (!consulta.isEmpty() || (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()))) {
 
@@ -333,6 +332,11 @@ public abstract class BasicMBReportImpl<T> {
                             filtro.add(new Long(s));
                         } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
                             filtros.get(filtros.indexOf(filtro)).add(new Long(s));
+                        } else //Integer ===============================================================================
+                        if (campoSelecionado.getClasseOriginal() == Integer.class && !filtros.contains(filtro)) {
+                            filtro.add(new Integer(s));
+                        } else if (campoSelecionado.getClasseOriginal() == Integer.class && filtros.contains(filtro)) {
+                            filtros.get(filtros.indexOf(filtro)).add(new Integer(s));
                         } //BIGDECIMAL =======================================================================
                         else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
                             s = s.replaceAll(",", ".");
@@ -352,9 +356,9 @@ public abstract class BasicMBReportImpl<T> {
                     for (String s : enumeracoesSelecionadas) {
                         //Enum ====================================================================================
                         if (!filtros.contains(filtro)) {
-                            filtro.addEnum(s);
+                            filtro.add(filtro.getEnum(s));
                         } else if (filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).addEnum(s);
+                            filtros.get(filtros.indexOf(filtro)).add(filtro.getEnum(s));
                         }
                     }
 
@@ -410,11 +414,12 @@ public abstract class BasicMBReportImpl<T> {
 
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
+        String nomeRelatorio = modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty() ? modeloDeRelatorioSelecionadoString : tipoRelatorio.getNome();
         try {
             if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
-                impressora.imprimir(registros, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             } else {
-                impressora.imprimir(registrosFiltrados, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -426,7 +431,7 @@ public abstract class BasicMBReportImpl<T> {
             if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
 
                 //Cria novo modelo
-                ModeloDeRelatorio modelo = new ModeloDeRelatorio(null, modeloDeRelatorioSelecionadoString, tipoRelatorio);
+                ModeloDeRelatorio modelo = new ModeloDeRelatorioBuilder().comNome(modeloDeRelatorioSelecionadoString).comTipoRelatorio(tipoRelatorio).construir();
 
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
@@ -436,15 +441,21 @@ public abstract class BasicMBReportImpl<T> {
                     }
                 }
 
-                //Adiciona campos exibidos
-                camposExibidos.getList().forEach((c) -> {
-                    modelo.adicionaColunaExibida(c);
-                });
+                //Adiciona Colunas
+                for (Coluna c : camposExibidos.getList()) {
+                    Coluna coluna = new ColunaBV(c).construir();
+                    modelo.addColunaExibida(coluna);
+                }
 
-                //Adiciona filtros
-                filtros.forEach((f) -> {
-                    modelo.adicionaFiltro(f);
-                });
+                //Adiciona Filtros
+                for (FiltroDeRelatorio f : filtros) {
+                    FiltroDeRelatorio filtro = new FiltroDeRelatorioBV(f).construir();
+                    //Adiciona filtro dentro dos parametros - Cascade
+                    for (ParametroDeFiltroDeRelatorio p : filtro.getParametros()) {
+                        p.setFiltroDeRelatorio(filtro);
+                    }
+                    modelo.addFiltro(filtro);
+                }
 
                 //Adiciona no banco novo registro
                 new AdicionaDAO<>().adiciona(modelo);
@@ -466,7 +477,6 @@ public abstract class BasicMBReportImpl<T> {
                     //Adiciona Filtros
                     if (m.getFiltroDeRelatorio() != null) {
                         for (FiltroDeRelatorio f : m.getFiltroDeRelatorio()) {
-                            f.setId(null);
                             filtros.add(f);
                         }
                     }
@@ -476,7 +486,6 @@ public abstract class BasicMBReportImpl<T> {
                         for (Coluna c : m.getColunasExibidas()) {
                             for (Model model : camposDisponiveis) {
                                 if (((Coluna) model.getObject()).getPropriedadeCompleta().equalsIgnoreCase(c.getPropriedadeCompleta())) {
-                                    c.setId(null);
                                     camposDisponiveis.remove(model);
                                     camposExibidos.add(c);
                                     break;

@@ -179,20 +179,35 @@ public class Coluna implements Serializable {
         tamanho = 20;
     }
 
-    public Coluna(Long id, String nome, String tabela, Integer tamanho, Class classeDeDeclaracao, Class classeOriginal, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Totalizador totalizador, TipoFormatacaoNumero tipoFormatadorNumero, ModeloDeRelatorio modelo) {
-        this.id = id;
+    public Coluna(String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador, Integer tamanho, ModeloDeRelatorio modeloDeRelatorio) {
         this.nome = nome;
         this.tabela = tabela;
-        this.tamanho = tamanho;
-        this.classeDeDeclaracao = classeDeDeclaracao;
-        this.classeOriginal = classeOriginal;
         this.propriedade = propriedade;
         this.propriedadeDois = propriedadeDois;
         this.propriedadeTres = propriedadeTres;
         this.propriedadeQuatro = propriedadeQuatro;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
         this.totalizador = totalizador;
         this.tipoFormatadorNumero = tipoFormatadorNumero;
-        this.modelo = modelo;
+        this.tamanho = tamanho;
+        this.modelo = modeloDeRelatorio;
+    }
+
+    public Coluna(Long id, String nome, String tabela, String propriedade, String propriedadeDois, String propriedadeTres, String propriedadeQuatro, Class classeDeDeclaracao, Class classeOriginal, TipoFormatacaoNumero tipoFormatadorNumero, Totalizador totalizador, Integer tamanho, ModeloDeRelatorio modeloDeRelatorio) {
+        this.id = id;
+        this.nome = nome;
+        this.tabela = tabela;
+        this.propriedade = propriedade;
+        this.propriedadeDois = propriedadeDois;
+        this.propriedadeTres = propriedadeTres;
+        this.propriedadeQuatro = propriedadeQuatro;
+        this.classeDeDeclaracao = classeDeDeclaracao;
+        this.classeOriginal = classeOriginal;
+        this.totalizador = totalizador;
+        this.tipoFormatadorNumero = tipoFormatadorNumero;
+        this.tamanho = tamanho;
+        this.modelo = modeloDeRelatorio;
     }
 
     public void setModelo(ModeloDeRelatorio modelo) {

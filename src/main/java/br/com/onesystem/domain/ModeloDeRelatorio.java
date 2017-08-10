@@ -44,14 +44,18 @@ public class ModeloDeRelatorio implements Serializable {
     public ModeloDeRelatorio() {
     }
 
-    public ModeloDeRelatorio(Long id, String nome, TipoRelatorio tipoRelatorio) throws DadoInvalidoException {
+    public ModeloDeRelatorio(Long id, String nome, TipoRelatorio tipoRelatorio, List<FiltroDeRelatorio> filtrosDeRelatorio) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.tipoRelatorio = tipoRelatorio;
+        if (filtrosDeRelatorio != null) {
+            filtrosDeRelatorio.forEach(f -> f.setModelo(this));
+        }
+        this.filtroDeRelatorio = filtrosDeRelatorio;
         ehValido();
     }
 
-    public void adicionaColunaExibida(Coluna colunaExibida) {
+    public void addColunaExibida(Coluna colunaExibida) {
         if (colunasExibidas == null) {
             this.colunasExibidas = new ArrayList<>();
         }
@@ -59,7 +63,7 @@ public class ModeloDeRelatorio implements Serializable {
         colunasExibidas.add(colunaExibida);
     }
 
-    public void adicionaFiltro(FiltroDeRelatorio filtro) {
+    public void addFiltro(FiltroDeRelatorio filtro) {
         if (filtroDeRelatorio == null) {
             this.filtroDeRelatorio = new ArrayList<>();
         }
