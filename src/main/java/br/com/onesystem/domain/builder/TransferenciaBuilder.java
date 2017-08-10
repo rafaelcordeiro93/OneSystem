@@ -29,6 +29,7 @@ public class TransferenciaBuilder {
     private Date emissao;
     private TipoLancamentoBancario tipoLancamentoBancario;
     private boolean estornado;
+    private Long idRelacaoEstorno;
 
     public TransferenciaBuilder comId(Long id) {
         this.id = id;
@@ -75,8 +76,13 @@ public class TransferenciaBuilder {
         return this;
     }
 
+    public TransferenciaBuilder comIdRelacaoEstorno(Long idRelacaoEstorno) {
+        this.idRelacaoEstorno = idRelacaoEstorno;
+        return this;
+    }
+
     public Transferencia construir() throws DadoInvalidoException {
-        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao, tipoLancamentoBancario, estornado);
+        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
     }
 
 }

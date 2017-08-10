@@ -103,9 +103,10 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
 
     public void transferir() {
         try {
+            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
             t = e.construir();
-            gerarBaixas();
-            gerarTaxas();
+            t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
+            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
             new AdicionaDAO<>().adiciona(t);
             RequestContext.getCurrentInstance().closeDialog(t);
             limparJanela();
@@ -114,33 +115,9 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
         }
     }
 
-    private void gerarTaxas() {
-        if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.LANCAMENTO)) {
-            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
-        } else {
-            baixas.forEach(b -> t.adiciona((Baixa) b.getObject()));
-        }
-    }
-
-    private void gerarBaixas() throws DadoInvalidoException {
-        if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.LANCAMENTO)) {
-            t.geraBaixaDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
-        } else {
-            t.geraEstornoDaTransferenciaCom(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
-        }
-    }
-
     public void fechar() {
         limparJanela();
         RequestContext.getCurrentInstance().closeDialog(null);
-    }
-
-    public void estorno(ValueChangeEvent event) {
-        if ((boolean) event.getNewValue() == true) {
-            e.setTipoLancamentoBancario(TipoLancamentoBancario.ESTORNO);
-        } else {
-            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
-        }
     }
 
     public void addBaixa() {

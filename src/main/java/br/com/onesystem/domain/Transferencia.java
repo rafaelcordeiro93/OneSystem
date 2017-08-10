@@ -66,10 +66,13 @@ public class Transferencia implements Serializable {
     @Column(nullable = true)
     private boolean estornado;
 
+    @Column(nullable = true)
+    private Long idRelacaoEstorno;
+
     public Transferencia() {
     }
 
-    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, Date emissao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado) throws DadoInvalidoException {
+    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, Date emissao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
         this.id = id;
         this.origem = origem;
         this.destino = destino;
@@ -79,6 +82,7 @@ public class Transferencia implements Serializable {
         this.emissao = emissao;
         this.tipoLancamentoBancario = tipoLancamentoBancario;
         this.estornado = estornado;
+        this.idRelacaoEstorno = idRelacaoEstorno;
         ehValido();
     }
 
@@ -92,6 +96,10 @@ public class Transferencia implements Serializable {
     public void geraEstornoDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
         adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
         adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+    }
+
+    public void setIdRelacaoEstorno(Transferencia transferencia) {
+        this.idRelacaoEstorno = transferencia.getId();
     }
 
     /* Adiciona Baixa e as tarifas.*/
@@ -175,6 +183,10 @@ public class Transferencia implements Serializable {
 
     public boolean isEstornado() {
         return estornado;
+    }
+
+    public Long getIdRelacaoEstorno() {
+        return idRelacaoEstorno;
     }
 
     @Override
