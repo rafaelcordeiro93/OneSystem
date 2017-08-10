@@ -200,6 +200,7 @@ public class DadosIniciais {
 
         Janela consultaCobranca = new Janela(null, "Consulta de Cobrança", "/menu/financeiro/consultar/consultaCobranca.xhtml", fin);
         Janela consultaDepositoBancario = new Janela(null, "Consulta Depósito Bancário", "/menu/financeiro/consultar/consultaDepositoBancario.xhtml", fin);
+        Janela consultaLancamentoBancario = new Janela(null, "Consulta Lançamento Bancário", "/menu/financeiro/consultar/consultaLancamentoBancario.xhtml", fin);
         Janela consultaSaqueBancario = new Janela(null, "Consulta Saque Bancário", "/menu/financeiro/consultar/consultaSaqueBancario.xhtml", fin);
         Janela consultaTransferencia = new Janela(null, "Consulta Transferência Bancária", "/menu/financeiro/consultar/consultaTransferencia.xhtml", fin);
         Janela conRecebimento = new Janela(null, "Consulta Receber Valores", "/menu/financeiro/consultar/consultaRecebimento.xhtml", fin);
@@ -228,6 +229,7 @@ public class DadosIniciais {
         daoJanela.adiciona(faturaEmitida);
         daoJanela.adiciona(faturaRecebida);
         daoJanela.adiciona(consultaDepositoBancario);
+        daoJanela.adiciona(consultaLancamentoBancario);
         daoJanela.adiciona(consultaSaqueBancario);
         daoJanela.adiciona(consultaTransferencia);
 
@@ -382,6 +384,7 @@ public class DadosIniciais {
                 new Privilegio(null, faturaEmitida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, faturaRecebida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaDepositoBancario, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, consultaLancamentoBancario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaSaqueBancario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, consultaTransferencia, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, recepcao, true, true, true, true, grupoDePrivilegio),

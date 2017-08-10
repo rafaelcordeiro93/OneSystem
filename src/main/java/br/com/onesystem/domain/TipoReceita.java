@@ -51,6 +51,8 @@ public class TipoReceita implements Serializable {
     private List<Operacao> receitasFretes;
     @OneToMany(mappedBy = "tipoReceita")
     private List<ReceitaEventual> receitasEventuais;
+    @OneToMany(mappedBy = "receita")
+    private List<LancamentoBancario> lancamentoBancario;
 
     public TipoReceita() {
     }
