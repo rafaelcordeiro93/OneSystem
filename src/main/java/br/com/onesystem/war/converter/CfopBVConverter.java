@@ -5,49 +5,49 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TabelaDeTributacao;
+import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.builder.CfopBV;
+import br.com.onesystem.war.service.CfopService;
 import java.io.Serializable;
 import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
  *
  * @author Rafael
  */
-@FacesConverter(value = "ivaConverter", forClass = TabelaDeTributacao.class)
-public class IVAConverter implements Converter, Serializable {
+@FacesConverter(value = "cfopBVConverter", forClass = CfopBV.class)
+public class CfopBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TabelaDeTributacao> lista = new IVAService().buscarIVAs();
+                List<Cfop> lista = new CfopService().buscarCfops();
                 if (StringUtils.containsLetter(value)) {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getNome().equals(value)) {
-                            return iva;
+                    for (Cfop cfop : lista) {
+                        if (cfop.getNome().equals(value)) {
+                            return new CfopBV(cfop);
                         }
                     }
                 } else {
-                    for (TabelaDeTributacao iva : lista) {
-                        if (iva.getId().equals(new Long(value))) {
-                            return iva;
+                    for (Cfop cfop : lista) {
+                        if (cfop.getId().equals(new Long(value))) {
+                            System.out.println("Cfop: " + cfop);
+                            return new CfopBV(cfop);
                         }
                     }
                 }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma iva válida."));
+                return new CfopBV();
+            } catch (Exception e) {
+                return new CfopBV();
             }
         } else {
-            return null;
+            return new CfopBV();
         }
     }
 
@@ -55,12 +55,12 @@ public class IVAConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((TabelaDeTributacao) object).getNome());
+                return String.valueOf(((CfopBV) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

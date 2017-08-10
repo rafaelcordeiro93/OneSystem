@@ -6,10 +6,16 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.util.StringUtils;
+import br.com.onesystem.war.service.PessoaService;
 import java.io.Serializable;
+import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
+import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -21,10 +27,29 @@ public class PessoaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            return (Pessoa) uic.getAttributes().get(value);
+       if (value != null && value.trim().length() > 0) {
+            try {
+                List<Pessoa> lista = new PessoaService().buscarPessoas();
+                if (StringUtils.containsLetter(value)) {
+                    for (Pessoa pessoa : lista) {
+                        if (pessoa.getNome().equals(value)) {
+                            return pessoa;
+                        }
+                    }
+                } else {
+                    for (Pessoa pessoa : lista) {
+                        if (pessoa.getId().equals(new Long(value))) {
+                            return pessoa;
+                        }
+                    }
+                }
+                return null;
+            } catch (NumberFormatException e) {
+                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma receita válida."));
+            }
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override

@@ -9,7 +9,7 @@
     <ui:define name="title">#{l.Selecao_De_Grupo_Fiscal}</ui:define>
 
     <ui:define name="content">
-        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoGrupoFiscalView}">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoCfopView}">
 
             <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                 <h:outputText value="#{bean.id}" />
@@ -17,8 +17,11 @@
             <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
                 <h:outputText value="#{bean.nome}" />
             </p:column>
-            <p:column headerText="#{l.Tabela_de_Tributacao}" sortBy="#{bean.tabelaDeTributacaoPadrao.nome}" filterBy="#{bean.tabelaDeTributacaoPadrao.nome}" footerText="#{l.Tabela_de_Tributacao}" filterMatchMode="contains">
-                <h:outputText value="#{bean.tabelaDeTributacaoPadrao.nome}" />
+            <p:column headerText="#{l.Cfop}" sortBy="#{bean.cfop}" filterBy="#{bean.cfop}" footerText="#{l.Cfop}" filterMatchMode="contains">
+                <h:outputText value="#{bean.cfop}" />
+            </p:column>
+            <p:column headerText="#{l.Operacao_Fisica}" sortBy="#{bean.operacaoFisica}" filterBy="#{bean.operacaoFisica}" footerText="#{l.Operacao_Fisica}" filterMatchMode="contains">
+                <h:outputText value="#{bean.operacaoFisica}" />
             </p:column>
         </a:dataTable>
 

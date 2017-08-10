@@ -6,6 +6,32 @@
                 xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="head">
+        <style type="text/css">
+            .ui-datatable tbody td {
+                border-color: #c7c7c7 !important;
+            }
+            body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
+                background-color: #f7f7f7;
+            }
+            .ui-autocomplete-panel .ui-autocomplete-table th, .ui-autocomplete-panel .ui-autocomplete-table td {
+                border-color: #c7c7c7;
+            }
+            body .ui-widget-content {
+                border: none;
+            }
+            .panelGrupo.ui-panel .ui-panel-titlebar  {
+                background:none;
+            }
+            .TabNoBorder.ui-tabs.ui-tabs-top .ui-tabs-panel, body .ui-tabs.ui-tabs-bottom .ui-tabs-panel, body .ui-tabs.ui-tabs-left .ui-tabs-panel, body .ui-tabs.ui-tabs-right .ui-tabs-panel {
+                border-bottom: none !important;
+            }
+            .DataTableNoWrap.ui-datatable .ui-datatable-data tr td {
+                white-space: nowrap;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="content">
 
         <div class="ui-g">
@@ -14,133 +40,266 @@
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
                     <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Operacao}</h3>
                     <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+                    <div class="ui-fluid"  style="padding: 0% 6% 0% 6%">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
                         <div class="EmptyBox10"/>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="operacaoId" value="#{operacaoView.e}" update=":conteudo" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoBVConverter" process="@this" itemLabel="#{operacao.id}" itemValue="#{operacao}" editVisible="false" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
+                            <a:inputTextDialog id="operacaoId" value="#{operacaoView.e}" update=":conteudo" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoBVConverter" process="@this" itemLabel="#{operacao.id}" itemValue="#{operacao}" editVisible="false" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" onlyNumber="true">
+                            </a:inputTextDialog>
 
-                            <p:outputLabel value="#{l.Nome}"/>
+                            <p:outputLabel value="#{l.Nome}" style="white-space: nowrap !important"/>
                             <p:inputText value="#{operacaoView.e.nome}" maxlength="60"/>
                         </p:panelGrid>
 
-                        <div class="EmptyBox20"/>
-                        <h4 style="font-size: 15px" >#{l.Configuracoes}</h4>
-                        <div class="EmptyBox10"/>
-                        <p:separator/>
                         <div class="EmptyBox10"/>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+                        <p:tabView id="tabs">
 
-                            <p:outputLabel value="#{l.Operacao_Financeira}"/>
-                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.e.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
-                                <f:selectItems value="#{operacaoView.operacaoFinanceira}" var="operacaoFinanceira" itemLabel="#{operacaoFinanceira.nome}" itemValue="#{operacaoFinanceira}" >
-                                </f:selectItems>
-                            </p:selectOneMenu>
+                            <p:tab id="tabGeral" title="#{l.Geral}">
 
-                            <p:outputLabel value="#{l.Tipo_Nota}"/>
-                            <p:selectOneMenu  id="TipoNota" value="#{operacaoView.e.tipoNota}" >
-                                <f:selectItems value="#{operacaoView.tipoNota}" itemLabel="#{tipoLancamento.nome}" itemValue="#{tipoLancamento}" var="tipoLancamento">
-                                </f:selectItems>
-                            </p:selectOneMenu>
+                                <div class="EmptyBox20"/>
+                                <h4 style="font-size: 15px" >#{l.Configuracoes}</h4>
+                                <div class="EmptyBox10"/>
+                                <p:separator/>
+                                <div class="EmptyBox10"/>
 
-                            <p:outputLabel value="#{l.Tipo_Contabil}"/>
-                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.e.contabilizarCMV}">
-                                <f:selectItems value="#{operacaoView.tipoContabil}" itemLabel="#{tipoContabil.nome}" itemValue="#{tipoContabil}" var="tipoContabil" >
-                                </f:selectItems>
-                            </p:selectOneMenu>
+                                <p:panelGrid columns="2" layout="grid" styleClass=" NoPadding"
+                                             columnClasses="ui-g-12 ui-md-7,ui-g-12 ui-md-5">
 
-                            <p:outputLabel value="#{l.Tipo_Operacao}"/>
-                            <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.e.tipoOperacao}" >
-                                <f:selectItems value="#{operacaoView.tipoDeOperacao}" var="tipoDeOperacao" itemLabel="#{tipoDeOperacao.nome}" itemValue="#{tipoDeOperacao}" >
-                                </f:selectItems>
-                            </p:selectOneMenu>
+                                    <p:panel style="border: none; padding: 0px;" >
+                                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                     columnClasses="ui-g-12 ui-md-4,ui-g-12 ui-md-8">
 
-                        </p:panelGrid>
+                                            <p:outputLabel value="#{l.Operacao_Financeira}"/>
+                                            <p:selectOneMenu  id="OperacaoFinaceira" value="#{operacaoView.e.operacaoFinanceira}" converter="operacaoFinanceiraConverter">
+                                                <f:selectItems value="#{operacaoView.operacaoFinanceira}" var="operacaoFinanceira" itemLabel="#{operacaoFinanceira.nome}" itemValue="#{operacaoFinanceira}" >
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
 
-                        <div class="EmptyBox20"/>
-                        <h4 style="font-size: 15px" >#{l.Receitas}</h4>
-                        <div class="EmptyBox10"/>
-                        <p:separator/>
-                        <div class="EmptyBox10"/>
+                                            <p:outputLabel value="#{l.Tipo_Nota}"/>
+                                            <p:selectOneMenu  id="TipoNota" value="#{operacaoView.e.tipoNota}" >
+                                                <f:selectItems value="#{operacaoView.tipoNota}" itemLabel="#{tipoLancamento.nome}" itemValue="#{tipoLancamento}" var="tipoLancamento">
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+                                            <p:outputLabel value="#{l.Tipo_Contabil}"/>
+                                            <p:selectOneMenu  id="TipoContabil" value="#{operacaoView.e.contabilizarCMV}">
+                                                <f:selectItems value="#{operacaoView.tipoContabil}" itemLabel="#{tipoContabil.nome}" itemValue="#{tipoContabil}" var="tipoContabil" >
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
 
-                            <p:outputLabel value="#{l.Receita_AVista}"/>
-                            <a:inputTextDialog id="receitaAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                                            <p:outputLabel value="#{l.Tipo_Operacao}"/>
+                                            <p:selectOneMenu  id="TipoDeOperacao" value="#{operacaoView.e.tipoOperacao}" >
+                                                <f:selectItems value="#{operacaoView.tipoDeOperacao}" var="tipoDeOperacao" itemLabel="#{tipoDeOperacao.nome}" itemValue="#{tipoDeOperacao}" >
+                                                </f:selectItems>
+                                            </p:selectOneMenu>
+
+                                        </p:panelGrid>
+                                    </p:panel>
+
+                                    <p:panel styleClass="panelGrupo" header="#{l.Grupo_Fiscal}" style="border: none; margin-top: -20px" >
+
+                                        <p:dataTable value="#{selecaoGrupoFiscalView.beans}" var="grupoFiscal" disabledSelection="#{operacaoView.e.getId() eq null}" style="#{operacaoView.e.getId() eq null ? 'cursor: not-allowed' : ''}"
+                                                     rowKey="#{grupoFiscal.id}" emptyMessage="#{l.Nao_Ha_Registros}" 
+                                                     selection="#{operacaoView.grupoFiscalSelecionado}" selectionMode="single" styleClass="DataTableNoWrap"  >
+
+                                            <p:ajax event="rowSelect" update="conteudo:tabs:tabSituacaoConta" listener="#{operacaoView.buscaSituacoes}" />
+
+                                            <p:column headerText="#{l.Id}" width="30" style="text-align: center">
+                                                <h:outputText value="#{grupoFiscal.id}" />
+                                            </p:column>
+
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{grupoFiscal.nome}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                    </p:panel>
+
+                                </p:panelGrid>                                
+
+                                <p:tabView  id="tabSituacaoConta" styleClass="TabNoBorder">
+
+                                    <p:tab id="tabSituacao" title="#{l.Situacao_Fiscal}" disabled="#{operacaoView.e.getId() eq null}" >
+
+                                        <h:panelGrid id="panelButton" columns="7">
+                                            <p:commandButton icon="fa fa-plus Fs14 White" style="width: 25px"   action="#{dialogoSituacaoFiscalView.abrirDialogo}" actionListener="#{operacaoView.adicionaNaSessao}"
+                                                             disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  >
+                                                <p:ajax event="dialogReturn" listener="#{operacaoView.atualizaSituacoesFiscais}" update="conteudo:tabs:tabSituacaoConta" />
+                                            </p:commandButton>
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" style="width: 25px" action="#{operacaoView.adicionaSituacaoNaSessao}" actionListener="#{dialogoSituacaoFiscalView.abrirDialogo}"
+                                                             styleClass="green-btn" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  >
+                                                <p:ajax event="dialogReturn" listener="#{operacaoView.atualizaSituacoesFiscais}" update="conteudo:tabs:tabSituacaoConta" />
+                                            </p:commandButton>     
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" style="width: 25px" action="#{operacaoView.removeSituacao}"
+                                                             update="conteudo:tabs:tabSituacaoConta" styleClass="orange-btn" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}" >
+                                            </p:commandButton>
+                                            <p:commandButton icon="fa fa-arrow-up Fs14 White" style="width: 25px" action="#{operacaoView.aumentaPrioridadeDeSituacao}"
+                                                             update="conteudo:tabs:tabSituacaoConta" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  />
+                                            <p:commandButton icon="fa fa-arrow-down Fs14 White" style="width: 25px" action="#{operacaoView.diminuiPrioridadeDeSituacao}"
+                                                             update="conteudo:tabs:tabSituacaoConta" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  />
+                                            <p:commandButton icon="fa fa-files-o Fs14 White" style="width: 25px" action="#{operacaoView.duplicarSituacao}"
+                                                             update="conteudo:tabs:tabSituacaoConta" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  />
+                                            <p:commandButton icon="fa fa-clone Fs14 White" style="width: 25px" onclick="PF('operacaoDuplicar').show()" disabled="#{operacaoView.e.getId() eq null || operacaoView.grupoFiscalSelecionado eq null}"  />
+
+                                        </h:panelGrid>
+
+                                        <div class="EmptyBox5"/>
+
+                                        <p:dataTable value="#{operacaoView.situacoesFiscais}" var="situacaoFiscal" styleClass="DataTableNoWrap"  
+                                                     rowKey="#{situacaoFiscal.id}" selectionMode="single" selection="#{operacaoView.situacaoFiscalSelecionada}"
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" disabledSelection="#{operacaoView.e.getId() eq null}" style="#{operacaoView.e.getId() eq null ? 'cursor: not-allowed' : ''}" >
+
+                                            <p:column headerText="#{l.Sequencia}" width="70">
+                                                <h:outputText value="#{situacaoFiscal.sequencia}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Tipo_Pessoa}" >
+                                                <h:outputText value="#{situacaoFiscal.tipoPessoa.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Estado}" >
+                                                <h:outputText value="#{situacaoFiscal.estado.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.CFOP}" width="50" >
+                                                <h:outputText value="#{situacaoFiscal.cfop.cfop}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Tabela_de_Tributacao}" >
+                                                <h:outputText value="#{situacaoFiscal.tabelaDeTributacao.id}" />
+                                            </p:column>
+
+                                        </p:dataTable>
+
+                                    </p:tab>
+
+             <!--                       <p:tab title="#{l.Conta_De_Estoque}" disabled="#{operacaoView.e.getId() eq null}">
+
+                                        <h:panelGrid columns="3">
+                                            <p:commandButton icon="fa fa-plus Fs14 White" style="width: 25px"
+                                                             update=":conteudo" disabled="#{operacaoView.e.getId() eq null}" />
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" style="width: 25px"
+                                                             update=":conteudo" styleClass="green-btn" disabled="#{operacaoView.e.getId() eq null}" />     
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" style="width: 25px"
+                                                             update=":conteudo" styleClass="orange-btn" disabled="#{operacaoView.e.getId() eq null}" />
+                                        </h:panelGrid>
+
+                                        <div class="EmptyBox5"/>
+
+                                        <p:dataTable var="contaDeEstoque" styleClass="DataTableNoWrap" emptyMessage="#{l.Nao_Ha_Registros}"
+                                                     disabledSelection="#{operacaoView.e.getId() eq null}" style="#{operacaoView.e.getId() eq null ? 'cursor: not-allowed' : ''}">
+
+                                            <p:column headerText="#{l.Id}" width="50" >
+                                                <h:outputText value="#{contaDeEstoque.id}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{contaDeEstoque.sequencia}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Operacao_Fisica}" width="200">
+                                                <h:outputText value="#{contaDeEstoque.tipoPessoa.nome}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:tab> -->
+
+                                </p:tabView>
+
+                            </p:tab>
+
+                            <p:tab title="#{l.Receitas_e_Despesas}">
+
+                                <div class="EmptyBox20"/>
+                                <h4 style="font-size: 15px" >#{l.Receitas}</h4>
+                                <div class="EmptyBox10"/>
+                                <p:separator/>
+                                <div class="EmptyBox10"/>
+
+                                <p:panelGrid columns="4" layout="grid" styleClass="TabNoBorder form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
+
+                                    <p:outputLabel value="#{l.Receita_AVista}"/>
+                                    <a:inputTextDialog id="receitaAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
 
-                            <p:outputLabel value="#{l.Receita_APrazo}"/>
-                            <a:inputTextDialog id="receitaAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                                    <p:outputLabel value="#{l.Receita_APrazo}"/>
+                                    <a:inputTextDialog id="receitaAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.vendaAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
 
-                            <p:outputLabel value="#{l.Servico_AVista}"/>
-                            <a:inputTextDialog id="servicoAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                                    <p:outputLabel value="#{l.Servico_AVista}"/>
+                                    <a:inputTextDialog id="servicoAVista" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAVista}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
 
-                            <p:outputLabel value="#{l.Servico_APrazo}"/>
-                            <a:inputTextDialog id="servicoAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                                    <p:outputLabel value="#{l.Servico_APrazo}"/>
+                                    <a:inputTextDialog id="servicoAPrazo" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.servicoAPrazo}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
 
-                            <p:outputLabel value="#{l.Receita_Frete}"/>
-                            <a:inputTextDialog id="receitaFrete" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.receitaFrete}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                                    <p:outputLabel value="#{l.Receita_Frete}"/>
+                                    <a:inputTextDialog id="receitaFrete" dialog="#{selecaoTipoReceitaView}" mbView="#{operacaoView}" value="#{operacaoView.e.receitaFrete}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
-                            <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
-                            <p:outputLabel  value=""/>
+                                    <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
+                                    <p:outputLabel  value=""/>
 
-                        </p:panelGrid>
-
-
-                        <div class="EmptyBox20"/>
-                        <h4 style="font-size: 15px" >#{l.Despesas}</h4>
-                        <div class="EmptyBox10"/>
-                        <p:separator/>
-                        <div class="EmptyBox10"/>
+                                </p:panelGrid>
 
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
-
-                            <p:outputLabel value="#{l.Despesa_CMV}"/>
-                            <a:inputTextDialog id="despesaCMV" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.despesaCMV}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
-
-
-                            <p:outputLabel value="#{l.Compra_AVista}"/>
-                            <a:inputTextDialog id="despesaAVista" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAVista}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+                                <div class="EmptyBox20"/>
+                                <h4 style="font-size: 15px" >#{l.Despesas}</h4>
+                                <div class="EmptyBox10"/>
+                                <p:separator/>
+                                <div class="EmptyBox10"/>
 
 
-                            <p:outputLabel value="#{l.Compra_APrazo}"/>
-                            <a:inputTextDialog id="despesaAPrazo" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAPrazo}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+                                <p:panelGrid columns="4" layout="grid" styleClass="TabNoBorder"
+                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-1 ui-g-12 ui-md-2,ui-g-12 ui-md-4">
 
-                            <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
-                            <p:outputLabel  value=""/>
-                            
-                        </p:panelGrid>
+                                    <p:outputLabel value="#{l.Despesa_CMV}"/>
+                                    <a:inputTextDialog id="despesaCMV" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.despesaCMV}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
 
 
-                        <div class="EmptyBox10"/>
-                        <p:separator/>
+                                    <p:outputLabel value="#{l.Compra_AVista}"/>
+                                    <a:inputTextDialog id="despesaAVista" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAVista}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+
+
+                                    <p:outputLabel value="#{l.Compra_APrazo}"/>
+                                    <a:inputTextDialog id="despesaAPrazo" dialog="#{selecaoTipoDespesaView}" mbView="#{operacaoView}" value="#{operacaoView.e.compraAPrazo}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+
+                                    <p:outputLabel  value=""/> <!-- MANTER O LAYOUT ORGANIZADO -->
+                                    <p:outputLabel  value=""/>
+
+                                </p:panelGrid>
+
+                            </p:tab>
+
+                        </p:tabView>
+
                     </div>
 
+                    <p:dialog width="400" widgetVar="operacaoDuplicar" header="#{l.Duplicar}" modal="true" closable="false" resizable="false">
 
+                        <p:outputLabel value="#{l.Grupo_Fiscal}"/>
+                        <a:inputTextDialog id="grupoFiscalOperacaoDuplicar" dialog="#{selecaoGrupoFiscalView}" mbView="#{operacaoView}" value="#{operacaoView.grupoFiscalDuplicar}" var="grupoFiscal" itemLabel="#{grupoFiscal.nome}" itemValue="#{grupoFiscal}" converter="grupoFiscalConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoFiscal.nome}"/>
 
+                        <p:outputLabel value="#{l.Operacao}"/>
+                        <a:inputTextDialog id="operacaoDuplicar" value="#{operacaoView.operacaoDuplicar}" dialog="#{selecaoOperacaoView}" mbView="#{operacaoView}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
 
+                        <div class="EmptyBox10"/>
+
+                        <p:commandButton value="#{l.Duplicar}" action="#{operacaoView.duplicarTodasSituacoes}" update="conteudo" />
+                        <p:commandButton value="#{l.Fechar}" onclick="PF('operacaoDuplicar').hide()"/>
+
+                    </p:dialog>
 
                     <div class="EmptyBox10"/>
 
                     <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" action="#{operacaoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{operacaoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{operacaoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{operacaoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Adicionar}" action="#{operacaoView.add}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{operacaoView.update}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{operacaoView.delete}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{operacaoView.limparJanela}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
                 </div>
             </div>

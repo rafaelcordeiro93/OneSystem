@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.Pais;
+import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.PaisService;
+import br.com.onesystem.war.service.CfopService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,36 +13,36 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializable {
+public class SelecaoCfopView extends BasicCrudMBImpl<Cfop> implements Serializable {
 
     @Inject
-    private PaisService service;
+    private CfopService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarPais();
+        beans = service.buscarCfops();
     }
 
     public void abrirDialogo() {
-        exibirNaTela("arquivo/selecao/selecaoPais");
+        exibirNaTela("contabil/selecao/selecaoCfop");
     }
-    
+
     @Override
     public String abrirEdicao() {
-        return "/menu/arquivo/pais";
+        return "/menu/contabil/cfop";
     }
-    
-     @Override
-    public List<Pais> complete(String query) {
-        List<Pais> listaFIltrada = new ArrayList<>();
-        for (Pais b : beans) {
+
+    @Override
+    public List<Cfop> complete(String query) {
+        List<Cfop> listaFIltrada = new ArrayList<>();
+        for (Cfop b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);
             }
         }
         if (!StringUtils.containsLetter(query)) {
-            for (Pais m : beans) {
-                if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
+            for (Cfop m : beans) {
+                if (StringUtils.startsWithIgnoreCase(m.getCfop().toString(), query)) {
                     listaFIltrada.add(m);
                 }
             }
@@ -50,11 +50,11 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
         return listaFIltrada;
     }
 
-    public PaisService getService() {
+    public CfopService getService() {
         return service;
     }
 
-    public void setService(PaisService service) {
+    public void setService(CfopService service) {
         this.service = service;
     }
 }

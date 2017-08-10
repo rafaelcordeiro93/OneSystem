@@ -19,6 +19,7 @@
         <composite:attribute name="itemLabel" required="true" shortDescription="Dado que é exibido no campo."/>
         <composite:attribute name="itemLabelTabVisible" default="false" shortDescription="Define se o dado da segunda coluna da lista de pesquisa autocomplete é exibido."/>
         <composite:attribute name="itemLabelTab" default="" shortDescription="Dado que é exibido na segunda coluna da lista de pesquisa autocomplete."/>
+        <composite:attribute name="itemLabelTabFirst" shortDescription="Dado que é exibido na primeira coluna da lista de pesquisa autocomplete."/>
         <composite:attribute name="onlyNumber" default="false" shortDescription="Define se o campo somente aceitará números." />
         <composite:attribute name="readonly" default="false" shortDescription="Define se o campo somente será de leitura." />
         <composite:attribute name="converter" required="true" shortDescription="Conversor dos dados do componente."  type="java.lang.String"/>
@@ -45,7 +46,7 @@
                     <f:converter converterId="#{cc.attrs.converter}"/>
                     <p:ajax event="change" update="#{cc.attrs.update}" process="#{cc.attrs.process}"/>
                     <p:column>
-                        <h:outputText value="#{cc.attrs.itemValue.id}" />
+                        <h:outputText value="#{cc.attrs.itemLabelTabFirst eq null ? cc.attrs.itemValue.id : cc.attrs.itemLabelTabFirst}" />
                     </p:column>                
                     <p:column rendered="#{cc.attrs.itemLabelTabVisible}">
                         <h:outputText value="#{cc.attrs.itemLabelTab}" />

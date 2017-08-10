@@ -30,7 +30,7 @@ public class GrupoFiscalBV implements Serializable, BuilderView<GrupoFiscal> {
         return nome;
     }
 
-    public TabelaDeTributacao getIva() {
+    public TabelaDeTributacao getTabelaDeTributacao() {
         return tabelaDeTributacaoPadrao;
     }
 
@@ -42,8 +42,8 @@ public class GrupoFiscalBV implements Serializable, BuilderView<GrupoFiscal> {
         this.nome = nome;
     }
 
-    public void setIva(TabelaDeTributacao iva) {
-        this.tabelaDeTributacaoPadrao = iva;
+    public void setTabelaDeTributacao(TabelaDeTributacao tabelaDeTributacao) {
+        this.tabelaDeTributacaoPadrao = tabelaDeTributacao;
     }
 
     public GrupoFiscal construir() throws DadoInvalidoException {

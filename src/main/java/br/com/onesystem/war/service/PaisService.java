@@ -7,7 +7,7 @@ import java.util.List;
 
 public class PaisService implements Serializable {
 
-    public List<Pais> buscarPaiss() {
+    public List<Pais> buscarPais() {
         return new ArmazemDeRegistros<Pais>(Pais.class).listaTodosOsRegistros();
     }
 
