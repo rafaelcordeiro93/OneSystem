@@ -6,6 +6,8 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.LancamentoBancario;
+import br.com.onesystem.domain.TipoDespesa;
+import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.LancamentoBancarioBV;
@@ -16,7 +18,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -31,8 +32,7 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
     private Cotacao cotacaoPadrao;
     private List<Conta> contaComCotacaoBancaria;
     private List<Cotacao> cotacaoBancariaLista;
-    private boolean despesa;
-    private boolean receita;
+    private Boolean yesNoRadio;
 
     @Inject
     private ConfiguracaoService serviceConf;
@@ -47,18 +47,18 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
     public void limparJanela() {
         t = null;
         e = new LancamentoBancarioBV();
-        e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
-        receita = true;
-        despesa = false;
+        yesNoRadio = true;
     }
 
     public void inicializar() {
         try {
             e.setEmissao(new Date());
+            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
             cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
             cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
             contaComCotacaoBancaria = new ContaDAO().buscarContaW().comBanco().listaDeResultados();
         } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -71,17 +71,22 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
         opcoes.put("resizable", false);
         opcoes.put("width", 400);
         opcoes.put("draggable", true);
-        opcoes.put("height", 475);
+        opcoes.put("height", 520);
         opcoes.put("closable", false);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
-
         RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoLancamentoBancario", opcoes, null);
     }
 
     @Override
     public void selecionar(SelectEvent event) {
+        Object obj = (Object) event.getObject();
+        if (obj instanceof TipoReceita) {
+            e.setReceita((TipoReceita) obj);
+        } else if (obj instanceof TipoDespesa) {
+            e.setDespesa((TipoDespesa) obj);
+        }
     }
 
     public void lancar() {
@@ -139,20 +144,12 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
         this.serviceConf = serviceConf;
     }
 
-    public boolean isDespesa() {
-        return despesa;
+    public Boolean getYesNoRadio() {
+        return yesNoRadio;
     }
 
-    public void setDespesa(boolean despesa) {
-        this.despesa = despesa;
-    }
-
-    public boolean isReceita() {
-        return receita;
-    }
-
-    public void setReceita(boolean receita) {
-        this.receita = receita;
+    public void setYesNoRadio(Boolean yesNoRadio) {
+        this.yesNoRadio = yesNoRadio;
     }
 
 }

@@ -6,10 +6,10 @@
                 template="/WEB-INF/templateDialog.xhtml">
 
 
-    <ui:define name="title">#{l.Selecao_De_Deposito_Bancario}</ui:define>
+    <ui:define name="title">#{l.Selecao_De_Lancamento_Bancario}</ui:define>
 
     <ui:define name="content">
-        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoDepositoBancarioView}">
+        <a:dataTable id="lancamentoDT" managedBeanName="#{selecaoLancamentoBancarioView}">
             <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                 <h:outputText value="#{bean.id}" />
             </p:column>
@@ -17,7 +17,7 @@
                 <h:outputText value="#{bean.conta.nome}" />
             </p:column>
             <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" filterBy="#{bean.valor}" footerText="#{l.Valor}" filterMatchMode="contains">
-                <h:outputText value="#{bean.origem.moeda.sigla} #{bean.valor}" />
+                <h:outputText value="#{bean.conta.moeda.sigla} #{bean.valor}" />
             </p:column>
             <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissao}" filterBy="#{bean.emissao}" footerText="#{l.Emissao}" filterMatchMode="contains">
                 <h:outputText value="#{bean.emissao}" />

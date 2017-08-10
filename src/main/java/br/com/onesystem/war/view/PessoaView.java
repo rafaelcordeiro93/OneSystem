@@ -15,7 +15,7 @@ import org.primefaces.event.SelectEvent;
 public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Serializable {
 
     private Date dataMaximaDeNascimento = new Date();
- 
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -36,18 +36,6 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
 
     public void limparJanela() {
         e = new PessoaBV();
-    }
-
-    public void fisicaJuridicaOnSelect() {
-        if (this.e.isFisicaJuridica()) {
-            this.e.setFantasiaCILabel("Fantasia");
-            this.e.setFantasiaCI("");
-            this.e.setNascimento(null);
-            this.e.setConjuge("");
-        } else {
-            this.e.setFantasiaCILabel("C.I.");
-            this.e.setFantasiaCI("");
-        }
     }
 
     public Date getDataMaximaDeNascimento() {

@@ -24,22 +24,24 @@
 
             <div class="ui-g-12">
 
-                <p:selectOneRadio id="console" >
-                    <f:selectItem itemLabel="#{l.Receita}" itemValue="#{dialogoLancamentoBancarioView.receita}" />
-                    <f:selectItem itemLabel="#{l.Despesa}" itemValue="#{dialogoLancamentoBancarioView.despesa}"  />
+                <p:outputLabel value="#{l.Tipo}"/>
+                <p:selectOneRadio id="tipoOperacao" value="#{dialogoLancamentoBancarioView.yesNoRadio}">
+                    <f:selectItem itemLabel="#{l.Despesa}" itemValue="#{false}" />
+                    <f:selectItem itemLabel="#{l.Receita}" itemValue="#{true}" />
+                    <p:ajax update="tempDialog"/>
                 </p:selectOneRadio>
 
-                <p:outputLabel value="#{l.Receita}"/>
-                <a:inputTextDialog id="receita" rendered="#{dialogoLancamentoBancarioView.receita}" dialog="#{selecaoTipoReceitaView}" mbView="#{dialogoLancamentoBancarioView}" value="#{dialogoLancamentoBancarioView.e.receita}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
+                <p:outputLabel id="labelReceita" rendered="#{dialogoLancamentoBancarioView.yesNoRadio}" value="#{l.Receita}"/>
+                <a:inputTextDialog id="receita" rendered="#{dialogoLancamentoBancarioView.yesNoRadio}" dialog="#{selecaoTipoReceitaView}" mbView="#{dialogoLancamentoBancarioView}" value="#{dialogoLancamentoBancarioView.e.receita}" var="tipoReceita" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" converter="tipoReceitaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}"/>
 
-                <p:outputLabel value="#{l.Despesa}"/>
-                <a:inputTextDialog id="despesa" rendered="#{dialogoLancamentoBancarioView.despesa}" dialog="#{selecaoTipoDespesaView}" mbView="#{dialogoLancamentoBancarioView}" value="#{dialogoLancamentoBancarioView.e.despesa}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
+                <p:outputLabel id="labelDespesa" rendered="#{!dialogoLancamentoBancarioView.yesNoRadio}" value="#{l.Despesa}"/>
+                <a:inputTextDialog id="despesa" rendered="#{!dialogoLancamentoBancarioView.yesNoRadio}" dialog="#{selecaoTipoDespesaView}" mbView="#{dialogoLancamentoBancarioView}" value="#{dialogoLancamentoBancarioView.e.despesa}" var="tipoDespesa" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" converter="tipoDespesaConverter" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}"/>
 
                 <div class="ui-g-12">
                     <p:outputLabel value="#{l.Conta}: "/>
                     <p:selectOneMenu  id="extratoOrigem" value="#{dialogoLancamentoBancarioView.e.conta}" 
-                                      converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" disabled="#{dialogoTipoDeCobrancaView.contaComCotacao.size() eq 0}" >
-                        <p:ajax listener="#{dialogoLancamentoBancarioView.selecionaCotacaoDeOrigemConformeConta}" update="vlOriginal"/>
+                                      converter="contaConverter" styleClass="Wid100" style="box-sizing: border-box" >
+                        <p:ajax listener="#{dialogoLancamentoBancarioView.selecionaCotacaoDeConta()}" update="vlOriginal"/>
                         <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
                         <f:selectItems value="#{dialogoLancamentoBancarioView.contaComCotacaoBancaria}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome} - #{conta.moeda.sigla}"/>
                     </p:selectOneMenu>
@@ -50,15 +52,14 @@
                     <p:inputNumber id="vlOriginal" inputStyleClass="Wid100" inputStyle="box-sizing: border-box" symbol="#{dialogoLancamentoBancarioView.e.conta.moeda.sigla} " value="#{dialogoLancamentoBancarioView.e.valor}" decimalPlaces="2" thousandSeparator="." decimalSeparator=","/>
                 </div>
 
-                <div class="ui-g-12"></div>
-                <p:outputLabel value="#{l.Observacao}"/>
-                <p:inputTextarea rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{orcamentoView.e.historico}"/>
-                <p:spacer/>
-                <p:outputLabel id="display"/>
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Observacao}"/>
+                    <p:inputTextarea  styleClass="Wid100" rows="1" maxlength="250" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{dialogoLancamentoBancarioView.e.observacao}"/>
+                </div>
+                <div class="ui-g-12">
+                    <p:outputLabel id="display"/>
+                </div>
             </div>
-
-
-
             <section>
 
                 <div class="EmptyBox5"/>

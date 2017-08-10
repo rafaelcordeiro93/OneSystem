@@ -146,13 +146,13 @@ public class LancamentoBancarioBV implements BuilderView<LancamentoBancario>, Se
     @Override
     public LancamentoBancario construir() throws DadoInvalidoException {
         return new LancamentoBancarioBuilder().comConta(conta).comValor(valor).comDespesa(despesa).comReceita(receita).comEmissao(emissao).comBaixas(baixas)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).construir();
     }
 
     @Override
     public LancamentoBancario construirComID() throws DadoInvalidoException {
         return new LancamentoBancarioBuilder().comId(id).comConta(conta).comValor(valor).comDespesa(despesa).comReceita(receita).comEmissao(emissao).comBaixas(baixas)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).construir();
     }
 
 }

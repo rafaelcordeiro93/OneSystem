@@ -107,18 +107,18 @@ public class LancamentoBancario implements Serializable {
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeLancamento(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comReceita(receita).comCotacao(conta).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comDespesa(despesa).comCotacao(conta).construir());
         }
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDoLancamentoCom(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comReceita(receita).comCotacao(conta).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comDespesa(despesa).comCotacao(conta).construir());
         }
     }
 
@@ -144,17 +144,16 @@ public class LancamentoBancario implements Serializable {
 
     private void geraHistorico(BaixaBuilder b) {
         BundleUtil msg = new BundleUtil();
-        if (this.tipoLancamentoBancario == TipoLancamentoBancario.LANCAMENTO && receita != null) {
-            b.comHistorico(msg.getLabel("Lancamento") + " " + msg.getLabel("de") + receita.getNome() + " "
-                    + msg.getLabel("para") + msg.getLabel("conta") + " (" + conta.getId() + " - " + conta.getNome() + ")");
-        }
-        if (this.tipoLancamentoBancario == TipoLancamentoBancario.LANCAMENTO && despesa != null) {
-            b.comHistorico(msg.getLabel("Lancamento") + " " + msg.getLabel("de") + despesa.getNome() + " "
-                    + msg.getLabel("para") + " " + msg.getLabel("conta") + " (" + conta.getId() + " - " + conta.getNome() + ")");
-        } else {
-            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " " + msg.getLabel("Lancamento") + " "
-                    + msg.getLabel("de") + " " + msg.getLabel("conta") + " (" + conta.getId() + " - " + conta.getNome() + ") ");
-
+        if (this.tipoLancamentoBancario.equals(TipoLancamentoBancario.LANCAMENTO) && receita != null) {
+            b.comHistorico(msg.getLabel("Lancamento") + " " + msg.getLabel("de") + " " + msg.getLabel("Receita") + " " + msg.getLabel("de") + " " + receita.getNome());
+        } else if (this.tipoLancamentoBancario.equals(TipoLancamentoBancario.LANCAMENTO) && despesa != null) {
+            b.comHistorico(msg.getLabel("Lancamento") + " " + msg.getLabel("de") + " " + msg.getLabel("Despesa") + " " + msg.getLabel("de") + " " + despesa.getNome());
+        } else if (this.tipoLancamentoBancario.equals(TipoLancamentoBancario.ESTORNO) && despesa != null) {
+            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " " + msg.getLabel("Lancamento") + " " + msg.getLabel("de")
+                    + " " + msg.getLabel("Despesa") + " " + msg.getLabel("de") + " " + despesa.getNome());
+        } else if (this.tipoLancamentoBancario.equals(TipoLancamentoBancario.ESTORNO) && receita != null) {
+            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " " + msg.getLabel("Lancamento") + " " + msg.getLabel("de")
+                    + " " + msg.getLabel("Receita") + " " + msg.getLabel("de") + " " + receita.getNome());
         }
     }
 

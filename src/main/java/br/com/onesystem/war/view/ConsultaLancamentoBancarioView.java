@@ -99,7 +99,9 @@ public class ConsultaLancamentoBancarioView extends BasicMBImpl<LancamentoBancar
     public void delete() {
         try {
             t = e.construirComID();
-            cancelaEstorno();
+            if (t.getTipoLancamentoBancario().equals(TipoLancamentoBancario.ESTORNO)) {
+                cancelaEstorno();
+            }
             deleteNoBanco(t, t.getId());
         } catch (DadoInvalidoException ex) {
             ex.print();
