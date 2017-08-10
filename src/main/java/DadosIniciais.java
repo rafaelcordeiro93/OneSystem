@@ -108,7 +108,7 @@ public class DadosIniciais {
 
         //Modulo de Arquivo
         Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
-        
+
         Janela jpais = new Janela(null, "País", "/menu/arquivo/pais.xhtml", arq);
         Janela jestado = new Janela(null, "Estado", "/menu/arquivo/estado.xhtml", arq);
         Janela cidade = new Janela(null, "Cidade", "/menu/arquivo/cidade.xhtml", arq);
@@ -203,7 +203,6 @@ public class DadosIniciais {
         Janela conRecebimento = new Janela(null, "Consulta Receber Valores", "/menu/financeiro/consultar/consultaRecebimento.xhtml", fin);
         Janela conPagamentos = new Janela(null, "Consulta Pagar Valores", "/menu/financeiro/consultar/consultaPagamento.xhtml", fin);
 
-
         daoJanela.adiciona(receberValores);
         daoJanela.adiciona(conRecebimento);
         daoJanela.adiciona(pagarValores);
@@ -232,6 +231,7 @@ public class DadosIniciais {
         Janela tipoDespesa = new Janela(null, "Tipo Despesa", "/menu/contabil/tipoDespesa.xhtml", con);
         Janela grupoFinance = new Janela(null, "Grupo Financeiro", "/menu/contabil/grupoFinanceiro.xhtml", con);
         Janela jgrupoFiscal = new Janela(null, "Grupo Fiscal", "/menu/contabil/grupoFiscal.xhtml", con);
+        Janela jcfop = new Janela(null, "Cfop", "/menu/contabil/cfop.xhtml", con);
         Janela operacoes = new Janela(null, "Operacoes", "/menu/contabil/operacoes.xhtml", con);
         Janela jiva = new Janela(null, "Tabela De Tributação", "/menu/contabil/tabelaDeTributacao.xhtml", con);
 
@@ -240,6 +240,7 @@ public class DadosIniciais {
         daoJanela.adiciona(tipoReceita);
         daoJanela.adiciona(grupoFinance);
         daoJanela.adiciona(jgrupoFiscal);
+        daoJanela.adiciona(jcfop);
         daoJanela.adiciona(operacoes);
 
         //Modulo de Cambio
@@ -404,7 +405,8 @@ public class DadosIniciais {
                 new Privilegio(null, perfilUsuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jestado, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpais, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio)
+                new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jcfop, true, true, true, true, grupoDePrivilegio)
         );
 
         for (Privilegio p : listaPrivilegios) {

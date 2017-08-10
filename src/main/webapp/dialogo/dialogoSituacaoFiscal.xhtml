@@ -1,0 +1,80 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Situacao_Fiscal}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+
+            <h2 class="BigTopic">#{l.Situacao_Fiscal}</h2>
+
+            <div class="ui-g-12">
+                <p:outputLabel  class="ui-g-12" value="#{l.Sequencia}: "/>
+                <p:inputNumber id="dseq" decimalPlaces="0" decimalSeparator="" thousandSeparator="" readonly="true" value="#{dialogoSituacaoFiscalView.e.sequencia}"/>
+                <p:separator styleClass="Wid100"/>
+            </div>
+
+            <div class="ui-g-12">
+
+                <div class="EmptyBox10"/>
+                <h4 style="font-size: 15px" >#{l.Condicoes}</h4>
+                <div class="EmptyBox10"/>
+                <p:separator/>
+                <div class="EmptyBox10"/>
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Estado}: "/>
+                    <a:inputTextDialog id="estadoSituacao" value="#{dialogoSituacaoFiscalView.e.estado}" dialog="#{selecaoEstadoView}" mbView="#{dialogoSituacaoFiscalView}" var="estado" converter="estadoConverter" itemLabel="#{estado.nome}" itemValue="#{estado}" itemLabelTabVisible="true" itemLabelTab="#{estado.nome}" editVisible="true" />
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Tipo_Pessoa}"/>
+                    <p:selectOneMenu  id="tipoPessoaSituacao" value="#{dialogoSituacaoFiscalView.e.tipoPessoa}" styleClass="Wid100" style="box-sizing: border-box" >
+                        <f:selectItem itemLabel="#{l.Selecione}" itemValue="" />
+                        <f:selectItems value="#{dialogoSituacaoFiscalView.tiposPessoa}" var="tipoPessoa" itemValue="#{tipoPessoa}" itemLabel="#{tipoPessoa.nome}"/>
+                    </p:selectOneMenu>
+                </div>
+                <p:spacer/>
+
+                <div class="EmptyBox10"/>
+                <h4 style="font-size: 15px" >#{l.Resultado}</h4>
+                <div class="EmptyBox10"/>
+                <p:separator/>
+                <div class="EmptyBox10"/>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Cfop}"/>
+                    <a:inputTextDialog id="cfopSituacao" dialog="#{selecaoCfopView}" mbView="#{dialogoSituacaoFiscalView}" value="#{dialogoSituacaoFiscalView.e.cfop}" var="cfop" itemLabel="#{cfop.cfop}" itemValue="#{cfop}" converter="cfopConverter" itemLabelTabVisible="true" itemLabelTab="#{cfop.nome}" itemLabelTabFirst="#{cfop.cfop}"/>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Tabela_de_Tributacao}"/>
+                    <a:inputTextDialog id="tabelaDeTributacaoSituacao" dialog="#{selecaoTabelaDeTributacaoView}" mbView="#{dialogoSituacaoFiscalView}" 
+                                       value="#{dialogoSituacaoFiscalView.e.tabelaDeTributacao}" var="tabelaDeTributacao" itemLabel="#{tabelaDeTributacao.nome}" itemValue="#{tabelaDeTributacao}" converter="tabelaDeTributacaoConverter" itemLabelTabVisible="true" itemLabelTab="#{tabelaDeTributacao.nome}"/>
+                </div>
+
+                <div class="ui-g-12">
+                    <p:outputLabel value="#{l.Observacao}" styleClass="Wid100"/>
+                    <p:inputTextarea rows="3" styleClass="Wid100" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{dialogoSituacaoFiscalView.e.observacao}"/>
+                    <p:outputLabel id="display" styleClass="Wid100"/>
+                </div>
+
+                <p:spacer/>
+            </div>
+
+            <section>
+                <p:separator/>
+                <p:commandButton value="#{l.Adicionar}" action="#{dialogoSituacaoFiscalView.add}" update="tempDialog" rendered="#{dialogoSituacaoFiscalView.t eq null}"/>
+                <p:commandButton value="#{l.Atualizar}" action="#{dialogoSituacaoFiscalView.atualizar}" update="tempDialog" rendered="#{dialogoSituacaoFiscalView.t ne null}"/>
+                <p:commandButton value="#{l.Fechar}" action="#{dialogoSituacaoFiscalView.fechar}" styleClass="orange-btn"/>
+            </section>
+        </div>
+
+    </ui:define>
+</ui:composition>

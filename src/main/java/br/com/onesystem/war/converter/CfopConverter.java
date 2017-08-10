@@ -5,10 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.TabelaDeTributacao;
-import br.com.onesystem.domain.TabelaDeTributacao;
+import br.com.onesystem.domain.Cfop;
+import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TabelaDeTributacaoService;
+import br.com.onesystem.war.service.CfopService;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.application.FacesMessage;
@@ -22,24 +22,24 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "tabelaDeTributacaoConverter", forClass = TabelaDeTributacao.class)
-public class TabelaDeTributacaoConverter implements Converter, Serializable {
+@FacesConverter(value = "cfopConverter", forClass = Cfop.class)
+public class CfopConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<TabelaDeTributacao> lista = new TabelaDeTributacaoService().buscarTabelasDeTributacao();
+                List<Cfop> lista = new CfopService().buscarCfops();
                 if (StringUtils.containsLetter(value)) {
-                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
-                        if (tabelaDeTributacao.getNome().equals(value)) {
-                            return tabelaDeTributacao;
+                    for (Cfop cfop : lista) {
+                        if (cfop.getNome().equals(value)) {
+                            return cfop;
                         }
                     }
                 } else {
-                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
-                        if (tabelaDeTributacao.getId().equals(new Long(value))) {
-                            return tabelaDeTributacao;
+                    for (Cfop cfop : lista) {
+                        if (cfop.getId().equals(new Long(value))) {
+                            return cfop;
                         }
                     }
                 }
@@ -56,7 +56,7 @@ public class TabelaDeTributacaoConverter implements Converter, Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
             try {
-                return String.valueOf(((TabelaDeTributacao) object).getNome());
+                return String.valueOf(((Cfop) object).getNome());
             } catch (ClassCastException cce) {
                 return object.toString();
             }

@@ -28,9 +28,8 @@
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{grupoFiscalView.e.nome}" maxlength="60"/>
 
-                            <p:outputLabel value="#{l.IVA}"/>
+                            <p:outputLabel value="#{l.Tabela_de_Tributacao}"/>
                             <a:inputTextDialog id="grupoFiscalTabelaDeTributacao" dialog="#{selecaoTabelaDeTributacaoView}" mbView="#{grupoFiscalView}" value="#{grupoFiscalView.e.tabelaDeTributacao}" var="tabelaDeTributacao" itemLabel="#{tabelaDeTributacao.nome}" itemValue="#{tabelaDeTributacao}" converter="tabelaDeTributacaoConverter" itemLabelTabVisible="true" itemLabelTab="#{tabelaDeTributacao.nome}"/>
-
 
                         </p:panelGrid>
 
