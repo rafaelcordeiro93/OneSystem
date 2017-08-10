@@ -117,6 +117,9 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private CambioEmpresa cambioEmpresa;
 
+    @ManyToOne
+    private LancamentoBancario lancamentoBancario;
+
     public Baixa() {
     }
 
@@ -125,7 +128,7 @@ public class Baixa implements Serializable, Movimento {
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
             Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
             TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca,
-            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, CambioEmpresa cambioEmpresa) throws DadoInvalidoException {
+            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa) throws DadoInvalidoException {
         this.id = id;
         this.estado = EstadoDeBaixa.EM_DEFINICAO;
         this.valor = valor;
@@ -148,6 +151,7 @@ public class Baixa implements Serializable, Movimento {
         this.depositoBancario = depositoBancario;
         this.saqueBancario = saqueBancario;
         this.cambioEmpresa = cambioEmpresa;
+        this.lancamentoBancario = lancamentoBancario;
         ehValido();
     }
 
@@ -192,6 +196,10 @@ public class Baixa implements Serializable, Movimento {
 
     public CobrancaFixa getCobrancaFixa() {
         return cobrancaFixa;
+    }
+
+    public LancamentoBancario getLancamentoBancario() {
+        return lancamentoBancario;
     }
 
     public BigDecimal getSaldo(BigDecimal saldoAtual) {

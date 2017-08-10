@@ -8,13 +8,13 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.dao.DepositoBancarioDAO;
+import br.com.onesystem.dao.LancamentoBancarioDAO;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
-import br.com.onesystem.war.builder.DepositoBancarioBV;
+import br.com.onesystem.war.builder.LancamentoBancarioBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -31,11 +31,10 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, DepositoBancarioBV> implements Serializable {
+public class ConsultaLancamentoBancarioView extends BasicMBImpl<LancamentoBancario, LancamentoBancarioBV> implements Serializable {
 
-    private DepositoBancarioBV depositoEstonado;
+    private LancamentoBancarioBV lancamentoEstonado;
     private List<Cotacao> cotacaoBancariaLista;
-    private List<Cotacao> cotacaoEmpresaLista;
 
     @PostConstruct
     public void init() {
@@ -43,39 +42,36 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     }
 
     public void inicializar() {
-        cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
         cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
     }
 
     @Override
     public void limparJanela() {
-        e = new DepositoBancarioBV();
-        depositoEstonado = new DepositoBancarioBV();
-        cotacaoEmpresaLista = new ArrayList<>();
+        e = new LancamentoBancarioBV();
+        lancamentoEstonado = new LancamentoBancarioBV();
         cotacaoBancariaLista = new ArrayList<>();
     }
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new DepositoBancarioBV((DepositoBancario) event.getObject());
+        e = new LancamentoBancarioBV((LancamentoBancario) event.getObject());
         inicializar();
     }
 
     public void estorno() {
         try {
-            depositoEstonado = new DepositoBancarioBV(e.construirComID());
+            lancamentoEstonado = new LancamentoBancarioBV(e.construirComID());
             selecionaCotacao();
-            depositoEstonado.setId(null);
-            depositoEstonado.setBaixas(null);
-            depositoEstonado.setCheques(null);
-            depositoEstonado.setEmissao(new Date());
-            depositoEstonado.setTipoLancamentoBancario(TipoLancamentoBancario.ESTORNO);
-            depositoEstonado.setEstornado(true);
-            depositoEstonado.setIdRelacaoEstorno(e.getId());
-            DepositoBancario d = depositoEstonado.construir();
-            d.geraEstornoDoDepositoCom(depositoEstonado.getCotacaoDeOrigem(), depositoEstonado.getCotacaoDeDestino());
+            lancamentoEstonado.setId(null);
+            lancamentoEstonado.setBaixas(null);
+            lancamentoEstonado.setEmissao(new Date());
+            lancamentoEstonado.setTipoLancamentoBancario(TipoLancamentoBancario.ESTORNO);
+            lancamentoEstonado.setEstornado(true);
+            lancamentoEstonado.setIdRelacaoEstorno(e.getId());
+            LancamentoBancario d = lancamentoEstonado.construir();
+            d.geraEstornoDoLancamentoCom(lancamentoEstonado.getCotacaoDeConta());
             new AdicionaDAO<>().adiciona(d);
-            atualizaDeposito(d);
+            atualizaLancamento(d);
             InfoMessage.atualizado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
@@ -84,15 +80,12 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     }
 
     public void selecionaCotacao() {
-        if (depositoEstonado.getDestino() != null) {
-            depositoEstonado.setCotacaoDeDestino(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(e.getDestino())).findFirst().get());
-        }
-        if (depositoEstonado.getOrigem() != null) {
-            depositoEstonado.setCotacaoDeOrigem(cotacaoEmpresaLista.stream().filter(c -> c.getConta().equals(e.getOrigem())).findFirst().get());
+        if (lancamentoEstonado.getConta() != null) {
+            lancamentoEstonado.setCotacaoDeConta(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(e.getConta())).findFirst().get());
         }
     }
 
-    private void atualizaDeposito(DepositoBancario d) {
+    private void atualizaLancamento(LancamentoBancario d) {
         try {
             e.setEstornado(true);
             t = e.construirComID();
@@ -116,7 +109,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     }
 
     private void cancelaEstorno() throws ConstraintViolationException, DadoInvalidoException {
-        DepositoBancarioBV de = new DepositoBancarioBV(new DepositoBancarioDAO().porId(t.getIdRelacaoEstorno()).resultado());
+        LancamentoBancarioBV de = new LancamentoBancarioBV(new LancamentoBancarioDAO().porId(t.getIdRelacaoEstorno()).resultado());
         de.setIdRelacaoEstorno(null);
         de.setEstornado(false);
         new AtualizaDAO<>().atualiza(de.construirComID());
