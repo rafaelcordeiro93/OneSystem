@@ -9,6 +9,7 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.io.Serializable;
@@ -107,18 +108,18 @@ public class LancamentoBancario implements Serializable {
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeLancamento(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comReceita(receita).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comDespesa(despesa).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         }
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDoLancamentoCom(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comReceita(receita).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comDespesa(despesa).comCotacao(conta).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         }
     }
 

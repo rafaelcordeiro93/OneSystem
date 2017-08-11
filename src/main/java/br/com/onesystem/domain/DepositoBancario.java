@@ -9,9 +9,9 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
-import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,6 +51,9 @@ public class DepositoBancario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date compensacao;
+
     @NotNull(message = "{origem_not_null}")
     @ManyToOne(optional = false)
     private Conta origem;
@@ -89,10 +92,11 @@ public class DepositoBancario implements Serializable {
     public DepositoBancario() {
     }
 
-    public DepositoBancario(Long id, Date emissao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas,
+    public DepositoBancario(Long id, Date emissao, Date compensacao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas,
             List<Cheque> cheques, String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
+        this.compensacao = compensacao;
         this.origem = origem;
         this.destino = destino;
         this.valor = valor;
@@ -113,17 +117,27 @@ public class DepositoBancario implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeDeposito(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+        if (this.compensacao != null) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());//Baixas Compensadas
+            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).construir());
+        } else {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());//Baixas do Lançamento
+            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+        }
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDoDepositoCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+        if (this.compensacao != null) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        } else {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
+            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+        }
     }
-    
-    public void setIdRelacaoEstorno(DepositoBancario d){
+
+    public void setIdRelacaoEstorno(DepositoBancario d) {
         this.idRelacaoEstorno = d.getId();
     }
 
@@ -236,6 +250,10 @@ public class DepositoBancario implements Serializable {
 
     public Long getIdRelacaoEstorno() {
         return idRelacaoEstorno;
+    }
+
+    public Date getCompensacao() {
+        return compensacao;
     }
 
     @Override

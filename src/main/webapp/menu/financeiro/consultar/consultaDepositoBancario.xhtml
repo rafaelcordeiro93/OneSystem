@@ -29,11 +29,16 @@
                             <p:outputLabel value="#{l.Emissao}"/>
                             <p:calendar pattern="dd/MM/yyyy" style="box-sizing: border-box" navigator="false" readonly="true" value="#{consultaDepositoBancarioView.e.emissao}"/>
 
+                            <p:outputLabel rendered="#{consultaDepositoBancarioView.e.estornado}" value="#{consultaDepositoBancarioView.e.tipoLancamentoBancario.nome eq l.Lancamento ? l.Id_Estorno : l.Id_Deposito}"/>
+                            <p:inputText rendered="#{consultaDepositoBancarioView.e.estornado}" readonly="true"  value="#{consultaDepositoBancarioView.e.idRelacaoEstorno}"/>
+
+                            <p:outputLabel value="#{l.Compensacao}"/>
+                            <p:calendar pattern="dd/MM/yyyy" style="box-sizing: border-box" readonly="#{consultaDepositoBancarioView.e.compensacao eq null ? false : true}" navigator="true" value="#{consultaDepositoBancarioView.e.compensacao}"/>
+
                             <p:outputLabel rendered="#{consultaDepositoBancarioView.e.estornado}" value="#{l.Estado}: "/>
                             <p:outputLabel rendered="#{consultaDepositoBancarioView.e.estornado}" class="label label-warning" value="#{consultaDepositoBancarioView.e.tipoLancamentoBancario.nome eq l.Lancamento ? l.Estornado : l.Lancamento_De_Estorno}" />
 
-                            <p:outputLabel rendered="#{consultaDepositoBancarioView.e.estornado}" value="#{consultaDepositoBancarioView.e.tipoLancamentoBancario.nome eq l.Lancamento ? l.Id_Estorno : l.Id_Deposito}"/>
-                            <p:inputText rendered="#{consultaDepositoBancarioView.e.estornado}" readonly="true"  value="#{consultaDepositoBancarioView.e.idRelacaoEstorno}"/>
+                            <p:spacer rendered="#{!consultaDepositoBancarioView.e.estornado}"/> <p:spacer rendered="#{!consultaDepositoBancarioView.e.estornado}"/>
 
                         </p:panelGrid>
 
@@ -77,12 +82,13 @@
                         <div class="EmptyBox10"/>
 
                         <p:separator/>
-
                     </div> 
 
                     <div class="EmptyBox10"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton rendered="#{!consultaDepositoBancarioView.e.estornado}" value="#{l.Estorno}" action="#{consultaDepositoBancarioView.estorno()}" styleClass="Mar2 orange-btn" update=":conteudo" icon="fa fa-history Fs16 White"/>
+                        <p:commandButton rendered="#{consultaDepositoBancarioView.e.estornado eq false and consultaDepositoBancarioView.e.compensacao eq null ? true : false}" value="#{l.Compensar}" action="#{consultaDepositoBancarioView.compensar()}" styleClass="Mar2" update=":conteudo" icon="fa fa-level-up  Fs16 White"/>
+                        <p:commandButton rendered="#{consultaDepositoBancarioView.e.estornado eq true or consultaDepositoBancarioView.e.compensacao eq null ? false : true}" value="#{l.Cancelar_Compensacao}" action="#{consultaDepositoBancarioView.cancelarCompensar()}" styleClass="Mar2" update=":conteudo" icon="fa fa-level-down  Fs16 White"/>
                         <p:commandButton rendered="#{consultaDepositoBancarioView.e.tipoLancamentoBancario.nome eq l.Lancamento and consultaDepositoBancarioView.e.estornado eq true ? false : true}" value="#{l.Remover}" action="#{consultaDepositoBancarioView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{consultaDepositoBancarioView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>

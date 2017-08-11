@@ -18,6 +18,7 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
 
     private Long id;
     private Date emissao;
+    private Date compensacao;
     private Conta origem;
     private Conta destino;
     private Cotacao cotacaoDeOrigem;
@@ -46,6 +47,7 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.estornado = dp.isEstornado();
         this.observacao = dp.getObservacao();
         this.idRelacaoEstorno = dp.getIdRelacaoEstorno();
+        this.compensacao = dp.getCompensacao();
     }
 
     public Long getId() {
@@ -160,8 +162,16 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.idRelacaoEstorno = idRelacaoEstorno;
     }
 
+    public Date getCompensacao() {
+        return compensacao;
+    }
+
+    public void setCompensacao(Date compensacao) {
+        this.compensacao = compensacao;
+    }
+
     public DepositoBancario construir() throws DadoInvalidoException {
-        return new DepositoBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor)
+        return new DepositoBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor).comCompensacao(compensacao)
                 .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comCheques(cheques)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
@@ -169,7 +179,7 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
     @Override
     public DepositoBancario construirComID() throws DadoInvalidoException {
         return new DepositoBancarioBuilder().comId(id).comDestino(destino).comOrigem(origem).comCheques(cheques).
-                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas)
+                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas).comCompensacao(compensacao)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
 

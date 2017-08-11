@@ -39,6 +39,7 @@ public class BaixaBuilder {
     private BigDecimal valor;
     private String historico;
     private Date emissao;
+    private Date dataCompensacao;
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
     private Cobranca cobranca;
@@ -67,8 +68,9 @@ public class BaixaBuilder {
         this.historico = baixa.getHistorico();
         this.valor = baixa.getValor();
         this.emissao = baixa.getEmissao();
+        this.dataCompensacao = baixa.getDataCompensacao();
         this.estado = baixa.getEstado();
-        this.naturezaFinanceira = baixa.getNaturezaFinanceira();
+        this.naturezaFinanceira = baixa.getOperacaoFinanceira();
         this.cotacao = baixa.getCotacao();
         this.cobranca = baixa.getParcela();
         this.despesa = baixa.getDespesa();
@@ -107,6 +109,11 @@ public class BaixaBuilder {
 
     public BaixaBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
+        return this;
+    }
+
+    public BaixaBuilder comDataCompensacao(Date dataCompensacao) {
+        this.dataCompensacao = dataCompensacao;
         return this;
     }
 
@@ -195,9 +202,14 @@ public class BaixaBuilder {
         return this;
     }
 
+    public BaixaBuilder comEstadoDeBaixa(EstadoDeBaixa estado) {
+        this.estado = estado;
+        return this;
+    }
+
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, valor, emissao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
-                recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario ,cambioEmpresa);
+        return new Baixa(id, valor, emissao, dataCompensacao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
+                recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado);
     }
 
 }

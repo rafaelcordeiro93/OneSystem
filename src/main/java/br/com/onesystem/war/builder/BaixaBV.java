@@ -7,6 +7,8 @@ import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -29,6 +31,7 @@ public class BaixaBV implements Serializable {
     private BigDecimal valor = BigDecimal.ZERO;
     private String historico = "";
     private Date emissao = Calendar.getInstance().getTime();
+    private Date dataCompensacao;
     private OperacaoFinanceira naturezaFinanceira;
     private Cotacao cotacao;
     private Cobranca perfilDeValor;
@@ -37,6 +40,8 @@ public class BaixaBV implements Serializable {
     private Pessoa pessoa;
     private Cambio cambio;
     private Transferencia transferencia;
+    private DepositoBancario depositoBancario;
+    private LancamentoBancario lancamentoBancario;
     private Recepcao recepcao;
     private EstadoDeBaixa estado;
     private CobrancaFixa movimentoFixo;
@@ -53,16 +58,19 @@ public class BaixaBV implements Serializable {
         this.dataCancelamento = baixa.getDataCancelamento();
         this.valor = baixa.getValor();
         this.emissao = baixa.getEmissao();
+        this.dataCompensacao = baixa.getDataCompensacao();
         this.historico = baixa.getHistorico();
-        this.naturezaFinanceira = baixa.getNaturezaFinanceira();
+        this.naturezaFinanceira = baixa.getOperacaoFinanceira();
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();
         this.perfilDeValor = baixa.getParcela();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
-              this.cotacao = baixa.getCotacao();
+        this.cotacao = baixa.getCotacao();
         this.valorPorCotacao = baixa.getValorPorCotacao();
+        this.lancamentoBancario = baixa.getLancamentoBancario();
+        this.depositoBancario = baixa.getDepositoBancario();
     }
 
     public void selecionaTitulo(Titulo titulo) {
@@ -124,6 +132,14 @@ public class BaixaBV implements Serializable {
 
     public void setEmissao(Date emissao) {
         this.emissao = emissao;
+    }
+
+    public Date getDataCompensacao() {
+        return dataCompensacao;
+    }
+
+    public void setDataCompensacao(Date dataCompensacao) {
+        this.dataCompensacao = dataCompensacao;
     }
 
     public OperacaoFinanceira getNaturezaFinanceira() {
@@ -226,20 +242,39 @@ public class BaixaBV implements Serializable {
         this.valorPorCotacao = valorPorCotacao;
     }
 
+    public DepositoBancario getDepositoBancario() {
+        return depositoBancario;
+    }
+
+    public void setDepositoBancario(DepositoBancario depositoBancario) {
+        this.depositoBancario = depositoBancario;
+    }
+
+    public LancamentoBancario getLancamentoBancario() {
+        return lancamentoBancario;
+    }
+
+    public void setLancamentoBancario(LancamentoBancario lancamentoBancario) {
+        this.lancamentoBancario = lancamentoBancario;
+    }
+    
+    
+
     public Baixa construir() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio)
-                .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).
-                comHistorico(historico).comOperacaoFinanceira(naturezaFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
-                .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
+                .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
+                .comHistorico(historico).comOperacaoFinanceira(naturezaFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
+                .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio)
                 .comCotacao(cotacao).comDespesa(despesa).comId(id)
                 .comEmissao(emissao).comHistorico(historico).comCobrancaFixa(movimentoFixo)
-                .comOperacaoFinanceira(naturezaFinanceira)
+                .comOperacaoFinanceira(naturezaFinanceira).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor)
-                .comTransferencia(transferencia).comValor(valor).comValorPorCotacao(valorPorCotacao).construir();
+                .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario)
+                .comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

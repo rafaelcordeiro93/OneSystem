@@ -59,6 +59,9 @@ public class Baixa implements Serializable, Movimento {
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = Calendar.getInstance().getTime();
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCompensacao;
+
     @Enumerated(EnumType.STRING)
     private OperacaoFinanceira naturezaFinanceira;
 
@@ -123,16 +126,17 @@ public class Baixa implements Serializable, Movimento {
     public Baixa() {
     }
 
-    public Baixa(Long id, BigDecimal valor, Date emissao, String historico,
+    public Baixa(Long id, BigDecimal valor, Date emissao, Date dataCompensacao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
             Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
             TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca,
-            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa) throws DadoInvalidoException {
+            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, EstadoDeBaixa estado) throws DadoInvalidoException {
         this.id = id;
-        this.estado = EstadoDeBaixa.EM_DEFINICAO;
+        setEstado(estado);
         this.valor = valor;
         this.emissao = emissao;
+        this.dataCompensacao = dataCompensacao;
         this.historico = historico;
         this.pessoa = pessoa;
         this.naturezaFinanceira = tipoMovimentacaoFinanceira;
@@ -153,6 +157,14 @@ public class Baixa implements Serializable, Movimento {
         this.cambioEmpresa = cambioEmpresa;
         this.lancamentoBancario = lancamentoBancario;
         ehValido();
+    }
+
+    private void setEstado(EstadoDeBaixa es) {
+        if (es == null) {
+            this.estado = EstadoDeBaixa.EM_DEFINICAO;
+        } else {
+            this.estado = es;
+        }
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -365,12 +377,25 @@ public class Baixa implements Serializable, Movimento {
         return emissao;
     }
 
+    public Date getDataCompensacao() {
+        return dataCompensacao;
+    }
+
     public String getEmissaoFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
     }
 
-    public OperacaoFinanceira getNaturezaFinanceira() {
+    public String getCompensacaoFormatada() {
+        SimpleDateFormat compensacaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        if (getDataCompensacao() != null) {
+            return compensacaoFormatada.format(getDataCompensacao().getTime());
+        } else {
+            return getEmissaoFormatada();
+        }
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
         return naturezaFinanceira;
     }
 
