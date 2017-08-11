@@ -117,8 +117,13 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
     }
 
     private String getHistorico() {
+        String pessoa = "";
+        if (tipoDeCobranca.getCobrancaFixa().getPessoa() != null) {
+            pessoa = " " + msg.getMessage("de") + " " + tipoDeCobranca.getCobrancaFixa().getPessoa().getNome();
+        }
+
         String id = tipoDeCobranca.getCobrancaFixa().getId() == null ? "" : " " + tipoDeCobranca.getCobrancaFixa().getId().toString();
-        return id + " " + msg.getMessage("de") + " " + tipoDeCobranca.getCobrancaFixa().getPessoa().getNome();
+        return id + pessoa;
     }
 
 }
