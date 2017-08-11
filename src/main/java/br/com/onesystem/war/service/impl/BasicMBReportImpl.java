@@ -21,14 +21,12 @@ import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.domain.FiltroDeRelatorio;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.ParametroDeFiltroDeRelatorio;
-import br.com.onesystem.domain.builder.ColunaBuilder;
 import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -59,7 +57,6 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
-import org.primefaces.event.ColumnResizeEvent;
 
 /**
  *
@@ -213,8 +210,19 @@ public abstract class BasicMBReportImpl<T> {
 
     public void excluirDeCampoExibido() {
         if (colunaExibidaSelecionada != null && !colunaExibidaSelecionada.isEmpty()) {
-            colunaExibidaSelecionada.forEach((c) -> camposDisponiveis.add(c));
-            colunaExibidaSelecionada.forEach(c -> camposExibidos.remove(c));
+            for (Coluna c : colunaExibidaSelecionada) {
+                camposDisponiveis.add(c);
+                List<Model> list = new ArrayList<>();
+                for (Model m : camposExibidos) {
+                    Coluna col = (Coluna) m.getObject();
+                    if (col.getPropriedadeCompleta().equals(c.getPropriedadeCompleta())) {
+                        list.add(m);
+                    }
+                }
+                if (!list.isEmpty()) {
+                    list.forEach(m -> camposExibidos.remove(m));
+                }
+            }
             colunaExibidaSelecionada = new LinkedList<>();
         }
     }
