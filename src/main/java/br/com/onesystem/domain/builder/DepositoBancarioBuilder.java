@@ -29,6 +29,7 @@ public class DepositoBancarioBuilder {
     private List<Baixa> baixas;
     private List<Cheque> cheques;
     private Date emissao;
+    private Date compensacao;
     private String observacao;
     private TipoLancamentoBancario tipoLancamentoBancario;
     private boolean estornado;
@@ -74,6 +75,11 @@ public class DepositoBancarioBuilder {
         return this;
     }
 
+    public DepositoBancarioBuilder comCompensacao(Date compensacao) {
+        this.compensacao = compensacao;
+        return this;
+    }
+
     public DepositoBancarioBuilder comObservacao(String observacao) {
         this.observacao = observacao;
         return this;
@@ -95,7 +101,7 @@ public class DepositoBancarioBuilder {
     }
 
     public DepositoBancario construir() throws DadoInvalidoException {
-        return new DepositoBancario(id, emissao, origem, destino, valor, valorConvertido, baixas, cheques, observacao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
+        return new DepositoBancario(id, emissao, compensacao, origem, destino, valor, valorConvertido, baixas, cheques, observacao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
     }
 
 }

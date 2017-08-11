@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
@@ -191,6 +192,14 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         return this;
     }
 
+    public BaixaDAO ePorEstadoDeBaixa(EstadoDeBaixa estado) {
+        if (estado != null) {
+            parametros.put("pEstado", estado);
+            where += "and baixa.estado = :pEstado ";
+        }
+        return this;
+    }
+
     public BaixaDAO ePorPessoa(Pessoa pessoa) {
         if (pessoa != null) {
             parametros.put("pPessoa", pessoa);
@@ -203,6 +212,14 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         if (transferencia != null) {
             parametros.put("pTransferencia", transferencia);
             where += "and baixa.transferencia = :pTransferencia ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorDepositoBancario(DepositoBancario depositoBancario) {
+        if (depositoBancario != null) {
+            parametros.put("pDepositoBancario", depositoBancario);
+            where += "and baixa.depositoBancario = :pDepositoBancario ";
         }
         return this;
     }
@@ -249,9 +266,9 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         return resultado;
     }
 
-    public BigDecimal buscarSaldoAnterior(Date data, Conta conta, Caixa caixa) {
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+    public BigDecimal buscarSaldoAnterior(Date data, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoSomaTotal();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;

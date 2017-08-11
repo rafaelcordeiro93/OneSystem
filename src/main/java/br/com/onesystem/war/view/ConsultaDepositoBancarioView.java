@@ -7,13 +7,20 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.DepositoBancarioDAO;
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
+import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.DepositoBancarioBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -83,6 +90,34 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
         }
     }
 
+    public void compensar() {
+        try {
+            DepositoBancario d = e.construirComID();
+            if (d.getCompensacao() == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Data_Compensacao_Deve_Ser_Informada"));
+            }
+            new AtualizaDAO<>().atualiza(d);
+            atualizaBaixas(d);
+            InfoMessage.atualizado();
+            limparJanela();
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void cancelarCompensar() {
+        try {
+            e.setCompensacao(null);
+            DepositoBancario d = e.construirComID();
+            new AtualizaDAO<>().atualiza(d);
+            cancelaCompensacaoBaixas(d);
+            InfoMessage.atualizado();
+            limparJanela();
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
     public void selecionaCotacao() {
         if (depositoEstonado.getDestino() != null) {
             depositoEstonado.setCotacaoDeDestino(cotacaoBancariaLista.stream().filter(c -> c.getConta().equals(e.getDestino())).findFirst().get());
@@ -95,6 +130,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     private void atualizaDeposito(DepositoBancario d) {
         try {
             e.setEstornado(true);
+            e.setCompensacao(null);
             t = e.construirComID();
             t.setIdRelacaoEstorno(d);
             new AtualizaDAO<>().atualiza(t);
@@ -120,6 +156,30 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
         de.setIdRelacaoEstorno(null);
         de.setEstornado(false);
         new AtualizaDAO<>().atualiza(de.construirComID());
+    }
+
+    private void atualizaBaixas(DepositoBancario d) throws ConstraintViolationException, DadoInvalidoException {
+        List<Baixa> listaBaixa = new BaixaDAO().ePorDepositoBancario(d).listaDeResultados();
+        for (Baixa b : listaBaixa) {
+            BaixaBV bv = new BaixaBV(b);
+            if (b.getOperacaoFinanceira().equals(OperacaoFinanceira.ENTRADA)) {
+                bv.setDataCompensacao(d.getCompensacao());
+            }
+            bv.setEstado(EstadoDeBaixa.EFETIVADO);
+            new AtualizaDAO<>().atualiza(bv.construirComID());
+        }
+    }
+
+    private void cancelaCompensacaoBaixas(DepositoBancario d) throws ConstraintViolationException, DadoInvalidoException {
+        List<Baixa> listaBaixa = new BaixaDAO().ePorDepositoBancario(d).listaDeResultados();
+        for (Baixa b : listaBaixa) {
+            BaixaBV bv = new BaixaBV(b);
+            if (b.getOperacaoFinanceira().equals(OperacaoFinanceira.ENTRADA)) {
+                bv.setDataCompensacao(null);
+            }
+            bv.setEstado(EstadoDeBaixa.EM_DEFINICAO);
+            new AtualizaDAO<>().atualiza(bv.construirComID());
+        }
     }
 
 }

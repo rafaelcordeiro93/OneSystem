@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,38 +17,38 @@ public class BaixaService implements Serializable {
         return new BaixaDAO().orderByEmissaoEId().listaDeResultados();
     }
 
-    public List<Baixa> buscarBaixasPelaData(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
+    public List<Baixa> buscarBaixasPelaData(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
             return new BaixaDAO().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
-                    .ePorCaixa(caixa).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
+                    .ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         } else {
             return new BaixaDAO().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
-                    .eNaoCancelada().orderByEmissaoEId().listaDeResultados();
+                    .ePorEstadoDeBaixa(estado).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         }
     }
 
-    public BigDecimal buscarSaldoAnterior(Date dataAnterior, Conta conta, Caixa caixa) {
+    public BigDecimal buscarSaldoAnterior(Date dataAnterior, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa);
+            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
         } else {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta);
+            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, null, estado);
         }
     }
 
-    public BigDecimal buscarSaldoFinal(Date dataAnterior, Conta conta, Caixa caixa) {
+    public BigDecimal buscarSaldoFinal(Date dataAnterior, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa);
+            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
         } else {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta);
+            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, null, estado);
         }
     }
 
-    public String buscarSaldoAnteriorFormatado(Date dataAnterior, Conta conta, Caixa caixa) {
-        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoAnterior(dataAnterior, conta, caixa));
+    public String buscarSaldoAnteriorFormatado(Date dataAnterior, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoAnterior(dataAnterior, conta, caixa, estado));
     }
 
-    public String buscarSaldoFinalFormatado(Date dataFinal, Conta conta, Caixa caixa) {
-        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoFinal(dataFinal, conta, caixa));
+    public String buscarSaldoFinalFormatado(Date dataFinal, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
+        return MoedaFormatter.format(conta.getMoeda(), buscarSaldoFinal(dataFinal, conta, caixa, estado));
     }
 
     public String buscarEntradasPorDataEContaFormatado(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {

@@ -7,11 +7,26 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="head">
+        <h:outputScript>
+            function abreTransferencia() {
+            document.getElementById("conteudo:bt:transferencia-btn").click();
+            }
+            function abreDeposito(){
+            document.getElementById("conteudo:bt:deposito-btn").click();
+            }
+            function abreSaque(){
+            document.getElementById("conteudo:bt:saque-btn").click();
+            }
+            function abreLancamento(){
+            document.getElementById("conteudo:bt:lancamento-btn").click();
+            }
+            function abreCambio(){
+            document.getElementById("conteudo:bt:cambio-btn").click();
+            }
+        </h:outputScript>
     </ui:define>
 
     <ui:define name="content">
-
-
 
         <div class="ui-g">
             <div class="ui-g-12">
@@ -20,8 +35,10 @@
                     <div class="EmptyBox20"/>
                     <div class="ui-fluid">
 
-                        <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-2,ui-g-12 ui-md-3,ui-g-12 ui-md-2">
+
+
+                        <p:panelGrid columns="7" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-3,ui-g-12 ui-md-1, ui-g-12 ui-md-1, ui-g-12 ui-md-2">
 
                             <p:column>
                                 <p:outputLabel value="#{l.Periodo}"/>
@@ -45,28 +62,47 @@
                                 <a:inputTextDialog id="extratoConta" placeholder="#{l.Conta}" dialog="#{selecaoContaView}" mbView="#{extratoDeContaView}" value="#{extratoDeContaView.extrato.conta}" updateButtonSearch="conteudo" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}">
                                     <p:ajax event="itemSelect" update="conteudo" listener="#{extratoDeContaView.atualizar()}" />
                                 </a:inputTextDialog>
+                            </p:column> 
+
+                            <p:column>
+                                <p:spacer/>
+                                <p:selectOneMenu  id="TipoNota" value="#{extratoDeContaView.lancamentoCompensacao}" >
+                                    <f:selectItems value="#{extratoDeContaView.listEstado}" itemValue="#{lancamentoCompensacao}" var="lancamentoCompensacao" />
+                                    <p:ajax event="itemSelect" update="conteudo" listener="#{extratoDeContaView.atualizar()}" />
+                                </p:selectOneMenu>
                             </p:column>
 
                             <p:column>
                                 <p:spacer/>
-                                <h:panelGrid columns="5" style="margin-top: -1.5%">
-                                    <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="green-btn" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
-                                    <p:commandButton id="transferencia-btn" value="#{l.Transferencia}" action="#{dialogoTransferenciaView.abrirDialogo}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                <p:commandButton value="#{l.Atualizar}" icon="fa fa-refresh Fs16 White" styleClass="green-btn" action="#{extratoDeContaView.atualizar()}" update=":conteudo"/>
+                            </p:column>
+
+                            <p:column> 
+                                <p:spacer/>
+                                <h:form id="bt">
+                                    <p:commandButton id="transferencia-btn"  action="#{dialogoTransferenciaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this"  update="conteudo"/>
                                     </p:commandButton>
-                                    <p:commandButton id="deposito-btn" value="#{l.Deposito}" action="#{dialogoDepositoBancarioView.abrirDialogo}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    <p:commandButton id="deposito-btn"  action="#{dialogoDepositoBancarioView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this" update="conteudo" />
                                     </p:commandButton>
-                                    <p:commandButton id="saque-btn" value="#{l.Saque}" action="#{dialogoSaqueBancarioView.abrirDialogo()}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    <p:commandButton id="saque-btn"  action="#{dialogoSaqueBancarioView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this"  update="conteudo"/>
                                     </p:commandButton>
-                                    <p:commandButton id="lancamento-btn" value="#{l.Lancamento}" action="#{dialogoLancamentoBancarioView.abrirDialogo()}" process="@this" update="@none">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    <p:commandButton id="lancamento-btn"  action="#{dialogoLancamentoBancarioView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this"  update="conteudo"/>
                                     </p:commandButton>
-                                    <p:commandButton id="cambio-btn" value="#{l.Cambio_De_Moeda}" action="#{dialogoCambioEmpresaView.abrirDialogo()}" process="@this" update="@none" style="min-width: 130px;">
-                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" update=":conteudo"/>
+                                    <p:commandButton id="cambio-btn"  action="#{dialogoCambioEmpresaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                                        <p:ajax event="dialogReturn" listener="#{extratoDeContaView.selecionar}" process="@this"  update="conteudo"/>
                                     </p:commandButton>
-                                </h:panelGrid>
+                                    <p:menuButton id="menuButton" value="#{l.Operacoes}" style="padding-top: 7.5%"> 
+                                        <p:menuitem value="#{l.Transferencia}"  onclick="abreTransferencia()" ajax="false"/>
+                                        <p:menuitem value="#{l.Deposito}"  onclick="abreDeposito()" ajax="false"/>
+                                        <p:menuitem value="#{l.Saque}" onclick="abreSaque()" ajax="false"/>
+                                        <p:menuitem value="#{l.Lancamento}" onclick="abreLancamento()" ajax="false"/>
+                                        <p:menuitem value="#{l.Cambio_De_Moeda}"  onclick="abreCambio()" ajax="false"/>
+                                    </p:menuButton>
+                                </h:form>
                             </p:column>
 
                         </p:panelGrid>    
@@ -106,20 +142,27 @@
                             </p:column>
 
                             <p:column style="text-align: center">
-                                <h:outputText value="#{baixa.emissaoFormatada}" />
+                                <h:outputText value="#{extratoDeContaView.lancamentoCompensacao eq l.Lancamento ? baixa.emissaoFormatada : baixa.compensacaoFormatada}" />
                             </p:column>
 
                             <p:column id="columnEntrada" style="text-align: center">
-                                <h:outputText id="entrada" value="#{baixa.naturezaFinanceira.id eq 1 ? baixa.valorFormatado : null }" style="color: #0288D1" />
+                                <h:outputText id="entrada" value="#{baixa.operacaoFinanceira.id eq 1 ? baixa.valor : null }" style="color: #0288D1" >
+                                    <f:convertNumber currencySymbol="#{extratoDeContaView.extrato.conta.moeda.sigla}" type="currency" /> 
+                                </h:outputText>
                             </p:column>
 
                             <p:column style="text-align: center;">
-                                <h:outputText value="#{baixa.naturezaFinanceira.id eq 2 ? baixa.valorFormatado : null }" style="color: #E53935"/>
+                                <h:outputText value="#{baixa.operacaoFinanceira.id eq 2 ? baixa.valor : null }" style="color: #E53935">
+                                    <f:convertNumber currencySymbol="#{extratoDeContaView.extrato.conta.moeda.sigla}" type="currency" /> 
+                                </h:outputText>
                             </p:column>
 
                             <p:column style="text-align: center">
+
                                 <h:outputText value="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.buscarSaldoAnterior(baixa)}" 
-                                              style="color : #{extratoDeContaView.buscarSaldoAnterior(baixa) ge 0 ? '#0288d1' : '#E53935'}" />
+                                              style="color : #{extratoDeContaView.buscarSaldoAnterior(baixa) ge 0 ? '#0288d1' : '#E53935'}" >
+                                    <f:convertNumber currencySymbol="#{extratoDeContaView.extrato.conta.moeda.sigla}" type="currency" /> 
+                                </h:outputText>
                             </p:column>
 
                             <p:column style="text-align: center;">
@@ -130,7 +173,8 @@
                                 <p:row>
                                     <p:column colspan="5" style="text-align:right" footerText="#{l.Totais}" />
                                     <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradasFormatado}" 
-                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradas ge 0 ? '#0288d1' : '#E53935'}"/>
+                                              style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.entradas ge 0 ? '#0288d1' : '#E53935'}">
+                                    </p:column>
                                     <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidasFormatado}"
                                               style="color : #{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saidas ge 0 ? '#E53935' : '#0288d1'}"/>
                                     <p:column footerText="#{extratoDeContaView.extrato.conta eq null ? '' : extratoDeContaView.saldoFormatado}"
