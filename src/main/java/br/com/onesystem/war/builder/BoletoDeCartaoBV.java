@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
     private Pessoa pessoa;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public BoletoDeCartaoBV(BoletoDeCartao b) {
         this.id = b.getId();
@@ -43,6 +45,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.pessoa = b.getPessoa();
         this.operacaoFinanceira = b.getOperacaoFinanceira();
         this.entrada = b.getEntrada();
+        this.situacaoDeCobranca = b.getSituacaoDeCobranca();
     }
 
     public BoletoDeCartaoBV(Cobranca c) {
@@ -58,6 +61,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.pessoa = c.getPessoa();
         this.operacaoFinanceira = c.getOperacaoFinanceira();
         this.entrada = c.getEntrada();
+        this.situacaoDeCobranca = c.getSituacaoDeCobranca();
     }
 
     public BoletoDeCartaoBV() {
@@ -155,6 +159,14 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         return entrada;
     }
 
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
+    }
+
+    public void setSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+    }
+
     public void setEntrada(Boolean entrada) {
         this.entrada = entrada;
     }
@@ -163,13 +175,13 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         return new BoletoDeCartaoBuilder().comNota(nota).
                 comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comVencimento(vencimento).comValor(valor).comCotacao(cotacao).comEntrada(entrada).
-                comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
+                comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comID(id).
                 comNota(nota).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comEntrada(entrada).
-                comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).construir();
+                comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 }

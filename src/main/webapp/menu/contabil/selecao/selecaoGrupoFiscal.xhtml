@@ -17,8 +17,8 @@
             <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
                 <h:outputText value="#{bean.nome}" />
             </p:column>
-            <p:column headerText="#{l.IVA}" sortBy="#{bean.iva.nome}" filterBy="#{bean.iva.nome}" footerText="#{l.IVA}" filterMatchMode="contains">
-                <h:outputText value="#{bean.iva.nome}" />
+            <p:column headerText="#{l.Tabela_de_Tributacao}" sortBy="#{bean.tabelaDeTributacaoPadrao.nome}" filterBy="#{bean.tabelaDeTributacaoPadrao.nome}" footerText="#{l.Tabela_de_Tributacao}" filterMatchMode="contains">
+                <h:outputText value="#{bean.tabelaDeTributacaoPadrao.nome}" />
             </p:column>
         </a:dataTable>
 

@@ -54,7 +54,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
      * @author Rafael Fernando Rauber
      * @date
      *
-     * Classe utilizada para buscar os objetos da sessão
+     * Método utilizado para buscar os objetos da sessão
      */
     private void buscaDaSessao() throws DadoInvalidoException {
         // Rafael Cordeiro - 01/08/2017 - Adequação para as classes de Fatura Emitida e Recebida

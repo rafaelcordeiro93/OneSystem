@@ -8,6 +8,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -59,8 +60,8 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
             Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, FaturaLegada faturaLegada,
-            FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
+            FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;

@@ -41,6 +41,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import br.com.onesystem.services.impl.FormatacaoNumeroRelatorio;
+import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 
 /**
@@ -102,11 +104,15 @@ public abstract class Cobranca implements Serializable {
 
     private Boolean entrada;
 
+    @Enumerated(EnumType.STRING)
+    private SituacaoDeCobranca situacaoDeCobranca;
+
     public Cobranca() {
     }
 
     public Cobranca(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento, Nota nota, Boolean entrada) throws DadoInvalidoException {
+            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
+            Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao == null ? new Date() : emissao;
@@ -118,6 +124,11 @@ public abstract class Cobranca implements Serializable {
         this.vencimento = vencimento;
         this.entrada = entrada;
         this.nota = nota;
+        if (situacaoDeCobranca != null) {
+            this.situacaoDeCobranca = situacaoDeCobranca;
+        } else {
+            atualizaSituacao();
+        }
         ehAbstracaoValida();
     }
 
@@ -140,8 +151,37 @@ public abstract class Cobranca implements Serializable {
         this.baixas.add(baixa);
     }
 
+    /**
+     * Utilizado no GeradorDeBaixaDeTipoCobranca no método geraBaixas para
+     * atualizar a situação da cobrança ao receber o pagamento.
+     *
+     * Quando a soma do valor das baixas for maior ou igual ao valor da
+     * cobrança, a mesma é considerada paga, caso contrário é considerada
+     * aberta. Não existe situação Parcial.
+     *
+     * @date 10/08/2017
+     * @author Rafael Fernando Rauber
+     * @see GeradorDeBaixaDeTipoCobranca
+     */
+    public final void atualizaSituacao() {
+        if (baixas != null) {
+            BigDecimal soma = baixas.stream().map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            if (soma.compareTo(this.valor) >= 0) {
+                situacaoDeCobranca = SituacaoDeCobranca.PAGO;
+            } else {
+                situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+            }
+        } else {
+            situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+        }
+    }
+
     public Long getId() {
         return id;
+    }
+
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
     }
 
     @FormatacaoNumeroRelatorio(formatacaoNumero = TipoFormatacaoNumero.MOEDA)

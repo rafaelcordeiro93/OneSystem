@@ -50,6 +50,8 @@ public class GeradorDeBaixaDeTipoCobranca {
             Titulo titulo = (Titulo) tipoDeCobranca.getCobranca();
             titulo.atualizaSaldo(tipoDeCobranca.getValor());
         }
+        //Atualiza situação da Cobrança 
+        tipoDeCobranca.getCobranca().atualizaSituacao();
     }
 
     private Baixa getValor(String tipo) throws DadoInvalidoException {

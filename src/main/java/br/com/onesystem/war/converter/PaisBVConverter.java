@@ -27,7 +27,7 @@ public class PaisBVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Pais> lista = new PaisService().buscarPaiss();
+                List<Pais> lista = new PaisService().buscarPais();
                 if (StringUtils.containsLetter(value)) {
                     for (Pais pais : lista) {
                         if (pais.getNome().equals(value)) {

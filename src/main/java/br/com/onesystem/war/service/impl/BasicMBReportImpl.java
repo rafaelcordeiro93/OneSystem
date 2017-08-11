@@ -20,6 +20,9 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.domain.FiltroDeRelatorio;
 import br.com.onesystem.domain.ModeloDeRelatorio;
+import br.com.onesystem.domain.ParametroDeFiltroDeRelatorio;
+import br.com.onesystem.domain.builder.ColunaBuilder;
+import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
@@ -36,8 +39,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -51,14 +52,14 @@ import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import br.com.onesystem.war.builder.ColunaBV;
+import br.com.onesystem.war.builder.FiltroDeRelatorioBV;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import org.primefaces.component.datatable.DataTable;
-import org.primefaces.context.RequestContext;
+import java.util.LinkedList;
+import org.primefaces.event.ColumnResizeEvent;
 
 /**
  *
@@ -79,7 +80,7 @@ public abstract class BasicMBReportImpl<T> {
     private TipoDeBusca tipoDeBuscaSelecionada = TipoDeBusca.CONTENDO;
     private Totalizador totalizador;
     private List<Model> modelDisponivelSelecionado = new ArrayList<>();
-    private List<Model> modelExibidoSelecionado = new ArrayList<>();
+    private List<Coluna> colunaExibidaSelecionada = new LinkedList<>();
     protected List<T> registros = new ArrayList<>();
     protected List<T> registrosFiltrados = new ArrayList<>();
     private ModelList<Coluna> campos = new ModelList<Coluna>();
@@ -150,7 +151,7 @@ public abstract class BasicMBReportImpl<T> {
                 table = "??" + c.getSimpleName() + "??";
             }
             //&& fieldsName.contains(m.getName().substring(3).substring(0, 1).toLowerCase() + m.getName().substring(4)) Summary Row
-            List<String> fieldsName = Arrays.asList(c.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
+//            List<String> fieldsName = Arrays.asList(c.getDeclaredFields()).stream().map(Field::getName).collect(Collectors.toList());
             for (Method m : c.getMethods()) {
                 if (m.getName().contains("get") && !"getClass".equals(m.getName()) && m.getReturnType() != List.class
                         && m.getDeclaringClass().toString().substring(6).equals(c.getName()) && !m.getReturnType().toString().contains("domain")
@@ -180,9 +181,7 @@ public abstract class BasicMBReportImpl<T> {
                             header = header + " (" + table + ")";
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
-                        if (!camposExibidos.getList().contains(novoCampo)) {
-                            addCampo(novoCampo);
-                        }
+                        addCampo(novoCampo);
                     } catch (MissingResourceException mre) {
                         String header = m.getName().substring(3);
                         header = "??" + header.substring(0, 1).toUpperCase() + header.substring(1) + "??";
@@ -190,12 +189,10 @@ public abstract class BasicMBReportImpl<T> {
                             header = header + " (" + table + ")";
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
-                        if (!camposExibidos.getList().contains(novoCampo)) {
-                            addCampo(novoCampo);
-                        }
+                        addCampo(novoCampo);
                     }
                 }
-            };
+            }
 
         }
     }
@@ -215,11 +212,10 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public void excluirDeCampoExibido() {
-        if (modelExibidoSelecionado != null && !modelExibidoSelecionado.isEmpty()) {
-            for (Model m : modelExibidoSelecionado) {
-                camposDisponiveis.add((Coluna) m.getObject());
-                camposExibidos.remove(m);
-            }
+        if (colunaExibidaSelecionada != null && !colunaExibidaSelecionada.isEmpty()) {
+            colunaExibidaSelecionada.forEach((c) -> camposDisponiveis.add(c));
+            colunaExibidaSelecionada.forEach(c -> camposExibidos.remove(c));
+            colunaExibidaSelecionada = new LinkedList<>();
         }
     }
 
@@ -255,13 +251,15 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     private void addCampo(Coluna campo) {
-        if (!((campo.getNome() != null && campo.getNome().toLowerCase().contains("format"))
-                || (campo.getPropriedade() != null && campo.getPropriedade().toLowerCase().contains("format"))
-                || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
-                || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
-                || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
-            this.campos.add(campo);
-            this.camposDisponiveis.add(campo);
+        if (!camposExibidos.getList().contains(campo) && !camposDisponiveis.getList().contains(campo)) {
+            if (!((campo.getNome() != null && campo.getNome().toLowerCase().contains("format"))
+                    || (campo.getPropriedade() != null && campo.getPropriedade().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
+                this.campos.add(campo);
+                this.camposDisponiveis.add(campo);
+            }
         }
     }
 
@@ -322,39 +320,48 @@ public abstract class BasicMBReportImpl<T> {
             } else {
 
                 //Adiciona os filtros
-                FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, campoSelecionado, tipoDeBuscaSelecionada);
+                FiltroDeRelatorio filtro = new FiltroDeRelatorio(null, new ColunaBV(campoSelecionado).construir(), tipoDeBuscaSelecionada);
 
-                if (campoSelecionado.getClasseOriginal() != Date.class && (!consulta.isEmpty() || (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()))) {
+                if (campoSelecionado.getClasseOriginal() != Date.class) {
 
-                    // Faz o tratamento dos filtros em String para seus devidos Tipos.
-                    for (String s : consulta) {
-                        //LONG ===============================================================================
-                        if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
-                            filtro.add(new Long(s));
-                        } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(new Long(s));
-                        } //BIGDECIMAL =======================================================================
-                        else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
-                            s = s.replaceAll(",", ".");
-                            filtro.add(new BigDecimal(s));
-                        } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
-                            s = s.replaceAll(",", ".");
-                            filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
-                        } //STRING ============================================================================
-                        else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
-                            filtro.add(s);
-                        } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).add(s);
+                    if (consulta != null && !consulta.isEmpty()) {
+                        // Faz o tratamento dos filtros em String para seus devidos Tipos.
+                        for (String s : consulta) {
+                            //LONG ===============================================================================
+                            if (campoSelecionado.getClasseOriginal() == Long.class && !filtros.contains(filtro)) {
+                                filtro.add(new Long(s));
+                            } else if (campoSelecionado.getClasseOriginal() == Long.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(new Long(s));
+                            } else //Integer ===============================================================================
+                            if (campoSelecionado.getClasseOriginal() == Integer.class && !filtros.contains(filtro)) {
+                                filtro.add(new Integer(s));
+                            } else if (campoSelecionado.getClasseOriginal() == Integer.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(new Integer(s));
+                            } //BIGDECIMAL =======================================================================
+                            else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && !filtros.contains(filtro)) {
+                                s = s.replaceAll(",", ".");
+                                filtro.add(new BigDecimal(s));
+                            } else if (campoSelecionado.getClasseOriginal() == BigDecimal.class && filtros.contains(filtro)) {
+                                s = s.replaceAll(",", ".");
+                                filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
+                            } //STRING ============================================================================
+                            else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
+                                filtro.add(s);
+                            } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(s);
+                            }
                         }
                     }
 
-                    // Faz o tratamento para os filtros de Enum
-                    for (String s : enumeracoesSelecionadas) {
-                        //Enum ====================================================================================
-                        if (!filtros.contains(filtro)) {
-                            filtro.addEnum(s);
-                        } else if (filtros.contains(filtro)) {
-                            filtros.get(filtros.indexOf(filtro)).addEnum(s);
+                    if (enumeracoesSelecionadas != null && !enumeracoesSelecionadas.isEmpty()) {
+                        // Faz o tratamento para os filtros de Enum
+                        for (String s : enumeracoesSelecionadas) {
+                            //Enum ====================================================================================
+                            if (!filtros.contains(filtro)) {
+                                filtro.add(filtro.getEnum(s));
+                            } else if (filtros.contains(filtro)) {
+                                filtros.get(filtros.indexOf(filtro)).add(filtro.getEnum(s));
+                            }
                         }
                     }
 
@@ -410,11 +417,12 @@ public abstract class BasicMBReportImpl<T> {
 
     public void imprimir() {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
+        String nomeRelatorio = modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty() ? modeloDeRelatorioSelecionadoString : tipoRelatorio.getNome();
         try {
             if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
-                impressora.imprimir(registros, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             } else {
-                impressora.imprimir(registrosFiltrados, tipoRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
             }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -426,25 +434,45 @@ public abstract class BasicMBReportImpl<T> {
             if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
 
                 //Cria novo modelo
-                ModeloDeRelatorio modelo = new ModeloDeRelatorio(null, modeloDeRelatorioSelecionadoString, tipoRelatorio);
+                ModeloDeRelatorio modelo = new ModeloDeRelatorioBuilder().comNome(modeloDeRelatorioSelecionadoString).comTipoRelatorio(tipoRelatorio).construir();
+                ModeloDeRelatorio modeloRemovido = null; // * Necessario para não soltar CuncurrentException
 
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
                         ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
                         new RemoveDAO<>().remove(find, find.getId());
+                        modeloRemovido = m; // * Necessario para não soltar CuncurrentException
+                        break;
                     }
                 }
 
-                //Adiciona campos exibidos
-                camposExibidos.getList().forEach((c) -> {
-                    modelo.adicionaColunaExibida(c);
-                });
+                // * Necessario para não soltar CuncurrentException
+                if (modeloRemovido != null) {
+                    modelosDeRelatorio.remove(modeloRemovido);
+                }
 
-                //Adiciona filtros
-                filtros.forEach((f) -> {
-                    modelo.adicionaFiltro(f);
-                });
+                //Adiciona Colunas
+                for (Coluna c : camposExibidos.getList()) {
+                    Coluna coluna = new ColunaBV(c).construir();
+                    modelo.addColunaExibida(coluna);
+                }
+
+                //Adiciona Filtros
+                for (FiltroDeRelatorio f : filtros) {
+                    FiltroDeRelatorio filtro = new FiltroDeRelatorioBV(f).construir();
+                    //Adiciona filtro dentro dos parametros - Cascade
+                    for (ParametroDeFiltroDeRelatorio p : filtro.getParametros()) {
+                        p.setId(null);
+                        p.setFiltroDeRelatorio(filtro);
+                    }
+                    //Altera coluna do filtro para que não tenha modelo e ser persistida como filtro.
+                    Coluna col = new ColunaBV(filtro.getColuna()).construir();
+                    col.setModelo(null);
+                    filtro.setColuna(col);
+
+                    modelo.addFiltro(filtro);
+                }
 
                 //Adiciona no banco novo registro
                 new AdicionaDAO<>().adiciona(modelo);
@@ -453,6 +481,7 @@ public abstract class BasicMBReportImpl<T> {
                 InfoMessage.adicionado();
             }
         } catch (DadoInvalidoException ex) {
+            ex.printConsole();
             ex.print();
         }
     }
@@ -466,7 +495,6 @@ public abstract class BasicMBReportImpl<T> {
                     //Adiciona Filtros
                     if (m.getFiltroDeRelatorio() != null) {
                         for (FiltroDeRelatorio f : m.getFiltroDeRelatorio()) {
-                            f.setId(null);
                             filtros.add(f);
                         }
                     }
@@ -476,7 +504,6 @@ public abstract class BasicMBReportImpl<T> {
                         for (Coluna c : m.getColunasExibidas()) {
                             for (Model model : camposDisponiveis) {
                                 if (((Coluna) model.getObject()).getPropriedadeCompleta().equalsIgnoreCase(c.getPropriedadeCompleta())) {
-                                    c.setId(null);
                                     camposDisponiveis.remove(model);
                                     camposExibidos.add(c);
                                     break;
@@ -553,12 +580,12 @@ public abstract class BasicMBReportImpl<T> {
         this.modelDisponivelSelecionado = modelDisponivelSelecionado;
     }
 
-    public List<Model> getModelExibidoSelecionado() {
-        return modelExibidoSelecionado;
+    public List<Coluna> getColunaExibidaSelecionada() {
+        return colunaExibidaSelecionada;
     }
 
-    public void setModelExibidoSelecionado(List<Model> modelExibidoSelecionado) {
-        this.modelExibidoSelecionado = modelExibidoSelecionado;
+    public void setColunaExibidaSelecionada(List<Coluna> colunaExibidaSelecionada) {
+        this.colunaExibidaSelecionada = colunaExibidaSelecionada;
     }
 
     public ModelList<Coluna> getCampos() {
@@ -742,7 +769,22 @@ public abstract class BasicMBReportImpl<T> {
         this.colunaParaTotalizadorSelecionada = colunaParaTotalizadorSelecionada;
     }
 
-    public String customFormat(Object obj) {
+    public void onResizeColumnObjects(Object objeto, Object tamanho) {
+        Coluna col = (Coluna) objeto;
+        Integer i = Integer.valueOf((String) tamanho);
+        col.setTamanho(i);
+
+        for (Model m : camposExibidos) {
+            Coluna colModel = (Coluna) m.getObject();
+            if (colModel.getNome().equals(col.getNome())) {
+                m.setObject(col);
+                camposExibidos.atualiza(m);
+                break;
+            }
+        }
+    }
+
+    public Object customFormat(Object obj) {
         try {
             if (obj.getClass() == BigDecimal.class) {
 
@@ -762,9 +804,9 @@ public abstract class BasicMBReportImpl<T> {
                 Enum o = (Enum) obj;
                 return o.getClass().getMethod("getNome", null).invoke(o, null).toString();
             }
-            return obj.toString();
+            return obj;
         } catch (Exception ex) {
-            return obj.toString();
+            return obj;
         }
     }
 

@@ -2,15 +2,22 @@ package br.com.onesystem.valueobjects;
 
 public enum TipoPessoa {
 
-    PESSOA_FISICA("Pessoa Física"),
-    PESSOA_JURIDICA("Pessoa Jurídica");
-    private String tipoPessoa;
+    PESSOA_FISICA(new Long(1), "Pessoa Física"),
+    PESSOA_JURIDICA(new Long(2), "Pessoa Jurídica");
 
-    private TipoPessoa(String tipoPersona) {
-        this.tipoPessoa = tipoPersona;
+    private Long id;
+    private String nome;
+
+    private TipoPessoa(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
     }
 
-    public String getTipoPessoa() {
-        return tipoPessoa;
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
     }
 }

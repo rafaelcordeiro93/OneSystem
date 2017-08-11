@@ -33,6 +33,7 @@ import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -88,6 +89,7 @@ public class CobrancaBV implements Serializable {
     private FaturaLegada faturaLegada;
     private FaturaEmitida faturaEmitida;
     private FaturaRecebida faturaRecebida;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public CobrancaBV() {
         entrada = false;
@@ -125,6 +127,7 @@ public class CobrancaBV implements Serializable {
         this.entrada = p.getEntrada();
         this.historico = p.getHistorico();
         this.faturaLegada = p.getFaturaLegada();
+        this.situacaoDeCobranca = p.getSituacaoDeCobranca();
     }
 
     public CobrancaBV(Long id, Nota notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
@@ -135,7 +138,8 @@ public class CobrancaBV implements Serializable {
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
             Recepcao recepcao, ModalidadeDeCobranca tipoFormaDeRecebimentoParcela,
-            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico, FaturaLegada faturaLegada) {
+            Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico, FaturaLegada faturaLegada,
+            SituacaoDeCobranca situacaoDeCobranca) {
         this.id = id;
         this.nota = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -166,6 +170,7 @@ public class CobrancaBV implements Serializable {
         this.pessoa = pessoa;
         this.entrada = entrada;
         this.historico = historico;
+        this.situacaoDeCobranca = situacaoDeCobranca;
         this.faturaLegada = faturaLegada;
     }
 
@@ -185,6 +190,7 @@ public class CobrancaBV implements Serializable {
         this.moeda = p.getCotacao().getConta().getMoeda();
         this.dias = p.getDias() != null ? p.getDias().intValue() : 0;
         this.banco = p.getCotacao().getConta().getBanco();
+        this.situacaoDeCobranca = p.getSituacaoDeCobranca();
 
         if (p instanceof Cheque) {
             this.agencia = ((Cheque) p).getAgencia();
@@ -223,6 +229,10 @@ public class CobrancaBV implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
     }
 
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
@@ -518,6 +528,10 @@ public class CobrancaBV implements Serializable {
         return faturaEmitida;
     }
 
+    public void setSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+    }
+    
     public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
         this.faturaEmitida = faturaEmitida;
     }
@@ -534,7 +548,7 @@ public class CobrancaBV implements Serializable {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
                 comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada)
                 .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira).comBaixas(baixas)
-                .construir();
+                .comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
     public Cheque construirCheque() throws DadoInvalidoException {
@@ -542,31 +556,31 @@ public class CobrancaBV implements Serializable {
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada)
                 .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comBaixas(baixas)
-                .construir();
+                .comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
     public Titulo construirTitulo() throws DadoInvalidoException {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento).comBaixas(baixas)
-                .comEntrada(entrada).construir();
+                .comSituacaoDeCobranca(situacaoDeCobranca).comEntrada(entrada).construir();
     }
 
     public Credito construirCredito() throws DadoInvalidoException {
         return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
-                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comValor(valor).comVencimento(vencimento).construir();
     }
 
     public BoletoDeCartao construirBoletoDeCartaoComId() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comID(id).comCartao(cartao).comCodigoTransacao(codigoTransacao).comBaixas(baixas)
-                .comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada)
+                .comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira).comNota(nota).comHistorico(historico)
                 .construir();
     }
 
     public Cheque construirChequeComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque).comBaixas(baixas)
+                .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada).comHistorico(historico)
                 .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comNota(nota)
                 .construir();
@@ -574,13 +588,13 @@ public class CobrancaBV implements Serializable {
 
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comEntrada(entrada).comNota(nota).comFaturaLegada(faturaLegada).comFaturaEmitida(faturaEmitida).comFaturaRecebida(faturaRecebida).comConhecimentoDeFrete(conhecimentoDeFrete).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {
         return new CreditoBuilder().comId(id).comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
-                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
+                .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comValor(valor).comVencimento(vencimento).construir();
     }
 

@@ -8,6 +8,7 @@ import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -37,8 +38,9 @@ public class BoletoDeCartao extends Cobranca implements Serializable {
     }
 
     public BoletoDeCartao(Long id, Nota nota, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
-            String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, Boolean entrada) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada);
+            String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, 
+            Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;

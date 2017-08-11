@@ -19,6 +19,7 @@ import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -210,6 +211,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
 
     private Cobranca constroi() throws DadoInvalidoException {
         Cobranca c = null;
+        e.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);
         switch (e.getModalidadeDeCobranca()) {
             case CARTAO:
                 c = e.construirBoletoDeCartaoComId();

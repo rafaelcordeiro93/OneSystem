@@ -6,19 +6,19 @@ import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class IVABV implements Serializable, BuilderView<TabelaDeTributacao> {
+public class TabelaDeTributacaoBV implements Serializable, BuilderView<TabelaDeTributacao> {
 
     private Long id;
     private String nome;   
     private BigDecimal iva;
 
-    public IVABV(TabelaDeTributacao ivaSelecionado) {
+    public TabelaDeTributacaoBV(TabelaDeTributacao ivaSelecionado) {
         this.id = ivaSelecionado.getId();
         this.nome = ivaSelecionado.getNome();
         this.iva = ivaSelecionado.getIva();
     }
 
-    public IVABV() {
+    public TabelaDeTributacaoBV() {
     }
 
     public Long getId() {

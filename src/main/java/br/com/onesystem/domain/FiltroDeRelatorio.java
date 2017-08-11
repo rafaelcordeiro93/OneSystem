@@ -44,9 +44,9 @@ public class FiltroDeRelatorio implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_FILTRODERELATORIO")
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.ALL})
     private Coluna coluna;
-    @OneToMany(mappedBy = "filtroDeRelatorio", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "filtroDeRelatorio", cascade = {CascadeType.ALL})
     private List<ParametroDeFiltroDeRelatorio> parametros = new ArrayList<>();
     @Enumerated(EnumType.ORDINAL)
     private TipoDeBusca tipoDaBusca;
@@ -56,6 +56,15 @@ public class FiltroDeRelatorio implements Serializable {
     private ModeloDeRelatorio modelo;
 
     public FiltroDeRelatorio() {
+    }
+
+    public FiltroDeRelatorio(Long id, Coluna coluna, TipoDeBusca tipoDaBusca, Date filtroDeData, ModeloDeRelatorio modelo, List<ParametroDeFiltroDeRelatorio> parametros) {
+        this.id = id;
+        this.coluna = coluna;
+        this.tipoDaBusca = tipoDaBusca;
+        this.filtroDeData = filtroDeData;
+        this.modelo = modelo;
+        this.parametros = parametros;
     }
 
     public FiltroDeRelatorio(Long id, Coluna coluna, TipoDeBusca tipoDaBusca) {
@@ -92,16 +101,24 @@ public class FiltroDeRelatorio implements Serializable {
         }
     }
 
-    public void addEnum(String e) {
+    public void add(Integer i) {
+        boolean present = parametros.stream().filter(p -> p.getParametroInteger().equals(i)).findAny().isPresent();
+        if (!present) {
+            this.parametros.add(new ParametroDeFiltroDeRelatorio(null, i, this));
+        }
+    }
+
+    public void add(Enum e) {
+        String str = e.name();
         boolean encontrou = false;
         for (ParametroDeFiltroDeRelatorio p : parametros) {
-            if (p.getParametroEnum().equalsIgnoreCase(e)) {
+            if (p.getParametroEnum().equalsIgnoreCase(str)) {
                 encontrou = true;
                 break;
             }
         }
         if (!encontrou) {
-            parametros.add(new ParametroDeFiltroDeRelatorio(null, this, e));
+            parametros.add(new ParametroDeFiltroDeRelatorio(null, this, str));
         }
     }
 
@@ -109,6 +126,10 @@ public class FiltroDeRelatorio implements Serializable {
         this.modelo = modelo;
     }
 
+    public void setColuna(Coluna coluna) {
+        this.coluna = coluna;
+    }
+    
     public Coluna getColuna() {
         return coluna;
     }
@@ -123,6 +144,7 @@ public class FiltroDeRelatorio implements Serializable {
         parametros.forEach((p) -> {
             filtros.add(
                     p.getParametroLong() != null ? p.getParametroLong()
+                    : p.getParametroInteger() != null ? p.getParametroInteger()
                     : p.getParametroBigDecimal() != null ? p.getParametroBigDecimal()
                     : p.getParametroString() != null ? p.getParametroString()
                     : p.getParametroEnum() != null ? getEnum(p.getParametroEnum()) : null);
@@ -137,6 +159,7 @@ public class FiltroDeRelatorio implements Serializable {
         parametros.forEach((p) -> {
             filtros.add(
                     p.getParametroLong() != null ? getPattern(p.getParametroLong())
+                    : p.getParametroInteger() != null ? getPattern(p.getParametroInteger())
                     : p.getParametroBigDecimal() != null ? getPattern(p.getParametroBigDecimal())
                     : p.getParametroString() != null ? p.getParametroString()
                     : p.getParametroEnum() != null ? getEnumName(getEnum(p.getParametroEnum())) : null);
@@ -145,7 +168,7 @@ public class FiltroDeRelatorio implements Serializable {
         return filtros;
     }
 
-    private Enum getEnum(String str) {
+    public Enum getEnum(String str) {
         return Enum.valueOf((Class<? extends Enum>) coluna.getClasseOriginal(), str);
     }
 
@@ -158,7 +181,7 @@ public class FiltroDeRelatorio implements Serializable {
     }
 
     private String getPattern(Object obj) {
-        if (obj.getClass() == Long.class) {
+        if (obj.getClass() == Long.class || obj.getClass() == Integer.class) {
             NumberFormat nf = NumberFormat.getIntegerInstance();
             return nf.format(obj);
         } else {
@@ -185,6 +208,10 @@ public class FiltroDeRelatorio implements Serializable {
 
     public void setFiltroDeData(Date filtroDeData) {
         this.filtroDeData = filtroDeData;
+    }
+
+    public List<ParametroDeFiltroDeRelatorio> getParametros() {
+        return parametros;
     }
 
     @Override
@@ -216,6 +243,11 @@ public class FiltroDeRelatorio implements Serializable {
 
     public void setId(Object object) {
         this.id = null;
+    }
+
+    @Override
+    public String toString() {
+        return "FiltroDeRelatorio{" + "id=" + id + ", coluna=" + coluna + ", parametros=" + parametros + ", tipoDaBusca=" + tipoDaBusca + ", filtroDeData=" + filtroDeData + ", modelo=" + modelo + '}';
     }
 
 }

@@ -81,11 +81,19 @@ public abstract class GenericDAO<T> {
         }
     }
 
+    public BigDecimal resultadoOperacaoMatematica() throws NoResultException {
+        BigDecimal resultado = new ArmazemDeRegistros<T>((Class<T>) clazz)
+                .resultadoOperacaoMatematica(getConsulta(), parametros);
+        limpar();
+        return resultado;
+    }
+
     public GenericDAO filter(TipoDeBusca tipo, Coluna campo, Object filtro) {
         String ALIAS = query.split(" ")[4];
         Date date = filtro instanceof Date ? (Date) filtro : null;
         SortedSet<String> conjuntoString = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof String ? (TreeSet<String>) filtro : null;
         SortedSet<Long> conjuntoLong = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Long ? (TreeSet<Long>) filtro : null;
+        SortedSet<Integer> conjuntoInteger = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Integer ? (TreeSet<Integer>) filtro : null;
         SortedSet<BigDecimal> conjuntoBigDecimal = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof BigDecimal ? (TreeSet<BigDecimal>) filtro : null;
         SortedSet<Enum> conjuntoEnum = filtro instanceof SortedSet && !((SortedSet) filtro).isEmpty() && ((SortedSet) filtro).first() instanceof Enum ? (TreeSet<Enum>) filtro : null;
 
@@ -104,7 +112,7 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + igualOuIn + " " + parametro + "";
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : conjuntoInteger != null ? conjuntoInteger : null);
             }
         } else if (tipo == TipoDeBusca.DIFERENTE_DE) {
             if (conjuntoString != null) {
@@ -116,9 +124,8 @@ public abstract class GenericDAO<T> {
                 parametros.put(parametro.substring(1) + "Final", Date.from(LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()).withHour(23).withMinute(59).withSecond(59).atZone(ZoneId.systemDefault()).toInstant()));
             } else {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " " + diferenteOuNotIn + " " + parametro;
-                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : null);
+                parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : conjuntoEnum != null ? conjuntoEnum : conjuntoInteger != null ? conjuntoInteger : null);
             }
-            parametros.put(parametro.substring(1), conjuntoString != null ? conjuntoString : conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : date != null ? date : null);
         } else if (conjuntoString != null && (tipo == TipoDeBusca.INICIANDO || tipo == TipoDeBusca.TERMINANDO || tipo == TipoDeBusca.CONTENDO)) {
             String s = " and ";
 
@@ -147,7 +154,7 @@ public abstract class GenericDAO<T> {
             } else if (tipo == TipoDeBusca.MENOR_OU_IGUAL_A) {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " <= " + parametro;
             }
-            parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : date != null ? date : null);
+            parametros.put(parametro.substring(1), conjuntoLong != null ? conjuntoLong : conjuntoBigDecimal != null ? conjuntoBigDecimal : date != null ? date : conjuntoInteger != null ? conjuntoInteger : null);
         }
 
         return this;

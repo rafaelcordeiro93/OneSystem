@@ -30,7 +30,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_CFOP", sequenceName = "SEQ_CFOP")
-public class CFOP implements Serializable {
+public class Cfop implements Serializable {
 
     @Id
     @GeneratedValue(generator = "SEQ_CFOP", strategy = GenerationType.SEQUENCE)
@@ -42,26 +42,27 @@ public class CFOP implements Serializable {
     @Length(max = 100, min = 4, message = "{nome_lenght}")
     private String nome;
     @Enumerated(EnumType.STRING)
-    private OperacaoFisica operacao;
+    private OperacaoFisica operacaoFisica;
+    @Column(length = 1000)
     private String texto;
     @OneToMany(mappedBy = "cfop")
     private List<SituacaoFiscal> situacoesFiscais;
 
-    public CFOP() {
+    public Cfop() {
     }
 
-    public CFOP(Long id, Long cfop, String nome, OperacaoFisica operacao, String texto) throws DadoInvalidoException {
+    public Cfop(Long id, Long cfop, String nome, OperacaoFisica operacaoFisica, String texto) throws DadoInvalidoException {
         this.id = id;
         this.cfop = cfop;
         this.nome = nome;
-        this.operacao = operacao;
+        this.operacaoFisica = operacaoFisica;
         this.texto = texto;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("cfop", "nome");
-        new ValidadorDeCampos<CFOP>().valida(this, campos);
+        new ValidadorDeCampos<Cfop>().valida(this, campos);
     }
 
     public Long getId() {
@@ -76,8 +77,8 @@ public class CFOP implements Serializable {
         return nome;
     }
 
-    public OperacaoFisica getOperacao() {
-        return operacao;
+    public OperacaoFisica getOperacaoFisica() {
+        return operacaoFisica;
     }
 
     public String getTexto() {
@@ -101,7 +102,7 @@ public class CFOP implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final CFOP other = (CFOP) obj;
+        final Cfop other = (Cfop) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
@@ -110,7 +111,7 @@ public class CFOP implements Serializable {
 
     @Override
     public String toString() {
-        return "CFOP{" + "id=" + id + ", cfop=" + cfop + ", nome=" + nome + ", operacao=" + operacao + ", texto=" + texto + '}';
+        return "CFOP{" + "id=" + id + ", cfop=" + cfop + ", nome=" + nome + ", operacao=" + operacaoFisica + ", texto=" + texto + '}';
     }
 
 }

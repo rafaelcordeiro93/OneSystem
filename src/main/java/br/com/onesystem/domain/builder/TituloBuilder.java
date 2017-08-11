@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class TituloBuilder {
     private FaturaRecebida faturaRecebida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Boolean entrada;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public TituloBuilder comId(Long id) {
         this.id = id;
@@ -141,10 +143,15 @@ public class TituloBuilder {
         return this;
     }
 
+    public TituloBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
+
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
                 tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete,
-                baixas, entrada, faturaLegada, faturaEmitida, faturaRecebida);
+                baixas, entrada, faturaLegada, faturaEmitida, faturaRecebida, situacaoDeCobranca);
     }
 
 }

@@ -16,6 +16,7 @@ public class ModeloDeRelatorioBuilder {
     private Long id;
     private String nome;
     private TipoRelatorio tipoRelatorio;
+    private List<FiltroDeRelatorio> filtrosDeRelatorio;
 
     public ModeloDeRelatorioBuilder comID(Long ID) {
         this.id = ID;
@@ -32,8 +33,13 @@ public class ModeloDeRelatorioBuilder {
         return this;
     }
 
+    public ModeloDeRelatorioBuilder comFiltros(List<FiltroDeRelatorio> filtrosDeRelatorio) {
+        this.filtrosDeRelatorio = filtrosDeRelatorio;
+        return this;
+    }
+
     public ModeloDeRelatorio construir() throws DadoInvalidoException {
-        return new ModeloDeRelatorio(id, nome, tipoRelatorio);
+        return new ModeloDeRelatorio(id, nome, tipoRelatorio, filtrosDeRelatorio);
     }
 
 }

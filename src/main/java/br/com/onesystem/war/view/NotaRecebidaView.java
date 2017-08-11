@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
@@ -19,6 +20,7 @@ import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
@@ -37,6 +39,7 @@ import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
 import br.com.onesystem.valueobjects.SituacaoDeCheque;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoPeriodicidade;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
@@ -50,6 +53,7 @@ import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.EstoqueService;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.Serializable;
@@ -66,6 +70,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
+import org.hibernate.Hibernate;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -301,7 +306,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     // ---------------------- Forma de Recebimento ----------------------------
     private void calculaTotaisFormaDeRecebimento() {
         FormaDeRecebimento formaDeRecebimento = notaRecebida.getFormaDeRecebimento();
-        if (formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0
+        if ((formaDeRecebimento.getPorcentagemDeEntrada() != null && formaDeRecebimento.getPorcentagemDeEntrada().compareTo(BigDecimal.ZERO) > 0)
                 && notaRecebida.getTotalItens().compareTo(BigDecimal.ZERO) > 0) {
             BigDecimal cem = new BigDecimal(100);
             BigDecimal p = formaDeRecebimento.getPorcentagemDeEntrada().divide(cem, 2, BigDecimal.ROUND_UP);
@@ -416,7 +421,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                                 .comTipoFormaDeRecebimentoParcela(notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
-                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).construir());
+                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -505,7 +510,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                if (operacao.getOperacaoDeEstoque().isEmpty()) {
+                List<OperacaoDeEstoque> operacoesDeEstoque = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(operacao);
+                if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {

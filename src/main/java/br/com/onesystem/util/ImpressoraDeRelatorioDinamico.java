@@ -6,10 +6,12 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -30,6 +32,7 @@ import net.sf.jasperreports.engine.JRException;
 import static net.sf.dynamicreports.report.builder.DynamicReports.*;
 import net.sf.dynamicreports.report.builder.MarginBuilder;
 import net.sf.dynamicreports.report.builder.column.TextColumnBuilder;
+import net.sf.dynamicreports.report.builder.component.ComponentBuilder;
 import net.sf.dynamicreports.report.builder.component.SubreportBuilder;
 import net.sf.dynamicreports.report.builder.datatype.BigDecimalType;
 import net.sf.dynamicreports.report.builder.style.PaddingBuilder;
@@ -38,6 +41,7 @@ import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
+import net.sf.dynamicreports.report.constant.WhenNoDataType;
 import net.sf.dynamicreports.report.definition.ReportParameters;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -55,7 +59,7 @@ public class ImpressoraDeRelatorioDinamico {
 
     private JasperReportBuilder relatorio = report(); // Cria um novo relatório.
     private Map<String, Object> parametros;
-    private TipoRelatorio tipoRelatorio;
+    private String nomeRelatorio;
 
     public ImpressoraDeRelatorioDinamico() {
     }
@@ -70,7 +74,7 @@ public class ImpressoraDeRelatorioDinamico {
      * web ou no console.
      * @throws br.com.onesystem.exception.impl.FDadoInvalidoException
      */
-    public ImpressoraDeRelatorioDinamico imprimir(List registros, TipoRelatorio tipoRelatorio, List<Coluna> colunas, String caminhoDaMoeda) throws FDadoInvalidoException {
+    public ImpressoraDeRelatorioDinamico imprimir(List registros, String nomeRelatorio, List<Coluna> colunas, String caminhoDaMoeda) throws FDadoInvalidoException {
         SubreportBuilder subreport;
         List<Moeda> moedas = new ArrayList<>();
         if (caminhoDaMoeda != null) {
@@ -83,14 +87,17 @@ public class ImpressoraDeRelatorioDinamico {
                     .setDataSource(new SubreportDataSourceExpression(registros));
         }
 
-        this.tipoRelatorio = tipoRelatorio; // Recebe o nome do relatório
+        this.nomeRelatorio = nomeRelatorio; // Recebe o nome do relatório
 
         margem(); //ajusta as margens
-        cabecalhoRodape(); //cria cabecalhoRodapé
+        relatorio.title(cabecalho());
+        rodape();
 
-        relatorio.noData(Templates.createTitleComponent("NoData"), cmp.text(new BundleUtil().getLabel("Nao_Ha_Registros")));
-        relatorio.detail(subreport, cmp.verticalGap(20));
-        relatorio.setDataSource(createDataSource(moedas.isEmpty() ? 1 : moedas.size())); //add registros
+        relatorio.noData(cabecalho(), cmp.text(new BundleUtil().getLabel("Nao_Ha_Registros")));
+        if (registros != null && !registros.isEmpty()) {
+            relatorio.detail(subreport, cmp.verticalGap(20));
+            relatorio.setDataSource(createDataSource(moedas.isEmpty() ? 1 : moedas.size())); //add registros
+        }
         relatorio.setLocale(new Locale("pt", "BR"));
 
         return this;
@@ -147,7 +154,12 @@ public class ImpressoraDeRelatorioDinamico {
 //                    .title(cmp.text(moedas.get(masterRowNumber - 1).getNome()).setStyle(Templates.bold12CenteredStyle));
 
             if (moedas == null) {
-                criarColunas(colunas, report, null);
+                try{
+                Moeda moedaPadrao = new ConfiguracaoService().buscar().getMoedaPadrao();
+                criarColunas(colunas, report, new CurrencyType(moedaPadrao != null ? moedaPadrao.getSigla() : null));
+                }catch(DadoInvalidoException die){
+                    die.printStackTrace();
+                }
             } else {
                 criarColunas(colunas, report, new CurrencyType(moedas.get(masterRowNumber - 1).getSigla()));
             }
@@ -191,7 +203,7 @@ public class ImpressoraDeRelatorioDinamico {
     public void naWeb() throws IOException, DRException {
         HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         res.setContentType("application/pdf");
-        res.addHeader("Content-disposition", "attachment; filename=" + tipoRelatorio.getNome() + new Date() + ".pdf");
+        res.addHeader("Content-disposition", "attachment; filename=" + nomeRelatorio + new Date() + ".pdf");
         relatorio.toPdf(res.getOutputStream());
         FacesContext.getCurrentInstance().responseComplete();
     }
@@ -284,7 +296,7 @@ public class ImpressoraDeRelatorioDinamico {
         }
     }
 
-    public void cabecalhoRodape() {
+    public ComponentBuilder<?, ?> cabecalho() {
 
         //ESTILOS
         StyleBuilder centeredStyle = stl.style()
@@ -310,14 +322,43 @@ public class ImpressoraDeRelatorioDinamico {
                 setPadding(stl.padding().setTop(9));
 
         //CABEÇALHO
-        relatorio.title(
-                cmp.horizontalList()
-                        .add(
-                                cmp.image(getClass().getClassLoader().getResourceAsStream("logo.png")).setFixedDimension(60, 60).setStyle(imagemStyle),
-                                cmp.verticalList().add(cmp.text(tipoRelatorio.getNome()).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
-                                        cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
-                        .newRow()
-                        .add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10)));
+        return cmp.horizontalList()
+                .add(
+                        cmp.image(getClass().getClassLoader().getResourceAsStream("logo.png")).setFixedDimension(60, 60).setStyle(imagemStyle),
+                        cmp.verticalList().add(cmp.text(nomeRelatorio).setStyle(titleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT),
+                                cmp.text("RR Minds Soluções de Tecnologia LTDA").setStyle(subTitleStyle).setHorizontalTextAlignment(HorizontalTextAlignment.LEFT)))
+                .newRow()
+                .add(cmp.line())
+                .newRow()
+                .add(cmp.verticalGap(10));
+        //.add(cmp.filler().setStyle(stl.style().setBackgroundColor(new Color(0, 162, 237))).setFixedHeight(10));
+    }
+
+    public void rodape() {
+
+        //ESTILOS
+        StyleBuilder centeredStyle = stl.style()
+                .setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        StyleBuilder boldCenteredStyle = stl.style(stl.style().bold())
+                .setHorizontalAlignment(HorizontalAlignment.CENTER);
+
+        PaddingBuilder padding = stl.padding().setBottom(0).setTop(0);
+
+        //ESTILO DO TITULO
+        StyleBuilder titleStyle = stl.style(boldCenteredStyle)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setPadding(padding).setFontSize(15);
+
+        //ESTILO DO SUBTITULO
+        StyleBuilder subTitleStyle = stl.style(centeredStyle)
+                .setVerticalAlignment(VerticalAlignment.MIDDLE)
+                .setPadding(padding).setFontSize(12);
+
+        //ESTILO DA IMAGEM
+        StyleBuilder imagemStyle = stl.style().setVerticalAlignment(VerticalAlignment.MIDDLE).
+                setPadding(stl.padding().setTop(9));
+
         //RODAPÉ
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm");
 
@@ -401,7 +442,7 @@ public class ImpressoraDeRelatorioDinamico {
         colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
         colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        impressora.imprimir(registros, TipoRelatorio.CONTAS, colunas, "cotacao.conta.moeda").noConsole();
+        impressora.imprimir(registros, TipoRelatorio.CONTAS.getNome(), colunas, null).noConsole();
 
         System.out.println("Imprimiu");
 

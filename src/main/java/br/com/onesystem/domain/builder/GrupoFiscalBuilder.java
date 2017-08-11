@@ -12,7 +12,6 @@ public class GrupoFiscalBuilder {
 
     private Long id;
     private String nome;
-    private TabelaDeTributacao iva;
     private TabelaDeTributacao tabelaDeTributacaoPadrao;
 
     public GrupoFiscalBuilder comID(Long ID) {

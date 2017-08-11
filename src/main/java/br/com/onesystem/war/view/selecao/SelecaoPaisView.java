@@ -20,7 +20,7 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
 
     @PostConstruct
     public void init() {
-        beans = service.buscarPaiss();
+        beans = service.buscarPais();
     }
 
     public void abrirDialogo() {

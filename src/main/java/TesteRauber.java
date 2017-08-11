@@ -1,18 +1,28 @@
 
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CobrancaDAO;
+import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.FiltroDeRelatorio;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoDeBusca;
+import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
+import br.com.onesystem.valueobjects.Totalizador;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,65 +38,31 @@ import java.util.logging.Logger;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException {
+    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, DadoInvalidoException {
 
-//        String ent = "ENTRADA";
-//            Class<?> clazz = Class.forName("br.com.onesystem.valueobjects.OperacaoFinanceira");
-//        
-//        Enum v = Enum.valueOf((Class<? extends Enum>)clazz, ent);
-//        
-//        System.out.println(v);
-        Enum o = OperacaoFinanceira.ENTRADA;
-        System.out.println(o.getClass().getMethod("getNome", null).invoke(o, null));
-//        o.getDeclaringClass().getEnumConstants()
+        BundleUtil msg = new BundleUtil();
+        AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
-//        List<Cobranca> listaDeResultados = new CobrancaDAO().operacaoFinanceira(o).listaDeResultados();
-//      
-//        listaDeResultados.forEach(System.out::println);
-//        
-//        try {
-//            Coluna c = new Coluna("colunsdfa", "tabfsela", "nomesd", Pessoa.class, String.class);
-//            Coluna c2 = new Coluna("operacaoFinanceira", "tdabela", "sobreNome", Cobranca.class, o.getClass());
-//
-//            FiltroDeRelatorio f = new FiltroDeRelatorio(null, c2, o,TipoDeBusca.IGUAL_A);
-//
-//            ModeloDeRelatorio m;
-//            m = new ModeloDeRelatorio(null, "Modelo", TipoRelatorio.PESSOAS);
-//            m.adicionaColunaExibida(c);
-//            m.adicionaFiltro(f);
-//
-//            System.out.println("M: " + m);        List<Cobranca> listaDeResultados = new CobrancaDAO().operacaoFinanceira(o).listaDeResultados();
-//      
-//        listaDeResultados.forEach(System.out::println);
-//        
-//        try {
-//            Coluna c = new Coluna("colunsdfa", "tabfsela", "nomesd", Pessoa.class, String.class);
-//            Coluna c2 = new Coluna("operacaoFinanceira", "tdabela", "sobreNome", Cobranca.class, o.getClass());
-//
-//            FiltroDeRelatorio f = new FiltroDeRelatorio(null, c2, o,TipoDeBusca.IGUAL_A);
-//
-//            ModeloDeRelatorio m;
-//            m = new ModeloDeRelatorio(null, "Modelo", TipoRelatorio.PESSOAS);
-//            m.adicionaColunaExibida(c);
-//            m.adicionaFiltro(f);
-//
-//            System.out.println("M: " + m);
-//
-//            new AdicionaDAO<>().adiciona(m);
-//
-//            System.out.println("Adicionado: " + m);
-//
-//        } catch (DadoInvalidoException ex) {
-//            ex.printConsole();
-//        }
-//    }
-//
-//            new AdicionaDAO<>().adiciona(m);
-//
-//            System.out.println("Adicionado: " + m);
-//
-//        } catch (DadoInvalidoException ex) {
-//            ex.printConsole();
-//        }
+            ModeloDeRelatorio relatorioDeItem = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_de_Balanco_Fisico"))
+                .comTipoRelatorio(TipoRelatorio.ITEM)
+                .construir();
+
+        //Colunas Exibidas
+        String itemStr = msg.getLabel("Item");
+
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Id"), itemStr, "id", Item.class, Long.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome"), itemStr, "nome", Item.class, String.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Saldo"), itemStr, "saldo", Item.class, BigDecimal.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco"), itemStr, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Medio"), itemStr, "custoMedio", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.AVERAGE));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Ultimo_Custo"), itemStr, "ultimoCusto", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Marca") + ")", itemStr, "nome", Marca.class, String.class));
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeItem);
+
+
     }
 }

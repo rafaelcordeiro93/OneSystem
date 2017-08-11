@@ -609,33 +609,7 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
-                  modal="true" closable="false" closeOnEscape="false" visible="false"
-                  responsive="true" styleClass="zIndex500">
-
-            <table>
-                <tr>
-                    <td>
-                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
-                    </td>
-                    <td>
-                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
-                    </td>
-                </tr>
-            </table>
-            <p:separator/>
-            <table>
-                <tr>
-                    <td>
-                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
-                    </td>
-                    <td>
-                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('operacaoAjusteDialog').hide()"/>
-                    </td>
-                </tr>
-            </table>
-
-        </p:dialog> <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+         <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
                               modal="true" closable="false" closeOnEscape="false" visible="false"
                               responsive="true" styleClass="zIndex500">
 
@@ -653,7 +627,7 @@
             <table>
                 <tr>
                     <td>
-                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/contaDeEstoque"/>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/menu/estoque/contaDeEstoque"/>
                     </td>
                     <td>
                         <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('notaOperacaoNaoRelacionadaDialog').hide()"/>

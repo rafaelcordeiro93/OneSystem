@@ -26,6 +26,7 @@ public class ParametroDeFiltroDeRelatorio implements Serializable {
     private String parametroString;
     private BigDecimal parametroBigDecimal;
     private String parametroEnum;
+    private Integer parametroInteger;
     @ManyToOne
     private FiltroDeRelatorio filtroDeRelatorio;
 
@@ -35,6 +36,12 @@ public class ParametroDeFiltroDeRelatorio implements Serializable {
     public ParametroDeFiltroDeRelatorio(Long id, Long parametroLong, FiltroDeRelatorio filtroDeRelatorio) {
         this.id = id;
         this.parametroLong = parametroLong;
+        this.filtroDeRelatorio = filtroDeRelatorio;
+    }
+    
+     public ParametroDeFiltroDeRelatorio(Long id, Integer parametroInteger, FiltroDeRelatorio filtroDeRelatorio) {
+        this.id = id;
+        this.parametroInteger = parametroInteger;
         this.filtroDeRelatorio = filtroDeRelatorio;
     }
 
@@ -60,6 +67,14 @@ public class ParametroDeFiltroDeRelatorio implements Serializable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setFiltroDeRelatorio(FiltroDeRelatorio filtroDeRelatorio) {
+        this.filtroDeRelatorio = filtroDeRelatorio;
+    }
+    
     public Long getParametroLong() {
         return parametroLong;
     }
@@ -78,6 +93,15 @@ public class ParametroDeFiltroDeRelatorio implements Serializable {
 
     public String getParametroEnum() {
         return parametroEnum;
+    }
+
+    public Integer getParametroInteger() {
+        return parametroInteger;
+    }
+
+    @Override
+    public String toString() {
+        return "ParametroDeFiltroDeRelatorio{" + "id=" + id + ", parametroLong=" + parametroLong + ", parametroString=" + parametroString + ", parametroBigDecimal=" + parametroBigDecimal + ", parametroEnum=" + parametroEnum + ", parametroInteger=" + parametroInteger + ", filtroDeRelatorio=" + filtroDeRelatorio.getId() + '}';
     }
     
 }

@@ -123,10 +123,10 @@
                             <a:inputTextDialog id="cidadeId" mbView="#{pessoaView}" dialog="#{selecaoCidadeView}" value="#{pessoaView.e.cidade}" update=":conteudo:pessoaUf :conteudo:pessoaPais" converter="cidadeConverter" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" editVisible="true" itemLabelTab="#{cidade.nome}" itemLabelTabVisible="true"/>
 
                             <p:outputLabel value="#{l.Uf}"/>
-                            <p:inputText id="pessoaUf" value="#{pessoaView.e.cidade.uf}" readonly="true" />
+                            <p:inputText id="pessoaUf" value="#{pessoaView.e.cidade.estado.sigla}" readonly="true" />
 
                             <p:outputLabel value="#{l.Pais}"/>
-                            <p:inputText id="pessoaPais" value="#{pessoaView.e.cidade.pais}" readonly="true" />
+                            <p:inputText id="pessoaPais" value="#{pessoaView.e.cidade.estado.pais.nome}" readonly="true" />
 
                             <p:spacer/>
                             <p:spacer/>

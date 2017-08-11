@@ -9,14 +9,11 @@ import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
-import br.com.onesystem.domain.builder.ItemBuilder;
-import br.com.onesystem.domain.builder.NotaEmitidaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
-import java.util.ArrayList;
+import br.com.onesystem.war.builder.ItemBV;
 import java.util.Date;
-import org.hibernate.TransientObjectException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +35,9 @@ public class EstoqueDAOTest {
             dao = new EstoqueDAO();
             nota = new NotaEmitida();
             contaDeEstoque = new ContaDeEstoqueBuilder().comID(new Long(1)).construir();
-            item = new ItemBuilder().comId(new Long(1)).construir();
+            ItemBV itemBv = new ItemBV();
+            itemBv.setId(new Long(1));
+            item = itemBv.construir();
         } catch (DadoInvalidoException ex) {
         }
     }
@@ -46,7 +45,7 @@ public class EstoqueDAOTest {
     @Test
     public void porTipoDeLancamentoDeNota() {
         try {
-            dao.porTipoDeLancamentoDeNota(TipoLancamento.EMITIDA).listaResultados();
+            dao.porTipoDeLancamentoDeNota(TipoLancamento.EMITIDA).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -55,7 +54,7 @@ public class EstoqueDAOTest {
     @Test
     public void porTipoDeOperacaoDeNota() {
         try {
-            dao.porTipoDeOperacaoDeNota(TipoOperacao.AVULSO).listaResultados();
+            dao.porTipoDeOperacaoDeNota(TipoOperacao.AVULSO).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -64,7 +63,7 @@ public class EstoqueDAOTest {
     @Test(expected = IllegalStateException.class)
     public void porNotaDeOrigem() {
         try {
-            dao.porNotaDeOrigem(nota).listaResultados();
+            dao.porNotaDeOrigem(nota).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -73,7 +72,7 @@ public class EstoqueDAOTest {
     @Test(expected = IllegalStateException.class)
     public void porNota() {
         try {
-            dao.porNota(nota).listaResultados();
+            dao.porNota(nota).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -82,7 +81,7 @@ public class EstoqueDAOTest {
     @Test
     public void porContaDeEstoque() {
         try {
-            dao.porContaDeEstoque(contaDeEstoque).listaResultados();
+            dao.porContaDeEstoque(contaDeEstoque).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -91,7 +90,7 @@ public class EstoqueDAOTest {
     @Test
     public void porItem() {
         try {
-            dao.porItem(item).listaResultados();
+            dao.porItem(item).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }
@@ -100,7 +99,7 @@ public class EstoqueDAOTest {
     @Test
     public void porEmissao() {
         try {
-            dao.porEmissao(new Date()).listaResultados();
+            dao.porEmissao(new Date()).listaDeResultados();
         } catch (IllegalArgumentException iae) {
             Assert.fail("Os atributos da consulta foram alterados, por favor corrija.");
         }

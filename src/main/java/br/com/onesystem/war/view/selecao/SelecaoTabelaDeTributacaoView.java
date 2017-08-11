@@ -2,7 +2,7 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.IVAService;
+import br.com.onesystem.war.service.TabelaDeTributacaoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -13,23 +13,23 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implements Serializable {
+public class SelecaoTabelaDeTributacaoView extends BasicCrudMBImpl<TabelaDeTributacao> implements Serializable {
 
     @Inject
-    private IVAService service;
+    private TabelaDeTributacaoService service;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarIVAs();
+        beans = service.buscarTabelasDeTributacao();
     }
 
     public void abrirDialogo() {
-        exibirNaTela("contabil/selecao/selecaoIVA");
+        exibirNaTela("contabil/selecao/selecaoTabelaDeTributacao");
     }
     
     @Override
     public String abrirEdicao() {
-        return "/menu/contabil/iva";
+        return "/menu/contabil/tabelaDeTributacao";
     }
     
     @Override
@@ -50,11 +50,11 @@ public class SelecaoIVAView extends BasicCrudMBImpl<TabelaDeTributacao> implemen
         return listaFIltrada;
     }
 
-    public IVAService getService() {
+    public TabelaDeTributacaoService getService() {
         return service;
     }
 
-    public void setService(IVAService service) {
+    public void setService(TabelaDeTributacaoService service) {
         this.service = service;
     }
 }

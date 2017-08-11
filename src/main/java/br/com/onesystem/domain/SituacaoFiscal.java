@@ -5,15 +5,23 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,25 +33,33 @@ import javax.persistence.SequenceGenerator;
 public class SituacaoFiscal implements Serializable {
 
     @Id
+    @GeneratedValue(generator = "SEQ_SITUACAOFISCAL", strategy = GenerationType.SEQUENCE)
     private Long id;
+    @NotNull(message = "{sequencia_not_null}")
     private Integer sequencia;
-    @ManyToOne
+    @NotNull(message = "{operacao_not_null}")
+    @ManyToOne(optional = false)
     private Operacao operacao;
-    @ManyToOne
+    @NotNull(message = "{grupo_fiscal_not_null}")
+    @ManyToOne(optional = false)
     private GrupoFiscal grupoFiscal;
-    @ManyToOne
+    @NotNull(message = "{tabela_de_tributacao_not_null}")
+    @ManyToOne(optional = false)
     private TabelaDeTributacao tabelaDeTributacao;
     @ManyToOne
     private Estado estado;
     @Enumerated(EnumType.STRING)
     private TipoPessoa tipoPessoa;
-    @ManyToOne
-    private CFOP cfop;
+    @NotNull(message = "{CFOP_not_null}")
+    @ManyToOne(optional = false)
+    private Cfop cfop;
+    @Column(length = 1000)
+    private String observacao;
 
     public SituacaoFiscal() {
     }
 
-    public SituacaoFiscal(Long id, Integer sequencia, Operacao operacao, GrupoFiscal grupoFiscal, TabelaDeTributacao tabelaDeTributacao, Estado estado, TipoPessoa tipoPessoa, CFOP cfop) {
+    public SituacaoFiscal(Long id, Integer sequencia, Operacao operacao, GrupoFiscal grupoFiscal, TabelaDeTributacao tabelaDeTributacao, Estado estado, TipoPessoa tipoPessoa, Cfop cfop, String observacao) throws DadoInvalidoException {
         this.id = id;
         this.sequencia = sequencia;
         this.operacao = operacao;
@@ -52,10 +68,21 @@ public class SituacaoFiscal implements Serializable {
         this.estado = estado;
         this.tipoPessoa = tipoPessoa;
         this.cfop = cfop;
+        this.observacao = observacao;
+        ehValido();
+    }
+
+    private void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("sequencia", "operacao", "grupoFiscal", "tabelaDeTributacao", "cfop");
+        new ValidadorDeCampos<SituacaoFiscal>().valida(this, campos);
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setSequencia(Integer sequencia) {
+        this.sequencia = sequencia;
     }
 
     public Integer getSequencia() {
@@ -82,8 +109,12 @@ public class SituacaoFiscal implements Serializable {
         return tipoPessoa;
     }
 
-    public CFOP getCfop() {
+    public Cfop getCfop() {
         return cfop;
+    }
+
+    public String getObservacao() {
+        return observacao;
     }
 
     @Override

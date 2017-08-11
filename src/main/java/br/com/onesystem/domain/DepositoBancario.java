@@ -163,7 +163,7 @@ public class DepositoBancario implements Serializable {
             b.comHistorico(msg.getLabel("Deposito") + " " + msg.getLabel("de") + " (" + origem.getId() + " - " + origem.getNome() + ") "
                     + msg.getLabel("para") + " (" + destino.getId() + " - " + destino.getNome() + ")");
         } else {
-            b.comHistorico(msg.getLabel("Estorno") + " " + msg.getLabel("de") + " (" + destino.getId() + " - " + destino.getNome() + ") "
+            b.comHistorico(msg.getLabel("Estorno") + msg.getLabel("de") + " " + msg.getLabel("Deposito")  + " " + msg.getLabel("de") + " (" + destino.getId() + " - " + destino.getNome() + ") "
                     + msg.getLabel("para") + " (" + origem.getId() + " - " + origem.getNome() + ")");
         }
     }
