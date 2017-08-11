@@ -58,6 +58,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
+import org.primefaces.event.ColumnResizeEvent;
 
 /**
  *
@@ -78,7 +80,7 @@ public abstract class BasicMBReportImpl<T> {
     private TipoDeBusca tipoDeBuscaSelecionada = TipoDeBusca.CONTENDO;
     private Totalizador totalizador;
     private List<Model> modelDisponivelSelecionado = new ArrayList<>();
-    private List<Model> modelExibidoSelecionado = new ArrayList<>();
+    private List<Coluna> colunaExibidaSelecionada = new LinkedList<>();
     protected List<T> registros = new ArrayList<>();
     protected List<T> registrosFiltrados = new ArrayList<>();
     private ModelList<Coluna> campos = new ModelList<Coluna>();
@@ -194,7 +196,7 @@ public abstract class BasicMBReportImpl<T> {
                         }
                     }
                 }
-            };
+            }
 
         }
     }
@@ -214,11 +216,10 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public void excluirDeCampoExibido() {
-        if (modelExibidoSelecionado != null && !modelExibidoSelecionado.isEmpty()) {
-            for (Model m : modelExibidoSelecionado) {
-                camposDisponiveis.add((Coluna) m.getObject());
-                camposExibidos.remove(m);
-            }
+        if (colunaExibidaSelecionada != null && !colunaExibidaSelecionada.isEmpty()) {
+            colunaExibidaSelecionada.forEach((c) -> camposDisponiveis.add(c));
+            colunaExibidaSelecionada.forEach(c -> camposExibidos.remove(c));
+            colunaExibidaSelecionada = new LinkedList<>();
         }
     }
 
@@ -581,12 +582,12 @@ public abstract class BasicMBReportImpl<T> {
         this.modelDisponivelSelecionado = modelDisponivelSelecionado;
     }
 
-    public List<Model> getModelExibidoSelecionado() {
-        return modelExibidoSelecionado;
+    public List<Coluna> getColunaExibidaSelecionada() {
+        return colunaExibidaSelecionada;
     }
 
-    public void setModelExibidoSelecionado(List<Model> modelExibidoSelecionado) {
-        this.modelExibidoSelecionado = modelExibidoSelecionado;
+    public void setColunaExibidaSelecionada(List<Coluna> colunaExibidaSelecionada) {
+        this.colunaExibidaSelecionada = colunaExibidaSelecionada;
     }
 
     public ModelList<Coluna> getCampos() {
@@ -770,7 +771,22 @@ public abstract class BasicMBReportImpl<T> {
         this.colunaParaTotalizadorSelecionada = colunaParaTotalizadorSelecionada;
     }
 
-    public String customFormat(Object obj) {
+    public void onResizeColumnObjects(Object objeto, Object tamanho) {
+        Coluna col = (Coluna) objeto;
+        Integer i = Integer.valueOf((String) tamanho);
+        col.setTamanho(i);
+
+        for (Model m : camposExibidos) {
+            Coluna colModel = (Coluna) m.getObject();
+            if (colModel.getNome().equals(col.getNome())) {
+                m.setObject(col);
+                camposExibidos.atualiza(m);
+                break;
+            }
+        }
+    }
+
+    public Object customFormat(Object obj) {
         try {
             if (obj.getClass() == BigDecimal.class) {
 
@@ -790,9 +806,9 @@ public abstract class BasicMBReportImpl<T> {
                 Enum o = (Enum) obj;
                 return o.getClass().getMethod("getNome", null).invoke(o, null).toString();
             }
-            return obj.toString();
+            return obj;
         } catch (Exception ex) {
-            return obj.toString();
+            return obj;
         }
     }
 

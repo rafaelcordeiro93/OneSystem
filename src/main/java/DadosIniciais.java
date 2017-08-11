@@ -23,6 +23,7 @@ import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Janela;
+import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Moeda;
@@ -72,7 +73,7 @@ public class DadosIniciais {
     public static void main(String[] args) throws DadoInvalidoException {
 
         //Bundle ====================================================
-        BundleUtil msg = new BundleUtil();
+        BundleUtil bundle = new BundleUtil();
 
         //País ====================================================
         Pais pais = new PaisBuilder().comNome("Paraguai").comCodigoPais(new Long(12)).comCodigoReceita(new Long(32)).construir();
@@ -99,7 +100,7 @@ public class DadosIniciais {
 
         Modulo arq = new Modulo(null, "Arquivo");
         Modulo fin = new Modulo(null, "Financeiro");
-        Modulo con = new Modulo(null, msg.getLabel("Contabil"));
+        Modulo con = new Modulo(null, bundle.getLabel("Contabil"));
         Modulo cam = new Modulo(null, "Câmbio");
         Modulo rela = new Modulo(null, "Relatórios");
         Modulo pref = new Modulo(null, "Preferências");
@@ -285,7 +286,7 @@ public class DadosIniciais {
         //Estoque
         Janela relAjusteEstoque = new Janela(null, "Relatório de Ajuste de Estoque", "/menu/relatorios/estoque/relatorioDeAjusteDeEstoque.xhtml", rela);
         Janela relNotaRecebida = new Janela(null, "Relatório de Notas Recebidas", "/menu/relatorios/estoque/relatorioDeNotasRecebidas.xhtml", rela);
-        Janela relBalancoFisico = new Janela(null, "Relatório de Balanco Fisico", "/menu/relatorios/estoque/relatorioDeBalancoFisico.xhtml", rela);
+        Janela relItem = new Janela(null, "Relatório de Item", "/menu/relatorios/estoque/relatorioDeItem.xhtml", rela);
 
         //Financeiro
         Janela relConta = new Janela(null, "Relatório de Contas", "/menu/relatorios/financeiro/relatorioDeContas.xhtml", rela);
@@ -317,7 +318,7 @@ public class DadosIniciais {
         daoJanela.adiciona(relRecepcao);
         daoJanela.adiciona(relSaldo);
         daoJanela.adiciona(relSaldoDivisao);
-        daoJanela.adiciona(relBalancoFisico);
+        daoJanela.adiciona(relItem);
 
         //Modulo Administrativo
         Janela usuario = new Janela(null, "Usuário", "/menu/topbar/preferencias/usuario.xhtml", admin);
@@ -421,7 +422,7 @@ public class DadosIniciais {
                 new Privilegio(null, relRecepcao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relSaldo, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relSaldoDivisao, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, relBalancoFisico, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relItem, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
@@ -809,7 +810,7 @@ public class DadosIniciais {
         AdicionaDAO<Operacao> operacaoDao = new AdicionaDAO<>();
 
         Operacao compraNormal = new OperacaoBuilder()
-                .comNome(msg.getLabel("Compra_Normal"))
+                .comNome(bundle.getLabel("Compra_Normal"))
                 .comOperacaoFinanceira(OperacaoFinanceira.SAIDA)
                 .comTipoOperacao(TipoOperacao.COMPRA_NORMAL)
                 .comTipoNota(TipoLancamento.RECEBIDA)
@@ -825,7 +826,7 @@ public class DadosIniciais {
                 .construir();
 
         Operacao vendaDeMercadorias = new OperacaoBuilder()
-                .comNome(msg.getLabel("Venda_de_Mercadorias"))
+                .comNome(bundle.getLabel("Venda_de_Mercadorias"))
                 .comOperacaoFinanceira(OperacaoFinanceira.ENTRADA)
                 .comTipoOperacao(TipoOperacao.VENDA)
                 .comTipoNota(TipoLancamento.EMITIDA)
@@ -884,11 +885,11 @@ public class DadosIniciais {
                 .construir();
 
         //Filtros
-        Coluna colOperacaoFinanceira = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        Coluna colOperacaoFinanceira = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
         FiltroDeRelatorio filtroOF = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
         filtroOF.add(OperacaoFinanceira.SAIDA);
 
-        Coluna colSituacaoDeCobranca = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        Coluna colSituacaoDeCobranca = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
         FiltroDeRelatorio filtroSDC = new FiltroDeRelatorio(null, colSituacaoDeCobranca, TipoDeBusca.IGUAL_A);
         filtroSDC.add(SituacaoDeCobranca.ABERTO);
 
@@ -896,30 +897,30 @@ public class DadosIniciais {
         relatorioDeContasAPagar.addFiltro(filtroSDC);
 
         //Colunas Exibidas
-        Coluna pessoa = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        Coluna pessoa = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
         pessoa.setTamanho(30);
 
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
         relatorioDeContasAPagar.addColunaExibida(pessoa);
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
 
-        //========================================================
         //Relatório de Contas a Receber
+        //========================================================
         ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
                 .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Receber"))
                 .comTipoRelatorio(TipoRelatorio.CONTAS)
                 .construir();
 
         //Filtros
-        Coluna colOperacaoFinanceiracCAR = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        Coluna colOperacaoFinanceiracCAR = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
         FiltroDeRelatorio filtroOFCAR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCAR, TipoDeBusca.IGUAL_A);
         filtroOFCAR.add(OperacaoFinanceira.ENTRADA);
 
-        Coluna colSituacaoDeCobrancaCAR = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        Coluna colSituacaoDeCobrancaCAR = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
         FiltroDeRelatorio filtroSDCCAR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCAR, TipoDeBusca.IGUAL_A);
         filtroSDCCAR.add(SituacaoDeCobranca.ABERTO);
 
@@ -927,16 +928,52 @@ public class DadosIniciais {
         relatorioDeContasAReceber.addFiltro(filtroSDCCAR);
 
         //Colunas Exibidas
-        Coluna pessoaCAR = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        Coluna pessoaCAR = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
         pessoaCAR.setTamanho(30);
 
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
         relatorioDeContasAReceber.addColunaExibida(pessoaCAR);
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
+
+        //Relatório de Balanço Físico
+        //========================================================
+        ModeloDeRelatorio relatorioDeItem = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_de_Balanco_Fisico"))
+                .comTipoRelatorio(TipoRelatorio.ITEM)
+                .construir();
+
+        //Colunas Exibidas
+        String itemStr = bundle.getLabel("Item");
+        Coluna itemId = new Coluna(bundle.getLabel("Id"), itemStr, "id", Item.class, Long.class);
+        Coluna itemSaldo = new Coluna(bundle.getLabel("Saldo"), itemStr, "saldo", Item.class, BigDecimal.class);
+        Coluna itemPreco = new Coluna(bundle.getLabel("Preco"), itemStr, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
+        Coluna itemCustoMedio = new Coluna(bundle.getLabel("Custo_Medio"), itemStr, "custoMedio", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.AVERAGE);
+        Coluna itemNome = new Coluna(bundle.getLabel("nome"), itemStr, "nome", Item.class, String.class);
+        Coluna itemPrecoTotal = new Coluna(bundle.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
+        Coluna itemCustoTotal = new Coluna(bundle.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
+        
+        //Alterar Tamanho das Colunas
+        itemId.setTamanho(10);
+        itemNome.setTamanho(25);
+        itemSaldo.setTamanho(15);
+        itemPreco.setTamanho(15);
+        itemCustoMedio.setTamanho(15);
+        itemPrecoTotal.setTamanho(15);
+        itemCustoTotal.setTamanho(15);
+        
+        relatorioDeItem.addColunaExibida(itemId);
+        relatorioDeItem.addColunaExibida(itemNome);
+        relatorioDeItem.addColunaExibida(itemSaldo);
+        relatorioDeItem.addColunaExibida(itemPreco);
+        relatorioDeItem.addColunaExibida(itemPrecoTotal);
+        relatorioDeItem.addColunaExibida(itemCustoMedio);
+        relatorioDeItem.addColunaExibida(itemCustoTotal);
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeItem);
     }
 
 }

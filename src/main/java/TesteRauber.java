@@ -5,6 +5,8 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.FiltroDeRelatorio;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
@@ -41,34 +43,25 @@ public class TesteRauber {
         BundleUtil msg = new BundleUtil();
         AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
-        ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
-                .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Receber"))
-                .comTipoRelatorio(TipoRelatorio.CONTAS)
+            ModeloDeRelatorio relatorioDeItem = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_de_Balanco_Fisico"))
+                .comTipoRelatorio(TipoRelatorio.ITEM)
                 .construir();
 
-        //Filtros
-        Coluna colOperacaoFinanceiracCAR = new Coluna(msg.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
-        FiltroDeRelatorio filtroOFCAR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCAR, TipoDeBusca.IGUAL_A);
-        filtroOFCAR.add(OperacaoFinanceira.ENTRADA);
-
-        Coluna colSituacaoDeCobrancaCAR = new Coluna(msg.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
-        FiltroDeRelatorio filtroSDCCAR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCAR, TipoDeBusca.IGUAL_A);
-        filtroSDCCAR.add(SituacaoDeCobranca.ABERTO);
-
-        relatorioDeContasAReceber.addFiltro(filtroOFCAR);
-        relatorioDeContasAReceber.addFiltro(filtroSDCCAR);
-
         //Colunas Exibidas
-        Coluna pessoaCAR = new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Pessoa") + ")", msg.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
-        pessoaCAR.setTamanho(30);
+        String itemStr = msg.getLabel("Item");
 
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Id"), msg.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
-        relatorioDeContasAReceber.addColunaExibida(pessoaCAR);
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Emissao"), msg.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Vencimento"), msg.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(msg.getLabel("Valor"), msg.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Id"), itemStr, "id", Item.class, Long.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome"), itemStr, "nome", Item.class, String.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Saldo"), itemStr, "saldo", Item.class, BigDecimal.class));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco"), itemStr, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Medio"), itemStr, "custoMedio", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.AVERAGE));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Ultimo_Custo"), itemStr, "ultimoCusto", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Marca") + ")", itemStr, "nome", Marca.class, String.class));
 
-        modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
+        modeloDeRelatorioDAO.adiciona(relatorioDeItem);
 
 
     }
