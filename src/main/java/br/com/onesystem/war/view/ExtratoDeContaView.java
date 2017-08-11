@@ -15,6 +15,7 @@ import br.com.onesystem.services.BaixaEmissaoComparator;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.ExtratoDeContaBV;
@@ -41,6 +42,8 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
     private ExtratoDeContaBV extrato;
     private List<Baixa> baixas;
     private BigDecimal saldoAnterior;
+    private String lancamentoCompensacao;
+    private List<String> listEstado = new ArrayList<>();
 
     @Inject
     private BaixaService service;
@@ -50,39 +53,56 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
 
     @PostConstruct
     public void init() {
-        extrato = new ExtratoDeContaBV();
+        limparJanela();
         buscarConfiguracaoDeConta();
+    }
+
+    @Override
+    public void limparJanela() {
+        extrato = new ExtratoDeContaBV();
+        lancamentoCompensacao = new BundleUtil().getLabel("Lancamento");
+        listEstado.add(new BundleUtil().getLabel("Lancamento"));
+        listEstado.add(new BundleUtil().getLabel("Compensacao"));
     }
 
     private void buscarConfiguracaoDeConta() {
         ConfiguracaoFinanceiro conf = serviceFinanceiro.buscar();
         extrato.setConta(conf == null ? null : conf.getContaPadrao());
-        if (extrato.getConta() != null) {
-            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa());
-            Collections.sort(baixas, new BaixaEmissaoComparator());
+        if (extrato.getConta() != null && lancamentoCompensacao.equals(new BundleUtil().getLabel("Lancamento"))) {
+            atualizar();
         }
     }
 
     public void atualizar() {
         try {
             validaConta();
-            Calendar dataAtual = Calendar.getInstance();
-            dataAtual.setTime(extrato.getDataInicial() != null ? extrato.getDataInicial() : Calendar.getInstance().getTime());
-            dataAtual.set(Calendar.HOUR_OF_DAY, 0);
-            dataAtual.set(Calendar.MINUTE, 0);
-            dataAtual.set(Calendar.SECOND, 0);
-            extrato.setDataInicial(dataAtual.getTime());
-            dataAtual.setTime(extrato.getDataFinal() != null ? extrato.getDataFinal() : Calendar.getInstance().getTime());
-            dataAtual.set(Calendar.HOUR_OF_DAY, 23);
-            dataAtual.set(Calendar.MINUTE, 59);
-            dataAtual.set(Calendar.SECOND, 59);
-            extrato.setDataFinal(dataAtual.getTime());
-            baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa());
-            saldoAnterior = service.buscarSaldoAnterior(extrato.getDataInicial(), extrato.getConta(), extrato.getCaixa());
-            Collections.sort(baixas, new BaixaEmissaoComparator());
+            setDataAtual();
+            if (extrato.getConta() != null && lancamentoCompensacao.equals(new BundleUtil().getLabel("Lancamento"))) {
+                baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa(), null);
+                saldoAnterior = service.buscarSaldoAnterior(extrato.getDataInicial(), extrato.getConta(), extrato.getCaixa(), null);
+                Collections.sort(baixas, new BaixaEmissaoComparator());
+            } else if (extrato.getConta() != null && lancamentoCompensacao.equals(new BundleUtil().getLabel("Compensacao"))) {
+                baixas = service.buscarBaixasPelaData(extrato.getDataInicial(), extrato.getDataFinal(), extrato.getConta(), extrato.getCaixa(), EstadoDeBaixa.EFETIVADO);
+                saldoAnterior = service.buscarSaldoAnterior(extrato.getDataInicial(), extrato.getConta(), extrato.getCaixa(), EstadoDeBaixa.EFETIVADO);
+                Collections.sort(baixas, new BaixaEmissaoComparator());
+            }
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+    }
+
+    private void setDataAtual() {
+        Calendar dataAtual = Calendar.getInstance();
+        dataAtual.setTime(extrato.getDataInicial() != null ? extrato.getDataInicial() : Calendar.getInstance().getTime());
+        dataAtual.set(Calendar.HOUR_OF_DAY, 0);
+        dataAtual.set(Calendar.MINUTE, 0);
+        dataAtual.set(Calendar.SECOND, 0);
+        extrato.setDataInicial(dataAtual.getTime());
+        dataAtual.setTime(extrato.getDataFinal() != null ? extrato.getDataFinal() : Calendar.getInstance().getTime());
+        dataAtual.set(Calendar.HOUR_OF_DAY, 23);
+        dataAtual.set(Calendar.MINUTE, 59);
+        dataAtual.set(Calendar.SECOND, 59);
+        extrato.setDataFinal(dataAtual.getTime());
     }
 
     private void validaConta() throws DadoInvalidoException {
@@ -121,27 +141,44 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
     }
 
     public BigDecimal buscarEntradas(Baixa baixa) {
-        return baixas.stream().filter(b -> b.getEmissao().compareTo(baixa.getEmissao()) <= 0 && b.getId().compareTo(baixa.getId()) <= 0).filter(b -> b.getNaturezaFinanceira() == OperacaoFinanceira.ENTRADA)
-                .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (baixa != null) {
+            return baixas.stream().filter(b -> b.getEmissao().compareTo(baixa.getEmissao()) <= 0 && b.getId().compareTo(baixa.getId()) <= 0).filter(b -> b.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA)
+                    .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 
     public BigDecimal buscarSaidas(Baixa baixa) {
-        return baixas.stream().filter(b -> b.getEmissao().compareTo(baixa.getEmissao()) <= 0 && b.getId().compareTo(baixa.getId()) <= 0).filter(b -> b.getNaturezaFinanceira() == OperacaoFinanceira.SAIDA)
-                .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (baixa != null) {
+            return baixas.stream().filter(b -> b.getEmissao().compareTo(baixa.getEmissao()) <= 0 && b.getId().compareTo(baixa.getId()) <= 0).filter(b -> b.getOperacaoFinanceira() == OperacaoFinanceira.SAIDA)
+                    .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 
     public BigDecimal getEntradas() {
-        return baixas.stream().filter(b -> b.getNaturezaFinanceira() == OperacaoFinanceira.ENTRADA)
-                .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (baixas != null) {
+            return baixas.stream().filter(b -> b.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA)
+                    .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            return BigDecimal.ZERO;
+        }
+    }
+
+    public BigDecimal getSaidas() {
+        if (baixas != null) {
+            return baixas.stream().filter(b -> b.getOperacaoFinanceira() == OperacaoFinanceira.SAIDA)
+                    .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        } else {
+            return BigDecimal.ZERO;
+        }
     }
 
     public String getEntradasFormatado() {
         return MoedaFormatter.format(extrato.getConta().getMoeda(), getEntradas());
-    }
 
-    public BigDecimal getSaidas() {
-        return baixas.stream().filter(b -> b.getNaturezaFinanceira() == OperacaoFinanceira.SAIDA)
-                .map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public String getSaidasFormatado() {
@@ -157,11 +194,31 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
     }
 
     public BigDecimal getSaldoAcumulado() {
-        return getSaldo().add(saldoAnterior);
+        try {
+            return getSaldo().add(saldoAnterior);
+        } catch (NullPointerException npe) {
+            return BigDecimal.ZERO;
+        }
     }
 
     public String getSaldoAcumuladoFormatado() {
         return MoedaFormatter.format(extrato.getConta().getMoeda(), getSaldoAcumulado());
+    }
+
+    public String getLancamentoCompensacao() {
+        return lancamentoCompensacao;
+    }
+
+    public void setLancamentoCompensacao(String lancamentoCompensacao) {
+        this.lancamentoCompensacao = lancamentoCompensacao;
+    }
+
+    public List<String> getListEstado() {
+        return listEstado;
+    }
+
+    public void setListEstado(List<String> listEstado) {
+        this.listEstado = listEstado;
     }
 
     public BaixaService getService() {
@@ -194,10 +251,6 @@ public class ExtratoDeContaView extends BasicMBImpl<Baixa, BaixaBV> implements S
 
     public void setServiceFinanceiro(ConfiguracaoFinanceiroService serviceFinanceiro) {
         this.serviceFinanceiro = serviceFinanceiro;
-    }
-
-    @Override
-    public void limparJanela() {
     }
 
     public BigDecimal getSaldoAnterior() {

@@ -4,6 +4,7 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import java.io.Serializable;
@@ -88,14 +89,14 @@ public class Transferencia implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraBaixaDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
+        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
     }
 
     public void setIdRelacaoEstorno(Transferencia transferencia) {
