@@ -4,7 +4,7 @@ import br.com.onesystem.util.BundleUtil;
 
 public enum TipoRelatorio {
 
-    BALANCO_FISICO(new Long(1), new BundleUtil().getLabel("Relatorio_de_Balanco_Fisico")),
+    ITEM(new Long(1), new BundleUtil().getLabel("Relatorio_de_Item")),
     CONTAS(new Long(2), new BundleUtil().getLabel("Relatorio_De_Contas")),
     AJUSTE_DE_ESTOQUE(new Long(3), new BundleUtil().getLabel("Relatorio_De_Ajuste_De_Estoque")),
     CHEQUES(new Long(4), new BundleUtil().getLabel("Relatorio_De_Cheques")),

@@ -6,10 +6,12 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import br.com.onesystem.war.service.ConfiguracaoService;
 import java.awt.Color;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -152,7 +154,12 @@ public class ImpressoraDeRelatorioDinamico {
 //                    .title(cmp.text(moedas.get(masterRowNumber - 1).getNome()).setStyle(Templates.bold12CenteredStyle));
 
             if (moedas == null) {
-                criarColunas(colunas, report, null);
+                try{
+                Moeda moedaPadrao = new ConfiguracaoService().buscar().getMoedaPadrao();
+                criarColunas(colunas, report, new CurrencyType(moedaPadrao != null ? moedaPadrao.getSigla() : null));
+                }catch(DadoInvalidoException die){
+                    die.printStackTrace();
+                }
             } else {
                 criarColunas(colunas, report, new CurrencyType(moedas.get(masterRowNumber - 1).getSigla()));
             }
@@ -435,7 +442,7 @@ public class ImpressoraDeRelatorioDinamico {
         colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
         colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        impressora.imprimir(registros, TipoRelatorio.CONTAS.getNome(), colunas, "cotacao.conta.moeda").noConsole();
+        impressora.imprimir(registros, TipoRelatorio.CONTAS.getNome(), colunas, null).noConsole();
 
         System.out.println("Imprimiu");
 

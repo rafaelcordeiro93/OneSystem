@@ -2,6 +2,7 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Item;
+import java.math.BigDecimal;
 
 public class AjusteDeEstoqueDAO extends GenericDAO<AjusteDeEstoque> {
 
@@ -10,8 +11,8 @@ public class AjusteDeEstoqueDAO extends GenericDAO<AjusteDeEstoque> {
         limpar();
     }
 
-    public AjusteDeEstoqueDAO buscarAjustesDeEstoque() {
-        where += "select ajusteDeEstoque from AjusteDeEstoque ajusteDeEstoque where ajusteDeEstoque.id != 0 ";
+    public AjusteDeEstoqueDAO buscaMediaDeCusto() {
+        query = "select avg(ajusteDeEstoque.custo) from AjusteDeEstoque ajusteDeEstoque ";
         return this;
     }
 
@@ -27,8 +28,14 @@ public class AjusteDeEstoqueDAO extends GenericDAO<AjusteDeEstoque> {
         return this;
     }
 
-    public AjusteDeEstoqueDAO ordenadoPorEmissaoDescrescente() {
-        where += " order by ajusteDeEstoque.emissao desc ";
+    public AjusteDeEstoqueDAO ordenadoPorEmissaoDecrescente() {
+        order += " order by ajusteDeEstoque.emissao desc ";
+        return this;
+    }
+
+    public AjusteDeEstoqueDAO porCustoMaiorQueZero() {
+        where += " and ajusteDeEstoque.custo > :pCusto";
+        parametros.put("pCusto", BigDecimal.ZERO);
         return this;
     }
 }

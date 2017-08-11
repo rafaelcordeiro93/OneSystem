@@ -24,7 +24,7 @@ public class ItemDeNotaService implements Serializable {
         BigDecimal saldo = BigDecimal.ZERO;
         
         if (condicional.getNotasEmitidas() != null && !condicional.getNotasEmitidas().isEmpty()) {
-            List<ItemDeNota> itensDeNotas = new ItemDeNotaDAO().buscarItens().porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item.getItem())
+            List<ItemDeNota> itensDeNotas = new ItemDeNotaDAO().porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item.getItem())
                     .porNaoCancelado().listaDeResultados();
             saldo = itensDeNotas.stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
         }

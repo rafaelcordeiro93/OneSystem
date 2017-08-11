@@ -2,6 +2,7 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.util.JPAUtil;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.EntityManager;
@@ -45,7 +46,13 @@ public class ArmazemDeRegistros<T> implements Serializable {
         return null;
     }
 
-      private void adicionarParametrosNaConsulta(Query query, Map<String, Object> parametros) {
+    public BigDecimal resultadoOperacaoMatematica(String consulta, Map<String, Object> parametros) throws NoResultException {
+        TypedQuery<BigDecimal> query = em.createQuery(consulta, BigDecimal.class);
+        adicionarParametrosNaConsulta(query, parametros);
+        return query.getSingleResult();
+    }
+
+    private void adicionarParametrosNaConsulta(Query query, Map<String, Object> parametros) {
         for (Map.Entry<String, Object> map : parametros.entrySet()) {
             query.setParameter(map.getKey(), map.getValue());
         }

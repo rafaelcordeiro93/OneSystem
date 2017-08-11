@@ -177,8 +177,6 @@ public class ItemBV implements Serializable, BuilderView<Item> {
         this.precos = precos;
     }
 
-   
-
     public TipoItem getTipoItem() {
         return tipoItem;
     }

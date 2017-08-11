@@ -12,8 +12,10 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.ItemService;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -48,14 +50,14 @@ public class CalculadoraDePreco {
         }
         soma = cem.subtract(soma);
         this.markup = cem.divide(soma, 2, BigDecimal.ROUND_UP);
-        this.precoMarkup = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? markup.multiply(new ItemService().custoMedio(item))
-                : markup.multiply(new ItemService().ultimoCusto(item));
+        this.precoMarkup = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? markup.multiply(new EstoqueService().buscaCustoMedioDeItem(item, new Date()))
+                : markup.multiply(new EstoqueService().buscaUltimoCustoItem(item, new Date()));
 
     }
 
     private void calculaMargemContribuicao() {
-        BigDecimal custo = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? new ItemService().custoMedio(item)
-                : new ItemService().ultimoCusto(item);
+        BigDecimal custo = tipoDeCalculoDeCusto == TipoDeCalculoDeCusto.CUSTO_MEDIO ? new EstoqueService().buscaCustoMedioDeItem(item, new Date())
+                : new EstoqueService().buscaUltimoCustoItem(item, new Date());
         this.margemContribuicao = item.getMargem().getMargem();
         BigDecimal mc = margemContribuicao.divide(new BigDecimal(100), BigDecimal.ROUND_UP);
         BigDecimal mcValor = mc.multiply(custo);

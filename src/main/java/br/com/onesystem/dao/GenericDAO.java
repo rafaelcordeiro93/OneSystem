@@ -81,6 +81,13 @@ public abstract class GenericDAO<T> {
         }
     }
 
+    public BigDecimal resultadoOperacaoMatematica() throws NoResultException {
+        BigDecimal resultado = new ArmazemDeRegistros<T>((Class<T>) clazz)
+                .resultadoOperacaoMatematica(getConsulta(), parametros);
+        limpar();
+        return resultado;
+    }
+
     public GenericDAO filter(TipoDeBusca tipo, Coluna campo, Object filtro) {
         String ALIAS = query.split(" ")[4];
         Date date = filtro instanceof Date ? (Date) filtro : null;

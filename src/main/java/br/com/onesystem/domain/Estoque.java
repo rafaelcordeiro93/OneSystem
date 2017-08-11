@@ -118,6 +118,14 @@ public class Estoque implements Serializable {
         return itemDeCondicional;
     }
 
+    public BigDecimal getValor() {
+        if (ajusteDeEstoque != null) {
+            return ajusteDeEstoque.getCusto();
+        } else {
+            return itemDeNota.getUnitario();
+        }
+    }
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
