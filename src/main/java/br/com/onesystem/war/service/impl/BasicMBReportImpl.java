@@ -181,9 +181,7 @@ public abstract class BasicMBReportImpl<T> {
                             header = header + " (" + table + ")";
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
-                        if (!camposExibidos.getList().contains(novoCampo)) {
-                            addCampo(novoCampo);
-                        }
+                        addCampo(novoCampo);
                     } catch (MissingResourceException mre) {
                         String header = m.getName().substring(3);
                         header = "??" + header.substring(0, 1).toUpperCase() + header.substring(1) + "??";
@@ -191,9 +189,7 @@ public abstract class BasicMBReportImpl<T> {
                             header = header + " (" + table + ")";
                         }
                         Coluna novoCampo = new Coluna(header, table, property[0], property[1], property[2], property[3], c, m.getReturnType(), formatador);
-                        if (!camposExibidos.getList().contains(novoCampo)) {
-                            addCampo(novoCampo);
-                        }
+                        addCampo(novoCampo);
                     }
                 }
             }
@@ -255,13 +251,15 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     private void addCampo(Coluna campo) {
-        if (!((campo.getNome() != null && campo.getNome().toLowerCase().contains("format"))
-                || (campo.getPropriedade() != null && campo.getPropriedade().toLowerCase().contains("format"))
-                || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
-                || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
-                || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
-            this.campos.add(campo);
-            this.camposDisponiveis.add(campo);
+        if (!camposExibidos.getList().contains(campo) && !camposDisponiveis.getList().contains(campo)) {
+            if (!((campo.getNome() != null && campo.getNome().toLowerCase().contains("format"))
+                    || (campo.getPropriedade() != null && campo.getPropriedade().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
+                    || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
+                this.campos.add(campo);
+                this.camposDisponiveis.add(campo);
+            }
         }
     }
 
