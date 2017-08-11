@@ -2,6 +2,7 @@
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.CobrancaDAO;
 import br.com.onesystem.dao.RemoveDAO;
+import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.FiltroDeRelatorio;
@@ -40,29 +41,35 @@ public class TesteRauber {
 
     public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, DadoInvalidoException {
 
-        BundleUtil msg = new BundleUtil();
+        BundleUtil bundle = new BundleUtil();
         AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
-            ModeloDeRelatorio relatorioDeItem = new ModeloDeRelatorioBuilder()
-                .comNome(new BundleUtil().getLabel("Relatorio_de_Balanco_Fisico"))
-                .comTipoRelatorio(TipoRelatorio.ITEM)
+        //Relatório de Balanço Físico
+//        //========================================================
+        ModeloDeRelatorio relatorioDeAniversariantes = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_de_Aniversariantes"))
+                .comTipoRelatorio(TipoRelatorio.PESSOAS)
                 .construir();
 
         //Colunas Exibidas
-        String itemStr = msg.getLabel("Item");
+        String pessoaStr = bundle.getLabel("Pessoa");
+        Coluna pessoaId = new Coluna(bundle.getLabel("Id"), pessoaStr, "id", Pessoa.class, Long.class);
+        Coluna pessoaNome = new Coluna(bundle.getLabel("Nome"), pessoaStr, "nome", Pessoa.class, String.class);
+        Coluna pessoaNascimento = new Coluna(bundle.getLabel("Nascimento"), pessoaStr, "nascimento", Pessoa.class, Date.class);
+        Coluna pessoaTelefone = new Coluna(bundle.getLabel("Telefone"), pessoaStr, "telefone", Pessoa.class, String.class);
+        Coluna pessoaCidadeNome = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Cidade") + ")", "Cidade", "cidade", "nome", Cidade.class, String.class);
 
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Id"), itemStr, "id", Item.class, Long.class));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome"), itemStr, "nome", Item.class, String.class));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Saldo"), itemStr, "saldo", Item.class, BigDecimal.class));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco"), itemStr, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Medio"), itemStr, "custoMedio", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.AVERAGE));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Ultimo_Custo"), itemStr, "ultimoCusto", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
-        relatorioDeItem.addColunaExibida(new Coluna(msg.getLabel("Nome") + "(" + msg.getLabel("Marca") + ")", itemStr, "nome", Marca.class, String.class));
+        //Alterar Tamanho das Colunas
+        pessoaNome.setTamanho(40);
+        pessoaNascimento.setTamanho(15);
 
-        modeloDeRelatorioDAO.adiciona(relatorioDeItem);
+        relatorioDeAniversariantes.addColunaExibida(pessoaId);
+        relatorioDeAniversariantes.addColunaExibida(pessoaNome);
+        relatorioDeAniversariantes.addColunaExibida(pessoaNascimento);
+        relatorioDeAniversariantes.addColunaExibida(pessoaTelefone);
+        relatorioDeAniversariantes.addColunaExibida(pessoaCidadeNome);
 
+        modeloDeRelatorioDAO.adiciona(relatorioDeAniversariantes);
 
     }
 }

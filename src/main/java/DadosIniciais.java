@@ -955,7 +955,7 @@ public class DadosIniciais {
         Coluna itemNome = new Coluna(bundle.getLabel("nome"), itemStr, "nome", Item.class, String.class);
         Coluna itemPrecoTotal = new Coluna(bundle.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
         Coluna itemCustoTotal = new Coluna(bundle.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
-        
+
         //Alterar Tamanho das Colunas
         itemId.setTamanho(10);
         itemNome.setTamanho(25);
@@ -964,7 +964,7 @@ public class DadosIniciais {
         itemCustoMedio.setTamanho(15);
         itemPrecoTotal.setTamanho(15);
         itemCustoTotal.setTamanho(15);
-        
+
         relatorioDeItem.addColunaExibida(itemId);
         relatorioDeItem.addColunaExibida(itemNome);
         relatorioDeItem.addColunaExibida(itemSaldo);
@@ -974,6 +974,33 @@ public class DadosIniciais {
         relatorioDeItem.addColunaExibida(itemCustoTotal);
 
         modeloDeRelatorioDAO.adiciona(relatorioDeItem);
+
+        //Relatório de Aniversariantes
+        //========================================================
+        ModeloDeRelatorio relatorioDeAniversariantes = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_de_Aniversariantes"))
+                .comTipoRelatorio(TipoRelatorio.PESSOAS)
+                .construir();
+
+        //Colunas Exibidas
+        String pessoaStr = bundle.getLabel("Pessoa");
+        Coluna pessoaId = new Coluna(bundle.getLabel("Id"), pessoaStr, "id", Pessoa.class, Long.class);
+        Coluna pessoaNome = new Coluna(bundle.getLabel("Nome"), pessoaStr, "nome", Pessoa.class, String.class);
+        Coluna pessoaNascimento = new Coluna(bundle.getLabel("Nascimento"), pessoaStr, "nascimento", Pessoa.class, Date.class);
+        Coluna pessoaTelefone = new Coluna(bundle.getLabel("Telefone"), pessoaStr, "telefone", Pessoa.class, String.class);
+        Coluna pessoaCidadeNome = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Cidade") + ")", "Cidade", "cidade", "nome", Cidade.class, String.class);
+
+        //Alterar Tamanho das Colunas
+        pessoaNome.setTamanho(40);
+        pessoaNascimento.setTamanho(15);
+
+        relatorioDeAniversariantes.addColunaExibida(pessoaId);
+        relatorioDeAniversariantes.addColunaExibida(pessoaNome);
+        relatorioDeAniversariantes.addColunaExibida(pessoaNascimento);
+        relatorioDeAniversariantes.addColunaExibida(pessoaTelefone);
+        relatorioDeAniversariantes.addColunaExibida(pessoaCidadeNome);
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeAniversariantes);
     }
 
 }
