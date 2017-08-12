@@ -47,6 +47,8 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         }
         tipoDeCobranca.getCobrancaFixa().adiciona(getValor(tipo));
 
+        //Atualiza situação da Cobrança 
+        tipoDeCobranca.getCobrancaFixa().atualizaSituacao();
     }
 
     private Baixa getValor(String tipo) throws DadoInvalidoException {

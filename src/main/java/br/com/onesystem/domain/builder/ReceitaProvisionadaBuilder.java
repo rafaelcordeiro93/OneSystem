@@ -1,13 +1,13 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,6 +30,7 @@ public class ReceitaProvisionadaBuilder {
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public ReceitaProvisionadaBuilder comId(Long id) {
         this.id = id;
@@ -86,8 +87,13 @@ public class ReceitaProvisionadaBuilder {
         return this;
     }
     
+    public ReceitaProvisionadaBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
+    
     public ReceitaProvisionada construir() throws DadoInvalidoException {
-        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, baixas, referencia);
+        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, baixas, referencia, situacaoDeCobranca);
     }
 
 }

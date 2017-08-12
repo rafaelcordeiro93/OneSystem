@@ -7,6 +7,7 @@ import br.com.onesystem.domain.ReceitaEventual;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class ReceitaEventualBuilder {
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public ReceitaEventualBuilder comId(Long id) {
         this.id = id;
@@ -79,14 +81,19 @@ public class ReceitaEventualBuilder {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
     }
-    
+
     public ReceitaEventualBuilder comReferencia(Date referencia) {
         this.referencia = referencia;
         return this;
     }
-    
+
+    public ReceitaEventualBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
+
     public ReceitaEventual construir() throws DadoInvalidoException {
-        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia);
+        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca);
     }
 
 }

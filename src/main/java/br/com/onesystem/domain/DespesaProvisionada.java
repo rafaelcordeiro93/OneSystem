@@ -3,6 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -28,8 +29,8 @@ public class DespesaProvisionada extends CobrancaFixa implements RelatorioContaA
 
     public DespesaProvisionada(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
             Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira,
-             Date referencia) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento, referencia);
+            Date referencia, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento, referencia, situacaoDeCobranca);
         this.tipoDespesa = tipoDespesa;
         this.cambio = cambio;
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;

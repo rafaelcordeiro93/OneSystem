@@ -3,6 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -22,8 +23,8 @@ public class ReceitaProvisionada extends CobrancaFixa implements Serializable, R
     }
 
     public ReceitaProvisionada(Long id, Pessoa pessoa, TipoReceita tipoReceita, BigDecimal valor, OperacaoFinanceira operacaoFinanceira,
-            Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, Date referencia) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, referencia);
+            Date vencimento, Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, Date referencia, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, referencia, situacaoDeCobranca);
         this.tipoReceita = tipoReceita;
     }
 

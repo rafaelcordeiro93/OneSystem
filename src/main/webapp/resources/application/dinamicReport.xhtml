@@ -24,10 +24,11 @@
                 <f:selectItem itemLabel="#{l.Selecione}" />
                 <f:selectItems value="#{cc.attrs.mbView.modelosDeRelatorio}" var="modeloDeRelatorio" itemLabel="#{modeloDeRelatorio.nome}" itemValue="#{modeloDeRelatorio.nome}" />
             </p:selectOneMenu>
-            <p:panelGrid columns="3">
+            <p:panelGrid columns="4">
                 <p:commandButton icon="fa fa-floppy-o" value="#{l.Salvar}" action="#{cc.attrs.mbView.salvarModeloDeRelatorio}" update="#{cc.attrs.form}" />
                 <p:commandButton icon="fa fa-refresh" value="#{l.Limpar}" action="#{cc.attrs.mbView.limparJanela}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()"/>
                 <p:commandButton icon="fa fa-trash-o Fs14 White" styleClass="orange-btn" action="#{cc.attrs.mbView.excluirModelo}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()" />
+                <p:commandButton styleClass="black-btn" icon="fa fa-file-code-o" title="#{l.Gerar_Codigo_Fonte}" actionListener="#{cc.attrs.mbView.gerarCodigoFonte}" onclick="PF('codigoFonte').show()" />
             </p:panelGrid>
         </p:panelGrid>
 
@@ -57,7 +58,6 @@
                 <f:selectItems value="#{cc.attrs.mbView.enumeracoesOpcoes}" var="opcao" itemLabel="#{opcao.nome}" itemValue="#{opcao}" />
             </p:selectManyMenu>
             <p:spacer/>
-
 
         </p:panelGrid>
 
@@ -203,6 +203,10 @@
 
         </p:dialog>
 
+        <p:dialog id="codigoFonteDialog" widgetVar="codigoFonte" width="900" height="600">
+            <p:inputTextarea id="codigoFonteInput" value="#{cc.attrs.mbView.codigoFonteModelo}" autoResize="true" />
+            <p:commandButton value="#{l.Fechar}" onclick="PF('codigoFonte').hide()"/>
+        </p:dialog>
 
         <p:dataTable id="objects" widgetVar="objectsTable" var="object" value="#{cc.attrs.mbView.registros}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
                      rowKey="#{object.id}" reflow="true" style="border: none;" filteredValue="#{cc.attrs.mbView.registrosFiltrados}"

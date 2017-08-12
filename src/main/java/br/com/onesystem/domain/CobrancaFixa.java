@@ -7,11 +7,13 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -19,7 +21,6 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -94,12 +95,15 @@ public abstract class CobrancaFixa implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date vencimento;
 
+    @Enumerated(EnumType.STRING)
+    private SituacaoDeCobranca situacaoDeCobranca;
+
     public CobrancaFixa() {
     }
 
     public CobrancaFixa(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
-            Date referencia) throws DadoInvalidoException {
+            Date referencia, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -110,6 +114,11 @@ public abstract class CobrancaFixa implements Serializable {
         this.baixas = baixas;
         this.vencimento = vencimento;
         this.referencia = referencia;
+        if (situacaoDeCobranca != null) {
+            this.situacaoDeCobranca = situacaoDeCobranca;
+        } else {
+            atualizaSituacao();
+        }
         ehAbstracaoValida();
     }
 
@@ -131,6 +140,7 @@ public abstract class CobrancaFixa implements Serializable {
         return id;
     }
 
+    @MetodoInacessivelRelatorio
     public Double getValorDouble() {
         return valor.doubleValue();
     }
@@ -171,6 +181,31 @@ public abstract class CobrancaFixa implements Serializable {
         return referencia;
     }
 
+    /**
+     * Utilizado no GeradorDeBaixaDeTipoCobrancaFixa no método geraBaixas para
+     * atualizar a situação da cobrança ao receber o pagamento.
+     *
+     * Quando a soma do valor das baixas for maior ou igual ao valor da
+     * cobrança, a mesma é considerada paga, caso contrário é considerada
+     * aberta. Não existe situação Parcial.
+     *
+     * @date 11/08/2017
+     * @author Rafael Fernando Rauber
+     * @see GeradorDeBaixaDeTipoCobrancaFixa
+     */
+    public final void atualizaSituacao() {
+        if (baixas != null) {
+            BigDecimal soma = baixas.stream().map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            if (soma.compareTo(this.valor) >= 0) {
+                situacaoDeCobranca = SituacaoDeCobranca.PAGO;
+            } else {
+                situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+            }
+        } else {
+            situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+        }
+    }
+
     public Long getDias() {
         LocalDate v = vencimento.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate e = getEmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -204,6 +239,10 @@ public abstract class CobrancaFixa implements Serializable {
     public String getEmissaoFormatadaSemHoras() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
+    }
+
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
     }
 
     @Override

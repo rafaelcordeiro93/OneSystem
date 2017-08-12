@@ -305,6 +305,20 @@ public class Coluna implements Serializable {
     public void setModelo(ModeloDeRelatorio modelo) {
         this.modelo = modelo;
     }
+    
+    public String getUltimaPropriedade() {
+        String ultimaPropriedade = propriedade;
+        if (propriedadeDois != null) {
+            ultimaPropriedade = propriedadeDois;
+        }
+        if (propriedadeTres != null) {
+            ultimaPropriedade = propriedadeTres;
+        }
+        if (propriedadeQuatro != null) {
+            ultimaPropriedade = propriedadeQuatro;
+        }
+        return ultimaPropriedade;
+    }
 
     public String getPropriedadeCompleta() {
         String propriedadeCompleta = propriedade;

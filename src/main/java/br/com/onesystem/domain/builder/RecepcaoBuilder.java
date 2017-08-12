@@ -1,11 +1,6 @@
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.Cambio;
-import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -13,7 +8,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  *

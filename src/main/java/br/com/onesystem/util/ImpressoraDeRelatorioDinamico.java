@@ -442,7 +442,7 @@ public class ImpressoraDeRelatorioDinamico {
         colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
         colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        impressora.imprimir(registros, TipoRelatorio.CONTAS.getNome(), colunas, null).noConsole();
+        impressora.imprimir(registros, TipoRelatorio.COBRANCA.getNome(), colunas, null).noConsole();
 
         System.out.println("Imprimiu");
 

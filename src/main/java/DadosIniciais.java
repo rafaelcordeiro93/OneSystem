@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoContabil;
@@ -289,7 +290,8 @@ public class DadosIniciais {
         Janela relItem = new Janela(null, "Relatório de Item", "/menu/relatorios/estoque/relatorioDeItem.xhtml", rela);
 
         //Financeiro
-        Janela relConta = new Janela(null, "Relatório de Contas", "/menu/relatorios/financeiro/relatorioDeContas.xhtml", rela);
+        Janela relConta = new Janela(null, "Relatório de Contas", "/menu/relatorios/financeiro/relatorioDeConta.xhtml", rela);
+        Janela relContaFixa = new Janela(null, "Relatório de Contas Fixas", "/menu/relatorios/financeiro/relatorioDeContaFixa.xhtml", rela);
         Janela relCheques = new Janela(null, "Relatório de Cheques", "/menu/relatorios/financeiro/relatorioDeCheques.xhtml", rela);
         Janela relDespPro = new Janela(null, "Relatório de Despesas Provisionadas", "/menu/relatorios/financeiro/relatorioDeDespesaProvisionada.xhtml", rela);
         Janela relReceitPro = new Janela(null, "Relatório de Receitas Provisionadas", "/menu/relatorios/financeiro/relatorioDeReceitaProvisionada.xhtml", rela);
@@ -881,7 +883,7 @@ public class DadosIniciais {
         //========================================================
         ModeloDeRelatorio relatorioDeContasAPagar = new ModeloDeRelatorioBuilder()
                 .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Pagar"))
-                .comTipoRelatorio(TipoRelatorio.CONTAS)
+                .comTipoRelatorio(TipoRelatorio.COBRANCA)
                 .construir();
 
         //Filtros
@@ -912,7 +914,7 @@ public class DadosIniciais {
         //========================================================
         ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
                 .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Receber"))
-                .comTipoRelatorio(TipoRelatorio.CONTAS)
+                .comTipoRelatorio(TipoRelatorio.COBRANCA)
                 .construir();
 
         //Filtros
@@ -939,6 +941,68 @@ public class DadosIniciais {
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
 
+         //Relatório de Contas Fixas a Pagar.
+        //========================================================
+        ModeloDeRelatorio relatorioDeContasFixasAPagar = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_Fixas_A_Pagar"))
+                .comTipoRelatorio(TipoRelatorio.COBRANCA_FIXA)
+                .construir();
+
+        //Filtros
+        Coluna colOperacaoFinanceiraCFP = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", CobrancaFixa.class, OperacaoFinanceira.class);
+        FiltroDeRelatorio filtroOFCFP = new FiltroDeRelatorio(null, colOperacaoFinanceiraCFP, TipoDeBusca.IGUAL_A);
+        filtroOFCFP.add(OperacaoFinanceira.SAIDA);
+
+        Coluna colSituacaoDeCobrancaCFP = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", CobrancaFixa.class, SituacaoDeCobranca.class);
+        FiltroDeRelatorio filtroSDCCFP = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCFP, TipoDeBusca.IGUAL_A);
+        filtroSDCCFP.add(SituacaoDeCobranca.ABERTO);
+
+        relatorioDeContasFixasAPagar.addFiltro(filtroOFCFP);
+        relatorioDeContasFixasAPagar.addFiltro(filtroSDCCFP);
+
+        //Colunas Exibidas
+        Coluna cfpPessoa = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        cfpPessoa.setTamanho(30);
+
+        relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", CobrancaFixa.class, Long.class));
+        relatorioDeContasFixasAPagar.addColunaExibida(cfpPessoa);
+        relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", CobrancaFixa.class, Date.class));
+        relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaFixa.class, Date.class));
+        relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaFixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeContasFixasAPagar);
+
+        //Relatório de Contas Fixas a Receber
+        //========================================================
+        ModeloDeRelatorio relatorioDeContasFixasAReceber = new ModeloDeRelatorioBuilder()
+                .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_Fixas_A_Receber"))
+                .comTipoRelatorio(TipoRelatorio.COBRANCA_FIXA)
+                .construir();
+
+        //Filtros
+        Coluna colOperacaoFinanceiracCFR = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", CobrancaFixa.class, OperacaoFinanceira.class);
+        FiltroDeRelatorio filtroOFCFR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCFR, TipoDeBusca.IGUAL_A);
+        filtroOFCFR.add(OperacaoFinanceira.ENTRADA);
+
+        Coluna colSituacaoDeCobrancaCFR = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", CobrancaFixa.class, SituacaoDeCobranca.class);
+        FiltroDeRelatorio filtroSDCCFR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCFR, TipoDeBusca.IGUAL_A);
+        filtroSDCCFR.add(SituacaoDeCobranca.ABERTO);
+
+        relatorioDeContasFixasAReceber.addFiltro(filtroOFCFR);
+        relatorioDeContasFixasAReceber.addFiltro(filtroSDCCFR);
+
+        //Colunas Exibidas
+        Coluna CFRPessoa = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
+        CFRPessoa.setTamanho(30);
+
+        relatorioDeContasFixasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", CobrancaFixa.class, Long.class));
+        relatorioDeContasFixasAReceber.addColunaExibida(CFRPessoa);
+        relatorioDeContasFixasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", CobrancaFixa.class, Date.class));
+        relatorioDeContasFixasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaFixa.class, Date.class));
+        relatorioDeContasFixasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaFixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+
+        modeloDeRelatorioDAO.adiciona(relatorioDeContasFixasAReceber);
+        
         //Relatório de Balanço Físico
         //========================================================
         ModeloDeRelatorio relatorioDeItem = new ModeloDeRelatorioBuilder()

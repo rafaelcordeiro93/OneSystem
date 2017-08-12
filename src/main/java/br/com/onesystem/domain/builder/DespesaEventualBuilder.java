@@ -7,6 +7,7 @@ import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class DespesaEventualBuilder {
     private TipoDespesa despesa;
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
+    private SituacaoDeCobranca situacaoDeCobranca;
 
     public DespesaEventualBuilder comId(Long id) {
         this.id = id;
@@ -84,9 +86,14 @@ public class DespesaEventualBuilder {
         this.referencia = referencia;
         return this;
     }
+    
+    public DespesaEventualBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca){
+        this.situacaoDeCobranca = situacaoDeCobranca;
+        return this;
+    }
 
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia);
+        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca);
     }
 
 }

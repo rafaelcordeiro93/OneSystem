@@ -46,6 +46,7 @@ import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.GeradorDeCodigoFonteDeModeloDeRelatorio;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
@@ -92,6 +93,7 @@ public abstract class BasicMBReportImpl<T> {
     private List<ModeloDeRelatorio> modelosDeRelatorio;
     private List<String> enumeracoesSelecionadas = new ArrayList<>();
     private List<Enum> enumeracoesOpcoes = new ArrayList<>();
+    private String codigoFonteModelo;
 
     protected abstract void init();
 
@@ -441,8 +443,6 @@ public abstract class BasicMBReportImpl<T> {
         try {
             if (modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty()) {
 
-                //Cria novo modelo
-                ModeloDeRelatorio modelo = new ModeloDeRelatorioBuilder().comNome(modeloDeRelatorioSelecionadoString).comTipoRelatorio(tipoRelatorio).construir();
                 ModeloDeRelatorio modeloRemovido = null; // * Necessario para não soltar CuncurrentException
 
                 //Exclui o  modelo
@@ -460,27 +460,8 @@ public abstract class BasicMBReportImpl<T> {
                     modelosDeRelatorio.remove(modeloRemovido);
                 }
 
-                //Adiciona Colunas
-                for (Coluna c : camposExibidos.getList()) {
-                    Coluna coluna = new ColunaBV(c).construir();
-                    modelo.addColunaExibida(coluna);
-                }
-
-                //Adiciona Filtros
-                for (FiltroDeRelatorio f : filtros) {
-                    FiltroDeRelatorio filtro = new FiltroDeRelatorioBV(f).construir();
-                    //Adiciona filtro dentro dos parametros - Cascade
-                    for (ParametroDeFiltroDeRelatorio p : filtro.getParametros()) {
-                        p.setId(null);
-                        p.setFiltroDeRelatorio(filtro);
-                    }
-                    //Altera coluna do filtro para que não tenha modelo e ser persistida como filtro.
-                    Coluna col = new ColunaBV(filtro.getColuna()).construir();
-                    col.setModelo(null);
-                    filtro.setColuna(col);
-
-                    modelo.addFiltro(filtro);
-                }
+                //Cria novo modelo
+                ModeloDeRelatorio modelo = criarModelo();
 
                 //Adiciona no banco novo registro
                 new AdicionaDAO<>().adiciona(modelo);
@@ -492,6 +473,33 @@ public abstract class BasicMBReportImpl<T> {
             ex.printConsole();
             ex.print();
         }
+    }
+
+    public ModeloDeRelatorio criarModelo() throws DadoInvalidoException {
+        ModeloDeRelatorio modelo = new ModeloDeRelatorioBuilder().comNome(modeloDeRelatorioSelecionadoString).comTipoRelatorio(tipoRelatorio).construir();
+
+        //Adiciona Colunas
+        for (Coluna c : camposExibidos.getList()) {
+            Coluna coluna = new ColunaBV(c).construir();
+            modelo.addColunaExibida(coluna);
+        }
+
+        //Adiciona Filtros
+        for (FiltroDeRelatorio f : filtros) {
+            FiltroDeRelatorio filtro = new FiltroDeRelatorioBV(f).construir();
+            //Adiciona filtro dentro dos parametros - Cascade
+            for (ParametroDeFiltroDeRelatorio p : filtro.getParametros()) {
+                p.setId(null);
+                p.setFiltroDeRelatorio(filtro);
+            }
+            //Altera coluna do filtro para que não tenha modelo e ser persistida como filtro.
+            Coluna col = new ColunaBV(filtro.getColuna()).construir();
+            col.setModelo(null);
+            filtro.setColuna(col);
+
+            modelo.addFiltro(filtro);
+        }
+        return modelo;
     }
 
     public void selecionaModelo() {
@@ -557,8 +565,33 @@ public abstract class BasicMBReportImpl<T> {
         }
     }
 
+    public void gerarCodigoFonte() {
+        try {
+            //Limpa variável
+            codigoFonteModelo = null;
+            //Cria novo modelo
+            ModeloDeRelatorio modelo = criarModelo();
+            if (modelo != null) {
+                GeradorDeCodigoFonteDeModeloDeRelatorio gerador = new GeradorDeCodigoFonteDeModeloDeRelatorio();
+                codigoFonteModelo = gerador.gerarCodigo(modelo);
+                System.out.println(codigoFonteModelo);
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public String getCodigoFonteModelo() {
+        return codigoFonteModelo;
+    }
+
+    public void setCodigoFonteModelo(String codigoFonteModelo) {
+        this.codigoFonteModelo = codigoFonteModelo;
+    }
+
     public void limparJanela() {
         modeloDeRelatorioSelecionadoString = "";
+        codigoFonteModelo = null;
         limpaFiltrosECampos();
         init();
         buscaDadosDoBancoComFiltros();
