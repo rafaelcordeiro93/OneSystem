@@ -53,6 +53,9 @@ import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
 import br.com.onesystem.war.builder.ColunaBV;
 import br.com.onesystem.war.builder.FiltroDeRelatorioBV;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -267,9 +270,11 @@ public abstract class BasicMBReportImpl<T> {
                     || (campo.getPropriedadeDois() != null && campo.getPropriedadeDois().toLowerCase().contains("format"))
                     || (campo.getPropriedadeTres() != null && campo.getPropriedadeTres().toLowerCase().contains("format"))
                     || (campo.getPropriedadeQuatro() != null && campo.getPropriedadeQuatro().toLowerCase().contains("format")))) {
-                this.campos.add(campo);
                 this.camposDisponiveis.add(campo);
             }
+        }
+        if (!campos.getList().contains(campo)) {
+            this.campos.add(campo);
         }
     }
 
@@ -290,7 +295,7 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     public void filterColumn() {
-        for (Model c : campos) {
+        for (Model c : camposExibidos) {
             if (((Coluna) c.getObject()).getNome().equals(colunaParaTotalizadorString)) {
                 colunaParaTotalizadorSelecionada = (Coluna) c.getObject();
             }
@@ -318,7 +323,18 @@ public abstract class BasicMBReportImpl<T> {
 
     public void totalizar() {
         //Seta o totalizador selecionado na coluna.
-        camposExibidos.getList().get(camposExibidos.getList().indexOf(colunaParaTotalizadorSelecionada)).setTotalizador(totalizador);
+        Model model = null;
+        for (Model m : camposExibidos) {
+            Coluna col = (Coluna) m.getObject();
+            if (col.getPropriedadeCompleta().equals(colunaParaTotalizadorSelecionada.getPropriedadeCompleta())) {
+                col.setTotalizador(totalizador);
+                m.setObject(col);
+                model = m;
+            }
+        }
+        if (model != null) {
+            camposExibidos.set(model);
+        }
     }
 
     public void pesquisar() {
@@ -356,9 +372,9 @@ public abstract class BasicMBReportImpl<T> {
                                 filtros.get(filtros.indexOf(filtro)).add(new BigDecimal(s));
                             } //STRING ============================================================================
                             else if (campoSelecionado.getClasseOriginal() == String.class && !filtros.contains(filtro)) {
-                                filtro.add(s);
+                                filtro.add(s.toLowerCase()); //Deve ser lower case devido a consulta sql.
                             } else if (campoSelecionado.getClasseOriginal() == String.class && filtros.contains(filtro)) {
-                                filtros.get(filtros.indexOf(filtro)).add(s);
+                                filtros.get(filtros.indexOf(filtro)).add(s.toLowerCase());//Deve ser lower case devido a consulta sql.
                             }
                         }
                     }
@@ -563,6 +579,13 @@ public abstract class BasicMBReportImpl<T> {
         } catch (DadoInvalidoException die) {
             die.print();
         }
+    }
+
+    public void copiarParaAreaDeTransferencia() {
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        StringSelection selection = new StringSelection(codigoFonteModelo);
+        clipboard.setContents(selection, null);
+        InfoMessage.print(bundle.getMessage("Codigo_Copiado_Para_Area_De_Transferencia"));
     }
 
     public void gerarCodigoFonte() {
@@ -819,7 +842,7 @@ public abstract class BasicMBReportImpl<T> {
             Coluna colModel = (Coluna) m.getObject();
             if (colModel.getNome().equals(col.getNome())) {
                 m.setObject(col);
-                camposExibidos.atualiza(m);
+                camposExibidos.set(m);
                 break;
             }
         }

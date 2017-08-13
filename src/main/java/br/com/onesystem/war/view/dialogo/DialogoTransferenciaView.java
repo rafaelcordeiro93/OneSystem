@@ -149,7 +149,7 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
         if (baixas != null && baixaSelecionada != null) {
             try {
                 baixaSelecionada.setObject(baixaBV.construirComID());
-                baixas.atualiza(baixaSelecionada);
+                baixas.set(baixaSelecionada);
                 limparBaixa();
             } catch (DadoInvalidoException ex) {
                 ex.print();

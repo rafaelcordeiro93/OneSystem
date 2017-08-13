@@ -195,7 +195,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             }
         } else if (obj instanceof Model) {
             Model m = (Model) obj;
-            list.atualiza(m);
+            list.set(m);
             modeloSelecionado = null;
         }
     }

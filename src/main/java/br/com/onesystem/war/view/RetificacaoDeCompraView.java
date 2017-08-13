@@ -186,7 +186,7 @@ public class RetificacaoDeCompraView extends BasicMBImpl<NotaRecebida, NotaReceb
                 recalculaValorAFaturar();
             } else if (obj instanceof Model) {
                 Model m = (Model) obj;
-                list.atualiza(m);
+                list.set(m);
                 modelo = null;
                 recalculaValorAFaturar();
             }

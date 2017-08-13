@@ -147,7 +147,7 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
         if (baixas != null && baixaSelecionada != null) {
             try {
                 baixaSelecionada.setObject(baixaBV.construirComID());
-                baixas.atualiza(baixaSelecionada);
+                baixas.set(baixaSelecionada);
                 limparBaixa();
             } catch (DadoInvalidoException ex) {
                 ex.print();

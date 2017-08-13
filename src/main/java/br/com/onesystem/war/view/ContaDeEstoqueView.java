@@ -133,7 +133,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         try {
             if (operacaoDeEstoqueSelecionado != null) {
                 operacaoDeEstoqueSelecionado.setObject(operacaoDeEstoque.construirComID());
-                operacaoEstoqueList.atualiza(operacaoDeEstoqueSelecionado);
+                operacaoEstoqueList.set(operacaoDeEstoqueSelecionado);
                 limparOperacao();
             }
         } catch (DadoInvalidoException ex) {

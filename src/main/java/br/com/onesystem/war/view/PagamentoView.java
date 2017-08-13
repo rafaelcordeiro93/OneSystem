@@ -103,9 +103,9 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
             } else if (obj instanceof Model) {
                 Model model = (Model) obj;
                 if (model.getObject() instanceof TipoDeCobranca) {
-                    tiposDeCobranca.atualiza(model);
+                    tiposDeCobranca.set(model);
                 } else {
-                    formasDeCobranca.atualiza(model);
+                    formasDeCobranca.set(model);
                 }
             }
             tipoSelecionado = null;

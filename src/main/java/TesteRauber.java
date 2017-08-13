@@ -1,8 +1,7 @@
 
-import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import java.lang.reflect.InvocationTargetException;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,11 +14,15 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ClassNotFoundException, DadoInvalidoException {
+    public static void main(String[] args) {
 
-        Enum n = OperacaoFinanceira.ENTRADA;
-        
-        System.out.println(n.getClass().getSimpleName());
-        
+        String codigoFonteModelo = "testando";
+
+        StringSelection selection = new StringSelection(codigoFonteModelo);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
+
+        System.out.println(codigoFonteModelo);
+
     }
 }

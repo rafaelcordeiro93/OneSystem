@@ -60,12 +60,12 @@ public class ModelList<T> extends ListDataModel<Model> implements SelectableData
         list.add(new Model<>(id, t));
     }
 
-    public void atualiza(Model m) {
+    public void set(Model m) {
         List<Model<T>> list = (List<Model<T>>) getWrappedData();
         list.set(list.indexOf(m), m);
     }
 
-    public void atualiza(int index, T t) {
+    public void set(int index, T t) {
         List<Model<T>> list = (List<Model<T>>) getWrappedData();
         list.set(index, new Model<>(new Long(index), t));
     }

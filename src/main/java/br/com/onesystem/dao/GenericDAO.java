@@ -104,7 +104,7 @@ public abstract class GenericDAO<T> {
 
         if (tipo == TipoDeBusca.IGUAL_A) {
             if (conjuntoString != null) {
-                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + igualOuIn + " lower(" + parametro + ")";
+                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + igualOuIn + " (" + parametro + ")";
                 parametros.put(parametro.substring(1), conjuntoString);
             } else if (date != null) {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " between " + parametro + "Inicial and " + parametro + "Final";
@@ -116,7 +116,7 @@ public abstract class GenericDAO<T> {
             }
         } else if (tipo == TipoDeBusca.DIFERENTE_DE) {
             if (conjuntoString != null) {
-                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + diferenteOuNotIn + " lower(" + parametro + ")";
+                where += " and lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") " + diferenteOuNotIn + " (" + parametro + ")";
                 parametros.put(parametro.substring(1), conjuntoString);
             } else if (date != null) {
                 where += " and " + ALIAS + "." + campo.getPropriedadeCompleta() + " not between " + parametro + "Inicial and " + parametro + "Final";
@@ -132,7 +132,7 @@ public abstract class GenericDAO<T> {
             int i = 0;
             for (final Iterator it = conjuntoString.iterator(); it.hasNext();) {
                 String par = parametro + "_" + i;
-                where += s + "lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like lower(" + par + ")";
+                where += s + "lower(" + ALIAS + "." + campo.getPropriedadeCompleta() + ") like (" + par + ")";
                 s = " or ";
                 if (tipo == TipoDeBusca.INICIANDO) {
                     parametros.put(par.substring(1), it.next().toString() + "%");

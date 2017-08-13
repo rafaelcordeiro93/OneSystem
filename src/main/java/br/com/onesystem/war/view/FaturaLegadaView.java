@@ -110,7 +110,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             list.add(cb);
         } else if (obj instanceof Model) {
             Model m = (Model) obj;
-            list.atualiza(m);
+            list.set(m);
             modeloSelecionado = null;
         }
     }

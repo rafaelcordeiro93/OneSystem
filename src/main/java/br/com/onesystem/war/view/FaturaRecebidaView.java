@@ -197,7 +197,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             }
         } else if (obj instanceof Model) {
             Model m = (Model) obj;
-            list.atualiza(m);
+            list.set(m);
             modeloSelecionado = null;
         }
     }
