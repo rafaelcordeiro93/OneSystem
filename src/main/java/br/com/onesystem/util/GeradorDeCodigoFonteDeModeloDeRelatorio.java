@@ -20,6 +20,9 @@ import br.com.onesystem.valueobjects.TipoDeBusca;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.math.BigDecimal;
 import java.text.Normalizer;
 import java.util.ArrayList;
@@ -200,7 +203,11 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
         relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaFixa.class, Date.class));
         relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaFixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
-        new GeradorDeCodigoFonteDeModeloDeRelatorio().gerarCodigo(relatorioDeContasFixasAPagar);
+        String gerarCodigo = new GeradorDeCodigoFonteDeModeloDeRelatorio().gerarCodigo(relatorioDeContasFixasAPagar);
+
+        StringSelection selection = new StringSelection(gerarCodigo);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
     }
 
 }

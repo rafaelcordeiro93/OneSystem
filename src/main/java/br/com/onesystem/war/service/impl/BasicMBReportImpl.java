@@ -46,6 +46,7 @@ import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.GeradorDeCodigoFonteDeModeloDeRelatorio;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
@@ -61,6 +62,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 /**
  *
@@ -581,13 +583,6 @@ public abstract class BasicMBReportImpl<T> {
         }
     }
 
-    public void copiarParaAreaDeTransferencia() {
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        StringSelection selection = new StringSelection(codigoFonteModelo);
-        clipboard.setContents(selection, null);
-        InfoMessage.print(bundle.getMessage("Codigo_Copiado_Para_Area_De_Transferencia"));
-    }
-
     public void gerarCodigoFonte() {
         try {
             //Limpa variável
@@ -597,7 +592,6 @@ public abstract class BasicMBReportImpl<T> {
             if (modelo != null) {
                 GeradorDeCodigoFonteDeModeloDeRelatorio gerador = new GeradorDeCodigoFonteDeModeloDeRelatorio();
                 codigoFonteModelo = gerador.gerarCodigo(modelo);
-                System.out.println(codigoFonteModelo);
             }
         } catch (DadoInvalidoException ex) {
             ex.print();

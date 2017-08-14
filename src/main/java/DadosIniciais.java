@@ -1016,7 +1016,7 @@ public class DadosIniciais {
         Coluna itemSaldo = new Coluna(bundle.getLabel("Saldo"), itemStr, "saldo", Item.class, BigDecimal.class);
         Coluna itemPreco = new Coluna(bundle.getLabel("Preco"), itemStr, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
         Coluna itemCustoMedio = new Coluna(bundle.getLabel("Custo_Medio"), itemStr, "custoMedio", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.AVERAGE);
-        Coluna itemNome = new Coluna(bundle.getLabel("nome"), itemStr, "nome", Item.class, String.class);
+        Coluna itemNome = new Coluna(bundle.getLabel("Nome"), itemStr, "nome", Item.class, String.class);
         Coluna itemPrecoTotal = new Coluna(bundle.getLabel("Preco_Total"), itemStr, "precoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
         Coluna itemCustoTotal = new Coluna(bundle.getLabel("Custo_Total"), itemStr, "custoTotal", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM);
 

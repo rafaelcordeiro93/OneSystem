@@ -5,6 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite"
       xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:pe="http://primefaces.org/ui/extensions"
       >
 
     <composite:interface>
@@ -28,10 +29,9 @@
                 <p:commandButton icon="fa fa-floppy-o" value="#{l.Salvar}" action="#{cc.attrs.mbView.salvarModeloDeRelatorio}" update="#{cc.attrs.form}" />
                 <p:commandButton icon="fa fa-refresh" value="#{l.Limpar}" action="#{cc.attrs.mbView.limparJanela}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()"/>
                 <p:commandButton icon="fa fa-trash-o Fs14 White" styleClass="orange-btn" action="#{cc.attrs.mbView.excluirModelo}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()" />
-                <p:commandButton styleClass="black-btn" icon="fa fa-file-code-o" title="#{l.Gerar_Codigo_Fonte}" actionListener="#{cc.attrs.mbView.gerarCodigoFonte}" onclick="PF('codigoFonte').show()" update="codigoFonteInput" />
+                <p:commandButton styleClass="black-btn" icon="fa fa-file-code-o" title="#{l.Gerar_Codigo_Fonte}" actionListener="#{cc.attrs.mbView.gerarCodigoFonte}" update="textCopy" onclick="PF('codigoFonte').show()" />
             </p:panelGrid>
         </p:panelGrid>
-
         <p:separator/>
 
         <p:panelGrid columns="3" style="width: 100%" layout="grid" columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-5 ui-fluid, ui-g-12 ui-md-6 ui-lg-2" styleClass="ui-panelgrid-blank form-group form-elements">
@@ -203,13 +203,12 @@
 
         </p:dialog>
 
-        <p:dialog id="codigoFonteDialog" widgetVar="codigoFonte" width="1000" resizable="false" >
-            <p:outputLabel id="codigoFonteInput" value="#{cc.attrs.mbView.codigoFonteModelo}" />
-            <br/><br/>
-            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank Wid15" >
-                <p:commandButton value="#{l.Copiar}" action="#{cc.attrs.mbView.copiarParaAreaDeTransferencia}" update="@form"/>
-                <p:commandButton value="#{l.Fechar}" onclick="PF('codigoFonte').hide()"/>
-            </p:panelGrid>
+        <p:dialog id="codigoFonteDialog" modal="true" widgetVar="codigoFonte" width="1000" height="500" resizable="false" >
+            <p:inputTextarea id="textCopy" value="#{cc.attrs.mbView.codigoFonteModelo}" style="width: 99%" />
+            <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="textCopy" />
+            <br/>
+            <p:commandButton value="#{l.Copiar}" id="btnCopy" rendered="true" />
+            <p:commandButton value="#{l.Fechar}" onclick="PF('codigoFonte').hide()"/>
         </p:dialog>
 
         <p:dataTable id="objects" widgetVar="objectsTable" var="object" value="#{cc.attrs.mbView.registros}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
