@@ -28,6 +28,7 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.MissingResourceException;
 
 /**
  * Esta classe irá gerar o código fonte dos modelos de relatório. Isso
@@ -39,22 +40,26 @@ import java.util.List;
  */
 public class GeradorDeCodigoFonteDeModeloDeRelatorio {
 
+    private StringBuilder bundles;
+
     public String gerarCodigo(ModeloDeRelatorio modeloDeRelatorio) throws DadoInvalidoException {
         StringBuilder sb = new StringBuilder();
 
         //Cria nome relatório, retira acentos e troca espaços por underline "_"
         String nomeRelatorio = Normalizer.normalize(modeloDeRelatorio.getNome(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll(" ", "_");
+        testaBundle(nomeRelatorio);
 
         //Cria nome modelo, retira acentos
         String retiraAcento = Normalizer.normalize(modeloDeRelatorio.getNome(), Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").trim();
         String[] split = retiraAcento.split(" ");
         //Formata nomeModelo
         String nomeModelo = retiraAcento.contains(" ") ? formataSplit(split) : retiraAcento;
-
+        
         //Cria o Modelo
-        sb.append(" //Cria o Modelo\n");
+        sb.append(" //").append(modeloDeRelatorio.getNome()).append("\n").append(" //Cria o Modelo\n");
+        sb.append("BundleUtil bundle = new BundleUtil();\n");
         sb.append("ModeloDeRelatorio ").append(nomeModelo).append(" = new ModeloDeRelatorioBuilder()");
-        sb.append(".comNome(new BundleUtil().getLabel(\"").append(nomeRelatorio).append("\"))");
+        sb.append(".comNome(bundle.getLabel(\"").append(nomeRelatorio).append("\"))");
         sb.append(".comTipoRelatorio(TipoRelatorio.").append(modeloDeRelatorio.getTipoRelatorio()).append(")");
         sb.append(".construir();\n\n");
 
@@ -117,10 +122,15 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
 
     private String criaColuna(Coluna coluna, StringBuilder sb) {
         //Nome da coluna
-        String nomeColuna = coluna.getPropriedadeCompleta().contains(".") ? formataSplit(coluna.getPropriedadeCompleta().split("\\.")) : coluna.getPropriedadeCompleta();
+        String nomeColuna = coluna.getPropriedadeCompleta().contains(".")
+                ? formataSplit(coluna.getPropriedadeCompleta().split("\\.")) : coluna.getPropriedadeCompleta();
+
+        //Bundle criado
+        String bundle = coluna.getUltimaPropriedade().substring(0, 1).toUpperCase() + coluna.getUltimaPropriedade().substring(1);
+        testaBundle(bundle);
 
         sb.append("Coluna ").append(nomeColuna).append(" = new Coluna(");
-        sb.append("bundle.getLabel(\"").append(coluna.getUltimaPropriedade()).append("\"), ");
+        sb.append("bundle.getLabel(\"").append(bundle).append("\"), ");
         sb.append("\"").append(coluna.getClasseDeDeclaracao().getSimpleName()).append("\", ");
         sb.append("\"").append(coluna.getPropriedade()).append("\", ");
 
@@ -138,6 +148,18 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
         sb.append("null);\n");
 
         return nomeColuna;
+    }
+
+    private void testaBundle(String bundle) {
+        //Testa bundle
+        try {
+            new BundleUtil().getLabel(bundle);
+        } catch (MissingResourceException mre) {
+            if (bundles == null) {
+                bundles = new StringBuilder("Bundle pendentes de criação:\n");
+            }
+            bundles.append(bundle).append("\n");
+        }
     }
 
     private void formataTipoFormatacaoNumero(TipoFormatacaoNumero tipoFormatacaoNumero, StringBuilder sb) {
@@ -210,4 +232,11 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
         clipboard.setContents(selection, selection);
     }
 
+    public String getBundles() {
+        if (bundles == null) {
+            return null;
+        } else {
+            return bundles.toString();
+        }
+    }
 }

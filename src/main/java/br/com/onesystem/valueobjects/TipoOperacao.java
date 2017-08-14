@@ -29,7 +29,6 @@ public enum TipoOperacao {
     RECEITA(23, new BundleUtil().getLabel("RECEITA")),
     TITULO(24, new BundleUtil().getLabel("TITULO")),
     AVULSO(25, new BundleUtil().getLabel("AVULSO")),
-    TODOS(26, new BundleUtil().getLabel("VENDA")),
     DESPESA_PROVISIONADA(27, new BundleUtil().getLabel("DESPESA_PROVISIONADA")),
     RECEITA_PROVISIONADA(28, new BundleUtil().getLabel("RECEITA_PROVISIONADA")),
     BONIFICACAO(29, new BundleUtil().getLabel("BONIFICACAO")),

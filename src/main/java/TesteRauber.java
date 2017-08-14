@@ -1,7 +1,9 @@
 
+import br.com.onesystem.util.BundleUtil;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.MissingResourceException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -16,13 +18,10 @@ public class TesteRauber {
 
     public static void main(String[] args) {
 
-        String codigoFonteModelo = "testando";
-
-        StringSelection selection = new StringSelection(codigoFonteModelo);
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        clipboard.setContents(selection, selection);
-
-        System.out.println(codigoFonteModelo);
-
+        try{
+       new BundleUtil().getLabel("sadfdafd");
+        }catch(MissingResourceException mre){
+            System.out.println("teste");
+        }
     }
 }

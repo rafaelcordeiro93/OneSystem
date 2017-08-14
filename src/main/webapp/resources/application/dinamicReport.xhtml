@@ -29,7 +29,7 @@
                 <p:commandButton icon="fa fa-floppy-o" value="#{l.Salvar}" action="#{cc.attrs.mbView.salvarModeloDeRelatorio}" update="#{cc.attrs.form}" />
                 <p:commandButton icon="fa fa-refresh" value="#{l.Limpar}" action="#{cc.attrs.mbView.limparJanela}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()"/>
                 <p:commandButton icon="fa fa-trash-o Fs14 White" styleClass="orange-btn" action="#{cc.attrs.mbView.excluirModelo}" update="#{cc.attrs.form}" oncomplete="PF('objectsTable').clearFilters()" />
-                <p:commandButton styleClass="black-btn" icon="fa fa-file-code-o" title="#{l.Gerar_Codigo_Fonte}" actionListener="#{cc.attrs.mbView.gerarCodigoFonte}" update="textCopy" onclick="PF('codigoFonte').show()" />
+                <p:commandButton styleClass="black-btn" icon="fa fa-file-code-o" title="#{l.Gerar_Codigo_Fonte}" actionListener="#{cc.attrs.mbView.gerarCodigoFonte}" update="textCopy bundleCopy" onclick="PF('codigoFonte').show()" />
             </p:panelGrid>
         </p:panelGrid>
         <p:separator/>
@@ -208,6 +208,10 @@
             <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="textCopy" />
             <br/>
             <p:commandButton value="#{l.Copiar}" id="btnCopy" rendered="true" />
+            <p:inputTextarea rendered="#{cc.attrs.mbView.bundlePendentes ne null}" id="bundleCopy" value="#{cc.attrs.mbView.bundlePendentes}" style="width: 99%" />
+            <pe:clipboard rendered="#{cc.attrs.mbView.bundlePendentes ne null}" trigger="clipBundleCopy" action="copy" target="blundeCopy" />
+            <br style="display: #{cc.attrs.mbView.bundlePendentes ne null ? '' : 'none'}" />
+            <p:commandButton value="#{l.Copiar}" id="clipBundleCopy" rendered="#{cc.attrs.mbView.bundlePendentes ne null}" />
             <p:commandButton value="#{l.Fechar}" onclick="PF('codigoFonte').hide()"/>
         </p:dialog>
 

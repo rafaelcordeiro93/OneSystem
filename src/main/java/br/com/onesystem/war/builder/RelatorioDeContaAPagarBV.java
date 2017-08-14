@@ -14,7 +14,7 @@ public class RelatorioDeContaAPagarBV implements Serializable {
     private Date dataFinal;
     private Pessoa pessoa;
     private Conta conta;
-    private TipoOperacao tipo = TipoOperacao.TODOS;
+    private TipoOperacao tipo = TipoOperacao.OUTRAS;
     private EstadoConta estadoConta = EstadoConta.PAGO;
     private TipoBusca tipoBusca = TipoBusca.PAGAMENTO;
 

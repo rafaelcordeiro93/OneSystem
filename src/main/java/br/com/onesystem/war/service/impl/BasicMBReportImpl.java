@@ -99,6 +99,7 @@ public abstract class BasicMBReportImpl<T> {
     private List<String> enumeracoesSelecionadas = new ArrayList<>();
     private List<Enum> enumeracoesOpcoes = new ArrayList<>();
     private String codigoFonteModelo;
+    private String bundlePendentes;
 
     protected abstract void init();
 
@@ -587,15 +588,25 @@ public abstract class BasicMBReportImpl<T> {
         try {
             //Limpa variável
             codigoFonteModelo = null;
+            bundlePendentes = null;
             //Cria novo modelo
             ModeloDeRelatorio modelo = criarModelo();
             if (modelo != null) {
                 GeradorDeCodigoFonteDeModeloDeRelatorio gerador = new GeradorDeCodigoFonteDeModeloDeRelatorio();
                 codigoFonteModelo = gerador.gerarCodigo(modelo);
+                bundlePendentes = gerador.getBundles();
             }
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+    }
+
+    public String getBundlePendentes() {
+        return bundlePendentes;
+    }
+
+    public void setBundlePendentes(String bundlePendentes) {
+        this.bundlePendentes = bundlePendentes;
     }
 
     public String getCodigoFonteModelo() {
