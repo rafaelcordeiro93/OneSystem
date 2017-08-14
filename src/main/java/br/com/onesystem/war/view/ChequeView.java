@@ -10,7 +10,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.ChequeBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -66,8 +66,8 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
 
     }
 
-    public List<SituacaoDeCheque> getTipoSituacao() {
-        return Arrays.asList(SituacaoDeCheque.values());
+    public List<EstadoDeCheque> getTipoSituacao() {
+        return Arrays.asList(EstadoDeCheque.values());
     }
 
     public List<OperacaoFinanceira> getOperacaoFinanceira() {

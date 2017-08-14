@@ -2,8 +2,10 @@
 import br.com.onesystem.domain.builder.EstadoBuilder;
 import br.com.onesystem.domain.builder.PaisBuilder;
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cfop;
+import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
@@ -23,6 +25,7 @@ import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Janela;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.ModeloDeRelatorio;
@@ -47,6 +50,8 @@ import br.com.onesystem.domain.builder.SituacaoFiscalBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -286,11 +291,13 @@ public class DadosIniciais {
 
         //Vendas
         Janela relNotaEmitida = new Janela(null, "Relatório de Notas Emitidas", "/menu/relatorios/vendas/relatorioDeNotasEmitidas.xhtml", rela);
+        Janela relItemEmitido = new Janela(null, "Relatório de Item Emitido", "/menu/relatorios/vendas/relatorioDeItemEmitido.xhtml", rela);
 
         //Estoque
         Janela relAjusteEstoque = new Janela(null, "Relatório de Ajuste de Estoque", "/menu/relatorios/estoque/relatorioDeAjusteDeEstoque.xhtml", rela);
         Janela relNotaRecebida = new Janela(null, "Relatório de Notas Recebidas", "/menu/relatorios/estoque/relatorioDeNotasRecebidas.xhtml", rela);
         Janela relItem = new Janela(null, "Relatório de Item", "/menu/relatorios/estoque/relatorioDeItem.xhtml", rela);
+        Janela relItemRecebido = new Janela(null, "Relatório de Item Recebido", "/menu/relatorios/vendas/relatorioDeItemRecebido.xhtml", rela);
 
         //Financeiro
         Janela relConta = new Janela(null, "Relatório de Contas", "/menu/relatorios/financeiro/relatorioDeConta.xhtml", rela);
@@ -300,6 +307,7 @@ public class DadosIniciais {
         Janela relReceitPro = new Janela(null, "Relatório de Receitas Provisionadas", "/menu/relatorios/financeiro/relatorioDeReceitaProvisionada.xhtml", rela);
         Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/menu/relatorios/financeiro/relatorioDeSaldoDeConta.xhtml", rela);
         Janela relSaldoDivisao = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "/menu/relatorios/financeiro/relatorioDeSaldoDeDivisaoDeLucro.xhtml", rela);
+        Janela relBaixa = new Janela(null, "Relatório de Baixas", "/menu/relatorios/financeiro/relatorioDeBaixa.xhtml", rela);
 
         //Cambio
         Janela relRecepcao = new Janela(null, "Relatório de Recepção", "/menu/relatorios/cambio/relatorioDeRecepcao.xhtml", rela);
@@ -308,6 +316,7 @@ public class DadosIniciais {
 
         daoJanela.adiciona(relCambio);
         daoJanela.adiciona(relPessoas);
+        daoJanela.adiciona(relBaixa);
         daoJanela.adiciona(relConta);
         daoJanela.adiciona(relContaFixa);
         daoJanela.adiciona(relNotaEmitida);
@@ -321,6 +330,8 @@ public class DadosIniciais {
         daoJanela.adiciona(relSaldo);
         daoJanela.adiciona(relSaldoDivisao);
         daoJanela.adiciona(relItem);
+        daoJanela.adiciona(relItemEmitido);
+        daoJanela.adiciona(relItemRecebido);
 
         //Modulo Administrativo
         Janela usuario = new Janela(null, "Usuário", "/menu/topbar/preferencias/usuario.xhtml", admin);
@@ -410,6 +421,8 @@ public class DadosIniciais {
                 new Privilegio(null, contraCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relConta, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relContaFixa, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relBaixa, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relPessoas, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relCambio, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relNotaEmitida, true, true, true, true, grupoDePrivilegio),
@@ -423,6 +436,8 @@ public class DadosIniciais {
                 new Privilegio(null, relSaldo, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relSaldoDivisao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relItem, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relItemEmitido, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relItemRecebido, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
@@ -877,37 +892,57 @@ public class DadosIniciais {
         //Modelo de Relatórios
         AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
 
+        relatorioDeContasAPagar(bundle, modeloDeRelatorioDAO);
+        relatorioDeContasAReceber(bundle, modeloDeRelatorioDAO);
+        relatorioDeContasFixasAPagar(bundle, modeloDeRelatorioDAO);
+        relatorioDeContasFixasAReceber(bundle, modeloDeRelatorioDAO);
+        relatorioDeBalancoFisico(bundle);
+        relatorioDeAniversariantes(bundle);
+        relatorioDeVendasEmitidas(bundle);
+        relatorioDeDevolucaoDeClientes(bundle);
+        relatorioDeCompras(bundle);
+        relatorioDeDevolucaoParaFornecedores();
+        relatorioDeVendaParaEntregaFutura();
+        extratoDeDespesas();
+        extratoDeReceitas();
+        relatorioDeMercadoriasVendidas();
+        relatorioDeChequesAbertos();
+        relatorioDeChequesDescontados();
+        relatorioDeChequesDevolvidos();
+        relatorioDeChequesCancelados();
+
+    }
+
+    private static ModeloDeRelatorio relatorioDeContasAPagar(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException {
         //Relatório de Contas a Pagar.
         //========================================================
         ModeloDeRelatorio relatorioDeContasAPagar = new ModeloDeRelatorioBuilder()
                 .comNome(new BundleUtil().getLabel("Relatorio_De_Contas_A_Pagar"))
                 .comTipoRelatorio(TipoRelatorio.COBRANCA)
                 .construir();
-
         //Filtros
         Coluna colOperacaoFinanceira = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
         FiltroDeRelatorio filtroOF = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
         filtroOF.add(OperacaoFinanceira.SAIDA);
-
         Coluna colSituacaoDeCobranca = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
         FiltroDeRelatorio filtroSDC = new FiltroDeRelatorio(null, colSituacaoDeCobranca, TipoDeBusca.IGUAL_A);
         filtroSDC.add(SituacaoDeCobranca.ABERTO);
-
         relatorioDeContasAPagar.addFiltro(filtroOF);
         relatorioDeContasAPagar.addFiltro(filtroSDC);
-
         //Colunas Exibidas
         Coluna pessoa = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
         pessoa.setTamanho(30);
-
         relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
         relatorioDeContasAPagar.addColunaExibida(pessoa);
         relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
         relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
         relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+                modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
 
-        modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
+        return relatorioDeContasAPagar;
+    }
 
+    private static void relatorioDeContasAReceber(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
         //Relatório de Contas a Receber
         //========================================================
         ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
@@ -938,7 +973,9 @@ public class DadosIniciais {
         relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
+    }
 
+    private static void relatorioDeContasFixasAPagar(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
         //Relatório de Contas Fixas a Pagar.
         //========================================================
         ModeloDeRelatorio relatorioDeContasFixasAPagar = new ModeloDeRelatorioBuilder()
@@ -967,9 +1004,11 @@ public class DadosIniciais {
         relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", CobrancaFixa.class, Date.class));
         relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaFixa.class, Date.class));
         relatorioDeContasFixasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaFixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
-
+        
         modeloDeRelatorioDAO.adiciona(relatorioDeContasFixasAPagar);
+    }
 
+    private static void relatorioDeContasFixasAReceber(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException, ConstraintViolationException {
         //Relatório de Contas Fixas a Receber
         //========================================================
         ModeloDeRelatorio relatorioDeContasFixasAReceber = new ModeloDeRelatorioBuilder()
@@ -1000,14 +1039,87 @@ public class DadosIniciais {
         relatorioDeContasFixasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaFixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasFixasAReceber);
+    }
 
-        relatorioDeBalancoFisico(bundle);
-        relatorioDeAniversariantes(bundle);
-        relatorioDeVendasEmitidas(bundle);
-        relatorioDeDevolucaoDeClientes(bundle);
-        relatorioDeCompras(bundle);
-        relatorioDeDevolucaoParaFornecedores();
-        relatorioDeVendaParaEntregaFutura();
+    private static void extratoDeDespesas() throws ConstraintViolationException, DadoInvalidoException {
+        //Extrato de Despesas
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio extratoDeDespesas = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Extrato_de_Despesas")).comTipoRelatorio(TipoRelatorio.BAIXA).construir();
+
+        //Cria os Filtros
+        Coluna naturezaFinanceira = new Coluna(bundle.getLabel("NaturezaFinanceira"), "Baixa", "naturezaFinanceira", null, null, null, Baixa.class, NaturezaFinanceira.class, null, null, 20, null);
+        FiltroDeRelatorio filtroNaturezaFinanceira = new FiltroDeRelatorio(null, naturezaFinanceira, TipoDeBusca.IGUAL_A);
+        filtroNaturezaFinanceira.add(NaturezaFinanceira.DESPESA);
+        filtroNaturezaFinanceira.add(NaturezaFinanceira.RECEITA);
+        extratoDeDespesas.addFiltro(filtroNaturezaFinanceira);
+
+        Coluna operacaoFinanceira = new Coluna(bundle.getLabel("OperacaoFinanceira"), "Baixa", "operacaoFinanceira", null, null, null, Baixa.class, OperacaoFinanceira.class, null, null, 20, null);
+        FiltroDeRelatorio filtroOperacaoFinanceira = new FiltroDeRelatorio(null, operacaoFinanceira, TipoDeBusca.IGUAL_A);
+        filtroOperacaoFinanceira.add(OperacaoFinanceira.SAIDA);
+        extratoDeDespesas.addFiltro(filtroOperacaoFinanceira);
+
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Baixa", "estado", null, null, null, Baixa.class, EstadoDeBaixa.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.DIFERENTE_DE);
+        filtroEstado.add(EstadoDeBaixa.CANCELADO);
+        extratoDeDespesas.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Baixa", "id", null, null, null, Baixa.class, Long.class, null, null, 20, null);
+        Coluna pessoaNome = new Coluna(bundle.getLabel("Nome"), "Pessoa", "pessoa", "nome", null, null, Pessoa.class, String.class, null, null, 30, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Baixa", "emissao", null, null, null, Baixa.class, Date.class, null, null, 20, null);
+        Coluna vencimento = new Coluna(bundle.getLabel("Vencimento"), "Baixa", "vencimento", null, null, null, Baixa.class, Date.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Baixa", "valor", null, null, null, Baixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        extratoDeDespesas.addColunaExibida(id);
+        extratoDeDespesas.addColunaExibida(pessoaNome);
+        extratoDeDespesas.addColunaExibida(emissao);
+        extratoDeDespesas.addColunaExibida(vencimento);
+        extratoDeDespesas.addColunaExibida(valor);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(extratoDeDespesas);
+    }
+
+    private static void extratoDeReceitas() throws ConstraintViolationException, DadoInvalidoException {
+        //Extrato de Receitas
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio extratoDeReceitas = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Extrato_de_Receitas")).comTipoRelatorio(TipoRelatorio.BAIXA).construir();
+
+        //Cria os Filtros
+        Coluna operacaoFinanceira = new Coluna(bundle.getLabel("OperacaoFinanceira"), "Baixa", "operacaoFinanceira", null, null, null, Baixa.class, OperacaoFinanceira.class, null, null, 20, null);
+        FiltroDeRelatorio filtroOperacaoFinanceira = new FiltroDeRelatorio(null, operacaoFinanceira, TipoDeBusca.IGUAL_A);
+        filtroOperacaoFinanceira.add(OperacaoFinanceira.SAIDA);
+        extratoDeReceitas.addFiltro(filtroOperacaoFinanceira);
+
+        Coluna naturezaFinanceira = new Coluna(bundle.getLabel("NaturezaFinanceira"), "Baixa", "naturezaFinanceira", null, null, null, Baixa.class, NaturezaFinanceira.class, null, null, 20, null);
+        FiltroDeRelatorio filtroNaturezaFinanceira = new FiltroDeRelatorio(null, naturezaFinanceira, TipoDeBusca.IGUAL_A);
+        filtroNaturezaFinanceira.add(NaturezaFinanceira.RECEITA);
+        extratoDeReceitas.addFiltro(filtroNaturezaFinanceira);
+
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Baixa", "estado", null, null, null, Baixa.class, EstadoDeBaixa.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.DIFERENTE_DE);
+        filtroEstado.add(EstadoDeBaixa.CANCELADO);
+        extratoDeReceitas.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Baixa", "id", null, null, null, Baixa.class, Long.class, null, null, 20, null);
+        Coluna pessoaNome = new Coluna(bundle.getLabel("Nome"), "Pessoa", "pessoa", "nome", null, null, Pessoa.class, String.class, null, null, 30, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Baixa", "emissao", null, null, null, Baixa.class, Date.class, null, null, 20, null);
+        Coluna vencimento = new Coluna(bundle.getLabel("Vencimento"), "Baixa", "vencimento", null, null, null, Baixa.class, Date.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Baixa", "valor", null, null, null, Baixa.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        extratoDeReceitas.addColunaExibida(id);
+        extratoDeReceitas.addColunaExibida(pessoaNome);
+        extratoDeReceitas.addColunaExibida(emissao);
+        extratoDeReceitas.addColunaExibida(vencimento);
+        extratoDeReceitas.addColunaExibida(valor);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(extratoDeReceitas);
     }
 
     private static void relatorioDeVendaParaEntregaFutura() throws ConstraintViolationException, DadoInvalidoException {
@@ -1250,6 +1362,165 @@ public class DadosIniciais {
 
         //Adiciona no Banco
         new AdicionaDAO<>().adiciona(relatorioDeNotasDeDevolucaoDeClientes);
+    }
+
+    private static void relatorioDeMercadoriasVendidas() throws ConstraintViolationException, DadoInvalidoException {
+        //Relatório de Mercadorias Vendidas
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio relatorioDeMercadoriasVendidas = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Relatorio_de_Mercadorias_Vendidas")).comTipoRelatorio(TipoRelatorio.ITEM_EMITIDO).construir();
+
+        //Cria os Filtros
+        Coluna notaOperacaoTipoOperacao = new Coluna(bundle.getLabel("TipoOperacao"), "Operacao", "nota", "operacao", "tipoOperacao", null, Operacao.class, TipoOperacao.class, null, null, 20, null);
+        FiltroDeRelatorio filtroNotaOperacaoTipoOperacao = new FiltroDeRelatorio(null, notaOperacaoTipoOperacao, TipoDeBusca.IGUAL_A);
+        filtroNotaOperacaoTipoOperacao.add(TipoOperacao.VENDA);
+        filtroNotaOperacaoTipoOperacao.add(TipoOperacao.VENDA_ENTREGA_FUTURA);
+        filtroNotaOperacaoTipoOperacao.add(TipoOperacao.VENDA_IMOBILIZADO);
+        relatorioDeMercadoriasVendidas.addFiltro(filtroNotaOperacaoTipoOperacao);
+
+        Coluna notaEstado = new Coluna(bundle.getLabel("Estado"), "Nota", "nota", "estado", null, null, Nota.class, EstadoDeNota.class, null, null, 20, null);
+        FiltroDeRelatorio filtroNotaEstado = new FiltroDeRelatorio(null, notaEstado, TipoDeBusca.DIFERENTE_DE);
+        filtroNotaEstado.add(EstadoDeNota.CANCELADO);
+        relatorioDeMercadoriasVendidas.addFiltro(filtroNotaEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Item", "id", null, null, null, Item.class, Long.class, null, null, 20, null);
+        Coluna itemNome = new Coluna(bundle.getLabel("Nome"), "Item", "item", "nome", null, null, Item.class, String.class, null, null, 20, null);
+        Coluna itemMarcaNome = new Coluna(bundle.getLabel("Nome"), "Marca", "item", "marca", "nome", null, Marca.class, String.class, null, null, 20, null);
+        Coluna quantidade = new Coluna(bundle.getLabel("Quantidade"), "ItemDeNota", "quantidade", null, null, null, ItemDeNota.class, BigDecimal.class, null, null, 20, null);
+        Coluna unitario = new Coluna(bundle.getLabel("Unitario"), "ItemDeNota", "unitario", null, null, null, ItemDeNota.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, null, 20, null);
+        Coluna total = new Coluna(bundle.getLabel("Total"), "ItemDeNota", "total", null, null, null, ItemDeNota.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        relatorioDeMercadoriasVendidas.addColunaExibida(id);
+        relatorioDeMercadoriasVendidas.addColunaExibida(itemNome);
+        relatorioDeMercadoriasVendidas.addColunaExibida(itemMarcaNome);
+        relatorioDeMercadoriasVendidas.addColunaExibida(quantidade);
+        relatorioDeMercadoriasVendidas.addColunaExibida(unitario);
+        relatorioDeMercadoriasVendidas.addColunaExibida(total);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(relatorioDeMercadoriasVendidas);
+    }
+
+    public static void relatorioDeChequesAbertos() throws ConstraintViolationException, DadoInvalidoException {
+        //Relatório de Cheques Abertos
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio relatorioDeChequesAbertos = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Relatorio_de_Cheques_Abertos")).comTipoRelatorio(TipoRelatorio.CHEQUES).construir();
+
+        //Cria os Filtros
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Cheque", "estado", null, null, null, Cheque.class, EstadoDeCheque.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
+        filtroEstado.add(EstadoDeCheque.ABERTO);
+        relatorioDeChequesAbertos.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        relatorioDeChequesAbertos.addColunaExibida(id);
+        relatorioDeChequesAbertos.addColunaExibida(cotacaoContaMoedaNome);
+        relatorioDeChequesAbertos.addColunaExibida(valor);
+        relatorioDeChequesAbertos.addColunaExibida(emitente);
+        relatorioDeChequesAbertos.addColunaExibida(emissao);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(relatorioDeChequesAbertos);
+    }
+
+    public static void relatorioDeChequesDescontados() throws ConstraintViolationException, DadoInvalidoException {
+        //Relatório de Cheques Descontados
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio relatorioDeChequesDescontados = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Relatorio_de_Cheques_Descontados")).comTipoRelatorio(TipoRelatorio.CHEQUES).construir();
+
+        //Cria os Filtros
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Cheque", "estado", null, null, null, Cheque.class, EstadoDeCheque.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
+        filtroEstado.add(EstadoDeCheque.DESCONTADO);
+        relatorioDeChequesDescontados.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        relatorioDeChequesDescontados.addColunaExibida(id);
+        relatorioDeChequesDescontados.addColunaExibida(cotacaoContaMoedaNome);
+        relatorioDeChequesDescontados.addColunaExibida(valor);
+        relatorioDeChequesDescontados.addColunaExibida(emitente);
+        relatorioDeChequesDescontados.addColunaExibida(emissao);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(relatorioDeChequesDescontados);
+    }
+
+    public static void relatorioDeChequesCancelados() throws ConstraintViolationException, DadoInvalidoException {
+        //Relatório de Cheques Cancelados
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio relatorioDeChequesCancelados = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Relatorio_de_Cheques_Cancelados")).comTipoRelatorio(TipoRelatorio.CHEQUES).construir();
+
+        //Cria os Filtros
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Cheque", "estado", null, null, null, Cheque.class, EstadoDeCheque.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
+        filtroEstado.add(EstadoDeCheque.CANCELADO);
+        relatorioDeChequesCancelados.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        relatorioDeChequesCancelados.addColunaExibida(id);
+        relatorioDeChequesCancelados.addColunaExibida(cotacaoContaMoedaNome);
+        relatorioDeChequesCancelados.addColunaExibida(valor);
+        relatorioDeChequesCancelados.addColunaExibida(emitente);
+        relatorioDeChequesCancelados.addColunaExibida(emissao);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(relatorioDeChequesCancelados);
+    }
+
+    public static void relatorioDeChequesDevolvidos() throws ConstraintViolationException, DadoInvalidoException {
+        //Relatório de Cheques Devolvidos
+        //Cria o Modelo
+        BundleUtil bundle = new BundleUtil();
+        ModeloDeRelatorio relatorioDeChequesDevolvidos = new ModeloDeRelatorioBuilder().comNome(bundle.getLabel("Relatorio_de_Cheques_Devolvidos")).comTipoRelatorio(TipoRelatorio.CHEQUES).construir();
+
+        //Cria os Filtros
+        Coluna estado = new Coluna(bundle.getLabel("Estado"), "Cheque", "estado", null, null, null, Cheque.class, EstadoDeCheque.class, null, null, 20, null);
+        FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
+        filtroEstado.add(EstadoDeCheque.DEVOLVIDO);
+        relatorioDeChequesDevolvidos.addFiltro(filtroEstado);
+
+        //Cria as Colunas Exibidas
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+
+        //Adiciona colunas exibidas no modelo
+        relatorioDeChequesDevolvidos.addColunaExibida(id);
+        relatorioDeChequesDevolvidos.addColunaExibida(cotacaoContaMoedaNome);
+        relatorioDeChequesDevolvidos.addColunaExibida(valor);
+        relatorioDeChequesDevolvidos.addColunaExibida(emitente);
+        relatorioDeChequesDevolvidos.addColunaExibida(emissao);
+
+        //Adiciona no Banco
+        new AdicionaDAO<>().adiciona(relatorioDeChequesDevolvidos);
     }
 
 }

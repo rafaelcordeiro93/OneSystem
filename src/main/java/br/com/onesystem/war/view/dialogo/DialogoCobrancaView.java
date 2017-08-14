@@ -18,7 +18,7 @@ import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
@@ -156,7 +156,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setNota(nota);
             e.setPessoa(nota.getPessoa());
             e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
-            e.setSituacaoDeCheque(SituacaoDeCheque.ABERTO);
+            e.setSituacaoDeCheque(EstadoDeCheque.ABERTO);
             modalidade = false;
         }
     }

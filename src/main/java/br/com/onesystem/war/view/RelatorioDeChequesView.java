@@ -29,7 +29,6 @@ public class RelatorioDeChequesView extends BasicMBReportImpl<Cobranca> implemen
         addExtraClass(Pessoa.class, "pessoa");
         addCampoPadrao(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Moeda") + ")", bundle.getLabel("Moeda"), "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null));
-        addCampoPadrao(new Coluna(bundle.getLabel("Valor") + "(" + bundle.getLabel("Cotacao") + ")", bundle.getLabel("Cotacao"), "cotacao", "valor", Cotacao.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, Long.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emitente") + "(" + bundle.getLabel("Cheque") + ")", bundle.getLabel("Cheque"), "emitente", Cheque.class, String.class, null));
         addCampoPadrao(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class, null));

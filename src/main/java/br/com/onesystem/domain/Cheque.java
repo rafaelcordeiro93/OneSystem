@@ -4,7 +4,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -35,7 +35,7 @@ public class Cheque extends Cobranca implements Serializable {
     private String numeroCheque;
     @NotNull(message = "{tipo_situacao_not_null}")
     @Enumerated(EnumType.STRING)
-    private SituacaoDeCheque tipoSituacao;
+    private EstadoDeCheque estado;
     @NotNull(message = "{tipo_lancamento_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoLancamento tipoLancamento;
@@ -54,14 +54,14 @@ public class Cheque extends Cobranca implements Serializable {
     }
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
-            String conta, String numeroCheque, SituacaoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
+            String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
             String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
         this.numeroCheque = numeroCheque;
-        this.tipoSituacao = tipoSituacao;
+        this.estado = tipoSituacao;
         this.multas = multas;
         this.juros = juros;
         this.descontos = descontos;
@@ -82,15 +82,15 @@ public class Cheque extends Cobranca implements Serializable {
     }
 
     public void cancela() {
-        this.tipoSituacao = SituacaoDeCheque.CANCELADO;
+        this.estado = EstadoDeCheque.CANCELADO;
     }
 
     public void devolve() {
-        this.tipoSituacao = SituacaoDeCheque.DEVOLVIDO;
+        this.estado = EstadoDeCheque.DEVOLVIDO;
     }
 
     public void desconta() {
-        this.tipoSituacao = SituacaoDeCheque.DESCONTADO;
+        this.estado = EstadoDeCheque.DESCONTADO;
     }
 
     public void depositaNo(DepositoBancario deposito) {
@@ -113,8 +113,8 @@ public class Cheque extends Cobranca implements Serializable {
         return numeroCheque;
     }
 
-    public SituacaoDeCheque getTipoSituacao() {
-        return tipoSituacao;
+    public EstadoDeCheque getEstado() {
+        return estado;
     }
 
     public BigDecimal getMultas() {
@@ -145,7 +145,7 @@ public class Cheque extends Cobranca implements Serializable {
     public String toString() {
         return "Cheque{" + "id=" + getId() + ", nota=" + (getNota() == null ? null : getNota().getId()) + ", valor=" + valor
                 + ", emissao=" + getEmissao() + ", vencimento=" + getVencimento() + ", banco=" + (banco == null ? null : banco.getId()) + ", agencia=" + agencia
-                + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + tipoSituacao + ", multas=" + multas + ", juros=" + juros
+                + ", conta=" + conta + ", numeroCheque=" + numeroCheque + ", tipoSituacao=" + estado + ", multas=" + multas + ", juros=" + juros
                 + ", tipoLancamento=" + tipoLancamento + ", descontos=" + descontos + ", emitente=" + emitente + ", historico=" + getHistorico()
                 + '}';
     }

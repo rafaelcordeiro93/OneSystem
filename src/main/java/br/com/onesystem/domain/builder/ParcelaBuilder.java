@@ -18,7 +18,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -43,7 +43,7 @@ public class ParcelaBuilder {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private SituacaoDeCheque situacaoDeCheque;
+    private EstadoDeCheque situacaoDeCheque;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -120,7 +120,7 @@ public class ParcelaBuilder {
         return this;
     }
 
-    public ParcelaBuilder comSituacaoDeCheque(SituacaoDeCheque situacaoDeCheque) {
+    public ParcelaBuilder comSituacaoDeCheque(EstadoDeCheque situacaoDeCheque) {
         this.situacaoDeCheque = situacaoDeCheque;
         return this;
     }

@@ -3,7 +3,7 @@ package br.com.onesystem.war.service;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import java.io.Serializable;
 import java.util.List;
 

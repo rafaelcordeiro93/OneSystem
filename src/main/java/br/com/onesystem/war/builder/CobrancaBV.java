@@ -31,7 +31,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoFormaPagRec;
@@ -65,7 +65,7 @@ public class CobrancaBV implements Serializable {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private SituacaoDeCheque situacaoDeCheque;
+    private EstadoDeCheque situacaoDeCheque;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -133,7 +133,7 @@ public class CobrancaBV implements Serializable {
     public CobrancaBV(Long id, Nota notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
             OperacaoFinanceira unidadeFinanceira, BigDecimal valor,
             Date emissao, Date vencimento, Banco banco, String agencia, String conta,
-            String numeroCheque, SituacaoDeCheque situacaoDeCheque, BigDecimal multas,
+            String numeroCheque, EstadoDeCheque situacaoDeCheque, BigDecimal multas,
             BigDecimal juros, BigDecimal descontos, String emitente, String observacao,
             Cartao cartao, String codigoTransacao,
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
@@ -196,7 +196,7 @@ public class CobrancaBV implements Serializable {
             this.agencia = ((Cheque) p).getAgencia();
             this.conta = ((Cheque) p).getConta();
             this.numeroCheque = ((Cheque) p).getNumeroCheque();
-            this.situacaoDeCheque = ((Cheque) p).getTipoSituacao();
+            this.situacaoDeCheque = ((Cheque) p).getEstado();
             this.multas = ((Cheque) p).getMultas();
             this.juros = ((Cheque) p).getJuros();
             this.descontos = ((Cheque) p).getDescontos();
@@ -340,11 +340,11 @@ public class CobrancaBV implements Serializable {
         this.numeroCheque = numeroCheque;
     }
 
-    public SituacaoDeCheque getSituacaoDeCheque() {
+    public EstadoDeCheque getSituacaoDeCheque() {
         return situacaoDeCheque;
     }
 
-    public void setSituacaoDeCheque(SituacaoDeCheque situacaoDeCheque) {
+    public void setSituacaoDeCheque(EstadoDeCheque situacaoDeCheque) {
         this.situacaoDeCheque = situacaoDeCheque;
     }
 
@@ -555,7 +555,7 @@ public class CobrancaBV implements Serializable {
         return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada)
-                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comBaixas(baixas)
+                .comTipoSituacao(EstadoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comBaixas(baixas)
                 .comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
@@ -582,7 +582,7 @@ public class CobrancaBV implements Serializable {
         return new ChequeBuilder().comID(id).comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada).comHistorico(historico)
-                .comTipoSituacao(SituacaoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comNota(nota)
+                .comTipoSituacao(EstadoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comNota(nota)
                 .construir();
     }
 

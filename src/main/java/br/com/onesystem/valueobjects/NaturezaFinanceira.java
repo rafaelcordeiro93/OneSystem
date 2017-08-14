@@ -15,18 +15,18 @@ public enum NaturezaFinanceira {
     DESPESA(2,"Despesa");    
     
     private Integer id;
-    private String naturezaFinanceira;
+    private String nome;
 
-    private NaturezaFinanceira(Integer id, String naturezaFinanceira) {
+    private NaturezaFinanceira(Integer id, String nome) {
         this.id = id;
-        this.naturezaFinanceira = naturezaFinanceira;
+        this.nome = nome;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getNaturezaFinanceira() {
-        return naturezaFinanceira;
+    public String getNome() {
+        return nome;
     }
 }

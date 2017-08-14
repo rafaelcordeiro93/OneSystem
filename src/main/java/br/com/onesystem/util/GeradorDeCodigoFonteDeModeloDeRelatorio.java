@@ -40,7 +40,7 @@ import java.util.MissingResourceException;
  */
 public class GeradorDeCodigoFonteDeModeloDeRelatorio {
 
-    private StringBuilder bundles;
+    private StringBuilder bundles = new StringBuilder();
 
     public String gerarCodigo(ModeloDeRelatorio modeloDeRelatorio) throws DadoInvalidoException {
         StringBuilder sb = new StringBuilder();
@@ -54,7 +54,7 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
         String[] split = retiraAcento.split(" ");
         //Formata nomeModelo
         String nomeModelo = retiraAcento.contains(" ") ? formataSplit(split) : retiraAcento;
-        
+
         //Cria o Modelo
         sb.append(" //").append(modeloDeRelatorio.getNome()).append("\n").append(" //Cria o Modelo\n");
         sb.append("BundleUtil bundle = new BundleUtil();\n");
@@ -155,9 +155,6 @@ public class GeradorDeCodigoFonteDeModeloDeRelatorio {
         try {
             new BundleUtil().getLabel(bundle);
         } catch (MissingResourceException mre) {
-            if (bundles == null) {
-                bundles = new StringBuilder("Bundle pendentes de criação:\n");
-            }
             bundles.append(bundle).append("\n");
         }
     }

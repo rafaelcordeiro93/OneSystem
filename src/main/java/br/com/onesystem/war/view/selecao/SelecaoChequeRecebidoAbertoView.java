@@ -3,7 +3,7 @@ package br.com.onesystem.war.view.selecao;
 import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.service.ChequeService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -23,7 +23,7 @@ public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> imp
 
     @PostConstruct
     public void init() {
-        beans = new ChequeDAO().porSituacao(SituacaoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        beans = new ChequeDAO().porSituacao(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
     }
 
     public void abrirDialogo() {

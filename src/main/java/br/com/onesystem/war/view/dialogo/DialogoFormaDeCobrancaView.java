@@ -24,7 +24,7 @@ import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.builder.ChequeBV;
@@ -221,7 +221,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     cheque.setHistorico(e.getObservacao());
                     cheque.setCotacao(e.getCotacao());
                     cheque.setTipoLancamento(TipoLancamento.RECEBIDA);
-                    cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
+                    cheque.setTipoSituacao(EstadoDeCheque.ABERTO);
                     if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
                         cheque.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
                         e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);

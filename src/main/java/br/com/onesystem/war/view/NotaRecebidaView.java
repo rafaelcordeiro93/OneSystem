@@ -37,7 +37,7 @@ import br.com.onesystem.util.Money;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -420,7 +420,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaRecebida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
-                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(SituacaoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
+                                .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
@@ -445,7 +445,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             //Prepara e constroi cheque
             cheque.setEntrada(true);
-            cheque.setTipoSituacao(SituacaoDeCheque.ABERTO);
+            cheque.setTipoSituacao(EstadoDeCheque.ABERTO);
             cheque.setOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira());
             Cheque c = cheque.construirComID();
 

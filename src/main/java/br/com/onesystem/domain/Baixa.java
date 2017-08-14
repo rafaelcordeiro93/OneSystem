@@ -9,6 +9,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.NumberUtils;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
+import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
@@ -63,7 +64,7 @@ public class Baixa implements Serializable, Movimento {
     private Date dataCompensacao;
 
     @Enumerated(EnumType.STRING)
-    private OperacaoFinanceira naturezaFinanceira;
+    private OperacaoFinanceira operacaoFinanceira;
 
     @NotNull(message = "{cotacao_not_null}")
     @ManyToOne(optional = false)
@@ -123,6 +124,9 @@ public class Baixa implements Serializable, Movimento {
     @ManyToOne
     private LancamentoBancario lancamentoBancario;
 
+    @Enumerated(EnumType.STRING)
+    private NaturezaFinanceira naturezaFinanceira;
+
     public Baixa() {
     }
 
@@ -139,7 +143,7 @@ public class Baixa implements Serializable, Movimento {
         this.dataCompensacao = dataCompensacao;
         this.historico = historico;
         this.pessoa = pessoa;
-        this.naturezaFinanceira = tipoMovimentacaoFinanceira;
+        this.operacaoFinanceira = tipoMovimentacaoFinanceira;
         this.despesa = despesa;
         this.cotacao = cotacao;
         this.receita = receita;
@@ -156,6 +160,11 @@ public class Baixa implements Serializable, Movimento {
         this.saqueBancario = saqueBancario;
         this.cambioEmpresa = cambioEmpresa;
         this.lancamentoBancario = lancamentoBancario;
+        if (receita != null) {
+            naturezaFinanceira = NaturezaFinanceira.RECEITA;
+        } else if (despesa != null) {
+            naturezaFinanceira = NaturezaFinanceira.DESPESA;
+        }
         ehValido();
     }
 
@@ -215,9 +224,9 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public BigDecimal getSaldo(BigDecimal saldoAtual) {
-        if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
+        if (operacaoFinanceira == OperacaoFinanceira.ENTRADA) {
             return saldoAtual.add(this.getValor());
-        } else if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
+        } else if (operacaoFinanceira == OperacaoFinanceira.SAIDA) {
             return saldoAtual.subtract(this.getValor());
         } else {
             return saldoAtual;
@@ -226,7 +235,7 @@ public class Baixa implements Serializable, Movimento {
 
     public String getHistoricoMovimentacao() {
         BundleUtil msg = new BundleUtil();
-        if (naturezaFinanceira == OperacaoFinanceira.SAIDA) {
+        if (operacaoFinanceira == OperacaoFinanceira.SAIDA) {
 
             if (cambio != null && (cobrancaFixa != null && !(cobrancaFixa instanceof DespesaProvisionada))) {
                 return geraMovimentacaoSaidaCambio(msg);
@@ -239,7 +248,7 @@ public class Baixa implements Serializable, Movimento {
             } else {
                 return geraMovimentacaoDespesa(msg);
             }
-        } else if (naturezaFinanceira == OperacaoFinanceira.ENTRADA) {
+        } else if (operacaoFinanceira == OperacaoFinanceira.ENTRADA) {
             if (recepcao != null) {
                 return geraMovimentacaoEntradaRecepcao(msg);
             } else if (transferencia != null) {
@@ -358,7 +367,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public String getValorFormatado() {
-        return MoedaFormatter.format(cotacao.getConta().getMoeda(), naturezaFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), operacaoFinanceira == OperacaoFinanceira.SAIDA ? (getValor().multiply(new BigDecimal(-1))) : getValor());
     }
 
     public String getValorFormatadoSemNegativos() {
@@ -395,8 +404,12 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
-    public OperacaoFinanceira getOperacaoFinanceira() {
+    public NaturezaFinanceira getNaturezaFinanceira() {
         return naturezaFinanceira;
+    }
+
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
     }
 
     public Cobranca getParcela() {
@@ -521,7 +534,7 @@ public class Baixa implements Serializable, Movimento {
 
         return "Baixa{" + "id=" + id + ",valor=" + valor + ", historico="
                 + historico + ", emissao=" + emissao + ", naturezaFinanceira="
-                + naturezaFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
+                + operacaoFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
                 + ", perfilDeValor=" + (parcela != null ? parcela.getId() : null)
                 + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
                 + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)

@@ -4,17 +4,32 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.util.List;
 
-public class ItemDeNotaDAO extends GenericDAO<ItemDeNota>{
+public class ItemDeNotaDAO extends GenericDAO<ItemDeNota> {
 
     public ItemDeNotaDAO() {
         super(ItemDeNota.class);
     }
-    
+
+    public ItemDeNotaDAO consultaItemEmitido() {
+        query = "select itemDeNota from ItemDeNota itemDeNota";
+        where = "where TYPE(itemDeNota.nota.class) = :pTypeNotaEmitida";
+        parametros.put("pTypeNotaEmitida", NotaEmitida.class);
+        return this;
+    }
+
+    public ItemDeNotaDAO consultaItemRecebido() {
+        query = "select itemDeNota from ItemDeNota itemDeNota ";
+        where = "where TYPE(itemDeNota.nota.class) = :pTypeNotaRecebida";
+        parametros.put("pTypeNotaRecebida", NotaRecebida.class);
+        return this;
+    }
+
     public ItemDeNotaDAO buscaMediaDeCusto() {
         query = "select avg(itemDeNota.unitario) from ItemDeNota itemDeNota ";
         return this;

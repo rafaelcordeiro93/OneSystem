@@ -5,7 +5,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

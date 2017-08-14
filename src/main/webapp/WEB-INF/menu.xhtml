@@ -122,20 +122,21 @@
                     </p:submenu>
                     <p:submenu label="#{l.Vendas}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeNotasEmitidas" />
+                        <p:menuitem value="#{l.Item_Emitido}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeItemEmitido" />
                     </p:submenu>
                     <p:submenu label="#{l.Estoque}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/relatorios/estoque/relatorioDeNotasRecebidas" />
                         <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/relatorios/estoque/relatorioDeAjusteDeEstoque" />
                         <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/relatorios/estoque/relatorioDeItem" />
+                        <p:menuitem value="#{l.Item_Recebido}" icon="fa fa-minus" outcome="/menu/relatorios/estoque/relatorioDeItemRecebido" />
                     </p:submenu>
                     <p:submenu label="#{l.Financeiro}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Conta}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeConta" />
                         <p:menuitem value="#{l.Conta_Fixa}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeContaFixa" />
+                        <p:menuitem value="#{l.Baixa}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeBaixa" />
                         <p:menuitem value="#{l.Cheque}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeCheques" />
                         <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeDespesaProvisionada" />
                         <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeReceitaProvisionada" />
-                        <p:menuitem value="#{l.Conta_a_Pagar}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeContaAPagar" />
-                        <p:menuitem value="#{l.Conta_a_Receber}" icon="fa fa-plus" outcome="/menu/relatorios/financeiro/relatorioDeContaAReceber" />
                         <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/menu/relatorios/financeiro/relatorioDeSaldoDeConta" />
                         <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/menu/relatorios/financeiro/relatorioDeSaldoDeDivisaoDeLucro" />
                     </p:submenu>

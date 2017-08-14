@@ -36,7 +36,7 @@ public class RelatorioDeItemView extends BasicMBReportImpl<Item> implements Seri
         addCampoPadrao(new Coluna(bundle.getLabel("Saldo"), item, "saldo", Item.class, BigDecimal.class));
         addCampoPadrao(new Coluna(bundle.getLabel("Preco"), item, "preco", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA));
         addCampoPadrao(new Coluna(bundle.getLabel("Ultimo_Custo"), item, "ultimoCusto", Item.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA));
-        addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Marca") + ")", item, "marca", "nome", Marca.class, String.class));
+        addCampoPadrao(new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Marca") + ")", bundle.getLabel("Marca"), "marca", "nome", Marca.class, String.class));
 
         initialize(Item.class, ItemDAO.class, TipoRelatorio.ITEM);
 

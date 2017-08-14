@@ -1,8 +1,11 @@
 
+import br.com.onesystem.dao.ItemDeNotaDAO;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.util.BundleUtil;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.util.List;
 import java.util.MissingResourceException;
 
 /*
@@ -17,11 +20,9 @@ import java.util.MissingResourceException;
 public class TesteRauber {
 
     public static void main(String[] args) {
-
-        try{
-       new BundleUtil().getLabel("sadfdafd");
-        }catch(MissingResourceException mre){
-            System.out.println("teste");
-        }
+        ItemDeNotaDAO dao = new ItemDeNotaDAO();
+        List<ItemDeNota> listaDeResultados = dao.consultaItemEmitido().listaDeResultados();
+        listaDeResultados.forEach(System.out::println);
+        System.out.println("Concluido");
     }
 }

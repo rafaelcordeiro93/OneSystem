@@ -1,7 +1,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.util.Date;
 
@@ -24,7 +24,7 @@ public class ChequeDAO extends GenericDAO<Cheque> {
         return this;
     }
 
-    public ChequeDAO porSituacao(SituacaoDeCheque situacaoDeCheque) {
+    public ChequeDAO porSituacao(EstadoDeCheque situacaoDeCheque) {
         where += " and cheque.tipoSituacao = :pSituacao";
         parametros.put("pSituacao", situacaoDeCheque);
         return this;

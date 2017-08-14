@@ -204,14 +204,19 @@
         </p:dialog>
 
         <p:dialog id="codigoFonteDialog" modal="true" widgetVar="codigoFonte" width="1000" height="500" resizable="false" >
+            <h4>Modelo_De_Relatorio</h4>
+            <br/>
             <p:inputTextarea id="textCopy" value="#{cc.attrs.mbView.codigoFonteModelo}" style="width: 99%" />
             <pe:clipboard id="clipCopy" trigger="btnCopy" action="copy" target="textCopy" />
             <br/>
             <p:commandButton value="#{l.Copiar}" id="btnCopy" rendered="true" />
-            <p:inputTextarea rendered="#{cc.attrs.mbView.bundlePendentes ne null}" id="bundleCopy" value="#{cc.attrs.mbView.bundlePendentes}" style="width: 99%" />
-            <pe:clipboard rendered="#{cc.attrs.mbView.bundlePendentes ne null}" trigger="clipBundleCopy" action="copy" target="blundeCopy" />
-            <br style="display: #{cc.attrs.mbView.bundlePendentes ne null ? '' : 'none'}" />
-            <p:commandButton value="#{l.Copiar}" id="clipBundleCopy" rendered="#{cc.attrs.mbView.bundlePendentes ne null}" />
+            <br/>
+            <h4>Bundles_Pendentes</h4>
+            <br/>
+            <p:inputTextarea id="bundleCopy" value="#{cc.attrs.mbView.bundlePendentes}" style="width: 99%" />
+            <pe:clipboard trigger="clipBundleCopy" action="copy" target="bundleCopy" />
+            <br/>
+            <p:commandButton value="#{l.Copiar}" id="clipBundleCopy"/>
             <p:commandButton value="#{l.Fechar}" onclick="PF('codigoFonte').hide()"/>
         </p:dialog>
 

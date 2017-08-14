@@ -9,7 +9,7 @@ import br.com.onesystem.domain.builder.ChequeBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.valueobjects.SituacaoDeCheque;
+import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
@@ -27,7 +27,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private SituacaoDeCheque tipoSituacao;
+    private EstadoDeCheque tipoSituacao;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -50,7 +50,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.agencia = c.getAgencia();
         this.conta = c.getConta();
         this.numeroCheque = c.getNumeroCheque();
-        this.tipoSituacao = c.getTipoSituacao();
+        this.tipoSituacao = c.getEstado();
         this.multas = c.getMultas();
         this.juros = c.getJuros();
         this.descontos = c.getDescontos();
@@ -147,11 +147,11 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.numeroCheque = numeroCheque;
     }
 
-    public SituacaoDeCheque getTipoSituacao() {
+    public EstadoDeCheque getTipoSituacao() {
         return tipoSituacao;
     }
 
-    public void setTipoSituacao(SituacaoDeCheque tipoSituacao) {
+    public void setTipoSituacao(EstadoDeCheque tipoSituacao) {
         this.tipoSituacao = tipoSituacao;
     }
 
