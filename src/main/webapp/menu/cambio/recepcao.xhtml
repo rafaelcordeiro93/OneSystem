@@ -66,10 +66,10 @@
                                                         process="@this" update="recepcaoPessoa" />
                                             </p:commandButton>
                                         </h:panelGrid>
-                                        <pe:inputNumber id="recepcaoValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{recepcaoView.recepcao.conta eq null ? true : false}"
+                                        <p:inputNumber id="recepcaoValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{recepcaoView.recepcao.conta eq null ? true : false}"
                                                         symbol="#{recepcaoView.recepcao.conta.moeda.sigla} " decimalPlaces="2" title="#{l.Valor_Sendo_Recebido}" value="#{recepcaoView.recepcao.valor}" >
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
-                                        </pe:inputNumber> 
+                                        </p:inputNumber> 
                                         <p:outputLabel/>
                                     </p:panelGrid>
                                 </div>

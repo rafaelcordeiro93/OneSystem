@@ -63,15 +63,15 @@
                                             </p:commandButton>
                                         </h:panelGrid>
                                         <p:inputText readonly="true" placeholder="#{l.Pessoa}" value="#{cambioView.cambio.contrato.pessoa.nome}" />
-                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.destino.sigla} " value="#{cambioView.cambio.contrato.valorNegociado}" decimalPlaces="2" disabled="true">
+                                        <p:inputNumber symbol="#{cambioView.cambio.contrato.destino.sigla} " value="#{cambioView.cambio.contrato.valorNegociado}" decimalPlaces="2" disabled="true">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor_Negociado}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.taxaNegociada}" decimalPlaces="2" disabled="true">
+                                        </p:inputNumber>
+                                        <p:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.taxaNegociada}" decimalPlaces="2" disabled="true">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Negociada}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.valorCalculado}" decimalPlaces="2" disabled="true">
+                                        </p:inputNumber>
+                                        <p:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " value="#{cambioView.cambio.contrato.valorCalculado}" decimalPlaces="2" disabled="true">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor_Calculado}"/>
-                                        </pe:inputNumber>
+                                        </p:inputNumber>
 
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="cambioConta" readonly="true" placeholder="#{l.Conta}" value="#{cambioView.cambio.cotacao.nome}"/>
@@ -83,13 +83,13 @@
                                         </h:panelGrid> 
                                         <p:inputText placeholder="#{l.Processo}" value="#{cambioView.cambio.processo}"/>
                                         <p:calendar pattern="dd/MM/yyyy" styleClass="Wid90" disabled="true" value="#{cambioView.cambio.emissao}"/> 
-                                        <pe:inputNumber id="taxaEfetivada" value="#{cambioView.cambio.taxaEfetivada}" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="3">
+                                        <p:inputNumber id="taxaEfetivada" value="#{cambioView.cambio.taxaEfetivada}" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="3">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Efetivada}"/>
                                             <p:ajax event="blur" listener="#{cambioView.calculaLucroDeTaxa}" update="conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada conteudo:porcentagemComissao conteudo:lucroTaxa"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="valorBruto" value="#{cambioView.cambio.valorBruto}" decimalPlaces="2" disabled="true">
+                                        </p:inputNumber>
+                                        <p:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="valorBruto" value="#{cambioView.cambio.valorBruto}" decimalPlaces="2" disabled="true">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor_Bruto}"/>
-                                        </pe:inputNumber>
+                                        </p:inputNumber>
 
                                         <h:panelGrid columns="2" style="margin-top: -2%">
                                             <p:inputText id="cambioPessoaComissionada" readonly="true" placeholder="#{l.Pessoa_Comissionada}" value="#{cambioView.cambio.pessoaComissionada.nome}"/>
@@ -99,17 +99,17 @@
                                                         process="@this" update="cambioPessoaComissionada" />
                                             </p:commandButton>
                                         </h:panelGrid>
-                                        <pe:inputNumber id="porcentagemComissao" value="#{cambioView.cambio.porcentagemDeComissao}" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
+                                        <p:inputNumber id="porcentagemComissao" value="#{cambioView.cambio.porcentagemDeComissao}" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Porcentagem_Comissao}"/>
                                             <p:ajax event="blur" listener="#{cambioView.calculaValor}" update="conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="comissaoCalculada" value="#{cambioView.cambio.comissaoCalculada}" decimalPlaces="2" disabled="true" >
+                                        </p:inputNumber>
+                                        <p:inputNumber symbol="#{cambioView.cambio.contrato.origem.sigla} " id="comissaoCalculada" value="#{cambioView.cambio.comissaoCalculada}" decimalPlaces="2" disabled="true" >
                                             <f:passThroughAttribute name="placeholder" value="#{l.Comissao_Calculada}"/>
-                                        </pe:inputNumber>
-                                        <pe:inputNumber id="lucroTaxa" value="#{cambioView.cambio.porcentualLucroTaxa}" minValue="-999999.99" maxValue="100.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
+                                        </p:inputNumber>
+                                        <p:inputNumber id="lucroTaxa" value="#{cambioView.cambio.porcentualLucroTaxa}" minValue="-999999.99" maxValue="100.00" decimalSeparator="," thousandSeparator="." symbol="%" symbolPosition="right" decimalPlaces="2">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Lucro_Taxa}"/>
                                             <p:ajax event="blur" listener="#{cambioView.calculaLucroDeTaxaEmPorcentagem}" update="conteudo:taxaEfetivada conteudo:liquido conteudo:valorBruto conteudo:cambioButton conteudo:comissaoCalculada conteudo:porcentagemComissao conteudo:lucroTaxa"/>
-                                        </pe:inputNumber>
+                                        </p:inputNumber>
                                         <p:outputLabel/>
                                     </p:panelGrid>
 
@@ -143,9 +143,9 @@
                                                         process="@this" update="cambioDespesa" />
                                             </p:commandButton>
                                         </h:panelGrid>
-                                        <pe:inputNumber value="#{cambioView.baixa.valor}" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="2">
+                                        <p:inputNumber value="#{cambioView.baixa.valor}" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." symbol="#{cambioView.cambio.contrato.origem.sigla} " decimalPlaces="2">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
-                                        </pe:inputNumber>
+                                        </p:inputNumber>
                                         <div class="EmptyBox5"/>
                                         <p:commandButton icon="fa fa-plus Fs16 White" styleClass="GreenButton" action="#{cambioView.addBaixa()}" update="conteudo"/>
                                         <p:commandButton icon="fa fa-exchange Fs16 White" styleClass="OrangeButton" action="#{cambioView.updateBaixa()}" update="conteudo"/>

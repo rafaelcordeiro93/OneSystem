@@ -228,10 +228,10 @@ public class Orcamento implements Serializable {
     }
 
     public String getTotalOrcamentoFormatado() {
-        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalOrcamento());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
     }
 
-    public BigDecimal getTotalOrcamento() {
+    public BigDecimal getTotal() {
         BigDecimal a = getAcrescimo() == null ? BigDecimal.ZERO : getAcrescimo();
         BigDecimal f = getFrete() == null ? BigDecimal.ZERO : getFrete();
         BigDecimal c = getDespesaCobranca() == null ? BigDecimal.ZERO : getDespesaCobranca();
