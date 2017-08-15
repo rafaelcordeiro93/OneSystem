@@ -20,6 +20,9 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ConfiguracaoContabilBV;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -40,46 +43,13 @@ public class TesteRauber2 {
 
     public static void main(String[] args) throws DadoInvalidoException {
 
-        // Unidade De Medida Item
-        // ---------------------------------------------------------------------
-        UnidadeMedidaItem unidade = new ArmazemDeRegistros<UnidadeMedidaItem>(UnidadeMedidaItem.class).find(new Long(1));
-      
+        String codigoFonteModelo = "testando";
 
-        // TabelaDeTributacao
-        // ---------------------------------------------------------------------
-        TabelaDeTributacao iva = new ArmazemDeRegistros<TabelaDeTributacao>(TabelaDeTributacao.class).find(new Long(1));
-       
+        StringSelection selection = new StringSelection(codigoFonteModelo);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(selection, selection);
 
-        // Grupo Fiscal
-        // ---------------------------------------------------------------------
-        GrupoFiscal grupoFiscal = new ArmazemDeRegistros<GrupoFiscal>(GrupoFiscal.class).find(new Long(1));
-       
-
-        // Deposito
-        // ---------------------------------------------------------------------
-        Deposito deposito = new ArmazemDeRegistros<Deposito>(Deposito.class).find(new Long(1));
-        
-
-        // Item
-        AdicionaDAO<Item> adicionaDAO = new AdicionaDAO<Item>();
-        for(int i = 5236; i<= 500000 ; i++){
-        Item item = new Item(null, null, "Exemplo " + i, null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
-        adicionaDAO.adiciona(item);
-        }
-        System.out.println("acabou!!!");
-        
-        
-        
-//        
-//        List<Cotacao> cotacaoLista = new CotacaoDAO().buscarCotacoes().naUltimaEmissao().porCotacaoBancaria().listaDeResultados();
-//        System.out.println(new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).getConsulta());
-//        List<Conta> contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-//        
-//        cotacaoLista.forEach(System.out::println);
-//        contaComCotacao.forEach(System.out::println);
-//        
-//        System.out.println("Concluiu");
+        System.out.println(codigoFonteModelo);
     }
 
 }

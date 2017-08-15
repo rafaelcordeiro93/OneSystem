@@ -9,6 +9,7 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.FacesContext;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -117,22 +119,24 @@ public class DepositoBancario implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeDeposito(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
         if (this.compensacao != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());//Baixas Compensadas
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comCaixa(caixa).construir());//Baixas Compensadas
             adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());//Baixas do Lançamento
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comCaixa(caixa).construir());//Baixas do Lançamento
             adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
         }
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDoDepositoCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
+         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
         if (this.compensacao != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comCaixa(caixa).construir());
             adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).construir());
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comCaixa(caixa).construir());
             adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).construir());
         }
     }
