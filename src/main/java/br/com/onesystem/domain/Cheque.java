@@ -18,6 +18,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -49,13 +51,15 @@ public class Cheque extends Cobranca implements Serializable {
     private String emitente;
     @ManyToOne
     private DepositoBancario depositoBancario;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date compensacao;
 
     public Cheque() {
     }
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Date compensacao) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
         this.banco = banco;
         this.agencia = agencia;
@@ -67,6 +71,7 @@ public class Cheque extends Cobranca implements Serializable {
         this.descontos = descontos;
         this.emitente = emitente;
         this.tipoLancamento = tipoLancamento;
+        this.compensacao = compensacao;
         ehValido();
     }
 
@@ -91,6 +96,10 @@ public class Cheque extends Cobranca implements Serializable {
 
     public void desconta() {
         this.estado = EstadoDeCheque.DESCONTADO;
+    }
+    
+     public void compensar() {
+        this.estado = EstadoDeCheque.COMPENSADO;
     }
 
     public void depositaNo(DepositoBancario deposito) {
@@ -135,6 +144,14 @@ public class Cheque extends Cobranca implements Serializable {
 
     public TipoLancamento getTipoLancamento() {
         return tipoLancamento;
+    }
+
+    public DepositoBancario getDepositoBancario() {
+        return depositoBancario;
+    }
+
+    public Date getCompensacao() {
+        return compensacao;
     }
 
     public String getDetalhes() {

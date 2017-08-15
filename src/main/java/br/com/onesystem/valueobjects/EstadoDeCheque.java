@@ -15,7 +15,8 @@ public enum EstadoDeCheque {
     ABERTO(new Long(1), new BundleUtil().getLabel("ABERTO")),
     CANCELADO(new Long(2), new BundleUtil().getLabel("CANCELADO")),
     DEVOLVIDO(new Long(3), new BundleUtil().getLabel("DEVOLVIDO")),
-    DESCONTADO(new Long(4), new BundleUtil().getLabel("DESCONTADO"));
+    DESCONTADO(new Long(4), new BundleUtil().getLabel("DESCONTADO")),
+    COMPENSADO(new Long(5), new BundleUtil().getLabel("COMPENSADO"));
 
     private Long id;
     private String nome;
