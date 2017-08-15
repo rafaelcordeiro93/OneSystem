@@ -18,6 +18,9 @@
                     <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/menu/arquivo/cidade" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/menu/arquivo/cidade.xhtml')}" />
                     <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/menu/arquivo/pessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/menu/arquivo/pessoa.xhtml')}" />   
                     <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/menu/arquivo/importarPessoa" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Consultar,'/menu/arquivo/importarPessoa.xhtml')}" />    
+                    <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-minus" outcome="/menu/arquivo/listar/relatorioDePessoas" />
+                    </p:submenu>
                 </pa:menu>
             </pa:tab>
 
@@ -33,6 +36,16 @@
                         <p:menuitem value="#{l.Condicional}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaCondicional" />
                         <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaNotaEmitida" />
                         <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaOrcamento" />
+                    </p:submenu>
+                    <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeNotasEmitidas" />
+                        <p:menuitem value="#{l.Item_Emitido}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemEmitido" />
+                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeOrcamento" />
+                        <p:menuitem value="#{l.Item_Orcado}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemOrcado" />
+                        <p:menuitem value="#{l.Condicional}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeCondicional" />
+                        <p:menuitem value="#{l.Item_Condicional}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemCondicional" />
+                        <p:menuitem value="#{l.Comanda}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeComanda" />
+                        <p:menuitem value="#{l.Item_Comanda}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemComanda" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>
@@ -56,6 +69,14 @@
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaNotaRecebida" />
+                    </p:submenu>
+                    <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeNotasRecebidas" />
+                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeAjusteDeEstoque" />
+                        <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeItem" />
+                        <p:menuitem value="#{l.Item_Recebido}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeItemRecebido" />
+                        <p:menuitem value="#{l.Estoque}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeEstoque" />
+                        <p:menuitem value="#{l.Conhecimento_de_Frete}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeConhecimentoDeFrete" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>
@@ -92,6 +113,16 @@
                         <p:menuitem value="#{l.Pagamentos}" icon="fa fa-shield fa-rotate-270" outcome="/menu/financeiro/consultar/consultaPagamento" />
                         <p:menuitem value="#{l.Recebimentos}" icon="fa fa-shield fa-rotate-270" outcome="/menu/financeiro/consultar/consultaRecebimento" />
                     </p:submenu>
+                    <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
+                        <p:menuitem value="#{l.Conta}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeConta" />
+                        <p:menuitem value="#{l.Conta_Fixa}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeContaFixa" />
+                        <p:menuitem value="#{l.Baixa}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeBaixa" />
+                        <p:menuitem value="#{l.Cheque}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeCheques" />
+                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeDespesaProvisionada" />
+                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-minus" outcome="/menu/financeiro/listar/relatorioDeReceitaProvisionada" />
+                        <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/menu/financeiro/listar/relatorioDeSaldoDeConta" />
+                        <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/menu/financeiro/listar/relatorioDeSaldoDeDivisaoDeLucro" />
+                    </p:submenu>
                 </pa:menu>
             </pa:tab> 
 
@@ -112,44 +143,10 @@
                     <p:menuitem value="#{l.Recepcao}" icon="fa fa-circle-o-notch" outcome="/menu/cambio/recepcao" />
                     <p:menuitem value="#{l.Contrato_De_Cambio}" icon="fa fa-handshake-o" outcome="/menu/cambio/contratoDeCambio" />
                     <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/menu/cambio/cambio" />
-                </pa:menu>
-            </pa:tab>
-
-            <pa:tab icon="fa fa-line-chart" title="#{l.Relatorios}">
-                <pa:menu widgetVar="mat">
-                    <p:submenu label="#{l.Arquivo}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Pessoa}" icon="fa fa-minus" outcome="/menu/relatorios/arquivo/relatorioDePessoas" />
-                    </p:submenu>
-                    <p:submenu label="#{l.Vendas}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeNotasEmitidas" />
-                        <p:menuitem value="#{l.Item_Emitido}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeItemEmitido" />
-                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeOrcamento" />
-                        <p:menuitem value="#{l.Item_Orcado}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeItemOrcado" />
-                        <p:menuitem value="#{l.Condicional}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeCondicional" />
-                        <p:menuitem value="#{l.Item_Condicional}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeItemCondicional" />
-                        <p:menuitem value="#{l.Comanda}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeComanda" />
-                        <p:menuitem value="#{l.Item_Comanda}" icon="fa fa-minus" outcome="/menu/relatorios/vendas/relatorioDeItemComanda" />
-                    </p:submenu>
-                    <p:submenu label="#{l.Estoque}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/relatorios/estoque/relatorioDeNotasRecebidas" />
-                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/relatorios/estoque/relatorioDeAjusteDeEstoque" />
-                        <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/relatorios/estoque/relatorioDeItem" />
-                        <p:menuitem value="#{l.Item_Recebido}" icon="fa fa-minus" outcome="/menu/relatorios/estoque/relatorioDeItemRecebido" />
-                    </p:submenu>
-                    <p:submenu label="#{l.Financeiro}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Conta}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeConta" />
-                        <p:menuitem value="#{l.Conta_Fixa}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeContaFixa" />
-                        <p:menuitem value="#{l.Baixa}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeBaixa" />
-                        <p:menuitem value="#{l.Cheque}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeCheques" />
-                        <p:menuitem value="#{l.Despesa_Provisionada}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeDespesaProvisionada" />
-                        <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-minus" outcome="/menu/relatorios/financeiro/relatorioDeReceitaProvisionada" />
-                        <p:menuitem value="#{l.Saldo_de_Conta}" icon="fa fa-bar-chart" outcome="/menu/relatorios/financeiro/relatorioDeSaldoDeConta" />
-                        <p:menuitem value="#{l.Saldo_De_Divisao_De_Lucro}" icon="fa fa-dollar" outcome="/menu/relatorios/financeiro/relatorioDeSaldoDeDivisaoDeLucro" />
-                    </p:submenu>
-                    <p:submenu label="#{l.Cambio}" icon="fa fa-exchange">
-                        <p:menuitem value="#{l.Recepcao}" icon="fa fa-money" outcome="/menu/relatorios/cambio/relatorioDeRecepcao" />
-                        <p:menuitem value="#{l.Contrato_De_Cambio}" icon="fa fa-handshake-o" outcome="/menu/relatorios/cambio/relatorioDeContratoDeCambio" />
-                        <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/menu/relatorios/cambio/relatorioDeCambio" />
+                    <p:submenu label="#{l.Listar}" icon="fa fa-exchange">
+                        <p:menuitem value="#{l.Recepcao}" icon="fa fa-money" outcome="/menu/cambio/listar/relatorioDeRecepcao" />
+                        <p:menuitem value="#{l.Contrato_De_Cambio}" icon="fa fa-handshake-o" outcome="/menu/cambio/listar/relatorioDeContratoDeCambio" />
+                        <p:menuitem value="#{l.Cambio}" icon="fa fa-exchange" outcome="/menu/cambio/listar/relatorioDeCambio" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>

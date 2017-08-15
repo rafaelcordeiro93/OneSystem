@@ -15,14 +15,16 @@ public enum TipoRelatorio {
     NOTAS_EMITIDAS(new Long(8), new BundleUtil().getLabel("Relatorio_de_Notas_Emitidas")),
     NOTAS_RECEBIDAS(new Long(9), new BundleUtil().getLabel("Relatorio_de_Notas_Recebidas")),
     PESSOAS(new Long(10), new BundleUtil().getLabel("Relatorio_de_Pessoas")),
-    ITEM_RECEBIDO(new Long(11), new BundleUtil().getLabel("Item_Recebido")),
-    ITEM_EMITIDO(new Long(12), new BundleUtil().getLabel("Item_Emitido")),
-    CONDICIONAL(new Long(13), new BundleUtil().getLabel("Condicional")),
-    COMANDA(new Long(14), new BundleUtil().getLabel("Comanda")),
-    ITEM_COMANDA(new Long(15), new BundleUtil().getLabel("Item_Comanda")),
-    ORCAMENTO(new Long(16), new BundleUtil().getLabel("Orcamento")),
-    ITEM_ORCADO(new Long(15), new BundleUtil().getLabel("Item_Orcado")),
-    ITEM_CONDICIONAL(new Long(15), new BundleUtil().getLabel("Item_Condicional"));
+    ITEM_RECEBIDO(new Long(11), new BundleUtil().getLabel("Relatorio_de_Item_Emitido")),
+    ITEM_EMITIDO(new Long(12), new BundleUtil().getLabel("Relatorio_de_Item_Emitido")),
+    CONDICIONAL(new Long(13), new BundleUtil().getLabel("Relatorio_de_Condicional")),
+    COMANDA(new Long(14), new BundleUtil().getLabel("Relatorio_de_Comanda")),
+    ITEM_COMANDA(new Long(15), new BundleUtil().getLabel("Relatorio_de_Item_Comanda")),
+    ORCAMENTO(new Long(16), new BundleUtil().getLabel("Relatorio_de_Orcamento")),
+    ITEM_ORCADO(new Long(17), new BundleUtil().getLabel("Relatorio_de_Item_Orcado")),
+    ITEM_CONDICIONAL(new Long(18), new BundleUtil().getLabel("Relatorio_de_Item_Condicional")),
+    ESTOQUE(new Long(19), new BundleUtil().getLabel("Relatorio_de_Estoque")),
+    CONHECIMENTO_DE_FRETE(new Long(20), new BundleUtil().getLabel("Relatorio_de_Conhecimento_de_Frete"));
 
 
     private Long id;
