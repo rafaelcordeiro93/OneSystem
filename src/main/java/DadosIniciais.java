@@ -347,6 +347,7 @@ public class DadosIniciais {
         daoJanela.adiciona(relItemEmitido);
         daoJanela.adiciona(relItemRecebido);
         daoJanela.adiciona(relEstoque);
+        daoJanela.adiciona(relConhecimentoDeFrete);
 
         //Modulo Administrativo
         Janela usuario = new Janela(null, "Usuário", "/menu/topbar/preferencias/usuario.xhtml", admin);
@@ -838,7 +839,7 @@ public class DadosIniciais {
 
         // Item
         Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
+                grupoFiscal, unidade, null, null, null, null, null, null, null);
         new AdicionaDAO<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");

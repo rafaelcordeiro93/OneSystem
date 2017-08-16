@@ -14,6 +14,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -90,7 +91,9 @@ public class Item implements Serializable {
     private Margem margem;
     @ManyToOne
     private Comissao comissao;
-
+    @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
+    private List<ItemImagem> imagens;
+    
     public Item() {
     }
 
@@ -101,7 +104,7 @@ public class Item implements Serializable {
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo,
-            Margem margem, Comissao comissao) throws DadoInvalidoException {
+            Margem margem, Comissao comissao, List<ItemImagem> imagens) throws DadoInvalidoException {
         this.id = id;
         this.barras = barras;
         this.nome = nome;
@@ -118,6 +121,7 @@ public class Item implements Serializable {
         this.estoqueMaximo = estoqueMaximo;
         this.margem = margem;
         this.comissao = comissao;
+        this.imagens= imagens;
         ehValido();
     }
 
@@ -150,6 +154,10 @@ public class Item implements Serializable {
         return margem;
     }
 
+    public List<ItemImagem> getImagens() {
+        return imagens;
+    }
+    
     public String getBarras() {
         return barras;
     }

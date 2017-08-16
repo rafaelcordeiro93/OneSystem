@@ -1,6 +1,8 @@
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ItemDeNotaDAO;
 import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.ItemImagem;
 import br.com.onesystem.util.BundleUtil;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -20,9 +22,7 @@ import java.util.MissingResourceException;
 public class TesteRauber {
 
     public static void main(String[] args) {
-        ItemDeNotaDAO dao = new ItemDeNotaDAO();
-        List<ItemDeNota> listaDeResultados = dao.consultaItemEmitido().listaDeResultados();
-        listaDeResultados.forEach(System.out::println);
-        System.out.println("Concluido");
+        ItemImagem find = new ArmazemDeRegistros<ItemImagem>(ItemImagem.class).find(new Long(2));
+        System.out.println(find);
     }
 }

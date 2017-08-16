@@ -899,7 +899,7 @@ body.main-body {
     -webkit-transition: color 0.3s;
     transition: color 0.3s;
     color: #999999;
-    font-size: 24px; }
+    font-size: 19px; }
 .layout-wrapper .layout-sidebar .layout-tabmenu .layout-tabmenu-nav li a .layout-tabmenu-tooltip {
     display: none;
     padding: 0 5px;
