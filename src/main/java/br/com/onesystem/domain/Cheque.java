@@ -1,7 +1,11 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.EstadoDeCheque;
@@ -9,9 +13,11 @@ import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.FacesContext;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -35,7 +41,7 @@ public class Cheque extends Cobranca implements Serializable {
     private String conta;
     @NotNull(message = "{numero_cheque_not_null}")
     private String numeroCheque;
-    @NotNull(message = "{tipo_situacao_not_null}")
+    @NotNull(message = "{estado_not_null}")
     @Enumerated(EnumType.STRING)
     private EstadoDeCheque estado;
     @NotNull(message = "{tipo_lancamento_not_null}")
@@ -76,9 +82,47 @@ public class Cheque extends Cobranca implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
+        List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "estado",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
+    }
+
+    /* Deve ser utilizado para gerar a baixa do depósito */
+    public void geraBaixaDeCheque() throws DadoInvalidoException {
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+        if (this.compensacao != null && this.tipoLancamento == TipoLancamento.EMITIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
+        } else if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+        }
+    }
+
+    /* Adiciona Baixa*/
+    @Override
+    public void adiciona(Baixa baixa) {
+        try {
+            BaixaBuilder b = new BaixaBuilder(baixa);
+            if (baixas == null) {
+                this.baixas = new ArrayList<>();
+            }
+            b.comCobranca(this);
+            geraHistorico(b);
+            b.comEmissao(emissao);
+            this.baixas.add(b.construir());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    private void geraHistorico(BaixaBuilder b) {
+        BundleUtil msg = new BundleUtil();
+        if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Emitido") + " " + msg.getLabel("para") + " " + pessoa.getFirstNameLastName());
+        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Recebido") + " " + msg.getLabel("de") + " " + pessoa.getFirstNameLastName());
+        }
     }
 
     @Override
@@ -97,9 +141,10 @@ public class Cheque extends Cobranca implements Serializable {
     public void desconta() {
         this.estado = EstadoDeCheque.DESCONTADO;
     }
-    
-     public void compensar() {
+
+    public void compensar(Date data) {
         this.estado = EstadoDeCheque.COMPENSADO;
+        this.compensacao = data;
     }
 
     public void depositaNo(DepositoBancario deposito) {
@@ -122,7 +167,7 @@ public class Cheque extends Cobranca implements Serializable {
         return numeroCheque;
     }
 
-    public EstadoDeCheque getEstado() {
+    public EstadoDeCheque getEstadoDeCheque() {
         return estado;
     }
 

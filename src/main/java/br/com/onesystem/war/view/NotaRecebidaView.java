@@ -445,7 +445,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             //Prepara e constroi cheque
             cheque.setEntrada(true);
-            cheque.setTipoSituacao(EstadoDeCheque.ABERTO);
+            cheque.setEstadoDeCheque(EstadoDeCheque.ABERTO);
             cheque.setOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira());
             Cheque c = cheque.construirComID();
 

@@ -25,6 +25,7 @@ import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
+import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,7 +41,8 @@ public class BaixaBuilder {
     private String historico;
     private Date emissao;
     private Date dataCompensacao;
-    private OperacaoFinanceira naturezaFinanceira;
+    private OperacaoFinanceira operacaoFinanceira;
+    private NaturezaFinanceira naturezaFinanceira;
     private Cotacao cotacao;
     private Cobranca cobranca;
     private TipoDespesa despesa;
@@ -70,9 +72,9 @@ public class BaixaBuilder {
         this.emissao = baixa.getEmissao();
         this.dataCompensacao = baixa.getDataCompensacao();
         this.estado = baixa.getEstado();
-        this.naturezaFinanceira = baixa.getOperacaoFinanceira();
+        this.operacaoFinanceira = baixa.getOperacaoFinanceira();
         this.cotacao = baixa.getCotacao();
-        this.cobranca = baixa.getParcela();
+        this.cobranca = baixa.getCobranca();
         this.despesa = baixa.getDespesa();
         this.receita = baixa.getReceita();
         this.pessoa = baixa.getPessoa();
@@ -117,8 +119,8 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comOperacaoFinanceira(OperacaoFinanceira naturezaFinanceira) {
-        this.naturezaFinanceira = naturezaFinanceira;
+    public BaixaBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
+        this.operacaoFinanceira = operacaoFinanceira;
         return this;
     }
 
@@ -208,7 +210,7 @@ public class BaixaBuilder {
     }
 
     public Baixa construir() throws DadoInvalidoException {
-        return new Baixa(id, valor, emissao, dataCompensacao, historico, naturezaFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
+        return new Baixa(id, valor, emissao, dataCompensacao, historico, operacaoFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
                 recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado);
     }
 

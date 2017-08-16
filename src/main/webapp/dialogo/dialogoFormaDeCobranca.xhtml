@@ -89,10 +89,10 @@
                                 <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.numeroCheque}" styleClass="Wid100" />   
 
                                 <p:outputLabel value="#{l.Vencimento}"/>
-                                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.vencimento}" size="7"/>
-                                
-                                <p:outputLabel value="#{l.Compensado}"/>
-                                <p:calendar id="compensado" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.compensacao}" size="7"/>
+                                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.vencimento}" size="8"/>
+
+                                <p:outputLabel value="#{l.Compensado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" />
+                                <p:calendar id="compensado" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.e.dataCompensacao}" size="8"/>
 
                                 <p:outputLabel value="#{l.Emitente}"/>
                                 <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.emitente}" styleClass="Wid100" />      

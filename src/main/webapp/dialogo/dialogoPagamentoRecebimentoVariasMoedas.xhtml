@@ -38,12 +38,12 @@
                 <p:outputLabel value="#{l.Valor_Pago}:"/>
                 <p:outputLabel value="#{l.Valor_Convertido}:"/>
 
-                <pe:inputNumber id="dlgValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                <p:inputNumber id="dlgValor" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                 symbol="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.conta.moeda.sigla} " decimalPlaces="2" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.valor}">
-                </pe:inputNumber>       
-                <pe:inputNumber id="dlgVlConvertido" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                </p:inputNumber>       
+                <p:inputNumber id="dlgVlConvertido" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                 symbol="#{dialogoPagamentoRecebimentoVariasMoedasView.contaDeOrigem.moeda.sigla} " decimalPlaces="2" value="#{dialogoPagamentoRecebimentoVariasMoedasView.dlg.valorConvertido}">
-                </pe:inputNumber>     
+                </p:inputNumber>     
 
             </p:panelGrid>
 

@@ -205,10 +205,10 @@ public class Condicional implements Serializable {
     }
 
     public String getTotalCondicionalFormatado() {
-        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalCondicional());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
     }
 
-    public BigDecimal getTotalCondicional() {
+    public BigDecimal getTotal() {
         BigDecimal a = getAcrescimo() == null ? BigDecimal.ZERO : getAcrescimo();
         BigDecimal f = getFrete() == null ? BigDecimal.ZERO : getFrete();
         BigDecimal c = getDespesaCobranca() == null ? BigDecimal.ZERO : getDespesaCobranca();

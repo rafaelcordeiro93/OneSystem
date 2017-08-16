@@ -5,15 +5,23 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
+import java.util.List;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
@@ -56,9 +64,10 @@ public class GeradorDeBaixaDeFormaCobranca {
                 builder.comDespesa(formaDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
             }
             if (forma.equals("Cheque")) {
-                builder.comHistorico(msg.getMessage("Abatimento_de") + " " + forma + getHistorico());
+                builder.comHistorico(msg.getMessage("Abatimento_de") + " " + forma + getHistorico()).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO);
             } else {
-                builder.comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico());
+                Cheque ch = (Cheque) formaDeCobranca.getCobranca();
+                builder.comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico()).comDataCompensacao(ch.getCompensacao()).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO);
             }
         }
 

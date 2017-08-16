@@ -153,7 +153,7 @@ public class CambioView implements Serializable {
                     throw new EDadoInvalidoException("O valor deve ser maior que zero!");
                 }
                 baixa.setEmissao(new Date());
-                baixa.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
+                baixa.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
                 baixa.setCotacao(cambio.getCotacao());
                 baixa.setId(retornarCodigo());
 //                baixa.setDesconto(BigDecimal.ZERO);

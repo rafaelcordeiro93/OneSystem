@@ -15,6 +15,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -33,6 +34,7 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
     private String observacao;
     private Cotacao cotacao;
     private OperacaoFinanceira operacaoFinanceira;
+    private Date dataCompensacao;
 
     public FormaDeCobrancaBV() {
     }
@@ -138,7 +140,15 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
     public void setOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
     }
-    
+
+    public Date getDataCompensacao() {
+        return dataCompensacao;
+    }
+
+    public void setDataCompensacao(Date dataCompensacao) {
+        this.dataCompensacao = dataCompensacao;
+    }
+
     public FormaDeCobranca construir() throws DadoInvalidoException {
         return new FormaDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)

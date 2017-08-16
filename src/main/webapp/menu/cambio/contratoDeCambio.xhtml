@@ -90,20 +90,20 @@
                                                             process="@this" update="contratoPessoa data saldo" />
                                                 </p:commandButton>
                                             </h:panelGrid>
-                                            <pe:inputNumber id="contratoDeCambioValorNegociado" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                            <p:inputNumber id="contratoDeCambioValorNegociado" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                             symbol="#{contratoDeCambioView.contratoDeCambio.destino.sigla} " decimalPlaces="2" value="#{contratoDeCambioView.contratoDeCambio.valorNegociado}">
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Valor_Negociado}"/>
                                                 <p:ajax event="blur" listener="#{contratoDeCambioView.calculaValor}" update="conteudo:contratoDeCambioValorCalculado"/>
-                                            </pe:inputNumber> 
-                                            <pe:inputNumber id="contratoDeCambioTaxaNegociada" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="."
+                                            </p:inputNumber> 
+                                            <p:inputNumber id="contratoDeCambioTaxaNegociada" maxValue="9999999.999" minValue="0.000" decimalSeparator="," thousandSeparator="."
                                                             symbol="#{contratoDeCambioView.contratoDeCambio.origem.sigla} " decimalPlaces="3" value="#{contratoDeCambioView.contratoDeCambio.taxaNegociada}">
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Taxa_Negociada}"/>
                                                 <p:ajax event="blur" listener="#{contratoDeCambioView.calculaValor}" update="conteudo:contratoDeCambioValorCalculado"/>
-                                            </pe:inputNumber> 
-                                            <pe:inputNumber readOnly="true" disabled="true" id="contratoDeCambioValorCalculado" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
+                                            </p:inputNumber> 
+                                            <p:inputNumber readonly="true" disabled="true" id="contratoDeCambioValorCalculado" maxValue="99999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                             symbol="#{contratoDeCambioView.contratoDeCambio.origem.sigla} " decimalPlaces="2" value="#{contratoDeCambioView.contratoDeCambio.valorCalculado}">
                                                 <f:passThroughAttribute name="placeholder" value="#{l.Valor_Calculado}"/>
-                                            </pe:inputNumber> 
+                                            </p:inputNumber> 
                                             <p:selectBooleanButton id="statusButton" value="#{contratoDeCambioView.contratoDeCambio.status}" onLabel="#{l.Fechado}" styleClass="#{contratoDeCambioView.statusButton}"
                                                                    offLabel="#{l.Aberto}" onIcon="fa fa-check Fs16 White" offIcon="fa fa-close Fs16 White">
                                                 <p:ajax listener="#{contratoDeCambioView.atuStatusButton}" update="statusButton"/>

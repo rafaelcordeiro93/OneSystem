@@ -24,9 +24,9 @@ public class ChequeDAO extends GenericDAO<Cheque> {
         return this;
     }
 
-    public ChequeDAO porSituacao(EstadoDeCheque situacaoDeCheque) {
-        where += " and cheque.tipoSituacao = :pSituacao";
-        parametros.put("pSituacao", situacaoDeCheque);
+    public ChequeDAO porEstado(EstadoDeCheque estado) {
+        where += " and cheque.estado = :pEstado";
+        parametros.put("pEstado", estado);
         return this;
     }
 

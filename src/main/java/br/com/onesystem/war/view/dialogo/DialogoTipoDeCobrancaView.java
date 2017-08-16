@@ -30,6 +30,7 @@ import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CreditoBV;
 import br.com.onesystem.war.builder.DespesaEventualBV;
 import br.com.onesystem.war.builder.ReceitaEventualBV;
@@ -194,6 +195,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             e.setValor(cheque.getValor());
             e.setCotacao(cheque.getCotacao());
             e.setConta(cheque.getCotacao().getConta());
+            e.setDataCompensacao(cheque.getCompensacao());
         } else if (c instanceof BoletoDeCartao) {
             boletoDeCartao = (BoletoDeCartao) c;
             e.setValor(boletoDeCartao.getValor());
@@ -258,7 +260,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         if (modalidadeDeCobranca == ModalidadeDeCobranca.CARTAO) {
             boletoDeCartao.quita();
         } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CHEQUE) {
-            cheque.desconta();
+            if(cheque.getTipoLancamento() == TipoLancamento.EMITIDA && e.getDataCompensacao() == null){
+                
+            }            
+            else if (cheque.getTipoLancamento() == TipoLancamento.EMITIDA) {
+                cheque.compensar(e.getDataCompensacao());
+            } else {
+                cheque.desconta();
+            }
         } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CREDITO) {
             credito.setValor(e.getValor());
             credito.setEmissao(emissao);
