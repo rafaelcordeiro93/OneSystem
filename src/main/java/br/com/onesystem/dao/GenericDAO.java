@@ -70,14 +70,14 @@ public abstract class GenericDAO<T> {
         return resultado;
     }
 
-    public T resultado() throws DadoInvalidoException {
+    public T resultado() {
         try {
             T resultado = new ArmazemDeRegistros<T>((Class<T>) clazz)
                     .resultadoUnicoDaConsulta(getConsulta(), parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
+            return null;
         }
     }
 

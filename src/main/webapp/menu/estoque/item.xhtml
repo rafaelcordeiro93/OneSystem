@@ -148,13 +148,19 @@
                                                 <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                             </p:column>
                                             <p:column headerText="#{l.Valor}">
-                                                <h:outputText value="#{precoDeItem.valor}" />
+                                                <h:outputText value="#{precoDeItem.valor}" >
+                                                    <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
+                                                </h:outputText>
                                             </p:column>
                                             <p:column headerText="#{l.Emissao}">
-                                                <h:outputText value="#{precoDeItem.emissao}" />
+                                                <h:outputText value="#{precoDeItem.emissao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
                                             </p:column>
                                             <p:column headerText="#{l.Data_Expiracao}">
-                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
                                             </p:column>
                                         </p:dataTable>
 
@@ -173,13 +179,19 @@
                                             <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                         </p:column>
                                         <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
-                                            <h:outputText value="#{precoDeItem.valor}" />
+                                            <h:outputText value="#{precoDeItem.valor}" >
+                                                <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
+                                            </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
-                                            <h:outputText value="#{precoDeItem.emissao}" />
+                                            <h:outputText value="#{precoDeItem.emissao}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                            </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
-                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                            </h:outputText>
                                         </p:column>
                                     </p:dataTable>
 

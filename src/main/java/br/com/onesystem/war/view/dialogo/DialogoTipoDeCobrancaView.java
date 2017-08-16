@@ -229,7 +229,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     public void selecionaCotacaoConformeConta() {
         try {
             if (e.getConta() != null) {
-                e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naUltimaEmissao(emissao).resultado());
+                e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naMaiorEmissao(emissao).resultado());
             } else {
                 e.setCotacao(cotacaoPadrao);
             }

@@ -3,6 +3,7 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.PrecoDeItem;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
@@ -22,9 +23,17 @@ public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
         parametros.put("pEmissao", emissao);
         return this;
     }
+    
+     public PrecoDeItemDAO naMaiorEmissao(Date emissao) {
+        where += " and precoDeItem.emissao in (select max(pdi.emissao) from PrecoDeItem pdi "
+                + "where pdi.emissao <= :pEmissao "
+                + "group by pdi.listaDePreco) ";
+        parametros.put("pEmissao", emissao);
+        return this;
+    }
 
     public PrecoDeItemDAO eNaoExpirado() {
-        where += " and precoDeItem.dataDeExpiracao >= :pDataDeExpiracao ";
+        where += " and (precoDeItem.dataDeExpiracao >= :pDataDeExpiracao or precoDeItem.dataDeExpiracao is null) ";
         parametros.put("pDataDeExpiracao", new Date());
         return this;
     }
@@ -39,5 +48,5 @@ public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
         order += " order by emissao desc ";
         return this;
     }
-
+    
 }

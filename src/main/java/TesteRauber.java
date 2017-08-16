@@ -1,14 +1,11 @@
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.ItemDeNotaDAO;
-import br.com.onesystem.domain.ItemDeNota;
-import br.com.onesystem.domain.ItemImagem;
-import br.com.onesystem.util.BundleUtil;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
+import br.com.onesystem.dao.PrecoDeItemDAO;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.PrecoDeItem;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import java.util.Date;
 import java.util.List;
-import java.util.MissingResourceException;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,8 +18,9 @@ import java.util.MissingResourceException;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) {
-        ItemImagem find = new ArmazemDeRegistros<ItemImagem>(ItemImagem.class).find(new Long(2));
-        System.out.println(find);
+    public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException {
+        List<PrecoDeItem> precos = new PrecoDeItemDAO().porItem(new Item(new Long(1)))
+                .naMaiorEmissao(new Date()).eNaoExpirado().listaDeResultados();
+        precos.forEach(System.out::println);
     }
 }

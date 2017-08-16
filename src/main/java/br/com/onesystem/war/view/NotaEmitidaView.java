@@ -231,7 +231,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 if (boletoDeCartao.getCartao() != null) {
-                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naUltimaEmissao(notaEmitida.getEmissao()).resultado());
+                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado());
                 }
                 nota.adiciona(boletoDeCartao.construir());
             }
@@ -263,7 +263,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         if (p.getCartao() != null) {
-                            Cotacao resultado = new CotacaoDAO().porConta(p.getCartao().getConta()).naUltimaEmissao(notaEmitida.getEmissao()).resultado();
+                            Cotacao resultado = new CotacaoDAO().porConta(p.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado();
                             if (resultado != null) {
                                 p.setCotacao(resultado);
                             } else {
