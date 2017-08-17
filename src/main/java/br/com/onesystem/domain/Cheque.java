@@ -107,8 +107,10 @@ public class Cheque extends Cobranca implements Serializable {
             if (baixas == null) {
                 this.baixas = new ArrayList<>();
             }
-            b.comCobranca(this);
+            if(baixa.getHistorico() == null){
             geraHistorico(b);
+            }
+            b.comCobranca(this);
             b.comEmissao(emissao);
             this.baixas.add(b.construir());
         } catch (DadoInvalidoException ex) {

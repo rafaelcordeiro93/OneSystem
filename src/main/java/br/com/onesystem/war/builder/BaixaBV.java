@@ -1,6 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
@@ -13,6 +14,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.domain.Recepcao;
+import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -49,6 +51,8 @@ public class BaixaBV implements Serializable {
     private CobrancaFixa movimentoFixo;
     private Date dataCancelamento;
     private ValorPorCotacao valorPorCotacao;
+    private TipoDeCobranca tipoDeCobranca;
+    private Caixa caixa;
 
     public BaixaBV() {
     }
@@ -74,6 +78,8 @@ public class BaixaBV implements Serializable {
         this.valorPorCotacao = baixa.getValorPorCotacao();
         this.lancamentoBancario = baixa.getLancamentoBancario();
         this.depositoBancario = baixa.getDepositoBancario();
+        this.tipoDeCobranca = baixa.getTipoDeCobranca();
+        this.caixa = baixa.getCaixa();
     }
 
     public void selecionaTitulo(Titulo titulo) {
@@ -273,17 +279,33 @@ public class BaixaBV implements Serializable {
         this.naturezaFinanceira = naturezaFinanceira;
     }
 
+    public TipoDeCobranca getTipoDeCobranca() {
+        return tipoDeCobranca;
+    }
+
+    public void setTipoDeCobranca(TipoDeCobranca tipoDeCobranca) {
+        this.tipoDeCobranca = tipoDeCobranca;
+    }
+
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+
     public Baixa construir() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio)
-                .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
+                .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao).comTipoDeCobranca(tipoDeCobranca).comCaixa(caixa)
                 .comHistorico(historico).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
                 .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio)
-                .comCotacao(cotacao).comDespesa(despesa).comId(id)
-                .comEmissao(emissao).comHistorico(historico).comCobrancaFixa(movimentoFixo)
+                .comCotacao(cotacao).comDespesa(despesa).comId(id).comCaixa(caixa)
+                .comEmissao(emissao).comHistorico(historico).comCobrancaFixa(movimentoFixo).comTipoDeCobranca(tipoDeCobranca)
                 .comOperacaoFinanceira(operacaoFinanceira).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor)
                 .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario)

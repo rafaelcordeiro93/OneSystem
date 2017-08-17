@@ -5,23 +5,16 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
-import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
-import java.util.List;
-import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
@@ -54,23 +47,27 @@ public class GeradorDeBaixaDeFormaCobranca {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(formaDeCobranca.getValor()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
-        if (formaDeCobranca.getRecebimento() == null) {
+        if (formaDeCobranca.getRecebimento() == null) {//pagamento
             if (formaDeCobranca.getCobranca().getNota() != null) {
                 builder.comReceita(formaDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
             }
             builder.comHistorico(msg.getMessage("Recebimento_de") + " " + forma + getHistorico());
-        } else {
+            if (forma.equals(new BundleUtil().getLabel("Cheque"))) {
+                Cheque ch = (Cheque) formaDeCobranca.getCobranca();
+                builder.comHistorico(new BundleUtil().getMessage("Abatimento_de") + " " + forma + getHistorico()).comDataCompensacao(ch.getCompensacao()).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO);
+            } else {
+                builder.comHistorico(new BundleUtil().getMessage("Pagamento_de") + " " + forma + getHistorico());
+            }
+        } else {//recebimento
             if (formaDeCobranca.getCobranca().getNota() != null) {
                 builder.comDespesa(formaDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
             }
-            if (forma.equals("Cheque")) {
+            if (forma.equals(new BundleUtil().getLabel("Cheque"))) {
                 builder.comHistorico(msg.getMessage("Abatimento_de") + " " + forma + getHistorico()).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO);
             } else {
-                Cheque ch = (Cheque) formaDeCobranca.getCobranca();
-                builder.comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico()).comDataCompensacao(ch.getCompensacao()).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO);
+                builder.comHistorico(msg.getMessage("Pagamento_de") + " " + forma + getHistorico());
             }
         }
-
         return builder.construir();
     }
 
@@ -84,7 +81,6 @@ public class GeradorDeBaixaDeFormaCobranca {
         } else {
             builder.comReceita(conf.getReceitaDeDescontosObtidos()).comHistorico(msg.getMessage("Desconto_recebido_sobre_pagamento_de") + " " + forma + getHistorico());
         }
-
         return builder.construir();
     }
 
@@ -132,5 +128,4 @@ public class GeradorDeBaixaDeFormaCobranca {
         String str = formaDeCobranca.getCobranca().getId() == null ? "" : formaDeCobranca.getCobranca().getId().toString() + " ";
         return " " + str + msg.getMessage("de") + " " + formaDeCobranca.getCobranca().getPessoa().getNome();
     }
-
 }

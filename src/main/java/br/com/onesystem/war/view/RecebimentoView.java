@@ -50,8 +50,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             Recebimento recebimento = e.construirComID();
             tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f));
-            recebimento.geraBaixas();
             recebimento.ehValido();
+            recebimento.geraBaixas();
             addNoBanco(recebimento);
         } catch (DadoInvalidoException die) {
             die.print();

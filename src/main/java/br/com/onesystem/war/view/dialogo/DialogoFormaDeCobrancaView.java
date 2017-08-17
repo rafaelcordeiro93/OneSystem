@@ -224,7 +224,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                         cheque.setTipoLancamento(TipoLancamento.RECEBIDA);///emitido ou recebido
                         cheque.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
                         cheque.setEstadoDeCheque(EstadoDeCheque.DESCONTADO);
-                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
                     } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {//cheque emitido
                         cheque.setTipoLancamento(TipoLancamento.EMITIDA);///emitido ou recebido
                         cheque.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
@@ -234,7 +234,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                         } else {
                             cheque.setEstadoDeCheque(EstadoDeCheque.ABERTO);
                         }
-                        e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
                     }
                     e.setCobranca(cheque.construirComID());
                     break;
