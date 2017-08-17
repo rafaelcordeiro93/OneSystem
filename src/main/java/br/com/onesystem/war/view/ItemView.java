@@ -1,7 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.ItemImagemDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
@@ -23,39 +23,24 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.services.CalculadoraDePreco;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.Model;
-import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.WarningMessage;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.ContextNotActiveException;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.faces.view.ViewScoped;
-import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.PersistenceException;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TabChangeEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 @Named
 @ViewScoped //javax.faces.view.ViewScoped;
@@ -209,15 +194,31 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(e.construirComID(), null);
     }
 
+    public void favoritarImagem(ItemImagem itemImagem) {
+        try {
+            ItemImagem imgDesfavoritada = imagens.stream().filter(ItemImagem::isFavorita).filter(i -> (!i.getId().equals(itemImagem.getId()))).findAny().get();
+            itemImagem.setFavorita(true);
+            imgDesfavoritada.setFavorita(false);
+            new AtualizaDAO<>().atualiza(imgDesfavoritada);
+            new AtualizaDAO<>().atualiza(itemImagem);
+            imagens.set(imagens.indexOf(imgDesfavoritada), imgDesfavoritada);
+            imagens.set(imagens.indexOf(itemImagem), itemImagem);
+            imagens.forEach(System.out::println);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
     public void uploadImagens(FileUploadEvent event) {
         try {
             String fileName = event.getFile().getFileName();
             byte[] contents = event.getFile().getContents();
             String contentType = event.getFile().getContentType();
-            System.out.println("F: " + fileName);
-            System.out.println("C: " + contents);
-            System.out.println("T: " + contentType);
-            ItemImagem itemImagem = new ItemImagem(null, fileName, contentType, contents, e.construirComID());
+            boolean favorita = false;
+            if (imagens.isEmpty()) {
+                favorita = true;
+            }
+            ItemImagem itemImagem = new ItemImagem(null, fileName, contentType, contents, e.construirComID(), favorita);
             new AdicionaDAO().adiciona(itemImagem);
             imagens.add(itemImagem);
         } catch (DadoInvalidoException ex) {
@@ -227,6 +228,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void excluirImagem() {
         try {
+            if (itemImagem.isFavorita() && imagens.size() > 1) {
+                ItemImagem imgFavoritada = imagens.stream().filter(i -> (!i.getId().equals(itemImagem.getId()))).findFirst().get();
+                imgFavoritada.setFavorita(true);
+                new AtualizaDAO<>().atualiza(imgFavoritada);
+                imagens.set(imagens.indexOf(imgFavoritada), imgFavoritada);
+            }
             new RemoveDAO<ItemImagem>().remove(itemImagem, itemImagem.getId());
             imagens.remove(itemImagem);
         } catch (DadoInvalidoException ex) {
@@ -361,5 +368,5 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void setItemImagem(ItemImagem itemImagem) {
         this.itemImagem = itemImagem;
     }
-    
+
 }

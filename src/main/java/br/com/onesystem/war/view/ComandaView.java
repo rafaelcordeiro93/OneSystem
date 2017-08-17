@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -21,6 +22,7 @@ import br.com.onesystem.valueobjects.EstadoDeComanda;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.ComandaBV;
 import br.com.onesystem.war.service.ComandaService;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -51,10 +53,14 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
     private ItemDeComanda itemDeComandaSelecionado;
     private List<ItemDeComanda> itensDeComandas;
     private Configuracao configuracao;
+    private ConfiguracaoEstoque configuracaoEstoque;
     private Cotacao cotacao;
 
     @Inject
     private ConfiguracaoService configuracaoService;
+
+    @Inject
+    private ConfiguracaoEstoqueService configuracaoEstoqueService;
 
     @Inject
     private CotacaoService cotacaoService;
@@ -73,6 +79,7 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
         try {
             comandasAbertas = service.buscarComandasNo(EstadoDeComanda.EM_DEFINICAO);
             configuracao = configuracaoService.buscar();
+            configuracaoEstoque = configuracaoEstoqueService.buscar();
             cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -82,6 +89,7 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
     public void limparJanela() {
         e = new ComandaBV();
         e.setCotacao(cotacao);
+        e.setListaDePreco(configuracaoEstoque.getListaDePreco());
         itemDeComanda = new ItemDeComandaBV();
         itensDeComandas = new ArrayList<>();
         limpaSessao();
@@ -188,8 +196,10 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
         String idComponent = event.getComponent().getId();
         if (obj instanceof ListaDePreco) {
             e.setListaDePreco((ListaDePreco) obj);
+            atualizaValorDeItemDeComanda();
         } else if (obj instanceof Item) {
             itemDeComanda.setItem((Item) obj);
+            atualizaValorDeItemDeComanda();
         }
     }
 
@@ -200,6 +210,16 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
 
     // ----------------------------- Fim Selecao ------------------------------
     // ------------------ Outras Operações da Janela --------------------------
+    /**
+     * Atualiza o valor unitario do item de comanda conforme a lista de preço
+     * selecionada.
+     */
+    public void atualizaValorDeItemDeComanda() {
+        if (e.getListaDePreco() != null && itemDeComanda.getItem() != null) {
+            itemDeComanda.setUnitario(itemDeComanda.getItem().getPreco(e.getListaDePreco()));
+        }
+    }
+
     /**
      * Calcula o valor de acréscimo e desconto após informar um dos campos de
      * porcentagem de acréscimo e desconto.

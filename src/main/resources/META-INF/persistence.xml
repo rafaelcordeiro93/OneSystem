@@ -98,6 +98,7 @@
     <class>br.com.onesystem.domain.Estado</class>
     <class>br.com.onesystem.domain.Pais</class>
     <class>br.com.onesystem.domain.Cfop</class>
+    <class>br.com.onesystem.domain.ItemImagem</class>
     <properties>
       <!--  Propriedades JDBC  -->
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

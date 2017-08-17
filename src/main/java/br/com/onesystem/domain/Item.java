@@ -93,7 +93,7 @@ public class Item implements Serializable {
     private Comissao comissao;
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     private List<ItemImagem> imagens;
-    
+
     public Item() {
     }
 
@@ -121,7 +121,7 @@ public class Item implements Serializable {
         this.estoqueMaximo = estoqueMaximo;
         this.margem = margem;
         this.comissao = comissao;
-        this.imagens= imagens;
+        this.imagens = imagens;
         ehValido();
     }
 
@@ -157,7 +157,7 @@ public class Item implements Serializable {
     public List<ItemImagem> getImagens() {
         return imagens;
     }
-    
+
     public String getBarras() {
         return barras;
     }
@@ -214,11 +214,24 @@ public class Item implements Serializable {
         return estoqueMaximo;
     }
 
+    public ItemImagem getImagemFavorita() {
+        return imagens.stream().filter(ItemImagem::isFavorita).findAny().get();
+    }
+
     public BigDecimal getPrecoTotal() {
         if (getSaldo().compareTo(BigDecimal.ZERO) == 0) {
             return getPreco();
         } else {
             return getSaldo().multiply(getPreco()).setScale(2, RoundingMode.HALF_UP);
+        }
+    }
+
+    public BigDecimal getPreco(ListaDePreco listaDePreco) {
+        PrecoDeItem preco = new PrecoDeItemService().buscaListaDePrecoAtual(this, listaDePreco, new Date());
+        if (preco == null) {
+            return BigDecimal.ZERO;
+        } else {
+            return preco.getValor();
         }
     }
 

@@ -1,6 +1,5 @@
 package br.com.onesystem.util;
 
-import br.com.onesystem.reportTemplate.*;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Coluna;
@@ -41,7 +40,6 @@ import net.sf.dynamicreports.report.builder.subtotal.AggregationSubtotalBuilder;
 import net.sf.dynamicreports.report.constant.HorizontalAlignment;
 import net.sf.dynamicreports.report.constant.HorizontalTextAlignment;
 import net.sf.dynamicreports.report.constant.VerticalAlignment;
-import net.sf.dynamicreports.report.constant.WhenNoDataType;
 import net.sf.dynamicreports.report.definition.ReportParameters;
 import net.sf.dynamicreports.report.exception.DRException;
 import net.sf.jasperreports.engine.JRDataSource;
@@ -195,7 +193,7 @@ public class ImpressoraDeRelatorioDinamico {
 
     private void margem() {
         // Para cada 1 de margem, é 0,04 cm - Comparação com Word - Margem Estreita.
-        // Top 1,28 cm | Bottom 1,32, Right e Left  1,20 cm 
+        // Top 1,28 cm | Bottom 1,8 cm, Right e Left  1 cm 
         MarginBuilder margem = margin().setRight(25).setLeft(25).setTop(32).setBottom(45);
         relatorio.setPageMargin(margem);
     }

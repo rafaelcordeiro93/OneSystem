@@ -5,12 +5,8 @@
  */
 package br.com.onesystem.domain;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Objects;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -41,16 +35,18 @@ public class ItemImagem implements Serializable {
     private byte[] imagem;
     @ManyToOne
     private Item item;
+    private boolean favorita;
 
     public ItemImagem() {
     }
 
-    public ItemImagem(Long id, String nome, String tipo, byte[] imagem, Item item) {
+    public ItemImagem(Long id, String nome, String tipo, byte[] imagem, Item item, boolean favorita) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
         this.item = item;
         this.imagem = imagem;
+        this.favorita = favorita;
     }
 
     public Long getId() {
@@ -65,6 +61,10 @@ public class ItemImagem implements Serializable {
         return tipo;
     }
 
+    public void setFavorita(boolean favorita) {
+        this.favorita = favorita;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
@@ -75,6 +75,14 @@ public class ItemImagem implements Serializable {
         return imagem;
     }
 
+    public boolean isFavorita() {
+        return favorita;
+    }
+    
+    public Item getItem() {
+        return item;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

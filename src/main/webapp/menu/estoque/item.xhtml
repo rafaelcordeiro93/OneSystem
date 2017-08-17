@@ -218,10 +218,15 @@
 
                                         <p:panel style="text-align:center; border:none">
                                             <h:panelGrid columns="1" style="width:100%">
-                                                <h:outputText value="#{m.nome}" />
+                                                <h:panelGrid columns="3" cellspacing="5">
+                                                    <h:outputText value="#{m.nome} - " />
+                                                    <h:outputText value="#{l.Favorita}" />
+                                                    <p:selectBooleanCheckbox value="#{m.favorita}" disabled="#{m.favorita}"  >
+                                                        <p:ajax listener="#{itemView.favoritarImagem(m)}" update=":conteudo" />
+                                                    </p:selectBooleanCheckbox>
+                                                </h:panelGrid>
                                                 <p:graphicImage value="#{imageStreamedView.image}" style="margin-top: 5px;width: 100%" >
                                                     <f:param name="id" value="#{m.id}" />
-
                                                 </p:graphicImage>
                                                 <f:facet name="footer">
                                                     <p:commandLink update=":conteudo" title="#{l.Remover}" style="text-align: center;position: absolute; margin-top: -8%;" action="#{itemView.excluirImagem}">
