@@ -86,6 +86,8 @@ public class Operacao implements Serializable {
     private List<AjusteDeEstoque> ajustes;
     @OneToMany(mappedBy = "operacao")
     private List<SituacaoFiscal> situacoesFiscais;
+    @OneToMany(mappedBy = "operacao")
+    private List<Pedido> pedido;
 
     public Operacao() {
     }
