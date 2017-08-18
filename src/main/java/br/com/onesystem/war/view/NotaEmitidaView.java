@@ -96,7 +96,7 @@ import org.primefaces.event.SelectEvent;
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
-    
+
     private CreditoBV creditoBV;
     private NotaEmitida nota;
     private NotaEmitida notaEmitidaSelecionada;
@@ -122,22 +122,22 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private Comanda comandaSelecionada;
     private Condicional condicionalSelecionada;
     private ConfiguracaoEstoque configuracaoEstoque;
-    
+
     @Inject
     private ConfiguracaoService configuracaoService;
-    
+
     @Inject
     private ConfiguracaoVendaService configuracaoVendaService;
-    
+
     @Inject
     private CotacaoService service;
-    
+
     @Inject
     private CreditoService creditoService;
-    
+
     @Inject
     private EstoqueService serviceEstoque;
-    
+
     @Inject
     private ConfiguracaoEstoqueService confEstoqueService;
 
@@ -147,7 +147,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         iniciarConfiguracoes();
         limparJanela();
     }
-    
+
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
@@ -158,7 +158,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ex.print();
         }
     }
-    
+
     public void limparJanela() {
         try {
             notaEmitida = new NotaEmitidaBV();
@@ -166,6 +166,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             notaEmitida.setUsuario(new UsuarioLogadoUtil().getUsuario());
             notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
+            notaEmitida.setListaDePreco(configuracaoEstoque.getListaDePreco());
             notaEmitida.setCotacao(cotacao);
             comandaSelecionada = null;
             creditoBV = new CreditoBV();
@@ -185,7 +186,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             die.print();
         }
     }
-    
+
     private void inicializaCotacoes() {
         cotacaoLista = service.buscarCotacoesDoDiaAtual();
         cotacoes = new ArrayList<>();
@@ -216,7 +217,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ex.print();
         }
     }
-    
+
     public void validaDinheiro() {
         // Se existir valor em dinheiro abre a janela de cotações.
         if (notaEmitida.getTotalEmDinheiro() != null && notaEmitida.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) > 0) {
@@ -225,7 +226,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             geraBoletoECreditoAVista();
         }
     }
-    
+
     public void geraBoletoECreditoAVista() {
         try {
             //Constroi boleto de Cartão
@@ -235,7 +236,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 }
                 nota.adiciona(boletoDeCartao.construir());
             }
-            
+
             if (creditoBV.getValor() != null && creditoBV.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 creditoBV.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
                 creditoBV.setPessoa(notaEmitida.getPessoa());
@@ -243,13 +244,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 creditoBV.setEntrada(true);
                 nota.adiciona(creditoBV.construir());
             }
-            
+
             geraParcelas();
         } catch (DadoInvalidoException die) {
             die.printConsole();
             die.print();
         }
-        
+
     }
 
     /**
@@ -282,14 +283,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                         break;
                 }
             }
-            
+
             geraOrcamento();
         } catch (DadoInvalidoException die) {
             ErrorMessage.print(new BundleUtil().getMessage("Erro_ao_gerar_parcelas"));
             die.print();
         }
     }
-    
+
     public void geraOrcamento() {
         if (notaEmitida.getOrcamento() != null) {
             RequestContext.getCurrentInstance().execute("PF('historicoDeOrcamento').show()");
@@ -297,7 +298,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             add();
         }
     }
-    
+
     public void efetivaOrcamento() {
         try {
             nota.getOrcamento().efetiva(historico);
@@ -312,7 +313,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
-            
+
             new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
@@ -383,7 +384,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
         }
     }
-    
+
     private void incluiValorDeFormaDeRecebimento(BigDecimal resultado) {
         switch (notaEmitida.getFormaDeRecebimento().getFormaPadraoDeEntrada()) {
             case DINHEIRO:
@@ -412,13 +413,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             notaEmitida.adiciona(itemEmitido);
             limparItemDeNota();
-            
+
             recalculaValores();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
-    
+
     public void updateItemNaLista() {
         try {
             if (itemEmitidoSelecionado != null) {
@@ -430,7 +431,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ex.print();
         }
     }
-    
+
     public void deleteItemNaLista() {
         if (itemEmitidoSelecionado != null) {
             notaEmitida.remove(itemEmitidoSelecionado);
@@ -438,7 +439,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             recalculaValores();
         }
     }
-    
+
     public void limparItemDeNota() {
         itemEmitido = new ItemDeNotaBV();
         itemEmitidoSelecionado = null;
@@ -456,7 +457,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             req.execute("PF('detalheChequeParcela').show()");
             req.update("conteudo:panelDetCheParcela");
         } else if (cobrancaSelecionada.getModalidadeDeCobranca() == ModalidadeDeCobranca.CARTAO) {
-            
+
             req.execute("PF('detalheCartaoParcela').show()");
             req.update("conteudo:panelDetCartaoPar");
         }
@@ -473,16 +474,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 Integer numParcelas = notaEmitida.getNumeroParcelas(); //Número de cobranca
                 TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
                 Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
-                
+
                 if (numParcelas != null && numParcelas > 0) {
-                    
+
                     BigDecimal soma = notaEmitida.getAFaturar().add(getTotalParcelas());
                     Money m = Money.valueOf(soma.toString(), "USD");
                     Money[] distribute = m.distribute(numParcelas);
 
                     // Busca o primeiro vencimento das cobranca
                     Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
-                    
+
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
                         cobrancas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
@@ -493,7 +494,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
-                    
+
                     recalculaValorAFaturar();
                 }
             } else {
@@ -517,14 +518,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             cheque.setEstadoDeCheque(EstadoDeCheque.ABERTO);
             cheque.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
             Cheque c = cheque.construirComID();
-            
+
             notaEmitida.adiciona(c); //Adiciona cheque a lista
             limparChequeEntrada(); //Limpa cheque
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
-    
+
     public void updateChequeEntrada() {
         try {
             if (chequeSelecionado != null) {
@@ -536,20 +537,20 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ex.print();
         }
     }
-    
+
     public void deleteChequeEntrada() {
         if (chequeSelecionado != null) {
             notaEmitida.remove(chequeSelecionado); //Remove cheque
         }
         limparChequeEntrada();
     }
-    
+
     public void limparChequeEntrada() {
         chequeSelecionado = null;
         cheque = new ChequeBV();
         cheque.setCotacao(cotacao);
     }
-    
+
     public void addCartaoQuandoSelecionadoNaParcela(CobrancaBV parcela) {
         if (parcela.getModalidadeDeCobranca() == ModalidadeDeCobranca.CARTAO) {
             for (CobrancaBV p : cobrancas) {
@@ -560,7 +561,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
         }
     }
-    
+
     public void limparChequeParcelas() {
         cobrancaBV.setBanco(null);
         cobrancaBV.setAgencia(null);
@@ -590,9 +591,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 notaEmitida.setPessoa((Pessoa) obj);
             } else if (obj instanceof ListaDePreco) {
                 notaEmitida.setListaDePreco((ListaDePreco) obj);
+                atualizaValorDeItemDeNota();
             } else if (obj instanceof Item) {
                 itemEmitido.setItem((Item) obj);
                 atribuiItemASessao();
+                atualizaValorDeItemDeNota();
             } else if (obj instanceof FormaDeRecebimento) {
                 FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
                 notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
@@ -627,7 +630,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                         itemEmitido.setListaDeQuantidade(i.getQuantidadePorDeposito());
                         itemEmitido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
                         addItemNaLista();
-                        
+
                     }
                     populaCampos(orcamento);
                 }
@@ -673,6 +676,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
     
+    /**
+     * Atualiza o valor unitario do item de de nota conforme a lista de preço
+     * selecionada.
+     */
+    public void atualizaValorDeItemDeNota() {
+        if (notaEmitida.getListaDePreco() != null && itemEmitido.getItem() != null) {
+            itemEmitido.setUnitario(itemEmitido.getItem().getPreco(notaEmitida.getListaDePreco()));
+        }
+    }
+
     public void setupView(Operacao operacao) {
         limparJanela();
         TipoOperacao tipo = operacao.getTipoOperacao();
@@ -681,7 +694,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         notaEmitida.setOperacao(operacao);
         RequestContext.getCurrentInstance().update("conteudo");
     }
-    
+
     private void importaItensDe(NotaEmitida nota) throws DadoInvalidoException {
         for (ItemDeNota ie : nota.getItens()) {
             itemEmitido.setItem(ie.getItem());
@@ -698,7 +711,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             addItemNaLista();
         }
     }
-    
+
     private void populaCampos(Orcamento orcamento) {
         notaEmitida.setOrcamento(orcamento);
         notaEmitida.setPessoa(orcamento.getPessoa());
@@ -707,12 +720,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         calculaTotaisFormaDeRecebimento();
         recalculaValores();
     }
-    
+
     private void populaCampos(Nota nota) {
         notaEmitida.setNotaDeOrigem(nota);
         notaEmitida.setPessoa(nota.getPessoa());
         notaEmitida.setListaDePreco(nota.getListaDePreco());
-        
+
         if (nota.getOperacao().getTipoOperacao() == TipoOperacao.DEVOLUCAO_CLIENTE) {
             notaEmitida.setFormaDeRecebimento(configuracaoVenda.getFormaDeRecebimentoDevolucaoEmpresa());
         }
@@ -720,14 +733,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         recalculaValores();
         RequestContext.getCurrentInstance().update("conteudo");
     }
-    
+
     private void populaCampos(Comanda comanda) {
         notaEmitida.setComanda(comanda);
         notaEmitida.setListaDePreco(comanda.getListaDePreco());
         recalculaValores();
         RequestContext.getCurrentInstance().update("conteudo");
     }
-    
+
     private void populaCampos(Condicional condicional) {
         notaEmitida.setCondicional(condicional);
         notaEmitida.setPessoa(condicional.getPessoa());
@@ -735,67 +748,67 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         recalculaValores();
         RequestContext.getCurrentInstance().update("conteudo");
     }
-    
+
     private void importa(Orcamento orcamento) throws DadoInvalidoException {
         this.orcamento = orcamento;
         atribuiOrcamentoASessao(orcamento);
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeOrcamento-btn\").click();");
     }
-    
+
     private void importa(NotaEmitida nota) throws DadoInvalidoException {
         notaEmitidaSelecionada = nota;
         SessionUtil.put(nota, "nota", FacesContext.getCurrentInstance());
         SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeNotaEmitida-btn\").click();");
     }
-    
+
     private void importa(Comanda comanda) throws DadoInvalidoException {
         comandaSelecionada = comanda;
         SessionUtil.put(comanda, "comanda", FacesContext.getCurrentInstance());
         SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeComanda-btn\").click();");
     }
-    
+
     private void importa(Condicional condicional) throws DadoInvalidoException {
         condicionalSelecionada = condicional;
         SessionUtil.put(condicional, "condicional", FacesContext.getCurrentInstance());
         SessionUtil.put(notaEmitida.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
         RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibeCondicional-btn\").click();");
     }
-    
+
     public void atribuiItemASessao() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.item.token");
         session.setAttribute("onesystem.item.token", itemEmitido.getItem());
     }
-    
+
     public void atribuiOrcamentoASessao(Orcamento orcamento) {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.orcamento.token");
         session.setAttribute("onesystem.orcamento.token", orcamento);
     }
-    
+
     public void selecionaChequeDeEntrada(SelectEvent event) {
         chequeSelecionado = (Cheque) event.getObject();
         cheque = new ChequeBV(chequeSelecionado);
     }
-    
+
     public void selecionaCartao(SelectEvent event) {
         cobrancaBV.setCartao((Cartao) event.getObject());
     }
-    
+
     public void selecionaItemDeNota(SelectEvent event) {
         this.itemEmitidoSelecionado = (ItemDeNota) event.getObject();
         this.itemEmitido = new ItemDeNotaBV(itemEmitidoSelecionado);
     }
-    
+
     public void selecionarBanco(SelectEvent event) {
         Banco banco = (Banco) event.getObject();
         cobrancaBV.setBanco(banco);
     }
-    
+
     public void selecionaChequeEntrada(SelectEvent event) {
         chequeSelecionado = (Cheque) event.getObject();
         cheque = new ChequeBV(chequeSelecionado);
@@ -818,7 +831,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ex.print();
         }
     }
-    
+
     public void addDetalheParcelaCheque() {
         try {
 
@@ -834,11 +847,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
             cobrancaBV = new CobrancaBV();
             cobrancaSelecionada = null;
-            
+
             RequestContext r = RequestContext.getCurrentInstance();
             r.update("conteudo:ne:neParcelas");
             r.execute("PF('detalheChequeParcela').hide()");
-            
+
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -856,7 +869,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             BigDecimal acrescimo;
             BigDecimal desconto;
             BigDecimal cem = new BigDecimal(100);
-            
+
             if (pAcrescimo.compareTo(BigDecimal.ZERO) > 0) {
                 acrescimo = (pAcrescimo.multiply(total)).divide(cem, 2, BigDecimal.ROUND_UP);
                 notaEmitida.setAcrescimo(acrescimo);
@@ -869,7 +882,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             } else {
                 notaEmitida.setDesconto(BigDecimal.ZERO);
             }
-            
+
             incluiValorDeFormaDeRecebimento(notaEmitida.getTotalNota());
         }
     }
@@ -886,7 +899,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             BigDecimal pAcrescimo;
             BigDecimal pDesconto;
             BigDecimal cem = new BigDecimal(100);
-            
+
             if (acrescimo.compareTo(BigDecimal.ZERO) > 0) {
                 pAcrescimo = (acrescimo.multiply(cem)).divide(total, 2, BigDecimal.ROUND_UP);
                 notaEmitida.setPorcentagemAcrescimo(pAcrescimo);
@@ -899,26 +912,26 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             } else {
                 notaEmitida.setPorcentagemDesconto(BigDecimal.ZERO);
             }
-            
+
             incluiValorDeFormaDeRecebimento(notaEmitida.getTotalNota());
         }
     }
-    
+
     public void calculaValoresTotais() {
         incluiValorDeFormaDeRecebimento(notaEmitida.getTotalNota());
     }
-    
+
     public void recalculaValores() {
         recalculaValorAFaturar();
         if (!cobrancas.isEmpty()) {
             criaParcelas();
         }
     }
-    
+
     public void deleteBoletoDeCartao() {
         boletoDeCartao = new BoletoDeCartaoBV();
     }
-    
+
     public void constroiBoletoDeCartaoEntrada() {
         RequestContext rc = RequestContext.getCurrentInstance();
         try {
@@ -927,7 +940,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             boletoDeCartao.setPessoa(notaEmitida.getPessoa());
             boletoDeCartao.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
             boletoDeCartao.setEntrada(true);
-            
+
             if (boletoDeCartao.getCartao() != null) {
                 if (boletoDeCartao.getValor() == null || boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
                     if (boletoDeCartao.getCartao().getTaxaDeAdministracao().isEmpty()) {
@@ -950,7 +963,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
             boletoDeCartao.construir();
             recalculaValores();
-            
+
             rc.execute("PF('detalheCartaoEntrada').hide()");
         } catch (DadoInvalidoException ex) {
             boletoDeCartao.setValor(null);
@@ -958,16 +971,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             rc.update("conteudo:growl");
         }
     }
-    
+
     public void recalculaValorAFaturar() {
-        
+
         BigDecimal chequeTotal = notaEmitida.getTotalChequeDeEntrada() == null ? BigDecimal.ZERO : notaEmitida.getTotalChequeDeEntrada();
         BigDecimal cartao = boletoDeCartao.getValor() == null ? BigDecimal.ZERO : boletoDeCartao.getValor();
         BigDecimal credito = creditoBV.getValor() == null ? BigDecimal.ZERO : creditoBV.getValor();
         BigDecimal dinheiro = notaEmitida.getTotalEmDinheiro() == null ? BigDecimal.ZERO : notaEmitida.getTotalEmDinheiro();
         BigDecimal totalParcelas = getTotalParcelas() == null ? BigDecimal.ZERO : getTotalParcelas();
         BigDecimal soma = chequeTotal.add(cartao).add(credito).add(totalParcelas).add(dinheiro);
-        
+
         notaEmitida.setAFaturar(notaEmitida.getTotalNota().subtract(soma));
     }
 
@@ -978,23 +991,23 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         Long dias = LocalDate.now().until(venc, ChronoUnit.DAYS);
         return dias.intValue();
     }
-    
+
     public String getValorRestante() {
         BigDecimal total = notaEmitida.getTotalEmDinheiro();
         BigDecimal valorAReceber = BigDecimal.ZERO;
         NumberFormat nf = NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal());
-        
+
         for (ValorPorCotacaoBV c : cotacoes) {
             valorAReceber = valorAReceber.add(c.getValorConvertidoRecebido());
         }
-        
+
         if (total == null || total.subtract(valorAReceber).compareTo(BigDecimal.ZERO) < 0) {
             return nf.format(BigDecimal.ZERO);
         } else {
             return nf.format(total.subtract(valorAReceber));
         }
     }
-    
+
     public BigDecimal getTotalConvertidoRecebido() {
         BigDecimal total = BigDecimal.ZERO;
         for (ValorPorCotacaoBV c : cotacoes) {
@@ -1002,11 +1015,11 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
         return total;
     }
-    
+
     public String getTotalConvertidoRecebidoFormatado() {
         return NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(getTotalConvertidoRecebido());
     }
-    
+
     public BigDecimal getTotalParcelas() {
         BigDecimal totalParcela = BigDecimal.ZERO;
         for (CobrancaBV p : cobrancas) {
@@ -1016,17 +1029,17 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 totalParcela = totalParcela.add(p.getValor());
             }
         }
-        
+
         return totalParcela;
     }
-    
+
     public String getTotalParcelasFormatado() {
         BigDecimal totalParcelas = getTotalParcelas();
-        
+
         return totalParcelas.compareTo(BigDecimal.ZERO) == 0 ? ""
                 : NumberFormat.getCurrencyInstance(configuracao.getMoedaPadrao().getBandeira().getLocal()).format(totalParcelas);
     }
-    
+
     private Long getIdParcela() {
         Long id = (long) 1;
         if (!cobrancas.isEmpty()) {
@@ -1047,19 +1060,19 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), BigDecimal.ZERO);
     }
-    
+
     public NotaEmitida getNotaEmitidaSelecionada() {
         return notaEmitidaSelecionada;
     }
-    
+
     public void setNotaSelecionada(NotaEmitida notaEmitidaSelecionada) {
         this.notaEmitidaSelecionada = notaEmitidaSelecionada;
     }
-    
+
     public NotaEmitidaBV getNotaEmitida() {
         return notaEmitida;
     }
-    
+
     public List<ModalidadeDeCobranca> getTiposDeFormaDeRecebimentoParcela() {
         List<ModalidadeDeCobranca> forma = new ArrayList<>();
         if (notaEmitida.getFormaDeRecebimento().isParcelaEmCartao()) {
@@ -1073,7 +1086,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
         return forma;
     }
-    
+
     public boolean getGeraFinanceiro() {
         try {
             return notaEmitida.getOperacao().getTipoOperacao() == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA
@@ -1082,203 +1095,203 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             return false;
         }
     }
-    
+
     public void setNota(NotaEmitidaBV notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-    
+
     public ItemDeNotaBV getItemEmitido() {
         return itemEmitido;
     }
-    
+
     public void setItemEmitido(ItemDeNotaBV itemEmitido) {
         this.itemEmitido = itemEmitido;
     }
-    
+
     public ItemDeNota getItemEmitidoSelecionado() {
         return itemEmitidoSelecionado;
     }
-    
+
     public void setItemEmitidoSelecionado(ItemDeNota itemEmitidoSelecionado) {
         this.itemEmitidoSelecionado = itemEmitidoSelecionado;
     }
-    
+
     public EstoqueBV getEstoqueBV() {
         return estoqueBV;
     }
-    
+
     public void setEstoqueBV(EstoqueBV estoqueBV) {
         this.estoqueBV = estoqueBV;
     }
-    
+
     public Configuracao getConfiguracao() {
         return configuracao;
     }
-    
+
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-    
+
     public ValorPorCotacaoBV getCotacaoValoresSelecionado() {
         return cotacaoValoresSelecionado;
     }
-    
+
     public void setCotacaoValoresSelecionado(ValorPorCotacaoBV cotacaoValoresSelecionado) {
         this.cotacaoValoresSelecionado = cotacaoValoresSelecionado;
     }
-    
+
     public List<Cotacao> getCotacaoLista() {
         return cotacaoLista;
     }
-    
+
     public void setCotacaoLista(List<Cotacao> cotacaoLista) {
         this.cotacaoLista = cotacaoLista;
     }
-    
+
     public List<ValorPorCotacaoBV> getCotacoes() {
         return cotacoes;
     }
-    
+
     public void setCotacoes(List<ValorPorCotacaoBV> cotacoes) {
         this.cotacoes = cotacoes;
     }
-    
+
     public List<CobrancaBV> getCobrancas() {
         return cobrancas;
     }
-    
+
     public void setCobrancas(List<CobrancaBV> cobrancas) {
         this.cobrancas = cobrancas;
     }
-    
+
     public ConfiguracaoService getConfiguracaoService() {
         return configuracaoService;
     }
-    
+
     public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
         this.configuracaoService = configuracaoService;
     }
-    
+
     public CotacaoService getService() {
         return service;
     }
-    
+
     public void setService(CotacaoService service) {
         this.service = service;
     }
-    
+
     public ChequeBV getCheque() {
         return cheque;
     }
-    
+
     public void setCheque(ChequeBV cheque) {
         this.cheque = cheque;
     }
-    
+
     public Cheque getChequeSelecionado() {
         return chequeSelecionado;
     }
-    
+
     public void setChequeSelecionado(Cheque chequeSelecionado) {
         this.chequeSelecionado = chequeSelecionado;
     }
-    
+
     public CobrancaBV getCobrancaSelecionada() {
         return cobrancaSelecionada;
     }
-    
+
     public void setCobrancaSelecionada(CobrancaBV cobrancaSelecionada) {
         this.cobrancaSelecionada = cobrancaSelecionada;
     }
-    
+
     public CobrancaBV getCobrancaBV() {
         return cobrancaBV;
     }
-    
+
     public void setCobrancaBV(CobrancaBV cobrancaBV) {
         this.cobrancaBV = cobrancaBV;
     }
-    
+
     public BoletoDeCartaoBV getBoletoDeCartao() {
         return boletoDeCartao;
     }
-    
+
     public void setBoletoDeCartao(BoletoDeCartaoBV boletoDeCartao) {
         this.boletoDeCartao = boletoDeCartao;
     }
-    
+
     public Cotacao getCotacao() {
         return cotacao;
     }
-    
+
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
     }
-    
+
     public CreditoBV getCreditoBV() {
         return creditoBV;
     }
-    
+
     public void setCreditoBV(CreditoBV creditoBV) {
         this.creditoBV = creditoBV;
     }
-    
+
     public Orcamento getOrcamento() {
         return orcamento;
     }
-    
+
     public void setOrcamento(Orcamento orcamento) {
         this.orcamento = orcamento;
     }
-    
+
     public String getHistorico() {
         return historico;
     }
-    
+
     public void setHistorico(String historico) {
         this.historico = historico;
     }
-    
+
     public EstoqueService getServiceEstoque() {
         return serviceEstoque;
     }
-    
+
     public void setServiceEstoque(EstoqueService serviceEstoque) {
         this.serviceEstoque = serviceEstoque;
     }
-    
+
     public EstadoDeOrcamento getEstadoDeOrcamento() {
         return EstadoDeOrcamento.EFETIVADO;
     }
-    
+
     public boolean isEditarItensEParcelas() {
         return editarItensEParcelas;
     }
-    
+
     public void setEditarItensEParcelas(boolean devolucao) {
         this.editarItensEParcelas = devolucao;
     }
-    
+
     public ConfiguracaoVenda getConfiguracaoVenda() {
         return configuracaoVenda;
     }
-    
+
     public void setConfiguracaoVenda(ConfiguracaoVenda configuracaoVenda) {
         this.configuracaoVenda = configuracaoVenda;
     }
-    
+
     public ConfiguracaoVendaService getConfiguracaoVendaService() {
         return configuracaoVendaService;
     }
-    
+
     public void setConfiguracaoVendaService(ConfiguracaoVendaService configuracaoVendaService) {
         this.configuracaoVendaService = configuracaoVendaService;
     }
-    
+
     public CreditoService getCreditoService() {
         return creditoService;
     }
-    
+
     public void setCreditoService(CreditoService creditoService) {
         this.creditoService = creditoService;
     }
