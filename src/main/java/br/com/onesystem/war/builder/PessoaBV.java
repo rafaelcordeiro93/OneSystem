@@ -1,6 +1,6 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.PessoaJuridica;
@@ -26,7 +26,7 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
     private Date cadastro = new Date();
     private String observacao;
     private String fiador;
-    private Cidade cidade;
+    private Cep cep;
     private String telefone;
     private String contato;
     private String email;
@@ -54,7 +54,7 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.cadastro = pessoaSelecionada.getCadastro();
         this.observacao = pessoaSelecionada.getObservacao();
         this.fiador = pessoaSelecionada.getFiador();
-        this.cidade = pessoaSelecionada.getCidade();
+        this.cep = pessoaSelecionada.getCep();
         this.fisicaJuridica = pessoaSelecionada.getTipo() != TipoPessoa.PESSOA_FISICA;
         this.nascimento = pessoaSelecionada.getNascimento();
         this.conjuge = pessoaSelecionada.getConjuge();
@@ -216,12 +216,12 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.fiador = fiador;
     }
     
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
     }
     
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
+    public void setCep(Cep cep) {
+        this.cep = cep;
     }
     
     public String getTelefone() {
@@ -253,10 +253,10 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato)
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato)
                 : new PessoaJuridica(fantasiaCI, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato);
     }
     
     public Pessoa construirComID() throws DadoInvalidoException {
@@ -264,10 +264,10 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato)
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato)
                 : new PessoaJuridica(fantasiaCI, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato);
     }
     
 }

@@ -89,7 +89,7 @@ public abstract class Pessoa implements Serializable {
     @Column(nullable = true, length = 80)
     private String fiador;
     @ManyToOne
-    private Cidade cidade;
+    private Cep cep;
     @OneToMany(mappedBy = "pessoa")
     private List<Recepcao> recepcoes;
     @OneToMany(mappedBy = "pessoa")
@@ -115,7 +115,7 @@ public abstract class Pessoa implements Serializable {
     public Pessoa(Long id, String nome, TipoPessoa tipo, String ruc, boolean ativo,
             String direcao, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
             boolean categoriaVendedor, boolean categoriaTransportador, Double desconto,
-            Date cadastro, String observacao, String fiador, Cidade cidade, String telefone, String email,
+            Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email,
             String contato) {
         this.id = id;
         this.nome = nome;
@@ -132,7 +132,7 @@ public abstract class Pessoa implements Serializable {
         this.cadastro = cadastro;
         this.observacao = observacao;
         this.fiador = fiador;
-        this.cidade = cidade;
+        this.cep = cep;
         this.telefone = telefone;
         this.email = email;
         this.contato = contato;
@@ -222,8 +222,8 @@ public abstract class Pessoa implements Serializable {
         return fiador;
     }
 
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
     }
 
     public void instanciaContactoList() {
@@ -278,7 +278,7 @@ public abstract class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", ruc=" + ruc + ", telefone=" + telefone + ", email=" + email + ", contato=" + contato + ", ativo=" + ativo + ", direcao=" + direcao + ", bairro=" + bairro + ", categoriaCliente=" + categoriaCliente + ", categoriaFornecedor=" + categoriaFornecedor + ", categoriaVendedor=" + categoriaVendedor + ", categoriaTransportador=" + categoriaTransportador + ", desconto=" + desconto + ", cadastro=" + cadastro + ", observacao=" + observacao + ", fiador=" + fiador + ", cidade=" + cidade + ", configuracaoCambio=" + configuracaoCambio + '}';
+        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", ruc=" + ruc + ", telefone=" + telefone + ", email=" + email + ", contato=" + contato + ", ativo=" + ativo + ", direcao=" + direcao + ", bairro=" + bairro + ", categoriaCliente=" + categoriaCliente + ", categoriaFornecedor=" + categoriaFornecedor + ", categoriaVendedor=" + categoriaVendedor + ", categoriaTransportador=" + categoriaTransportador + ", desconto=" + desconto + ", cadastro=" + cadastro + ", observacao=" + observacao + ", fiador=" + fiador + ", cep=" + cep.getCep() + ", configuracaoCambio=" + configuracaoCambio + '}';
     }
 
 }

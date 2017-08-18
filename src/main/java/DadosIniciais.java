@@ -4,6 +4,7 @@ import br.com.onesystem.domain.builder.PaisBuilder;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cidade;
@@ -41,6 +42,7 @@ import br.com.onesystem.domain.SituacaoFiscal;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
+import br.com.onesystem.domain.builder.CepBuilder;
 import br.com.onesystem.domain.builder.CfopBuilder;
 import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
@@ -95,9 +97,13 @@ public class DadosIniciais {
         //Cidade ====================================================
         Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comEstado(estado).construir();
         new AdicionaDAO<>().adiciona(city);
+        
+        //Cep =======================================================
+        Cep cep = new CepBuilder().comCep("85950-000").comCidade(city).construir();
+        new AdicionaDAO<>().adiciona(cep);
 
-        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "rauber@rrminds.com", null);
-        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "cordeiro@rrminds.com", null);
+        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "rauber@rrminds.com", null);
+        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "cordeiro@rrminds.com", null);
         new AdicionaDAO<Pessoa>().adiciona(cordeiro);
         new AdicionaDAO<Pessoa>().adiciona(rauber);
 
@@ -138,6 +144,7 @@ public class DadosIniciais {
         Janela jpais = new Janela(null, "País", "/menu/arquivo/pais.xhtml", arq);
         Janela jestado = new Janela(null, "Estado", "/menu/arquivo/estado.xhtml", arq);
         Janela cidade = new Janela(null, "Cidade", "/menu/arquivo/cidade.xhtml", arq);
+        Janela jcep = new Janela(null, "Cep", "/menu/arquivo/cep.xhtml", arq);
         Janela jpessoa = new Janela(null, "Pessoa", "/menu/arquivo/pessoa.xhtml", arq);
         Janela jpessoaimport = new Janela(null, "Importador de Pessoas", "/menu/arquivo/importarPessoa.xhtml", arq);
 
@@ -145,6 +152,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jpais);
         daoJanela.adiciona(jestado);
         daoJanela.adiciona(cidade);
+        daoJanela.adiciona(jcep);
         daoJanela.adiciona(jpessoa);
         daoJanela.adiciona(jpessoaimport);
 
@@ -378,6 +386,7 @@ public class DadosIniciais {
                 new Privilegio(null, dashboard, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoa, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cidade, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jcep, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoaimport, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, notaSaida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, retificacaoDeVenda, true, true, true, true, grupoDePrivilegio),

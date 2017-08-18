@@ -1,6 +1,6 @@
 package br.com.onesystem.domain.builder;
 
-import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.util.Date;
@@ -18,7 +18,7 @@ public class FilialBuilder {
     private String ruc;
     private String endereco;
     private String bairro;
-    private Cidade cidade;
+    private Cep cep;
     private String telefone;
     private Date vencimento;
     private String serialKey;
@@ -58,8 +58,8 @@ public class FilialBuilder {
         return this;
     }
 
-    public FilialBuilder comCidade(Cidade cidade) {
-        this.cidade = cidade;
+    public FilialBuilder comCep(Cep cep) {
+        this.cep = cep;
         return this;
     }
 
@@ -79,7 +79,7 @@ public class FilialBuilder {
     }
 
     public Filial construir() throws DadoInvalidoException {
-        return new Filial(id, nome, razao_social, fantasia, ruc, endereco, bairro, cidade, telefone, vencimento, serialKey);
+        return new Filial(id, nome, razao_social, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey);
     }
 
 }

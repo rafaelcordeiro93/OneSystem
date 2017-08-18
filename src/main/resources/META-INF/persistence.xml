@@ -8,6 +8,7 @@
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <!--  Aqui são listadas todas as entidades  -->
     <class>br.com.onesystem.domain.Cidade</class>
+    <class>br.com.onesystem.domain.Cep</class>
     <class>br.com.onesystem.domain.Contato</class>
     <class>br.com.onesystem.domain.Log</class>
     <class>br.com.onesystem.domain.GrupoDePrivilegio</class>

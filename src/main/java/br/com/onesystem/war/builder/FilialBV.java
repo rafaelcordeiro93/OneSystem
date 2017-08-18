@@ -1,6 +1,6 @@
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.builder.FilialBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -17,7 +17,7 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
     private String ruc;
     private String endereco;
     private String bairro;
-    private Cidade cidade;
+    private Cep cep;
     private String telefone;
     private Date vencimento;
     private String serialKey;
@@ -30,7 +30,7 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
         this.ruc = filialSelecionada.getRuc();
         this.endereco = filialSelecionada.getEndereco();
         this.bairro = filialSelecionada.getBairro();
-        this.cidade = filialSelecionada.getCidade();
+        this.cep = filialSelecionada.getCep();
         this.telefone = filialSelecionada.getTelefone();
         this.vencimento = filialSelecionada.getVencimento();
         this.serialKey = filialSelecionada.getSerialKey();
@@ -95,12 +95,12 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
         this.bairro = bairro;
     }
     
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
     }
     
-    public void setCidade(Cidade cidade) {
-        this.cidade = cidade;
+    public void setCep(Cep cep) {
+        this.cep = cep;
     }
     
     public String getTelefone() {
@@ -129,11 +129,11 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
     
     public Filial construir() throws DadoInvalidoException {
         return new FilialBuilder().comNome(nome).comRazaoSocial(razao_social).comFantasia(fantasia).comRuc(ruc)
-                .comEndereco(endereco).comBairro(bairro).comCidade(cidade).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
+                .comEndereco(endereco).comBairro(bairro).comCep(cep).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
     }
     
     public Filial construirComID() throws DadoInvalidoException {
         return new FilialBuilder().comID(id).comNome(nome).comRazaoSocial(razao_social).comFantasia(fantasia).comRuc(ruc)
-                .comEndereco(endereco).comBairro(bairro).comCidade(cidade).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
+                .comEndereco(endereco).comBairro(bairro).comCep(cep).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
     }
 }

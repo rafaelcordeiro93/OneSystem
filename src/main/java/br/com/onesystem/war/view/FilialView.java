@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.war.builder.FilialBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -27,8 +27,8 @@ public class FilialView extends BasicMBImpl<Filial, FilialBV> implements Seriali
         Object obj = event.getObject();
         if (obj instanceof Filial) {
             e = new FilialBV((Filial) obj);
-        } else if (obj instanceof Cidade) {
-            e.setCidade((Cidade) obj);
+        } else if (obj instanceof Cep) {
+            e.setCep((Cep) obj);
         }        
     }
     

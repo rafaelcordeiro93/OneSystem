@@ -50,9 +50,9 @@ public class Filial implements Serializable {
     @Length(min = 2, max = 60, message = "{bairro_lenght}")
     @Column(length = 60, nullable = false)
     private String bairro;
-    @NotNull(message = "{cidade_not_null}")
+    @NotNull(message = "{cep_not_null}")
     @ManyToOne
-    private Cidade cidade;
+    private Cep cep;
     @NotNull(message = "{telefone_not_null}")
     @Length(min = 2, max = 60, message = "{telefone_lenght}")
     @Column(length = 60, nullable = false)
@@ -66,14 +66,14 @@ public class Filial implements Serializable {
     }
 
     public Filial(Long id, String nome, String razao_social, String fantasia,
-            String ruc, String endereco, String bairro, Cidade cidade,
+            String ruc, String endereco, String bairro, Cep cep,
             String telefone, Date vencimento, String serialKey) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.razao_social = razao_social;
         this.fantasia = fantasia;
         this.ruc = ruc;
-        this.cidade = cidade;
+        this.cep = cep;
         this.endereco = endereco;
         this.bairro = bairro;
         this.telefone = telefone;
@@ -110,8 +110,8 @@ public class Filial implements Serializable {
         return bairro;
     }
 
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
     }
 
     public String getTelefone() {
@@ -148,7 +148,7 @@ public class Filial implements Serializable {
 
     @Override
     public String toString() {
-        return "Filial{" + "id=" + id + ", nome=" + nome + ", razao_social=" + razao_social + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", bairro=" + bairro + ", cidade=" + cidade + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + '}';
+        return "Filial{" + "id=" + id + ", nome=" + nome + ", razao_social=" + razao_social + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", bairro=" + bairro + ", cep=" + cep + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + '}';
     }
 
 }

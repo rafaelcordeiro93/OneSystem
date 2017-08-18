@@ -24,30 +24,30 @@ import org.hibernate.validator.constraints.Length;
  * @author Rafael Fernando Rauber
  */
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_CIDADE",
-        sequenceName = "SEQ_CIDADE")
-public class Cidade implements Serializable {
+@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_CEP",
+        sequenceName = "SEQ_CEP")
+public class Cep implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CIDADE")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CEP")
     private Long id;
-    @NotNull(message = "{nome_not_null}")
-    @Length(min = 4, max = 60, message = "{nome_lenght}")
-    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nome_type_letter_space}")
-    @Column(nullable = false, length = 60)
-    private String nome;
-    @OneToMany(mappedBy = "cidade", fetch = FetchType.LAZY)
-    private List<Cep> listadeCeps;
-    @ManyToOne
-    private Estado estado;
+    @NotNull(message = "{cep_not_null}")
+    @Length(min = 8, max = 9, message = "{cep_lenght}")
+    @Column(nullable = false, length = 20, unique = true)
+    private String cep;
+    @OneToMany(mappedBy = "cep", fetch = FetchType.LAZY)
+    private List<Pessoa> listadePessoas;
+    @NotNull(message = "{cidade_not_null}")
+    @ManyToOne(optional = false)
+    private Cidade cidade;
 
-    public Cidade() {
+    public Cep() {
     }
 
-    public Cidade(Long id, String nome, Estado estado) throws DadoInvalidoException {
+    public Cep(Long id, String cep, Cidade cidade) throws DadoInvalidoException {
         this.id = id;
-        this.nome = nome;
-        this.estado = estado;
+        this.cep = cep;
+        this.cidade = cidade;
         ehValido();
     }
 
@@ -55,25 +55,17 @@ public class Cidade implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getCep() {
+        return cep;
     }
 
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Estado getEstado() {
-        return estado;
+    public Cidade getCidade() {
+        return cidade;
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome");
-        new ValidadorDeCampos<Cidade>().valida(this, campos);
+        List<String> campos = Arrays.asList("cep");
+        new ValidadorDeCampos<Cep>().valida(this, campos);
     }
 
     @Override
@@ -81,10 +73,10 @@ public class Cidade implements Serializable {
         if (objeto == null) {
             return false;
         }
-        if (!(objeto instanceof Cidade)) {
+        if (!(objeto instanceof Cep)) {
             return false;
         }
-        Cidade outro = (Cidade) objeto;
+        Cep outro = (Cep) objeto;
         if (this.id == null) {
             return false;
         }
@@ -93,7 +85,7 @@ public class Cidade implements Serializable {
 
     @Override
     public String toString() {
-        return "Cidade{" + "id=" + id + ", nome=" + nome + '}';
+        return "Cidade{" + "id=" + id + ", cep=" + cep + '}';
     }
 
 }
