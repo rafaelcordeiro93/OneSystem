@@ -13,6 +13,9 @@
                 <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
                     <h:outputText value="#{bean.id}" />
                 </p:column>
+              <p:column headerText="#{l.Tipo_Lancamento}" sortBy="#{bean.tipoLancamento}" filterBy="#{bean.tipoLancamento}" footerText="#{l.Tipo_Lancamento}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.tipoLancamento}" />
+                </p:column>
                 <p:column headerText="#{l.Banco}" sortBy="#{bean.banco.nome}" filterBy="#{bean.banco.nome}" footerText="#{l.Banco}" filterMatchMode="contains">
                     <h:outputText value="#{bean.banco.nome}" />
                 </p:column>
@@ -21,6 +24,9 @@
                 </p:column>
                 <p:column headerText="#{l.Valor}" sortBy="#{bean.valor}" filterBy="#{bean.valor}" footerText="#{l.Valor}" filterMatchMode="contains">
                     <h:outputText value="#{bean.valor}" />
+                </p:column>
+             <p:column headerText="#{l.Estado}" sortBy="#{bean.estadoDeCheque.nome}" filterBy="#{bean.estadoDeCheque.nome}" footerText="#{l.Estado}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.estadoDeCheque.nome}" />
                 </p:column>
       </a:dataTable>
 

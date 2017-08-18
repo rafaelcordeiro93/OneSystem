@@ -67,26 +67,26 @@ public abstract class Cobranca implements Serializable {
 
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao;
+    protected Date emissao;
 
     @NotNull(message = "{pessoa_not_null}")
     @ManyToOne(optional = true)
-    private Pessoa pessoa;
+    protected Pessoa pessoa;
 
     @NotNull(message = "{cotacao_not_null}")
     @ManyToOne(optional = false)
-    private Cotacao cotacao;
+    protected Cotacao cotacao;
 
     @Length(max = 250, min = 0, message = "{historico_length}")
     @Column(length = 250, nullable = true)
-    private String historico;
+    protected String historico;
 
-    @OneToMany(mappedBy = "parcela", cascade = {CascadeType.ALL})
-    private List<Baixa> baixas;
+    @OneToMany(mappedBy = "cobranca", cascade = {CascadeType.ALL})
+    protected List<Baixa> baixas;
 
     @NotNull(message = "{unidadeFinanceira_not_null}")
     @Enumerated(EnumType.STRING)
-    private OperacaoFinanceira operacaoFinanceira;
+    protected OperacaoFinanceira operacaoFinanceira;
 
     @NotNull(message = "{vencimento_not_null}")
     @Temporal(TemporalType.TIMESTAMP)

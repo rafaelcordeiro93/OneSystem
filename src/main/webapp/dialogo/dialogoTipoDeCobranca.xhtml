@@ -108,7 +108,7 @@
                             <p:outputLabel value="#{l.Agencia}: #{dialogoTipoDeCobrancaView.cheque.agencia}"/>
                             <p:outputLabel value="#{l.Conta}: #{dialogoTipoDeCobrancaView.cheque.conta}"/>
                             <p:outputLabel value="#{l.Cheque}: #{dialogoTipoDeCobrancaView.cheque.numeroCheque}" styleClass="Blue"/>
-                            <p:outputLabel value="#{l.Situacao}: #{dialogoTipoDeCobrancaView.cheque.tipoSituacao}"/>
+                            <p:outputLabel value="#{l.Situacao}: #{dialogoTipoDeCobrancaView.cheque.estadoDeCheque}"/>
                             <p:outputLabel value="#{l.Emitente}: #{dialogoTipoDeCobrancaView.cheque.emitente}"/>
 
                         </p:panelGrid>
@@ -197,6 +197,9 @@
                             <f:selectItems value="#{dialogoTipoDeCobrancaView.contaComCotacao}" var="conta" itemValue="#{conta}" itemLabel="#{conta.nome}"/>
                         </p:selectOneMenu>
 
+                        <p:outputLabel value="#{l.Compensado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" />
+                        <p:calendar id="compensado" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoTipoDeCobrancaView.e.dataCompensacao}" size="8"/>
+
                         <p:outputLabel value="#{l.Cotacao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"/>
                         <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1}" readonly="true"/>
                         <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 1 ? true : false : false}" >
@@ -225,6 +228,8 @@
 
                         <p:outputLabel value="#{l.Observacao}:" />
                         <p:inputTextarea rows="3" value="#{dialogoTipoDeCobrancaView.e.observacao}" placeholder="#{l.Escreva_uma_observacao}"/>
+
+
                     </p:panelGrid>
 
                 </div>

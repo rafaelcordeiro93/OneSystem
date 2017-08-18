@@ -514,7 +514,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             //Prepara e constroi cheque
             cheque.setEntrada(true);
-            cheque.setTipoSituacao(EstadoDeCheque.ABERTO);
+            cheque.setEstadoDeCheque(EstadoDeCheque.ABERTO);
             cheque.setOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira());
             Cheque c = cheque.construirComID();
             

@@ -5,8 +5,10 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
@@ -14,10 +16,16 @@ import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.TipoLancamento;
+import br.com.onesystem.valueobjects.TipoLancamentoBancario;
+import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.List;
+import javax.faces.context.FacesContext;
+import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
@@ -28,6 +36,7 @@ public class GeradorDeBaixaDeTipoCobranca {
     private TipoDeCobranca tipoDeCobranca;
     private BundleUtil msg = new BundleUtil();
     private ConfiguracaoContabil conf = new ConfiguracaoContabilService().buscar();
+    private boolean entrou = false;
 
     public GeradorDeBaixaDeTipoCobranca(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
         this.tipoDeCobranca = tipoDeCobranca;
@@ -35,29 +44,58 @@ public class GeradorDeBaixaDeTipoCobranca {
 
     public void geraBaixas() throws DadoInvalidoException {
         String tipo = tipoDeCobranca.getTipoDocumento();
-        if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
-        }
-        if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
-        }
-        if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
-        }
-        tipoDeCobranca.getCobranca().adiciona(getValor(tipo));
 
-        if (tipoDeCobranca.getCobranca() instanceof Titulo) {
-            Titulo titulo = (Titulo) tipoDeCobranca.getCobranca();
-            titulo.atualizaSaldo(tipoDeCobranca.getValor());
+        if (tipoDeCobranca.getCobranca() instanceof Cheque) {
+            verificaBaixasExistentes(tipoDeCobranca.getCobranca());
+        }
+        if (entrou == false) {
+
+            if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
+                tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
+            }
+            if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
+                tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
+            }
+            if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
+                tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
+            }
+            tipoDeCobranca.getCobranca().adiciona(getValor(tipo));
+
+            if (tipoDeCobranca.getCobranca() instanceof Titulo) {
+                Titulo titulo = (Titulo) tipoDeCobranca.getCobranca();
+                titulo.atualizaSaldo(tipoDeCobranca.getValor());
+            }
+
         }
         //Atualiza situação da Cobrança 
         tipoDeCobranca.getCobranca().atualizaSituacao();
     }
 
+    private void verificaBaixasExistentes(Cobranca d) throws ConstraintViolationException, DadoInvalidoException {
+        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        entrou = false;
+        if (listaBaixa.size() > 0) {
+            Cheque ch = (Cheque) tipoDeCobranca.getCobranca();
+            Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+            for (Baixa b : listaBaixa) {
+                BaixaBV bv = new BaixaBV(b);
+                if (ch.getTipoLancamento() == TipoLancamento.EMITIDA) {
+                    bv.setHistorico(new BundleUtil().getMessage("Pagamento_de") + " " + new BundleUtil().getLabel("Cheque") + getHistorico());
+                } else {
+                    bv.setHistorico(new BundleUtil().getMessage("Abatimento_de") + " " + new BundleUtil().getLabel("Cheque") + getHistorico());
+                }
+                bv.setDataCompensacao(ch.getCompensacao());
+                bv.setEstado(EstadoDeBaixa.EFETIVADO);
+                bv.setCaixa(caixa);
+                new AtualizaDAO<>().atualiza(bv.construirComID());
+            }
+            entrou = true;
+        }
+    }
+
     private Baixa getValor(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
-
         if (tipoDeCobranca.getRecebimento() != null) {
             if (tipoDeCobranca.getCobranca().getNota() != null) {
                 builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());

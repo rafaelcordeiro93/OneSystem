@@ -1,7 +1,11 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.EstadoDeCheque;
@@ -9,15 +13,19 @@ import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.faces.context.FacesContext;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -33,7 +41,7 @@ public class Cheque extends Cobranca implements Serializable {
     private String conta;
     @NotNull(message = "{numero_cheque_not_null}")
     private String numeroCheque;
-    @NotNull(message = "{tipo_situacao_not_null}")
+    @NotNull(message = "{estado_not_null}")
     @Enumerated(EnumType.STRING)
     private EstadoDeCheque estado;
     @NotNull(message = "{tipo_lancamento_not_null}")
@@ -49,13 +57,15 @@ public class Cheque extends Cobranca implements Serializable {
     private String emitente;
     @ManyToOne
     private DepositoBancario depositoBancario;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date compensacao;
 
     public Cheque() {
     }
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Date compensacao) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
         this.banco = banco;
         this.agencia = agencia;
@@ -67,13 +77,54 @@ public class Cheque extends Cobranca implements Serializable {
         this.descontos = descontos;
         this.emitente = emitente;
         this.tipoLancamento = tipoLancamento;
+        this.compensacao = compensacao;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "tipoSituacao",
+        List<String> camposCheque = Arrays.asList("banco", "agencia", "conta", "numeroCheque", "estado",
                 "multas", "juros", "descontos", "emitente");
         new ValidadorDeCampos<Cheque>().valida(this, camposCheque);
+    }
+
+    /* Deve ser utilizado para gerar a baixa do depósito */
+    public void geraBaixaDeCheque() throws DadoInvalidoException {
+        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+        if (this.compensacao != null && this.tipoLancamento == TipoLancamento.EMITIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
+        } else if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+        }
+    }
+
+    /* Adiciona Baixa*/
+    @Override
+    public void adiciona(Baixa baixa) {
+        try {
+            BaixaBuilder b = new BaixaBuilder(baixa);
+            if (baixas == null) {
+                this.baixas = new ArrayList<>();
+            }
+            if(baixa.getHistorico() == null){
+            geraHistorico(b);
+            }
+            b.comCobranca(this);
+            b.comEmissao(emissao);
+            this.baixas.add(b.construir());
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    private void geraHistorico(BaixaBuilder b) {
+        BundleUtil msg = new BundleUtil();
+        if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Emitido") + " " + msg.getLabel("para") + " " + pessoa.getFirstNameLastName());
+        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Recebido") + " " + msg.getLabel("de") + " " + pessoa.getFirstNameLastName());
+        }
     }
 
     @Override
@@ -91,6 +142,11 @@ public class Cheque extends Cobranca implements Serializable {
 
     public void desconta() {
         this.estado = EstadoDeCheque.DESCONTADO;
+    }
+
+    public void compensar(Date data) {
+        this.estado = EstadoDeCheque.COMPENSADO;
+        this.compensacao = data;
     }
 
     public void depositaNo(DepositoBancario deposito) {
@@ -113,7 +169,7 @@ public class Cheque extends Cobranca implements Serializable {
         return numeroCheque;
     }
 
-    public EstadoDeCheque getEstado() {
+    public EstadoDeCheque getEstadoDeCheque() {
         return estado;
     }
 
@@ -135,6 +191,14 @@ public class Cheque extends Cobranca implements Serializable {
 
     public TipoLancamento getTipoLancamento() {
         return tipoLancamento;
+    }
+
+    public DepositoBancario getDepositoBancario() {
+        return depositoBancario;
+    }
+
+    public Date getCompensacao() {
+        return compensacao;
     }
 
     public String getDetalhes() {

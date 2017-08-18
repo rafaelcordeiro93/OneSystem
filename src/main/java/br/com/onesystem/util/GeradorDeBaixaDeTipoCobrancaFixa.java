@@ -59,9 +59,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
             builder.comReceita(tipoReceita).comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(tipoDespesa).comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
-        }
-
-        return builder.construir();
+        } return builder.construir();
     }
 
     private Baixa getDesconto(String tipo) throws DadoInvalidoException {

@@ -17,6 +17,7 @@ import br.com.onesystem.domain.builder.TipoDeCobrancaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
@@ -36,6 +37,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     private String observacao;
     private Cotacao cotacao;
     private Conta conta;
+    private Date dataCompensacao;
 
     public TipoDeCobrancaBV() {
     }
@@ -148,6 +150,14 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
 
     public void setConta(Conta conta) {
         this.conta = conta;
+    }
+
+    public Date getDataCompensacao() {
+        return dataCompensacao;
+    }
+
+    public void setDataCompensacao(Date dataCompensacao) {
+        this.dataCompensacao = dataCompensacao;
     }
 
     public TipoDeCobranca construir() throws DadoInvalidoException {

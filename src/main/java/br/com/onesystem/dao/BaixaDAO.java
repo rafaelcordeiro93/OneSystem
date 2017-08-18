@@ -3,6 +3,7 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -165,14 +166,14 @@ public class BaixaDAO extends GenericDAO<Baixa> {
     }
 
     public BaixaDAO eEntrada() {
-        parametros.put("pNaturezaFinanceira", OperacaoFinanceira.ENTRADA);
-        where += "and baixa.naturezaFinanceira = :pNaturezaFinanceira ";
+        parametros.put("pOperacaoFinanceira", OperacaoFinanceira.ENTRADA);
+        where += "and baixa.operacaoFinanceira = :pOperacaoFinanceira ";
         return this;
     }
 
     public BaixaDAO eSaida() {
-        parametros.put("pNaturezaSaida", OperacaoFinanceira.SAIDA);
-        where += "and baixa.naturezaFinanceira = :pNaturezaSaida ";
+        parametros.put("pOperacaoFinanceiraSaida", OperacaoFinanceira.SAIDA);
+        where += "and baixa.operacaoFinanceira = :pOperacaoFinanceiraSaida ";
         return this;
     }
 
@@ -220,6 +221,14 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         if (depositoBancario != null) {
             parametros.put("pDepositoBancario", depositoBancario);
             where += "and baixa.depositoBancario = :pDepositoBancario ";
+        }
+        return this;
+    }
+
+    public BaixaDAO ePorCobranca(Cobranca cobranca) {
+        if (cobranca != null) {
+            parametros.put("pCobranca", cobranca);
+            where += "and baixa.cobranca = :pCobranca ";
         }
         return this;
     }

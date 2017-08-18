@@ -27,7 +27,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
     private String agencia;
     private String conta;
     private String numeroCheque;
-    private EstadoDeCheque tipoSituacao;
+    private EstadoDeCheque estado;
     private BigDecimal multas;
     private BigDecimal juros;
     private BigDecimal descontos;
@@ -39,6 +39,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Date compensacao;
 
     public ChequeBV(Cheque c) {
         this.id = c.getId();
@@ -50,7 +51,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.agencia = c.getAgencia();
         this.conta = c.getConta();
         this.numeroCheque = c.getNumeroCheque();
-        this.tipoSituacao = c.getEstado();
+        this.estado = c.getEstadoDeCheque();
         this.multas = c.getMultas();
         this.juros = c.getJuros();
         this.descontos = c.getDescontos();
@@ -62,6 +63,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.operacaoFinanceira = c.getOperacaoFinanceira();
         this.entrada = c.getEntrada();
         this.situacaoDeCobranca = c.getSituacaoDeCobranca();
+        this.compensacao = c.getCompensacao();
     }
 
     public ChequeBV() {
@@ -147,12 +149,12 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
         this.numeroCheque = numeroCheque;
     }
 
-    public EstadoDeCheque getTipoSituacao() {
-        return tipoSituacao;
+    public EstadoDeCheque getEstadoDeCheque() {
+        return estado;
     }
 
-    public void setTipoSituacao(EstadoDeCheque tipoSituacao) {
-        this.tipoSituacao = tipoSituacao;
+    public void setEstadoDeCheque(EstadoDeCheque tipoSituacao) {
+        this.estado = tipoSituacao;
     }
 
     public BigDecimal getMultas() {
@@ -225,7 +227,7 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
 
     public void setEntrada(Boolean entrada) {
         this.entrada = entrada;
-    }      
+    }
 
     public SituacaoDeCobranca getSituacaoDeCobranca() {
         return situacaoDeCobranca;
@@ -234,18 +236,26 @@ public class ChequeBV implements Serializable, BuilderView<Cheque> {
     public void setSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
         this.situacaoDeCobranca = situacaoDeCobranca;
     }
-    
+
+    public Date getCompensacao() {
+        return compensacao;
+    }
+
+    public void setCompensacao(Date compensacao) {
+        this.compensacao = compensacao;
+    }
+
     public Cheque construir() throws DadoInvalidoException {
         return new ChequeBuilder().comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
-                .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
+                .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(estado).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).comCompensacao(compensacao).construir();
     }
 
     public Cheque construirComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comNota(nota).comValor(valor).comEmissao(emissao).comVencimento(vencimento).comPessoa(pessoa)
-                .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(tipoSituacao).comMultas(multas)
+                .comBanco(banco).comAgencia(agencia).comConta(conta).comNumeroCheque(numeroCheque).comTipoSituacao(estado).comMultas(multas)
                 .comJuros(juros).comDesconto(descontos).comEmitente(emitente).comCotacao(cotacao).comObservacao(historico).comOperacaoFinanceira(operacaoFinanceira)
-                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).construir();
+                .comTipoLancamento(tipoLancamento).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca).comCompensacao(compensacao).construir();
     }
 }

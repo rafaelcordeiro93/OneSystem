@@ -50,18 +50,19 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             Recebimento recebimento = e.construirComID();
             tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f));
-            recebimento.geraBaixas();
             recebimento.ehValido();
-
+            recebimento.geraBaixas();
             addNoBanco(recebimento);
         } catch (DadoInvalidoException die) {
             die.print();
+            limparJanela();
         }
     }
 
     @Override
     public void limparJanela() {
         try {
+            removeDaSessao();
             e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
@@ -69,6 +70,14 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         } catch (DadoInvalidoException die) {
             die.print();
         }
+    }
+
+    private void removeDaSessao() throws FDadoInvalidoException {
+        SessionUtil.remove("model", FacesContext.getCurrentInstance());
+        SessionUtil.remove("emissao", FacesContext.getCurrentInstance());
+        SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
+        SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {

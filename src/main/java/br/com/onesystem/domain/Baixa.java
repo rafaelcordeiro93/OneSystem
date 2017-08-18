@@ -74,7 +74,7 @@ public class Baixa implements Serializable, Movimento {
     private ValorPorCotacao valorPorCotacao;
 
     @ManyToOne
-    private Cobranca parcela;
+    private Cobranca cobranca;
 
     @ManyToOne
     private CobrancaFixa cobrancaFixa;
@@ -141,6 +141,7 @@ public class Baixa implements Serializable, Movimento {
         this.valor = valor;
         this.emissao = emissao;
         this.dataCompensacao = dataCompensacao;
+        this.dataCancelamento = dataCancelamento;
         this.historico = historico;
         this.pessoa = pessoa;
         this.operacaoFinanceira = tipoMovimentacaoFinanceira;
@@ -150,7 +151,7 @@ public class Baixa implements Serializable, Movimento {
         this.cambio = cambio;
         this.transferencia = transferencia;
         this.recepcao = recepcao;
-        this.parcela = cobranca;
+        this.cobranca = cobranca;
         this.cobrancaFixa = movimentoFixo;
         this.valorPorCotacao = valorPorCotacao;
         this.tipoDeCobranca = tipoDeCobranca;
@@ -253,7 +254,7 @@ public class Baixa implements Serializable, Movimento {
                 return geraMovimentacaoEntradaRecepcao(msg);
             } else if (transferencia != null) {
                 return geraMovimentacaoEntradaTransferencia(msg);
-//            } else if (parcela instanceof DespesaProvisionada) {
+//            } else if (cobranca instanceof DespesaProvisionada) {
 //                return geraMovimentacaoEntradaDespesaProvisionada(msg);
             } else if (cobrancaFixa != null && !(cobrancaFixa instanceof ReceitaProvisionada)) {
                 return geraMovimentacaoReceitaProvisionada(msg);
@@ -268,11 +269,11 @@ public class Baixa implements Serializable, Movimento {
         if (getCambio() != null) {
             throw new EDadoInvalidoException("Baixas com referências de câmbio não podem ser canceladas!");
         }
-        if (parcela instanceof Titulo) {
-            ((Titulo) parcela).cancelarSaldoDeBaixa(valor);
+        if (cobranca instanceof Titulo) {
+            ((Titulo) cobranca).cancelarSaldoDeBaixa(valor);
         }
-        if (parcela instanceof Cobranca) {
-            ((Cobranca) parcela).atualizaSituacao();
+        if (cobranca instanceof Cobranca) {
+            ((Cobranca) cobranca).atualizaSituacao();
         }
 
         this.estado = EstadoDeBaixa.CANCELADO;
@@ -281,11 +282,11 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public void descancela() throws EDadoInvalidoException {
-        if (parcela instanceof Titulo) {
-            ((Titulo) parcela).descancelarSaldoDeBaixa(valor);
+        if (cobranca instanceof Titulo) {
+            ((Titulo) cobranca).descancelarSaldoDeBaixa(valor);
         }
-        if (parcela instanceof Cobranca) {
-            ((Cobranca) parcela).atualizaSituacao();
+        if (cobranca instanceof Cobranca) {
+            ((Cobranca) cobranca).atualizaSituacao();
         }
         this.estado = EstadoDeBaixa.EFETIVADO;
         this.dataCancelamento = null;
@@ -346,10 +347,10 @@ public class Baixa implements Serializable, Movimento {
     }
 
     private String geraMovimentacaoSaidaCambio(BundleUtil msg) {
-        if (parcela instanceof Titulo) {
+        if (cobranca instanceof Titulo) {
             List<Titulo> titulos = new TituloDAO().aPagar().ePorCambio(cambio).listaDeResultados();
             for (Titulo t : titulos) {
-                if (((Titulo) parcela).getValor().equals(t.getValor())) {
+                if (((Titulo) cobranca).getValor().equals(t.getValor())) {
                     return msg.getMessage("Pagamento_Comissao") + " " + cambio.getId();
                 }
             }
@@ -412,8 +413,8 @@ public class Baixa implements Serializable, Movimento {
         return operacaoFinanceira;
     }
 
-    public Cobranca getParcela() {
-        return parcela;
+    public Cobranca getCobranca() {
+        return cobranca;
     }
 
     public ValorPorCotacao getValorPorCotacao() {
@@ -481,10 +482,10 @@ public class Baixa implements Serializable, Movimento {
     public Long getDocumentoOriginal() {
         if (cambio != null) {
             return this.cambio.getId();
-        } else if (recepcao != null && parcela instanceof Titulo) {
+        } else if (recepcao != null && cobranca instanceof Titulo) {
             return this.recepcao.getId();
-        } else if (recepcao != null && !(parcela instanceof Titulo)) {
-            return ((Titulo) parcela).getId();
+        } else if (recepcao != null && !(cobranca instanceof Titulo)) {
+            return ((Titulo) cobranca).getId();
         } else {
             return this.id;
         }
@@ -500,8 +501,8 @@ public class Baixa implements Serializable, Movimento {
             return despesa.getId();
         } else if (receita != null) {
             return receita.getId();
-        } else if (parcela != null) {
-            return parcela.getId();
+        } else if (cobranca != null) {
+            return cobranca.getId();
         } else {
             return getId();
         }
@@ -517,7 +518,7 @@ public class Baixa implements Serializable, Movimento {
             return despesa.getNome();
         } else if (receita != null) {
             return receita.getNome();
-        } else if (parcela instanceof Titulo) {
+        } else if (cobranca instanceof Titulo) {
             return TipoOperacao.TITULO.getNome();
         } else if (cobrancaFixa instanceof DespesaProvisionada) {
             return ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome();
@@ -530,8 +531,8 @@ public class Baixa implements Serializable, Movimento {
 
     @Override
     public BigDecimal getValorBaixado() {
-        if (parcela instanceof Titulo) {
-            return ((Titulo) parcela).getValorBaixado();
+        if (cobranca instanceof Titulo) {
+            return ((Titulo) cobranca).getValorBaixado();
         } else {
             return getValor();
         }
@@ -543,7 +544,7 @@ public class Baixa implements Serializable, Movimento {
         return "Baixa{" + "id=" + id + ",valor=" + valor + ", historico="
                 + historico + ", emissao=" + emissao + ", naturezaFinanceira="
                 + operacaoFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
-                + ", perfilDeValor=" + (parcela != null ? parcela.getId() : null)
+                + ", perfilDeValor=" + (cobranca != null ? cobranca.getId() : null)
                 + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
                 + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
                 + ", cambio=" + (cambio != null ? cambio.getId() : null)

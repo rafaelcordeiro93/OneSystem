@@ -200,6 +200,11 @@ public class DadosNecessarios implements Serializable {
                 getCotacaoEmMoedaPadrao(moeda);
                 break;
             }
+            case "/menu/financeiro/cadastros/cheque.xhtml": {
+                Moeda moeda = getMoedaPadrao();
+                getCotacaoEmMoedaPadrao(moeda);
+                break;
+            }
             default:
                 break;
         }

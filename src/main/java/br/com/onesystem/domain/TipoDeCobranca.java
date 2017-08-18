@@ -244,7 +244,8 @@ public class TipoDeCobranca implements Serializable {
             b.cancela();
         }
     }
-     public void descancelar() throws DadoInvalidoException {
+
+    public void descancelar() throws DadoInvalidoException {
         for (Baixa b : baixas) {
             b.descancela();
         }

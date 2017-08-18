@@ -123,7 +123,7 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
             if (baixaBV.getDespesa() != null) {
                 if (baixaBV.getValor() != null && baixaBV.getValor().compareTo(BigDecimal.ZERO) > 0) {
                     baixaBV.setEmissao(e.getEmissao());
-                    baixaBV.setNaturezaFinanceira(OperacaoFinanceira.SAIDA);
+                    baixaBV.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
                     baixaBV.setCotacao(e.getCotacaoDeOrigem());
                     baixas.add(baixaBV.construirComID());
                     limparBaixa();

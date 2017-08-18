@@ -89,7 +89,10 @@
                                 <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.numeroCheque}" styleClass="Wid100" />   
 
                                 <p:outputLabel value="#{l.Vencimento}"/>
-                                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.vencimento}" size="7"/>
+                                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.cheque.vencimento}" size="8"/>
+
+                                <p:outputLabel value="#{l.Compensado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" />
+                                <p:calendar id="compensado" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoFormaDeCobrancaView.e.dataCompensacao}" size="8"/>
 
                                 <p:outputLabel value="#{l.Emitente}"/>
                                 <p:inputText value="#{dialogoFormaDeCobrancaView.cheque.emitente}" styleClass="Wid100" />      
@@ -143,7 +146,7 @@
                         <p:inputText value="#{dialogoFormaDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id eq 2}" readonly="true"/>
                         <p:selectOneMenu  id="dceCotacao" value="#{dialogoFormaDeCobrancaView.e.cotacao}" converter="cotacaoConverter" rendered="#{dialogoFormaDeCobrancaView.modalidadeDeCobranca.id ne 2}"  >
                             <p:ajax update="tempDialog"/>
-                            <f:selectItems value="#{dialogoFormaDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
+                            <f:selectItems value="#{dialogoFormaDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.conta.nome}"/>
                         </p:selectOneMenu>
 
                     </p:panelGrid>
