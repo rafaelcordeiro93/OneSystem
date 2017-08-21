@@ -26,5 +26,10 @@ public class PessoaDAO extends GenericDAO<Pessoa> {
         parametros.put("pId", id);
         return this;
     }
+    
+    public PessoaDAO porFornecedor() {
+        where += " and pessoa.categoriaFornecedor = true ";       
+        return this;
+    }
 
 }
