@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.domain;
 
+import br.com.onesystem.dao.OperacaoDeEstoqueDAO;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
@@ -101,7 +102,8 @@ public class ItemDeCondicional implements Serializable {
         estoques = new ArrayList<>();
         ConfiguracaoVenda conf = new ConfiguracaoVendaService().buscar();
         ConfiguracaoEstoque confEstoque = new ConfiguracaoEstoqueService().buscar();
-        for (OperacaoDeEstoque operacaoDeEstoque : conf.getOperacaoDeCondicional().getOperacaoDeEstoque()) {
+        List<OperacaoDeEstoque> listaOperacaoEstoque = new OperacaoDeEstoqueDAO().porOperacao(conf.getOperacaoDeCondicional()).listaDeResultados();
+        for (OperacaoDeEstoque operacaoDeEstoque : listaOperacaoEstoque) {
             Estoque e = new EstoqueBuilder().comDeposito(confEstoque.getDepositoPadrao()).comQuantidade(quantidade)
                     .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(condicional.getEmissao()).comItemDeCondicional(this).construir();
             // Adiciona no estoque

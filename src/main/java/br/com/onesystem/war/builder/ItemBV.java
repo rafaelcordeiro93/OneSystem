@@ -8,6 +8,7 @@ import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.ItemImagem;
 import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
@@ -40,6 +41,7 @@ public class ItemBV implements Serializable, BuilderView<Item> {
     private List<ItemOrcado> itensOrcados;
     private List<ItemDeComanda> itensDeComanda;
     private List<PrecoDeItem> precos;
+    private List<ItemImagem> imagens;
     private Margem margem;
     private Comissao comissao;
 
@@ -60,6 +62,7 @@ public class ItemBV implements Serializable, BuilderView<Item> {
         this.ativo = itemSelecionado.isAtivo();
         this.margem = itemSelecionado.getMargem();
         this.comissao = itemSelecionado.getComissao();
+        this.imagens = itemSelecionado.getImagens();
     }
 
     public ItemBV() {
@@ -221,6 +224,14 @@ public class ItemBV implements Serializable, BuilderView<Item> {
         return idContabil;
     }
 
+    public List<ItemImagem> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(List<ItemImagem> imagens) {
+        this.imagens = imagens;
+    }
+    
     public void setIdContabil(String idContabil) {
         this.idContabil = idContabil;
     }
@@ -234,10 +245,10 @@ public class ItemBV implements Serializable, BuilderView<Item> {
     }
 
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
+        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao, imagens);
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao);
+        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao, imagens);
     }
 }

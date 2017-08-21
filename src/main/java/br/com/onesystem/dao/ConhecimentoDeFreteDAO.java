@@ -6,7 +6,6 @@ public class ConhecimentoDeFreteDAO extends GenericDAO<ConhecimentoDeFrete> {
 
     public ConhecimentoDeFreteDAO() {
         super(ConhecimentoDeFrete.class);
-        limpar();
     }
 
     public ConhecimentoDeFreteDAO porId(Long id) {

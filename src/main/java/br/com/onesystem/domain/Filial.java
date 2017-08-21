@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,7 +34,7 @@ public class Filial implements Serializable {
     @NotNull(message = "{razao_social_not_null}")
     @Length(min = 2, max = 60, message = "{razao_social_lenght}")
     @Column(length = 60, nullable = false)
-    private String razao_social;
+    private String razaoSocial;
     @NotNull(message = "{fantasia_not_null}")
     @Length(min = 2, max = 60, message = "{fantasia_lenght}")
     @Column(length = 60, nullable = false)
@@ -46,13 +47,16 @@ public class Filial implements Serializable {
     @Length(min = 2, max = 60, message = "{endereco_lenght}")
     @Column(length = 60, nullable = false)
     private String endereco;
+    @Length(min = 0, max = 40, message = "{numero_lenght}")
+    @Column(length = 40, nullable = true)
+    private String numero;
     @NotNull(message = "{bairro_not_null}")
     @Length(min = 2, max = 60, message = "{bairro_lenght}")
     @Column(length = 60, nullable = false)
     private String bairro;
-    @NotNull(message = "{cidade_not_null}")
+    @NotNull(message = "{cep_not_null}")
     @ManyToOne
-    private Cidade cidade;
+    private Cep cep;
     @NotNull(message = "{telefone_not_null}")
     @Length(min = 2, max = 60, message = "{telefone_lenght}")
     @Column(length = 60, nullable = false)
@@ -61,24 +65,33 @@ public class Filial implements Serializable {
     private Date vencimento;
     @Column(nullable = true)
     private String serialKey;
+    @org.hibernate.validator.constraints.Email(message = "{email_invalido}")
+    @Column(nullable = true, length = 100)
+    private String email;
+    @Column(nullable = true, length = 60)
+    private String contato;
 
     public Filial() {
     }
 
-    public Filial(Long id, String nome, String razao_social, String fantasia,
-            String ruc, String endereco, String bairro, Cidade cidade,
-            String telefone, Date vencimento, String serialKey) throws DadoInvalidoException {
+    public Filial(Long id, String nome, String razaoSocial, String fantasia,
+            String ruc, String endereco, String bairro, Cep cep,
+            String telefone, Date vencimento, String serialKey, String numero,
+            String email, String contato) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
-        this.razao_social = razao_social;
+        this.razaoSocial = razaoSocial;
         this.fantasia = fantasia;
         this.ruc = ruc;
-        this.cidade = cidade;
+        this.cep = cep;
         this.endereco = endereco;
         this.bairro = bairro;
         this.telefone = telefone;
+        this.email = email;
+        this.contato = contato;
         this.vencimento = vencimento;
         this.serialKey = serialKey;
+        this.numero = numero;
         ehValido();
     }
 
@@ -90,8 +103,8 @@ public class Filial implements Serializable {
         return nome;
     }
 
-    public String getRazao_social() {
-        return razao_social;
+    public String getRazaoSocial() {
+        return razaoSocial;
     }
 
     public String getFantasia() {
@@ -106,12 +119,24 @@ public class Filial implements Serializable {
         return endereco;
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
     public String getBairro() {
         return bairro;
     }
 
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getContato() {
+        return contato;
     }
 
     public String getTelefone() {
@@ -126,8 +151,44 @@ public class Filial implements Serializable {
         return serialKey;
     }
 
+    @MetodoInacessivelRelatorio
+    public String getEnderecoNumeroBairroFormatado() {
+        String str = "";
+        if (endereco != null) {
+            str += endereco;
+        }
+        if (numero != null) {
+            if (endereco != null) {
+                str += ", ";
+            }
+            str += "Nº " + numero;
+        }
+        if (bairro != null) {
+            if (endereco != null || numero != null) {
+                str += " - ";
+            }
+            str += bairro;
+        }
+        return str;
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getTelefoneEmailFormatado() {
+        String str = "";
+        if (telefone != null) {
+            str += telefone;
+        }
+        if (email != null) {
+            if (telefone != null) {
+                str += ", ";
+            }
+            str += email;
+        }
+        return str;
+    }
+
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome");
+        List<String> campos = Arrays.asList("nome", "numero", "cep", "razaoSocial", "bairro", "telefone", "ruc", "fantasia");
         new ValidadorDeCampos<Filial>().valida(this, campos);
     }
 
@@ -148,7 +209,7 @@ public class Filial implements Serializable {
 
     @Override
     public String toString() {
-        return "Filial{" + "id=" + id + ", nome=" + nome + ", razao_social=" + razao_social + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", bairro=" + bairro + ", cidade=" + cidade + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + '}';
+        return "Filial{" + "id=" + id + ", nome=" + nome + ", razaoSocial=" + razaoSocial + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", numero=" + numero + ", bairro=" + bairro + ", cep=" + cep + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + ", email=" + email + ", contato=" + contato + '}';
     }
 
 }

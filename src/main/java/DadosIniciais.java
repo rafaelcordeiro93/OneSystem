@@ -4,6 +4,7 @@ import br.com.onesystem.domain.builder.PaisBuilder;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cidade;
@@ -41,6 +42,7 @@ import br.com.onesystem.domain.SituacaoFiscal;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.Usuario;
+import br.com.onesystem.domain.builder.CepBuilder;
 import br.com.onesystem.domain.builder.CfopBuilder;
 import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
@@ -95,9 +97,13 @@ public class DadosIniciais {
         //Cidade ====================================================
         Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comEstado(estado).construir();
         new AdicionaDAO<>().adiciona(city);
+        
+        //Cep =======================================================
+        Cep cep = new CepBuilder().comCep("85950-000").comCidade(city).construir();
+        new AdicionaDAO<>().adiciona(cep);
 
-        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "rauber@rrminds.com", null);
-        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, city, null, "cordeiro@rrminds.com", null);
+        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "rauber@rrminds.com", null, "768");
+        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "cordeiro@rrminds.com", null, "635A");
         new AdicionaDAO<Pessoa>().adiciona(cordeiro);
         new AdicionaDAO<Pessoa>().adiciona(rauber);
 
@@ -138,6 +144,7 @@ public class DadosIniciais {
         Janela jpais = new Janela(null, "País", "/menu/arquivo/pais.xhtml", arq);
         Janela jestado = new Janela(null, "Estado", "/menu/arquivo/estado.xhtml", arq);
         Janela cidade = new Janela(null, "Cidade", "/menu/arquivo/cidade.xhtml", arq);
+        Janela jcep = new Janela(null, "Cep", "/menu/arquivo/cep.xhtml", arq);
         Janela jpessoa = new Janela(null, "Pessoa", "/menu/arquivo/pessoa.xhtml", arq);
         Janela jpessoaimport = new Janela(null, "Importador de Pessoas", "/menu/arquivo/importarPessoa.xhtml", arq);
 
@@ -145,6 +152,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jpais);
         daoJanela.adiciona(jestado);
         daoJanela.adiciona(cidade);
+        daoJanela.adiciona(jcep);
         daoJanela.adiciona(jpessoa);
         daoJanela.adiciona(jpessoaimport);
 
@@ -287,38 +295,40 @@ public class DadosIniciais {
 
         //Modulo de Relatorios
         //Arquivo
-        Janela relPessoas = new Janela(null, "Relatório de Pessoas", "/menu/relatorios/arquivo/relatorioDePessoas.xhtml", rela);
+        Janela relPessoas = new Janela(null, "Relatório de Pessoas", "/menu/arquivo/listar/relatorioDePessoas.xhtml", rela);
 
         //Vendas
-        Janela relNotaEmitida = new Janela(null, "Relatório de Notas Emitidas", "/menu/relatorios/vendas/relatorioDeNotasEmitidas.xhtml", rela);
-        Janela relCondicional = new Janela(null, "Relatório de Condicional", "/menu/relatorios/vendas/relatorioDeCondicional.xhtml", rela);
-        Janela relComanda = new Janela(null, "Relatório de Comanda", "/menu/relatorios/vendas/relatorioDeComanda.xhtml", rela);
-        Janela relOrcamento = new Janela(null, "Relatório de Orçamento", "/menu/relatorios/vendas/relatorioDeOrcamento.xhtml", rela);
-        Janela relItemEmitido = new Janela(null, "Relatório de Item Emitido", "/menu/relatorios/vendas/relatorioDeItemEmitido.xhtml", rela);
-        Janela relItemOrcado = new Janela(null, "Relatório de Item Orçado", "/menu/relatorios/vendas/relatorioDeItemOrcado.xhtml", rela);
-        Janela relItemCondicional = new Janela(null, "Relatório de Item de Condicional", "/menu/relatorios/vendas/relatorioDeItemCondicional.xhtml", rela);
-        Janela relItemComanda = new Janela(null, "Relatório de Item de Comanda", "/menu/relatorios/vendas/relatorioDeItemComanda.xhtml", rela);
+        Janela relNotaEmitida = new Janela(null, "Relatório de Notas Emitidas", "/menu/vendas/listar/relatorioDeNotasEmitidas.xhtml", rela);
+        Janela relCondicional = new Janela(null, "Relatório de Condicional", "/menu/vendas/listar/relatorioDeCondicional.xhtml", rela);
+        Janela relComanda = new Janela(null, "Relatório de Comanda", "/menu/vendas/listar/relatorioDeComanda.xhtml", rela);
+        Janela relOrcamento = new Janela(null, "Relatório de Orçamento", "/menu/vendas/listar/relatorioDeOrcamento.xhtml", rela);
+        Janela relItemEmitido = new Janela(null, "Relatório de Item Emitido", "/menu/vendas/listar/relatorioDeItemEmitido.xhtml", rela);
+        Janela relItemOrcado = new Janela(null, "Relatório de Item Orçado", "/menu/vendas/listar/relatorioDeItemOrcado.xhtml", rela);
+        Janela relItemCondicional = new Janela(null, "Relatório de Item de Condicional", "/menu/vendas/listar/relatorioDeItemCondicional.xhtml", rela);
+        Janela relItemComanda = new Janela(null, "Relatório de Item de Comanda", "/menu/vendas/listar/relatorioDeItemComanda.xhtml", rela);
 
         //Estoque
-        Janela relAjusteEstoque = new Janela(null, "Relatório de Ajuste de Estoque", "/menu/relatorios/estoque/relatorioDeAjusteDeEstoque.xhtml", rela);
-        Janela relNotaRecebida = new Janela(null, "Relatório de Notas Recebidas", "/menu/relatorios/estoque/relatorioDeNotasRecebidas.xhtml", rela);
-        Janela relItem = new Janela(null, "Relatório de Item", "/menu/relatorios/estoque/relatorioDeItem.xhtml", rela);
-        Janela relItemRecebido = new Janela(null, "Relatório de Item Recebido", "/menu/relatorios/vendas/relatorioDeItemRecebido.xhtml", rela);
+        Janela relAjusteEstoque = new Janela(null, "Relatório de Ajuste de Estoque", "/menu/estoque/listar/relatorioDeAjusteDeEstoque.xhtml", rela);
+        Janela relNotaRecebida = new Janela(null, "Relatório de Notas Recebidas", "/menu/estoque/listar/relatorioDeNotasRecebidas.xhtml", rela);
+        Janela relItem = new Janela(null, "Relatório de Item", "/menu/estoque/listar/relatorioDeItem.xhtml", rela);
+        Janela relItemRecebido = new Janela(null, "Relatório de Item Recebido", "/menu/vendas/listar/relatorioDeItemRecebido.xhtml", rela);
+        Janela relEstoque = new Janela(null, "Relatório de Estoque", "/menu/estoque/listar/relatorioDeEstoque.xhtml", rela);
+        Janela relConhecimentoDeFrete = new Janela(null, "Relatório de Conhecimento de Frete", "/menu/estoque/listar/relatorioDeConhecimentoDeFrete.xhtml", rela);
 
         //Financeiro
-        Janela relConta = new Janela(null, "Relatório de Contas", "/menu/relatorios/financeiro/relatorioDeConta.xhtml", rela);
-        Janela relContaFixa = new Janela(null, "Relatório de Contas Fixas", "/menu/relatorios/financeiro/relatorioDeContaFixa.xhtml", rela);
-        Janela relCheques = new Janela(null, "Relatório de Cheques", "/menu/relatorios/financeiro/relatorioDeCheques.xhtml", rela);
-        Janela relDespPro = new Janela(null, "Relatório de Despesas Provisionadas", "/menu/relatorios/financeiro/relatorioDeDespesaProvisionada.xhtml", rela);
-        Janela relReceitPro = new Janela(null, "Relatório de Receitas Provisionadas", "/menu/relatorios/financeiro/relatorioDeReceitaProvisionada.xhtml", rela);
-        Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/menu/relatorios/financeiro/relatorioDeSaldoDeConta.xhtml", rela);
-        Janela relSaldoDivisao = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "/menu/relatorios/financeiro/relatorioDeSaldoDeDivisaoDeLucro.xhtml", rela);
-        Janela relBaixa = new Janela(null, "Relatório de Baixas", "/menu/relatorios/financeiro/relatorioDeBaixa.xhtml", rela);
+        Janela relConta = new Janela(null, "Relatório de Contas", "/menu/financeiro/listar/relatorioDeConta.xhtml", rela);
+        Janela relContaFixa = new Janela(null, "Relatório de Contas Fixas", "/menu/financeiro/listar/relatorioDeContaFixa.xhtml", rela);
+        Janela relCheques = new Janela(null, "Relatório de Cheques", "/menu/financeiro/listar/relatorioDeCheques.xhtml", rela);
+        Janela relDespPro = new Janela(null, "Relatório de Despesas Provisionadas", "/menu/financeiro/listar/relatorioDeDespesaProvisionada.xhtml", rela);
+        Janela relReceitPro = new Janela(null, "Relatório de Receitas Provisionadas", "/menu/financeiro/listar/relatorioDeReceitaProvisionada.xhtml", rela);
+        Janela relSaldo = new Janela(null, "Relatório de Saldo de Conta", "/menu/financeiro/listar/relatorioDeSaldoDeConta.xhtml", rela);
+        Janela relSaldoDivisao = new Janela(null, "Relatório de Saldo de Divisão de Lucro", "/menu/financeiro/listar/relatorioDeSaldoDeDivisaoDeLucro.xhtml", rela);
+        Janela relBaixa = new Janela(null, "Relatório de Baixas", "/menu/financeiro/listar/relatorioDeBaixa.xhtml", rela);
 
         //Cambio
-        Janela relRecepcao = new Janela(null, "Relatório de Recepção", "/menu/relatorios/cambio/relatorioDeRecepcao.xhtml", rela);
-        Janela relContrato = new Janela(null, "Relatório de Contrato de Câmbio", "/menu/relatorios/cambio/relatorioDeContratoDeCambio.xhtml", rela);
-        Janela relCambio = new Janela(null, "Relatório de Câmbio", "/menu/relatorios/cambio/relatorioDeCambio.xhtml", rela);
+        Janela relRecepcao = new Janela(null, "Relatório de Recepção", "/menu/cambio/listar/relatorioDeRecepcao.xhtml", rela);
+        Janela relContrato = new Janela(null, "Relatório de Contrato de Câmbio", "/menu/cambio/listar/relatorioDeContratoDeCambio.xhtml", rela);
+        Janela relCambio = new Janela(null, "Relatório de Câmbio", "/menu/cambio/listar/relatorioDeCambio.xhtml", rela);
 
         daoJanela.adiciona(relItemComanda);
         daoJanela.adiciona(relItemCondicional);
@@ -344,6 +354,8 @@ public class DadosIniciais {
         daoJanela.adiciona(relItem);
         daoJanela.adiciona(relItemEmitido);
         daoJanela.adiciona(relItemRecebido);
+        daoJanela.adiciona(relEstoque);
+        daoJanela.adiciona(relConhecimentoDeFrete);
 
         //Modulo Administrativo
         Janela usuario = new Janela(null, "Usuário", "/menu/topbar/preferencias/usuario.xhtml", admin);
@@ -374,6 +386,7 @@ public class DadosIniciais {
                 new Privilegio(null, dashboard, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoa, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, cidade, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, jcep, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoaimport, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, notaSaida, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, retificacaoDeVenda, true, true, true, true, grupoDePrivilegio),
@@ -456,6 +469,8 @@ public class DadosIniciais {
                 new Privilegio(null, relItemComanda, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relItemCondicional, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, relItemOrcado, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relEstoque, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, relConhecimentoDeFrete, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, usuario, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfiguracao, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jconfigNecessario, true, true, true, true, grupoDePrivilegio),
@@ -833,7 +848,7 @@ public class DadosIniciais {
 
         // Item
         Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null);
+                grupoFiscal, unidade, null, null, null, null, null, null, null);
         new AdicionaDAO<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");
@@ -1703,6 +1718,7 @@ public class DadosIniciais {
 
         //Adiciona no Banco
         new AdicionaDAO<>().adiciona(relatorioDeChequesDevolvidos);
+        
     }
     
 }

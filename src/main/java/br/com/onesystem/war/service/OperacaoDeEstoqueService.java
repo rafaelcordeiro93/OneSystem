@@ -9,7 +9,7 @@ import java.util.List;
 public class OperacaoDeEstoqueService implements Serializable {
     
     public List<OperacaoDeEstoque> buscarOperacoesDeEstoquePor(Operacao operacao){
-        return new OperacaoDeEstoqueDAO().buscarOperacaoDeEstoque().porOperacao(operacao).listaDeResultados();
+        return new OperacaoDeEstoqueDAO().porOperacao(operacao).listaDeResultados();
     }
         
 }
