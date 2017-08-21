@@ -96,14 +96,14 @@
 
                                         <p:inputNumber placeholder="#{l.Valor}" value="#{pedidoAFornecedoresView.itemDePedido.valorUnitario}" maxValue="999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{pedidoAFornecedoresView.e.moedaPadrao.sigla}"/>
 
-                                        <p:inputNumber placeholder="#{l.Quantidade}" id="quantidade" value="#{pedidoAFornecedoresView.itemDePedido.quantidade}" maxValue="999999999.99" minValue="0" decimalSeparator="" thousandSeparator=""  symbol="#{pedidoAFornecedoresView.itemDePedido.item.unidadeDeMedida.sigla}"/>
+                                        <p:inputNumber placeholder="#{l.Quantidade}" id="quantidade" value="#{pedidoAFornecedoresView.itemDePedido.quantidade}" maxValue="99999999999" minValue="0" decimalSeparator="" thousandSeparator=""  symbol="#{pedidoAFornecedoresView.itemDePedido.item.unidadeDeMedida.sigla}"/>
 
                                         <p:panelGrid columns="3" layout="grid" style="margin-top: -1.5%" styleClass="ui-panelgrid-blank form-group form-elements">
-                                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{pedidoAFornecedoresView.adicionaItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" />
+                                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{pedidoAFornecedoresView.adicionaItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" />
 
-                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{pedidoAFornecedoresView.atualizaItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" styleClass="green-btn"/>
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{pedidoAFornecedoresView.atualizaItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" styleClass="green-btn"/>
 
-                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{pedidoAFornecedoresView.removerItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" styleClass="orange-btn" />
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{pedidoAFornecedoresView.removerItem}" actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}" update="itensDePedido conteudo:tabView:painelItem conteudo:totalPedido conteudo:totalDinheiro" styleClass="orange-btn" />
                                         </p:panelGrid>
 
                                     </p:panelGrid>
@@ -154,11 +154,11 @@
                                         <p:calendar placeholder="#{l.Vencimento}" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{pedidoAFornecedoresView.parcelaDePedido.vencimento}"/>
 
                                         <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-                                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{pedidoAFornecedoresView.adicionaParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}"  update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" />
+                                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{pedidoAFornecedoresView.adicionaParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}"  update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" />
 
-                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{pedidoAFornecedoresView.atualizaParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}" update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" styleClass="green-btn"/>
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{pedidoAFornecedoresView.atualizaParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}" update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" styleClass="green-btn"/>
 
-                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{pedidoAFornecedoresView.removerParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro}" update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" styleClass="orange-btn" />
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{pedidoAFornecedoresView.removerParcela}"  actionListener="#{pedidoAFornecedoresView.atualizaValorDinheiro()}" update="parcelasDePedido conteudo:tabView:painelParcelas conteudo:totalDinheiro" styleClass="orange-btn" />
                                         </p:panelGrid>
                                     </p:panelGrid>
                                     <p:dataTable id="parcelasDePedido" var="model" value="#{pedidoAFornecedoresView.listaDeParcela}"

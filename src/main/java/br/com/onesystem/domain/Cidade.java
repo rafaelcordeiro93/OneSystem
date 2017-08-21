@@ -37,7 +37,7 @@ public class Cidade implements Serializable {
     @Column(nullable = false, length = 60)
     private String nome;
     @OneToMany(mappedBy = "cidade", fetch = FetchType.LAZY)
-    private List<Pessoa> listadePessoas;
+    private List<Cep> listadeCeps;
     @ManyToOne
     private Estado estado;
 

@@ -12,6 +12,7 @@ import br.com.onesystem.valueobjects.EstadoDeComanda;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -207,6 +208,9 @@ public class Comanda implements Serializable {
     }
 
     public void adiciona(NotaEmitida nota) {
+        if(this.notasEmitidas == null){
+            this.notasEmitidas = new ArrayList<>();
+        }
         this.notasEmitidas.add(nota);
         BigDecimal total = this.notasEmitidas.stream().filter(n -> !n.getEstado().equals(EstadoDeNota.CANCELADO)).map(n -> n.getItens().stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add)).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (total.equals(getItensDeComanda().stream().map(i -> i.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add))) {

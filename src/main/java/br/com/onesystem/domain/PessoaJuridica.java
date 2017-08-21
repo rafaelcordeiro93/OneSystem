@@ -25,8 +25,8 @@ public class PessoaJuridica extends Pessoa {
     public PessoaJuridica() {
     }
 
-    public PessoaJuridica(String fantasia, Long ID, String nome, TipoPessoa tipo, String ruc, boolean ativo, String direcao, String bairro, boolean categoriaCliente, boolean categoriaFornecedor, boolean categoriaVendedor, boolean categoriaTransportador, Double desconto, Date cadastro, String observacao, String fiador, Cidade cidade, String telefone, String email, String contato) throws DadoInvalidoException {
-        super(ID, nome, tipo, ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador, desconto, cadastro, observacao, fiador, cidade, telefone, email, contato);
+    public PessoaJuridica(String fantasia, Long ID, String nome, TipoPessoa tipo, String ruc, boolean ativo, String endereco, String bairro, boolean categoriaCliente, boolean categoriaFornecedor, boolean categoriaVendedor, boolean categoriaTransportador, Double desconto, Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email, String contato, String numero) throws DadoInvalidoException {
+        super(ID, nome, tipo, ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
         this.fantasia = fantasia;
         ehValido();
     }

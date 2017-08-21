@@ -65,7 +65,10 @@ public abstract class Pessoa implements Serializable {
     private boolean ativo;
 //    @Length(min = 4, max = 120, message = "{direcao_lenght}")
     @Column(nullable = true, length = 120)
-    private String direcao;
+    private String endereco;
+    @Length(min = 0, max = 40, message = "{numero_lenght}")
+    @Column(length = 40, nullable = true)
+    private String numero;
 //    @Length(min = 4, max = 60, message = "{bairro_lenght}")
     @Column(nullable = true, length = 80)
     private String bairro;
@@ -89,7 +92,7 @@ public abstract class Pessoa implements Serializable {
     @Column(nullable = true, length = 80)
     private String fiador;
     @ManyToOne
-    private Cidade cidade;
+    private Cep cep;
     @OneToMany(mappedBy = "pessoa")
     private List<Recepcao> recepcoes;
     @OneToMany(mappedBy = "pessoa")
@@ -115,16 +118,17 @@ public abstract class Pessoa implements Serializable {
     }
 
     public Pessoa(Long id, String nome, TipoPessoa tipo, String ruc, boolean ativo,
-            String direcao, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
+            String endereco, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
             boolean categoriaVendedor, boolean categoriaTransportador, Double desconto,
-            Date cadastro, String observacao, String fiador, Cidade cidade, String telefone, String email,
-            String contato) {
+            Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email,
+            String contato, String numero) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
         this.ruc = ruc;
         this.ativo = ativo;
-        this.direcao = direcao;
+        this.endereco = endereco;
+        this.numero = numero;
         this.bairro = bairro;
         this.categoriaCliente = categoriaCliente;
         this.categoriaFornecedor = categoriaFornecedor;
@@ -134,7 +138,7 @@ public abstract class Pessoa implements Serializable {
         this.cadastro = cadastro;
         this.observacao = observacao;
         this.fiador = fiador;
-        this.cidade = cidade;
+        this.cep = cep;
         this.telefone = telefone;
         this.email = email;
         this.contato = contato;
@@ -164,6 +168,10 @@ public abstract class Pessoa implements Serializable {
         return tipo;
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
     public String getRuc() {
         return ruc;
     }
@@ -172,8 +180,8 @@ public abstract class Pessoa implements Serializable {
         return ativo;
     }
 
-    public String getDirecao() {
-        return direcao;
+    public String getEndereco() {
+        return endereco;
     }
 
     public String getBairro() {
@@ -224,8 +232,8 @@ public abstract class Pessoa implements Serializable {
         return fiador;
     }
 
-    public Cidade getCidade() {
-        return cidade;
+    public Cep getCep() {
+        return cep;
     }
 
     public void instanciaContactoList() {
@@ -246,6 +254,42 @@ public abstract class Pessoa implements Serializable {
 
     public String getConjuge() {
         return null;
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getEnderecoNumeroBairroFormatado() {
+        String str = "";
+        if (endereco != null) {
+            str += endereco;
+        }
+        if (numero != null) {
+            if (endereco != null) {
+                str += ", ";
+            }
+            str += "Nº " + numero;
+        }
+        if (bairro != null) {
+            if (endereco != null || numero != null) {
+                str += " - ";
+            }
+            str += bairro;
+        }
+        return str;
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getTelefoneEmailFormatado() {
+        String str = "";
+        if (telefone != null) {
+            str += telefone;
+        }
+        if (email != null) {
+            if (telefone != null) {
+                str += ", ";
+            }
+            str += email;
+        }
+        return str;
     }
 
     public abstract String getDocumento();
@@ -280,7 +324,7 @@ public abstract class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", ruc=" + ruc + ", telefone=" + telefone + ", email=" + email + ", contato=" + contato + ", ativo=" + ativo + ", direcao=" + direcao + ", bairro=" + bairro + ", categoriaCliente=" + categoriaCliente + ", categoriaFornecedor=" + categoriaFornecedor + ", categoriaVendedor=" + categoriaVendedor + ", categoriaTransportador=" + categoriaTransportador + ", desconto=" + desconto + ", cadastro=" + cadastro + ", observacao=" + observacao + ", fiador=" + fiador + ", cidade=" + cidade + ", configuracaoCambio=" + configuracaoCambio + '}';
+        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", ruc=" + ruc + ", telefone=" + telefone + ", email=" + email + ", contato=" + contato + ", ativo=" + ativo + ", direcao=" + endereco + ", bairro=" + bairro + ", categoriaCliente=" + categoriaCliente + ", categoriaFornecedor=" + categoriaFornecedor + ", categoriaVendedor=" + categoriaVendedor + ", categoriaTransportador=" + categoriaTransportador + ", desconto=" + desconto + ", cadastro=" + cadastro + ", observacao=" + observacao + ", fiador=" + fiador + ", cep=" + cep.getCep() + ", configuracaoCambio=" + configuracaoCambio + '}';
     }
 
 }

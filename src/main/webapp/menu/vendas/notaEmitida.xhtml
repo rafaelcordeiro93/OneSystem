@@ -116,7 +116,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neListaDePreco" disabledSearch="#{notaEmitidaView.editarItensEParcelas}"  readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true"/>
+                                    <a:inputTextDialog id="neListaDePreco" disabledSearch="#{notaEmitidaView.editarItensEParcelas}"  readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true">
+                                        <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
+                                    </a:inputTextDialog>
                                 </h:panelGrid>
 
                             </p:panelGrid> 
@@ -131,8 +133,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco " placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
                                         <p:ajax event="itemSelect" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
+                                        <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 
@@ -672,8 +675,8 @@
         </p:dialog>
 
         <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
-                              modal="true" closable="false" closeOnEscape="false" visible="false"
-                              responsive="true" styleClass="zIndex500">
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
 
             <table>
                 <tr>

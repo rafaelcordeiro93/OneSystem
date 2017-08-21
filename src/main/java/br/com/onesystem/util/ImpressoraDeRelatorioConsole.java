@@ -21,7 +21,7 @@ public class ImpressoraDeRelatorioConsole {
    
     public void gerarPDF(String relatorio) throws DadoInvalidoException {
         try {
-            JasperExportManager.exportReportToPdfFile(print, diretorio + relatorio + ".pdf");
+            JasperExportManager.exportReportToPdfFile(print, "C:\\Users\\Rafael\\Desktop\\" + relatorio + ".pdf");
         } catch (Exception e) {
             throw new EDadoInvalidoException("Erro ao exibir o relatório: " + e.getMessage());
         }
@@ -42,7 +42,7 @@ public class ImpressoraDeRelatorioConsole {
 
     public void imprimir(List<?> lista, String relatorio) throws JRException {
 //        JasperReport report = JasperCompileManager.compileReport(diretorio + relatorio + ".jrxml");
-        JasperReport report = JasperCompileManager.compileReport("C:\\Users\\Rafael\\JaspersoftWorkspace\\MyReports\\" + relatorio + ".jrxml");
+        JasperReport report = JasperCompileManager.compileReport("C:\\Users\\Rafael\\Desktop\\" + relatorio + ".jrxml");
         print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(lista));
     }
 

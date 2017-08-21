@@ -6,6 +6,17 @@
                 xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
+    <ui:define name="head">
+        <style type="text/css">
+            .aImageExcluir{
+                color: #c7c7c7;
+            }
+            .aImageExcluir:hover{
+                color: #a7a7a7;
+            }
+        </style>
+    </ui:define>
+
     <ui:define name="content">
 
         <div class="ui-g">
@@ -108,8 +119,8 @@
                                     <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">   
                                         <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
                                             <p:ajax update="itemPreco"/>
-                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="true" />
-                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="false" />
+                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="true" />
+                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="false" />
                                         </p:selectOneRadio>
 
                                         <div class="EmptyBox10"/>
@@ -137,13 +148,19 @@
                                                 <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                             </p:column>
                                             <p:column headerText="#{l.Valor}">
-                                                <h:outputText value="#{precoDeItem.valor}" />
+                                                <h:outputText value="#{precoDeItem.valor}" >
+                                                    <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
+                                                </h:outputText>
                                             </p:column>
                                             <p:column headerText="#{l.Emissao}">
-                                                <h:outputText value="#{precoDeItem.emissao}" />
+                                                <h:outputText value="#{precoDeItem.emissao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
                                             </p:column>
                                             <p:column headerText="#{l.Data_Expiracao}">
-                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
                                             </p:column>
                                         </p:dataTable>
 
@@ -162,17 +179,66 @@
                                             <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
                                         </p:column>
                                         <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
-                                            <h:outputText value="#{precoDeItem.valor}" />
+                                            <h:outputText value="#{precoDeItem.valor}" >
+                                                <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
+                                            </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
-                                            <h:outputText value="#{precoDeItem.emissao}" />
+                                            <h:outputText value="#{precoDeItem.emissao}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                            </h:outputText>
                                         </p:column>
                                         <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
-                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" />
+                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
+                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                            </h:outputText>
                                         </p:column>
                                     </p:dataTable>
 
                                 </h:panelGrid>
+
+                            </p:tab>
+
+                            <p:tab title="#{l.Imagens}" rendered="#{!itemView.tab}">
+
+                                <p:panel styleClass="Wid100" style="border:none">
+                                    <p:panelGrid>
+                                        <p:fileUpload label="#{l.Procurar_arquivo}" uploadLabel="#{l.Fazer_upload}" cancelLabel="#{l.Cancelar}" style="border:none"
+                                                      dragDropSupport="true" mode="advanced" multiple="false" allowTypes="/(\.|\/)(jpg|jpe?g|png)$/" 
+                                                      fileUploadListener="#{itemView.uploadImagens}" update=":conteudo" fileLimit="1"
+                                                      invalidFileMessage="#{l.Formato_Do_Arquivo_Invalido}" invalidSizeMessage="#{l.Tamanho_Arquivo_Grande}"/>
+                                    </p:panelGrid>
+                                </p:panel>
+
+                                <p:panel styleClass="Wid100" style="border:none">
+                                    <p:dataGrid var="m" value="#{itemView.imagens}" columns="1" layout="grid"
+                                                rows="12" paginator="true" id="imagens"
+                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                rowsPerPageTemplate="6,12,16">
+
+                                        <p:panel style="text-align:center; border:none">
+                                            <h:panelGrid columns="1" style="width:100%">
+                                                <h:panelGrid columns="3" cellspacing="5">
+                                                    <h:outputText value="#{m.nome} - " />
+                                                    <h:outputText value="#{l.Favorita}" />
+                                                    <p:selectBooleanCheckbox value="#{m.favorita}" disabled="#{m.favorita}"  >
+                                                        <p:ajax listener="#{itemView.favoritarImagem(m)}" update=":conteudo" />
+                                                    </p:selectBooleanCheckbox>
+                                                </h:panelGrid>
+                                                <p:graphicImage value="#{imageStreamedView.image}" style="margin-top: 5px;width: 100%" >
+                                                    <f:param name="id" value="#{m.id}" />
+                                                </p:graphicImage>
+                                                <f:facet name="footer">
+                                                    <p:commandLink update=":conteudo" title="#{l.Remover}" style="text-align: center;position: absolute; margin-top: -8%;" action="#{itemView.excluirImagem}">
+                                                        <h:outputText styleClass="aImageExcluir fa fa-trash-o Fs40"/>
+                                                        <f:setPropertyActionListener value="#{m}" target="#{itemView.itemImagem}" />
+                                                    </p:commandLink>
+                                                </f:facet>
+                                            </h:panelGrid>
+                                        </p:panel>
+
+                                    </p:dataGrid>
+                                </p:panel>
 
                             </p:tab>
 

@@ -247,7 +247,7 @@ public class PedidoAFornecedoresView extends BasicMBImpl<PedidoAFornecedores, Pe
         }
     }
 
-    public void getAtualizaValorDinheiro() {
+    public void atualizaValorDinheiro() {
         try {
             e.setTotalEmDinheiro(getTotalPedido().subtract(getTotalParcelasBigDecimal()));
         } catch (DadoInvalidoException die) {

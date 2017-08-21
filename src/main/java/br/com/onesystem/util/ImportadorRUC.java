@@ -46,7 +46,7 @@ public class ImportadorRUC {
                     String nome = index == -1 ? linha : linha.substring(index + 1, linha.lastIndexOf('|'));//nome
                     nome = nome.substring(0, nome.indexOf('|'));//nome
 
-                    listaPessoas.add(new PessoaJuridica(nome, null, nome, TipoPessoa.PESSOA_JURIDICA, ruc, true, null, null, true, false, false, false, null, new Date(), null, null, null, null, null, null));
+                    listaPessoas.add(new PessoaJuridica(nome, null, nome, TipoPessoa.PESSOA_JURIDICA, ruc, true, null, null, true, false, false, false, null, new Date(), null, null, null, null, null, null,""));
                     
                 } catch (EDadoInvalidoException e) {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("erro_ao_importar") + e.getMessage());

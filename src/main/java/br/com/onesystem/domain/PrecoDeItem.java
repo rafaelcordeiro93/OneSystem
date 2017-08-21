@@ -47,7 +47,6 @@ public class PrecoDeItem implements Serializable {
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();
-    @NotNull(message = "{data_expiracao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataDeExpiracao;
 

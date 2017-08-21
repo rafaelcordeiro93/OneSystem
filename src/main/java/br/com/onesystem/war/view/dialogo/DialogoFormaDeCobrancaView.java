@@ -181,8 +181,8 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                 Cotacao resultado = new CotacaoDAO().porConta(((Cartao) obj).getConta()).naMaiorEmissao(emissao).resultado();
                 if (resultado != null) {
                     boletoDeCartao.setCartao((Cartao) obj);
-                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(((Cartao) obj).getConta()).naUltimaEmissao(emissao).resultado());
-                    e.setCotacao(new CotacaoDAO().porMoeda(((Cartao) obj).getConta().getMoeda()).porCotacaoEmpresa().naUltimaEmissao(emissao).resultado());
+                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(((Cartao) obj).getConta()).naMaiorEmissao(emissao).resultado());
+                    e.setCotacao(new CotacaoDAO().porMoeda(((Cartao) obj).getConta().getMoeda()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado());
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("Cotacao_Da_Conta_Do_Cartao_Not_Null"));
                 }

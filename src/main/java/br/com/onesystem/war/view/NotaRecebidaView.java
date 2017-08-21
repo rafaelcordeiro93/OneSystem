@@ -187,7 +187,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 if (boletoDeCartao.getCartao() != null) {
-                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naUltimaEmissao(notaRecebida.getEmissao()).resultado());
+                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
                 }
                 nota.adiciona(boletoDeCartao.construir());
             }
@@ -219,7 +219,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         if (p.getCartao() != null) {
-                            p.setCotacao(new CotacaoDAO().porConta(p.getCartao().getConta()).naUltimaEmissao(notaRecebida.getEmissao()).resultado());
+                            p.setCotacao(new CotacaoDAO().porConta(p.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
                         }
                         nota.adiciona(p.construirBoletoDeCartao());
                         break;

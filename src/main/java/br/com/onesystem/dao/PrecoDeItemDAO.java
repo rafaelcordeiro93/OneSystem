@@ -3,6 +3,7 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.PrecoDeItem;
+import java.util.Calendar;
 import java.util.Date;
 
 public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
@@ -12,25 +13,33 @@ public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
     }
 
     public PrecoDeItemDAO porItem(Item item) {
-        where += " and preco.item = :pItem ";
+        where += " and precoDeItem.item = :pItem ";
         parametros.put("pItem", item);
         return this;
     }
 
     public PrecoDeItemDAO porUltimaEmissao(Date emissao) {
-        where += " and preco.emissao <= :pEmissao ";
+        where += " and precoDeItem.emissao <= :pEmissao ";
+        parametros.put("pEmissao", emissao);
+        return this;
+    }
+    
+     public PrecoDeItemDAO naMaiorEmissao(Date emissao) {
+        where += " and precoDeItem.emissao in (select max(pdi.emissao) from PrecoDeItem pdi "
+                + "where pdi.emissao <= :pEmissao "
+                + "group by pdi.listaDePreco) ";
         parametros.put("pEmissao", emissao);
         return this;
     }
 
     public PrecoDeItemDAO eNaoExpirado() {
-        where += " and preco.dataDeExpiracao >= :pDataDeExpiracao ";
+        where += " and (precoDeItem.dataDeExpiracao >= :pDataDeExpiracao or precoDeItem.dataDeExpiracao is null) ";
         parametros.put("pDataDeExpiracao", new Date());
         return this;
     }
 
     public PrecoDeItemDAO porListaDePreco(ListaDePreco listaDePreco) {
-        where += " and preco.listaDePreco = :pListaDePreco ";
+        where += " and precoDeItem.listaDePreco = :pListaDePreco ";
         parametros.put("pListaDePreco", listaDePreco);
         return this;
     }
@@ -39,5 +48,5 @@ public class PrecoDeItemDAO extends GenericDAO<PrecoDeItem> {
         order += " order by emissao desc ";
         return this;
     }
-
+    
 }

@@ -445,6 +445,14 @@ public class Baixa implements Serializable, Movimento {
         return caixa;
     }
 
+    public Date getDataCompetencia() {
+        if (cobrancaFixa != null) {
+            return cobrancaFixa.getReferencia();
+        } else {
+            return emissao;
+        }
+    }
+
     public TipoDeCobranca getTipoDeCobranca() {
         return tipoDeCobranca;
     }

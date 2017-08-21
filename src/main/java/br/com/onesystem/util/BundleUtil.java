@@ -16,4 +16,12 @@ public class BundleUtil implements Serializable {
         return BUNDLE_LABEL.getString(key);
     }
 
+    public ResourceBundle getBUNDLE() {
+        return BUNDLE;
+    }
+
+    public ResourceBundle getBUNDLE_LABEL() {
+        return BUNDLE_LABEL;
+    }
+
 }

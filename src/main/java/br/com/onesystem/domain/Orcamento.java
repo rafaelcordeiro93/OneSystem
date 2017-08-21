@@ -12,6 +12,7 @@ import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -210,6 +211,11 @@ public class Orcamento implements Serializable {
         return emissao;
     }
 
+    public String getEmissaoFormatada() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
+    }
+
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -227,7 +233,7 @@ public class Orcamento implements Serializable {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
-    public String getTotalOrcamentoFormatado() {
+    public String getTotalFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
     }
 

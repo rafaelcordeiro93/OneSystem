@@ -5,6 +5,7 @@ import br.com.onesystem.dao.PrecoDeItemDAO;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.PrecoDeItem;
+import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -18,18 +19,14 @@ public class PrecoDeItemService implements Serializable {
     }
 
     public PrecoDeItem buscaListaDePrecoAtual(Item item, ListaDePreco listaDePreco, Date emissao) {
-        List<PrecoDeItem> precos = new PrecoDeItemDAO().porItem(item).porListaDePreco(listaDePreco)
-                .eNaoExpirado().porUltimaEmissao(emissao).listaDeResultados();
-        if (!precos.isEmpty()) {
-            return precos.stream().max(Comparator.comparing(PrecoDeItem::getEmissao)).get();
-        } else {
-            return null;
-        }
+        PrecoDeItem preco = new PrecoDeItemDAO().porItem(item).porListaDePreco(listaDePreco)
+                .eNaoExpirado().naMaiorEmissao(emissao).resultado();
+        return preco;
     }
 
     public List<PrecoDeItem> buscaListaDePrecoAtual(Item item) {
         List<PrecoDeItem> precos = new PrecoDeItemDAO().porItem(item)
-                .eNaoExpirado().listaDeResultados();
+                .naMaiorEmissao(new Date()).eNaoExpirado().listaDeResultados();
         List<PrecoDeItem> lista = new ArrayList<PrecoDeItem>();
         for (PrecoDeItem p : precos) {
             boolean operacao = true;

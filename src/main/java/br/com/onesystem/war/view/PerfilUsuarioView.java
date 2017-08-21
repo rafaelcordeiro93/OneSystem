@@ -61,10 +61,10 @@ public class PerfilUsuarioView implements Serializable {
 
     private void atualizaPessoa() throws DadoInvalidoException {
         Pessoa p = new PessoaFisica(usuarioSelecionada.getPessoa().getDocumento(), usuarioSelecionada.getPessoa().getNascimento(), usuarioSelecionada.getPessoa().getId(),
-                pessoa.getNome(), TipoPessoa.PESSOA_FISICA, usuarioSelecionada.getPessoa().getRuc(), usuarioSelecionada.getPessoa().isAtivo(), usuarioSelecionada.getPessoa().getDirecao(),
+                pessoa.getNome(), TipoPessoa.PESSOA_FISICA, usuarioSelecionada.getPessoa().getRuc(), usuarioSelecionada.getPessoa().isAtivo(), usuarioSelecionada.getPessoa().getEndereco(),
                 usuarioSelecionada.getPessoa().getBairro(), usuarioSelecionada.getPessoa().isCategoriaCliente(), usuarioSelecionada.getPessoa().isCategoriaFornecedor(), usuarioSelecionada.getPessoa().isCategoriaVendedor(), usuarioSelecionada.getPessoa().isCategoriaTransportador(),
                 usuarioSelecionada.getPessoa().getConjuge(), usuarioSelecionada.getPessoa().getDesconto(), usuarioSelecionada.getPessoa().getCadastro(), usuarioSelecionada.getPessoa().getObservacao(),
-                usuarioSelecionada.getPessoa().getFiador(), usuarioSelecionada.getPessoa().getCidade(), pessoa.getTelefone(), pessoa.getEmail(), usuarioSelecionada.getPessoa().getContato());
+                usuarioSelecionada.getPessoa().getFiador(), usuarioSelecionada.getPessoa().getCep(), pessoa.getTelefone(), pessoa.getEmail(), usuarioSelecionada.getPessoa().getContato(), usuarioSelecionada.getPessoa().getNumero());
         usuario.setPessoa(p);
     }
 

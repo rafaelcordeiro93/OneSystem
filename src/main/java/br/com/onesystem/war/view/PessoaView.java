@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.war.builder.PessoaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -29,8 +29,8 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
         Object obj = event.getObject();
         if (obj instanceof Pessoa) {
             e = new PessoaBV((Pessoa) obj);
-        } else if (obj instanceof Cidade) {
-            e.setCidade((Cidade) obj);
+        } else if (obj instanceof Cep) {
+            e.setCep((Cep) obj);
         }
     }
 
