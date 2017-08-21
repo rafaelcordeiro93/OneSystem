@@ -29,7 +29,7 @@ public class CepConverter implements Converter, Serializable {
         if (value != null && value.trim().length() > 0) {
             try {
                 List<Cep> lista = new CepService().buscarCeps();
-                if (StringUtils.containsLetter(value)) {
+                if (value.contains("-")) {
                     for (Cep cep : lista) {
                         if (cep.getCep().equals(value)) {
                             return cep;

@@ -13,15 +13,18 @@ public class FilialBuilder {
 
     private Long id;
     private String nome;
-    private String razao_social;
+    private String razaoSocial;
     private String fantasia;
     private String ruc;
     private String endereco;
+    private String numero;
     private String bairro;
     private Cep cep;
     private String telefone;
     private Date vencimento;
     private String serialKey;
+    private String email;
+    private String contato;
 
     public FilialBuilder comID(Long ID) {
         this.id = ID;
@@ -33,8 +36,8 @@ public class FilialBuilder {
         return this;
     }
 
-    public FilialBuilder comRazaoSocial(String razao_social) {
-        this.razao_social = razao_social;
+    public FilialBuilder comRazaoSocial(String razaoSocial) {
+        this.razaoSocial = razaoSocial;
         return this;
     }
 
@@ -50,6 +53,21 @@ public class FilialBuilder {
 
     public FilialBuilder comEndereco(String endereco) {
         this.endereco = endereco;
+        return this;
+    }
+
+    public FilialBuilder comNumero(String numero) {
+        this.numero = numero;
+        return this;
+    }
+
+    public FilialBuilder comEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public FilialBuilder comContato(String contato) {
+        this.contato = contato;
         return this;
     }
 
@@ -79,7 +97,7 @@ public class FilialBuilder {
     }
 
     public Filial construir() throws DadoInvalidoException {
-        return new Filial(id, nome, razao_social, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey);
+        return new Filial(id, nome, razaoSocial, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey, numero, email, contato);
     }
 
 }

@@ -24,8 +24,8 @@
                                     bean.estado eq 'EFETIVADO' ? 'Green' : bean.estado eq 'CANCELADO' ? 'Orange' : ''}">
                 <h:outputText value="#{bean.estado.nome}" />
             </p:column>
-            <p:column headerText="#{l.Total}" sortBy="#{bean.totalOrcamentoFormatado}" filterBy="#{bean.totalOrcamentoFormatado}" footerText="#{l.Total}" filterMatchMode="contains">
-                <h:outputText value="#{bean.totalOrcamentoFormatado}" />
+            <p:column headerText="#{l.Total}" sortBy="#{bean.totalFormatado}" filterBy="#{bean.totalFormatado}" footerText="#{l.Total}" filterMatchMode="contains">
+                <h:outputText value="#{bean.totalFormatado}" />
             </p:column>
         </a:dataTable>
 

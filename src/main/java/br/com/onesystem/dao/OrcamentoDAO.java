@@ -10,13 +10,13 @@ public class OrcamentoDAO extends GenericDAO<Orcamento>{
     }
 
     public OrcamentoDAO porId(Long id) {
-        where += " and o.id = :oId ";
+        where += " and orcamento.id = :oId ";
         parametros.put("oId", id);
         return this;
     }
 
     public OrcamentoDAO porEstado(EstadoDeOrcamento estado) {
-        where += " and o.estado = :oEstado ";
+        where += " and orcamento.estado = :oEstado ";
         parametros.put("oEstado", estado);
         return this;
     }

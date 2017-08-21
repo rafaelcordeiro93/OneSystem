@@ -10,13 +10,13 @@ public class CondicionalDAO extends GenericDAO<Condicional>{
     }
 
     public CondicionalDAO porId(Long id) {
-        where += " and c.id = :oId ";
+        where += " and condicional.id = :oId ";
         parametros.put("oId", id);
         return this;
     }
 
     public CondicionalDAO porEstado(EstadoDeCondicional estado) {
-        where += " and c.estado = :oEstado ";
+        where += " and condicional.estado = :oEstado ";
         parametros.put("oEstado", estado);
         return this;
     }

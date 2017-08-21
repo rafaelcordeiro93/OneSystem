@@ -27,7 +27,7 @@
                             <p:inputText value="#{filialView.e.nome}" />
 
                             <p:outputLabel value="#{l.Razao_social}"/>
-                            <p:inputText value="#{filialView.e.razao_social}" />
+                            <p:inputText value="#{filialView.e.razaoSocial}" />
 
                             <p:outputLabel value="#{l.Fantasia}"/>
                             <p:inputText value="#{filialView.e.fantasia}" />
@@ -51,10 +51,10 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Contato}"/>
-                            <p:inputText value="#{pessoaView.e.contato}" />
+                            <p:inputText value="#{filialView.e.contato}" />
 
                             <p:outputLabel value="#{l.Email}"/>
-                            <p:inputText  value="#{pessoaView.e.email}"/>                      
+                            <p:inputText  value="#{filialView.e.email}"/>                      
 
                         </p:panelGrid>
 
@@ -68,6 +68,9 @@
                             <p:outputLabel value="#{l.Endereco}"/>
                             <p:inputText value="#{filialView.e.endereco}"/>
 
+                            <p:outputLabel value="#{l.Numero}"/>
+                            <p:inputText value="#{pessoaView.e.numero}" maxlength="40"/>
+
                             <p:outputLabel value="#{l.Bairro}"/>
                             <p:inputText  value="#{filialView.e.bairro}"/>
 
@@ -76,12 +79,15 @@
 
                             <p:outputLabel value="#{l.Cidade}"/>
                             <p:inputText id="filialCidade" value="#{filialView.e.cep.cidade.nome}" readonly="true" />
-                           
+
                             <p:outputLabel value="#{l.Estado}"/>
                             <p:inputText id="filialUf" value="#{filialView.e.cep.cidade.estado.nome}" readonly="true" />
 
                             <p:outputLabel value="#{l.Pais}"/>
                             <p:inputText id="filialPais" value="#{filialView.e.cep.cidade.estado.pais.nome}" readonly="true" />
+
+                            <p:spacer/>
+                            <p:spacer/>
 
                         </p:panelGrid>
                         <div class="EmptyBox20"/>

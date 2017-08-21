@@ -71,7 +71,7 @@ public class Teste {
                     continue;
                 }
                 if (g.getColuna().equals("endereco")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getDirecao());
+                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getEndereco());
                     continue;
                 }
                 if (g.getColuna().equals("telefone")) {

@@ -449,9 +449,9 @@ public abstract class BasicMBReportImpl<T> {
         String nomeRelatorio = modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty() ? modeloDeRelatorioSelecionadoString : tipoRelatorio.getNome();
         try {
             if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
-                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), null).naWeb();
             } else {
-                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class)).naWeb();
+                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), null).naWeb();
             }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);

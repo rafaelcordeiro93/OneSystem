@@ -31,8 +31,8 @@ public class PessoaFisica extends Pessoa {
     public PessoaFisica() {
     }
     
-    public PessoaFisica(String CI, Date nascimento, Long ID, String nome, TipoPessoa tipo, String ruc, boolean ativo, String direcao, String bairro, boolean categoriaCliente, boolean categoriaFornecedor, boolean categoriaVendedor, boolean categoriaTransportado, String conjuge, Double desconto, Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email, String contato) throws DadoInvalidoException {
-        super(ID, nome, tipo, ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportado, desconto, cadastro, observacao, fiador, cep, telefone, email, contato);
+    public PessoaFisica(String CI, Date nascimento, Long ID, String nome, TipoPessoa tipo, String ruc, boolean ativo, String endereco, String bairro, boolean categoriaCliente, boolean categoriaFornecedor, boolean categoriaVendedor, boolean categoriaTransportado, String conjuge, Double desconto, Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email, String contato, String numero) throws DadoInvalidoException {
+        super(ID, nome, tipo, ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportado, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
         this.CI = CI;
         this.nascimento = nascimento;
         this.conjuge = conjuge;

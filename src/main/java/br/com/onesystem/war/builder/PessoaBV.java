@@ -16,7 +16,8 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
     private String nome;
     private String ruc;
     private boolean ativo = true;
-    private String direcao;
+    private String endereco;
+    private String numero;
     private String bairro;
     private boolean categoriaCliente = true;
     private boolean categoriaFornecedor = false;
@@ -44,7 +45,8 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.nome = pessoaSelecionada.getNome();
         this.ruc = pessoaSelecionada.getRuc();
         this.ativo = pessoaSelecionada.isAtivo();
-        this.direcao = pessoaSelecionada.getDirecao();
+        this.endereco = pessoaSelecionada.getEndereco();
+        this.numero = pessoaSelecionada.getNumero();
         this.bairro = pessoaSelecionada.getBairro();
         this.categoriaCliente = pessoaSelecionada.isCategoriaCliente();
         this.categoriaFornecedor = pessoaSelecionada.isCategoriaFornecedor();
@@ -96,20 +98,28 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.ativo = ativo;
     }
     
-    public String getDirecao() {
-        return direcao;
-    }
-    
-    public void setDirecao(String direcao) {
-        this.direcao = direcao;
-    }
-    
     public String getBairro() {
         return bairro;
     }
     
     public void setBairro(String bairro) {
         this.bairro = bairro;
+    }
+
+    public String getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
     
     public boolean isCategoriaCliente() {
@@ -252,22 +262,22 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         telefone = telefone == null ? null : telefone.replaceAll("\\(", "").replaceAll("\\)", "");
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
-                        ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato)
+                        ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero)
                 : new PessoaJuridica(fantasiaCI, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
-                        ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato);
+                        ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
     }
     
     public Pessoa construirComID() throws DadoInvalidoException {
         telefone = telefone == null ? null : telefone.replaceAll("\\(", "").replaceAll("\\)", "");
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
-                        ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato)
+                        ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero)
                 : new PessoaJuridica(fantasiaCI, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
-                        ruc, ativo, direcao, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato);
+                        ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
     }
     
 }
