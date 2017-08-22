@@ -36,7 +36,7 @@ public class UsuarioLogadoUtil implements Serializable {
 
         return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
     }
-    
+
     public boolean getPrivilegio(String tipo, String j) throws DadoInvalidoException {
         FacesContext context = FacesContext.getCurrentInstance();
         ExternalContext ec = context.getExternalContext();
@@ -52,7 +52,9 @@ public class UsuarioLogadoUtil implements Serializable {
 
     public boolean buscaPermissoesNoBanco(String tipo, String janela, Usuario usuario) throws DadoInvalidoException {
         List<Privilegio> listaPrivilegios = usuario.getGrupoDePrivilegio().getListaPrivilegios();
-
+        if (usuario.isSupervisor() == true) {//se for supervisor não passa pelas regras 
+            return true;
+        }
         if (tipo == new BundleUtil().getLabel("Consultar")) {
             return getPrivilegioConsultar(listaPrivilegios, janela);
         }
@@ -72,7 +74,7 @@ public class UsuarioLogadoUtil implements Serializable {
     public void carregaPreferenciasDo(Usuario usuario) {
         PreferenciasDeUsuario gp = (PreferenciasDeUsuario) new BeanUtil().getBeanNaSessao("preferenciasDeUsuario");
 
-        gp.setLayout(usuario.getCorLayout());        
+        gp.setLayout(usuario.getCorLayout());
         gp.setCorMenu(usuario.getCorMenu());
         gp.setTheme(usuario.getCorTema());
         gp.setOverlayMenu(usuario.isOverlayMenu());
