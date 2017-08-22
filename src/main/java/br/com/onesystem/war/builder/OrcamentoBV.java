@@ -6,6 +6,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.ListaDePreco;
@@ -41,6 +42,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     private BigDecimal frete;
     private BigDecimal porcentagemAcrescimo;
     private BigDecimal porcentagemDesconto;
+    private Filial filial;
 
     public OrcamentoBV() {
     }
@@ -58,6 +60,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
         this.despesaCobranca = o.getDespesaCobranca();
         this.frete = o.getFrete();
         this.itensOrcados = o.getItensOrcados();
+        this.filial = o.getFilial();
     }
 
     public void adiciona(ItemOrcadoBV item) throws DadoInvalidoException {
@@ -213,18 +216,26 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
         this.porcentagemDesconto = porcentagemDesconto;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Orcamento construir() throws DadoInvalidoException {
         return new OrcamentoBuilder().comCotacao(cotacao).comFormaDeRecebimento(formaDeRecebimento).
                 comHistorico(historico).comItensOrcados(itensOrcados).comListaDePreco(listaDePreco).comPessoa(pessoa).
                 comVencimento(vencimento).comFrete(frete).comDespesaCobranca(despesaCobranca).comAcrescimo(acrescimo)
-                .comDesconto(desconto).construir();
+                .comDesconto(desconto).comFilial(filial).construir();
     }
 
     public Orcamento construirComID() throws DadoInvalidoException {
         return new OrcamentoBuilder().comId(id).comCotacao(cotacao).comFormaDeRecebimento(formaDeRecebimento).
                 comHistorico(historico).comItensOrcados(itensOrcados).comListaDePreco(listaDePreco).comPessoa(pessoa).
                 comVencimento(vencimento).comFrete(frete).comDespesaCobranca(despesaCobranca).comAcrescimo(acrescimo)
-                .comDesconto(desconto).construir();
+                .comDesconto(desconto).comFilial(filial).construir();
     }
 
 }

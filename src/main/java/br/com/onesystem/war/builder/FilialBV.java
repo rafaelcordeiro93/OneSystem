@@ -11,7 +11,6 @@ import java.util.Date;
 public class FilialBV implements Serializable, BuilderView<Filial> {
     
     private Long id;
-    private String nome;
     private String razaoSocial;
     private String fantasia;
     private String ruc;
@@ -27,7 +26,6 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
     
     public FilialBV(Filial filialSelecionada) {
         this.id = filialSelecionada.getId();
-        this.nome = filialSelecionada.getNome();
         this.razaoSocial = filialSelecionada.getRazaoSocial();
         this.fantasia = filialSelecionada.getFantasia();
         this.ruc = filialSelecionada.getRuc();
@@ -53,14 +51,6 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
         this.id = id;
     }
     
-    public String getNome() {
-        return nome;
-    }
-    
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
     public String getRazaoSocial() {
         return razaoSocial;
     }
@@ -158,12 +148,12 @@ public class FilialBV implements Serializable, BuilderView<Filial> {
     }
     
     public Filial construir() throws DadoInvalidoException {
-        return new FilialBuilder().comNome(nome).comRazaoSocial(razaoSocial).comFantasia(fantasia).comRuc(ruc).comNumero(numero).comEmail(email).comContato(contato)
+        return new FilialBuilder().comRazaoSocial(razaoSocial).comFantasia(fantasia).comRuc(ruc).comNumero(numero).comEmail(email).comContato(contato)
                 .comEndereco(endereco).comBairro(bairro).comCep(cep).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
     }
     
     public Filial construirComID() throws DadoInvalidoException {
-        return new FilialBuilder().comID(id).comNome(nome).comRazaoSocial(razaoSocial).comFantasia(fantasia).comRuc(ruc).comNumero(numero).comEmail(email).comContato(contato)
+        return new FilialBuilder().comID(id).comRazaoSocial(razaoSocial).comFantasia(fantasia).comRuc(ruc).comNumero(numero).comEmail(email).comContato(contato)
                 .comEndereco(endereco).comBairro(bairro).comCep(cep).comTelefone(telefone).comVencimento(vencimento).comSerialKey(serialKey).construir();
     }
 }

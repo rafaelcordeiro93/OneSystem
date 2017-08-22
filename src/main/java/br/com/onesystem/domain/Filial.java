@@ -27,10 +27,6 @@ public class Filial implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_FILIAL", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull(message = "{nome_not_null}")
-    @Length(min = 2, max = 60, message = "{nome_lenght}")
-    @Column(length = 60, nullable = false)
-    private String nome;
     @NotNull(message = "{razao_social_not_null}")
     @Length(min = 2, max = 60, message = "{razao_social_lenght}")
     @Column(length = 60, nullable = false)
@@ -74,12 +70,11 @@ public class Filial implements Serializable {
     public Filial() {
     }
 
-    public Filial(Long id, String nome, String razaoSocial, String fantasia,
+    public Filial(Long id, String razaoSocial, String fantasia,
             String ruc, String endereco, String bairro, Cep cep,
             String telefone, Date vencimento, String serialKey, String numero,
             String email, String contato) throws DadoInvalidoException {
         this.id = id;
-        this.nome = nome;
         this.razaoSocial = razaoSocial;
         this.fantasia = fantasia;
         this.ruc = ruc;
@@ -97,10 +92,6 @@ public class Filial implements Serializable {
 
     public Long getId() {
         return id;
-    }
-
-    public String getNome() {
-        return nome;
     }
 
     public String getRazaoSocial() {
@@ -188,7 +179,7 @@ public class Filial implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "numero", "cep", "razaoSocial", "bairro", "telefone", "ruc", "fantasia");
+        List<String> campos = Arrays.asList("numero", "cep", "razaoSocial", "bairro", "telefone", "ruc", "fantasia");
         new ValidadorDeCampos<Filial>().valida(this, campos);
     }
 
@@ -209,7 +200,7 @@ public class Filial implements Serializable {
 
     @Override
     public String toString() {
-        return "Filial{" + "id=" + id + ", nome=" + nome + ", razaoSocial=" + razaoSocial + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", numero=" + numero + ", bairro=" + bairro + ", cep=" + cep + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + ", email=" + email + ", contato=" + contato + '}';
+        return "Filial{" + "id=" + id + ", razaoSocial=" + razaoSocial + ", fantasia=" + fantasia + ", ruc=" + ruc + ", endereco=" + endereco + ", numero=" + numero + ", bairro=" + bairro + ", cep=" + cep + ", telefone=" + telefone + ", vencimento=" + vencimento + ", serialKey=" + serialKey + ", email=" + email + ", contato=" + contato + '}';
     }
 
 }

@@ -6,11 +6,13 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.MD5Util;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.service.CaixaService;
+import br.com.onesystem.war.service.FilialService;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -36,6 +38,9 @@ public class LoginView implements Serializable {
     @Inject
     private CaixaService service;
 
+    @Inject
+    private FilialService filialService;
+
     public String logar() {
         try {
             if (!listaDeUsuarios.isEmpty()) {
@@ -54,7 +59,11 @@ public class LoginView implements Serializable {
                         if (service.getCaixaAbertoDo(usuarioCadastrado) != null) {
                             SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
                         }
-
+                        
+                        List<Filial> filiais = filialService.buscarFiliais();
+                        if(filiais.size() == 1){
+                            SessionUtil.put(filiais.get(0), "filial", FacesContext.getCurrentInstance());
+                        }
                         return "dashboard?faces-redirect=true";
                     }
                 }

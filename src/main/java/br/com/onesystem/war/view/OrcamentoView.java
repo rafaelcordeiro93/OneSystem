@@ -8,6 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemOrcado;
@@ -15,8 +16,13 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -26,11 +32,17 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.apache.http.protocol.RequestContent;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -69,10 +81,15 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     }
 
     public void limparJanela() {
-        e = new OrcamentoBV();
-        e.setCotacao(cotacao);
-        itemOrcado = new ItemOrcadoBV();
-        itemOrcadoSelecionado = new ItemOrcado();
+        try {
+            e = new OrcamentoBV();
+            e.setCotacao(cotacao);
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            itemOrcado = new ItemOrcadoBV();
+            itemOrcadoSelecionado = new ItemOrcado();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     // --------------------- Fim Inicializa Janela ----------------------------
@@ -83,15 +100,29 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     public void finalizar() {
         try {
             //Constroi o orçamento
-            Orcamento ne = e.construirComID();
+            Orcamento orcamento = e.construirComID();
 
-            addNoBanco(ne);
+            addNoBanco(orcamento);
+            t = orcamento; // adiciona o orcamento ao objeto para impressao.
+            RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
         } catch (DadoInvalidoException die) {
             die.printConsole();
             die.print();
         } catch (ConstraintViolationException cpe) {
             ErrorMessage.printConsole(cpe.toString());
             ErrorMessage.print(cpe.toString());
+        }
+    }
+
+    /**
+     * Imprime o layout do orçamento.
+     **/
+    public void imprimir() {
+        try {
+            new ImpressoraDeLayout(t.getItensOrcados(), TipoLayout.ORCAMENTO).addParametro("orcamento", t).visualizarPDF();
+            t = null; // libera memoria do objeto impresso.
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

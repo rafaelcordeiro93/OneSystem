@@ -31,6 +31,7 @@
                     <div class="profile-info">
                         <span class="topbar-item-name profile-name">#{usuarioLogadoUtil.nomeUsuario}</span>
                         <span style="#{dialogoCaixaView.temCaixa() eq true ? 'display: none' : ''}"  class="topbar-item-name profile-role">#{l.Caixa_Logado}: #{dialogoCaixaView.e.id}</span> 
+                        <span style="#{dialogoFilialView.temFilial() eq true ? 'display: none' : ''}"  class="topbar-item-name profile-role">#{l.Filial_Logada}: #{dialogoFilialView.e.id}</span> 
                          <!--<span class="topbar-item-name profile-role">#{usuarioLogadoUtil.grupoPrivilegio}</span>-->
                     </div>
                 </a>
@@ -91,6 +92,15 @@
                         </p:commandButton>
                         <a onclick="document.getElementById('btAbrirDialogoCaixa').click()" > <i class="fa fa-fw fa-briefcase">
                             </i> <span>#{l.Logar_Caixa}</span> 
+                          <!--  <span class="topbar-submenuitem-badge">Novo</span>-->
+                        </a>
+                    </li>
+                    <li role="menuitem">
+                        <p:commandButton id="btAbrirDialogoLogarFilial" action="#{dialogoFilialView.abrirDialogo()}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{topBarView.redireciona}" />
+                        </p:commandButton>
+                        <a onclick="document.getElementById('btAbrirDialogoLogarFilial').click()" > <i class="fa fa-fw fa-industry">
+                            </i> <span>#{l.Logar_Filial}</span> 
                           <!--  <span class="topbar-submenuitem-badge">Novo</span>-->
                         </a>
                     </li>

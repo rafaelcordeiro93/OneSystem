@@ -12,7 +12,6 @@ import java.util.Date;
 public class FilialBuilder {
 
     private Long id;
-    private String nome;
     private String razaoSocial;
     private String fantasia;
     private String ruc;
@@ -28,11 +27,6 @@ public class FilialBuilder {
 
     public FilialBuilder comID(Long ID) {
         this.id = ID;
-        return this;
-    }
-
-    public FilialBuilder comNome(String nome) {
-        this.nome = nome;
         return this;
     }
 
@@ -97,7 +91,7 @@ public class FilialBuilder {
     }
 
     public Filial construir() throws DadoInvalidoException {
-        return new Filial(id, nome, razaoSocial, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey, numero, email, contato);
+        return new Filial(id, razaoSocial, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey, numero, email, contato);
     }
 
 }

@@ -83,6 +83,9 @@ public class Orcamento implements Serializable {
     private BigDecimal frete;
     @OneToMany(mappedBy = "orcamento", cascade = CascadeType.ALL)
     private List<HistoricoDeOrcamento> historicosDeOrcamento;
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public Orcamento() {
         this.historicosDeOrcamento = new ArrayList<>();
@@ -91,7 +94,7 @@ public class Orcamento implements Serializable {
 
     public Orcamento(Long id, Pessoa pessoa, FormaDeRecebimento formaDeRecebimento,
             ListaDePreco listaDePreco, Cotacao cotacao, List<ItemOrcado> itensOrcados, Date validade, String observacao,
-            BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
+            BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, Filial filial) throws DadoInvalidoException {
         this.historicosDeOrcamento = new ArrayList<>();
         this.id = id;
         this.pessoa = pessoa;
@@ -107,6 +110,7 @@ public class Orcamento implements Serializable {
         this.emissao = new Date();
         this.estado = EstadoDeOrcamento.EM_DEFINICAO;
         this.itensOrcados = itensOrcados;
+        this.filial = filial;
         geraItensOrcados(itensOrcados);
         ehValido();
     }
@@ -159,6 +163,10 @@ public class Orcamento implements Serializable {
         estado = historicoDeOrcamento.getEstado();
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     public String getAcrescimoFormatado() {
         if (cotacao != null) {
             return MoedaFormatter.format(cotacao.getConta().getMoeda(), getAcrescimo());
