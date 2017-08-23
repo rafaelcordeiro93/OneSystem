@@ -1,16 +1,12 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.PedidoAFornecedores;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.PedidoAFornecedoresBV;
-import br.com.onesystem.war.service.PedidoAFornecedoresService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
 
 /**
  *
@@ -21,32 +17,29 @@ public class PedidoAFornecedoresBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            PedidoAFornecedoresService service = new PedidoAFornecedoresService();
-            try {
-                List<PedidoAFornecedores> lista = service.buscarPedidosAFornecedores();
-
-                for (PedidoAFornecedores pedidoAFornecedores : lista) {
-                    if (pedidoAFornecedores.getId().equals(new Long(value))) {
-                        return new PedidoAFornecedoresBV(pedidoAFornecedores);
-                    }
-                }
-
-                return new PedidoAFornecedoresBV();
-            } catch (Exception e) {
-                return new PedidoAFornecedoresBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof PedidoAFornecedores) {
+                return new PedidoAFornecedoresBV((PedidoAFornecedores) object);
+            } else if (object instanceof PedidoAFornecedoresBV) {
+                return (PedidoAFornecedoresBV) object;
             }
-        } else {
-            return new PedidoAFornecedoresBV();
         }
+        return new PedidoAFornecedoresBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((PedidoAFornecedoresBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof PedidoAFornecedoresBV) {
+                String id = String.valueOf(((PedidoAFornecedoresBV) object).getId());
+                uic.getAttributes().put(id, (PedidoAFornecedoresBV) object);
+                return id;
+            } else if (object instanceof PedidoAFornecedores) {
+                String id = String.valueOf(((PedidoAFornecedores) object).getId());
+                uic.getAttributes().put(id, (PedidoAFornecedores) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

@@ -6,15 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Margem;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.MargemService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -26,41 +21,27 @@ public class MargemConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Margem> lista = new MargemService().buscarMargems();
-                if (StringUtils.containsLetter(value)) {
-                    for (Margem margem : lista) {
-                        if (margem.getNome().equals(value)) {
-                            return margem;
-                        }
-                    }
-                } else {
-                    for (Margem margem : lista) {
-                        if (margem.getId().equals(new Long(value))) {
-                            return margem;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma margem válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Margem) {
+                return (Margem) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Margem) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof Margem) {
+                String id = String.valueOf(((Margem) object).getId());
+                uic.getAttributes().put(id, (Margem) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

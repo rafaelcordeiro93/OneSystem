@@ -37,7 +37,7 @@ public class PessoaJuridica extends Pessoa {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "direcao", "bairro", "fiador", "observacao", "fantasia");
+        List<String> campos = Arrays.asList("nome", "endereco", "bairro", "fiador", "observacao", "fantasia");
         new ValidadorDeCampos<Pessoa>().valida(this, campos);
     }
 

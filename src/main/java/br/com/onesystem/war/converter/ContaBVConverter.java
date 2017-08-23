@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.ContaBV;
-import br.com.onesystem.war.service.ContaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class ContaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Conta> lista = new ContaService().buscarContas();
-                if (StringUtils.containsLetter(value)) {
-                    for (Conta conta : lista) {
-                        if (conta.getNome().equals(value)) {
-                            return new ContaBV(conta);
-                        }
-                    }
-                } else {
-                    for (Conta conta : lista) {
-                        if (conta.getId().equals(new Long(value))) {
-                            return new ContaBV(conta);
-                        }
-                    }
-                }
-                return new ContaBV();
-            } catch (Exception e) {
-                return new ContaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Conta) {
+                return new ContaBV((Conta) object);
+            } else if (object instanceof ContaBV) {
+                return (ContaBV) object;
             }
-        } else {
-            return new ContaBV();
         }
+        return new ContaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ContaBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof ContaBV) {
+                String id = String.valueOf(((ContaBV) object).getId());
+                uic.getAttributes().put(id, (ContaBV) object);
+                return id;
+            } else if (object instanceof Conta) {
+                String id = String.valueOf(((Conta) object).getId());
+                uic.getAttributes().put(id, (Conta) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

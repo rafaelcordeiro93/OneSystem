@@ -324,7 +324,7 @@ public abstract class Pessoa implements Serializable {
 
     @Override
     public String toString() {
-        return "Pessoa{" + "id=" + id + ", nome=" + nome + ", tipo=" + tipo + ", ruc=" + ruc + ", telefone=" + telefone + ", email=" + email + ", contato=" + contato + ", ativo=" + ativo + ", direcao=" + endereco + ", bairro=" + bairro + ", categoriaCliente=" + categoriaCliente + ", categoriaFornecedor=" + categoriaFornecedor + ", categoriaVendedor=" + categoriaVendedor + ", categoriaTransportador=" + categoriaTransportador + ", desconto=" + desconto + ", cadastro=" + cadastro + ", observacao=" + observacao + ", fiador=" + fiador + ", cep=" + cep.getCep() + ", configuracaoCambio=" + configuracaoCambio + '}';
+        return "Pessoa{" + "id=" + id + ", nome=" + nome + '}';
     }
 
 }

@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.DespesaProvisionada;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.DespesaProvisionadaBV;
-import br.com.onesystem.war.service.DespesaProvisionadaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,29 +22,29 @@ public class DespesaProvisionadaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<DespesaProvisionada> lista = new DespesaProvisionadaService().buscarDespesaProvisionadas();
-                for (DespesaProvisionada despesaProvisionada : lista) {
-                    if (despesaProvisionada.getId().equals(new Long(value))) {
-                        return new DespesaProvisionadaBV(despesaProvisionada);
-                    }
-                }
-                return new DespesaProvisionadaBV();
-            } catch (Exception e) {
-                return new DespesaProvisionadaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof DespesaProvisionada) {
+                return new DespesaProvisionadaBV((DespesaProvisionada) object);
+            } else if (object instanceof DespesaProvisionadaBV) {
+                return (DespesaProvisionadaBV) object;
             }
-        } else {
-            return new DespesaProvisionadaBV();
         }
+        return new DespesaProvisionadaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((DespesaProvisionadaBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof DespesaProvisionadaBV) {
+                String id = String.valueOf(((DespesaProvisionadaBV) object).getId());
+                uic.getAttributes().put(id, (DespesaProvisionadaBV) object);
+                return id;
+            } else if (object instanceof DespesaProvisionada) {
+                String id = String.valueOf(((DespesaProvisionada) object).getId());
+                uic.getAttributes().put(id, (DespesaProvisionada) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

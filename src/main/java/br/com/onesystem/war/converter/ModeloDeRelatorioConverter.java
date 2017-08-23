@@ -21,7 +21,10 @@ public class ModeloDeRelatorioConverter implements Converter {
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && !value.isEmpty()) {
-            return (ModeloDeRelatorio) uic.getAttributes().get(value);
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ModeloDeRelatorio) {
+                return (ModeloDeRelatorio) object;
+            }
         }
         return null;
     }
@@ -29,9 +32,15 @@ public class ModeloDeRelatorioConverter implements Converter {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            return String.valueOf(((ModeloDeRelatorio) object).getId());
+            if (object instanceof ModeloDeRelatorio) {
+                String id = String.valueOf(((ModeloDeRelatorio) object).getId());
+                uic.getAttributes().put(id, (ModeloDeRelatorio) object);
+                return id;
+            } else {
+                return object.toString();
+            }
         } else {
-            return null;
+            return "";
         }
     }
 }

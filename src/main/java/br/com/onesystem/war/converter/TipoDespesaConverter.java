@@ -6,15 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TipoDespesaService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -26,41 +21,27 @@ public class TipoDespesaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<TipoDespesa> lista = new TipoDespesaService().buscarTiposDeDespesa();
-                if (StringUtils.containsLetter(value)) {
-                    for (TipoDespesa despesa : lista) {
-                        if (despesa.getNome().equals(value)) {
-                            return despesa;
-                        }
-                    }
-                } else {
-                    for (TipoDespesa despesa : lista) {
-                        if (despesa.getId().equals(new Long(value))) {
-                            return despesa;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma despesa válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof TipoDespesa) {
+                return (TipoDespesa) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((TipoDespesa) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof TipoDespesa) {
+                String id = String.valueOf(((TipoDespesa) object).getId());
+                uic.getAttributes().put(id, (TipoDespesa) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

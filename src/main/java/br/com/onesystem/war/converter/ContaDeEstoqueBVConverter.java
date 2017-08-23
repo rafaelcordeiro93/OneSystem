@@ -5,12 +5,10 @@
  */
 package br.com.onesystem.war.converter;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.ContaDeEstoque;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.ContaDeEstoqueBV;
-import br.com.onesystem.war.service.ContaDeEstoqueService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -20,34 +18,34 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "contaDeEstoqueBVConverter", forClass = ContaDeEstoque.class)
+@FacesConverter(value = "contaDeEstoqueBVConverter", forClass = ContaDeEstoqueBV.class)
 public class ContaDeEstoqueBVConverter implements Converter, Serializable {
 
-    @Override
+     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ContaDeEstoque> lista = new ContaDeEstoqueService().buscarContaDeEstoque();
-                for (ContaDeEstoque contaDeEstoqueBV : lista) {
-                    if (contaDeEstoqueBV.getId().equals(new Long(value))) {
-                        return new ContaDeEstoqueBV(contaDeEstoqueBV);
-                    }
-                }
-                return new ContaDeEstoqueBV();
-            } catch (Exception e) {
-                return new ContaDeEstoqueBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ContaDeEstoque) {
+                return new ContaDeEstoqueBV((ContaDeEstoque) object);
+            } else if (object instanceof ContaDeEstoqueBV) {
+                return (ContaDeEstoqueBV) object;
             }
-        } else {
-            return new ContaDeEstoqueBV();
         }
+        return new ContaDeEstoqueBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ContaDeEstoqueBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof ContaDeEstoqueBV) {
+                String id = String.valueOf(((ContaDeEstoqueBV) object).getId());
+                uic.getAttributes().put(id, (ContaDeEstoqueBV) object);
+                return id;
+            } else if (object instanceof ContaDeEstoque) {
+                String id = String.valueOf(((ContaDeEstoque) object).getId());
+                uic.getAttributes().put(id, (ContaDeEstoque) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

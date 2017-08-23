@@ -26,41 +26,27 @@ public class ItemConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Item> lista = new ItemService().buscarItems();
-                if (StringUtils.containsLetter(value)) {
-                    for (Item item : lista) {
-                        if (item.getNome().equals(value)) {
-                            return item;
-                        }
-                    }
-                } else {
-                    for (Item item : lista) {
-                        if (item.getId().equals(new Long(value))) {
-                            return item;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma item válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Item) {
+                return (Item) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Item) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof Item) {
+                String id = String.valueOf(((Item) object).getId());
+                uic.getAttributes().put(id, (Item) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

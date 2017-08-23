@@ -11,7 +11,12 @@
         <div class="ui-g">
             <div class="ui-g-10" style="margin-left: 8%">
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
-                    <h2 class="BigTopic">#{l.Consulta_De_Registro}</h2>
+                    <h2 class="BigTopic">#{l.Consulta_De_Registro}
+                        <p:panelGrid columns="2" style="right: 12%; position: absolute" styleClass="ui-panelgrid-blank" columnClasses="NoPadding, NoPadding">
+                            <p:commandButton title="#{l.Imprimir}" value="#{l.Imprimir}" action="#{consultaOrcamentoView.imprimir}" ajax="false" onclick="this.form.target = '_blank'" icon="fa fa-print" />
+                            <p:commandButton title="#{l.Ajuda}" value="#{l.Ajuda}" disabled="true" ajax="false" icon="fa fa-question" />
+                        </p:panelGrid>
+                    </h2>
                     <div class="EmptyBox20"/>
 
                     <div class="ui-fluid">
@@ -19,47 +24,48 @@
                         <div id="orca" class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Orcamento}:"/>
                         </div>
+
                         <div class="ui-g">
-                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cOrcamento" value="#{consultaOrcamentoView.orcamento}" update=":conteudo" dialog="#{selecaoOrcamentoView}" mbView="#{consultaOrcamentoView}" var="orcamento" converter="orcamentoConverter" itemLabel="#{orcamento.id}" itemValue="#{orcamento}" editVisible="false" onlyNumber="true"/>
-                            <p:menuButton class="ui-g-12 ui-md-4 ui-lg-2" rendered="#{consultaOrcamentoView.orcamento.estado ne null ? (consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : (consultaOrcamentoView.orcamento.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}" value="#{l.Atualizar_Estado}" style="padding: 2px !important">
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cOrcamento" value="#{consultaOrcamentoView.t}" update=":conteudo" dialog="#{selecaoOrcamentoView}" mbView="#{consultaOrcamentoView}" var="orcamento" converter="orcamentoConverter" itemLabel="#{orcamento.id}" itemValue="#{orcamento}" editVisible="false" onlyNumber="true"/>
+                            <p:menuButton class="ui-g-12 ui-md-4 ui-lg-2" style="max-width: 135px;height: 28px; margin-top: 2px" rendered="#{consultaOrcamentoView.t.estado ne null ? (consultaOrcamentoView.t.estado eq 'EFETIVADO' ? 'false' : (consultaOrcamentoView.t.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}" value="#{l.Atualizar_Estado}" >
                                 <p:menuitem value="#{l.Enviar_Para_Aprovacao}" actionListener="#{consultaOrcamentoView.enviaParaAprovacao}"  icon="fa fa-share-square-o"
-                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_DEFINICAO' ? 'true' : 'false'}" update="@form"/>
+                                            rendered="#{consultaOrcamentoView.t.estado eq 'EM_DEFINICAO' ? 'true' : 'false'}" update="@form"/>
                                 <p:menuitem value="#{l.Aprovar}" actionListener="#{consultaOrcamentoView.aprova}"  icon="fa fa-check"
-                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
+                                            rendered="#{consultaOrcamentoView.t.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
                                 <p:menuitem value="#{l.Reprovar}" actionListener="#{consultaOrcamentoView.reprova}" ajax="false" icon="fa fa-times"
-                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
+                                            rendered="#{consultaOrcamentoView.t.estado eq 'EM_APROVACAO' ? 'true' : 'false'}"/>
                                 <p:menuitem value="#{l.Redefinir}" actionListener="#{consultaOrcamentoView.redefinir}" ajax="false" icon="fa fa-refresh "
-                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'true' : 
-                                                        consultaOrcamentoView.orcamento.estado eq 'REPROVADO' ? 'true' : 'false'}"/>
+                                            rendered="#{consultaOrcamentoView.t.estado eq 'EM_APROVACAO' ? 'true' : 
+                                                        consultaOrcamentoView.t.estado eq 'REPROVADO' ? 'true' : 'false'}"/>
                                 <p:menuitem value="#{l.Cancelar}" actionListener="#{consultaOrcamentoView.cancela}" ajax="false" icon="fa fa-ban"
-                                            rendered="#{consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'false' : 'true'}"/>                 
+                                            rendered="#{consultaOrcamentoView.t.estado eq 'EFETIVADO' ? 'false' : 'true'}"/>                 
                             </p:menuButton>
                         </div>
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  value="#{l.Estado}: "/>
-                            <p:outputLabel class="#{consultaOrcamentoView.orcamento.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
-                                                    consultaOrcamentoView.orcamento.estado eq 'EM_APROVACAO' ? 'label label-info' : 
-                                                    consultaOrcamentoView.orcamento.estado eq 'APROVADO' ? 'label label-primary': 
-                                                    consultaOrcamentoView.orcamento.estado eq 'REPROVADO' ? 'label label-danger' : 
-                                                    consultaOrcamentoView.orcamento.estado eq 'EFETIVADO' ? 'label label-success' :
-                                                    consultaOrcamentoView.orcamento.estado eq 'CANCELADO' ? 'label label-warning' :
-                                                    ''}"> #{consultaOrcamentoView.orcamento.estado.nome}</p:outputLabel>
+                            <p:outputLabel class="#{consultaOrcamentoView.t.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaOrcamentoView.t.estado eq 'EM_APROVACAO' ? 'label label-info' : 
+                                                    consultaOrcamentoView.t.estado eq 'APROVADO' ? 'label label-primary': 
+                                                    consultaOrcamentoView.t.estado eq 'REPROVADO' ? 'label label-danger' : 
+                                                    consultaOrcamentoView.t.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaOrcamentoView.t.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaOrcamentoView.t.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaOrcamentoView.orcamento.pessoa.id} #{consultaOrcamentoView.orcamento.pessoa ne null ? '-' : ''}  #{consultaOrcamentoView.orcamento.pessoa.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaOrcamentoView.t.pessoa.id} #{consultaOrcamentoView.t.pessoa ne null ? '-' : ''}  #{consultaOrcamentoView.t.pessoa.nome}"/>
 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaOrcamentoView.orcamento.listaDePreco.id} #{consultaOrcamentoView.orcamento.listaDePreco ne null ? '-' : ''}  #{consultaOrcamentoView.orcamento.listaDePreco.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaOrcamentoView.t.listaDePreco.id} #{consultaOrcamentoView.t.listaDePreco ne null ? '-' : ''}  #{consultaOrcamentoView.t.listaDePreco.nome}"/>
                         </div>
 
                         <p:tabView style="border: 1px solid #d8d8d8;">
 
                             <p:tab id="item" title="#{l.Itens}">
 
-                                <p:dataTable id="itensOrcadosOrcamento" var="itemOrcado" value="#{consultaOrcamentoView.orcamento.itensOrcados}" rowKey="#{itemOrcado.id}" 
+                                <p:dataTable id="itensOrcadosOrcamento" var="itemOrcado" value="#{consultaOrcamentoView.t.itensOrcados}" rowKey="#{itemOrcado.id}" 
                                              emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
 
                                     <f:facet name="header">
@@ -90,10 +96,10 @@
 
                                     <p:columnGroup type="footer">
                                         <p:row>
-                                            <p:column colspan="1" footerText="#{consultaOrcamentoView.orcamento.itensOrcados.size() eq 0 ? '' : consultaOrcamentoView.orcamento.itensOrcados.size()}" />
+                                            <p:column colspan="1" footerText="#{consultaOrcamentoView.t.itensOrcados.size() eq 0 ? '' : consultaOrcamentoView.t.itensOrcados.size()}" />
                                             <p:column colspan="6"/>
                                             <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
-                                            <p:column colspan="2" footerText="#{consultaOrcamentoView.orcamento.totalItensFormatado}"/>
+                                            <p:column colspan="2" footerText="#{consultaOrcamentoView.t.totalItensFormatado}"/>
                                         </p:row>
                                     </p:columnGroup> 
 
@@ -105,32 +111,32 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Forma_Recebimento}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{consultaOrcamentoView.orcamento.formaDeRecebimento.id} #{consultaOrcamentoView.orcamento.pessoa ne null ? '-' : ''}  #{consultaOrcamentoView.orcamento.formaDeRecebimento.nome}"/>
+                                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{consultaOrcamentoView.t.formaDeRecebimento.id} #{consultaOrcamentoView.t.pessoa ne null ? '-' : ''}  #{consultaOrcamentoView.t.formaDeRecebimento.nome}"/>
                                 </div>
 
                                 <p:separator/>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.orcamento.acrescimoFormatado}" />                             
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.t.acrescimoFormatado}" />                             
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Orcamento}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.orcamento.totalFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.t.totalFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.orcamento.descontoFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.t.descontoFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.orcamento.despesaCobrancaFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.t.despesaCobrancaFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.orcamento.freteFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaOrcamentoView.t.freteFormatado}" />
                                 </div>                           
 
                                 <p:spacer width="1px"/>
@@ -139,7 +145,7 @@
 
                             <p:tab title="#{l.Historico}">
 
-                                <p:dataTable var="historicoDeOrcamento" value="#{consultaOrcamentoView.orcamento.historicosDeOrcamento}" emptyMessage="#{l.Nao_Ha_Registros}"
+                                <p:dataTable var="historicoDeOrcamento" value="#{consultaOrcamentoView.t.historicosDeOrcamento}" emptyMessage="#{l.Nao_Ha_Registros}"
                                              rowKey="#{historicoDeOrcamento.id}" reflow="true" style="border: none" >
 
                                     <p:column headerText="#{l.Id}" >

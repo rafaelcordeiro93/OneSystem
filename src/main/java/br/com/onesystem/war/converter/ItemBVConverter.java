@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Item;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.ItemBV;
-import br.com.onesystem.war.service.ItemService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class ItemBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Item> lista = new ItemService().buscarItems();
-                if (StringUtils.containsLetter(value)) {
-                    for (Item item : lista) {
-                        if (item.getNome().equals(value)) {
-                            return new ItemBV(item);
-                        }
-                    }
-                } else {
-                    for (Item item : lista) {
-                        if (item.getId().equals(new Long(value))) {
-                            return new ItemBV(item);
-                        }
-                    }
-                }
-                return new ItemBV();
-            } catch (Exception e) {
-                return new ItemBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Item) {
+                return new ItemBV((Item) object);
+            } else if (object instanceof ItemBV) {
+                return (ItemBV) object;
             }
-        } else {
-            return new ItemBV();
         }
+        return new ItemBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ItemBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof ItemBV) {
+                String id = String.valueOf(((ItemBV) object).getId());
+                uic.getAttributes().put(id, (ItemBV) object);
+                return id;
+            } else if (object instanceof Item) {
+                String id = String.valueOf(((Item) object).getId());
+                uic.getAttributes().put(id, (Item) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

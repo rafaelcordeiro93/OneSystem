@@ -2,9 +2,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.war.builder.SaqueBancarioBV;
-import br.com.onesystem.war.service.SaqueBancarioService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -19,32 +17,29 @@ public class SaqueBancarioBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            SaqueBancarioService service = new SaqueBancarioService();
-            try {
-                List<SaqueBancario> lista = service.buscarSaqueBancarios();
-
-                for (SaqueBancario saqueBancario : lista) {
-                    if (saqueBancario.getId().equals(new Long(value))) {
-                        return new SaqueBancarioBV(saqueBancario);
-                    }
-                }
-
-                return new SaqueBancarioBV();
-            } catch (Exception e) {
-                return new SaqueBancarioBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof SaqueBancario) {
+                return new SaqueBancarioBV((SaqueBancario) object);
+            } else if (object instanceof SaqueBancarioBV) {
+                return (SaqueBancarioBV) object;
             }
-        } else {
-            return new SaqueBancarioBV();
         }
+        return new SaqueBancarioBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((SaqueBancarioBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof SaqueBancarioBV) {
+                String id = String.valueOf(((SaqueBancarioBV) object).getId());
+                uic.getAttributes().put(id, (SaqueBancarioBV) object);
+                return id;
+            } else if (object instanceof SaqueBancario) {
+                String id = String.valueOf(((SaqueBancario) object).getId());
+                uic.getAttributes().put(id, (SaqueBancario) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

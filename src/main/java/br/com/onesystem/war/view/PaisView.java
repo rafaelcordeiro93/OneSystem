@@ -18,7 +18,10 @@ public class PaisView extends BasicMBImpl<Pais, PaisBV> implements Serializable 
     }
 
     public void selecionar(SelectEvent event) {
-        e = new PaisBV((Pais) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Pais) {
+            e = new PaisBV((Pais) event.getObject());
+        } 
     }
 
     public void limparJanela() {

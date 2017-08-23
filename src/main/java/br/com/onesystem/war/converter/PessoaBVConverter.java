@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.PessoaBV;
-import br.com.onesystem.war.service.PessoaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class PessoaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Pessoa> lista = new PessoaService().buscarPessoas();
-                if (StringUtils.containsLetter(value)) {
-                    for (Pessoa pessoa : lista) {
-                        if (pessoa.getNome().equals(value)) {
-                            return new PessoaBV(pessoa);
-                        }
-                    }
-                } else {
-                    for (Pessoa pessoa : lista) {
-                        if (pessoa.getId().equals(new Long(value))) {
-                            return new PessoaBV(pessoa);
-                        }
-                    }
-                }
-                return new PessoaBV();
-            } catch (Exception e) {
-                return new PessoaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Pessoa) {
+                return new PessoaBV((Pessoa) object);
+            } else if (object instanceof PessoaBV) {
+                return (PessoaBV) object;
             }
-        } else {
-            return new PessoaBV();
         }
+        return new PessoaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((PessoaBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof PessoaBV) {
+                String id = String.valueOf(((PessoaBV) object).getId());
+                uic.getAttributes().put(id, (PessoaBV) object);
+                return id;
+            } else if (object instanceof Pessoa) {
+                String id = String.valueOf(((Pessoa) object).getId());
+                uic.getAttributes().put(id, (Pessoa) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

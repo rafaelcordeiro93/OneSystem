@@ -7,9 +7,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
-import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -22,32 +20,31 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "ajusteDeEstoqueBVConverter", forClass = AjusteDeEstoque.class)
 public class AjusteDeEstoqueBVConverter implements Converter, Serializable {
 
-    @Override
+     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                AjusteDeEstoqueService service = new AjusteDeEstoqueService();
-                List<AjusteDeEstoque> lista = service.buscarAjusteDeEstoques();
-                for (AjusteDeEstoque ajusteDeEstoque : lista) {
-                    if (ajusteDeEstoque.getId().equals(new Long(value))) {
-                        return new AjusteDeEstoqueBV(ajusteDeEstoque);
-                    }
-                }
-                return new AjusteDeEstoqueBV();
-            } catch (Exception e) {
-                return new AjusteDeEstoqueBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof AjusteDeEstoque) {
+                return new AjusteDeEstoqueBV((AjusteDeEstoque) object);
+            } else if (object instanceof AjusteDeEstoqueBV) {
+                return (AjusteDeEstoqueBV) object;
             }
-        } else {
-            return new AjusteDeEstoqueBV();
         }
+        return new AjusteDeEstoqueBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((AjusteDeEstoqueBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof AjusteDeEstoqueBV) {
+                String id = String.valueOf(((AjusteDeEstoqueBV) object).getId());
+                uic.getAttributes().put(id, (AjusteDeEstoqueBV) object);
+                return id;
+            } else if (object instanceof AjusteDeEstoque) {
+                String id = String.valueOf(((AjusteDeEstoque) object).getId());
+                uic.getAttributes().put(id, (AjusteDeEstoque) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

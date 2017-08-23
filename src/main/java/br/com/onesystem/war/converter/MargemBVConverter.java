@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Margem;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.GrupoDeMargemBV;
-import br.com.onesystem.war.service.GrupoDeMargemService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class MargemBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Margem> lista = new GrupoDeMargemService().buscarGrupoDeMargens();
-                if (StringUtils.containsLetter(value)) {
-                    for (Margem margem : lista) {
-                        if (margem.getNome().equals(value)) {
-                            return new GrupoDeMargemBV(margem);
-                        }
-                    }
-                } else {
-                    for (Margem margem : lista) {
-                        if (margem.getId().equals(new Long(value))) {
-                            return new GrupoDeMargemBV(margem);
-                        }
-                    }
-                }
-                return new GrupoDeMargemBV();
-            } catch (Exception e) {
-                return new GrupoDeMargemBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Margem) {
+                return new GrupoDeMargemBV((Margem) object);
+            } else if (object instanceof GrupoDeMargemBV) {
+                return (GrupoDeMargemBV) object;
             }
-        } else {
-            return new GrupoDeMargemBV();
         }
+        return new GrupoDeMargemBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((GrupoDeMargemBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof GrupoDeMargemBV) {
+                String id = String.valueOf(((GrupoDeMargemBV) object).getId());
+                uic.getAttributes().put(id, (GrupoDeMargemBV) object);
+                return id;
+            } else if (object instanceof Margem) {
+                String id = String.valueOf(((Margem) object).getId());
+                uic.getAttributes().put(id, (Margem) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

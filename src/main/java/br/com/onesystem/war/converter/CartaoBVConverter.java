@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.CartaoBV;
-import br.com.onesystem.war.service.CartaoService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -18,44 +15,36 @@ import javax.faces.convert.FacesConverter;
 
 /**
  *
- * @author Rafael 
+ * @author Rafael
  */
 @FacesConverter(value = "cartaoBVConverter", forClass = CartaoBV.class)
 public class CartaoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Cartao> lista = new CartaoService().buscarCartaos();
-                if (StringUtils.containsLetter(value)) {
-                    for (Cartao cartao : lista) {
-                        if (cartao.getNome().equals(value)) {
-                            return new CartaoBV(cartao);
-                        }
-                    }
-                } else {
-                    for (Cartao cartao : lista) {
-                        if (cartao.getId().equals(new Long(value))) {
-                            return new CartaoBV(cartao);
-                        }
-                    }
-                }
-                return new CartaoBV();
-            } catch (Exception e) {
-                return new CartaoBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Cartao) {
+                return new CartaoBV((Cartao) object);
+            } else if (object instanceof CartaoBV) {
+                return (CartaoBV) object;
             }
-        } else {
-            return new CartaoBV();
         }
+        return new CartaoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((CartaoBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof CartaoBV) {
+                String id = String.valueOf(((CartaoBV) object).getId());
+                uic.getAttributes().put(id, (CartaoBV) object);
+                return id;
+            } else if (object instanceof Cartao) {
+                String id = String.valueOf(((Cartao) object).getId());
+                uic.getAttributes().put(id, (Cartao) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

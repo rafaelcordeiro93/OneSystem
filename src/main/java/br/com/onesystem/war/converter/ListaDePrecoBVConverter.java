@@ -6,12 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ListaDePreco;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.ListaDePrecoBV;
-import br.com.onesystem.war.service.ListaDePrecoService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -26,37 +22,29 @@ public class ListaDePrecoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ListaDePreco> lista = new ListaDePrecoService().buscarListaPrecos();
-                if (StringUtils.containsLetter(value)) {
-                    for (ListaDePreco listaDePreco : lista) {
-                        if (listaDePreco.getNome().equals(value)) {
-                            return new ListaDePrecoBV(listaDePreco);
-                        }
-                    }
-                } else {
-                    for (ListaDePreco listaDePreco : lista) {
-                        if (listaDePreco.getId().equals(new Long(value))) {
-                            return new ListaDePrecoBV(listaDePreco);
-                        }
-                    }
-                }
-                return new ListaDePrecoBV();
-            } catch (Exception e) {
-                return new ListaDePrecoBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ListaDePreco) {
+                return new ListaDePrecoBV((ListaDePreco) object);
+            } else if (object instanceof ListaDePrecoBV) {
+                return (ListaDePrecoBV) object;
             }
-        } else {
-            return new ListaDePrecoBV();
         }
+        return new ListaDePrecoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ListaDePrecoBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof ListaDePrecoBV) {
+                String id = String.valueOf(((ListaDePrecoBV) object).getId());
+                uic.getAttributes().put(id, (ListaDePrecoBV) object);
+                return id;
+            } else if (object instanceof ListaDePreco) {
+                String id = String.valueOf(((ListaDePreco) object).getId());
+                uic.getAttributes().put(id, (ListaDePreco) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

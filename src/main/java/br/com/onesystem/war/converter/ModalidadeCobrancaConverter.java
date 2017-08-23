@@ -6,13 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import java.util.Arrays;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -24,29 +20,27 @@ public class ModalidadeCobrancaConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ModalidadeDeCobranca> lista = Arrays.asList(ModalidadeDeCobranca.values());
-                for (ModalidadeDeCobranca modalidadeDeCobranca : lista) {
-                    if (modalidadeDeCobranca.getId().equals(new Long(value))) {
-                        return modalidadeDeCobranca;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Not a valid theme."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ModalidadeDeCobranca) {
+                return (ModalidadeDeCobranca) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            return String.valueOf(((ModalidadeDeCobranca) object).getId());
+            if (object instanceof ModalidadeDeCobranca) {
+                String id = String.valueOf(((ModalidadeDeCobranca) object).getId());
+                uic.getAttributes().put(id, (ModalidadeDeCobranca) object);
+                return id;
+            } else {
+                return object.toString();
+            }
         } else {
-            return null;
+            return "";
         }
     }
 }

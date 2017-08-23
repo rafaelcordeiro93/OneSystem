@@ -6,7 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.util.StringUtils;
+import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
 import br.com.onesystem.war.service.BoletoDeCartaoService;
 import java.io.Serializable;
@@ -25,36 +27,33 @@ public class BoletoDeCartaoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                BoletoDeCartaoService service = new BoletoDeCartaoService();
-                List<BoletoDeCartao> lista = service.buscarBoletoDeCartaos();
-                if (!StringUtils.containsLetter(value)) {
-                    for (BoletoDeCartao boletoDeCartao : lista) {
-                        if (boletoDeCartao.getId().equals(new Long(value))) {
-                            return new BoletoDeCartaoBV(boletoDeCartao);
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                return new BoletoDeCartaoBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof BoletoDeCartao) {
+                return new BoletoDeCartaoBV((BoletoDeCartao) object);
+            } else if (object instanceof BoletoDeCartaoBV) {
+                return (BoletoDeCartaoBV) object;
             }
-        } else {
-            return new BoletoDeCartaoBV();
         }
+        return new BoletoDeCartaoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((BoletoDeCartaoBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof BoletoDeCartaoBV) {
+                String id = String.valueOf(((BoletoDeCartaoBV) object).getId());
+                uic.getAttributes().put(id, (BoletoDeCartaoBV) object);
+                return id;
+            } else if (object instanceof BoletoDeCartao) {
+                String id = String.valueOf(((BoletoDeCartao) object).getId());
+                uic.getAttributes().put(id, (BoletoDeCartao) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

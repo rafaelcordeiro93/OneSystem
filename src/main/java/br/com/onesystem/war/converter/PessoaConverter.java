@@ -27,41 +27,27 @@ public class PessoaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-       if (value != null && value.trim().length() > 0) {
-            try {
-                List<Pessoa> lista = new PessoaService().buscarPessoas();
-                if (StringUtils.containsLetter(value)) {
-                    for (Pessoa pessoa : lista) {
-                        if (pessoa.getNome().equals(value)) {
-                            return pessoa;
-                        }
-                    }
-                } else {
-                    for (Pessoa pessoa : lista) {
-                        if (pessoa.getId().equals(new Long(value))) {
-                            return pessoa;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma receita válida."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Pessoa) {
+                return (Pessoa) object;
+            } 
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Pessoa) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof Pessoa) {
+                String id = String.valueOf(((Pessoa) object).getId());
+                uic.getAttributes().put(id, (Pessoa) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

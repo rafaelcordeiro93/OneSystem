@@ -7,9 +7,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.war.builder.ReceitaProvisionadaBV;
-import br.com.onesystem.war.service.ReceitaProvisionadaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -24,29 +22,29 @@ public class ReceitaProvisionadaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ReceitaProvisionada> lista = new ReceitaProvisionadaService().buscarReceitaProvisionadas();
-                for (ReceitaProvisionada receitaProvisionada : lista) {
-                    if (receitaProvisionada.getId().equals(new Long(value))) {
-                        return new ReceitaProvisionadaBV(receitaProvisionada);
-                    }
-                }
-                return new ReceitaProvisionadaBV();
-            } catch (Exception e) {
-                return new ReceitaProvisionadaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ReceitaProvisionada) {
+                return new ReceitaProvisionadaBV((ReceitaProvisionada) object);
+            } else if (object instanceof ReceitaProvisionadaBV) {
+                return (ReceitaProvisionadaBV) object;
             }
-        } else {
-            return new ReceitaProvisionadaBV();
         }
+        return new ReceitaProvisionadaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ReceitaProvisionadaBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof ReceitaProvisionadaBV) {
+                String id = String.valueOf(((ReceitaProvisionadaBV) object).getId());
+                uic.getAttributes().put(id, (ReceitaProvisionadaBV) object);
+                return id;
+            } else if (object instanceof ReceitaProvisionada) {
+                String id = String.valueOf(((ReceitaProvisionada) object).getId());
+                uic.getAttributes().put(id, (ReceitaProvisionada) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

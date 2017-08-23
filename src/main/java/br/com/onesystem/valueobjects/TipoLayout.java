@@ -13,7 +13,8 @@ import br.com.onesystem.util.BundleUtil;
  */
 public enum TipoLayout {
     
-    ORCAMENTO(new Long(1), "Orcamento");
+    ORCAMENTO(new Long(1), "Orcamento"),
+    COMANDA(new Long(2), "Comanda");
     
     private Long id;
     private String nome;

@@ -35,10 +35,9 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        String realPath = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem\\target\\OneSystem-war-1.0-SNAPSHOT";
-        realPath = realPath.substring(0, realPath.lastIndexOf("\\"));
-        realPath = realPath + "\\classes\\layouts\\";
-        System.out.println("Dir: " + realPath);
+        String p = "Pessoa{id=1,";
+        
+        System.out.println(p.substring(p.indexOf("=")+1,p.indexOf(",")));
 
     }
 }

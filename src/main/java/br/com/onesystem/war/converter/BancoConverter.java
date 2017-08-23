@@ -26,42 +26,27 @@ public class BancoConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                BancoService service = new BancoService();
-                List<Banco> lista = service.buscarBancos();
-                if (StringUtils.containsLetter(value)) {
-                    for (Banco banco : lista) {
-                        if (banco.getNome().equals(value)) {
-                            return banco;
-                        }
-                    }
-                } else {
-                    for (Banco banco : lista) {
-                        if (banco.getId().equals(new Long(value))) {
-                            return banco;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um banco válido."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Banco) {
+                return (Banco) object;
+            } 
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Banco) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof Banco) {
+                String id = String.valueOf(((Banco) object).getId());
+                uic.getAttributes().put(id, (Banco) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

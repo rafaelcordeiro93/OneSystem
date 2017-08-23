@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cidade;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.CidadeBV;
-import br.com.onesystem.war.service.CidadeService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class CidadeBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Cidade> lista = new CidadeService().buscarCidades();
-                if (StringUtils.containsLetter(value)) {
-                    for (Cidade cidade : lista) {
-                        if (cidade.getNome().equals(value)) {
-                            return new CidadeBV(cidade);
-                        }
-                    }
-                } else {
-                    for (Cidade cidade : lista) {
-                        if (cidade.getId().equals(new Long(value))) {
-                            return new CidadeBV(cidade);
-                        }
-                    }
-                }
-                return new CidadeBV();
-            } catch (Exception e) {
-                return new CidadeBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Cidade) {
+                return new CidadeBV((Cidade) object);
+            } else if (object instanceof CidadeBV) {
+                return (CidadeBV) object;
             }
-        } else {
-            return new CidadeBV();
         }
+        return new CidadeBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((CidadeBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof CidadeBV) {
+                String id = String.valueOf(((CidadeBV) object).getId());
+                uic.getAttributes().put(id, (CidadeBV) object);
+                return id;
+            } else if (object instanceof Cidade) {
+                String id = String.valueOf(((Cidade) object).getId());
+                uic.getAttributes().put(id, (Cidade) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TipoReceita;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.TipoReceitaBV;
-import br.com.onesystem.war.service.TipoReceitaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class TipoReceitaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<TipoReceita> lista = new TipoReceitaService().buscarTiposDeReceita();
-                if (StringUtils.containsLetter(value)) {
-                    for (TipoReceita tipoReceita : lista) {
-                        if (tipoReceita.getNome().equals(value)) {
-                            return new TipoReceitaBV(tipoReceita);
-                        }
-                    }
-                } else {
-                    for (TipoReceita tipoReceita : lista) {
-                        if (tipoReceita.getId().equals(new Long(value))) {
-                            return new TipoReceitaBV(tipoReceita);
-                        }
-                    }
-                }
-                return new TipoReceitaBV();
-            } catch (Exception e) {
-                return new TipoReceitaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof TipoReceita) {
+                return new TipoReceitaBV((TipoReceita) object);
+            } else if (object instanceof TipoReceitaBV) {
+                return (TipoReceitaBV) object;
             }
-        } else {
-            return new TipoReceitaBV();
         }
+        return new TipoReceitaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((TipoReceitaBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof TipoReceitaBV) {
+                String id = String.valueOf(((TipoReceitaBV) object).getId());
+                uic.getAttributes().put(id, (TipoReceitaBV) object);
+                return id;
+            } else if (object instanceof TipoReceita) {
+                String id = String.valueOf(((TipoReceita) object).getId());
+                uic.getAttributes().put(id, (TipoReceita) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

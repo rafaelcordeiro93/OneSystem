@@ -6,16 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TabelaDeTributacao;
-import br.com.onesystem.domain.TabelaDeTributacao;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TabelaDeTributacaoService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -27,41 +21,27 @@ public class TabelaDeTributacaoConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<TabelaDeTributacao> lista = new TabelaDeTributacaoService().buscarTabelasDeTributacao();
-                if (StringUtils.containsLetter(value)) {
-                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
-                        if (tabelaDeTributacao.getNome().equals(value)) {
-                            return tabelaDeTributacao;
-                        }
-                    }
-                } else {
-                    for (TabelaDeTributacao tabelaDeTributacao : lista) {
-                        if (tabelaDeTributacao.getId().equals(new Long(value))) {
-                            return tabelaDeTributacao;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma receita válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof TabelaDeTributacao) {
+                return (TabelaDeTributacao) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((TabelaDeTributacao) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof TabelaDeTributacao) {
+                String id = String.valueOf(((TabelaDeTributacao) object).getId());
+                uic.getAttributes().put(id, (TabelaDeTributacao) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

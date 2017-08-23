@@ -8,10 +8,13 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -35,8 +38,6 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     private String historico;
     private EstadoDeOrcamento estadoDesejado;
 
-    private Orcamento orcamento;
-
     @PostConstruct
     public void construir() {
     }
@@ -45,21 +46,26 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof Orcamento) {
-            orcamento = (Orcamento) obj;
+            t = (Orcamento) obj;
         }
     }
 
-    public Orcamento getOrcamento() {
-        return orcamento;
-    }
-
-    public void setOrcamento(Orcamento orcamento) {
-        this.orcamento = orcamento;
+    public void imprimir() {
+        try {
+            if (t != null) {
+                new ImpressoraDeLayout(t.getItensOrcados(), TipoLayout.ORCAMENTO).addParametro("orcamento", t).visualizarPDF();
+                t = null; // libera memoria do objeto impresso.
+            } else {
+                throw new EDadoInvalidoException("Selecione_um_orcamento");
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     public String getZero() {
-        if (orcamento != null) {
-            return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+        if (t != null) {
+            return MoedaFormatter.format(t.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }
@@ -99,24 +105,24 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
         try {
             switch (estadoDesejado) {
                 case APROVADO:
-                    orcamento.aprova(historico);
+                    t.aprova(historico);
                     break;
                 case REPROVADO:
-                    orcamento.reprova(historico);
+                    t.reprova(historico);
                     break;
                 case EFETIVADO:
-                    orcamento.efetiva(historico);
+                    t.efetiva(historico);
                     break;
                 case CANCELADO:
-                    orcamento.cancela(historico);
+                    t.cancela(historico);
                     break;
                 case EM_APROVACAO:
-                    orcamento.enviaParaAprovacao(historico);
+                    t.enviaParaAprovacao(historico);
                     break;
                 case EM_DEFINICAO:
-                    orcamento.redefinir(historico);
+                    t.redefinir(historico);
             }
-            new AtualizaDAO<>().atualiza(orcamento);
+            new AtualizaDAO<>().atualiza(t);
             InfoMessage.atualizado();
             limparHistorico();
         } catch (DadoInvalidoException die) {
@@ -126,7 +132,7 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
 
     @Override
     public void limparJanela() {
-        orcamento = null;
+        t = null;
         limparHistorico();
     }
 

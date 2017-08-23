@@ -74,7 +74,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     private void iniciarConfiguracoes() {
         try {
             configuracao = configuracaoService.buscar();
-            cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

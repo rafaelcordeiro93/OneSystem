@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.DepositoBV;
-import br.com.onesystem.war.service.DepositoService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class DepositoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Deposito> lista = new DepositoService().buscarDepositos();
-                if (StringUtils.containsLetter(value)) {
-                    for (Deposito deposito : lista) {
-                        if (deposito.getNome().equals(value)) {
-                            return new DepositoBV(deposito);
-                        }
-                    }
-                } else {
-                    for (Deposito deposito : lista) {
-                        if (deposito.getId().equals(new Long(value))) {
-                            return new DepositoBV(deposito);
-                        }
-                    }
-                }
-                return new DepositoBV();
-            } catch (Exception e) {
-                return new DepositoBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Deposito) {
+                return new DepositoBV((Deposito) object);
+            } else if (object instanceof DepositoBV) {
+                return (DepositoBV) object;
             }
-        } else {
-            return new DepositoBV();
         }
+        return new DepositoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((DepositoBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof DepositoBV) {
+                String id = String.valueOf(((DepositoBV) object).getId());
+                uic.getAttributes().put(id, (DepositoBV) object);
+                return id;
+            } else if (object instanceof Deposito) {
+                String id = String.valueOf(((Deposito) object).getId());
+                uic.getAttributes().put(id, (Deposito) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

@@ -25,7 +25,7 @@
 
                                 <p:outputLabel value="#{l.Id}"/>
                                 <a:inputTextDialog id="neId" mbView="#{contaDeEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" process="@this" update=":conteudo" value="#{contaDeEstoqueView.e}" var="contaDeEstoqueBV" converter="contaDeEstoqueBVConverter"  itemLabel="#{contaDeEstoqueBV.id}" itemValue="#{contaDeEstoqueBV}" itemLabelTab="#{contaDeEstoqueBV.nome}" itemLabelTabVisible="true" editVisible="false" onlyNumber="true">
-                                    <p:ajax event="itemSelect" listener="#{contaDeEstoqueView.selecionaConta}" update=":conteudo"/>
+                                    <p:ajax event="change" listener="#{contaDeEstoqueView.selecionaConta}" update=":conteudo"/>
                                 </a:inputTextDialog>
 
                                 <p:outputLabel value="#{l.Nome}"/>

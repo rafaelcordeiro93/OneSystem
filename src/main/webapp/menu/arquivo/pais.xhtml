@@ -23,7 +23,7 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="paisId" update=":conteudo" process="@this"  dialog="#{selecaoPaisView}" mbView="#{paisView}" value="#{paisView.e}" var="pais" itemLabel="#{pais.id}" itemValue="#{pais}" converter="paisBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pais.nome}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="paisId" dialog="#{selecaoPaisView}"  mbView="#{paisView}" value="#{paisView.e}" var="pais" itemLabel="#{pais.id}" itemValue="#{pais}" converter="paisBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pais.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="false"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{paisView.e.nome}"/>

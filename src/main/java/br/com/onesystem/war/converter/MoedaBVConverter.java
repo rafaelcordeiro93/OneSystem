@@ -6,16 +6,12 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.MoedaBV;
-import br.com.onesystem.war.service.MoedaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
 
 /**
  *
@@ -26,38 +22,29 @@ public class MoedaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            MoedaService service = new MoedaService();
-            try {
-                List<Moeda> lista = service.buscarMoedas();
-                if (StringUtils.containsLetter(value)) {
-                    for (Moeda moeda : lista) {
-                        if (moeda.getNome().equals(value)) {
-                            return new MoedaBV(moeda);
-                        }
-                    }
-                } else {
-                    for (Moeda moeda : lista) {
-                        if (moeda.getId().equals(new Long(value))) {
-                            return new MoedaBV(moeda);
-                        }
-                    }
-                }
-                return new MoedaBV();
-            } catch (Exception e) {
-                return new MoedaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Moeda) {
+                return new MoedaBV((Moeda) object);
+            } else if (object instanceof MoedaBV) {
+                return (MoedaBV) object;
             }
-        } else {
-            return new MoedaBV();
         }
+        return new MoedaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((MoedaBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof MoedaBV) {
+                String id = String.valueOf(((MoedaBV) object).getId());
+                uic.getAttributes().put(id, (MoedaBV) object);
+                return id;
+            } else if (object instanceof Moeda) {
+                String id = String.valueOf(((Moeda) object).getId());
+                uic.getAttributes().put(id, (Moeda) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

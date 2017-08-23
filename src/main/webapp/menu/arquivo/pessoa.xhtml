@@ -24,8 +24,8 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>                            
-                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="true"/>
-
+                            <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="false"/>
+                            
                         </p:panelGrid>
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
@@ -121,7 +121,7 @@
                             <p:inputText  value="#{pessoaView.e.bairro}"/>
 
                             <p:outputLabel value="#{l.Cep}"/>
-                            <a:inputTextDialog id="cepId" mbView="#{pessoaView}" dialog="#{selecaoCepView}" value="#{pessoaView.e.cep}" update=":conteudo:pessoaCidade :conteudo:pessoaUf :conteudo:pessoaPais" converter="cepConverter" var="cep" itemLabel="#{cep.cep}" itemValue="#{cep}" editVisible="true" itemLabelTab="#{cep.cep}" itemLabelTabVisible="true"/>
+                            <a:inputTextDialog id="cepId" mbView="#{pessoaView}" dialog="#{selecaoCepView}" value="#{pessoaView.e.cep}" process="@this" update=":conteudo" converter="cepConverter" var="cep" itemLabel="#{cep.cep}" itemValue="#{cep}" editVisible="true" itemLabelTab="#{cep.cep}" itemLabelTabVisible="true"/>
 
                             <p:outputLabel value="#{l.Cidade}"/>
                             <p:inputText id="pessoaCidade" value="#{pessoaView.e.cep.cidade.nome}" readonly="true" />

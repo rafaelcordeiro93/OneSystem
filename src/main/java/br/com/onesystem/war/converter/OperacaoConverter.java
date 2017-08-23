@@ -6,15 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.OperacaoService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -26,41 +21,27 @@ public class OperacaoConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Operacao> lista = new OperacaoService().buscar();
-                if (StringUtils.containsLetter(value)) {
-                    for (Operacao operacao : lista) {
-                        if (operacao.getNome().equals(value)) {
-                            return operacao;
-                        }
-                    }
-                } else {
-                    for (Operacao operacao : lista) {
-                        if (operacao.getId().equals(new Long(value))) {
-                            return operacao;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma operacao válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Operacao) {
+                return (Operacao) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Operacao) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof Operacao) {
+                String id = String.valueOf(((Operacao) object).getId());
+                uic.getAttributes().put(id, (Operacao) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

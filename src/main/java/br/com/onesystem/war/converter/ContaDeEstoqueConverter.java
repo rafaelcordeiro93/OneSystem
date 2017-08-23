@@ -6,15 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ContaDeEstoque;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ContaDeEstoqueService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -26,41 +21,27 @@ public class ContaDeEstoqueConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<ContaDeEstoque> lista = new ContaDeEstoqueService().buscarContaDeEstoque();
-                if (StringUtils.containsLetter(value)) {
-                    for (ContaDeEstoque contaDeEstoque : lista) {
-                        if (contaDeEstoque.getNome().equals(value)) {
-                            return contaDeEstoque;
-                        }
-                    }
-                } else {
-                    for (ContaDeEstoque contaDeEstoque : lista) {
-                        if (contaDeEstoque.getId().equals(new Long(value))) {
-                            return contaDeEstoque;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma contaDeEstoque válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof ContaDeEstoque) {
+                return (ContaDeEstoque) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ContaDeEstoque) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof ContaDeEstoque) {
+                String id = String.valueOf(((ContaDeEstoque) object).getId());
+                uic.getAttributes().put(id, (ContaDeEstoque) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

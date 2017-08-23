@@ -64,7 +64,7 @@ public class Cep implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("cep");
+        List<String> campos = Arrays.asList("cep","cidade");
         new ValidadorDeCampos<Cep>().valida(this, campos);
     }
 

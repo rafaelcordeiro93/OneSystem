@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Estado;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.EstadoBV;
-import br.com.onesystem.war.service.EstadoService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,29 @@ public class EstadoBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Estado> lista = new EstadoService().buscarEstados();
-                if (StringUtils.containsLetter(value)) {
-                    for (Estado estado : lista) {
-                        if (estado.getNome().equals(value)) {
-                            return new EstadoBV(estado);
-                        }
-                    }
-                } else {
-                    for (Estado estado : lista) {
-                        if (estado.getId().equals(new Long(value))) {
-                            return new EstadoBV(estado);
-                        }
-                    }
-                }
-                return new EstadoBV();
-            } catch (Exception e) {
-                return new EstadoBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Estado) {
+                return new EstadoBV((Estado) object);
+            } else if (object instanceof EstadoBV) {
+                return (EstadoBV) object;
             }
-        } else {
-            return new EstadoBV();
         }
+        return new EstadoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((EstadoBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof EstadoBV) {
+                String id = String.valueOf(((EstadoBV) object).getId());
+                uic.getAttributes().put(id, (EstadoBV) object);
+                return id;
+            } else if (object instanceof Estado) {
+                String id = String.valueOf(((Estado) object).getId());
+                uic.getAttributes().put(id, (Estado) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

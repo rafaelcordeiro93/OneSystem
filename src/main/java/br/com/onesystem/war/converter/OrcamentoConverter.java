@@ -23,36 +23,29 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "orcamentoConverter", forClass = Orcamento.class)
 public class OrcamentoConverter implements Converter, Serializable {
 
-    @Override
+     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {                
-                OrcamentoService service = new OrcamentoService();
-                List<Orcamento> lista = service.buscarOrcamentos();
-                for (Orcamento orcamento : lista) {
-                    if (orcamento.getId().equals(new Long(value))) {
-                        return orcamento;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um orcamento válido."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Orcamento) {
+                return (Orcamento) object;
+            } 
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Orcamento) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof Orcamento) {
+                String id = String.valueOf(((Orcamento) object).getId());
+                uic.getAttributes().put(id, (Orcamento) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

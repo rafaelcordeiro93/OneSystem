@@ -5,17 +5,11 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.war.service.BoletoDeCartaoService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -27,31 +21,27 @@ public class BoletoDeCartaoConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                BoletoDeCartao encontrado = new ArmazemDeRegistros<>(BoletoDeCartao.class).find(new Long(value));
-                if (encontrado != null) {
-                    return encontrado;
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma boletoDeCartao válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof BoletoDeCartao) {
+                return (BoletoDeCartao) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((BoletoDeCartao) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof BoletoDeCartao) {
+                String id = String.valueOf(((BoletoDeCartao) object).getId());
+                uic.getAttributes().put(id, (BoletoDeCartao) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

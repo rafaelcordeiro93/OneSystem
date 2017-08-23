@@ -6,14 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Comanda;
-import br.com.onesystem.war.service.ComandaService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -23,36 +19,29 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "comandaConverter", forClass = Comanda.class)
 public class ComandaConverter implements Converter, Serializable {
 
-    @Override
+   @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {                
-                ComandaService service = new ComandaService();
-                List<Comanda> lista = service.buscarComandas();
-                for (Comanda comanda : lista) {
-                    if (comanda.getId().equals(new Long(value))) {
-                        return comanda;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma comanda válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Comanda) {
+                return (Comanda) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Comanda) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof Comanda) {
+                String id = String.valueOf(((Comanda) object).getId());
+                uic.getAttributes().put(id, (Comanda) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

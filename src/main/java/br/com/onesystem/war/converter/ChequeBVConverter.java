@@ -2,9 +2,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.war.builder.ChequeBV;
-import br.com.onesystem.war.service.ChequeService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -19,32 +17,29 @@ public class ChequeBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            ChequeService service = new ChequeService();
-            try {
-                List<Cheque> lista = service.buscarCheques();
-
-                for (Cheque cheque : lista) {
-                    if (cheque.getId().equals(new Long(value))) {
-                        return new ChequeBV(cheque);
-                    }
-                }
-
-                return new ChequeBV();
-            } catch (Exception e) {
-                return new ChequeBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Cheque) {
+                return new ChequeBV((Cheque) object);
+            } else if (object instanceof ChequeBV) {
+                return (ChequeBV) object;
             }
-        } else {
-            return new ChequeBV();
         }
+        return new ChequeBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((ChequeBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof ChequeBV) {
+                String id = String.valueOf(((ChequeBV) object).getId());
+                uic.getAttributes().put(id, (ChequeBV) object);
+                return id;
+            } else if (object instanceof Cheque) {
+                String id = String.valueOf(((Cheque) object).getId());
+                uic.getAttributes().put(id, (Cheque) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

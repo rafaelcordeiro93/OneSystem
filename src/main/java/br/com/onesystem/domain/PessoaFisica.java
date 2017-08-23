@@ -55,7 +55,7 @@ public class PessoaFisica extends Pessoa {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome","conjuge","direcao","bairro","telefone"
+        List<String> campos = Arrays.asList("nome","conjuge","endereco","bairro","telefone"
                 ,"contato","email","observacao");
         new ValidadorDeCampos<Pessoa>().valida(this, campos);
     }

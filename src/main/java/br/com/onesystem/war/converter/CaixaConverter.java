@@ -24,35 +24,29 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "caixaConverter", forClass = Caixa.class)
 public class CaixaConverter implements Converter, Serializable {
 
-    @Override
+     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Caixa> lista = new CaixaService().buscarCaixas();
-                for (Caixa caixa : lista) {
-                    if (caixa.getId().equals(new Long(value))) {
-                        return caixa;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um caixa válido."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Caixa) {
+                return (Caixa) object;
+            } 
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Caixa) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof Caixa) {
+                String id = String.valueOf(((Caixa) object).getId());
+                uic.getAttributes().put(id, (Caixa) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

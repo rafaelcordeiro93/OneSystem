@@ -6,12 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.GrupoFinanceiro;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.GrupoFinanceiroBV;
-import br.com.onesystem.war.service.GrupoFinanceiroService;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.bean.RequestScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -26,37 +22,29 @@ public class GrupoFinanceiroBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<GrupoFinanceiro> lista = new GrupoFinanceiroService().buscarGruposFinanceiros();
-                if (StringUtils.containsLetter(value)) {
-                    for (GrupoFinanceiro grupoFinanceiro : lista) {
-                        if (grupoFinanceiro.getNome().equals(value)) {
-                            return new GrupoFinanceiroBV(grupoFinanceiro);
-                        }
-                    }
-                } else {
-                    for (GrupoFinanceiro grupoFinanceiro : lista) {
-                        if (grupoFinanceiro.getId().equals(new Long(value))) {
-                            return new GrupoFinanceiroBV(grupoFinanceiro);
-                        }
-                    }
-                }
-                return new GrupoFinanceiroBV();
-            } catch (Exception e) {
-                return new GrupoFinanceiroBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof GrupoFinanceiro) {
+                return new GrupoFinanceiroBV((GrupoFinanceiro) object);
+            } else if (object instanceof GrupoFinanceiroBV) {
+                return (GrupoFinanceiroBV) object;
             }
-        } else {
-            return new GrupoFinanceiroBV();
         }
+        return new GrupoFinanceiroBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((GrupoFinanceiroBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof GrupoFinanceiroBV) {
+                String id = String.valueOf(((GrupoFinanceiroBV) object).getId());
+                uic.getAttributes().put(id, (GrupoFinanceiroBV) object);
+                return id;
+            } else if (object instanceof GrupoFinanceiro) {
+                String id = String.valueOf(((GrupoFinanceiro) object).getId());
+                uic.getAttributes().put(id, (GrupoFinanceiro) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

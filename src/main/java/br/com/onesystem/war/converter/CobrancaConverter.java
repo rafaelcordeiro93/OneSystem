@@ -25,34 +25,27 @@ public class CobrancaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {                
-                CobrancaService service = new CobrancaService();
-                List<Cobranca> lista = service.buscarCobrancas();
-                for (Cobranca cobranca : lista) {
-                    if (cobranca.getId().equals(new Long(value))) {
-                        return cobranca;
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma cobranca válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Cobranca) {
+                return (Cobranca) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((Cobranca) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof Cobranca) {
+                String id = String.valueOf(((Cobranca) object).getId());
+                uic.getAttributes().put(id, (Cobranca) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

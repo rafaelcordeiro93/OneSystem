@@ -26,41 +26,27 @@ public class GrupoFiscalConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<GrupoFiscal> lista = new GrupoFiscalService().buscarGrupoFiscais();
-                if (StringUtils.containsLetter(value)) {
-                    for (GrupoFiscal grupoFiscal : lista) {
-                        if (grupoFiscal.getNome().equals(value)) {
-                            return grupoFiscal;
-                        }
-                    }
-                } else {
-                    for (GrupoFiscal grupoFiscal : lista) {
-                        if (grupoFiscal.getId().equals(new Long(value))) {
-                            return grupoFiscal;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é uma grupoFiscal válida."));
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof GrupoFiscal) {
+                return (GrupoFiscal) object;
             }
-        } else {
-            return null;
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((GrupoFiscal) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof GrupoFiscal) {
+                String id = String.valueOf(((GrupoFiscal) object).getId());
+                uic.getAttributes().put(id, (GrupoFiscal) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

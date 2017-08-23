@@ -2,9 +2,7 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.war.builder.TransferenciaBV;
-import br.com.onesystem.war.service.TransferenciaService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -19,32 +17,29 @@ public class TransferenciaBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            TransferenciaService service = new TransferenciaService();
-            try {
-                List<Transferencia> lista = service.buscarTransferencias();
-
-                for (Transferencia transferencia : lista) {
-                    if (transferencia.getId().equals(new Long(value))) {
-                        return new TransferenciaBV(transferencia);
-                    }
-                }
-
-                return new TransferenciaBV();
-            } catch (Exception e) {
-                return new TransferenciaBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof Transferencia) {
+                return new TransferenciaBV((Transferencia) object);
+            } else if (object instanceof TransferenciaBV) {
+                return (TransferenciaBV) object;
             }
-        } else {
-            return new TransferenciaBV();
         }
+        return new TransferenciaBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((TransferenciaBV) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof TransferenciaBV) {
+                String id = String.valueOf(((TransferenciaBV) object).getId());
+                uic.getAttributes().put(id, (TransferenciaBV) object);
+                return id;
+            } else if (object instanceof Transferencia) {
+                String id = String.valueOf(((Transferencia) object).getId());
+                uic.getAttributes().put(id, (Transferencia) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {

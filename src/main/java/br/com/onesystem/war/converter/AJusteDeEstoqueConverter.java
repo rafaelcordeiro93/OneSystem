@@ -24,38 +24,29 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "aJusteDeEstoqueConverter", forClass = AjusteDeEstoque.class)
 public class AJusteDeEstoqueConverter implements Converter, Serializable {
 
-    @Override
+     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                AjusteDeEstoqueService service = new AjusteDeEstoqueService();
-                List<AjusteDeEstoque> lista = service.buscarAjusteDeEstoques();
-                if (!StringUtils.containsLetter(value)) {
-                    for (AjusteDeEstoque ajusteDeEstoque : lista) {
-                        if (ajusteDeEstoque.getId().equals(new Long(value))) {
-                            return ajusteDeEstoque;
-                        }
-                    }
-                }
-                return null;
-            } catch (NumberFormatException e) {
-                throw new ConverterException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Conversion Error", "Não é um ajuste de estoque válido."));
-            }
-        } else {
-            return null;
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof AjusteDeEstoque) {
+                return (AjusteDeEstoque) object;
+            } 
         }
+        return null;
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((AjusteDeEstoque) object).getId());
-            } catch (ClassCastException cce) {
+            if (object instanceof AjusteDeEstoque) {
+                String id = String.valueOf(((AjusteDeEstoque) object).getId());
+                uic.getAttributes().put(id, (AjusteDeEstoque) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
-            return null;
+            return "";
         }
     }
 }

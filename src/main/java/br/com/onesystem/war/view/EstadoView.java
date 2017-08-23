@@ -18,7 +18,10 @@ public class EstadoView extends BasicMBImpl<Estado, EstadoBV> implements Seriali
     }
 
     public void selecionar(SelectEvent event) {
-        e = new EstadoBV((Estado) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Estado) {
+            e = new EstadoBV((Estado) event.getObject());
+        }
     }
 
     public void limparJanela() {

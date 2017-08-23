@@ -6,11 +6,8 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Pais;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.PaisBV;
-import br.com.onesystem.war.service.PaisService;
 import java.io.Serializable;
-import java.util.List;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
@@ -25,37 +22,30 @@ public class PaisBVConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && value.trim().length() > 0) {
-            try {
-                List<Pais> lista = new PaisService().buscarPais();
-                if (StringUtils.containsLetter(value)) {
-                    for (Pais pais : lista) {
-                        if (pais.getNome().equals(value)) {
-                            return new PaisBV(pais);
-                        }
-                    }
-                } else {
-                    for (Pais pais : lista) {
-                        if (pais.getId().equals(new Long(value))) {
-                            return new PaisBV(pais);
-                        }
-                    }
-                }
-                return new PaisBV();
-            } catch (Exception e) {
-                return new PaisBV();
+        if (value != null && !value.isEmpty()) {
+            Object object = uic.getAttributes().get(value);
+            if (object instanceof PaisBV) {
+                return (PaisBV) object;
+            } else if (object instanceof Pais) {
+                Pais pais = (Pais) object;
+                return new PaisBV(pais);
             }
-        } else {
-            return new PaisBV();
         }
+        return new PaisBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            try {
-                return String.valueOf(((PaisBV) object).getNome());
-            } catch (ClassCastException cce) {
+            if (object instanceof PaisBV) {
+                String id = String.valueOf(((PaisBV) object).getId());
+                uic.getAttributes().put(id, (PaisBV) object);
+                return id;
+            } else if (object instanceof Pais) {
+                String id = String.valueOf(((Pais) object).getId());
+                uic.getAttributes().put(id, (Pais) object);
+                return id;
+            } else {
                 return object.toString();
             }
         } else {
