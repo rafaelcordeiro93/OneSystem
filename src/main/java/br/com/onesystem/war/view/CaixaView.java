@@ -15,7 +15,7 @@ import br.com.onesystem.war.builder.CaixaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;

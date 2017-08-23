@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.onesystem.war.util;
+package br.com.onesystem.util;
 
 import br.com.onesystem.util.PreferenciasDeUsuario;
 import br.com.onesystem.dao.UsuarioDAO;

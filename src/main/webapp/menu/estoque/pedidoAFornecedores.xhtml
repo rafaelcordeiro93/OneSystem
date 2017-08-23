@@ -166,7 +166,7 @@
                                                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                  emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                        <p:ajax event="rowSelect" listener="#{pedidoAFornecedoresView.selecionaParcela}" update="@this" />
+                                        <p:ajax event="rowSelect" listener="#{pedidoAFornecedoresView.selecionaParcela}" update="@this conteudo:tabView:painelParcelas" />
 
                                         <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
                                             <h:outputText value="#{model.id + 1}" />

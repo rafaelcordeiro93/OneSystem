@@ -11,7 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import br.com.onesystem.util.UsuarioLogadoUtil;
 import javax.inject.Inject;
 
 /**
