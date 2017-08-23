@@ -18,7 +18,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @DiscriminatorValue("PESSOA_FISICA")
 public class PessoaFisica extends Pessoa {
-
+    
     @Column(unique = false)
     private String CI;
     @Temporal(TemporalType.DATE)
@@ -27,7 +27,7 @@ public class PessoaFisica extends Pessoa {
     @CharacterType(value = CaseType.LETTER_SPACE, message = "{conjuge_type_letter_space}")
     @Column(nullable = true, length = 80)
     private String conjuge;
-
+    
     public PessoaFisica() {
     }
     
@@ -38,25 +38,25 @@ public class PessoaFisica extends Pessoa {
         this.conjuge = conjuge;
         ehValido();
     }
-
+    
     @Override
     public String getDocumento() {
         return CI;
     }
-
+    
     @Override
     public Date getNascimento() {
         return nascimento;
     }
-
+    
     @Override
     public String getConjuge() {
         return conjuge;
     }
-
+    
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome","conjuge","direcao","bairro","telefone"
-                ,"contato","email","observacao");
+        List<String> campos = Arrays.asList("nome", "conjuge", "endereco", "bairro", "telefone",
+                 "contato", "email", "observacao");
         new ValidadorDeCampos<Pessoa>().valida(this, campos);
     }
 }

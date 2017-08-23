@@ -29,7 +29,7 @@
                             <p:inputText value="#{perfilUsuarioView.pessoa.email}" />
 
                             <p:outputLabel value="#{l.Telefone}"/>
-                            <p:inputMask mask="(99) 9999-9999?9"  value="#{perfilUsuarioView.pessoa.telefone}" />
+                            <p:inputMask mask="#{perfilUsuarioView.mascaraDeTelefone}"  value="#{perfilUsuarioView.pessoa.telefone}" />
                         </p:panelGrid>
 
                         <div class="EmptyBox20"/>
@@ -42,7 +42,7 @@
                             <p:password value="#{perfilUsuarioView.senhaVelha}" />       
 
                             <p:outputLabel value="#{l.Senha_Nova}"/>
-                            <p:password value="#{perfilUsuarioView.usuario.senha}" />    
+                            <p:password value="#{perfilUsuarioView.e.senha}" />    
 
                             <p:outputLabel value="#{l.Senha_Confirma}"/>
                             <p:password value="#{perfilUsuarioView.senhaConfirma}" />    
@@ -55,7 +55,7 @@
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-3">
                             <p:outputLabel value="#{l.Cor_Tema}"/>
-                            <p:selectOneMenu id="sonCorTema" value="#{perfilUsuarioView.usuario.corTema}" style="width:125px">
+                            <p:selectOneMenu id="sonCorTema" value="#{perfilUsuarioView.e.corTema}" style="width:125px">
                                 <f:selectItem itemLabel="Blue" itemValue="blue" />
                                 <f:selectItem itemLabel="Cyan" itemValue="cyan" />
                                 <f:selectItem itemLabel="Green" itemValue="green" />
@@ -68,7 +68,7 @@
 
                             <p:outputLabel value="#{l.Cor_Layout}"/>
 
-                            <p:selectOneMenu id="sonCorLayout" value="#{perfilUsuarioView.usuario.corLayout}" style="width:125px">
+                            <p:selectOneMenu id="sonCorLayout" value="#{perfilUsuarioView.e.corLayout}" style="width:125px">
                                 <f:selectItem itemLabel="White" itemValue="white" />
                                 <f:selectItem itemLabel="Dark" itemValue="dark" />
                                 <f:selectItem itemLabel="Cyan" itemValue="cyan" />
@@ -82,15 +82,15 @@
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Menu_Overlay}"/>
-                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.overlayMenu}" />
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.e.overlayMenu}" />
 
                             <p:outputLabel value="#{l.Cor_Menu}"/>
-                            <p:selectOneMenu id="corMenu" value="#{perfilUsuarioView.usuario.corMenu}">
+                            <p:selectOneMenu id="corMenu" value="#{perfilUsuarioView.e.corMenu}">
                                 <f:selectItems value="#{perfilUsuarioView.coresDeMenu}" var="tipoCorMenu" itemValue="#{tipoCorMenu}" itemLabel="#{tipoCorMenu}"/>
                             </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Menu_Inverso}"/>
-                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.usuario.orientationRTL}" />
+                            <p:selectBooleanCheckbox value="#{perfilUsuarioView.e.orientationRTL}" />
 
                         </p:panelGrid>
 

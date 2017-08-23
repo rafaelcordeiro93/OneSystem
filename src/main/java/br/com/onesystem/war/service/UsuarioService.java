@@ -3,7 +3,7 @@ package br.com.onesystem.war.service;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Usuario;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
 

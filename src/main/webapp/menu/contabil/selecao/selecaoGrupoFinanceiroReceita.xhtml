@@ -17,8 +17,8 @@
             <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
                 <h:outputText value="#{bean.nome}" />
             </p:column>
-            <p:column headerText="#{l.Natureza_Financeira}" sortBy="#{l[bean.naturezaFinanceira.naturezaFinanceira]}" filterBy="#{l[bean.naturezaFinanceira.naturezaFinanceira]}" footerText="#{l.Natureza_Financeira}" filterMatchMode="contains">
-                <h:outputText value="#{l[bean.naturezaFinanceira.naturezaFinanceira]}" />
+            <p:column headerText="#{l.Natureza_Financeira}" sortBy="#{bean.naturezaFinanceira.nome}" filterBy="#{bean.naturezaFinanceira.nome}" footerText="#{l.Natureza_Financeira}" filterMatchMode="contains">
+                <h:outputText value="#{bean.naturezaFinanceira.nome}" />
             </p:column>
         </a:dataTable>
 

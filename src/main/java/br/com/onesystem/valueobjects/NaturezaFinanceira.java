@@ -5,15 +5,17 @@
  */
 package br.com.onesystem.valueobjects;
 
+import br.com.onesystem.util.BundleUtil;
+
 /**
  *
  * @author Rafael-Pc
  */
 public enum NaturezaFinanceira {
 
-    RECEITA(1,"Receita"),
-    DESPESA(2,"Despesa");    
-    
+    RECEITA(1, new BundleUtil().getLabel("Receita")),
+    DESPESA(2, new BundleUtil().getLabel("Despesa"));
+
     private Integer id;
     private String nome;
 

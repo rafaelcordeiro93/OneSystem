@@ -6,7 +6,6 @@ import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.FilialBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
