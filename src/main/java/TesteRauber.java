@@ -9,7 +9,9 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
-import br.com.onesystem.util.ImpressoraDeRelatorioConsole;
+import br.com.onesystem.util.ImpressoraDeLayoutConsole;
+import br.com.onesystem.valueobjects.TipoLayout;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
@@ -33,19 +35,10 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        BundleUtil bundle = new BundleUtil();
-        
-        Filial find = new ArmazemDeRegistros<>(Filial.class).find(new Long(1));
-        Orcamento o = new ArmazemDeRegistros<>(Orcamento.class).find(new Long(1));
-        Map m = new HashMap();
-        m.put("REPORT_RESOURCE_BUNDLE", bundle.getBUNDLE_LABEL());
-        m.put("filial", find);
-        m.put("orcamento", o);
-
-        ImpressoraDeRelatorioConsole impressora = new ImpressoraDeRelatorioConsole();
-        impressora.comParametros(m);
-        impressora.imprimir(o.getItensOrcados(), "Orcamento");
-        impressora.visualizar();
+        String realPath = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\OneSystem\\target\\OneSystem-war-1.0-SNAPSHOT";
+        realPath = realPath.substring(0, realPath.lastIndexOf("\\"));
+        realPath = realPath + "\\classes\\layouts\\";
+        System.out.println("Dir: " + realPath);
 
     }
 }

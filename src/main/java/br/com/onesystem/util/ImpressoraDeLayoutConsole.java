@@ -2,6 +2,7 @@ package br.com.onesystem.util;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoLayout;
 import java.util.List;
 import java.util.Map;
 import net.sf.jasperreports.engine.JRException;
@@ -13,15 +14,16 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.view.JasperViewer;
 
-public class ImpressoraDeRelatorioConsole {
+public class ImpressoraDeLayoutConsole {
 
-    private final String diretorio = System.getProperty("user.dir") + "\\src\\main\\webapp\\resources\\relatorios\\";
+    private final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layouts\\";
     private JasperPrint print;
     private Map<String, Object> parametros;
-   
-    public void gerarPDF(String relatorio) throws DadoInvalidoException {
+    private TipoLayout tipoLayout;
+
+    public void gerarPDF() throws DadoInvalidoException {
         try {
-            JasperExportManager.exportReportToPdfFile(print,diretorio + relatorio + ".pdf");
+            JasperExportManager.exportReportToPdfFile(print, diretorio + tipoLayout.getNome() + ".pdf");
         } catch (Exception e) {
             throw new EDadoInvalidoException("Erro ao exibir o relatório: " + e.getMessage());
         }
@@ -34,16 +36,17 @@ public class ImpressoraDeRelatorioConsole {
             throw new EDadoInvalidoException("Erro ao exibir o relatório: " + e.getMessage());
         }
     }
-    
-    public ImpressoraDeRelatorioConsole comParametros(Map<String, Object> parametros){
+
+    public ImpressoraDeLayoutConsole comParametros(Map<String, Object> parametros) {
         this.parametros = parametros;
         return this;
     }
 
-    public void imprimir(List<?> lista, String relatorio) throws JRException {
-//        JasperReport report = JasperCompileManager.compileReport(diretorio + relatorio + ".jrxml");
-        JasperReport report = JasperCompileManager.compileReport(diretorio + relatorio + ".jrxml");
+    public ImpressoraDeLayoutConsole imprimir(List<?> lista, TipoLayout tipoLayout) throws JRException {
+        this.tipoLayout = tipoLayout;
+        JasperReport report = JasperCompileManager.compileReport(diretorio + tipoLayout.getNome() + ".jrxml");
         print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(lista));
+        return this;
     }
 
 }

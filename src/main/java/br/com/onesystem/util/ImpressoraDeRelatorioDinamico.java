@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import net.sf.dynamicreports.jasper.builder.JasperReportBuilder;
 import net.sf.dynamicreports.report.base.expression.AbstractSimpleExpression;
@@ -197,7 +198,11 @@ public class ImpressoraDeRelatorioDinamico {
         HttpServletResponse res = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
         res.setContentType("application/pdf");
         res.addHeader("Content-disposition", "attachment; filename=" + nomeRelatorio + new Date() + ".pdf");
-        relatorio.toPdf(res.getOutputStream());
+        ServletOutputStream stream = res.getOutputStream();
+        relatorio.toPdf(stream);
+        
+        stream.flush();
+        stream.close();
         FacesContext.getCurrentInstance().responseComplete();
     }
 

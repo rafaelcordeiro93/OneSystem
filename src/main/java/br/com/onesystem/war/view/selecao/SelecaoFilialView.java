@@ -36,7 +36,7 @@ public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serial
     public List<Filial> complete(String query) {
         List<Filial> listaFIltrada = new ArrayList<>();
         for (Filial b : beans) {
-            if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
+            if (StringUtils.startsWithIgnoreCase(b.getFantasia(), query)) {
                 listaFIltrada.add(b);
             }
         }

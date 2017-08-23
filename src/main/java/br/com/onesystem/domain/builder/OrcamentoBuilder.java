@@ -6,6 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.ListaDePreco;
@@ -16,6 +17,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +40,15 @@ public class OrcamentoBuilder {
     private BigDecimal desconto;
     private BigDecimal despesaCobranca;
     private BigDecimal frete;
+    private Filial filial;
 
     public OrcamentoBuilder comId(Long id) {
         this.id = id;
+        return this;
+    }
+    
+    public OrcamentoBuilder comFilial(Filial filial) {
+        this.filial = filial;
         return this;
     }
 
@@ -55,7 +63,7 @@ public class OrcamentoBuilder {
     }
 
     public OrcamentoBuilder comItensOrcados(List<ItemOrcado> itensOrcados) throws DadoInvalidoException {
-        List<ItemOrcado> lista = itensOrcados.stream().collect(Collectors.toList());
+        List<ItemOrcado> lista = new ArrayList<>(itensOrcados);
         if (lista != null && !lista.isEmpty()) {
             for (ItemOrcado i : lista) {
                 lista.set(lista.indexOf(i), new ItemOrcadoBV(i).construir());
@@ -108,7 +116,7 @@ public class OrcamentoBuilder {
     }
 
     public Orcamento construir() throws DadoInvalidoException {
-        return new Orcamento(id, pessoa, formaDeRecebimento, listaDePreco, cotacao, itensOrcados, vencimento, historico, desconto, acrescimo, despesaCobranca, frete);
+        return new Orcamento(id, pessoa, formaDeRecebimento, listaDePreco, cotacao, itensOrcados, vencimento, historico, desconto, acrescimo, despesaCobranca, frete, filial);
     }
 
 }
