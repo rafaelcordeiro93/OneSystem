@@ -40,8 +40,11 @@ public class BaixaView extends BasicMBImpl<Baixa, BaixaBV> implements Serializab
 
     @Override
     public void selecionar(SelectEvent event) {
-        baixa = (Baixa) event.getObject();
-        e = new BaixaBV(baixa);
+        Object obj = event.getObject();
+        if (obj instanceof Baixa) {
+            baixa = (Baixa) obj;
+            e = new BaixaBV(baixa);
+        }
     }
 
     public void update() {

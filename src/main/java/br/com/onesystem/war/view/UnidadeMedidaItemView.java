@@ -19,7 +19,10 @@ public class UnidadeMedidaItemView extends BasicMBImpl<UnidadeMedidaItem, Unidad
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new UnidadeMedidaItemBV((UnidadeMedidaItem) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof UnidadeMedidaItem) {
+            e = new UnidadeMedidaItemBV((UnidadeMedidaItem) event.getObject());
+        }
     }
 
     public void limparJanela() {

@@ -23,7 +23,10 @@ public class GrupoFinanceiroView extends BasicMBImpl<GrupoFinanceiro, GrupoFinan
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new GrupoFinanceiroBV((GrupoFinanceiro) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof GrupoFinanceiro) {
+            e = new GrupoFinanceiroBV((GrupoFinanceiro) event.getObject());
+        }
     }
 
     public List<NaturezaFinanceira> getNaturezasFinanceiras() {

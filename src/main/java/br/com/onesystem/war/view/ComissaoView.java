@@ -19,7 +19,10 @@ public class ComissaoView extends BasicMBImpl<Comissao, ComissaoBV> implements S
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new ComissaoBV((Comissao) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Comissao) {
+            e = new ComissaoBV((Comissao) event.getObject());
+        }
     }
 
     public void limparJanela() {

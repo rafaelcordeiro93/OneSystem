@@ -299,6 +299,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     /*visibilities according to the platform*/
     .ShowOnMobile{display:none; opacity:0;}
     .ShowOnDesktop{display:inherit; opacity:1;}
+
+    .imagemFundo{width: 211.45px; height: 225.20px;}
 }
 
 @media (min-width: 960px) and (max-width:1200px){
@@ -310,6 +312,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     /* make auto of element width attribute on mobile devices with media queries */
     .WidAutoOnMobile{width:auto !important;}
     .HeiAutoOnMobile{height:auto !important; min-height:50px !important;}
+
+    .imagemFundo{width: 211.45px; height: 225.20px;}
 } 
 
 /* Portrait tablet to landscape and desktop */
@@ -353,6 +357,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .Fs60{font-size:40px !important;}
     .Fs100{font-size:60px !important;}
     .Fs130{font-size:70px !important;}
+
+    .imagemFundo{width: 158.587px; height: 170.141px}
 }
 
 
@@ -399,6 +405,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .Fs60{font-size:35px !important;}
     .Fs100{font-size:40px !important;}
     .Fs130{font-size:50px !important;}
+
+    .imagemFundo{width: 158.587px; height: 170.141px}
 }
 
 
@@ -445,6 +453,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .Fs60{font-size:32px !important;}
     .Fs100{font-size:35px !important;}
     .Fs130{font-size:40px !important;}
+
+    .imagemFundo{width: 120px; height: 120px}
 }
 
 /* clearfix for Container */
@@ -696,4 +706,10 @@ body .ui-button.red-btn.ui-state-active {
     height: 75px;
     text-align: center;
     background-color: #ffffff;
+}
+.imagemFundo{
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.65;
 }

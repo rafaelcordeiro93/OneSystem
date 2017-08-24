@@ -68,8 +68,11 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new TransferenciaBV((Transferencia) event.getObject());
-        inicializar();
+        Object obj = event.getObject();
+        if (obj instanceof Transferencia) {
+            e = new TransferenciaBV((Transferencia) event.getObject());
+            inicializar();
+        }
     }
 
     public void estorno() {

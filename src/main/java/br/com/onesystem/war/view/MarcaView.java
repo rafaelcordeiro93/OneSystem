@@ -25,7 +25,10 @@ public class MarcaView extends BasicMBImpl<Marca, MarcaBV> implements Serializab
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new MarcaBV((Marca) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Marca) {
+            e = new MarcaBV((Marca) event.getObject());
+        }
     }
 
     public void limparJanela() {

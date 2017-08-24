@@ -13,6 +13,7 @@ import br.com.onesystem.dao.DepositoBancarioDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -64,8 +65,11 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new DepositoBancarioBV((DepositoBancario) event.getObject());
-        inicializar();
+        Object obj = event.getObject();
+        if (obj instanceof DepositoBancario) {
+            e = new DepositoBancarioBV((DepositoBancario) event.getObject());
+            inicializar();
+        }
     }
 
     public void estorno() {

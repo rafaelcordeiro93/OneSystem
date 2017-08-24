@@ -19,7 +19,10 @@ public class ListaDePrecoView extends BasicMBImpl<ListaDePreco, ListaDePrecoBV> 
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new ListaDePrecoBV((ListaDePreco) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof ListaDePreco) {
+            e = new ListaDePrecoBV((ListaDePreco) event.getObject());
+        }
     }
 
     public void limparJanela() {

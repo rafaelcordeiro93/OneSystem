@@ -19,7 +19,10 @@ public class TabelaDeTributacaoView extends BasicMBImpl<TabelaDeTributacao, Tabe
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new TabelaDeTributacaoBV((TabelaDeTributacao) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof TabelaDeTributacao) {
+            e = new TabelaDeTributacaoBV((TabelaDeTributacao) event.getObject());
+        }
     }
 
     public void limparJanela() {

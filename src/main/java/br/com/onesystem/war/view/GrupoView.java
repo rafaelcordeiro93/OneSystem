@@ -19,7 +19,10 @@ public class GrupoView extends BasicMBImpl<Grupo, GrupoBV> implements Serializab
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new GrupoBV((Grupo) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Grupo) {
+            e = new GrupoBV((Grupo) event.getObject());
+        }
     }
 
     public void limparJanela() {

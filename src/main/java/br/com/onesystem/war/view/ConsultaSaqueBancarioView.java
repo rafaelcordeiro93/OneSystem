@@ -33,6 +33,9 @@ public class ConsultaSaqueBancarioView extends BasicMBImpl<SaqueBancario, SaqueB
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new SaqueBancarioBV((SaqueBancario) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof SaqueBancario) {
+            e = new SaqueBancarioBV((SaqueBancario) event.getObject());
+        }
     }
 }

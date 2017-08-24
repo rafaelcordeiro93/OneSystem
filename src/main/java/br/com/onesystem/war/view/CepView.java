@@ -58,7 +58,10 @@ public class CepView extends BasicMBImpl<Cep, CepBV> implements Serializable {
     }
 
     public void selecionar(SelectEvent event) {
-        e = new CepBV((Cep) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Cep) {
+            e = new CepBV((Cep) event.getObject());
+        }
     }
 
     public void limparJanela() {

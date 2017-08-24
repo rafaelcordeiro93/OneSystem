@@ -73,6 +73,7 @@
             }
 
             //]]>  
+
         </script>
 
 
@@ -84,7 +85,57 @@
     </ui:define>
 
     <ui:define name="content">
-            <img class="imagemFundo" src="/OneSystem-war/javax.faces.resource/images/logo_final.png.xhtml?ln=atlantis-layout" name="logo"/>
+            <div class="ui-g dashboard">
+                <div class="ui-g-12 ui-md-6">
+                    <div class="card">
+                        <h:form>
+
+                            <p:panel header="Gráfico de Vendas" class="chart-panel">
+                                <p:chart type="bar" model="#{dashboardVendaView.vendas}" responsive="true" />
+                            </p:panel>
+
+                        </h:form>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <div class="card">
+                        <h:form>
+
+                            <p:panel header="Gráfico de Contas a Pagar"  class="chart-panel" id="chartContasAPagar">
+                                <p:chart type="bar" model="#{dashboardContasView.contasAPagar}" responsive="true" />
+                            </p:panel>
+
+                        </h:form>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <div class="card">
+                        <h:form>
+
+                            <p:panel header="Gráfico de Contas a Receber"  class="chart-panel">
+                                <p:chart type="bar" model="#{dashboardContasView.contasAReceber}" responsive="true" />
+                            </p:panel>
+
+                        </h:form>
+                    </div>
+                </div>
+
+                <div class="ui-g-12 ui-md-6">
+                    <div class="card">
+                        <h:form>
+
+                            <p:panel header="Gráfico Comparativo de Contas"  class="chart-panel">
+                                <p:chart type="line" model="#{dashboardContasView.comparativoDeContas}" responsive="true" />
+                            </p:panel>
+
+                        </h:form>
+                    </div>
+                </div>
+
+            </div>
+
     </ui:define>
 
 </ui:composition>

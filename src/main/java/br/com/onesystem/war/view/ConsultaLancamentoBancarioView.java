@@ -11,6 +11,7 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.LancamentoBancarioDAO;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.LancamentoBancario;
+import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
@@ -54,8 +55,11 @@ public class ConsultaLancamentoBancarioView extends BasicMBImpl<LancamentoBancar
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new LancamentoBancarioBV((LancamentoBancario) event.getObject());
-        inicializar();
+        Object obj = event.getObject();
+        if (obj instanceof LancamentoBancario) {
+            e = new LancamentoBancarioBV((LancamentoBancario) event.getObject());
+            inicializar();
+        }
     }
 
     public void estorno() {

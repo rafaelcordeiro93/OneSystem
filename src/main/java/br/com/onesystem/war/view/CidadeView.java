@@ -58,7 +58,10 @@ public class CidadeView extends BasicMBImpl<Cidade, CidadeBV> implements Seriali
     }
 
     public void selecionar(SelectEvent event) {
-        e = new CidadeBV((Cidade) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Cidade) {
+            e = new CidadeBV((Cidade) event.getObject());
+        }
     }
 
     public void limparJanela() {

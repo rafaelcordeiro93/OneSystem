@@ -140,6 +140,7 @@ public class DadosIniciais {
 
         //Modulo de Arquivo
         Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
+        Janela dashboardGestao = new Janela(null, "Dashbord de Gestao", "/dashboardGestao.xhtml", arq);
 
         Janela jpais = new Janela(null, "País", "/menu/arquivo/pais.xhtml", arq);
         Janela jestado = new Janela(null, "Estado", "/menu/arquivo/estado.xhtml", arq);
@@ -155,6 +156,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jcep);
         daoJanela.adiciona(jpessoa);
         daoJanela.adiciona(jpessoaimport);
+        daoJanela.adiciona(dashboardGestao);
 
         //Modulo de Notas
         Janela notaSaida = new Janela(null, "Nota de Saida", "/menu/vendas/notaEmitida.xhtml", vendas);
@@ -482,7 +484,8 @@ public class DadosIniciais {
                 new Privilegio(null, jestado, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpais, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jlogin, true, true, true, true, grupoDePrivilegio),
-                new Privilegio(null, jcfop, true, true, true, true, grupoDePrivilegio)
+                new Privilegio(null, jcfop, true, true, true, true, grupoDePrivilegio),
+                new Privilegio(null, dashboardGestao, true, true, true, true, grupoDePrivilegio)
         );
 
         for (Privilegio p : listaPrivilegios) {

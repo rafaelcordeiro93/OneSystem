@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.valueobjects.TipoBandeira;
-import br.com.onesystem.war.builder.MoedaBV;
+import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.valueobjects.TipoLayout;
+import br.com.onesystem.war.builder.LayoutDeImpressaoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -13,26 +13,28 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class MoedaView extends BasicMBImpl<Moeda, MoedaBV> implements Serializable {
+public class LayoutDeImpressaoView extends BasicMBImpl<LayoutDeImpressao, LayoutDeImpressaoBV> implements Serializable {
 
     @PostConstruct
     public void init() {
         limparJanela();
     }
 
+    @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
-        if (obj instanceof Moeda) {
-            e = new MoedaBV((Moeda) event.getObject());
+        if (obj instanceof LayoutDeImpressao) {
+            e = new LayoutDeImpressaoBV((LayoutDeImpressao) obj);
         }
     }
 
-    public List<TipoBandeira> getBandeiras() {
-        return Arrays.asList(TipoBandeira.values());
-    }
-
+    @Override
     public void limparJanela() {
-        e = new MoedaBV();
+        e = new LayoutDeImpressaoBV();
+    }
+    
+    public List<TipoLayout> getTipoLayouts(){
+        return Arrays.asList(TipoLayout.values());
     }
 
 }

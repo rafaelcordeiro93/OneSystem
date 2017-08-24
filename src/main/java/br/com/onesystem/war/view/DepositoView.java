@@ -59,7 +59,10 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
 
     @Override
     public void selecionar(SelectEvent event) {
-        e = new DepositoBV((Deposito) event.getObject());
+        Object obj = event.getObject();
+        if (obj instanceof Deposito) {
+            e = new DepositoBV((Deposito) event.getObject());
+        }
     }
 
     public void limparJanela() {
