@@ -9,7 +9,7 @@ public class CepDAO extends GenericDAO<Cep> {
     }
 
     public CepDAO porCep(Cep cep)  {
-        where += " and cep.nome = :cNome ";
+        where += " and cep.cep = :cNome ";
         parametros.put("cNome", cep.getCep());
         return this;
     }

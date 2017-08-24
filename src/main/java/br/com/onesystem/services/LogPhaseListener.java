@@ -10,7 +10,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DadosNecessarios;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Level;

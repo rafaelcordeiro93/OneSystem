@@ -1,7 +1,6 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.valueobjects.CaseType;
-import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.services.CharacterType;
 import java.io.Serializable;

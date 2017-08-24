@@ -70,7 +70,7 @@ import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.util.UsuarioLogadoUtil;
+import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;

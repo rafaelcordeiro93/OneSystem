@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CepDAO;
 import br.com.onesystem.domain.Cep;
+import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.war.builder.CepBV;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -16,12 +17,12 @@ import org.primefaces.event.SelectEvent;
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class CepView extends BasicMBImpl<Cep, CepBV> implements Serializable {
-
+    
     @PostConstruct
     public void init() {
         limparJanela();
     }
-
+    
     public void add() {
         try {
             Cep novoRegistro = e.construir();
@@ -34,7 +35,7 @@ public class CepView extends BasicMBImpl<Cep, CepBV> implements Serializable {
             die.print();
         }
     }
-
+    
     public void update() {
         try {
             Cep cepExistente = e.construirComID();
@@ -51,21 +52,21 @@ public class CepView extends BasicMBImpl<Cep, CepBV> implements Serializable {
             die.print();
         }
     }
-
+    
     private boolean validaCepExistente(Cep novoRegistro) {
         List<Cep> lista = new CepDAO().porCep(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
-
+    
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof Cep) {
             e = new CepBV((Cep) event.getObject());
         }
     }
-
+    
     public void limparJanela() {
         e = new CepBV();
     }
-
+    
 }

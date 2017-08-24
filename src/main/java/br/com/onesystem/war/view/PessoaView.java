@@ -23,9 +23,6 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
 
     @Override
     public void selecionar(SelectEvent event) {
-        if (event == null) {
-            limparJanela();
-        }
         Object obj = event.getObject();
         if (obj instanceof Pessoa) {
             e = new PessoaBV((Pessoa) obj);
