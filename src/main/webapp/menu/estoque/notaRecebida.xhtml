@@ -8,6 +8,12 @@
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="head">
+        <h:outputScript>
+            function importaPedidoAFornecedor() {
+            document.getElementById("conteudo:ne:importaPedidoAFornecedor-btn").click();
+            }
+        </h:outputScript>
+
     </ui:define>
 
     <ui:define name="content">
@@ -21,6 +27,9 @@
 
                         <p:spacer height="1px" width="100%"/>
 
+                        <p:commandButton id="importaPedidoAFornecedor-btn" action="#{selecaoPedidoAFornecedoresEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
 
                         <p:commandButton id="importaItemNotaRecebida-btn" action="#{selecaoNotaRecebidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this" update=":conteudo:ne:itensRecebidosNota"/>
@@ -33,6 +42,14 @@
                         <p:commandButton id="exibeOrcamento-btn" action="#{dialogoOrcamentoView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this" update=":conteudo"/>
                         </p:commandButton>
+                        
+                        <p:commandButton id="exibePedidoAFornecedores-btn" action="#{dialogoPedidoAFornecedoresView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                            <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this"/>
+                        </p:commandButton>
+
+                        <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid15">                          
+                            <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa fa-superpowers" onclick="importaPedidoAFornecedor()" ajax="false"/>                           
+                        </p:menuButton>
 
                         <div class="ui-fluid">
 
@@ -231,7 +248,7 @@
 
                                     <p:outputLabel value="#{l.Cheque}"/>
                                     <p:inputNumber  id="chequeEntrada" readonly="true"  disabled="#{!notaRecebidaView.notaRecebida.formaDeRecebimento.entradaEmCheque}"
-                                                  value="#{notaRecebidaView.notaRecebida.totalChequeDeEntrada}" symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator=".">
+                                                    value="#{notaRecebidaView.notaRecebida.totalChequeDeEntrada}" symbol="#{notaRecebidaView.configuracao.moedaPadrao.sigla} " decimalSeparator="," thousandSeparator=".">
                                         <p:ajax event="change" update="neAFaturar neParcelas" listener="#{notaRecebidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
@@ -609,9 +626,9 @@
 
         </p:dialog>
 
-         <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
-                              modal="true" closable="false" closeOnEscape="false" visible="false"
-                              responsive="true" styleClass="zIndex500">
+        <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
 
             <table>
                 <tr>

@@ -1,6 +1,7 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.PedidoAFornecedores;
+import br.com.onesystem.valueobjects.EstadoDePedido;
 
 public class PedidoAFornecedoresDAO extends GenericDAO<PedidoAFornecedores> {
 
@@ -17,4 +18,11 @@ public class PedidoAFornecedoresDAO extends GenericDAO<PedidoAFornecedores> {
         return this;
     }
 
+    public PedidoAFornecedoresDAO porEstado(EstadoDePedido estado) {
+        if (estado != null) {
+            where += " and pedidoAFornecedores.estado = :bEstado ";
+            parametros.put("bEstado", estado);
+        }
+        return this;
+    }
 }
