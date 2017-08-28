@@ -55,8 +55,8 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
             Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, Fatura fatura, 
-            SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial);
+            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;

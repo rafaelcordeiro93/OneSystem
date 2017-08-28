@@ -496,7 +496,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaEmitida.getFilial()).construir());
+                                .comFilial(notaEmitida.getFilial()).comParcela(i+1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

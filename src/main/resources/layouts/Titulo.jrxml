@@ -47,9 +47,8 @@
 	<field name="filial.cep.cidade.estado.sigla" class="java.lang.String"/>
 	<field name="filial.cep.cidade.nome" class="java.lang.String"/>
 	<field name="filial.cep.cep" class="java.lang.String"/>
-	<field name="filia.telefoneEmailFormatado" class="java.lang.String"/>
+	<field name="filial.telefoneEmailFormatado" class="java.lang.String"/>
 	<field name="valorFormatado" class="java.lang.String"/>
-	<field name="faturaEmitida.id" class="java.lang.Long"/>
 	<field name="idFaturaOuNota" class="java.lang.Long"/>
 	<field name="valorFaturaOuNota" class="java.lang.String"/>
 	<field name="parcela" class="java.lang.Integer"/>
@@ -106,7 +105,7 @@ $F{filial.cep.cidade.estado.pais.nome}]]></textFieldExpression>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{filia.telefoneEmailFormatado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{filial.telefoneEmailFormatado}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="76" width="555" height="1" uuid="ab77eac8-b5a3-464e-9691-7c30ae990c4a"/>

@@ -439,7 +439,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaRecebida.getFilial()).construir());
+                                .comFilial(notaRecebida.getFilial()).comParcela(i+1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

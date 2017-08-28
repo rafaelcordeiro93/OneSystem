@@ -139,7 +139,11 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            SessionUtil.put(e.construir(), "faturaRecebida", FacesContext.getCurrentInstance());
+            if (modeloSelecionado != null) {
+                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
+                SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
+            }
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
             die.print();
@@ -152,7 +156,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             valorBanco = new FaturaRecebidaDAO().porId(e.getId()).resultado().getDinheiro();
         }
         if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
-            SessionUtil.put(e.construir(), "faturaRecebida", FacesContext.getCurrentInstance());
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
         } else if (e.getId() == null) {
             add();
@@ -175,7 +179,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
                 list = new ModelList<>(e.getTitulo());
             }
             try {
-                SessionUtil.put(e.construirComID(), "faturaRecebida", FacesContext.getCurrentInstance());
+                SessionUtil.put(e.construirComID(), "fatura", FacesContext.getCurrentInstance());
             } catch (DadoInvalidoException ex) {
                 ex.print();
             }
@@ -268,7 +272,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     public void limparJanela() {
         try {
             removeDaSessao();
-            SessionUtil.remove("faturaRecebida", FacesContext.getCurrentInstance());
+            SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             e = new FaturaRecebidaBV();
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;

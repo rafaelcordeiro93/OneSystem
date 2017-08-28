@@ -47,6 +47,7 @@ public class ChequeBuilder {
     private SituacaoDeCobranca situacaoDeCobranca;
     private Date compensacao;
     private Filial filial;
+    private Integer parcela;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
@@ -173,8 +174,13 @@ public class ChequeBuilder {
         return this;
     }
     
+    public ChequeBuilder comParcela(Integer parcela){
+        this.parcela = parcela;
+        return this;
+    }
+    
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca, compensacao, filial);
+        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca, compensacao, filial, parcela);
     }
 
 }

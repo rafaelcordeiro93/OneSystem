@@ -34,6 +34,7 @@ public class CreditoBuilder {
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
+    private Integer parcela;
 
     public CreditoBuilder comId(Long id) {
         this.id = id;
@@ -100,8 +101,13 @@ public class CreditoBuilder {
         return this;
     }
 
+    public CreditoBuilder comParcela(Integer parcela) {
+        this.parcela = parcela;
+        return this;
+    }
+
     public Credito construir() throws DadoInvalidoException {
-        return new Credito(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial);
+        return new Credito(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
     }
 
 }

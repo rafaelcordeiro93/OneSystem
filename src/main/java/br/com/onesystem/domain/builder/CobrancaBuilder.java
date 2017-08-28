@@ -66,6 +66,7 @@ public class CobrancaBuilder {
     private FaturaLegada faturaLegada;
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
+    private Integer parcela;
 
     public CobrancaBuilder comID(Long ID) {
         this.id = ID;
@@ -232,8 +233,13 @@ public class CobrancaBuilder {
         return this;
     }
     
+    public CobrancaBuilder comParcela(Integer parcela){
+        this.parcela = parcela;
+        return this;
+    }
+    
     public CobrancaBV construir() {
-        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial);
+        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial, parcela);
     }
 
 

@@ -37,6 +37,7 @@ public class BoletoDeCartaoBuilder {
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
+    private Integer parcela;
     
     public BoletoDeCartaoBuilder() {
     }
@@ -120,9 +121,14 @@ public class BoletoDeCartaoBuilder {
         this.filial = filial;
         return this;
     }
+    
+    public BoletoDeCartaoBuilder comParcela(Integer parcela){
+        this.parcela = parcela;
+        return this;
+    }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca, filial);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca, filial, parcela);
     }
 
 }

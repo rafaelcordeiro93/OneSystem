@@ -65,8 +65,9 @@ public class Cheque extends Cobranca implements Serializable {
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Date compensacao, Filial filial) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial);
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, 
+            SituacaoDeCobranca situacaoDeCobranca, Date compensacao, Filial filial, Integer parcela) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;

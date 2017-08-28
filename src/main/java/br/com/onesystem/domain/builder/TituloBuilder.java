@@ -48,6 +48,7 @@ public class TituloBuilder {
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
+    private Integer parcela;
 
     public TituloBuilder comId(Long id) {
         this.id = id;
@@ -144,9 +145,14 @@ public class TituloBuilder {
         return this;
     }
 
+     public TituloBuilder comParcela(Integer parcela) {
+        this.parcela = parcela;
+        return this;
+    }
+    
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira, tipoFormaPagRec,
-                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial);
+                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial, parcela);
     }
 
 }
