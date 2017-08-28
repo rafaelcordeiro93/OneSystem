@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Configuracao;
@@ -22,6 +23,7 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
@@ -30,6 +32,7 @@ import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -39,6 +42,7 @@ import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.Money;
@@ -72,6 +76,9 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
+import br.com.onesystem.valueobjects.TipoImpressao;
+import br.com.onesystem.valueobjects.TipoLayout;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -82,6 +89,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -123,6 +131,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private Comanda comandaSelecionada;
     private Condicional condicionalSelecionada;
     private ConfiguracaoEstoque configuracaoEstoque;
+    private LayoutDeImpressao layout;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -141,6 +150,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     @Inject
     private ConfiguracaoEstoqueService confEstoqueService;
+
+    @Inject
+    private LayoutDeImpressaoService serviceLayout;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -317,12 +329,28 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
-
             new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
+            layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.TITULO);
+            if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+            }
             limparJanela();
         } catch (DadoInvalidoException ex) {
             ex.print();
+        }
+    }
+
+    public void imprimir() {
+        try {
+            if (nota.getCobrancas() != null && !nota.getCobrancas().isEmpty()) {
+                List<Cobranca> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+                if (!titulos.isEmpty()) {
+                    new ImpressoraDeLayout(titulos, layout).visualizarPDF();
+                }
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -496,7 +524,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaEmitida.getFilial()).comParcela(i+1).construir());
+                                .comFilial(notaEmitida.getFilial()).comParcela(i + 1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

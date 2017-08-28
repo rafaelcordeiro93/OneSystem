@@ -435,6 +435,8 @@
                         <p:separator/>
 
                         <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.validaAFaturar}" update=":conteudo"/>
+                        <h:commandButton id="imprimir" actionListener="#{notaEmitidaView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
+
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.limparJanela()}" update=":conteudo"/>
 
                     </div>
