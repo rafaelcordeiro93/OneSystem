@@ -59,6 +59,10 @@ public class ItemDePedido implements Serializable {
         ehValido();
     }
 
+    public void paraPedido(Pedido pedido) throws DadoInvalidoException {
+        this.pedido = pedido;
+    }
+
     public Long getId() {
         return id;
     }

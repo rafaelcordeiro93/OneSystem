@@ -6,7 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
@@ -23,6 +23,8 @@ import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
+import br.com.onesystem.domain.ParcelaDePedido;
+import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
@@ -57,6 +59,8 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.war.builder.ItemDePedidoBV;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -71,7 +75,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
-import org.hibernate.Hibernate;
+import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
@@ -103,6 +107,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private String historico;
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
+    private PedidoAFornecedores pedidoAFornecedores;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -251,10 +256,18 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void add() {
         try {
             new AdicionaDAO<>().adiciona(nota);
+            efetivaPedidoAFornecedores();
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException ex) {
             ex.print();
+        }
+    }
+
+    private void efetivaPedidoAFornecedores() throws ConstraintViolationException, DadoInvalidoException {
+        if (pedidoAFornecedores != null) {
+            pedidoAFornecedores.efetiva();
+            new AtualizaDAO<>().atualiza(pedidoAFornecedores);
         }
     }
 
@@ -538,6 +551,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 cheque.setBanco((Banco) obj);
             } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
                 cobrancaBV.setBanco((Banco) obj);
+            } else if (obj instanceof PedidoAFornecedores && "importaPedidoAFornecedor-btn".equals(idComponent)) {
+                importa((PedidoAFornecedores) obj);
             } else if (obj instanceof Cartao) {
                 boletoDeCartao.setCartao((Cartao) obj);
             } else if (obj instanceof NotaRecebida) {
@@ -546,10 +561,61 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 List<QuantidadeDeItemPorDeposito> lista = (List<QuantidadeDeItemPorDeposito>) event.getObject();
                 itemRecebido.setListaDeQuantidade(lista);
                 itemRecebido.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+            } else if (obj instanceof List && "exibePedidoAFornecedores-btn".equals(idComponent)) {
+                List<ItemDePedidoBV> lista = (List<ItemDePedidoBV>) event.getObject();
+                importaItensDe(lista);
             }
         } catch (DadoInvalidoException die) {
             die.print();
         }
+    }
+
+    private void importa(PedidoAFornecedores pedido) throws DadoInvalidoException {
+        pedidoAFornecedores = pedido;
+        SessionUtil.put(pedido, "pedidoAFornecedores", FacesContext.getCurrentInstance());
+        SessionUtil.put(pedido.getOperacao().getTipoOperacao(), "tipoOperacao", FacesContext.getCurrentInstance());
+        RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:ne:exibePedidoAFornecedores-btn\").click();");
+    }
+
+    private void importaItensDe(List<ItemDePedidoBV> lista) {
+        if (!lista.isEmpty()) {
+            for (ItemDePedidoBV i : lista) {
+                itemRecebido.setItem(i.getItem());
+                itemRecebido.setUnitario(i.getValorUnitario());
+                itemRecebido.setListaDeQuantidade(i.getListaDeQuantidade());
+                itemRecebido.setQuantidade(lista.stream().map((q) -> q.getQuantidade()).reduce(BigDecimal.ZERO, BigDecimal::add));
+                addItemNaLista();
+            }
+            importaParcelasDe(pedidoAFornecedores);
+        }
+    }
+
+    private void importaParcelasDe(PedidoAFornecedores pedidoAFornecedores) {
+        for (ParcelaDePedido p : pedidoAFornecedores.getParcelaDePedido()) {
+            cobrancaBV = new CobrancaBV();
+            cobrancaBV.setEmissao(pedidoAFornecedores.getEmissao());
+            cobrancaBV.setValor(p.getValor());
+            cobrancaBV.setVencimento(p.getVencimento());
+            cobrancaBV.setCotacao(new CotacaoDAO().porMoeda(pedidoAFornecedores.getMoeda()).naMaiorEmissao(pedidoAFornecedores.getEmissao()).resultado());
+            cobrancaBV.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
+            cobrancaBV.setTipoLancamento(TipoLancamento.RECEBIDA);
+            cobrancaBV.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);
+            cobrancaBV.setPessoa(pedidoAFornecedores.getPessoa());
+            cobrancaBV.setOperacaoFinanceira(pedidoAFornecedores.getOperacao().getOperacaoFinanceira());
+            cobrancaBV.setMoeda(pedidoAFornecedores.getMoeda());
+            cobrancas.add(cobrancaBV);
+        }
+        notaRecebida.setPessoa(pedidoAFornecedores.getPessoa());
+        notaRecebida.setOperacao(pedidoAFornecedores.getOperacao());
+        notaRecebida.setPedidoAFornecedores(pedidoAFornecedores);
+        notaRecebida.setFormaDeRecebimento(pedidoAFornecedores.getFormaDeRecebimento());
+        notaRecebida.setAcrescimo(pedidoAFornecedores.getAcrescimo());
+        notaRecebida.setDesconto(pedidoAFornecedores.getDesconto());
+        notaRecebida.setDespesaCobranca(pedidoAFornecedores.getDespesaCobranca());
+        notaRecebida.setFrete(pedidoAFornecedores.getFrete());
+        notaRecebida.setTotalEmDinheiro(pedidoAFornecedores.getTotalEmDinheiro());
+        recalculaValores();
+        RequestContext.getCurrentInstance().update("conteudo");
     }
 
     private void importaItensDe(NotaRecebida nota) throws DadoInvalidoException {

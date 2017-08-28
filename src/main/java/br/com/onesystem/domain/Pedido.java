@@ -14,6 +14,7 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -122,6 +123,21 @@ public abstract class Pedido implements Serializable {
 
     public void cancela() {
         estado = EstadoDePedido.CANCELADO;
+    }
+
+    public void efetiva() {
+        estado = EstadoDePedido.EFETIVADO;
+    }
+
+    private void gera(List<ItemDePedido> itensDePedido) throws DadoInvalidoException {
+        for (ItemDePedido i : itensDePedido) {
+            i.paraPedido(this);
+        }
+    }
+
+    public List<ItemDePedido> getItensDePedido() {
+        itens.sort(Comparator.comparing(ItemDePedido::getId));
+        return itens;
     }
 
     public final void ehValido() throws DadoInvalidoException {
@@ -249,9 +265,14 @@ public abstract class Pedido implements Serializable {
         return totalEmDinheiro;
     }
 
-    public Moeda getMoedaPadrao() throws EDadoInvalidoException {
-        Configuracao cfg = new ConfiguracaoService().buscar();
-        return cfg.getMoedaPadrao();
+    public Moeda getMoedaPadrao() {
+        try {
+            Configuracao cfg = new ConfiguracaoService().buscar();
+            return cfg.getMoedaPadrao();
+        } catch (DadoInvalidoException die) {
+            die.print();
+            return null;
+        }
     }
 
     @Override

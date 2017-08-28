@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -28,6 +29,9 @@ public class NotaRecebida extends Nota implements Serializable {
     @ManyToOne
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private PedidoAFornecedores pedidoAFornecedores;
+
     public NotaRecebida() {
     }
 
@@ -37,10 +41,11 @@ public class NotaRecebida extends Nota implements Serializable {
             Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao,
-            Caixa caixa, Usuario usuario, FaturaRecebida faturaRecebida, ConhecimentoDeFrete conhecimentoDeFrete, Filial filial) throws DadoInvalidoException {
+            Caixa caixa, Usuario usuario, FaturaRecebida faturaRecebida, ConhecimentoDeFrete conhecimentoDeFrete, Filial filial, PedidoAFornecedores pedidoAFornecedores) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial);
         this.faturaRecebida = faturaRecebida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
+        this.pedidoAFornecedores = pedidoAFornecedores;
         if (id == null) {
             adicionaNoEstoque();
         }
@@ -67,6 +72,10 @@ public class NotaRecebida extends Nota implements Serializable {
 
     public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
+    }
+
+    public PedidoAFornecedores getPedidoAFornecedores() {
+        return pedidoAFornecedores;
     }
 
     @Override

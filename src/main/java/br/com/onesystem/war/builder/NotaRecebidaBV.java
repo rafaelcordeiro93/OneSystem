@@ -3,7 +3,6 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.ItemDeNota;
@@ -11,10 +10,11 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Pedido;
+import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -59,6 +59,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private EstadoDeNota estado;
     private Caixa caixa;
     private Usuario usuario;
+    private PedidoAFornecedores pedidoAFornecedores;
     private Filial filial;
 
     public NotaRecebidaBV(NotaRecebida nota) {
@@ -379,6 +380,14 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.usuario = usuario;
     }
 
+    public Pedido getPedidoAFornecedores() {
+        return pedidoAFornecedores;
+    }
+
+    public void setPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
+        this.pedidoAFornecedores = pedidoAFornecedores;
+    }
+    
     public List<ValorPorCotacao> getValorPorCotacao() {
         return valorPorCotacao;
     }
@@ -415,7 +424,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
                 .comUsuairo(usuario).comFilial(filial).construir();
     }
@@ -424,7 +433,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa)
+                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
                 .comUsuairo(usuario).comFilial(filial).construir();
     }
