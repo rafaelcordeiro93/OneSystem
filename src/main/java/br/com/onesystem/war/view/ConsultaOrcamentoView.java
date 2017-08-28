@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -16,6 +17,7 @@ import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.OrcamentoBV;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -38,6 +40,9 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     private String historico;
     private EstadoDeOrcamento estadoDesejado;
 
+    @Inject
+    private LayoutDeImpressaoService layoutService;
+
     @PostConstruct
     public void construir() {
     }
@@ -53,10 +58,11 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     public void imprimir() {
         try {
             if (t != null) {
-                new ImpressoraDeLayout(t.getItensOrcados(), TipoLayout.ORCAMENTO).addParametro("orcamento", t).visualizarPDF();
+                LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
+                new ImpressoraDeLayout(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
                 t = null; // libera memoria do objeto impresso.
             } else {
-                throw new EDadoInvalidoException("Selecione_um_orcamento");
+                throw new EDadoInvalidoException(new BundleUtil().getLabel("Selecione_um_registro"));
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -156,4 +162,13 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     public void setEstadoDesejado(EstadoDeOrcamento estadoDesejado) {
         this.estadoDesejado = estadoDesejado;
     }
+
+    public LayoutDeImpressaoService getLayoutService() {
+        return layoutService;
+    }
+
+    public void setLayoutService(LayoutDeImpressaoService layoutService) {
+        this.layoutService = layoutService;
+    }
+    
 }

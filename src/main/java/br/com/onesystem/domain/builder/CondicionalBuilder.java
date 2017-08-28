@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -32,6 +33,7 @@ public class CondicionalBuilder {
     private BigDecimal frete;
     private Pessoa pessoa;
     private Operacao operacao;
+    private Filial filial;
 
     public CondicionalBuilder comId(Long id) {
         this.id = id;
@@ -58,6 +60,11 @@ public class CondicionalBuilder {
         return this;
     }
 
+    public CondicionalBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
+    
     public CondicionalBuilder comAcrescimo(BigDecimal acrescimo) {
         this.acrescimo = acrescimo;
         return this;
@@ -89,7 +96,7 @@ public class CondicionalBuilder {
     }
 
     public Condicional construir() throws DadoInvalidoException {
-        return new Condicional(id, pessoa, listaDePreco, cotacao, itensDeCondicional, operacao, historico, desconto, acrescimo, despesaCobranca, frete);
+        return new Condicional(id, pessoa, listaDePreco, cotacao, itensDeCondicional, operacao, historico, desconto, acrescimo, despesaCobranca, frete, filial);
     }
 
 }

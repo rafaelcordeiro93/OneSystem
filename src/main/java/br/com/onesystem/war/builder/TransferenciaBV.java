@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.builder.TransferenciaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -28,6 +29,7 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
     private boolean estornado = false;
     private String observacao;
     private Long idRelacaoEstorno;
+    private Filial filial;
     
     public TransferenciaBV() {
     }
@@ -43,6 +45,7 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
         this.tipoLancamentoBancario = transferencia.getTipoLancamentoBancario();
         this.estornado = transferencia.isEstornado();
         this.idRelacaoEstorno = transferencia.getIdRelacaoEstorno();
+        this.filial = transferencia.getFilial();
     }
     
     public Long getId() {
@@ -148,17 +151,25 @@ public class TransferenciaBV implements BuilderView<Transferencia>, Serializable
     public void setIdRelacaoEstorno(Long idRelacaoEstorno) {
         this.idRelacaoEstorno = idRelacaoEstorno;
     }
+
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
     
     public Transferencia construir() throws DadoInvalidoException {
         return new TransferenciaBuilder().comDestino(destino).comOrigem(origem).comValor(valor)
-                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao)
+                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comFilial(filial)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
     
     @Override
     public Transferencia construirComID() throws DadoInvalidoException {
         return new TransferenciaBuilder().comId(id).comDestino(destino).comOrigem(origem).
-                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao)
+                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comFilial(filial)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comBaixas(baixas).comIdRelacaoEstorno(idRelacaoEstorno).comEstornado(estornado).construir();
     }
     

@@ -13,11 +13,13 @@ import br.com.onesystem.dao.DepositoBancarioDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -57,10 +60,15 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
 
     @Override
     public void limparJanela() {
-        e = new DepositoBancarioBV();
-        depositoEstonado = new DepositoBancarioBV();
-        cotacaoEmpresaLista = new ArrayList<>();
-        cotacaoBancariaLista = new ArrayList<>();
+        try {
+            e = new DepositoBancarioBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            depositoEstonado = new DepositoBancarioBV();
+            cotacaoEmpresaLista = new ArrayList<>();
+            cotacaoBancariaLista = new ArrayList<>();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     @Override

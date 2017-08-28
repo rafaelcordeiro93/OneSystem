@@ -5,10 +5,12 @@ import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.LancamentoBancarioBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -45,9 +48,14 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
 
     @Override
     public void limparJanela() {
+        try{
         t = null;
         e = new LancamentoBancarioBV();
+        e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
         yesNoRadio = true;
+        }catch(DadoInvalidoException die){
+            die.print();
+        }
     }
 
     public void inicializar() {

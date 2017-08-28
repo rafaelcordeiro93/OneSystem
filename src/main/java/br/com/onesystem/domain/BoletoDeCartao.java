@@ -39,8 +39,8 @@ public class BoletoDeCartao extends Cobranca implements Serializable {
 
     public BoletoDeCartao(Long id, Nota nota, Cartao cartao, Date emissao, BigDecimal valor, String codigoTransacao, SituacaoDeCartao situacao,
             String historico, Date vencimento, Cotacao cotacao, Pessoa pessoa, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, 
-            Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
+            Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial);
         this.cartao = cartao;
         this.codigoTransacao = codigoTransacao;
         this.situacao = situacao;

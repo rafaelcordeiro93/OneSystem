@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.ReceitaEventual;
 import br.com.onesystem.domain.ReceitaProvisionada;
@@ -229,11 +230,11 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     }
 
     public void selecionaCotacaoConformeConta() {
-            if (e.getConta() != null) {
-                e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naMaiorEmissao(emissao).resultado());
-            } else {
-                e.setCotacao(cotacaoPadrao);
-            }
+        if (e.getConta() != null) {
+            e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naMaiorEmissao(emissao).resultado());
+        } else {
+            e.setCotacao(cotacaoPadrao);
+        }
     }
 
     public void salvar() {
@@ -255,11 +256,11 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     private void construir() throws DadoInvalidoException {
         if (modalidadeDeCobranca == ModalidadeDeCobranca.CARTAO) {
             boletoDeCartao.quita();
+
         } else if (modalidadeDeCobranca == ModalidadeDeCobranca.CHEQUE) {
-            if(cheque.getTipoLancamento() == TipoLancamento.EMITIDA && e.getDataCompensacao() == null){
-                
-            }            
-            else if (cheque.getTipoLancamento() == TipoLancamento.EMITIDA) {
+            if (cheque.getTipoLancamento() == TipoLancamento.EMITIDA && e.getDataCompensacao() == null) {
+
+            } else if (cheque.getTipoLancamento() == TipoLancamento.EMITIDA) {
                 cheque.compensar(e.getDataCompensacao());
             } else {
                 cheque.desconta();
@@ -270,6 +271,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             credito.setVencimento(emissao);
             credito.setCotacao(e.getCotacao());
             credito.setHistorico(e.getObservacao());
+            credito.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
                 credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
@@ -283,6 +285,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             receitaEventualBV.setVencimento(emissao);
             receitaEventualBV.setHistorico(e.getObservacao());
             receitaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+            receitaEventualBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCobrancaFixa(receitaEventualBV.construirComID());
         } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobrancaFixa.DESPESA_EVENTUAL) {
             despesaEventualBV.setCotacao(e.getCotacao());
@@ -291,6 +294,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             despesaEventualBV.setVencimento(emissao);
             despesaEventualBV.setHistorico(e.getObservacao());
             despesaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+            despesaEventualBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCobrancaFixa(despesaEventualBV.construirComID());
         }
     }

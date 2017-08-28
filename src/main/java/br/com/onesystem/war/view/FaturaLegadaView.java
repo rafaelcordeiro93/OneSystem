@@ -9,6 +9,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -135,6 +136,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             removeDaSessao();
             SessionUtil.remove("faturaLegada", FacesContext.getCurrentInstance());
             e = new FaturaLegadaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
         } catch (FDadoInvalidoException ex) {

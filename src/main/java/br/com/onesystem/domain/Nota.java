@@ -93,7 +93,10 @@ public abstract class Nota implements Serializable {
     private Caixa caixa;
     @ManyToOne
     private Usuario usuario;
-
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
+    
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
     }
@@ -102,7 +105,7 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario) throws DadoInvalidoException {
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario, Filial filial) throws DadoInvalidoException {
         this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
@@ -123,6 +126,7 @@ public abstract class Nota implements Serializable {
         this.notaDeOrigem = notaDeOrigem;
         this.caixa = caixa;
         this.usuario = usuario;
+        this.filial = filial;
         if (id == null) {
             geraBaixaPorValorDeCotacao();
             geraCobrancas();
@@ -176,7 +180,7 @@ public abstract class Nota implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "moedaPadrao");
+        List<String> campos = Arrays.asList("pessoa", "operacao", "moedaPadrao", "filial");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -234,6 +238,10 @@ public abstract class Nota implements Serializable {
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public Filial getFilial() {
+        return filial;
     }
     
     public List<Cobranca> getParcelas() {
@@ -336,7 +344,7 @@ public abstract class Nota implements Serializable {
         this.cobrancas = parcelas;
     }
 
-    public String getTotalNotaFormatado() {
+    public String getTotalFormatado() {
         return MoedaFormatter.format(moedaPadrao, getTotalNota());
     }
 

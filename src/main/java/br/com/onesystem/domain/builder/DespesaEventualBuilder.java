@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaEventual;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -31,6 +32,7 @@ public class DespesaEventualBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Filial filial;
 
     public DespesaEventualBuilder comId(Long id) {
         this.id = id;
@@ -92,8 +94,13 @@ public class DespesaEventualBuilder {
         return this;
     }
 
+    public DespesaEventualBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
+    
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca);
+        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

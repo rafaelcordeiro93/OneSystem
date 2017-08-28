@@ -9,94 +9,48 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
+            <div class="ui-g-12 template-card">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 3.7%" ><i class="fa fa-industry Fs40" style="color: #848484"/> #{l.Filial}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 3.7%" ><i class="fa fa-adjust Fs40" style="color: #848484"/> #{l.Gerenciador_de_Layout}</h3>
                     <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+                    <div class="ui-fluid template-card-inbox">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
-                            <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="filialID" value="#{filialView.e}" update=":conteudo" dialog="#{selecaoFilialView}" mbView="#{filialView}" var="filial" converter="filialBVConverter" process="@this"  itemLabel="#{filial.id}" itemValue="#{filial}" editVisible="false" onlyNumber="true"/>
 
-                            <p:outputLabel value="#{l.Fantasia}"/>
-                            <p:inputText value="#{filialView.e.fantasia}" />
-                            
-                            <p:outputLabel value="#{l.Razao_social}"/>
-                            <p:inputText value="#{filialView.e.razaoSocial}" />
+                        <div class="ui-g">
+                            <p:dataTable id="tiposLayout" widgetVar="tipoLayoutTable" var="m" value="#{gerenciadorDeLayoutView.tipoLayouts}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}" 
+                                         rowKey="#{m.id}" reflow="true" style="border: none;" styleClass="ui-g-12 ui-md-4" selection="#{gerenciadorDeLayoutView.layoutSelecionado}" >
 
-                            <p:outputLabel value="#{l.Ruc}"/>
-                            <p:inputText value="#{filialView.e.ruc}"/>
-                        </p:panelGrid>
+                                <p:ajax event="rowSelect" listener="#{gerenciadorDeLayoutView.selecionaTipoLayout}" update=":conteudo" />
 
-                        <div class="EmptyBox20"/>
-                        <h4 style="font-size: 15px" >#{l.Contato}</h4>
+                                <p:column headerText="#{l.Nome}" sortBy="#{m.nome}">
+                                    <h:outputText value="#{m.nome}"/>
+                                </p:column>
+
+                            </p:dataTable>
+
+                            <div class="ui-g-12 ui-md-8">
+                                <p:selectOneRadio value="#{gerenciadorDeLayoutView.e.tipoImpressao}" styleClass="ui-g-12 ui-md-12 ui-lg-12">
+                                    <f:selectItems value="#{gerenciadorDeLayoutView.tiposImpressao}" var="tipoImpressao" itemLabel="#{tipoImpressao.nome}" itemValue="#{tipoImpressao}" />
+                                </p:selectOneRadio>
+                                <p:outputLabel value="#{l.Layout_Grafico}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                                <div class="ui-g-12 ui-md-6 ui-lg-9">
+                                    <p:inputText id="layoutGrafico" value="#{gerenciadorDeLayoutView.e.layoutGrafico}" />
+                                </div>
+
+                                <div class="ui-g-12 ui-md-6 ui-lg-3"></div>
+
+                                <div class="ui-g-12 ui-md-6 ui-lg-3">
+                                    <p:commandButton value="#{l.Salvar}" action="#{gerenciadorDeLayoutView.salvar}" update=":conteudo" icon="fa fa-floppy-o Fs16 White"/>     
+                                </div>
+                            </div>
+
+                        </div>
+
                         <p:separator/>
 
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-2">
-                            <p:outputLabel value="#{l.Telefone}"/>
-                            <p:inputMask mask="(99) 9999-9999?9"  value="#{filialView.e.telefone}" />
-
-                        </p:panelGrid>
-
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5">
-
-                            <p:outputLabel value="#{l.Contato}"/>
-                            <p:inputText value="#{filialView.e.contato}" />
-
-                            <p:outputLabel value="#{l.Email}"/>
-                            <p:inputText  value="#{filialView.e.email}"/>                      
-
-                        </p:panelGrid>
-
-                        <div class="EmptyBox30"/>
-                        <h4 style="font-size: 15px">#{l.Endereco}</h4>
-                        <p:separator/>
-
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4, ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
-
-                            <p:outputLabel value="#{l.Endereco}"/>
-                            <p:inputText value="#{filialView.e.endereco}"/>
-
-                            <p:outputLabel value="#{l.Numero}"/>
-                            <p:inputText value="#{pessoaView.e.numero}" maxlength="40"/>
-
-                            <p:outputLabel value="#{l.Bairro}"/>
-                            <p:inputText  value="#{filialView.e.bairro}"/>
-
-                            <p:outputLabel value="#{l.Cep}"/>
-                            <a:inputTextDialog id="cepId" mbView="#{filialView}" dialog="#{selecaoCepView}" value="#{filialView.e.cep}" update=":conteudo:filialCidade :conteudo:filialUf :conteudo:filialPais" converter="cepConverter" var="cep" itemLabel="#{cep.cep}" itemValue="#{cep}" editVisible="true" itemLabelTab="#{cep.cep}" itemLabelTabVisible="true"/>
-
-                            <p:outputLabel value="#{l.Cidade}"/>
-                            <p:inputText id="filialCidade" value="#{filialView.e.cep.cidade.nome}" readonly="true" />
-
-                            <p:outputLabel value="#{l.Estado}"/>
-                            <p:inputText id="filialUf" value="#{filialView.e.cep.cidade.estado.nome}" readonly="true" />
-
-                            <p:outputLabel value="#{l.Pais}"/>
-                            <p:inputText id="filialPais" value="#{filialView.e.cep.cidade.estado.pais.nome}" readonly="true" />
-
-                            <p:spacer/>
-                            <p:spacer/>
-
-                        </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
-                    </div>
-
-                    <div class="EmptyBox20"/>
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{filialView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{filialView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{filialView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{filialView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
                 </div>
             </div>

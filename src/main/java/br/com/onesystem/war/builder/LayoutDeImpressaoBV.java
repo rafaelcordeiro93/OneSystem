@@ -9,6 +9,7 @@ import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.builder.LayoutDeImpressaoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 import java.io.Serializable;
 
@@ -23,6 +24,7 @@ public class LayoutDeImpressaoBV implements BuilderView<LayoutDeImpressao>, Seri
     private String layoutGrafico;
     private String layoutTexto;
     private boolean layoutGraficoEhPadrao;
+    private TipoImpressao tipoImpressao;
 
     public LayoutDeImpressaoBV() {
     }
@@ -33,6 +35,7 @@ public class LayoutDeImpressaoBV implements BuilderView<LayoutDeImpressao>, Seri
         this.layoutGrafico = l.getLayoutGrafico();
         this.layoutTexto = l.getLayoutTexto();
         this.layoutGraficoEhPadrao = l.isLayoutGraficoEhPadrao();
+        this.tipoImpressao = l.getTipoImpressao();
     }
 
     public Long getId() {
@@ -75,16 +78,24 @@ public class LayoutDeImpressaoBV implements BuilderView<LayoutDeImpressao>, Seri
         this.layoutGraficoEhPadrao = layoutGraficoEhPadrao;
     }
 
+    public TipoImpressao getTipoImpressao() {
+        return tipoImpressao;
+    }
+
+    public void setTipoImpressao(TipoImpressao tipoImpressao) {
+        this.tipoImpressao = tipoImpressao;
+    }
+
     @Override
     public LayoutDeImpressao construir() throws DadoInvalidoException {
         return new LayoutDeImpressaoBuilder().comLayoutGrafico(layoutGrafico).comLayoutGraficoEhPadrao(layoutGraficoEhPadrao)
-                .comLayoutTexto(layoutTexto).comTipoLayout(tipoLayout).construir();
+                .comLayoutTexto(layoutTexto).comTipoLayout(tipoLayout).comTipoImpressao(tipoImpressao).construir();
     }
 
     @Override
     public LayoutDeImpressao construirComID() throws DadoInvalidoException {
         return new LayoutDeImpressaoBuilder().comId(id).comLayoutGrafico(layoutGrafico).comLayoutGraficoEhPadrao(layoutGraficoEhPadrao)
-                .comLayoutTexto(layoutTexto).comTipoLayout(tipoLayout).construir();
+                .comLayoutTexto(layoutTexto).comTipoLayout(tipoLayout).comTipoImpressao(tipoImpressao).construir();
     }
 
 }

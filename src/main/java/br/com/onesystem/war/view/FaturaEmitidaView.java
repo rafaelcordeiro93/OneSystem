@@ -12,6 +12,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
@@ -191,15 +192,15 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
 
     private void inicializaFaturaEmitida(Object obj) {
         limparJanela();
-        e = new FaturaEmitidaBV((FaturaEmitida) obj);
-        if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
-            notaEmitidaList = e.getNotaEmitida();
-        }
-        buscaPessoaNota();
-        if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
-            list = new ModelList<>(e.getTitulo());
-        }
         try {
+            e = new FaturaEmitidaBV((FaturaEmitida) obj);
+            if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
+                notaEmitidaList = e.getNotaEmitida();
+            }
+            buscaPessoaNota();
+            if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
+                list = new ModelList<>(e.getTitulo());
+            }
             SessionUtil.put(e.construirComID(), "faturaEmitida", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -273,6 +274,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             removeDaSessao();
             SessionUtil.remove("faturaEmitida", FacesContext.getCurrentInstance());
             e = new FaturaEmitidaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
             notaEmitidaList = new ArrayList<>();

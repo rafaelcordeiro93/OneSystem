@@ -88,7 +88,7 @@ public class ValorPorCotacao implements Serializable {
                 + " " + msg.getMessage("de") + " " + nota.getPessoa().getNome();
 
         this.nota = nota;
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(historico)
+        baixa = new BaixaBuilder().comFilial(nota.getFilial()).comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
                 .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
                 .comValorPorCotacao(this).construir();
@@ -99,7 +99,7 @@ public class ValorPorCotacao implements Serializable {
         BundleUtil msg = new BundleUtil();
         String historico = msg.getMessage("Fatura_Emitida") + " " + msg.getMessage("de") + " " + faturaEmitida.getPessoa().getNome();
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(faturaEmitida.getEmissao()).comHistorico(historico)
+        baixa = new BaixaBuilder().comFilial(faturaEmitida.getFilial()).comCotacao(cotacao).comEmissao(faturaEmitida.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comPessoa(faturaEmitida.getPessoa())
                 .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
     }
@@ -109,7 +109,7 @@ public class ValorPorCotacao implements Serializable {
         BundleUtil msg = new BundleUtil();
         String historico = msg.getMessage("Fatura_Recebida") + " " + msg.getMessage("de") + " " + faturaRecebida.getPessoa().getNome();
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(faturaRecebida.getEmissao()).comHistorico(historico)
+        baixa = new BaixaBuilder().comFilial(faturaRecebida.getFilial()).comCotacao(cotacao).comEmissao(faturaRecebida.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comPessoa(faturaRecebida.getPessoa())
                 .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
     }
@@ -119,7 +119,7 @@ public class ValorPorCotacao implements Serializable {
         BundleUtil msg = new BundleUtil();
         String historico = msg.getMessage("Conhecimento_De_Frete") + " " + msg.getMessage("de") + " " + conhecimentoDeFrete.getPessoa().getNome();
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
-        baixa = new BaixaBuilder().comCotacao(cotacao).comEmissao(conhecimentoDeFrete.getEmissao()).comHistorico(historico)
+        baixa = new BaixaBuilder().comFilial(conhecimentoDeFrete.getFilial()).comCotacao(cotacao).comEmissao(conhecimentoDeFrete.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(conhecimentoDeFrete.getOperacao().getOperacaoFinanceira()).comPessoa(conhecimentoDeFrete.getPessoa())
                 .comValor(valor).comCaixa(caixa).comValorPorCotacao(this).construir();
     }

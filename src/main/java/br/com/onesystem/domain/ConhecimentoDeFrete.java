@@ -73,12 +73,18 @@ public class ConhecimentoDeFrete implements Serializable {
 
     @OneToMany(mappedBy = "conhecimentoDeFrete", cascade = {CascadeType.ALL})
     private List<ValorPorCotacao> valorPorCotacao;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public ConhecimentoDeFrete() {
     }
 
     public ConhecimentoDeFrete(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal despesas,
-            BigDecimal dinheiro, Date data, Date emissao, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao) throws DadoInvalidoException {
+            BigDecimal dinheiro, Date data, Date emissao, List<Titulo> titulo, 
+            List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao,
+            Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -90,6 +96,7 @@ public class ConhecimentoDeFrete implements Serializable {
         this.titulo = titulo;
         this.notaRecebida = notaRecebida;
         this.valorPorCotacao = valorPorCotacao;
+        this.filial = filial;
         ehValido();
     }
 
@@ -208,8 +215,12 @@ public class ConhecimentoDeFrete implements Serializable {
         return valorPorCotacao;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valorFrete", "outrasdespesas", "dinheiro", "pessoa");
+        List<String> campos = Arrays.asList("valorFrete", "outrasdespesas", "dinheiro", "pessoa", "filial");
         new ValidadorDeCampos<ConhecimentoDeFrete>().valida(this, campos);
     }
 

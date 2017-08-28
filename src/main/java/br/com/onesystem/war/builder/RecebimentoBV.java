@@ -8,6 +8,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -32,6 +33,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     private Date emissao;
     private EstadoDeLancamento estado;
     private Caixa caixa;
+    private Filial filial;
 
     public RecebimentoBV() {
     }
@@ -39,9 +41,10 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     public RecebimentoBV(Date emissao) {
     }
 
-    public RecebimentoBV(Date emissao, Caixa caixa) {
+    public RecebimentoBV(Date emissao, Caixa caixa, Filial filial) {
         this.emissao = emissao;
         this.caixa = caixa;
+        this.filial = filial;
     }
 
     public RecebimentoBV(Recebimento r) {
@@ -53,6 +56,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.totalEmDinheiro = r.getTotalEmDinheiro();
         this.estado = r.getEstado();
         this.caixa = r.getCaixa();
+        this.filial = r.getFilial();
     }
 
     public Long getId() {
@@ -111,17 +115,35 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.estado = estado;
     }
 
+    public Caixa getCaixa() {
+        return caixa;
+    }
+
+    public void setCaixa(Caixa caixa) {
+        this.caixa = caixa;
+    }
+
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Recebimento construir() throws DadoInvalidoException {
         return new RecebimentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
-                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa)
+                .comFilial(filial).construir();
     }
 
     @Override
     public Recebimento construirComID() throws DadoInvalidoException {
         return new RecebimentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
-                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa)
+                .comFilial(filial).construir();
     }
 
 }

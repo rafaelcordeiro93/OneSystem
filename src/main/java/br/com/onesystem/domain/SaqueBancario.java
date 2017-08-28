@@ -67,11 +67,15 @@ public class SaqueBancario implements Serializable {
 
     @Length(message = "{observacao_length}", max = 255)
     private String observacao;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public SaqueBancario() {
     }
 
-    public SaqueBancario(Long id, Date emissao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, String observacao) throws DadoInvalidoException {
+    public SaqueBancario(Long id, Date emissao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, String observacao, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.origem = origem;
@@ -80,6 +84,7 @@ public class SaqueBancario implements Serializable {
         this.valorConvertido = valorConvertido;
         this.baixas = baixas;
         this.observacao = observacao;
+        this.filial = filial;
         ehValido();
     }
 
@@ -90,8 +95,8 @@ public class SaqueBancario implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa do saque */
     public void geraBaixaDeSaque(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
     }
 
     /* Adiciona Baixa*/
@@ -152,6 +157,10 @@ public class SaqueBancario implements Serializable {
         return valor;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }

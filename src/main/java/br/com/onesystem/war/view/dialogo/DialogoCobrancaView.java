@@ -80,7 +80,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setCotacao(new CotacaoDAO().porMoeda(faturaLegada.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaLegada.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.EMITIDA);
             e.setMoeda(faturaLegada.getMoedaPadrao());
-            e.setFaturaLegada(faturaLegada);
+            e.setFatura(faturaLegada);
             e.setPessoa(faturaLegada.getPessoa());
             modalidade = true;
             return;
@@ -98,7 +98,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setCotacao(new CotacaoDAO().porMoeda(faturaEmitida.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaEmitida.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.EMITIDA);
             e.setMoeda(faturaEmitida.getMoedaPadrao());
-            e.setFaturaEmitida(faturaEmitida);
+            e.setFatura(faturaEmitida);
             e.setPessoa(faturaEmitida.getPessoa());
             modalidade = true;
             return;
@@ -116,7 +116,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             e.setCotacao(new CotacaoDAO().porMoeda(faturaRecebida.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(faturaRecebida.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.RECEBIDA);
             e.setMoeda(faturaRecebida.getMoedaPadrao());
-            e.setFaturaRecebida(faturaRecebida);
+            e.setFatura(faturaRecebida);
             e.setPessoa(faturaRecebida.getPessoa());
             modalidade = true;
             return;

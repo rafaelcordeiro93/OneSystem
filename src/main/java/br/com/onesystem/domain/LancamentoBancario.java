@@ -81,11 +81,15 @@ public class LancamentoBancario implements Serializable {
     @Column(nullable = true)
     private Long idRelacaoEstorno;
 
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
+    
     public LancamentoBancario() {
     }
 
     public LancamentoBancario(Long id, Date emissao, Conta conta, BigDecimal valor, TipoReceita receita, TipoDespesa despesa, List<Baixa> baixas,
-            String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
+            String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.conta = conta;
@@ -97,29 +101,30 @@ public class LancamentoBancario implements Serializable {
         this.tipoLancamentoBancario = tipoLancamentoBancario;
         this.estornado = estornado;
         this.idRelacaoEstorno = idRelacaoEstorno;
+        this.filial = filial;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("conta", "valor", "observacao");
+        List<String> campos = Arrays.asList("conta", "valor", "observacao", "filial");
         new ValidadorDeCampos<LancamentoBancario>().valida(this, campos);
     }
 
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeLancamento(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         }
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDoLancamentoCom(Cotacao conta) throws DadoInvalidoException {
         if (receita != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comReceita(receita).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comDespesa(despesa).comCotacao(conta).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
         }
     }
 

@@ -4,6 +4,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.FaturaRecebida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.FaturaRecebidaBuilder;
@@ -31,6 +32,7 @@ public class FaturaRecebidaBV implements Serializable, BuilderView<FaturaRecebid
     private List<NotaRecebida> notaRecebida;
     private List<ValorPorCotacao> valorPorCotacao;
     private BigDecimal dinheiro;
+    private Filial filial;
 
     public FaturaRecebidaBV(FaturaRecebida faturaRecebidaSelecionada) {
         this.id = faturaRecebidaSelecionada.getId();
@@ -42,6 +44,7 @@ public class FaturaRecebidaBV implements Serializable, BuilderView<FaturaRecebid
         this.notaRecebida = faturaRecebidaSelecionada.getNotaRecebida();
         this.valorPorCotacao = faturaRecebidaSelecionada.getValorPorCotacao();
         this.dinheiro = faturaRecebidaSelecionada.getDinheiro();
+        this.filial = faturaRecebidaSelecionada.getFilial();
     }
 
     public FaturaRecebidaBV() {
@@ -125,12 +128,26 @@ public class FaturaRecebidaBV implements Serializable, BuilderView<FaturaRecebid
         return cfg.getMoedaPadrao().getSigla();
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public FaturaRecebida construirComID() throws DadoInvalidoException {
-        return new FaturaRecebidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
+        return new FaturaRecebidaBuilder().comID(id).comCodigo(codigo).comTotal(total).
+                comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaRecebida(notaRecebida).
+                comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).
+                comFilial(filial).construir();
     }
 
     public FaturaRecebida construir() throws DadoInvalidoException {
-        return new FaturaRecebidaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
+        return new FaturaRecebidaBuilder().comCodigo(codigo).comTotal(total).
+                comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaRecebida(notaRecebida).
+                comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).
+                comFilial(filial).construir();
     }
 
 }

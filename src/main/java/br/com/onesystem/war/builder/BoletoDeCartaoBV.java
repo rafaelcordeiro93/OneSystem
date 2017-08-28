@@ -4,6 +4,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.BoletoDeCartaoBuilder;
@@ -31,6 +32,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Filial filial;
 
     public BoletoDeCartaoBV(BoletoDeCartao b) {
         this.id = b.getId();
@@ -46,6 +48,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.operacaoFinanceira = b.getOperacaoFinanceira();
         this.entrada = b.getEntrada();
         this.situacaoDeCobranca = b.getSituacaoDeCobranca();
+        this.filial = b.getFilial();
     }
 
     public BoletoDeCartaoBV(Cobranca c) {
@@ -62,6 +65,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.operacaoFinanceira = c.getOperacaoFinanceira();
         this.entrada = c.getEntrada();
         this.situacaoDeCobranca = c.getSituacaoDeCobranca();
+        this.filial = c.getFilial();
     }
 
     public BoletoDeCartaoBV() {
@@ -171,15 +175,23 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.entrada = entrada;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comNota(nota).
+        return new BoletoDeCartaoBuilder().comNota(nota).comFilial(filial).
                 comCartao(cartao).comEmissao(emissao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comVencimento(vencimento).comValor(valor).comCotacao(cotacao).comEntrada(entrada).
                 comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).comSituacaoDeCobranca(situacaoDeCobranca).construir();
     }
 
     public BoletoDeCartao construirComID() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).
+        return new BoletoDeCartaoBuilder().comID(id).comFilial(filial).
                 comNota(nota).comCotacao(cotacao).comPessoa(pessoa).comOperacaoFinanceira(operacaoFinanceira).
                 comCartao(cartao).comEmissao(emissao).comVencimento(vencimento).comEntrada(entrada).
                 comValor(valor).comCodigoTransacao(codigoTransacao).comTipoSituacao(situacao).comSituacaoDeCobranca(situacaoDeCobranca).construir();

@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaEventual;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.DespesaEventualBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -27,6 +28,7 @@ public class DespesaEventualBV implements Serializable {
     private Cotacao cotacao;
     private List<Baixa> baixas;
     private Date referencia;
+    private Filial filial;
 
     public DespesaEventualBV(DespesaEventual despesaEventualSelecionada) {
         this.id = despesaEventualSelecionada.getId();
@@ -40,11 +42,12 @@ public class DespesaEventualBV implements Serializable {
         this.baixas = despesaEventualSelecionada.getBaixas();
         this.operacaoFinanceira = despesaEventualSelecionada.getOperacaoFinanceira();
         this.referencia = despesaEventualSelecionada.getReferencia();
+        this.filial = despesaEventualSelecionada.getFilial();
     }
 
     public DespesaEventualBV(Long id, Pessoa pessoa, TipoDespesa despesa, BigDecimal valor, Date vencimento,
             Date emissao, String historico, Cotacao cotacao, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
-            Date referencia) {
+            Date referencia, Filial filial) {
         this.id = id;
         this.pessoa = pessoa;
         this.despesa = despesa;
@@ -56,6 +59,7 @@ public class DespesaEventualBV implements Serializable {
         this.baixas = baixas;
         this.operacaoFinanceira = operacaoFinanceira;
         this.referencia = referencia;
+        this.filial = filial;
     }
 
     public DespesaEventualBV() {
@@ -73,6 +77,14 @@ public class DespesaEventualBV implements Serializable {
         return pessoa;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
@@ -157,13 +169,13 @@ public class DespesaEventualBV implements Serializable {
     public DespesaEventual construir() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
                 .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
-                .comReferencia(referencia).construir();
+                .comReferencia(referencia).comFilial(filial).construir();
 
     }
 
     public DespesaEventual construirComID() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
                 .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
-                .comReferencia(referencia).construir();
+                .comReferencia(referencia).comFilial(filial).construir();
     }
 }

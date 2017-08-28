@@ -18,6 +18,7 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
@@ -29,7 +30,7 @@ import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
-import br.com.onesystem.domain.builder.ParcelaBuilder;
+import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -159,10 +160,12 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
+    @Override
     public void limparJanela() {
         try {
             notaEmitida = new NotaEmitidaBV();
             notaEmitida.setEmissao(new Date());
+            notaEmitida.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             notaEmitida.setUsuario(new UsuarioLogadoUtil().getUsuario());
             notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
@@ -177,6 +180,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             cheque = new ChequeBV();
             inicializaCotacoes();
             cobrancaBV = new CobrancaBV();
+            cobrancaBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             orcamento = null;
             editarItensEParcelas = false;
             limparChequeEntrada();
@@ -486,12 +490,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
-                        cobrancas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
+                        cobrancas.add(new CobrancaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
-                                .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO).construir());
+                                .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
+                                .comFilial(notaEmitida.getFilial()).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -675,7 +680,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             die.print();
         }
     }
-    
+
     /**
      * Atualiza o valor unitario do item de de nota conforme a lista de preço
      * selecionada.

@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ public class SaqueBancarioBuilder {
     private List<Baixa> baixas;
     private Date emissao;
     private String observacao;
+    private Filial filial;
 
     public SaqueBancarioBuilder comId(Long id) {
         this.id = id;
@@ -68,8 +70,13 @@ public class SaqueBancarioBuilder {
         return this;
     }
 
+    public SaqueBancarioBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
+
     public SaqueBancario construir() throws DadoInvalidoException {
-        return new SaqueBancario(id, emissao, origem, destino, valor, valorConvertido, baixas, observacao);
+        return new SaqueBancario(id, emissao, origem, destino, valor, valorConvertido, baixas, observacao, filial);
     }
 
 }

@@ -23,8 +23,8 @@ public class ReceitaEventual extends CobrancaFixa implements RelatorioContaAbert
     }
 
     public ReceitaEventual(Long id, Pessoa pessoa, TipoReceita receita, BigDecimal valor, Date emissao, String historico,
-            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira, Date referencia, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao, referencia, situacaoDeCobranca);
+            Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira, Date referencia, SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, emissao, referencia, situacaoDeCobranca, filial);
         this.tipoReceita = receita;
     }
 

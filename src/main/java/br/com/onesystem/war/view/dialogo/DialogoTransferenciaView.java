@@ -6,6 +6,7 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -13,6 +14,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.BaixaBV;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -56,10 +59,15 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
 
     @Override
     public void limparJanela() {
+        try{
         t = null;
         e = new TransferenciaBV();
+        e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
         baixas = new ModelList<>();
         limparBaixa();
+        }catch(DadoInvalidoException die){
+            die.print();
+        }
     }
 
     public void inicializar() {

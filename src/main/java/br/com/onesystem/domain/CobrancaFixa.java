@@ -98,12 +98,16 @@ public abstract class CobrancaFixa implements Serializable {
     @Enumerated(EnumType.STRING)
     private SituacaoDeCobranca situacaoDeCobranca;
 
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
+    
     public CobrancaFixa() {
     }
 
     public CobrancaFixa(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
-            Date referencia, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+            Date referencia, SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao;
@@ -114,6 +118,7 @@ public abstract class CobrancaFixa implements Serializable {
         this.baixas = baixas;
         this.vencimento = vencimento;
         this.referencia = referencia;
+        this.filial = filial;
         if (situacaoDeCobranca != null) {
             this.situacaoDeCobranca = situacaoDeCobranca;
         } else {
@@ -123,7 +128,7 @@ public abstract class CobrancaFixa implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "referencia");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "referencia", "filial");
         new ValidadorDeCampos<CobrancaFixa>().valida(this, campos);
     }
 
@@ -245,6 +250,14 @@ public abstract class CobrancaFixa implements Serializable {
         return situacaoDeCobranca;
     }
 
+    public List<TipoDeCobranca> getTiposDeCobranca() {
+        return tiposDeCobranca;
+    }
+
+    public Filial getFilial() {
+        return filial;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

@@ -20,6 +20,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Usuario;
@@ -64,6 +65,7 @@ public class NotaEmitidaBuilder {
     private Caixa caixa;
     private Usuario usuario;
     private FaturaEmitida faturaEmitida;
+    private Filial filial;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -213,9 +215,14 @@ public class NotaEmitidaBuilder {
         this.usuario = usuario;
         return this;
     }
+    
+    public NotaEmitidaBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa, usuario, faturaEmitida);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa, usuario, faturaEmitida, filial);
     }
 
 }

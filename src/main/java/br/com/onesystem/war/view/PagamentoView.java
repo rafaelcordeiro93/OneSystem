@@ -2,6 +2,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -51,7 +52,7 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
             tiposDeCobranca.getList().forEach(tp -> pagamento.adiciona(tp));
             formasDeCobranca.getList().forEach(f -> pagamento.adiciona(f));
             pagamento.geraBaixas();
-            pagamento.ehValido();
+            pagamento.ehRegistroValido();
             addNoBanco(pagamento);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -63,7 +64,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void limparJanela() {
         try {
             removeDaSessao();
-            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance())
+            , (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();

@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -38,25 +39,31 @@ public class LayoutDeImpressao implements Serializable {
     @NotNull(message = "{tipoLayout_not_null}")
     @Enumerated(EnumType.STRING)
     private TipoLayout tipoLayout;
-    @NotNull(message = "{layoutGrafico_not_null}")
     @Length(max = 255, min = 0, message = "{layoutGrafico_lenght}")
     @Column(length = 255)
     private String layoutGrafico;
     private String layoutTexto;
     @NotNull(message = "{layoutGraficoEhPadrao_not_null}")
     private boolean layoutGraficoEhPadrao;
+    @NotNull(message = "{tipoImpressao_not_null}")
+    @Enumerated(EnumType.STRING)
+    private TipoImpressao tipoImpressao;
 
-    public LayoutDeImpressao(Long id, TipoLayout tipoLayout, String layoutGrafico, String layoutTexto, boolean layoutGraficoEhPadrao) throws DadoInvalidoException {
+    public LayoutDeImpressao() {
+    }
+
+    public LayoutDeImpressao(Long id, TipoLayout tipoLayout, String layoutGrafico, String layoutTexto, boolean layoutGraficoEhPadrao, TipoImpressao tipoImpressao) throws DadoInvalidoException {
         this.id = id;
         this.tipoLayout = tipoLayout;
         this.layoutGrafico = layoutGrafico;
         this.layoutTexto = layoutTexto;
         this.layoutGraficoEhPadrao = layoutGraficoEhPadrao;
+        this.tipoImpressao = tipoImpressao;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("tipoLayout", "layoutGrafico", "layoutGraficoEhPadrao_not_null");
+        List<String> campos = Arrays.asList("tipoLayout", "layoutGrafico", "layoutGraficoEhPadrao", "tipoImpressao");
         new ValidadorDeCampos<LayoutDeImpressao>().valida(this, campos);
     }
 
@@ -80,6 +87,10 @@ public class LayoutDeImpressao implements Serializable {
         return layoutGraficoEhPadrao;
     }
 
+    public TipoImpressao getTipoImpressao() {
+        return tipoImpressao;
+    }
+    
     @Override
     public String toString() {
         return "LayoutDeImpressao{" + "id=" + id + ", tipoLayout=" + tipoLayout + ", layoutGrafico=" + layoutGrafico + ", layoutTexto=" + layoutTexto + ", layoutGraficoEhPadrao=" + layoutGraficoEhPadrao + '}';

@@ -12,6 +12,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
@@ -243,6 +244,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             removeDaSessao();
             SessionUtil.remove("conhecimentoDeFrete", FacesContext.getCurrentInstance());
             e = new ConhecimentoDeFreteBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
             notaRecebidaList = new ArrayList<>();

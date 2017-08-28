@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -34,6 +35,7 @@ public class DespesaProvisionadaBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Filial filial;
 
     public DespesaProvisionadaBuilder comId(Long id) {
         this.id = id;
@@ -99,14 +101,19 @@ public class DespesaProvisionadaBuilder {
         this.referencia = referencia;
         return this;
     }
-    
-    public DespesaProvisionadaBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca){
+
+    public DespesaProvisionadaBuilder comSituacaoDeCobranca(SituacaoDeCobranca situacaoDeCobranca) {
         this.situacaoDeCobranca = situacaoDeCobranca;
         return this;
     }
 
+    public DespesaProvisionadaBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
+
     public DespesaProvisionada construir() throws DadoInvalidoException {
-        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca);
+        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

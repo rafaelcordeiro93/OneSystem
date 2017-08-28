@@ -12,6 +12,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaRecebida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
@@ -269,6 +270,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             removeDaSessao();
             SessionUtil.remove("faturaRecebida", FacesContext.getCurrentInstance());
             e = new FaturaRecebidaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
             notaRecebidaList = new ArrayList<>();

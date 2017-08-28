@@ -8,6 +8,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.builder.*;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -32,13 +33,15 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     private Date emissao;
     private EstadoDeLancamento estado;
     private Caixa caixa;
+    private Filial filial;
 
     public PagamentoBV() {
     }
 
-    public PagamentoBV(Date emissao, Caixa caixa) {
+    public PagamentoBV(Date emissao, Caixa caixa, Filial filial) {
         this.emissao = emissao;
         this.caixa = caixa;
+        this.filial = filial;
     }
 
     public PagamentoBV(Pagamento r) {
@@ -50,6 +53,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.totalEmDinheiro = r.getTotalEmDinheiro();
         this.estado = r.getEstado();
         this.caixa = r.getCaixa();
+        this.filial = r.getFilial();
     }
 
     public Long getId() {
@@ -116,16 +120,24 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.caixa = caixa;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Pagamento construir() throws DadoInvalidoException {
         return new PagamentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comFilial(filial)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 
     @Override
     public Pagamento construirComID() throws DadoInvalidoException {
         return new PagamentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
-                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
+                .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comFilial(filial)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 

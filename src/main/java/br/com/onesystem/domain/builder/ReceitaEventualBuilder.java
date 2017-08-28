@@ -2,6 +2,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.ReceitaEventual;
 import br.com.onesystem.domain.Pessoa;
@@ -31,6 +32,7 @@ public class ReceitaEventualBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private Date referencia;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Filial filial;
 
     public ReceitaEventualBuilder comId(Long id) {
         this.id = id;
@@ -92,8 +94,13 @@ public class ReceitaEventualBuilder {
         return this;
     }
 
+    public ReceitaEventualBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
+    
     public ReceitaEventual construir() throws DadoInvalidoException {
-        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca);
+        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

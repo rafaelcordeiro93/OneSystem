@@ -5,11 +5,15 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.SaqueBancario;
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.SaqueBancarioBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -28,7 +32,12 @@ public class ConsultaSaqueBancarioView extends BasicMBImpl<SaqueBancario, SaqueB
 
     @Override
     public void limparJanela() {
+        try{
         e = new SaqueBancarioBV();
+        e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+        }catch(DadoInvalidoException die){
+            die.print();
+        }
     }
 
     @Override

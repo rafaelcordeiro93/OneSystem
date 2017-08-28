@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -35,7 +36,8 @@ public class BoletoDeCartaoBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
-
+    private Filial filial;
+    
     public BoletoDeCartaoBuilder() {
     }
 
@@ -113,9 +115,14 @@ public class BoletoDeCartaoBuilder {
         this.situacaoDeCobranca = situacaoDeCobranca;
         return this;
     }
+    
+    public BoletoDeCartaoBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca, filial);
     }
 
 }

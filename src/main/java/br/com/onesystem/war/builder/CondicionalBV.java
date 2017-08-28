@@ -8,6 +8,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
@@ -38,6 +39,7 @@ public class CondicionalBV implements Serializable, BuilderView<Condicional> {
     private BigDecimal porcentagemDesconto;
     private Pessoa pessoa;
     private Operacao operacao;
+    private Filial filial;
 
     public CondicionalBV() {
     }
@@ -53,6 +55,7 @@ public class CondicionalBV implements Serializable, BuilderView<Condicional> {
         this.frete = c.getFrete();
         this.pessoa = c.getPessoa();
         this.operacao = c.getOperacao();
+        this.filial = c.getFilial();
     }
 
     public Long getId() {
@@ -75,6 +78,14 @@ public class CondicionalBV implements Serializable, BuilderView<Condicional> {
         return listaDePreco;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public void setListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
     }
@@ -162,13 +173,13 @@ public class CondicionalBV implements Serializable, BuilderView<Condicional> {
     public Condicional construir() throws DadoInvalidoException {
         return new CondicionalBuilder().comAcrescimo(acrescimo).comCotacao(cotacao).comDesconto(desconto)
                 .comDespesaCobranca(despesaCobranca).comFrete(frete).comObservacao(observacao).comItensDeCondicional(itensDeCondicional)
-                .comListaDePreco(listaDePreco).comPessoa(pessoa).comOperacao(operacao).construir();
+                .comListaDePreco(listaDePreco).comPessoa(pessoa).comOperacao(operacao).comFilial(filial).construir();
     }
 
     public Condicional construirComID() throws DadoInvalidoException {
         return new CondicionalBuilder().comId(id).comAcrescimo(acrescimo).comCotacao(cotacao).comDesconto(desconto)
                 .comDespesaCobranca(despesaCobranca).comFrete(frete).comObservacao(observacao).comItensDeCondicional(itensDeCondicional)
-                .comListaDePreco(listaDePreco).comPessoa(pessoa).comOperacao(operacao).construir();
+                .comListaDePreco(listaDePreco).comPessoa(pessoa).comOperacao(operacao).comFilial(filial).construir();
     }
 
 }

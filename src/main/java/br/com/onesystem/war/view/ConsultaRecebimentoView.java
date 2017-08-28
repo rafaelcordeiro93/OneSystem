@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -62,7 +63,7 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             tiposDeCobranca.getList().forEach(tp -> recebimento.atualizaBaixas(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.atualizaBaixas(f));
 
-            recebimento.ehValido();
+            recebimento.ehRegistroValido();
             tiposDeCobrancaDeletados.getList().forEach(tp -> recebimento.remove(tp));
             formasDeCobrancaDeletados.getList().forEach(f -> recebimento.remove(f));
 
@@ -103,7 +104,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     @Override
     public void limparJanela() {
         try {
-            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
+                    (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();

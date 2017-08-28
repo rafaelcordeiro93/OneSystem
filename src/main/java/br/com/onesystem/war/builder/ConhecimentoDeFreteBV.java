@@ -2,6 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
@@ -31,6 +32,7 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
     private List<Titulo> titulo;
     private List<ValorPorCotacao> valorPorCotacao;
     private List<NotaRecebida> notaRecebida;
+    private Filial filial;
 
     public ConhecimentoDeFreteBV() {
     }
@@ -47,10 +49,11 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
         this.titulo = c.getTitulo();
         this.notaRecebida = c.getNotaRecebida();
         this.valorPorCotacao = c.getValorPorCotacao();
+        this.filial = c.getFilial();
     }
 
     public ConhecimentoDeFreteBV(Long id, Pessoa pessoa, Operacao operacao, BigDecimal valorFrete, BigDecimal outrasdespesas, BigDecimal dinheiro,
-            Date data, Date emissao, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao) {
+            Date data, Date emissao, List<Titulo> titulo, List<NotaRecebida> notaRecebida, List<ValorPorCotacao> valorPorCotacao, Filial filial) {
         this.id = id;
         this.pessoa = pessoa;
         this.operacao = operacao;
@@ -62,7 +65,7 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
         this.titulo = titulo;
         this.notaRecebida = notaRecebida;
         this.valorPorCotacao = valorPorCotacao;
-
+        this.filial = filial;
     }
 
     public Long getId() {
@@ -158,15 +161,23 @@ public class ConhecimentoDeFreteBV implements Serializable, BuilderView<Conhecim
         return cfg.getMoedaPadrao();
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+
     public ConhecimentoDeFrete construir() throws DadoInvalidoException {
         return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao)
-                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro).comFilial(filial)
                 .comData(data).comEmissao(emissao).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     public ConhecimentoDeFrete construirComID() throws DadoInvalidoException {
         return new ConhecimentoDeFreteBuilder().comPessoa(pessoa).comOperacao(operacao).comID(id)
-                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro)
+                .comValorFrete(valorFrete).comOutrasDespesas(outrasdespesas).comDinheiro(dinheiro).comFilial(filial)
                 .comData(data).comEmissao(emissao).comTitulo(titulo).comNotaRecebida(notaRecebida).comValorPorCotacao(valorPorCotacao).construir();
     }
 }
