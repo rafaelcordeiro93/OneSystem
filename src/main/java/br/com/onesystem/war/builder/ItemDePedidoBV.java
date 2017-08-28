@@ -10,7 +10,11 @@ import br.com.onesystem.domain.ItemDePedido;
 import br.com.onesystem.domain.Pedido;
 import br.com.onesystem.domain.builder.ItemDePedidoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.MoedaFormatter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,6 +27,8 @@ public class ItemDePedidoBV {
     private BigDecimal valorUnitario;
     private BigDecimal quantidade;
     private Pedido pedido;
+    private List<QuantidadeDeItemPorDeposito> quantidadePorDeposito = new ArrayList<>();
+    private List<QuantidadeDeItemPorDeposito> listaDeQuantidade = new ArrayList<QuantidadeDeItemPorDeposito>();
 
     public ItemDePedidoBV() {
     }
@@ -76,21 +82,48 @@ public class ItemDePedidoBV {
         this.pedido = pedido;
     }
 
-//    public String getTotalFormatado() {
-//        if (comanda != null) {
-//            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
-//        } else {
-//            return NumberFormat.getNumberInstance().format(getTotal());
-//        }
-//    }
-//
-//    public String getUnitarioFormatado() {
-//        if (comanda != null) {
-//            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getValorUnitario());
-//        } else {
-//            return NumberFormat.getNumberInstance().format(getValorUnitario());
-//        }
-//    }
+    public List<QuantidadeDeItemPorDeposito> getListaDeQuantidade() {
+        return listaDeQuantidade;
+    }
+
+    public void setListaDeQuantidade(List<QuantidadeDeItemPorDeposito> listaDeQuantidade) {
+        this.listaDeQuantidade = listaDeQuantidade;
+    }
+
+    public String getTotalFormatado() {
+        if (pedido != null) {
+            return MoedaFormatter.format(pedido.getMoedaPadrao(), getTotal());
+        } else {
+            return NumberFormat.getNumberInstance().format(getTotal());
+        }
+    }
+
+    public String getUnitarioFormatado() {
+        if (pedido != null) {
+            return MoedaFormatter.format(pedido.getMoedaPadrao(), getValorUnitario());
+        } else {
+            return NumberFormat.getNumberInstance().format(getValorUnitario());
+        }
+    }
+
+    public BigDecimal getTotalListaSaldoDeQuantidade() {
+        return getQuantidade().subtract(getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add));
+    }
+
+    public BigDecimal getTotalListaDeQuantidade() {
+        return getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getValorTotalListaDeQuantidadeFormatado() {
+        BigDecimal resultado = getValorUnitario().multiply(getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return MoedaFormatter.format(pedido.getMoedaPadrao(), resultado);
+    }
+
+    public int getComparaQuantidadeDevolucao() {
+        BigDecimal r = getQuantidade().subtract(getTotalListaSaldoDeQuantidade());
+        return r.compareTo(getTotalListaDeQuantidade());
+    }
+
     public BigDecimal getTotal() {
         return getQuantidade() == null ? BigDecimal.ZERO : getQuantidade().multiply(valorUnitario == null ? BigDecimal.ZERO : valorUnitario);
     }

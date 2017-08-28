@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeCondicional;
@@ -17,12 +18,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class EstoqueDAO extends GenericDAO<Estoque>{
+public class EstoqueDAO extends GenericDAO<Estoque> {
 
     public EstoqueDAO() {
         super(Estoque.class);
     }
-    
+
     public EstoqueDAO porItem(Item item) {
         where += " and estoque.item = :pItem";
         parametros.put("pItem", item);
@@ -81,6 +82,17 @@ public class EstoqueDAO extends GenericDAO<Estoque>{
         return this;
     }
 
+    public EstoqueDAO porNotasRecebidas(List<NotaRecebida> notasRecebidas) throws DadoInvalidoException {
+        if (notasRecebidas != null && !notasRecebidas.isEmpty()) {
+            where += " and estoque.itemDeNota.nota in :pNotas ";
+            parametros.put("pNotas", notasRecebidas);
+        } else {
+            throw new FDadoInvalidoException("Erro: Deve ser feito a validação de lista de notas recebidas não "
+                    + "nula e não vazia antes de chamar o método porNotasRecebidas a fim de não trazer resultados incorretos");
+        }
+        return this;
+    }
+
     public EstoqueDAO porNotaDeOrigem(Nota notaDeOrigem) {
         where += " and estoque.itemDeNota.nota.notaDeOrigem = :pNotaDeOrigem";
         parametros.put("pNotaDeOrigem", notaDeOrigem);
@@ -116,6 +128,5 @@ public class EstoqueDAO extends GenericDAO<Estoque>{
         dataAtual.set(Calendar.SECOND, 59);
         return dataAtual;
     }
-
 
 }

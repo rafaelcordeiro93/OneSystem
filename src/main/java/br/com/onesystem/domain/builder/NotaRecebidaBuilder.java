@@ -19,6 +19,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -59,6 +60,7 @@ public class NotaRecebidaBuilder {
     private Usuario usuario;
     private FaturaRecebida faturaRecebida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
+    private PedidoAFornecedores pedidoAFornecedores;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -198,10 +200,16 @@ public class NotaRecebidaBuilder {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
     }
+    
+      public NotaRecebidaBuilder comPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
+        this.pedidoAFornecedores = pedidoAFornecedores;
+        return this;
+    }
+    
 
     public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
-                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida, conhecimentoDeFrete);
+                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida, conhecimentoDeFrete, pedidoAFornecedores);
     }
 
 }
