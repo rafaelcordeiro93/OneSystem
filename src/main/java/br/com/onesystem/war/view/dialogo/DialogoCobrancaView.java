@@ -68,7 +68,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     private void buscaDaSessao() throws DadoInvalidoException {
         model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         fatura = (Fatura) SessionUtil.getObject("fatura", FacesContext.getCurrentInstance());
-        if(model == null){
+        if (model == null) {
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setParcela((Integer) SessionUtil.getObject("parcela", FacesContext.getCurrentInstance()));
         }
@@ -202,9 +202,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         SessionUtil.remove("model", FacesContext.getCurrentInstance());
         SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
         SessionUtil.remove("conhecimentoDeFrete", FacesContext.getCurrentInstance());
-        SessionUtil.remove("faturaLegada", FacesContext.getCurrentInstance());
-        SessionUtil.remove("faturaRecebida", FacesContext.getCurrentInstance());
-        SessionUtil.remove("faturaEmitida", FacesContext.getCurrentInstance());
+        SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
     }
 
     @Override
