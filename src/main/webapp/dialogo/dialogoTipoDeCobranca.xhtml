@@ -42,35 +42,35 @@
                                    var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" 
                                    rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 4}" />
 
-                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}"  />
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 5}"  />
                 <a:inputTextDialog id="inp-despesaPessoa" value="#{dialogoTipoDeCobrancaView.despesaEventualBV.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}"
                                    var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true"  
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 5}" />
 
-                <p:outputLabel value="#{l.Despesa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+                <p:outputLabel value="#{l.Despesa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 5}" />
                 <a:inputTextDialog id="despesa" value="#{dialogoTipoDeCobrancaView.despesaEventualBV.despesa}" dialog="#{selecaoTipoDespesaView}" mbView="#{dialogoTipoDeCobrancaView}"
                                    var="tipoDespesa" converter="tipoDespesaConverter" itemLabel="#{tipoDespesa.nome}" itemValue="#{tipoDespesa}" itemLabelTabVisible="true" itemLabelTab="#{tipoDespesa.nome}" readonly="true" 
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" />
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 5}" />
 
-                <p:outputLabel value="#{l.Despesa_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}" />
+                <p:outputLabel value="#{l.Despesa_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 6}" />
                 <a:inputTextDialog id="despesaProvisionada" value="#{dialogoTipoDeCobrancaView.despesaProvisionada}" dialog="#{selecaoDespesaProvisionadaView}" mbView="#{dialogoTipoDeCobrancaView}" 
                                    var="despesaProvisionada" converter="despesaProvisionadaConverter" itemLabel="#{despesaProvisionada.id}" itemValue="#{despesaProvisionada}" readonly="true" update="tempDialog"
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}"/>
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 6}"/>
 
-                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+                <p:outputLabel value="#{l.Pessoa}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 7}" />
                 <a:inputTextDialog id="inp-receitaPessoa" value="#{dialogoTipoDeCobrancaView.receitaEventualBV.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{dialogoTipoDeCobrancaView}" 
                                    var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" readonly="true" 
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 7}" />
 
-                <p:outputLabel value="#{l.Receita}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" />
+                <p:outputLabel value="#{l.Receita}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 7}" />
                 <a:inputTextDialog id="receita" value="#{dialogoTipoDeCobrancaView.receitaEventualBV.receita}" dialog="#{selecaoTipoReceitaView}" mbView="#{dialogoTipoDeCobrancaView}"
                                    var="tipoReceita" converter="tipoReceitaConverter" itemLabel="#{tipoReceita.nome}" itemValue="#{tipoReceita}" itemLabelTabVisible="true" itemLabelTab="#{tipoReceita.nome}" readonly="true" 
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}"/>
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 7}"/>
 
-                <p:outputLabel value="#{l.Receita_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}" />
+                <p:outputLabel value="#{l.Receita_Provisionada}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 8}" />
                 <a:inputTextDialog id="receitaProvisionada" value="#{dialogoTipoDeCobrancaView.receitaProvisionada}" dialog="#{selecaoReceitaProvisionadaView}" mbView="#{dialogoTipoDeCobrancaView}" 
                                    var="receitaProvisionada" converter="receitaProvisionadaConverter" itemLabel="#{receitaProvisionada.id}" itemValue="#{receitaProvisionada}" readonly="true" update="tempDialog"
-                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}"/>
+                                   rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 8}"/>
 
             </p:panelGrid>
 
@@ -136,7 +136,7 @@
                         </p:panelGrid>
 
                         <p:panelGrid id="cobrancaFixa" columns="1"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12"
-                                     rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2 ? true : false}">
+                                     rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 8 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 6 ? true : false}">
 
                             <p:outputLabel value="#{l.Codigo}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.id}"/>
                             <p:outputLabel value="#{l.Pessoa}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.pessoa.nome}"/>
@@ -146,7 +146,7 @@
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="despesaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 1}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="despesaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 5}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
                             <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-4">
 
@@ -157,14 +157,14 @@
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="despesaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 2}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="despesaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 6}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
                             <p:outputLabel value="#{l.Referencia}  #{dialogoTipoDeCobrancaView.despesaProvisionada.referencia}" />
                             <p:outputLabel value="#{l.Vencimento}: #{dialogoTipoDeCobrancaView.despesaProvisionada.vencimentoFormatadoSemHoras}"/>                
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="receitaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 3}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="receitaEventual" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 7}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
                             <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-5,ui-g-12 ui-md-4">
 
@@ -175,7 +175,7 @@
 
                         </p:panelGrid>
 
-                        <p:panelGrid id="receitaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 4}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
+                        <p:panelGrid id="receitaProvisionada" columns="1" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 8}" styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12">
 
                             <p:outputLabel value="#{l.Referencia}  #{dialogoTipoDeCobrancaView.despesaProvisionada.referencia}" />
                             <p:outputLabel value="#{l.Vencimento}: #{dialogoTipoDeCobrancaView.receitaProvisionada.vencimentoFormatadoSemHoras}"/>                

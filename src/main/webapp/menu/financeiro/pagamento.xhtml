@@ -37,19 +37,19 @@
                         <p:ajax event="rowSelect" listener="#{pagamentoView.adicionaTipoNaSessao}" update="@this"/>
 
                         <p:column headerText="#{l.Documento}" >
-                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.id : m.object.cobrancaFixa.id}"/>
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.id : m.object.cobranca.id}"/>
                         </p:column>
                         <p:column headerText="#{l.Tipo_Documento}" colspan="2">
                             <h:outputText value="#{m.object.tipoDocumento}" />
                         </p:column>
                         <p:column headerText="#{l.Nome}" colspan="3" >
-                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.pessoa.nome : m.object.cobrancaFixa.pessoa.nome}"/>
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.pessoa.nome : m.object.cobranca.pessoa.nome}"/>
                         </p:column>
                         <p:column headerText="#{l.Vencimento}" >
-                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.vencimentoFormatadoSemHoras : m.object.cobrancaFixa.vencimentoFormatadoSemHoras}"/>
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.vencimentoFormatadoSemHoras : m.object.cobranca.vencimentoFormatadoSemHoras}"/>
                         </p:column>
                         <p:column headerText="#{l.Emissao}" >
-                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.emissaoFormatadaSemHoras : m.object.cobrancaFixa.emissaoFormatadaSemHoras}"/>
+                            <h:outputText value="#{m.object.cobranca ne null ? m.object.cobranca.emissaoFormatadaSemHoras : m.object.cobranca.emissaoFormatadaSemHoras}"/>
                         </p:column>
                         <p:column headerText="#{l.Observacao}" colspan="3">
                             <h:outputText value="#{m.object.observacao}"/>

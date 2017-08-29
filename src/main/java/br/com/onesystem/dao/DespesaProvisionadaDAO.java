@@ -13,7 +13,7 @@ public class DespesaProvisionadaDAO extends GenericDAO<DespesaProvisionada> {
     }
 
     public DespesaProvisionadaDAO wAPagar() {
-        where += "and 0 = (select count(*) from Baixa baixa where baixa.cobrancaFixa = despesaProvisionada.id and baixa.estado = :pBNaoCancelada) "
+        where += "and 0 = (select count(*) from Baixa baixa where baixa.cobranca = despesaProvisionada.id and baixa.estado = :pBNaoCancelada) "
                 + "and 0 = (select count(*) from TransferenciaDespesaProvisionada transferenciaDespesaProvisionada where transferenciaDespesaProvisionada.origem = despesaProvisionada.id) ";
         parametros.put("pBNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;

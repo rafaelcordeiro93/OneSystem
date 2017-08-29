@@ -148,7 +148,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
     }
 
     public List<ModalidadeDeCobranca> getModalidadesDeCobranca() {
-        return Arrays.asList(ModalidadeDeCobranca.values());
+        return Arrays.asList(ModalidadeDeCobranca.CARTAO, ModalidadeDeCobranca.CHEQUE, ModalidadeDeCobranca.CREDITO, ModalidadeDeCobranca.TITULO);
     }
 
     @Override

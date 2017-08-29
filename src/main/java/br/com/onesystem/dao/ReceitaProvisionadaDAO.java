@@ -13,7 +13,7 @@ public class ReceitaProvisionadaDAO extends GenericDAO<ReceitaProvisionada> {
     }
 
     public ReceitaProvisionadaDAO aReceber() {
-        where += "and 0 = (select count(*) from Baixa b where b.cobrancaFixa = receitaProvisionada.id and b.estado = :pBNaoCancelada) ";
+        where += "and 0 = (select count(*) from Baixa b where b.cobranca = receitaProvisionada.id and b.estado = :pBNaoCancelada) ";
         parametros.put("pBNaoCancelada", EstadoDeBaixa.CANCELADO);
         return this;
     }
