@@ -25,6 +25,7 @@ import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.FaturaRecebidaBV;
+import br.com.onesystem.war.builder.TituloBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.war.view.dialogo.DialogoCobrancaView;
 import java.io.Serializable;
@@ -62,9 +63,14 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     public void add() {
         try {
             FaturaRecebida f = e.construir();
-            list.getList().forEach((t) -> {
-                f.adiciona(t);
-            });
+
+            int parcela = 1;
+            for (Titulo t : list.getList()) {
+                TituloBV bv = new TituloBV(t);
+                bv.setParcela(parcela);
+                parcela++;
+                f.adiciona(bv.construir());
+            }
             notaRecebidaList.forEach((n) -> {
                 f.adiciona(n);
             });
@@ -91,9 +97,13 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             if (valorPorCotacaoList.size() > 0) {
                 valoresARemover.forEach(v -> f.remove(v));
             }
-            list.getList().forEach((t) -> {
-                f.atualiza(t);
-            });
+            int parcela = 1;
+            for (Titulo t : list.getList()) {
+                TituloBV bv = new TituloBV(t);
+                bv.setParcela(parcela);
+                parcela++;
+                f.atualiza(bv.construirComID());
+            }
             notaRecebidaList.forEach((n) -> {
                 f.atualiza(n);
             });
@@ -141,7 +151,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
         try {
             if (modeloSelecionado != null) {
                 SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
-                SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
             }
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
@@ -264,6 +273,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             modeloSelecionado = (Model<Titulo>) event.getObject();
             removeDaSessao();
             SessionUtil.put(modeloSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
