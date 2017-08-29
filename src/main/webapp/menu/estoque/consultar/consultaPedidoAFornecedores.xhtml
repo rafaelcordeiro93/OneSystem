@@ -1,0 +1,221 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"                
+                xmlns:pe="http://primefaces.org/ui/extensions"
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+
+
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 7%;margin-top: 3%">
+                <span class="tab" />
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4.5%" ><i class="fa fa-address-book-o Fs40" style="color: #848484"/> #{l.Pedido_AFornecedores}</h3>
+                    <div class="EmptyBox40"/>
+                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3 ui-grc-1,ui-g-12 ui-md-3 ui-grc-1"> 
+                            <a:inputTextDialog id="pedidoAFornecedoresID" placeholder="#{l.Id}" readonly="true" value="#{consultaPedidoAFornecedoresView.e}" update=":conteudo" dialog="#{selecaoPedidoAFornecedoresView}" mbView="#{consultaPedidoAFornecedoresView}" var="pedidoAFornecedores" converter="pedidoAFornecedoresBVConverter" process="@this"  itemLabel="#{pedidoAFornecedores.id}" itemValue="#{pedidoAFornecedores}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog id="operacaoID" placeholder="#{l.Operacao}" readonly="true" value="#{consultaPedidoAFornecedoresView.e.operacao}" dialog="#{selecaoOperacaoNotaRecebidaView}" mbView="#{consultaPedidoAFornecedoresView}" var="operacao" itemLabel="#{operacao.nome}" itemValue="#{operacao}" converter="operacaoConverter" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}"/>
+                            <a:inputTextDialog id="pessoaID" placeholder="#{l.Fornecedor}" readonly="true" value="#{consultaPedidoAFornecedoresView.e.pessoa}" dialog="#{selecaoPessoaFornecedorView}" mbView="#{consultaPedidoAFornecedoresView}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" converter="pessoaConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox10"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-2">
+                            <p:outputLabel value="#{l.Emissao}"/>
+                            <p:calendar value="#{consultaPedidoAFornecedoresView.e.emissao}" readonly="true" pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel value="#{l.Previsao_De_Entrega}"/>
+                            <p:calendar value="#{consultaPedidoAFornecedoresView.e.previsaoDeEntrega}" readonly="true" pattern="dd/MM/yyyy"/>
+
+                            <p:outputLabel  value="#{l.Contato}"/>
+                            <p:inputText value="#{consultaPedidoAFornecedoresView.e.contato}" readonly="true" />
+
+                            <p:outputLabel  value="#{l.Observacao}"/>
+                            <p:inputTextarea autoResize="true" value="#{consultaPedidoAFornecedoresView.e.observacao}" readonly="true" rows="1"/>
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+                        <h4 style="font-size: 15px" >#{l.Pagamento}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <div class="ui-g-4"> 
+                            <a:inputTextDialog placeholder="#{l.Forma_De_Recebimento}" id="formaDeRecebimentoID" value="#{consultaPedidoAFornecedoresView.e.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{consultaPedidoAFornecedoresView}" var="forma" itemLabel="#{forma.nome}" itemValue="#{forma}" converter="formaDeRecebimentoConverter" itemLabelTabVisible="true" itemLabelTab="#{forma.nome}"/>
+                        </div>
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-2,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-2">
+                            <p:outputLabel  value="#{l.Desconto}"/>
+                            <p:inputNumber id="descontos" value="#{consultaPedidoAFornecedoresView.e.desconto}" readonly="true" maxValue="999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{consultaPedidoAFornecedoresView.e.moedaPadrao.sigla}">
+                                <p:ajax update="totalPedido" />
+                            </p:inputNumber> 
+
+                            <p:outputLabel  value="#{l.Acrecimo}"/>
+                            <p:inputNumber id="acrescimo" value="#{consultaPedidoAFornecedoresView.e.acrescimo}" readonly="true" maxValue="999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{consultaPedidoAFornecedoresView.e.moedaPadrao.sigla}">
+                                <p:ajax update="totalPedido" />
+                            </p:inputNumber> 
+
+                            <p:outputLabel  value="#{l.Frete}"/>
+                            <p:inputNumber id="frete" value="#{consultaPedidoAFornecedoresView.e.frete}" readonly="true" maxValue="999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{consultaPedidoAFornecedoresView.e.moedaPadrao.sigla}">
+                                <p:ajax update="totalPedido" />
+                            </p:inputNumber> 
+
+
+                            <p:outputLabel  value="#{l.Total_Em_Dinheiro}"/>
+                            <p:inputNumber id="totalDinheiro" value="#{consultaPedidoAFornecedoresView.e.totalEmDinheiro}" readonly="true" maxValue="999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{consultaPedidoAFornecedoresView.e.moedaPadrao.sigla}">
+                            </p:inputNumber> 
+
+
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+
+                        <p:tabView id="tabView">
+                            <!--  ================================================   -->
+                            <!--  ===================== ITENS =====================   -->
+                            <!--  ================================================   -->
+                            <p:tab title="#{l.Itens}">
+                                <div class="ui-g-12">  
+                                    <div class="EmptyBox20"/>
+                                    <div class="ui-g-2">
+                                        <p:commandButton value="#{l.Cancela_Item}" action="#{dialogoCancelaItemDePedidoView.abrirDialogo()}"  actionListener="#{consultaPedidoAFornecedoresView.addItemCancelado()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White">
+                                            <p:ajax event="dialogReturn" listener="#{consultaPedidoAFornecedoresView.selecionar}" process="@this" update="@none"/>
+                                        </p:commandButton>
+                                    </div>
+
+                                    <p:dataTable id="itensDePedido" var="model" value="#{consultaPedidoAFornecedoresView.listaDeItens}"
+                                                 styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" paginatorAlwaysVisible="false" rows="12" paginator="true" 
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:ajax event="rowSelect" listener="#{consultaPedidoAFornecedoresView.selecionaItem}" update="@this" />
+
+                                        <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                            <h:outputText value="#{model.id + 1}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Item}" styleClass="TexAlCenter">
+                                            <h:outputText value="#{model.object.item.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Valor}" styleClass="TexAlCenter">                                    
+                                            <h:outputText id="vencimentoParcelaFormatado" value="#{model.object.valorUnitario}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Quantidade}" styleClass="TexAlCenter">
+                                            <h:outputText id="dcpValorTxt" value="#{model.object.quantidade}"/>
+                                        </p:column>                                   
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="3" style="text-align:right" footerText="#{l.Totais}" />
+                                                <p:column id="totalParcelas" footerText="#{consultaPedidoAFornecedoresView.totalItens}"/>
+
+                                            </p:row>                                  
+                                        </p:columnGroup>
+                                    </p:dataTable>
+                                </div>
+                            </p:tab>
+
+                            <!--  ================================================   -->
+                            <!--  ===================== Parcelas =====================   -->
+                            <!--  ================================================   -->
+                            <p:tab title="#{l.Parcelas}">
+                                <div class="ui-g-12">  
+                                    <div class="EmptyBox20"/>
+                                    <p:dataTable id="parcelasDePedido" var="model" value="#{consultaPedidoAFornecedoresView.listaDeParcela}"
+                                                 styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" paginatorAlwaysVisible="false" rows="12" paginator="true" 
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                            <h:outputText value="#{model.id + 1}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Valor}" styleClass="TexAlCenter">
+                                            <h:outputText value="#{model.object.valor}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Vencimento}" styleClass="TexAlCenter">                                    
+                                            <h:outputText id="vencimentoParcelaFormatado" value="#{model.object.vencimento}"/>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column colspan="2" style="text-align:right" footerText="#{l.Totais}" />
+                                                <p:column id="totalParcelas" footerText="#{consultaPedidoAFornecedoresView.totalParcelas}"/>
+
+                                            </p:row>                                  
+                                        </p:columnGroup>
+
+                                    </p:dataTable>
+                                </div>
+                            </p:tab>
+                            <p:tab title="#{l.Itens_Cancelados}">
+                                <div class="ui-g-12">  
+                                    <div class="EmptyBox20"/>
+
+                                    <div class="ui-g-2"> 
+                                        <p:panelGrid columns="2" layout="grid" style="margin-top: -1.5%" styleClass="ui-panelgrid-blank form-group form-elements">
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{dialogoCancelaItemDePedidoView.abrirDialogo()}" actionListener="#{consultaPedidoAFornecedoresView.updateItemCancelado}" update="itensCanceladosDePedido" styleClass="green-btn">
+                                                <p:ajax event="dialogReturn" listener="#{consultaPedidoAFornecedoresView.selecionar}" process="@this" update="@none"/>
+                                            </p:commandButton>
+
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{consultaPedidoAFornecedoresView.removerItemCancelado}" update="itensCanceladosDePedido" styleClass="orange-btn" />
+                                        </p:panelGrid>
+                                    </div>
+                                    
+                                    <p:dataTable id="itensCanceladosDePedido" var="model" value="#{consultaPedidoAFornecedoresView.listaDeItensCancelados}"
+                                                 styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" paginatorAlwaysVisible="false" rows="12" paginator="true" 
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:ajax event="rowSelect" listener="#{consultaPedidoAFornecedoresView.selecionaItemCancelado}" update="@this" />
+
+                                        <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                            <h:outputText value="#{model.id + 1}" />
+                                        </p:column>
+                                        <p:column headerText="#{l.Item}" styleClass="TexAlCenter">
+                                            <h:outputText value="#{model.object.itemDePedido.item.nome}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Quantidade}" styleClass="TexAlCenter">
+                                            <h:outputText id="dcpValorTxt" value="#{model.object.quantidade}"/>
+                                        </p:column>                                   
+
+                                    </p:dataTable>
+                                </div>
+                            </p:tab>                            
+                        </p:tabView>
+
+
+
+                        <div class="ui-g-2">
+                            <p:outputLabel  value="#{l.Total_Pedido}"/>
+                            <p:inputNumber id="totalPedido" readonly="true" value="#{consultaPedidoAFornecedoresView.totalPedido}" maxValue="99999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."  symbol="#{consultaPedidoAFornecedoresView.e.moedaPadrao.sigla}"/>
+                        </div>
+
+                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                    </div>
+
+
+                    <div class="EmptyBox10"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Atualizar}" action="#{consultaPedidoAFornecedoresView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{consultaPedidoAFornecedoresView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </ui:define>
+
+</ui:composition>

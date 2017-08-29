@@ -12,7 +12,7 @@
     <ui:define name="content">      
 
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
-                     <div class="EmptyBox5"/>
+            <div class="EmptyBox5"/>
 
             <div class="ui-fluid">
 
@@ -53,9 +53,12 @@
                             <p:column headerText="#{l.Total}" sortBy="#{ItemDePedidoBV.totalFormatado}" style=" text-align: center">
                                 <h:outputText value="#{ItemDePedidoBV.totalFormatado}" />
                             </p:column>
+                            <p:column headerText="#{l.Cancelado}" style=" text-align: center">
+                                <h:outputText value="#{ItemDePedidoBV.getTotalItemCancelado()}" />
+                            </p:column> 
                             <p:column headerText="#{l.Faturado}" style=" text-align: center">
                                 <h:outputText value="#{ItemDePedidoBV.totalListaSaldoDeQuantidade}" />
-                            </p:column>
+                            </p:column>                            
                             <p:column headerText="#{l.A_Faturar}" style=" text-align: center">
                                 <h:outputText value="#{ItemDePedidoBV.totalListaDeQuantidade}" />
                             </p:column>
@@ -64,7 +67,7 @@
                             </p:column>                            
 
                             <p:column headerText="+" width="7%" style="text-align: center;">
-                                <p:commandLink id="attr-btn" action="#{dialogoPedidoAFornecedoresView.atribuiItemASessao(ItemDePedidoBV)}"><i class="fa fa-plus Fs10"/></p:commandLink>
+                                <p:commandLink id="attr-btn" action="#{dialogoPedidoAFornecedoresView.atribuiItemASessao(ItemDePedidoBV)}" disabled="#{ItemDePedidoBV.habilitaSelecaoDeDepoistos()}"><i class="fa fa-plus Fs10"/></p:commandLink>
 
                                 <p:commandButton id="exibeQuantidade-btn" action="#{quantidadeDeItemView.abrirDialogo}" process="@this" update="@none" style="display: none">
                                     <p:ajax event="dialogReturn" listener="#{dialogoPedidoAFornecedoresView.selecionar}" process="@this" update="@form"/>
@@ -75,7 +78,7 @@
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="1" footerText="#{dialogoPedidoAFornecedoresView.pedidoAFornecedores.itensDePedido.size() eq 0 ? '' : dialogoPedidoAFornecedoresView.pedidoAFornecedores.itensDePedido.size()}" />
-                                    <p:column colspan="8"/>
+                                    <p:column colspan="9"/>
                                     <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
                                     <p:column colspan="2" footerText="#{dialogoPedidoAFornecedoresView.pedidoAFornecedores.totalItensFormatado}"/>
                                     <p:column colspan="1"/>

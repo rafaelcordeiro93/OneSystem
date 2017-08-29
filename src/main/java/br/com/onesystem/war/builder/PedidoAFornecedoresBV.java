@@ -6,6 +6,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.ItemDePedido;
+import br.com.onesystem.domain.ItemDePedidoCancelado;
 import br.com.onesystem.domain.ParcelaDePedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.builder.PedidoAFornecedoresBuilder;
@@ -33,6 +34,7 @@ public class PedidoAFornecedoresBV implements Serializable, BuilderView<PedidoAF
     private EstadoDePedido estado;
     private Moeda moeda;
     private List<ItemDePedido> itens = new ArrayList<>();
+    private List<ItemDePedidoCancelado> itensCancelados = new ArrayList<>();
     private List<ParcelaDePedido> parcelaDePedido = new ArrayList<>();
     private BigDecimal desconto = BigDecimal.ZERO;
     private BigDecimal acrescimo = BigDecimal.ZERO;
@@ -50,7 +52,8 @@ public class PedidoAFornecedoresBV implements Serializable, BuilderView<PedidoAF
         this.estado = p.getEstado();
         this.moeda = p.getMoeda();
         this.itens = p.getItens();
-        this.contato = p .getContato();
+        this.itensCancelados = p.getItensCancelados();
+        this.contato = p.getContato();
         this.parcelaDePedido = p.getParcelaDePedido();
         this.desconto = p.getDesconto();
         this.acrescimo = p.getAcrescimo();
@@ -220,13 +223,21 @@ public class PedidoAFornecedoresBV implements Serializable, BuilderView<PedidoAF
         this.observacao = observacao;
     }
 
+    public List<ItemDePedidoCancelado> getItensCancelados() {
+        return itensCancelados;
+    }
+
+    public void setItensCancelados(List<ItemDePedidoCancelado> itensCancelados) {
+        this.itensCancelados = itensCancelados;
+    }
+
     public PedidoAFornecedores construir() throws DadoInvalidoException {
         return new PedidoAFornecedoresBuilder().comPessoa(pessoa).comOperacao(operacao)
                 .comFormaDeRecebimento(formaDeRecebimento).comPrevisaoDeEntrega(previsaoDeEntrega)
                 .comEmissao(emissao).comContato(contato).comEstado(estado).comMoedaPadrao(moeda)
                 .comItens(itens).comParcelasDePedidos(parcelaDePedido).comDesconto(desconto)
                 .comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca).comFrete(frete)
-                .comTotalEmDinheiro(totalEmDinheiro).comObservacao(observacao).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comObservacao(observacao).comItensCancelados(itensCancelados).construir();
     }
 
     public PedidoAFornecedores construirComID() throws DadoInvalidoException {
@@ -235,7 +246,7 @@ public class PedidoAFornecedoresBV implements Serializable, BuilderView<PedidoAF
                 .comEmissao(emissao).comContato(contato).comEstado(estado).comMoedaPadrao(moeda)
                 .comItens(itens).comParcelasDePedidos(parcelaDePedido).comDesconto(desconto)
                 .comAcrescimo(acrescimo).comDespesaCobranca(despesaCobranca).comFrete(frete)
-                .comTotalEmDinheiro(totalEmDinheiro).comObservacao(observacao).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comObservacao(observacao).comItensCancelados(itensCancelados).construir();
     }
 
 }

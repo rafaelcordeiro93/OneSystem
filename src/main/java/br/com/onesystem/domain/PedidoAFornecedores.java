@@ -36,55 +36,12 @@ public class PedidoAFornecedores extends Pedido implements Serializable {
     public PedidoAFornecedores(Long id, Pessoa pessoa, Operacao operacao, List<ItemDePedido> itens, String contato, EstadoDePedido estado,
             FormaDeRecebimento formaDeRecebimento, List<ParcelaDePedido> parcelaDePedido, Moeda moedaPadrao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
-            BigDecimal totalEmDinheiro, Date emissao, Date previsaoDeEntrega, String observacao) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, contato, estado, formaDeRecebimento, parcelaDePedido, moedaPadrao, desconto, acrescimo, despesaCobranca, frete, totalEmDinheiro, emissao, previsaoDeEntrega, observacao);
+            BigDecimal totalEmDinheiro, Date emissao, Date previsaoDeEntrega, String observacao, List<ItemDePedidoCancelado> itensCancelados) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, contato, estado, formaDeRecebimento, parcelaDePedido, moedaPadrao, desconto, acrescimo, despesaCobranca, frete, totalEmDinheiro, emissao, previsaoDeEntrega, observacao, itensCancelados);
     }
 
-       
-    public void adiciona(ItemDePedido item) {
-        if (itens == null) {
-            itens = new ArrayList<>();
-        }
-        item.setPedido(this);
-        itens.add(item);
-    }
-
-    public void atualiza(ItemDePedido item) {
-        if (itens.contains(item)) {
-            itens.set(itens.indexOf(item), item);
-        } else {
-            item.setPedido(this);
-            itens.add(item);
-        }
-    }
-
-    public void remove(ItemDePedido item) {
-        itens.remove(item);
-    }
-
-    public void adiciona(ParcelaDePedido parcela) {
-        if (parcelaDePedido == null) {
-            parcelaDePedido = new ArrayList<>();
-        }
-        parcela.setPedido(this);
-        parcelaDePedido.add(parcela);
-    }
-
-    public void atualiza(ParcelaDePedido parcela) {
-        if (parcelaDePedido.contains(parcela)) {
-            parcelaDePedido.set(parcelaDePedido.indexOf(parcela), parcela);
-        } else {
-            parcela.setPedido(this);
-            parcelaDePedido.add(parcela);
-        }
-    }
-
-    public void remove(ParcelaDePedido parcela) {
-        parcelaDePedido.remove(parcela);
-    }
-    
-     public void adiciona(NotaRecebida nota) {
-        if(this.notasrecebidas == null){
+    public void adiciona(NotaRecebida nota) {
+        if (this.notasrecebidas == null) {
             this.notasrecebidas = new ArrayList<>();
         }
         this.notasrecebidas.add(nota);
@@ -95,6 +52,9 @@ public class PedidoAFornecedores extends Pedido implements Serializable {
     }
 
     public List<NotaRecebida> getNotasrecebidas() {
+        if (this.notasrecebidas == null) {
+            return new ArrayList<>();
+        }
         return notasrecebidas;
     }
 

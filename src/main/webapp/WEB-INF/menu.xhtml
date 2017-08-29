@@ -13,6 +13,7 @@
             <pa:tab icon="fa fa-book" title="#{l.Arquivo}">
                 <pa:menu widgetVar="mat">
                     <p:menuitem value="#{l.Dashboard}" icon="fa fa-fw fa-home" outcome="/dashboard" />
+                    <p:menuitem value="#{l.Motivo}" icon="fa fa-user-o" outcome="/menu/arquivo/motivo" />   
                     <p:menuitem value="#{l.País}"  icon="fa fa-flag-o" outcome="/menu/arquivo/pais" />
                     <p:menuitem value="#{l.Estado}"  icon="fa fa-flag-checkered" outcome="/menu/arquivo/estado" />
                     <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/menu/arquivo/cidade" />
@@ -70,6 +71,7 @@
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaNotaRecebida" />
+                         <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaPedidoAFornecedores" />
                     </p:submenu>
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeNotasRecebidas" />

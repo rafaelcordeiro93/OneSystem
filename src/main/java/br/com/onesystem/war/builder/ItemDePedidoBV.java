@@ -5,8 +5,10 @@
  */
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.dao.ItemDePedidoCanceladoDAO;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDePedido;
+import br.com.onesystem.domain.ItemDePedidoCancelado;
 import br.com.onesystem.domain.Pedido;
 import br.com.onesystem.domain.builder.ItemDePedidoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -106,8 +108,30 @@ public class ItemDePedidoBV {
         }
     }
 
+    public BigDecimal getTotalItemCancelado() {
+        try {
+            ItemDePedidoCancelado i = new ItemDePedidoCanceladoDAO().porItemDePedido(this.construirComId()).resultado();
+            if (i != null) {
+                return i.getQuantidade();
+            } else {
+                return BigDecimal.ZERO;
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+            return BigDecimal.ZERO;
+        }
+    }
+
     public BigDecimal getTotalListaSaldoDeQuantidade() {
-        return getQuantidade().subtract(getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add));
+        return getQuantidade().subtract(getListaDeQuantidade().stream().map(q -> q.getSaldoDeEstoque().getSaldo()).reduce(BigDecimal.ZERO, BigDecimal::add)).negate();
+    }
+
+    public boolean habilitaSelecaoDeDepoistos() {
+        if (this.quantidade.compareTo(getTotalListaSaldoDeQuantidade().add(getTotalItemCancelado())) < 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public BigDecimal getTotalListaDeQuantidade() {

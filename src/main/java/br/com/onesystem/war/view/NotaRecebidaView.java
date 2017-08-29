@@ -59,7 +59,6 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -439,7 +438,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaRecebida.getFilial()).comParcela(i+1).construir());
+                                .comFilial(notaRecebida.getFilial()).comParcela(i + 1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -591,31 +590,36 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     }
 
     private void importaParcelasDe(PedidoAFornecedores pedidoAFornecedores) {
-        for (ParcelaDePedido p : pedidoAFornecedores.getParcelaDePedido()) {
-            cobrancaBV = new CobrancaBV();
-            cobrancaBV.setEmissao(pedidoAFornecedores.getEmissao());
-            cobrancaBV.setValor(p.getValor());
-            cobrancaBV.setVencimento(p.getVencimento());
-            cobrancaBV.setCotacao(new CotacaoDAO().porMoeda(pedidoAFornecedores.getMoeda()).naMaiorEmissao(pedidoAFornecedores.getEmissao()).resultado());
-            cobrancaBV.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
-            cobrancaBV.setTipoLancamento(TipoLancamento.RECEBIDA);
-            cobrancaBV.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);
-            cobrancaBV.setPessoa(pedidoAFornecedores.getPessoa());
-            cobrancaBV.setOperacaoFinanceira(pedidoAFornecedores.getOperacao().getOperacaoFinanceira());
-            cobrancaBV.setMoeda(pedidoAFornecedores.getMoeda());
-            cobrancas.add(cobrancaBV);
+        try {
+            for (ParcelaDePedido p : pedidoAFornecedores.getParcelaDePedido()) {
+                cobrancaBV = new CobrancaBV();
+                cobrancaBV.setEmissao(pedidoAFornecedores.getEmissao());
+                cobrancaBV.setValor(p.getValor());
+                cobrancaBV.setVencimento(p.getVencimento());
+                cobrancaBV.setCotacao(new CotacaoDAO().porMoeda(pedidoAFornecedores.getMoeda()).porCotacaoEmpresa().naUltimaEmissao(new Date()).resultado());
+                cobrancaBV.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
+                cobrancaBV.setTipoLancamento(TipoLancamento.RECEBIDA);
+                cobrancaBV.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);
+                cobrancaBV.setPessoa(pedidoAFornecedores.getPessoa());
+                cobrancaBV.setOperacaoFinanceira(pedidoAFornecedores.getOperacao().getOperacaoFinanceira());
+                cobrancaBV.setMoeda(pedidoAFornecedores.getMoeda());
+                cobrancaBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+                cobrancas.add(cobrancaBV);
+            }
+            notaRecebida.setPessoa(pedidoAFornecedores.getPessoa());
+            notaRecebida.setOperacao(pedidoAFornecedores.getOperacao());
+            notaRecebida.setPedidoAFornecedores(pedidoAFornecedores);
+            notaRecebida.setFormaDeRecebimento(pedidoAFornecedores.getFormaDeRecebimento());
+            notaRecebida.setAcrescimo(pedidoAFornecedores.getAcrescimo());
+            notaRecebida.setDesconto(pedidoAFornecedores.getDesconto());
+            notaRecebida.setDespesaCobranca(pedidoAFornecedores.getDespesaCobranca());
+            notaRecebida.setFrete(pedidoAFornecedores.getFrete());
+            notaRecebida.setTotalEmDinheiro(pedidoAFornecedores.getTotalEmDinheiro());
+            recalculaValores();
+            RequestContext.getCurrentInstance().update("conteudo");
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
-        notaRecebida.setPessoa(pedidoAFornecedores.getPessoa());
-        notaRecebida.setOperacao(pedidoAFornecedores.getOperacao());
-        notaRecebida.setPedidoAFornecedores(pedidoAFornecedores);
-        notaRecebida.setFormaDeRecebimento(pedidoAFornecedores.getFormaDeRecebimento());
-        notaRecebida.setAcrescimo(pedidoAFornecedores.getAcrescimo());
-        notaRecebida.setDesconto(pedidoAFornecedores.getDesconto());
-        notaRecebida.setDespesaCobranca(pedidoAFornecedores.getDespesaCobranca());
-        notaRecebida.setFrete(pedidoAFornecedores.getFrete());
-        notaRecebida.setTotalEmDinheiro(pedidoAFornecedores.getTotalEmDinheiro());
-        recalculaValores();
-        RequestContext.getCurrentInstance().update("conteudo");
     }
 
     private void importaItensDe(NotaRecebida nota) throws DadoInvalidoException {
