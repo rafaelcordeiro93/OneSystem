@@ -11,6 +11,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +38,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_RECEBIMENTO",
         sequenceName = "SEQ_RECEBIMENTO")
-public class Recebimento {
+public class Recebimento implements Serializable{
 
     @Id
     @GeneratedValue(generator = "SEQ_RECEBIMENTO", strategy = GenerationType.SEQUENCE)

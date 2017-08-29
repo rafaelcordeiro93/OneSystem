@@ -71,7 +71,7 @@
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaNotaRecebida" />
-                         <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaPedidoAFornecedores" />
+                        <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaPedidoAFornecedores" />
                     </p:submenu>
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeNotasRecebidas" />
@@ -86,15 +86,16 @@
 
             <pa:tab icon="fa fa-money" title="#{l.Financeiro}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Baixa}" icon="fa fa-retweet" outcome="/menu/financeiro/baixa" />
-                    <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/menu/financeiro/caixa" />
-                    <p:menuitem value="#{l.Cotacoes}" icon="fa fa-money" outcome="/menu/financeiro/cotacao" />
-                    <p:menuitem value="#{l.Extrato_Conta}" icon="fa fa-file-text-o" outcome="/menu/financeiro/extratoConta" />     
+                    <p:menuitem value="#{l.Extrato_Conta}" icon="fa fa-file-text-o" outcome="/menu/financeiro/extratoConta" styleClass="separator-menu-item" />     
+                    <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/menu/financeiro/pagamento" />  
+                    <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/menu/financeiro/recebimento" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Fatura_Emitida}" icon="fa fa-caret-square-o-right" outcome="/menu/financeiro/faturaEmitida" />
                     <p:menuitem value="#{l.Fatura_Recebida}" icon="fa fa-caret-square-o-left" outcome="/menu/financeiro/faturaRecebida" />
-                    <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-file-archive-o" outcome="/menu/financeiro/faturaLegada" />
-                    <p:menuitem value="#{l.Pagar_Valores}" icon="fa fa-mail-forward" outcome="/menu/financeiro/pagamento" />  
-                    <p:menuitem value="#{l.Receber_Valores}" icon="fa fa-mail-reply" outcome="/menu/financeiro/recebimento"/>
+                    <p:menuitem value="#{l.Fatura_Legada}" icon="fa fa-file-archive-o" outcome="/menu/financeiro/faturaLegada" styleClass="separator-menu-item" />
+                    <p:menuitem value="#{l.Baixa}" icon="fa fa-retweet" outcome="/menu/financeiro/baixa" />
+                    <p:menuitem value="#{l.Caixa}" icon="fa fa-briefcase" outcome="/menu/financeiro/caixa" />
+                    <p:menuitem value="#{l.Cotacoes}" icon="fa fa-money" outcome="/menu/financeiro/cotacao" styleClass="separator-menu-item" />
+
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
                         <p:menuitem value="#{l.Banco}" icon="fa fa-bank" outcome="/menu/financeiro/cadastros/banco" />
                         <p:menuitem value="#{l.Boleto_De_Cartao}" rendered="false" icon="fa fa-credit-card" outcome="/menu/financeiro/cadastros/boletoDeCartao" />
