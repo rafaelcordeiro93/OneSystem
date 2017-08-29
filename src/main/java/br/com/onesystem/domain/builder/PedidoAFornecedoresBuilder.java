@@ -10,6 +10,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.ItemDePedido;
+import br.com.onesystem.domain.ItemDePedidoCancelado;
 import br.com.onesystem.domain.ParcelaDePedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -35,6 +36,7 @@ public class PedidoAFornecedoresBuilder {
     private EstadoDePedido estado;
     private Moeda moedaPadrao;
     private List<ItemDePedido> itens;
+    private List<ItemDePedidoCancelado> itensCancelados;
     private List<ParcelaDePedido> parcelaDePedido;
     private BigDecimal desconto;
     private BigDecimal acrescimo = BigDecimal.ZERO;
@@ -58,20 +60,12 @@ public class PedidoAFornecedoresBuilder {
     }
 
     public PedidoAFornecedoresBuilder comItens(List<ItemDePedido> itens) throws DadoInvalidoException {
-//        if (id == null) {
-//            List<ItemDePedido> itensCol = itens.stream().collect(Collectors.toList());
-//            if (itensCol != null && !itensCol.isEmpty()) {
-//                for (ItemDePedido i : itensCol) {
-//                    itensCol.set(itensCol.indexOf(i), new ItemDePedidoBV(i).construir());
-//                }
-//            } else {
-//                throw new EDadoInvalidoException(new BundleUtil().getMessage("Itens_Devem_Ser_Informados"));
-//            }
-//            this.itens = itensCol;
-//        } else {
-//            this.itens = itens;
-//        }
         this.itens = itens;
+        return this;
+    }
+
+    public PedidoAFornecedoresBuilder comItensCancelados(List<ItemDePedidoCancelado> itensCancelados) throws DadoInvalidoException {
+        this.itensCancelados = itensCancelados;
         return this;
     }
 
@@ -142,7 +136,7 @@ public class PedidoAFornecedoresBuilder {
 
     public PedidoAFornecedores construir() throws DadoInvalidoException {
         return new PedidoAFornecedores(id, pessoa, operacao, itens, contato, estado, formaDeRecebimento, parcelaDePedido,
-                moedaPadrao, desconto, acrescimo, despesaCobranca, frete, totalEmDinheiro, emissao, previsaoDeEntrega, observacao);
+                moedaPadrao, desconto, acrescimo, despesaCobranca, frete, totalEmDinheiro, emissao, previsaoDeEntrega, observacao, itensCancelados);
     }
 
 }

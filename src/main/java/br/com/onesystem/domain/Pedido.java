@@ -13,6 +13,7 @@ import br.com.onesystem.valueobjects.EstadoDePedido;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -74,6 +75,8 @@ public abstract class Pedido implements Serializable {
     @OneToMany(mappedBy = "pedido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     protected List<ItemDePedido> itens;
     @OneToMany(mappedBy = "pedido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    protected List<ItemDePedidoCancelado> itensCancelados;
+    @OneToMany(mappedBy = "pedido", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     protected List<ParcelaDePedido> parcelaDePedido;
     @Min(value = 0, message = "{valorDesconto_min}")
     @Column(nullable = true)
@@ -95,7 +98,7 @@ public abstract class Pedido implements Serializable {
     public Pedido(Long id, Pessoa pessoa, Operacao operacao, List<ItemDePedido> itens, String contato, EstadoDePedido estado,
             FormaDeRecebimento formaDeRecebimento, List<ParcelaDePedido> parcelaDePedido, Moeda moeda, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete,
-            BigDecimal totalEmDinheiro, Date emissao, Date previsaoDeEntrega, String observacao) throws DadoInvalidoException {
+            BigDecimal totalEmDinheiro, Date emissao, Date previsaoDeEntrega, String observacao, List<ItemDePedidoCancelado> itensCancelados) throws DadoInvalidoException {
 
         this.id = id;
         this.emissao = emissao;
@@ -113,6 +116,7 @@ public abstract class Pedido implements Serializable {
         this.totalEmDinheiro = totalEmDinheiro;
         this.itens = itens;
         this.observacao = observacao;
+        this.itensCancelados = itensCancelados;
         if (estado == null) {
             this.estado = EstadoDePedido.EM_DEFINICAO;
         } else {
@@ -134,14 +138,74 @@ public abstract class Pedido implements Serializable {
             i.paraPedido(this);
         }
     }
-
+   
     public List<ItemDePedido> getItensDePedido() {
         itens.sort(Comparator.comparing(ItemDePedido::getId));
         return itens;
     }
+    
+     public void adiciona(ItemDePedido item) {
+        if (itens == null) {
+            itens = new ArrayList<>();
+        }
+        item.setPedido(this);
+        itens.add(item);
+    }
+
+    public void atualiza(ItemDePedido item) {
+        if (itens.contains(item)) {
+            itens.set(itens.indexOf(item), item);
+        } else {
+            item.setPedido(this);
+            itens.add(item);
+        }
+    }
+
+    public void remove(ItemDePedido item) {
+        itens.remove(item);
+    }
+
+   
+    public void atualiza(ItemDePedidoCancelado item) {
+        if (itensCancelados == null) {
+            itensCancelados = new ArrayList<>();
+        }
+        if (itensCancelados.contains(item)) {
+            itensCancelados.set(itensCancelados.indexOf(item), item);
+        } else {
+            item.paraPedido(this);
+            itensCancelados.add(item);
+        }
+    }
+
+    public void remove(ItemDePedidoCancelado item) {
+        itensCancelados.remove(item);
+    }
+
+    public void adiciona(ParcelaDePedido parcela) {
+        if (parcelaDePedido == null) {
+            parcelaDePedido = new ArrayList<>();
+        }
+        parcela.setPedido(this);
+        parcelaDePedido.add(parcela);
+    }
+
+    public void atualiza(ParcelaDePedido parcela) {
+        if (parcelaDePedido.contains(parcela)) {
+            parcelaDePedido.set(parcelaDePedido.indexOf(parcela), parcela);
+        } else {
+            parcela.setPedido(this);
+            parcelaDePedido.add(parcela);
+        }
+    }
+
+    public void remove(ParcelaDePedido parcela) {
+        parcelaDePedido.remove(parcela);
+    }
+
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "moedaPadrao");
+        List<String> campos = Arrays.asList("pessoa", "operacao", "moeda");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -183,6 +247,10 @@ public abstract class Pedido implements Serializable {
 
     public List<ItemDePedido> getItens() {
         return itens;
+    }
+
+    public List<ItemDePedidoCancelado> getItensCancelados() {
+        return itensCancelados;
     }
 
     public List<ParcelaDePedido> getParcelaDePedido() {

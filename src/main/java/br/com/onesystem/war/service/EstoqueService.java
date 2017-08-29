@@ -7,9 +7,12 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeComanda;
+import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ItemDePedido;
+import br.com.onesystem.domain.ItemDePedidoCancelado;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.valueobjects.OperacaoFisica;
@@ -157,16 +160,17 @@ public class EstoqueService implements Serializable {
 
         return saldoDeEstoque;
     }
-    
-     public List<SaldoDeEstoque> buscaListaDeSaldoDe(ItemDePedido item, PedidoAFornecedores pedido, TipoOperacao operacaoDesejada) throws DadoInvalidoException {
+
+    public List<SaldoDeEstoque> buscaListaDeSaldoDe(ItemDePedido item, PedidoAFornecedores pedido, TipoOperacao operacaoDesejada) throws DadoInvalidoException {
         ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
         ConfiguracaoEstoque conf = serv.buscar();
 
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), conf.getDepositoPadrao(), item.getQuantidade()));
 
-        if (pedido.getNotasrecebidas()!= null && !pedido.getNotasrecebidas().isEmpty()) {
-            List<Estoque> estoqueDaOperacao = new EstoqueDAO().porItem(item.getItem()).porContaDeEstoque(conf.getContaDeEstoqueEmpresa()).porNotasRecebidas(pedido.getNotasrecebidas()).porNaoCancelado().listaDeResultados();
+        if (pedido.getNotasrecebidas() != null && !pedido.getNotasrecebidas().isEmpty()) {
+            List<Estoque> estoqueDaOperacao = new EstoqueDAO().porItem(item.getItem()).porContaDeEstoque(conf.getContaDeEstoqueEmpresa())
+                    .porNotasRecebidas(pedido.getNotasrecebidas()).porNaoCancelado().listaDeResultados();
             geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
         }
 

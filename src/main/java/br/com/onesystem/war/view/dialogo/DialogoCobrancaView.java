@@ -232,6 +232,10 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
 
     private void removeDaSessao() throws FDadoInvalidoException {
         SessionUtil.remove("model", FacesContext.getCurrentInstance());
+        SessionUtil.remove("conhecimentoDeFrete", FacesContext.getCurrentInstance());
+        SessionUtil.remove("faturaLegada", FacesContext.getCurrentInstance());
+        SessionUtil.remove("faturaRecebida", FacesContext.getCurrentInstance());
+        SessionUtil.remove("faturaEmitida", FacesContext.getCurrentInstance());
     }
 
     @Override

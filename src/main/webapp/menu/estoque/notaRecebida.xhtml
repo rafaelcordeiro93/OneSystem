@@ -27,7 +27,7 @@
 
                         <p:spacer height="1px" width="100%"/>
 
-                        <p:commandButton id="importaPedidoAFornecedor-btn" action="#{selecaoPedidoAFornecedoresEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:commandButton id="importaPedidoAFornecedor-btn" action="#{selecaoPedidoAFornecedoresView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this"/>
                         </p:commandButton>
 

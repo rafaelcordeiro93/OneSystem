@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"                
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Cancelar}  #{l.Item}</ui:define>
+
+    <ui:define name="content">      
+
+        <div class="card" style="border: solid 1px; border-color: #C9D3DD">
+            <p:panelGrid columns="2"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-4,ui-g-8">
+                <p:outputLabel value="#{l.Item}:" />
+                <p:inputText value="#{dialogoCancelaItemDePedidoView.item.nome}" />
+
+                <p:outputLabel value="#{l.Data_Cancelamento}:" />
+                <p:calendar id="vencimentoParcela" pattern="dd/MM/yyyy" value="#{dialogoCancelaItemDePedidoView.e.dataCancelamento}" />
+
+                <p:outputLabel value="#{l.Motivo}:" />
+                <a:inputTextDialog id="pessoaID"  value="#{dialogoCancelaItemDePedidoView.e.motivo}" dialog="#{selecaoMotivoView}" mbView="#{dialogoCancelaItemDePedidoView}" var="motivo" itemLabel="#{motivo.nome}" itemValue="#{motivo}" converter="motivoConverter" itemLabelTabVisible="true" itemLabelTab="#{motivo.nome}"/>
+
+                <p:outputLabel value="#{l.Quantidade}:"/>
+                <p:inputNumber id="dcpValorInp" maxValue="999999999999" minValue="0" value="#{dialogoCancelaItemDePedidoView.e.quantidade}" decimalSeparator="" thousandSeparator="" />
+            </p:panelGrid>
+
+            <section>
+                <p:separator/>
+                <p:commandButton value="#{l.Salvar}" action="#{dialogoCancelaItemDePedidoView.salvar()}" update="msg"/>
+            </section>
+        </div>
+
+    </ui:define>
+</ui:composition>

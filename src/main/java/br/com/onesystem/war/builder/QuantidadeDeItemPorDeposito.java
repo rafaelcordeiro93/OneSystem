@@ -26,7 +26,7 @@ public class QuantidadeDeItemPorDeposito implements Serializable {
     public BigDecimal getQuantidade() {
         return quantidade;
     }
-
+   
     public void setQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
     }
@@ -34,5 +34,5 @@ public class QuantidadeDeItemPorDeposito implements Serializable {
     public Long getId() {
         return id;
     }
-
+    
 }
