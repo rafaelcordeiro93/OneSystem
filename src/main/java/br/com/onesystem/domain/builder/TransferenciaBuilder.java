@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
@@ -30,6 +31,7 @@ public class TransferenciaBuilder {
     private TipoLancamentoBancario tipoLancamentoBancario;
     private boolean estornado;
     private Long idRelacaoEstorno;
+    private Filial filial;
 
     public TransferenciaBuilder comId(Long id) {
         this.id = id;
@@ -81,8 +83,13 @@ public class TransferenciaBuilder {
         return this;
     }
 
+    public TransferenciaBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
+    
     public Transferencia construir() throws DadoInvalidoException {
-        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
+        return new Transferencia(id, origem, destino, valor, valorConvertido, baixas, emissao, tipoLancamentoBancario, estornado, idRelacaoEstorno, filial);
     }
 
 }

@@ -1,14 +1,20 @@
 package br.com.onesystem.util;
 
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoLayout;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
+import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -22,11 +28,11 @@ public class ImpressoraDeLayout {
     private String diretorio;
     private JasperPrint print;
     private Map<String, Object> parametros;
-    private TipoLayout tipoLayout;
+    private LayoutDeImpressao layoutDeImpressao;
     private final List<?> lista;
 
-    public ImpressoraDeLayout(List<?> lista, TipoLayout tipoLayout) {
-        this.tipoLayout = tipoLayout;
+    public ImpressoraDeLayout(List<?> lista, LayoutDeImpressao layoutDeImpressao) {
+        this.layoutDeImpressao = layoutDeImpressao;
         this.lista = lista;
         initDiretorio();
         initParametros();
@@ -52,11 +58,11 @@ public class ImpressoraDeLayout {
     public void exportarPDF() throws DadoInvalidoException {
         try {
             //Compila o relatorio
-            JasperReport report = JasperCompileManager.compileReport(diretorio + tipoLayout.getNome() + ".jrxml");
+            JasperReport report = JasperCompileManager.compileReport(diretorio + layoutDeImpressao.getLayoutGrafico() + ".jrxml");
             print = JasperFillManager.fillReport(report, parametros, new JRBeanCollectionDataSource(lista));
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-            response.addHeader("Content-disposition", "attachment; filename=" + tipoLayout.getNome() + ".pdf");
+            response.addHeader("Content-disposition", "attachment; filename=" + layoutDeImpressao.getTipoLayout().getNome() + ".pdf");
             ServletOutputStream stream = response.getOutputStream();
 
             JasperExportManager.exportReportToPdfStream(print, stream);
@@ -64,15 +70,17 @@ public class ImpressoraDeLayout {
             stream.flush();
             stream.close();
             FacesContext.getCurrentInstance().responseComplete();
-        } catch (Exception e) {
-            throw new EDadoInvalidoException("Erro ao exibir o relatório: " + e.getMessage());
+        } catch (JRException ex) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Layout_nao_definido_no_gerenciador_de_layouts"));
+        } catch (IOException ex) {
+            throw new FDadoInvalidoException(new BundleUtil().getMessage("Erro_Exibir_Relatorio") + ": (ImpressoraDeLayout - ExportarPDF)" + ex.getMessage(), "Error");
         }
     }
 
     public void visualizarPDF() throws DadoInvalidoException {
         try {
             //Compila o relatorio
-            JasperReport report = JasperCompileManager.compileReport(diretorio + tipoLayout.getNome() + ".jrxml");
+            JasperReport report = JasperCompileManager.compileReport(diretorio + layoutDeImpressao.getLayoutGrafico() + ".jrxml");
             byte[] bytes = JasperRunManager.runReportToPdf(report, parametros, new JRBeanCollectionDataSource(lista));
 
             HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -85,8 +93,11 @@ public class ImpressoraDeLayout {
             outStream.close();
 
             FacesContext.getCurrentInstance().responseComplete();
-        } catch (Exception e) {
-            throw new EDadoInvalidoException("Erro ao exibir o relatório: " + e.getMessage());
+        } catch (JRException ex) {
+            Logger.getLogger(ImpressoraDeLayout.class.getName()).log(Level.SEVERE, "Erro: " + ex.getMessage(), ex);
+            throw new EDadoInvalidoException("Error: " + ex.getMessage()); 
+        } catch (IOException ex) {
+            throw new FDadoInvalidoException(new BundleUtil().getMessage("Erro_Exibir_Relatorio") + ": (ImpressoraDeLayout - ExportarPDF)" + ex.getMessage(), "Error");
         }
     }
 

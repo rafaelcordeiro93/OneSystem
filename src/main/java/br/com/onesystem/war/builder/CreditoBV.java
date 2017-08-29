@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Credito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.CreditoBuilder;
@@ -28,6 +29,7 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
     private List<Baixa> baixas;
     private Cotacao cotacao;
     private Boolean entrada;
+    private Filial filial;
 
     public CreditoBV() {
     }
@@ -44,6 +46,7 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
         this.baixas = c.getBaixas();
         this.cotacao = c.getCotacao();
         this.entrada = c.getEntrada();
+        this.filial = c.getFilial();
     }
 
     public Long getId() {
@@ -134,16 +137,24 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
         this.entrada = entrada;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+
     public Credito construir() throws DadoInvalidoException {
         return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comValor(valor).comVencimento(vencimento).construir();
+                .comValor(valor).comVencimento(vencimento).comFilial(filial).construir();
     }
 
     public Credito construirComID() throws DadoInvalidoException {
         return new CreditoBuilder().comId(id).comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comValor(valor).comVencimento(vencimento).construir();
+                .comValor(valor).comVencimento(vencimento).comFilial(filial).construir();
     }
 
 }

@@ -15,6 +15,7 @@ import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.NotaRecebidaBuilder;
@@ -59,6 +60,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Caixa caixa;
     private Usuario usuario;
     private PedidoAFornecedores pedidoAFornecedores;
+    private Filial filial;
 
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
@@ -72,6 +74,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.estado = nota.getEstado();
         this.caixa = nota.getCaixa();
         this.moedaPadrao = nota.getMoedaPadrao();
+        this.filial = nota.getFilial();
     }
 
     public NotaRecebidaBV() {
@@ -384,6 +387,38 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     public void setPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
         this.pedidoAFornecedores = pedidoAFornecedores;
     }
+    
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
+    public void setValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+    }
+
+    public BigDecimal getaFaturar() {
+        return aFaturar;
+    }
+
+    public void setaFaturar(BigDecimal aFaturar) {
+        this.aFaturar = aFaturar;
+    }
+
+    public EstadoDeNota getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoDeNota estado) {
+        this.estado = estado;
+    }
+
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
 
     public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
@@ -391,7 +426,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
-                .comUsuairo(usuario).construir();
+                .comUsuairo(usuario).comFilial(filial).construir();
     }
 
     public NotaRecebida construirComID() throws DadoInvalidoException {
@@ -400,7 +435,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
-                .comUsuairo(usuario).construir();
+                .comUsuairo(usuario).comFilial(filial).construir();
     }
 
 }

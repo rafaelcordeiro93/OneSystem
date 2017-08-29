@@ -13,15 +13,22 @@ import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.ConfiguracaoVenda;
+import br.com.onesystem.domain.Filial;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.util.SessionUtil;
+import br.com.onesystem.valueobjects.TipoImpressao;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.CondicionalBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -34,6 +41,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 import org.hibernate.exception.ConstraintViolationException;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -50,6 +58,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     private Configuracao configuracao;
     private ConfiguracaoVenda configuracaoVenda;
     private Cotacao cotacao;
+    private LayoutDeImpressao layout;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -60,6 +69,9 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     @Inject
     private CotacaoService cotacaoService;
 
+    @Inject
+    private LayoutDeImpressaoService layoutService;
+
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
@@ -69,6 +81,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     private void iniciarConfiguracoes() {
         try {
+            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracao = configuracaoService.buscar();
             cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
@@ -78,12 +91,17 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     }
 
     public void limparJanela() {
-        e = new CondicionalBV();
-        e.setOperacao(configuracaoVenda.getOperacaoDeCondicional());
-        e.setCotacao(cotacao);
-        itemDeCondicional = new ItemDeCondicionalBV();
-        itensDeCondicionais = new ArrayList<>();
-        limpaSessao();
+        try {
+            e = new CondicionalBV();
+            e.setOperacao(configuracaoVenda.getOperacaoDeCondicional());
+            e.setCotacao(cotacao);
+            itemDeCondicional = new ItemDeCondicionalBV();
+            itensDeCondicionais = new ArrayList<>();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            limpaSessao();
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     private void limpaSessao() {
@@ -108,13 +126,29 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
             Condicional condicional = e.construirComID();
 
             addNoBanco(condicional);
-
+            t = condicional;
+            if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+            }
         } catch (DadoInvalidoException die) {
             die.printConsole();
             die.print();
         } catch (ConstraintViolationException cpe) {
             ErrorMessage.printConsole(cpe.toString());
             ErrorMessage.print(cpe.toString());
+        }
+    }
+
+    /**
+     * Imprime o layout da condicional.
+     *
+     */
+    public void imprimir() {
+        try {
+            new ImpressoraDeLayout(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
+            t = null; // libera memoria do objeto impresso.
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

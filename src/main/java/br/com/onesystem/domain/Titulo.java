@@ -5,6 +5,7 @@ import br.com.onesystem.valueobjects.TipoFormaPagRec;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
@@ -46,30 +47,22 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
     @ManyToOne
-    private FaturaLegada faturaLegada;
-
-    @ManyToOne
-    private FaturaEmitida faturaEmitida;
-
-    @ManyToOne
-    private FaturaRecebida faturaRecebida;
+    private Fatura fatura;
 
     public Titulo() {
     }
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, FaturaLegada faturaLegada,
-            FaturaEmitida faturaEmitida, FaturaRecebida faturaRecebida, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
+            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, Fatura fatura, 
+            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.recepcao = recepcao;
         this.cambio = cambio;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
-        this.faturaLegada = faturaLegada;
-        this.faturaEmitida = faturaEmitida;
-        this.faturaRecebida = faturaRecebida;
+        this.fatura = fatura;
         ehValido();
     }
 
@@ -78,16 +71,8 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         new ValidadorDeCampos<>().valida(this, camposTitulo);
     }
 
-    public void setFaturaLegada(FaturaLegada faturaLegada) {
-        this.faturaLegada = faturaLegada;
-    }
-
-    public void setFaturaEmitida(FaturaEmitida faturaEmitida) {
-        this.faturaEmitida = faturaEmitida;
-    }
-
-    public void setFaturaRecebida(FaturaRecebida faturaRecebida) {
-        this.faturaRecebida = faturaRecebida;
+    public void setFatura(Fatura fatura) {
+        this.fatura = fatura;
     }
 
     public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
@@ -148,20 +133,21 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
         return cambio;
     }
 
+    public String getValorFaturaOuNota() throws DadoInvalidoException {
+        return fatura == null ? getNota().getTotalFormatado(): fatura.getTotalFormatado();
+    }
+
+    @MetodoInacessivelRelatorio
+    public Long getIdFaturaOuNota() {
+        return fatura == null ? getNota().getId() : fatura.getId();
+    }
+
     public TipoFormaPagRec getTipoFormaPagRec() {
         return tipoFormaPagRec;
     }
 
-    public FaturaLegada getFaturaLegada() {
-        return faturaLegada;
-    }
-
-    public FaturaEmitida getFaturaEmitida() {
-        return faturaEmitida;
-    }
-
-    public FaturaRecebida getFaturaRecebida() {
-        return faturaRecebida;
+    public Fatura getFatura() {
+        return fatura;
     }
 
     public Long getIdOrigem() {

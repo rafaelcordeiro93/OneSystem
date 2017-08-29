@@ -9,6 +9,7 @@ import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
@@ -53,6 +54,7 @@ public class BaixaBV implements Serializable {
     private ValorPorCotacao valorPorCotacao;
     private TipoDeCobranca tipoDeCobranca;
     private Caixa caixa;
+    private Filial filial;
 
     public BaixaBV() {
     }
@@ -80,6 +82,7 @@ public class BaixaBV implements Serializable {
         this.depositoBancario = baixa.getDepositoBancario();
         this.tipoDeCobranca = baixa.getTipoDeCobranca();
         this.caixa = baixa.getCaixa();
+        this.filial = baixa.getFilial();
     }
 
     public void selecionaTitulo(Titulo titulo) {
@@ -91,6 +94,7 @@ public class BaixaBV implements Serializable {
         this.perfilDeValor = titulo;
         this.valor = titulo.getSaldo();
         this.cambio = titulo.getCambio();
+        this.filial = titulo.getFilial();
     }
 
     public void selecionaDespesaProvisionada(DespesaProvisionada despesaProvisionada) {
@@ -101,6 +105,7 @@ public class BaixaBV implements Serializable {
         this.movimentoFixo = despesaProvisionada;
         this.despesa = despesaProvisionada.getTipoDespesa();
         this.cambio = despesaProvisionada.getCambio();
+        this.filial = despesaProvisionada.getFilial();
     }
 
     public void selecionaReceitaProvisionada(ReceitaProvisionada receitaProvisionada) {
@@ -109,6 +114,7 @@ public class BaixaBV implements Serializable {
         this.emissao = receitaProvisionada.getEmissao();
         this.historico = receitaProvisionada.getHistorico();
         this.movimentoFixo = receitaProvisionada;
+        this.filial = receitaProvisionada.getFilial();
     }
 
     public Long getId() {
@@ -287,6 +293,14 @@ public class BaixaBV implements Serializable {
         this.tipoDeCobranca = tipoDeCobranca;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Caixa getCaixa() {
         return caixa;
     }
@@ -299,7 +313,8 @@ public class BaixaBV implements Serializable {
         return new BaixaBuilder().comCambio(cambio)
                 .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao).comTipoDeCobranca(tipoDeCobranca).comCaixa(caixa)
                 .comHistorico(historico).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor).comCobrancaFixa(movimentoFixo)
-                .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario).comValorPorCotacao(valorPorCotacao).construir();
+                .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario).comValorPorCotacao(valorPorCotacao)
+                .comFilial(filial).construir();
     }
 
     public Baixa construirComID() throws DadoInvalidoException {
@@ -309,7 +324,7 @@ public class BaixaBV implements Serializable {
                 .comOperacaoFinanceira(operacaoFinanceira).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
                 .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(perfilDeValor)
                 .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario)
-                .comValorPorCotacao(valorPorCotacao).construir();
+                .comFilial(filial).comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

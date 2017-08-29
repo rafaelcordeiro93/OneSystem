@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
@@ -31,6 +32,8 @@ public class TituloBV implements Serializable {
     private NotaEmitida notaEmitida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Cotacao cotacao;
+    private Filial filial;
+    private Integer parcela;
 
     public TituloBV(Titulo tituloSelecionado) {
         this.id = tituloSelecionado.getId();
@@ -45,11 +48,14 @@ public class TituloBV implements Serializable {
         this.cambio = tituloSelecionado.getCambio();
         this.tipoFormaPagRec = tituloSelecionado.getTipoFormaPagRec();
         this.cotacao = tituloSelecionado.getCotacao();
+        this.filial = tituloSelecionado.getFilial();
+        this.parcela = tituloSelecionado.getParcela();
     }
 
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo,
             Date vencimento, Date emissao, OperacaoFinanceira unidadeFinanceira,
-            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao) {
+            Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao, ConhecimentoDeFrete conhecimentoDeFrete,
+            Filial filial, Integer parcela) {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -63,6 +69,8 @@ public class TituloBV implements Serializable {
         this.tipoFormaPagRec = tipoFormaPagRec;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.cotacao = cotacao;
+        this.filial = filial;
+        this.parcela = parcela;
     }
 
     public TituloBV() {
@@ -180,12 +188,28 @@ public class TituloBV implements Serializable {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+
+    public Integer getParcela() {
+        return parcela;
+    }
+
+    public void setParcela(Integer parcela) {
+        this.parcela = parcela;
+    }
+
     public Titulo construir() throws DadoInvalidoException {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
 
     public Titulo construirComID() throws DadoInvalidoException {
@@ -193,6 +217,6 @@ public class TituloBV implements Serializable {
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
 }

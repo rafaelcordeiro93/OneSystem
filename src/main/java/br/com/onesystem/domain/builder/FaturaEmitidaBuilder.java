@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -25,6 +26,7 @@ public class FaturaEmitidaBuilder {
     private List<NotaEmitida> notaEmitida;
     private List<ValorPorCotacao> valorPorCotacao;
     private BigDecimal dinheiro;
+    private Filial filial;
 
     public FaturaEmitidaBuilder comID(Long ID) {
         this.id = ID;
@@ -70,9 +72,14 @@ public class FaturaEmitidaBuilder {
         this.dinheiro = dinheiro;
         return this;
     }
+    
+    public FaturaEmitidaBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public FaturaEmitida construir() throws DadoInvalidoException {
-        return new FaturaEmitida(id, codigo, total, emissao, pessoa, titulo, notaEmitida, valorPorCotacao, dinheiro);
+        return new FaturaEmitida(id, codigo, total, emissao, pessoa, titulo, notaEmitida, valorPorCotacao, dinheiro, filial);
     }
 
 }

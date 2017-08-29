@@ -65,8 +65,9 @@ public class Cheque extends Cobranca implements Serializable {
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Date compensacao) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, 
+            SituacaoDeCobranca situacaoDeCobranca, Date compensacao, Filial filial, Integer parcela) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
@@ -91,11 +92,11 @@ public class Cheque extends Cobranca implements Serializable {
     public void geraBaixaDeCheque() throws DadoInvalidoException {
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
         if (this.compensacao != null && this.tipoLancamento == TipoLancamento.EMITIDA) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
+            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
         } else if (this.tipoLancamento == TipoLancamento.EMITIDA) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
         } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
         }
     }
 

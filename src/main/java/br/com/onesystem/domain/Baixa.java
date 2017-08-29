@@ -126,6 +126,10 @@ public class Baixa implements Serializable, Movimento {
 
     @Enumerated(EnumType.STRING)
     private NaturezaFinanceira naturezaFinanceira;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne
+    private Filial filial;
 
     public Baixa() {
     }
@@ -134,14 +138,15 @@ public class Baixa implements Serializable, Movimento {
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
             Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
-            TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca,
-            Caixa caixa, DepositoBancario depositoBancario, SaqueBancario saqueBancario, LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, EstadoDeBaixa estado) throws DadoInvalidoException {
+            TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca, Caixa caixa, 
+            DepositoBancario depositoBancario, SaqueBancario saqueBancario, 
+            LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, 
+            EstadoDeBaixa estado, Filial filial) throws DadoInvalidoException {
         this.id = id;
         setEstado(estado);
         this.valor = valor;
         this.emissao = emissao;
         this.dataCompensacao = dataCompensacao;
-        this.dataCancelamento = dataCancelamento;
         this.historico = historico;
         this.pessoa = pessoa;
         this.operacaoFinanceira = tipoMovimentacaoFinanceira;
@@ -161,6 +166,7 @@ public class Baixa implements Serializable, Movimento {
         this.saqueBancario = saqueBancario;
         this.cambioEmpresa = cambioEmpresa;
         this.lancamentoBancario = lancamentoBancario;
+        this.filial = filial;
         if (receita != null) {
             naturezaFinanceira = NaturezaFinanceira.RECEITA;
         } else if (despesa != null) {
@@ -178,7 +184,7 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("cotacao", "historico");
+        List<String> campos = Arrays.asList("cotacao", "historico", "filial");
         new ValidadorDeCampos<Baixa>().valida(this, campos);
     }
 
@@ -470,6 +476,14 @@ public class Baixa implements Serializable, Movimento {
         return estado;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Date getDataCancelamento() {
         return dataCancelamento;
     }

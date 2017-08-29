@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ public class FaturaLegadaBuilder {
     private Date emissao;
     private Pessoa pessoa;
     private List<Titulo> titulo;
+    private Filial filial;
 
     public FaturaLegadaBuilder comID(Long ID) {
         this.id = ID;
@@ -51,9 +53,14 @@ public class FaturaLegadaBuilder {
         this.titulo = titulo;
         return this;
     }
+    
+    public FaturaLegadaBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public FaturaLegada construir() throws DadoInvalidoException {
-        return new FaturaLegada(id, codigo, total, emissao, pessoa, titulo);
+        return new FaturaLegada(id, codigo, total, emissao, pessoa, titulo, filial);
     }
 
 }

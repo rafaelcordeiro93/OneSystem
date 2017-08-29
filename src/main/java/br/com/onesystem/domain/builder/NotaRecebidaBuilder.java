@@ -18,6 +18,7 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.FaturaRecebida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Titulo;
@@ -60,6 +61,7 @@ public class NotaRecebidaBuilder {
     private Usuario usuario;
     private FaturaRecebida faturaRecebida;
     private ConhecimentoDeFrete conhecimentoDeFrete;
+    private Filial filial;
     private PedidoAFornecedores pedidoAFornecedores;
 
     public NotaRecebidaBuilder comId(Long id) {
@@ -195,7 +197,7 @@ public class NotaRecebidaBuilder {
         this.faturaRecebida = faturaRecebida;
         return this;
     }
-    
+
     public NotaRecebidaBuilder comConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
@@ -207,9 +209,14 @@ public class NotaRecebidaBuilder {
     }
     
 
+    public NotaRecebidaBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
-                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida, conhecimentoDeFrete, pedidoAFornecedores);
+                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida, conhecimentoDeFrete, filial, pedidoAFornecedores);
     }
 
 }

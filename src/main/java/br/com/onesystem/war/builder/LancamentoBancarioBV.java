@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -29,6 +30,7 @@ public class LancamentoBancarioBV implements BuilderView<LancamentoBancario>, Se
     private boolean estornado = false;
     private String observacao;
     private Long idRelacaoEstorno;
+    private Filial filial;
 
     public LancamentoBancarioBV() {
     }
@@ -45,6 +47,7 @@ public class LancamentoBancarioBV implements BuilderView<LancamentoBancario>, Se
         this.estornado = dp.isEstornado();
         this.observacao = dp.getObservacao();
         this.idRelacaoEstorno = dp.getIdRelacaoEstorno();
+        this.filial = filial;
     }
 
     public Long getId() {
@@ -143,16 +146,26 @@ public class LancamentoBancarioBV implements BuilderView<LancamentoBancario>, Se
         this.idRelacaoEstorno = idRelacaoEstorno;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     @Override
     public LancamentoBancario construir() throws DadoInvalidoException {
         return new LancamentoBancarioBuilder().comConta(conta).comValor(valor).comDespesa(despesa).comReceita(receita).comEmissao(emissao).comBaixas(baixas)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).
+                comFilial(filial).construir();
     }
 
     @Override
     public LancamentoBancario construirComID() throws DadoInvalidoException {
         return new LancamentoBancarioBuilder().comId(id).comConta(conta).comValor(valor).comDespesa(despesa).comReceita(receita).comEmissao(emissao).comBaixas(baixas)
-                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).construir();
+                .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).comObservacao(observacao).
+                comFilial(filial).construir();
     }
 
 }

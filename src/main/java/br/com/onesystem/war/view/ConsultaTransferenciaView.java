@@ -12,9 +12,11 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.TransferenciaDAO;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
@@ -61,9 +64,14 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
 
     @Override
     public void limparJanela() {
-        e = new TransferenciaBV();
-        transferenciaEstornada = new TransferenciaBV();
-        cotacaoBancariaLista = new ArrayList<>();
+        try {
+            e = new TransferenciaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            transferenciaEstornada = new TransferenciaBV();
+            cotacaoBancariaLista = new ArrayList<>();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     @Override

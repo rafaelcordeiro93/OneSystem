@@ -14,6 +14,7 @@ import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
@@ -26,7 +27,7 @@ import br.com.onesystem.domain.ParcelaDePedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
-import br.com.onesystem.domain.builder.ParcelaBuilder;
+import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -133,10 +134,12 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         }
     }
 
+    @Override
     public void limparJanela() {
         try {
             notaRecebida = new NotaRecebidaBV();
             notaRecebida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            notaRecebida.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             notaRecebida.setUsuario(new UsuarioLogadoUtil().getUsuario());
             notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaRecebida.setCotacao(cotacao);
@@ -149,6 +152,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             inicializaCotacoes();
             limparChequeEntrada();
             cobrancaBV = new CobrancaBV();
+            cobrancaBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -429,12 +433,13 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
-                        cobrancas.add(new ParcelaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
+                        cobrancas.add(new CobrancaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
                                 .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaRecebida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
-                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO).construir());
+                                .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
+                                .comFilial(notaRecebida.getFilial()).comParcela(i+1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

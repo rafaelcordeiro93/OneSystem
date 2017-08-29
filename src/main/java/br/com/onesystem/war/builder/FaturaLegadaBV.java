@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.FaturaLegadaBuilder;
@@ -27,6 +28,7 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
     private Date emissao = new Date();
     private Pessoa pessoa;
     private List<Titulo> titulo;
+    private Filial filial;
 
     public FaturaLegadaBV(FaturaLegada faturaLegadaSelecionada) {
         this.id = faturaLegadaSelecionada.getId();
@@ -35,7 +37,7 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
         this.emissao = faturaLegadaSelecionada.getEmissao();
         this.pessoa = faturaLegadaSelecionada.getPessoa();
         this.titulo = faturaLegadaSelecionada.getTitulo();
-
+        this.filial = faturaLegadaSelecionada.getFilial();
     }
 
     public FaturaLegadaBV() {
@@ -95,12 +97,24 @@ public class FaturaLegadaBV implements Serializable, BuilderView<FaturaLegada> {
         this.titulo = titulo;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public FaturaLegada construirComID() throws DadoInvalidoException {
-        return new FaturaLegadaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).construir();
+        return new FaturaLegadaBuilder().comID(id).comCodigo(codigo).comTotal(total).
+                comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo)
+                .comFilial(filial).construir();
     }
 
     public FaturaLegada construir() throws DadoInvalidoException {
-        return new FaturaLegadaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).construir();
+        return new FaturaLegadaBuilder().comCodigo(codigo).comTotal(total).
+                comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo)
+                .comFilial(filial).construir();
     }
 
 }

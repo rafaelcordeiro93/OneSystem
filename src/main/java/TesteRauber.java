@@ -3,14 +3,17 @@ import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.PrecoDeItemDAO;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.PrecoDeItem;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.util.ImpressoraDeLayoutConsole;
 import br.com.onesystem.valueobjects.TipoLayout;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -35,9 +38,12 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        String p = "Pessoa{id=1,";
+        Titulo titulo = new ArmazemDeRegistros<>(Titulo.class).find(new Long(5));
+        Titulo titulon = new ArmazemDeRegistros<>(Titulo.class).find(new Long(6));
         
-        System.out.println(p.substring(p.indexOf("=")+1,p.indexOf(",")));
+        LayoutDeImpressao layout = new LayoutDeImpressaoService().getLayoutPorTipoDeLayout(TipoLayout.TITULO);
+        
+        new ImpressoraDeLayoutConsole(Arrays.asList(titulo,titulon), layout).visualizar();
 
     }
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
@@ -23,8 +24,7 @@ import javax.persistence.SequenceGenerator;
  * @author Rafael
  */
 @Entity
-@SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_NOTAEMITIDA",
-        sequenceName = "SEQ_NOTAEMITIDA")
+@DiscriminatorValue("NOTA_EMITIDA")
 public class NotaEmitida extends Nota implements Serializable {
 
     @OneToOne(cascade = {CascadeType.ALL})
@@ -50,8 +50,8 @@ public class NotaEmitida extends Nota implements Serializable {
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
             Comanda comanda, Condicional condicional, Date emissao, Caixa caixa,
-            Usuario usuario, FaturaEmitida faturaEmitida) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario);
+            Usuario usuario, FaturaEmitida faturaEmitida, Filial filial) throws DadoInvalidoException {
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial);
         this.orcamento = orcamento;
         this.comanda = comanda;
         this.condicional = condicional;

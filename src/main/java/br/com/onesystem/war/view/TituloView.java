@@ -4,6 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cambio;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.Titulo;
@@ -13,6 +14,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.FatalMessage;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.TituloBV;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -159,11 +162,16 @@ public class TituloView implements Serializable {
     }
 
     public void limparJanela() {
+        try{
         titulo = new TituloBV();
+        titulo.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
         tituloSelecionado = new Titulo();
         intervaloDias = null;
         numeroParcelas = null;
         parcelas = new ArrayList<TituloBV>();
+        }catch(DadoInvalidoException die){
+            die.print();
+        }
     }
 
     public void abrirEdicao() {

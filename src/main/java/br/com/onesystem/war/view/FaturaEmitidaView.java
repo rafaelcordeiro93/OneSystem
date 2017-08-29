@@ -12,6 +12,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
@@ -138,7 +139,11 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            SessionUtil.put(e.construir(), "faturaEmitida", FacesContext.getCurrentInstance());
+            if (modeloSelecionado != null) {
+                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
+                SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
+            }
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
             die.print();
@@ -151,7 +156,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             valorBanco = new FaturaEmitidaDAO().porId(e.getId()).resultado().getDinheiro();
         }
         if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
-            SessionUtil.put(e.construir(), "faturaEmitida", FacesContext.getCurrentInstance());
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
         } else if (e.getId() == null) {
             add();
@@ -191,16 +196,16 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
 
     private void inicializaFaturaEmitida(Object obj) {
         limparJanela();
-        e = new FaturaEmitidaBV((FaturaEmitida) obj);
-        if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
-            notaEmitidaList = e.getNotaEmitida();
-        }
-        buscaPessoaNota();
-        if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
-            list = new ModelList<>(e.getTitulo());
-        }
         try {
-            SessionUtil.put(e.construirComID(), "faturaEmitida", FacesContext.getCurrentInstance());
+            e = new FaturaEmitidaBV((FaturaEmitida) obj);
+            if (e.getNotaEmitida().size() > 0 && e.getNotaEmitida() != null) {
+                notaEmitidaList = e.getNotaEmitida();
+            }
+            buscaPessoaNota();
+            if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
+                list = new ModelList<>(e.getTitulo());
+            }
+            SessionUtil.put(e.construirComID(), "fatura", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -271,8 +276,9 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
     public void limparJanela() {
         try {
             removeDaSessao();
-            SessionUtil.remove("faturaEmitida", FacesContext.getCurrentInstance());
+            SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             e = new FaturaEmitidaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
             notaEmitidaList = new ArrayList<>();

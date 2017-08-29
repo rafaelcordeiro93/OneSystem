@@ -1,6 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
@@ -28,6 +29,7 @@ public class ConhecimentoDeFreteBuilder {
     private List<Titulo> titulo;
     private List<ValorPorCotacao> valorPorCotacao;
     private List<NotaRecebida> notaRecebida;
+    private Filial filial;
 
     public ConhecimentoDeFreteBuilder comID(Long ID) {
         this.id = ID;
@@ -83,9 +85,14 @@ public class ConhecimentoDeFreteBuilder {
         this.titulo = titulo;
         return this;
     }
+    
+    public ConhecimentoDeFreteBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
 
     public ConhecimentoDeFrete construir() throws DadoInvalidoException {
-        return new ConhecimentoDeFrete(id, pessoa, operacao, valorFrete, outrasdespesas, dinheiro, data, emissao, titulo, notaRecebida, valorPorCotacao);
+        return new ConhecimentoDeFrete(id, pessoa, operacao, valorFrete, outrasdespesas, dinheiro, data, emissao, titulo, notaRecebida, valorPorCotacao, filial);
     }
 
 }

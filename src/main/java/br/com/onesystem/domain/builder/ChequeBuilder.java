@@ -4,6 +4,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -45,6 +46,8 @@ public class ChequeBuilder {
     private String historico;
     private SituacaoDeCobranca situacaoDeCobranca;
     private Date compensacao;
+    private Filial filial;
+    private Integer parcela;
 
     public ChequeBuilder comID(Long ID) {
         this.id = ID;
@@ -166,8 +169,18 @@ public class ChequeBuilder {
         return this;
     }
 
+    public ChequeBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
+    
+    public ChequeBuilder comParcela(Integer parcela){
+        this.parcela = parcela;
+        return this;
+    }
+    
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca, compensacao);
+        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca, compensacao, filial, parcela);
     }
 
 }

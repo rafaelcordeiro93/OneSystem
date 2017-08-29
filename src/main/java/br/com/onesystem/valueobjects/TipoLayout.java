@@ -14,7 +14,9 @@ import br.com.onesystem.util.BundleUtil;
 public enum TipoLayout {
     
     ORCAMENTO(new Long(1), "Orcamento"),
-    COMANDA(new Long(2), "Comanda");
+    COMANDA(new Long(2), "Comanda"),
+    CONDICIONAL(new Long(3), "Condicional"),
+    TITULO(new Long(4), "Titulo");
     
     private Long id;
     private String nome;

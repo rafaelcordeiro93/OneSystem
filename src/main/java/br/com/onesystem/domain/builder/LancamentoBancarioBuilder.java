@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -33,6 +34,7 @@ public class LancamentoBancarioBuilder {
     private TipoLancamentoBancario tipoLancamentoBancario;
     private boolean estornado;
     private Long idRelacaoEstorno;
+    private Filial filial;
 
     public LancamentoBancarioBuilder comId(Long id) {
         this.id = id;
@@ -88,9 +90,14 @@ public class LancamentoBancarioBuilder {
         this.idRelacaoEstorno = idEstorno;
         return this;
     }
+    
+    public LancamentoBancarioBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public LancamentoBancario construir() throws DadoInvalidoException {
-        return new LancamentoBancario(id, emissao, conta, valor, receita, despesa, baixas, observacao, tipoLancamentoBancario, estornado, idRelacaoEstorno);
+        return new LancamentoBancario(id, emissao, conta, valor, receita, despesa, baixas, observacao, tipoLancamentoBancario, estornado, idRelacaoEstorno, filial);
     }
 
 }

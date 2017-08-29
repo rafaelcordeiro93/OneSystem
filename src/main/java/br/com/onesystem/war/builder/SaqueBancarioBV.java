@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.domain.builder.SaqueBancarioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -23,6 +24,7 @@ public class SaqueBancarioBV implements BuilderView<SaqueBancario>, Serializable
     private BigDecimal valor;
     private BigDecimal valorConvertido;
     private List<Baixa> baixas;
+    private Filial filial;
 
     public SaqueBancarioBV() {
     }
@@ -35,6 +37,7 @@ public class SaqueBancarioBV implements BuilderView<SaqueBancario>, Serializable
         this.valorConvertido = dp.getValorConvertido();
         this.baixas = dp.getBaixas();
         this.emissao = dp.getEmissao();
+        this.filial = dp.getFilial();
     }
 
     public Long getId() {
@@ -109,15 +112,24 @@ public class SaqueBancarioBV implements BuilderView<SaqueBancario>, Serializable
         this.emissao = emissao;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public SaqueBancario construir() throws DadoInvalidoException {
-        return new SaqueBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor)
+        return new SaqueBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor).comFilial(filial)
                 .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).construir();
     }
 
     @Override
     public SaqueBancario construirComID() throws DadoInvalidoException {
         return new SaqueBancarioBuilder().comId(id).comDestino(destino).comOrigem(origem).
-                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas).construir();
+                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas)
+                .comFilial(filial).construir();
     }
 
 }

@@ -12,6 +12,10 @@
             <div class="ui-g-10" style="margin-left: 8%">
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
                     <h2 class="BigTopic">#{l.Consulta_De_Registro}</h2>
+                    <p:panelGrid columns="2" style="right: 12%; position: absolute" styleClass="ui-panelgrid-blank" columnClasses="NoPadding, NoPadding">
+                        <p:commandButton title="#{l.Imprimir}" value="#{l.Imprimir}" action="#{consultaCondicionalView.imprimir}" ajax="false" onclick="this.form.target = '_blank'" icon="fa fa-print" />
+                        <p:commandButton title="#{l.Ajuda}" value="#{l.Ajuda}" disabled="true" ajax="false" icon="fa fa-question" />
+                    </p:panelGrid>
                     <div class="EmptyBox20"/>
 
                     <div class="ui-fluid">
@@ -20,35 +24,35 @@
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Condicional}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cCondicional" value="#{consultaCondicionalView.condicional}" update=":conteudo" dialog="#{selecaoCondicionalView}" mbView="#{consultaCondicionalView}" var="condicional" converter="condicionalConverter" itemLabel="#{condicional.id}" itemValue="#{condicional}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cCondicional" value="#{consultaCondicionalView.t}" update=":conteudo" dialog="#{selecaoCondicionalView}" mbView="#{consultaCondicionalView}" var="condicional" converter="condicionalConverter" itemLabel="#{condicional.id}" itemValue="#{condicional}" editVisible="false" onlyNumber="true"/>
                             <p:commandButton value="#{l.Cancelar}" actionListener="#{consultaCondicionalView.cancela}" icon="fa fa-ban"
                                              styleClass="orange-btn" style="width: auto !important" update=":conteudo"
-                                             rendered="#{consultaCondicionalView.condicional.estado ne null ? (consultaCondicionalView.condicional.estado eq 'EFETIVADO' ? 'false':(consultaCondicionalView.condicional.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
+                                             rendered="#{consultaCondicionalView.t.estado ne null ? (consultaCondicionalView.t.estado eq 'EFETIVADO' ? 'false':(consultaCondicionalView.t.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
                         </div>
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  value="#{l.Estado}: "/>
-                            <p:outputLabel class="#{consultaCondicionalView.condicional.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
-                                                    consultaCondicionalView.condicional.estado eq 'EFETIVADO' ? 'label label-success' :
-                                                    consultaCondicionalView.condicional.estado eq 'CANCELADO' ? 'label label-warning' :
-                                                    ''}"> #{consultaCondicionalView.condicional.estado.nome}</p:outputLabel>
+                            <p:outputLabel class="#{consultaCondicionalView.t.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaCondicionalView.t.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaCondicionalView.t.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaCondicionalView.t.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaCondicionalView.condicional.pessoa.id} #{consultaCondicionalView.condicional.pessoa ne null ? '-' : ''}  #{consultaCondicionalView.condicional.pessoa.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaCondicionalView.t.pessoa.id} #{consultaCondicionalView.t.pessoa ne null ? '-' : ''}  #{consultaCondicionalView.t.pessoa.nome}"/>
                         </div>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaCondicionalView.condicional.listaDePreco.id} #{consultaCondicionalView.condicional.listaDePreco ne null ? '-' : ''}  #{consultaCondicionalView.condicional.listaDePreco.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaCondicionalView.t.listaDePreco.id} #{consultaCondicionalView.t.listaDePreco ne null ? '-' : ''}  #{consultaCondicionalView.t.listaDePreco.nome}"/>
                         </div>
 
                         <p:tabView style="border: 1px solid #d8d8d8;">
 
                             <p:tab id="item" title="#{l.Itens}">
 
-                                <p:dataTable id="itensDeCondicionalCondicional" var="itemDeCondicional" value="#{consultaCondicionalView.condicional.itensDeCondicional}" rowKey="#{itemDeCondicional.id}" 
+                                <p:dataTable id="itensDeCondicionalCondicional" var="itemDeCondicional" value="#{consultaCondicionalView.t.itensDeCondicional}" rowKey="#{itemDeCondicional.id}" 
                                              emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
 
                                     <f:facet name="header">
@@ -79,10 +83,10 @@
 
                                     <p:columnGroup type="footer">
                                         <p:row>
-                                            <p:column colspan="1" footerText="#{consultaCondicionalView.condicional.itensDeCondicional.size() eq 0 ? '' : consultaCondicionalView.condicional.itensDeCondicional.size()}" />
+                                            <p:column colspan="1" footerText="#{consultaCondicionalView.t.itensDeCondicional.size() eq 0 ? '' : consultaCondicionalView.t.itensDeCondicional.size()}" />
                                             <p:column colspan="6"/>
                                             <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
-                                            <p:column colspan="2" footerText="#{consultaCondicionalView.condicional.totalItensFormatado}"/>
+                                            <p:column colspan="2" footerText="#{consultaCondicionalView.t.totalItensFormatado}"/>
                                         </p:row>
                                     </p:columnGroup> 
 
@@ -94,25 +98,25 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.condicional.acrescimoFormatado}" />                             
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.t.acrescimoFormatado}" />                             
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Condicional}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.condicional.totalCondicionalFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.t.totalFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.condicional.descontoFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.t.descontoFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.condicional.despesaCobrancaFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.t.despesaCobrancaFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.condicional.freteFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaCondicionalView.t.freteFormatado}" />
                                 </div>                           
 
                                 <p:spacer width="1px"/>

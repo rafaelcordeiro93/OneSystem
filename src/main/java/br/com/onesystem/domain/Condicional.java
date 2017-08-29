@@ -14,6 +14,7 @@ import br.com.onesystem.valueobjects.EstadoDeCondicional;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -80,6 +81,9 @@ public class Condicional implements Serializable {
     @NotNull(message = "{operacao_not_null}")
     @ManyToOne
     private Operacao operacao;
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public Condicional() {
         this.estado = EstadoDeCondicional.EM_DEFINICAO;
@@ -90,7 +94,7 @@ public class Condicional implements Serializable {
     }
 
     public Condicional(Long id, Pessoa pessoa, ListaDePreco listaDePreco, Cotacao cotacao, List<ItemDeCondicional> itensDeCondicional, Operacao operacao,
-            String observacao, BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete) throws DadoInvalidoException {
+            String observacao, BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.pessoa = pessoa;
         this.listaDePreco = listaDePreco;
@@ -103,6 +107,7 @@ public class Condicional implements Serializable {
         this.acrescimo = acrescimo;
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
+        this.filial = filial;
         gera(itensDeCondicional);
         ehValido();
     }
@@ -119,7 +124,7 @@ public class Condicional implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete", "operacao");
+        List<String> campos = Arrays.asList("pessoa", "observacao", "cotacao", "desconto", "acrescimo", "despesaCobranca", "frete", "operacao", "filial");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -155,6 +160,10 @@ public class Condicional implements Serializable {
         }
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
     public String getFreteFormatado() {
         if (cotacao != null) {
             return MoedaFormatter.format(cotacao.getConta().getMoeda(), getFrete());
@@ -183,6 +192,11 @@ public class Condicional implements Serializable {
         return emissao;
     }
 
+    public String getEmissaoFormatada() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
+    }
+
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -204,7 +218,7 @@ public class Condicional implements Serializable {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
-    public String getTotalCondicionalFormatado() {
+    public String getTotalFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
     }
 

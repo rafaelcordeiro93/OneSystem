@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemOrcado;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
@@ -22,11 +23,13 @@ import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,12 +60,16 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
     private ItemOrcado itemOrcadoSelecionado;
     private Configuracao configuracao;
     private Cotacao cotacao;
+    private LayoutDeImpressao layout;
 
     @Inject
     private ConfiguracaoService configuracaoService;
 
     @Inject
     private CotacaoService service;
+
+    @Inject
+    private LayoutDeImpressaoService layoutService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -73,6 +80,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void iniciarConfiguracoes() {
         try {
+            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
             configuracao = configuracaoService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
@@ -104,7 +112,9 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
             addNoBanco(orcamento);
             t = orcamento; // adiciona o orcamento ao objeto para impressao.
-            RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+            if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+            }
         } catch (DadoInvalidoException die) {
             die.printConsole();
             die.print();
@@ -116,10 +126,11 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     /**
      * Imprime o layout do orçamento.
-     **/
+     *
+     */
     public void imprimir() {
         try {
-            new ImpressoraDeLayout(t.getItensOrcados(), TipoLayout.ORCAMENTO).addParametro("orcamento", t).visualizarPDF();
+            new ImpressoraDeLayout(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
             t = null; // libera memoria do objeto impresso.
         } catch (DadoInvalidoException die) {
             die.print();
@@ -316,6 +327,14 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
+    }
+
+    public LayoutDeImpressaoService getLayoutService() {
+        return layoutService;
+    }
+
+    public void setLayoutService(LayoutDeImpressaoService layoutService) {
+        this.layoutService = layoutService;
     }
 
 }

@@ -29,8 +29,8 @@ public class Credito extends Cobranca implements Serializable {
     }
 
     public Credito(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
-            BigDecimal valor, Date vencimento, Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca);
+            BigDecimal valor, Date vencimento, Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
+        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
     }
 
     @Override

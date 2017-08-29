@@ -5,8 +5,10 @@ import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.SaqueBancarioBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,8 +47,13 @@ public class DialogoSaqueBancarioView extends BasicMBImpl<SaqueBancario, SaqueBa
 
     @Override
     public void limparJanela() {
-        t = null;
-        e = new SaqueBancarioBV();
+        try {
+            t = null;
+            e = new SaqueBancarioBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     public void inicializar() {

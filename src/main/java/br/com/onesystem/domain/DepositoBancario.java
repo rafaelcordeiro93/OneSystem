@@ -90,12 +90,17 @@ public class DepositoBancario implements Serializable {
 
     @Column(nullable = true)
     private Long idRelacaoEstorno;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public DepositoBancario() {
     }
 
     public DepositoBancario(Long id, Date emissao, Date compensacao, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas,
-            List<Cheque> cheques, String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
+            List<Cheque> cheques, String observacao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno,
+            Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.emissao = emissao;
         this.compensacao = compensacao;
@@ -109,11 +114,12 @@ public class DepositoBancario implements Serializable {
         this.tipoLancamentoBancario = tipoLancamentoBancario;
         this.estornado = estornado;
         this.idRelacaoEstorno = idRelacaoEstorno;
+        this.filial = filial;
         ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("origem", "destino", "valor", "valorConvertido", "observacao");
+        List<String> campos = Arrays.asList("origem", "destino", "valor", "valorConvertido", "observacao", "filial");
         new ValidadorDeCampos<DepositoBancario>().valida(this, campos);
     }
 
@@ -121,11 +127,11 @@ public class DepositoBancario implements Serializable {
     public void geraBaixaDeDeposito(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
         Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
         if (this.compensacao != null) {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comCaixa(caixa).construir());//Baixas Compensadas
-            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comCaixa(caixa).construir());//Baixas Compensadas
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).construir());
         } else {
-            adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comCaixa(caixa).construir());//Baixas do Lançamento
-            adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comCaixa(caixa).construir());//Baixas do Lançamento
+            adiciona(new BaixaBuilder().comFilial(filial).comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).construir());
         }
     }
 
@@ -258,6 +264,10 @@ public class DepositoBancario implements Serializable {
 
     public Date getCompensacao() {
         return compensacao;
+    }
+
+    public Filial getFilial() {
+        return filial;
     }
 
     @Override

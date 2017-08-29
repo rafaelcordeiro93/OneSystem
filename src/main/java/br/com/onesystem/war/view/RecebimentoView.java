@@ -1,6 +1,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -48,7 +49,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             Recebimento recebimento = e.construirComID();
             tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f));
-            recebimento.ehValido();
+            recebimento.ehRegistroValido();
             recebimento.geraBaixas();
             addNoBanco(recebimento);
         } catch (DadoInvalidoException die) {
@@ -61,7 +62,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void limparJanela() {
         try {
             removeDaSessao();
-            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
+            e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
+                    (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();

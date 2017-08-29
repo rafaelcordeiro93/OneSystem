@@ -4,6 +4,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.FaturaEmitida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.builder.FaturaEmitidaBuilder;
@@ -32,6 +33,7 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     private List<NotaEmitida> notaEmitida = new ArrayList<>();
     private List<ValorPorCotacao> valorPorCotacao = new ArrayList<>();
     private BigDecimal dinheiro;
+    private Filial filial;
 
     public FaturaEmitidaBV(FaturaEmitida faturaEmitidaSelecionada) {
         this.id = faturaEmitidaSelecionada.getId();
@@ -43,6 +45,7 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
         this.notaEmitida = faturaEmitidaSelecionada.getNotaEmitida();
         this.valorPorCotacao = faturaEmitidaSelecionada.getValorPorCotacao();
         this.dinheiro = faturaEmitidaSelecionada.getDinheiro();
+        this.filial = faturaEmitidaSelecionada.getFilial();
     }
 
     public FaturaEmitidaBV() {
@@ -126,12 +129,24 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
         return cfg.getMoedaPadrao().getSigla();
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public FaturaEmitida construirComID() throws DadoInvalidoException {
-        return new FaturaEmitidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
+        return new FaturaEmitidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).
+                comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).
+                comDinheiro(dinheiro).comFilial(filial).construir();
     }
 
     public FaturaEmitida construir() throws DadoInvalidoException {
-        return new FaturaEmitidaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).comDinheiro(dinheiro).construir();
+        return new FaturaEmitidaBuilder().comCodigo(codigo).comTotal(total).comEmissao(emissao).
+                comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).
+                comDinheiro(dinheiro).comFilial(filial).construir();
     }
 
 }

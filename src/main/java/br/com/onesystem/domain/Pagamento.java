@@ -9,9 +9,11 @@ import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -27,6 +29,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import org.hibernate.Hibernate;
 import org.hibernate.validator.cdi.HibernateValidator;
 
@@ -61,14 +64,20 @@ public class Pagamento {
     @Enumerated(EnumType.STRING)
     private EstadoDeLancamento estado;
 
-    @ManyToOne
+    @NotNull(message = "{caixa_not_null}")
+    @ManyToOne(optional = false)
     private Caixa caixa;
+
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public Pagamento() {
     }
 
     public Pagamento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
-            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado, Caixa caixa) {
+            Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado, Caixa caixa,
+            Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
@@ -77,9 +86,16 @@ public class Pagamento {
         this.totalEmDinheiro = totalEmDinheiro;
         this.estado = estado;
         this.caixa = caixa;
+        this.filial = filial;
+        ehValido();
     }
 
-    public void ehValido() throws DadoInvalidoException {
+    private final void ehValido() throws DadoInvalidoException {
+        List<String> campos = Arrays.asList("caixa", "filial");
+        new ValidadorDeCampos<>().valida(this, campos);
+    }
+    
+    public void ehRegistroValido() throws DadoInvalidoException {
         if ((tipoDeCobranca == null || tipoDeCobranca.isEmpty()) && (formasDeCobranca == null || formasDeCobranca.isEmpty())) {
             throw new EDadoInvalidoException("Deve_possuir_recebimentos_informados");
         }
@@ -173,6 +189,10 @@ public class Pagamento {
 
     public List<FormaDeCobranca> getFormasDeCobranca() {
         return formasDeCobranca;
+    }
+
+    public Filial getFilial() {
+        return filial;
     }
 
     public Caixa getCaixa() {

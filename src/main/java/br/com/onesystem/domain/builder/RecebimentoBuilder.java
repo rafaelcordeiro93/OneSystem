@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -30,6 +31,7 @@ public class RecebimentoBuilder {
     private Date emissao;
     private EstadoDeLancamento estado;
     private Caixa caixa;
+    private Filial filial;
 
     public RecebimentoBuilder comId(Long id) {
         this.id = id;
@@ -70,9 +72,14 @@ public class RecebimentoBuilder {
         this.caixa = caixa;
         return this;
     }
+    
+    public RecebimentoBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
 
     public Recebimento construir() throws DadoInvalidoException {
-        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa);
+        return new Recebimento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa, filial);
     }
 
 }

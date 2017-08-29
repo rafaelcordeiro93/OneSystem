@@ -69,11 +69,18 @@ public class Transferencia implements Serializable {
 
     @Column(nullable = true)
     private Long idRelacaoEstorno;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public Transferencia() {
     }
 
-    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor, BigDecimal valorConvertido, List<Baixa> baixas, Date emissao, TipoLancamentoBancario tipoLancamentoBancario, boolean estornado, Long idRelacaoEstorno) throws DadoInvalidoException {
+    public Transferencia(Long id, Conta origem, Conta destino, BigDecimal valor,
+            BigDecimal valorConvertido, List<Baixa> baixas, Date emissao,
+            TipoLancamentoBancario tipoLancamentoBancario, boolean estornado,
+            Long idRelacaoEstorno, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.origem = origem;
         this.destino = destino;
@@ -84,19 +91,20 @@ public class Transferencia implements Serializable {
         this.tipoLancamentoBancario = tipoLancamentoBancario;
         this.estornado = estornado;
         this.idRelacaoEstorno = idRelacaoEstorno;
+        this.filial = filial;
         ehValido();
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraBaixaDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
     }
 
     /* Deve ser utilizado para gerar a baixa da transferência */
     public void geraEstornoDaTransferenciaCom(Cotacao origem, Cotacao destino) throws DadoInvalidoException {
-        adiciona(new BaixaBuilder().comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
-        adiciona(new BaixaBuilder().comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(origem).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
+        adiciona(new BaixaBuilder().comFilial(filial).comValor(valorConvertido).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(destino).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).construir());
     }
 
     public void setIdRelacaoEstorno(Transferencia transferencia) {
@@ -169,6 +177,10 @@ public class Transferencia implements Serializable {
         return valorConvertido;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     public Date getEmissao() {
         return emissao;
     }

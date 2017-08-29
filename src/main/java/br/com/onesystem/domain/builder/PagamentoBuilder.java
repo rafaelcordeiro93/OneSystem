@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -30,6 +31,7 @@ public class PagamentoBuilder {
     private Date emissao;
     private EstadoDeLancamento estado;
     private Caixa caixa;
+    private Filial filial;
 
     public PagamentoBuilder comId(Long id) {
         this.id = id;
@@ -70,9 +72,14 @@ public class PagamentoBuilder {
         this.caixa = caixa;
         return this;
     }
+    
+    public PagamentoBuilder comFilial(Filial filial){
+        this.filial = filial;
+        return this;
+    }
 
     public Pagamento construir() throws DadoInvalidoException {
-        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa);
+        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa, filial);
     }
 
 }

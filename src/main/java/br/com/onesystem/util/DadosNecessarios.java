@@ -13,6 +13,7 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Operacao;
@@ -207,6 +208,10 @@ public class DadosNecessarios implements Serializable {
             }
             default:
                 break;
+        }
+        // Filial obrigatória para todas as janelas.
+        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")) {
+            getFilial();
         }
         return pendencias;
     }
@@ -440,6 +445,22 @@ public class DadosNecessarios implements Serializable {
             }
         } catch (DadoInvalidoException | NullPointerException ex) {
             bv.getLista().add(b.getMessage("Caixa_Deve_Estar_Logado"));
+            pendencias.add(bv);
+            return null;
+        }
+    }
+
+    private Filial getFilial() {
+        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Filial"), "/menu/topbar/preferencias/filial.xhtml");
+        try {
+            Object object = SessionUtil.getObject("filial", FacesContext.getCurrentInstance());
+            if (object == null) {
+                throw new NullPointerException();
+            } else {
+                return (Filial) object;
+            }
+        } catch (DadoInvalidoException | NullPointerException ex) {
+            bv.getLista().add(b.getMessage("Filial_Deve_Estar_Logada"));
             pendencias.add(bv);
             return null;
         }

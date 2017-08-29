@@ -4,9 +4,11 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Fatura;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.FaturaRecebida;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
@@ -41,12 +43,12 @@ public class TituloBuilder {
     private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
     private Cotacao cotacao;
-    private FaturaLegada faturaLegada;
-    private FaturaEmitida faturaEmitida;
-    private FaturaRecebida faturaRecebida;
+    private Fatura fatura;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
+    private Filial filial;
+    private Integer parcela;
 
     public TituloBuilder comId(Long id) {
         this.id = id;
@@ -103,18 +105,8 @@ public class TituloBuilder {
         return this;
     }
 
-    public TituloBuilder comFaturaLegada(FaturaLegada faturaLegada) {
-        this.faturaLegada = faturaLegada;
-        return this;
-    }
-
-    public TituloBuilder comFaturaEmitida(FaturaEmitida faturaEmitida) {
-        this.faturaEmitida = faturaEmitida;
-        return this;
-    }
-
-    public TituloBuilder comFaturaRecebida(FaturaRecebida faturaRecebida) {
-        this.faturaRecebida = faturaRecebida;
+    public TituloBuilder comFatura(Fatura fatura) {
+        this.fatura = fatura;
         return this;
     }
 
@@ -148,10 +140,19 @@ public class TituloBuilder {
         return this;
     }
 
+    public TituloBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
+
+     public TituloBuilder comParcela(Integer parcela) {
+        this.parcela = parcela;
+        return this;
+    }
+    
     public Titulo construir() throws DadoInvalidoException {
-        return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira,
-                tipoFormaPagRec, vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete,
-                baixas, entrada, faturaLegada, faturaEmitida, faturaRecebida, situacaoDeCobranca);
+        return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira, tipoFormaPagRec,
+                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial, parcela);
     }
 
 }

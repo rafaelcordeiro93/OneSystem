@@ -10,10 +10,12 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.LancamentoBancarioDAO;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.LancamentoBancarioBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -48,9 +51,14 @@ public class ConsultaLancamentoBancarioView extends BasicMBImpl<LancamentoBancar
 
     @Override
     public void limparJanela() {
-        e = new LancamentoBancarioBV();
-        lancamentoEstonado = new LancamentoBancarioBV();
-        cotacaoBancariaLista = new ArrayList<>();
+        try {
+            e = new LancamentoBancarioBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            lancamentoEstonado = new LancamentoBancarioBV();
+            cotacaoBancariaLista = new ArrayList<>();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 
 /**
@@ -20,6 +21,7 @@ public class LayoutDeImpressaoBuilder {
     private String layoutGrafico;
     private String layoutTexto;
     private boolean layoutGraficoEhPadrao;
+    private TipoImpressao tipoImpressao;
 
     public LayoutDeImpressaoBuilder comId(Long id) {
         this.id = id;
@@ -46,8 +48,13 @@ public class LayoutDeImpressaoBuilder {
         return this;
     }
 
+    public LayoutDeImpressaoBuilder comTipoImpressao(TipoImpressao tipoImpressao){
+        this.tipoImpressao = tipoImpressao;
+        return this;
+    }
+    
     public LayoutDeImpressao construir() throws DadoInvalidoException {
-        return new LayoutDeImpressao(id, tipoLayout, layoutGrafico, layoutTexto, layoutGraficoEhPadrao);
+        return new LayoutDeImpressao(id, tipoLayout, layoutGrafico, layoutTexto, layoutGraficoEhPadrao, tipoImpressao);
     }
 
 }

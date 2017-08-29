@@ -9,6 +9,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.FaturaLegada;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -61,7 +62,11 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            SessionUtil.put(e.construir(), "faturaLegada", FacesContext.getCurrentInstance());
+            if (modeloSelecionado != null) {
+                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
+                SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
+            }
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
             die.print();
@@ -99,7 +104,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
                 if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
                     list = new ModelList<>(e.getTitulo());
                 }
-                SessionUtil.put(e.construirComID(), "faturaLegada", FacesContext.getCurrentInstance());
+                SessionUtil.put(e.construirComID(), "fatura", FacesContext.getCurrentInstance());
             } catch (DadoInvalidoException ex) {
                 ex.print();
             }
@@ -133,8 +138,9 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
     public void limparJanela() {
         try {
             removeDaSessao();
-            SessionUtil.remove("faturaLegada", FacesContext.getCurrentInstance());
+            SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             e = new FaturaLegadaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
         } catch (FDadoInvalidoException ex) {

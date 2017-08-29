@@ -107,12 +107,19 @@ public abstract class Cobranca implements Serializable {
     @Enumerated(EnumType.STRING)
     private SituacaoDeCobranca situacaoDeCobranca;
 
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
+    
+    @NotNull(message = "{parcela_not_null}")
+    private Integer parcela;
+
     public Cobranca() {
     }
 
     public Cobranca(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
             List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
-            Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca) throws DadoInvalidoException {
+            Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
         this.id = id;
         this.valor = valor;
         this.emissao = emissao == null ? new Date() : emissao;
@@ -124,6 +131,8 @@ public abstract class Cobranca implements Serializable {
         this.vencimento = vencimento;
         this.entrada = entrada;
         this.nota = nota;
+        this.filial = filial;
+        this.parcela = parcela;
         if (situacaoDeCobranca != null) {
             this.situacaoDeCobranca = situacaoDeCobranca;
         } else {
@@ -133,9 +142,9 @@ public abstract class Cobranca implements Serializable {
     }
 
     private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "pessoa");
+        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "filial", "pessoa");
         if (!(this instanceof Credito)) {
-            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "vencimento");
+            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "filial", "vencimento");
         }
         new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
@@ -201,6 +210,10 @@ public abstract class Cobranca implements Serializable {
         return pessoa;
     }
 
+    public Integer getParcela() {
+        return parcela;
+    }
+    
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -261,6 +274,10 @@ public abstract class Cobranca implements Serializable {
 
     public List<Baixa> getBaixas() {
         return baixas;
+    }
+
+    public Filial getFilial() {
+        return filial;
     }
 
     public boolean getPossuiPagamento() {

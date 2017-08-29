@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.builder.DepositoBancarioBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
@@ -31,6 +32,7 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
     private boolean estornado = false;
     private String observacao;
     private Long idRelacaoEstorno;
+    private Filial filial;
 
     public DepositoBancarioBV() {
     }
@@ -48,6 +50,7 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.observacao = dp.getObservacao();
         this.idRelacaoEstorno = dp.getIdRelacaoEstorno();
         this.compensacao = dp.getCompensacao();
+        this.filial = dp.getFilial();
     }
 
     public Long getId() {
@@ -170,16 +173,24 @@ public class DepositoBancarioBV implements BuilderView<DepositoBancario>, Serial
         this.compensacao = compensacao;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public DepositoBancario construir() throws DadoInvalidoException {
         return new DepositoBancarioBuilder().comDestino(destino).comOrigem(origem).comValor(valor).comCompensacao(compensacao)
-                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comCheques(cheques)
+                .comValorConvertido(valorConvertido).comBaixas(baixas).comEmissao(emissao).comCheques(cheques).comFilial(filial)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
 
     @Override
     public DepositoBancario construirComID() throws DadoInvalidoException {
         return new DepositoBancarioBuilder().comId(id).comDestino(destino).comOrigem(origem).comCheques(cheques).
-                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas).comCompensacao(compensacao)
+                comValor(valor).comValorConvertido(valorConvertido).comEmissao(emissao).comBaixas(baixas).comCompensacao(compensacao).comFilial(filial)
                 .comTipoLancamentoBancario(tipoLancamentoBancario).comEstornado(estornado).comIdRelacaoEstorno(idRelacaoEstorno).construir();
     }
 

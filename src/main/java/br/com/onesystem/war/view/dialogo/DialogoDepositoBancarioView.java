@@ -6,7 +6,9 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.DepositoBancarioBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
@@ -18,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -40,7 +43,6 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
     @PostConstruct
     public void init() {
         limparJanela();
-        inicializar();
     }
 
     @Override
@@ -48,17 +50,20 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
         t = null;
         e = new DepositoBancarioBV();
         e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
+        inicializar();
     }
 
     public void inicializar() {
         try {
             e.setEmissao(new Date());
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
             cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
             cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
             contaComCotacaoEmpresa = new ContaDAO().buscarContaW().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
             contaComCotacaoBancaria = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoBancariaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
