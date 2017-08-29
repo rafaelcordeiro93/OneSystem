@@ -13,10 +13,11 @@ import br.com.onesystem.util.BundleUtil;
  */
 public enum TipoLayout {
     
-    ORCAMENTO(new Long(1), "Orcamento"),
-    COMANDA(new Long(2), "Comanda"),
-    CONDICIONAL(new Long(3), "Condicional"),
-    TITULO(new Long(4), "Titulo");
+    ORCAMENTO(new Long(1), new BundleUtil().getLabel("Orcamento")),
+    COMANDA(new Long(2), new BundleUtil().getLabel("Comanda")),
+    CONDICIONAL(new Long(3), new BundleUtil().getLabel("Condicional")),
+    TITULO(new Long(4), new BundleUtil().getLabel("Titulo")),
+    NOTA_EMITIDA(new Long(5), new BundleUtil().getLabel("Nota_Emitida"));
     
     private Long id;
     private String nome;

@@ -111,7 +111,6 @@ public abstract class Cobranca implements Serializable {
     @ManyToOne(optional = false)
     private Filial filial;
     
-    @NotNull(message = "{parcela_not_null}")
     private Integer parcela;
 
     public Cobranca() {

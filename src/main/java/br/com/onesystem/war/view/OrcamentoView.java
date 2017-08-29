@@ -80,7 +80,6 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void iniciarConfiguracoes() {
         try {
-            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
             configuracao = configuracaoService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
@@ -112,6 +111,7 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
             addNoBanco(orcamento);
             t = orcamento; // adiciona o orcamento ao objeto para impressao.
+            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
                 RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
             }

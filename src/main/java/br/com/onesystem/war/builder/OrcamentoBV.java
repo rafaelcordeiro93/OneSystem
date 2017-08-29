@@ -81,7 +81,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     }
 
     public BigDecimal getTotalItens() {
-        if (itensOrcados == null) {
+        if (itensOrcados == null || itensOrcados.isEmpty()) {
             return BigDecimal.ZERO;
         } else {
             return itensOrcados.stream().map(ItemOrcado::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -223,7 +223,7 @@ public class OrcamentoBV implements Serializable, BuilderView<Orcamento> {
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
-    
+
     public Orcamento construir() throws DadoInvalidoException {
         return new OrcamentoBuilder().comCotacao(cotacao).comFormaDeRecebimento(formaDeRecebimento).
                 comHistorico(historico).comItensOrcados(itensOrcados).comListaDePreco(listaDePreco).comPessoa(pessoa).

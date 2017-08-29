@@ -9,6 +9,7 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
@@ -142,6 +143,10 @@ public class ValorPorCotacao implements Serializable {
 
     public BigDecimal getValor() {
         return valor;
+    }
+
+    public String getValorFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValor());
     }
 
     public Nota getNota() {

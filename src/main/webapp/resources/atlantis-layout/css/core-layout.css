@@ -200,6 +200,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 .PaddingTopDown3Px{padding: 3px 0px 3px 0px !important}
 .Padding-right-Px2{padding: 0px 2px 0px 0px !important}
 .PaddingTop2Px{padding-top: 2px !important}
+.PaddingTop6Px{padding-top: 6px !important}
 .PaddingBottom2Px{padding-bottom: 2px !important}
 .PaddingRight22px{padding-right: 22px !important}
 .PaddingRight42px{padding-right: 42px !important}
