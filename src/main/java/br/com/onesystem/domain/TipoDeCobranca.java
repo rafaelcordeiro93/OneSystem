@@ -103,7 +103,7 @@ public class TipoDeCobranca implements Serializable {
 
     public void geraBaixas() {
         try {
-            if (cobranca != null) {
+            if (cobranca instanceof CobrancaVariavel) {
                 GeradorDeBaixaDeTipoCobranca gerador = new GeradorDeBaixaDeTipoCobranca(this);
                 gerador.geraBaixas();
             } else {
