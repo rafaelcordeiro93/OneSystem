@@ -3,7 +3,7 @@ package br.com.onesystem.war.view.dialogo;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Fatura;
@@ -40,16 +40,16 @@ import org.primefaces.event.SelectEvent;
 
 @Named
 @ViewScoped
-public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
+public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaBV> implements Serializable {
 
     private boolean modalidade = true;
-    private Cobranca cobranca;
+    private CobrancaVariavel cobranca;
     private List<Cotacao> cotacaoLista;
     private Nota nota;
     private Fatura fatura;
     private ConhecimentoDeFrete conhecimentoDeFrete;
 
-    private Model<Cobranca> model;
+    private Model<CobrancaVariavel> model;
 
     @Inject
 
@@ -66,14 +66,14 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     }
 
     private void buscaDaSessao() throws DadoInvalidoException {
-        model = (Model<Cobranca>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
+        model = (Model<CobrancaVariavel>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         fatura = (Fatura) SessionUtil.getObject("fatura", FacesContext.getCurrentInstance());
         if(model == null){
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setParcela((Integer) SessionUtil.getObject("parcela", FacesContext.getCurrentInstance()));
         }
         if (model != null && fatura != null) {
-            cobranca = (Cobranca) model.getObject();
+            cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().naEmissao(fatura.getEmissao()).listaDeResultados();
             return;
@@ -91,7 +91,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         }
         conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", FacesContext.getCurrentInstance());
         if (model != null && conhecimentoDeFrete != null) {
-            cobranca = (Cobranca) model.getObject();
+            cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
             return;
@@ -108,7 +108,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
             return;
         }
         if (model != null) { //NOTA
-            cobranca = (Cobranca) model.getObject();
+            cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
             cotacaoLista = new CotacaoDAO().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
             return;
@@ -164,7 +164,7 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
     public void salvar() {
         try {
             removeDaSessao();
-            Cobranca c = constroi();
+            CobrancaVariavel c = constroi();
             if (model != null) {
                 model.setObject(c);
                 RequestContext.getCurrentInstance().closeDialog(model);
@@ -177,8 +177,8 @@ public class DialogoCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> imple
         }
     }
 
-    private Cobranca constroi() throws DadoInvalidoException {
-        Cobranca c = null;
+    private CobrancaVariavel constroi() throws DadoInvalidoException {
+        CobrancaVariavel c = null;
         e.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);
         switch (e.getModalidadeDeCobranca()) {
             case CARTAO:

@@ -109,7 +109,6 @@ public class ConfiguracaoContabilBV implements Serializable, BuilderView<Configu
 
     @Override
     public ConfiguracaoContabil construir() throws DadoInvalidoException {
-        System.out.println("Receita 1 " + receitaDeJuros);
         return new ConfiguracaoContabilBuilder().comReceitaDeDescontosObtidos(receitaDeDescontosObtidos).comReceitaDeJuros(receitaDeJuros).comReceitaDeMultas(receitaDeMultas)
                 .comReceitaDeVariacaoCambial(receitaDeVariacaoCambial).comDespesaDeDescontosConcedidos(despesaDeDescontosConcedidos)
                 .comDespesaDeJuros(despesaDeJuros).comDespesaDeMultas(despesaDeMultas).comDespesaDeVariacaoCambial(despesaDeVariacaoCambial)
@@ -118,7 +117,6 @@ public class ConfiguracaoContabilBV implements Serializable, BuilderView<Configu
 
     @Override
     public ConfiguracaoContabil construirComID() throws DadoInvalidoException {
-        System.out.println("Receita 1 " + receitaDeJuros);
         return new ConfiguracaoContabilBuilder().comId(id).comReceitaDeDescontosObtidos(receitaDeDescontosObtidos).comReceitaDeJuros(receitaDeJuros).comReceitaDeMultas(receitaDeMultas)
                 .comReceitaDeVariacaoCambial(receitaDeVariacaoCambial).comDespesaDeDescontosConcedidos(despesaDeDescontosConcedidos)
                 .comDespesaDeJuros(despesaDeJuros).comDespesaDeMultas(despesaDeMultas).comDespesaDeVariacaoCambial(despesaDeVariacaoCambial)

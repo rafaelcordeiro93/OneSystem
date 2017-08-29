@@ -61,7 +61,7 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, Form
     }
 
     public List<ModalidadeDeCobranca> getTipoFormaDeRecebimentoPadraoParcela() {
-        return Arrays.asList(ModalidadeDeCobranca.values());
+        return Arrays.asList(ModalidadeDeCobranca.CARTAO,ModalidadeDeCobranca.CHEQUE,ModalidadeDeCobranca.CREDITO, ModalidadeDeCobranca.TITULO);
     }
 
     public List<TipoPeriodicidade> getTipoPeriodicidade() {

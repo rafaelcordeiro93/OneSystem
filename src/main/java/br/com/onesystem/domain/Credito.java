@@ -23,7 +23,7 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorValue("CONTA_CORRENTE")
-public class Credito extends Cobranca implements Serializable {
+public class Credito extends CobrancaVariavel implements Serializable {
 
     public Credito() {
     }

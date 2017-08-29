@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.war.service.CobrancaService;
 import java.io.Serializable;
 import java.util.List;
@@ -20,15 +20,15 @@ import javax.faces.convert.FacesConverter;
  *
  * @author Rafael
  */
-@FacesConverter(value = "cobrancaConverter", forClass = Cobranca.class)
+@FacesConverter(value = "cobrancaConverter", forClass = CobrancaVariavel.class)
 public class CobrancaConverter implements Converter, Serializable {
 
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && !value.isEmpty()) {
             Object object = uic.getAttributes().get(value);
-            if (object instanceof Cobranca) {
-                return (Cobranca) object;
+            if (object instanceof CobrancaVariavel) {
+                return (CobrancaVariavel) object;
             }
         }
         return null;
@@ -37,9 +37,9 @@ public class CobrancaConverter implements Converter, Serializable {
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            if (object instanceof Cobranca) {
-                String id = String.valueOf(((Cobranca) object).getId());
-                uic.getAttributes().put(id, (Cobranca) object);
+            if (object instanceof CobrancaVariavel) {
+                String id = String.valueOf(((CobrancaVariavel) object).getId());
+                uic.getAttributes().put(id, (CobrancaVariavel) object);
                 return id;
             } else {
                 return object.toString();

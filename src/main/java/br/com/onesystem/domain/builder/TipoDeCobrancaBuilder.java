@@ -6,7 +6,6 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Cobranca;
-import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pagamento;
@@ -30,7 +29,6 @@ public class TipoDeCobrancaBuilder {
     private BigDecimal desconto;
     private String historico;
     private Cotacao cotacao;
-    private CobrancaFixa cobrancaFixa;
     private Conta conta;
     private Pagamento pagamento;
 
@@ -46,11 +44,6 @@ public class TipoDeCobrancaBuilder {
 
     public TipoDeCobrancaBuilder comPagamento(Pagamento pagamento) {
         this.pagamento = pagamento;
-        return this;
-    }
-
-    public TipoDeCobrancaBuilder comCobrancaFixa(CobrancaFixa cobrancaFixa) {
-        this.cobrancaFixa = cobrancaFixa;
         return this;
     }
 
@@ -95,7 +88,7 @@ public class TipoDeCobrancaBuilder {
     }
 
     public TipoDeCobranca construir() throws DadoInvalidoException {
-        return new TipoDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao, cobrancaFixa, conta, pagamento);
+        return new TipoDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao, conta, pagamento);
     }
 
 }

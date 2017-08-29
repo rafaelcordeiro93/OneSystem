@@ -43,11 +43,8 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        Cotacao resultado = new CotacaoService().getCotacaoPadrao(new Date());
-        
-        System.out.println( new CotacaoDAO().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).getConsulta());
-        
-        System.out.println("Resultado: " + resultado);
+        Item item = new ArmazemDeRegistros<>(Item.class).find(new Long(1));
+        System.out.println(item.getSaldo());
 
     }
 }

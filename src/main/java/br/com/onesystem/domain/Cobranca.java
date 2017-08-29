@@ -5,11 +5,12 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
+import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -18,9 +19,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -40,18 +41,14 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
-import br.com.onesystem.services.impl.FormatacaoNumeroRelatorio;
-import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
-import br.com.onesystem.valueobjects.SituacaoDeCobranca;
-import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 
 /**
  *
- * @author Rafael Fernando Rauber
+ * @author Rafael
  */
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@DiscriminatorColumn(name = "Cobranca_CLASSE_NOME")
+@DiscriminatorColumn(name = "COBRANCA_CLASSE_NOME")
 public abstract class Cobranca implements Serializable {
 
     @Id
@@ -84,25 +81,8 @@ public abstract class Cobranca implements Serializable {
     @OneToMany(mappedBy = "cobranca", cascade = {CascadeType.ALL})
     protected List<Baixa> baixas;
 
-    @NotNull(message = "{unidadeFinanceira_not_null}")
-    @Enumerated(EnumType.STRING)
-    protected OperacaoFinanceira operacaoFinanceira;
-
-    @NotNull(message = "{vencimento_not_null}")
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(nullable = true)
-    private Date vencimento;
-
-    @ManyToOne
-    private Nota nota;
-
     @OneToMany(mappedBy = "cobranca")
     private List<TipoDeCobranca> tiposDeCobranca;
-
-    @OneToMany(mappedBy = "cobranca")
-    private List<FormaDeCobranca> formasDeCobranca;
-
-    private Boolean entrada;
 
     @Enumerated(EnumType.STRING)
     private SituacaoDeCobranca situacaoDeCobranca;
@@ -110,42 +90,38 @@ public abstract class Cobranca implements Serializable {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne(optional = false)
     private Filial filial;
-    
-    private Integer parcela;
+
+    @NotNull(message = "{vencimento_not_null}")
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = true)
+    private Date vencimento;
+
+    @NotNull(message = "{unidadeFinanceira_not_null}")
+    @Enumerated(EnumType.STRING)
+    protected OperacaoFinanceira operacaoFinanceira;
 
     public Cobranca() {
     }
 
-    public Cobranca(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
-            Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
+    public Cobranca(Long id, BigDecimal valor, Date emissao, Pessoa pessoa,
+            Cotacao cotacao, String historico, List<Baixa> baixas,
+            SituacaoDeCobranca situacaoDeCobranca, Filial filial,
+            Date vencimento, OperacaoFinanceira operacaoFinanceira) {
         this.id = id;
         this.valor = valor;
-        this.emissao = emissao == null ? new Date() : emissao;
+        this.emissao = emissao == null ? new Date() : emissao;;
         this.pessoa = pessoa;
         this.cotacao = cotacao;
         this.historico = historico;
-        this.operacaoFinanceira = operacaoFinanceira;
         this.baixas = baixas;
-        this.vencimento = vencimento;
-        this.entrada = entrada;
-        this.nota = nota;
         this.filial = filial;
-        this.parcela = parcela;
+        this.vencimento = vencimento;
+        this.operacaoFinanceira = operacaoFinanceira;
         if (situacaoDeCobranca != null) {
             this.situacaoDeCobranca = situacaoDeCobranca;
         } else {
             atualizaSituacao();
         }
-        ehAbstracaoValida();
-    }
-
-    private final void ehAbstracaoValida() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "filial", "pessoa");
-        if (!(this instanceof Credito)) {
-            campos = Arrays.asList("valor", "emissao", "historico", "cotacao", "operacaoFinanceira", "filial", "vencimento");
-        }
-        new ValidadorDeCampos<Cobranca>().valida(this, campos);
     }
 
     public abstract ModalidadeDeCobranca getModalidade();
@@ -184,58 +160,51 @@ public abstract class Cobranca implements Serializable {
         }
     }
 
-    public Long getId() {
-        return id;
+    public OperacaoFinanceira getOperacaoFinanceira() {
+        return operacaoFinanceira;
     }
 
-    public SituacaoDeCobranca getSituacaoDeCobranca() {
-        return situacaoDeCobranca;
+    public List<Baixa> getBaixas() {
+        return baixas;
     }
 
-    @FormatacaoNumeroRelatorio(formatacaoNumero = TipoFormatacaoNumero.MOEDA)
-    public BigDecimal getValor() {
-        return valor;
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public boolean getPossuiPagamento() {
+        return baixas == null ? false : baixas.isEmpty() ? false : true;
+    }
+
+    @MetodoInacessivelRelatorio
+    public Double getValorDouble() {
+        return valor.doubleValue();
     }
 
     public String getValorFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), valor);
     }
 
-    public Date getEmissao() {
-        return emissao;
+    public String getEmissaoFormatada() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
     }
 
-    public Pessoa getPessoa() {
-        return pessoa;
+    public String getEmissaoFormatadaSemHoras() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
     }
 
-    public Integer getParcela() {
-        return parcela;
-    }
-    
-    public Cotacao getCotacao() {
-        return cotacao;
+    public SituacaoDeCobranca getSituacaoDeCobranca() {
+        return situacaoDeCobranca;
     }
 
-    public String getHistorico() {
-        return historico;
+    public List<TipoDeCobranca> getTiposDeCobranca() {
+        return tiposDeCobranca;
     }
 
     public Date getVencimento() {
         return vencimento;
-    }
-
-    public Nota getNota() {
-        return nota;
-    }
-
-    public void geraPara(Nota nota) {
-        this.nota = nota;
-        this.emissao = nota.getEmissao();
-    }
-
-    public Boolean getEntrada() {
-        return entrada;
     }
 
     public Long getDias() {
@@ -271,54 +240,52 @@ public abstract class Cobranca implements Serializable {
         return "";
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
+    public Date getEmissao() {
+        return emissao;
     }
 
-    public Filial getFilial() {
-        return filial;
+    public Long getId() {
+        return id;
     }
 
-    public boolean getPossuiPagamento() {
-        return baixas == null ? false : baixas.isEmpty() ? false : true;
+    public BigDecimal getValor() {
+        return valor;
     }
 
-    public List<FormaDeCobranca> getFormasDeCobranca() {
-        return formasDeCobranca;
+    public Pessoa getPessoa() {
+        return pessoa;
     }
 
-    public OperacaoFinanceira getOperacaoFinanceira() {
-        return operacaoFinanceira;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
-    public String getEmissaoFormatada() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public String getEmissaoFormatadaSemHoras() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
+    public String getHistorico() {
+        return historico;
     }
 
     @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
-            return false;
-        }
-        if (!(objeto instanceof Cobranca)) {
-            return false;
-        }
-        Cobranca outro = (Cobranca) objeto;
-        if (this.id == null) {
-            return false;
-        }
-        return this.id.equals(outro.id);
+    public int hashCode() {
+        int hash = 7;
+        return hash;
     }
 
     @Override
-    public String toString() {
-        return "Cobranca{" + "id=" + id + ", valor=" + valor + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cotacao=" + cotacao + ", historico=" + historico + ", baixas=" + baixas + ", operacaoFinanceira=" + operacaoFinanceira + ", vencimento=" + vencimento + ", nota=" + nota + ", entrada=" + entrada + '}';
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Cobranca other = (Cobranca) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 
 }

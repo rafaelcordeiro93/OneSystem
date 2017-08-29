@@ -129,7 +129,6 @@ public class LoginView implements Serializable {
     public String getminhaSession() {
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-        System.out.println("" + session.getValue("minds.nome.token").toString());
         return session.getValue("minds.nome.token").toString();
     }
 }

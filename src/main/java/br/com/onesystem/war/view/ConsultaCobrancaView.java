@@ -8,7 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -28,12 +28,12 @@ import org.primefaces.event.SelectEvent;
  */
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
-public class ConsultaCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> implements Serializable {
+public class ConsultaCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaBV> implements Serializable {
 
     @Inject
     private BundleUtil msg;
 
-    private Cobranca cobranca;
+    private CobrancaVariavel cobranca;
 
     public void update() {
         try {
@@ -72,17 +72,17 @@ public class ConsultaCobrancaView extends BasicMBImpl<Cobranca, CobrancaBV> impl
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
-        if (obj instanceof Cobranca) {
-            cobranca = (Cobranca) obj;
+        if (obj instanceof CobrancaVariavel) {
+            cobranca = (CobrancaVariavel) obj;
             e = new CobrancaBV(cobranca);
         }
     }
 
-    public Cobranca getCobranca() {
+    public CobrancaVariavel getCobranca() {
         return cobranca;
     }
 
-    public void setCobranca(Cobranca cobranca) {
+    public void setCobranca(CobrancaVariavel cobranca) {
         this.cobranca = cobranca;
     }
 

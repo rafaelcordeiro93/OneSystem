@@ -7,7 +7,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
@@ -150,7 +150,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public String getTotalParcelas() throws EDadoInvalidoException {
         if (list != null) {
-            BigDecimal valor = list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal valor = list.getList().stream().map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
             //return MoedaFomatter.format(nota.getMoedaPadrao(), valor);
             return e.getMoedaPadrao() + valor.toString();
         }

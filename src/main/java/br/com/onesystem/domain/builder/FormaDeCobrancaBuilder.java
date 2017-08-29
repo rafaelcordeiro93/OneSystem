@@ -6,7 +6,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Caixa;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 public class FormaDeCobrancaBuilder {
 
     private Long id;
-    private Cobranca cobranca;
+    private CobrancaVariavel cobranca;
     private Recebimento recebimento;
     private Pagamento pagamento;
     private BigDecimal valor;
@@ -39,7 +39,7 @@ public class FormaDeCobrancaBuilder {
         return this;
     }
 
-    public FormaDeCobrancaBuilder comCobranca(Cobranca cobranca) {
+    public FormaDeCobrancaBuilder comCobranca(CobrancaVariavel cobranca) {
         this.cobranca = cobranca;
         return this;
     }

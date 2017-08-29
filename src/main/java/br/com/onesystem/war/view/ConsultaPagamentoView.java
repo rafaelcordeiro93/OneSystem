@@ -1,6 +1,8 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.CobrancaFixa;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
@@ -15,7 +17,6 @@ import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.PagamentoBV;
@@ -132,9 +133,9 @@ public class ConsultaPagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> i
                 TipoDeCobranca tipo = (TipoDeCobranca) obj;
                 boolean possuiCobranca = false;
                 if (tipo.getCobranca() != null) {
-                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null && tp.getCobranca() instanceof CobrancaVariavel).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
                 } else {
-                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobrancaFixa() != null).filter(tp -> tp.getCobrancaFixa().getId() != null).map(TipoDeCobranca::getCobrancaFixa).anyMatch(co -> co.getId().equals(tipo.getCobrancaFixa().getId()));
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null && tp.getCobranca() instanceof CobrancaFixa).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
                 }
                 if (!possuiCobranca) {
                     tiposDeCobranca.add(tipo);
@@ -190,13 +191,13 @@ public class ConsultaPagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> i
 
     public void abreReceitaProvisionada() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
-        SessionUtil.put(ModalidadeDeCobrancaFixa.RECEITA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.RECEITA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
 
     public void abreReceitaEventual() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
-        SessionUtil.put(ModalidadeDeCobrancaFixa.RECEITA_EVENTUAL, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.RECEITA_EVENTUAL, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
 

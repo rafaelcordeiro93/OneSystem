@@ -45,7 +45,7 @@ public class FormaDeCobranca implements Serializable {
     private Long id;
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private Cobranca cobranca;
+    private CobrancaVariavel cobrancaVariavel;
 
     @ManyToOne
     private Recebimento recebimento;
@@ -90,11 +90,11 @@ public class FormaDeCobranca implements Serializable {
     public FormaDeCobranca() {
     }
 
-    public FormaDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
+    public FormaDeCobranca(Long id, CobrancaVariavel cobrancaVariavel, Recebimento recebimento, BigDecimal valor,
             BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento, Caixa caixa,
             OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
-        this.cobranca = cobranca;
+        this.cobrancaVariavel = cobrancaVariavel;
         this.recebimento = recebimento;
         this.valor = valor;
         this.juros = juros;
@@ -131,7 +131,7 @@ public class FormaDeCobranca implements Serializable {
 
     public void geraBaixas() {
         try {
-            if (cobranca != null) {
+            if (cobrancaVariavel != null) {
                 GeradorDeBaixaDeFormaCobranca gerador = new GeradorDeBaixaDeFormaCobranca(this);
                 gerador.geraBaixas();
             }
@@ -148,8 +148,8 @@ public class FormaDeCobranca implements Serializable {
         return id;
     }
 
-    public Cobranca getCobranca() {
-        return cobranca;
+    public CobrancaVariavel getCobranca() {
+        return cobrancaVariavel;
     }
 
     public Recebimento getRecebimento() {
@@ -220,12 +220,12 @@ public class FormaDeCobranca implements Serializable {
     }
 
     public String getTipoDocumento() {
-        if (cobranca != null) {
-            if (cobranca instanceof Titulo) {
+        if (cobrancaVariavel != null) {
+            if (cobrancaVariavel instanceof Titulo) {
                 return new BundleUtil().getLabel("Titulo");
-            } else if (cobranca instanceof Cheque) {
+            } else if (cobrancaVariavel instanceof Cheque) {
                 return new BundleUtil().getLabel("Cheque");
-            } else if (cobranca instanceof BoletoDeCartao) {
+            } else if (cobrancaVariavel instanceof BoletoDeCartao) {
                 return new BundleUtil().getLabel("Boleto_De_Cartao");
             } else {
                 return new BundleUtil().getLabel("Credito");

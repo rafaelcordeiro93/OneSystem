@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("CHEQUE")
-public class Cheque extends Cobranca implements Serializable {
+public class Cheque extends CobrancaVariavel implements Serializable {
 
     @NotNull(message = "{banco_not_null}")
     @ManyToOne

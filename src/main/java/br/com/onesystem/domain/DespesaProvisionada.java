@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
@@ -42,6 +43,11 @@ public class DespesaProvisionada extends CobrancaFixa implements RelatorioContaA
 
     public Cambio getCambio() {
         return cambio;
+    }
+    
+    @Override
+    public ModalidadeDeCobranca getModalidade(){
+        return ModalidadeDeCobranca.DESPESA_PROVISIONADA;
     }
 
     public Moeda getMoeda() {

@@ -15,7 +15,7 @@ import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Credito;
 import br.com.onesystem.domain.Fatura;
 import br.com.onesystem.domain.FaturaEmitida;
@@ -180,7 +180,7 @@ public class CobrancaBV implements Serializable {
         this.parcela = parcela;
     }
 
-    public CobrancaBV(Cobranca p) {
+    public CobrancaBV(CobrancaVariavel p) {
 
         this.id = p.getId();
         this.valor = p.getValor();

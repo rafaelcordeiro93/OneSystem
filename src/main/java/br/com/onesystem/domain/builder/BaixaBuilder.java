@@ -9,10 +9,11 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.CambioEmpresa;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.TipoDespesa;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -53,7 +54,6 @@ public class BaixaBuilder {
     private Transferencia transferencia;
     private Recepcao recepcao;
     private EstadoDeBaixa estado;
-    private CobrancaFixa cobrancaFixa;
     private ValorPorCotacao valorPorCotacao;
     private TipoDeCobranca tipoDeCobranca;
     private Caixa caixa;
@@ -83,7 +83,7 @@ public class BaixaBuilder {
         this.cambio = baixa.getCambio();
         this.transferencia = baixa.getTransferencia();
         this.recepcao = baixa.getRecepcao();
-        this.cobrancaFixa = baixa.getCobrancaFixa();
+        this.cobranca = baixa.getCobranca();
         this.valorPorCotacao = baixa.getValorPorCotacao();
         this.tipoDeCobranca = baixa.getTipoDeCobranca();
         this.caixa = baixa.getCaixa();
@@ -176,11 +176,6 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comCobrancaFixa(CobrancaFixa cobrancaFixa) {
-        this.cobrancaFixa = cobrancaFixa;
-        return this;
-    }
-
     public BaixaBuilder comValorPorCotacao(ValorPorCotacao valorPorCotacao) {
         this.valorPorCotacao = valorPorCotacao;
         return this;
@@ -218,7 +213,7 @@ public class BaixaBuilder {
 
     public Baixa construir() throws DadoInvalidoException {
         return new Baixa(id, valor, emissao, dataCompensacao, historico, operacaoFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
-                recepcao, cobranca, cobrancaFixa, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial);
+                recepcao, cobranca, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial);
     }
 
 }

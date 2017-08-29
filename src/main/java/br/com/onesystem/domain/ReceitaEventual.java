@@ -2,6 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
+import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
@@ -55,6 +56,11 @@ public class ReceitaEventual extends CobrancaFixa implements RelatorioContaAbert
     @Override
     public String getDetalhes() {
         return getTipoReceita().getNome();
+    }
+
+    @Override
+    public ModalidadeDeCobranca getModalidade() {
+        return ModalidadeDeCobranca.RECEITA_EVENTUAL;
     }
 
 }

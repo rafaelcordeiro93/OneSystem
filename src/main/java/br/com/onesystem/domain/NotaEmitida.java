@@ -45,7 +45,7 @@ public class NotaEmitida extends Nota implements Serializable {
 
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            List<Cobranca> cobrancas,
+            List<CobrancaVariavel> cobrancas,
             Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,

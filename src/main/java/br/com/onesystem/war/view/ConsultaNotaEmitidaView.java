@@ -11,7 +11,7 @@ import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Titulo;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
@@ -76,7 +76,7 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
         }
     }
 
-    public String getOrigem(Cobranca parcela) {
+    public String getOrigem(CobrancaVariavel parcela) {
         if (parcela instanceof Cheque) {
             return msg.getLabel("Cheque");
         } else if (parcela instanceof BoletoDeCartao) {
@@ -88,7 +88,7 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
         }
     }
 
-    public void consultaParcela(Cobranca parcela) {
+    public void consultaParcela(CobrancaVariavel parcela) {
         if (parcela instanceof Cheque) {
             InfoMessage.print(msg.getLabel("Cheque"));
         } else if (parcela instanceof BoletoDeCartao) {

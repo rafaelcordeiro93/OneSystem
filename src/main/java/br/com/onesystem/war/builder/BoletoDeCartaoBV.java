@@ -2,7 +2,7 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
@@ -51,7 +51,7 @@ public class BoletoDeCartaoBV implements Serializable, BuilderView<BoletoDeCarta
         this.filial = b.getFilial();
     }
 
-    public BoletoDeCartaoBV(Cobranca c) {
+    public BoletoDeCartaoBV(CobrancaVariavel c) {
         this.id = c.getId();
         this.nota = c.getNota();
         this.cartao = ((BoletoDeCartao) c).getCartao();

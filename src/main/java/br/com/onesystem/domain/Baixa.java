@@ -1,11 +1,9 @@
 package br.com.onesystem.domain;
 
-import br.com.onesystem.dao.TituloDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.Movimento;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.NumberUtils;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
@@ -77,9 +75,6 @@ public class Baixa implements Serializable, Movimento {
     private Cobranca cobranca;
 
     @ManyToOne
-    private CobrancaFixa cobrancaFixa;
-
-    @ManyToOne
     private TipoDespesa despesa;
 
     @ManyToOne
@@ -137,7 +132,7 @@ public class Baixa implements Serializable, Movimento {
     public Baixa(Long id, BigDecimal valor, Date emissao, Date dataCompensacao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, Cobranca cobranca, CobrancaFixa movimentoFixo, ValorPorCotacao valorPorCotacao,
+            Recepcao recepcao, Cobranca cobranca, ValorPorCotacao valorPorCotacao,
             TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca, Caixa caixa, 
             DepositoBancario depositoBancario, SaqueBancario saqueBancario, 
             LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, 
@@ -157,7 +152,6 @@ public class Baixa implements Serializable, Movimento {
         this.transferencia = transferencia;
         this.recepcao = recepcao;
         this.cobranca = cobranca;
-        this.cobrancaFixa = movimentoFixo;
         this.valorPorCotacao = valorPorCotacao;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formaDeCobranca = formaDeCobranca;
@@ -222,10 +216,6 @@ public class Baixa implements Serializable, Movimento {
         return historico;
     }
 
-    public CobrancaFixa getCobrancaFixa() {
-        return cobrancaFixa;
-    }
-
     public LancamentoBancario getLancamentoBancario() {
         return lancamentoBancario;
     }
@@ -240,37 +230,6 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
-    public String getHistoricoMovimentacao() {
-        BundleUtil msg = new BundleUtil();
-        if (operacaoFinanceira == OperacaoFinanceira.SAIDA) {
-
-            if (cambio != null && (cobrancaFixa != null && !(cobrancaFixa instanceof DespesaProvisionada))) {
-                return geraMovimentacaoSaidaCambio(msg);
-            } else if (recepcao != null) {
-                return geraMovimentacaoSaidaRecepcao(msg);
-            } else if (transferencia != null && despesa == null) {
-                return geraMovimentacaoSaidaTransferencia(msg);
-            } else if (cobrancaFixa != null && !(cobrancaFixa instanceof DespesaProvisionada)) {
-                geraMovimentacaoDespesaProvisionada(msg);
-            } else {
-                return geraMovimentacaoDespesa(msg);
-            }
-        } else if (operacaoFinanceira == OperacaoFinanceira.ENTRADA) {
-            if (recepcao != null) {
-                return geraMovimentacaoEntradaRecepcao(msg);
-            } else if (transferencia != null) {
-                return geraMovimentacaoEntradaTransferencia(msg);
-//            } else if (cobranca instanceof DespesaProvisionada) {
-//                return geraMovimentacaoEntradaDespesaProvisionada(msg);
-            } else if (cobrancaFixa != null && !(cobrancaFixa instanceof ReceitaProvisionada)) {
-                return geraMovimentacaoReceitaProvisionada(msg);
-            } else {
-                return geraMovimentacaoReceita(msg);
-            }
-        }
-        return "";
-    }
-
     public void cancela() throws EDadoInvalidoException {
         if (getCambio() != null) {
             throw new EDadoInvalidoException("Baixas com referências de câmbio não podem ser canceladas!");
@@ -278,8 +237,8 @@ public class Baixa implements Serializable, Movimento {
         if (cobranca instanceof Titulo) {
             ((Titulo) cobranca).cancelarSaldoDeBaixa(valor);
         }
-        if (cobranca instanceof Cobranca) {
-            ((Cobranca) cobranca).atualizaSituacao();
+        if (cobranca instanceof CobrancaVariavel) {
+            ((CobrancaVariavel) cobranca).atualizaSituacao();
         }
 
         this.estado = EstadoDeBaixa.CANCELADO;
@@ -291,82 +250,11 @@ public class Baixa implements Serializable, Movimento {
         if (cobranca instanceof Titulo) {
             ((Titulo) cobranca).descancelarSaldoDeBaixa(valor);
         }
-        if (cobranca instanceof Cobranca) {
-            ((Cobranca) cobranca).atualizaSituacao();
+        if (cobranca instanceof CobrancaVariavel) {
+            ((CobrancaVariavel) cobranca).atualizaSituacao();
         }
         this.estado = EstadoDeBaixa.EFETIVADO;
         this.dataCancelamento = null;
-    }
-
-    private String geraMovimentacaoReceita(BundleUtil msg) {
-        String historicoFormatado = "";
-        if (historico != null) {
-            historicoFormatado = historico.length() > 25 ? historico.substring(0, 24) : historico;
-        }
-        String str = pessoa == null ? historicoFormatado : " " + msg.getMessage("pagos_por") + " " + pessoa.getNome();
-        return this.receita.getNome() + " - " + str;
-    }
-
-    private String geraMovimentacaoEntradaTransferencia(BundleUtil msg) {
-        return msg.getMessage("Entrada_Transferencia") + " " + cotacao.getConta().getNome();
-    }
-
-    private String geraMovimentacaoEntradaRecepcao(BundleUtil msg) {
-        return msg.getMessage("Recebimento_Recepcao")
-                + " " + pessoa.getNome();
-    }
-
-    private String geraMovimentacaoDespesaProvisionada(BundleUtil msg) {
-        String historicoFormatado = "";
-        if (historico != null) {
-            historicoFormatado = historico.length() > 25 ? historico.substring(0, 24) : historico;
-        }
-        return ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome() + " - " + historicoFormatado;
-    }
-
-    private String geraMovimentacaoDespesa(BundleUtil msg) {
-        String historicoFormatado = "";
-        if (historico != null) {
-            historicoFormatado = historico.length() > 25 ? historico.substring(0, 24) : historico;
-        } else if (transferencia != null) {
-            historicoFormatado = msg.getMessage("operacao_transferencia");
-        }
-        String str = pessoa == null ? historicoFormatado : " " + msg.getMessage("pagos_para") + " " + pessoa.getNome();
-        return this.despesa.getNome() + " - " + str;
-    }
-
-    private String geraMovimentacaoSaidaTransferencia(BundleUtil msg) {
-        return msg.getMessage("Saida_Transferencia") + " " + cotacao.getConta().getNome();
-    }
-
-    private String geraMovimentacaoEntradaDespesaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Entrada_Lucro") + " de câmbio " + ((DespesaProvisionada) cobrancaFixa).getCambio().getId();
-    }
-
-    private String geraMovimentacaoSaidaRecepcao(BundleUtil msg) {
-        return msg.getMessage("Pagamento_Titulo")
-                + " - " + pessoa.getNome();
-    }
-
-    private String geraMovimentacaoReceitaProvisionada(BundleUtil msg) {
-        return msg.getMessage("Recebimento_Receita_Provisionada") + " de " + ((ReceitaProvisionada) cobrancaFixa).getPessoa().getNome();
-    }
-
-    private String geraMovimentacaoSaidaCambio(BundleUtil msg) {
-        if (cobranca instanceof Titulo) {
-            List<Titulo> titulos = new TituloDAO().aPagar().ePorCambio(cambio).listaDeResultados();
-            for (Titulo t : titulos) {
-                if (((Titulo) cobranca).getValor().equals(t.getValor())) {
-                    return msg.getMessage("Pagamento_Comissao") + " " + cambio.getId();
-                }
-            }
-        } else if (cobrancaFixa instanceof DespesaProvisionada) {
-            return msg.getMessage("Pagamento_Despesa_Provisionada") + " de " + ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome()
-                    + " para " + pessoa.getNome();
-        }
-        String str = despesa != null ? despesa.getNome() : historico;
-        return str + " " + msg.getMessage("Cambio")
-                + " " + msg.getMessage("de") + " " + cambio.getContrato().getPessoa().getNome();
     }
 
     public BigDecimal getValor() {
@@ -452,8 +340,8 @@ public class Baixa implements Serializable, Movimento {
     }
 
     public Date getDataCompetencia() {
-        if (cobrancaFixa != null) {
-            return cobrancaFixa.getReferencia();
+        if (cobranca != null && cobranca instanceof CobrancaFixa) {
+            return ((CobrancaFixa) cobranca).getReferencia();
         } else {
             return emissao;
         }
@@ -534,10 +422,10 @@ public class Baixa implements Serializable, Movimento {
             return receita.getNome();
         } else if (cobranca instanceof Titulo) {
             return TipoOperacao.TITULO.getNome();
-        } else if (cobrancaFixa instanceof DespesaProvisionada) {
-            return ((DespesaProvisionada) cobrancaFixa).getTipoDespesa().getNome();
-        } else if (cobrancaFixa instanceof ReceitaProvisionada) {
-            return ((ReceitaProvisionada) cobrancaFixa).getPessoa().getNome();
+        } else if (cobranca instanceof DespesaProvisionada) {
+            return ((DespesaProvisionada) cobranca).getTipoDespesa().getNome();
+        } else if (cobranca instanceof ReceitaProvisionada) {
+            return ((ReceitaProvisionada) cobranca).getPessoa().getNome();
         } else {
             return TipoOperacao.AVULSO.getNome();
         }

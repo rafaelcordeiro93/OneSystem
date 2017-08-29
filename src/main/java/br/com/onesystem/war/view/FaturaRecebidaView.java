@@ -10,7 +10,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.FaturaRecebidaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
@@ -290,7 +290,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public String getTotalParcelas() throws EDadoInvalidoException {
         if (list != null) {
-            BigDecimal valor = list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal valor = list.getList().stream().map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
             return e.getMoedaPadrao() + valor.toString();
         }
         return e.getMoedaPadrao();

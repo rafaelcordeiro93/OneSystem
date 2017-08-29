@@ -45,9 +45,7 @@ public class DialogoPagamentoRecebimentoVariasMoedasView implements Serializable
         opcoes.put("contentHeight", 500);
 
         if (conta != null) {
-            System.out.println("Conta: " + conta.getMoeda().getNome());
             this.contaDeOrigem = conta;
-            System.out.println("Conta or: " + contaDeOrigem.getMoeda().getNome());
             RequestContext.getCurrentInstance().openDialog("/dialogo/dialogoPagamentoRecebimentoVariasMoedas", opcoes, null);
         } else {
             ErrorMessage.print(new BundleUtil().getMessage("conta_not_null"));

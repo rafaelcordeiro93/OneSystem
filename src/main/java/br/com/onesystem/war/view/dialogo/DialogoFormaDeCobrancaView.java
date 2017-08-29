@@ -6,7 +6,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Credito;
@@ -155,7 +155,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     }
 
     public void selecionaCobrancaNoObjeto() {
-        Cobranca c = e.getCobranca();
+        CobrancaVariavel c = e.getCobranca();
         if (c instanceof Titulo) {
             titulo = (Titulo) c;
         }
@@ -166,8 +166,8 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
         try {
             Object obj = event.getObject();
             String id = event.getComponent().getId();
-            if (obj instanceof Cobranca) {
-                e.setCobranca((Cobranca) event.getObject());
+            if (obj instanceof CobrancaVariavel) {
+                e.setCobranca((CobrancaVariavel) event.getObject());
                 selecionaCobrancaNoObjeto();
             } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
                 credito.setPessoa((Pessoa) obj);

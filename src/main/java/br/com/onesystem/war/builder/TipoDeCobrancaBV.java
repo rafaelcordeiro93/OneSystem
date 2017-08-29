@@ -6,6 +6,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
@@ -27,7 +28,6 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
 
     private Long id;
     private Cobranca cobranca;
-    private CobrancaFixa cobrancaFixa;
     private Recebimento recebimento;
     private Pagamento pagamento;
     private BigDecimal valor;
@@ -136,14 +136,6 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.cotacao = cotacao;
     }
 
-    public CobrancaFixa getCobrancaFixa() {
-        return cobrancaFixa;
-    }
-
-    public void setCobrancaFixa(CobrancaFixa cobrancaFixa) {
-        this.cobrancaFixa = cobrancaFixa;
-    }
-
     public Conta getConta() {
         return conta;
     }
@@ -163,14 +155,14 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     public TipoDeCobranca construir() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comCobrancaFixa(cobrancaFixa).comConta(conta).comPagamento(pagamento).construir();
+                .comConta(conta).comPagamento(pagamento).construir();
     }
 
     @Override
     public TipoDeCobranca construirComID() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comId(id).comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
                 .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comCobrancaFixa(cobrancaFixa).comConta(conta).comPagamento(pagamento).construir();
+                .comConta(conta).comPagamento(pagamento).construir();
     }
 
 }

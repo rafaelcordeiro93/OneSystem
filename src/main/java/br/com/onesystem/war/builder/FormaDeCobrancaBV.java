@@ -5,7 +5,7 @@
  */
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
@@ -24,7 +24,7 @@ import java.util.Date;
 public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
 
     private Long id;
-    private Cobranca cobranca;
+    private CobrancaVariavel cobranca;
     private Recebimento recebimento;
     private Pagamento pagamento;
     private BigDecimal valor;
@@ -61,11 +61,11 @@ public class FormaDeCobrancaBV implements BuilderView<FormaDeCobranca> {
         this.id = id;
     }
 
-    public Cobranca getCobranca() {
+    public CobrancaVariavel getCobranca() {
         return cobranca;
     }
 
-    public void setCobranca(Cobranca cobranca) {
+    public void setCobranca(CobrancaVariavel cobranca) {
         this.cobranca = cobranca;
     }
 

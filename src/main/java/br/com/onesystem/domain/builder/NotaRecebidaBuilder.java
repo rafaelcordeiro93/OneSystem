@@ -15,7 +15,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Filial;
@@ -46,7 +46,7 @@ public class NotaRecebidaBuilder {
     private List<ItemDeNota> itens;
     private ListaDePreco listaDePreco;
     private FormaDeRecebimento formaDeRecebimento;
-    private List<Cobranca> cobrancas;
+    private List<CobrancaVariavel> cobrancas;
     private Moeda moedaPadrao;
     private List<ValorPorCotacao> valorPorCotacao;
     private BigDecimal totalEmDinheiro;
@@ -111,7 +111,7 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comCheque(List<Cobranca> parcelas) {
+    public NotaRecebidaBuilder comCheque(List<CobrancaVariavel> parcelas) {
         this.cobrancas = parcelas;
         return this;
     }
@@ -121,10 +121,10 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comCobrancas(List<Cobranca> cobrancas) throws DadoInvalidoException {
+    public NotaRecebidaBuilder comCobrancas(List<CobrancaVariavel> cobrancas) throws DadoInvalidoException {
         if (id == null) {
             if (cobrancas != null && !cobrancas.isEmpty()) {
-                for (Cobranca i : cobrancas) {
+                for (CobrancaVariavel i : cobrancas) {
                     if (i.getId() != null) {
                         if (i instanceof Cheque) {
                             cobrancas.set(cobrancas.indexOf(i), new CobrancaBV(i).construirCheque());

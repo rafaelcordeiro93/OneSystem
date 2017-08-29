@@ -71,7 +71,7 @@ public abstract class Nota implements Serializable {
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ValorPorCotacao> valorPorCotacao;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    private List<Cobranca> cobrancas;
+    private List<CobrancaVariavel> cobrancas;
     @NotNull(message = "{moeda_padrao_not_null}")
     @ManyToOne(optional = false)
     private Moeda moedaPadrao;
@@ -107,7 +107,7 @@ public abstract class Nota implements Serializable {
 
     public Nota(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            List<Cobranca> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
+            List<CobrancaVariavel> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
             BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario, Filial filial) throws DadoInvalidoException {
         this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
@@ -154,16 +154,16 @@ public abstract class Nota implements Serializable {
         }
     }
 
-    public void adiciona(Cobranca cobranca) throws DadoInvalidoException {
+    public void adiciona(CobrancaVariavel cobranca) throws DadoInvalidoException {
         cobranca.geraPara(this);
         this.cobrancas.add(cobranca);
     }
 
-    public void atualiza(Cobranca cobranca) throws DadoInvalidoException {
+    public void atualiza(CobrancaVariavel cobranca) throws DadoInvalidoException {
         this.cobrancas.set(cobrancas.indexOf(cobranca), cobranca);
     }
 
-    public void remove(Cobranca cobranca) {
+    public void remove(CobrancaVariavel cobranca) {
         this.cobrancas.remove(cobranca);
     }
 
@@ -232,15 +232,15 @@ public abstract class Nota implements Serializable {
             lista.add(new TemplateFormaPagamento(id, v.getCotacao().getConta().getMoeda().getNome(), null, v.getValorFormatado()));
             id++;
         }
-        List<Cobranca> entradas = cobrancas.stream().filter(c -> c.getEntrada() == true).sorted(Comparator.comparing(c -> c.getVencimento())).collect(Collectors.toList());
-        List<Cobranca> parcelas = cobrancas.stream().filter(c -> c.getEntrada() == false).sorted(Comparator.comparing(c -> c.getParcela())).collect(Collectors.toList());
+        List<CobrancaVariavel> entradas = cobrancas.stream().filter(c -> c.getEntrada() == true).sorted(Comparator.comparing(c -> c.getVencimento())).collect(Collectors.toList());
+        List<CobrancaVariavel> parcelas = cobrancas.stream().filter(c -> c.getEntrada() == false).sorted(Comparator.comparing(c -> c.getParcela())).collect(Collectors.toList());
 
-        for (Cobranca c : entradas) {
+        for (CobrancaVariavel c : entradas) {
             lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
             id++;
         }
 
-        for (Cobranca c : parcelas) {
+        for (CobrancaVariavel c : parcelas) {
             lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
             id++;
         }
@@ -265,7 +265,7 @@ public abstract class Nota implements Serializable {
         return moedaPadrao;
     }
 
-    public List<Cobranca> getCobrancas() {
+    public List<CobrancaVariavel> getCobrancas() {
         return cobrancas;
     }
 
@@ -277,20 +277,20 @@ public abstract class Nota implements Serializable {
         return filial;
     }
 
-    public List<Cobranca> getParcelas() {
+    public List<CobrancaVariavel> getParcelas() {
         if (cobrancas != null) {
-            List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
-            parcelamento.sort(Comparator.comparingLong(Cobranca::getDias));
+            List<CobrancaVariavel> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
+            parcelamento.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
             return parcelamento;
         } else {
             return null;
         }
     }
 
-    public List<Cobranca> getEntradas() {
+    public List<CobrancaVariavel> getEntradas() {
         if (cobrancas != null) {
-            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).collect(Collectors.toList());
-            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            List<CobrancaVariavel> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
             return entradas;
         } else {
             return null;
@@ -327,7 +327,7 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getTotalParcelas() {
         if (cobrancas != null) {
-            return cobrancas.stream().filter(c -> c.getEntrada() == null || c.getEntrada() == false).map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            return cobrancas.stream().filter(c -> c.getEntrada() == null || c.getEntrada() == false).map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         } else {
             return BigDecimal.ZERO;
         }
@@ -336,7 +336,7 @@ public abstract class Nota implements Serializable {
     public BigDecimal getTotalCartaoDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
-            for (Cobranca c : cobrancas) {
+            for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof BoletoDeCartao && c.getEntrada() != null && c.getEntrada() == true) {
                     total = total.add(c.getValor());
                 }
@@ -354,7 +354,7 @@ public abstract class Nota implements Serializable {
     public BigDecimal getTotalChequeDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
-            for (Cobranca c : cobrancas) {
+            for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof Cheque && c.getEntrada() != null && c.getEntrada() == true) {
                     if (c.getCotacao() != null && c.getCotacao().getConta().getMoeda() != moedaPadrao) {
                         total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
@@ -373,7 +373,7 @@ public abstract class Nota implements Serializable {
         return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
 
-    public void setParcelas(List<Cobranca> parcelas) {
+    public void setParcelas(List<CobrancaVariavel> parcelas) {
         this.cobrancas = parcelas;
     }
 
@@ -410,7 +410,7 @@ public abstract class Nota implements Serializable {
     }
 
     public Credito getCredito() {
-        List<Cobranca> credito = cobrancas.stream().filter(c -> c instanceof Credito).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
+        List<CobrancaVariavel> credito = cobrancas.stream().filter(c -> c instanceof Credito).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
         if (credito != null && !credito.isEmpty()) {
             return (Credito) credito.get(0);
         } else {
@@ -419,7 +419,7 @@ public abstract class Nota implements Serializable {
     }
 
     public BoletoDeCartao getBoletoDeCartaoEntrada() {
-        List<Cobranca> boletoDeCartao = cobrancas.stream().filter(c -> c instanceof BoletoDeCartao).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
+        List<CobrancaVariavel> boletoDeCartao = cobrancas.stream().filter(c -> c instanceof BoletoDeCartao).filter(c -> c.getEntrada() == true).collect(Collectors.toList());
         if (boletoDeCartao != null && !boletoDeCartao.isEmpty()) {
             return (BoletoDeCartao) boletoDeCartao.get(0);
         } else {

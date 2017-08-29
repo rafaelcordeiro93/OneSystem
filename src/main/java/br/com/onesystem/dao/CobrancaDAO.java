@@ -1,12 +1,12 @@
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 
-public class CobrancaDAO extends GenericDAO<Cobranca> {
+public class CobrancaDAO extends GenericDAO<CobrancaVariavel> {
 
     public CobrancaDAO() {
-        super(Cobranca.class);
+        super(CobrancaVariavel.class);
         limpar();
     }
 

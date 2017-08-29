@@ -7,7 +7,7 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -38,8 +38,8 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> implements Serializable {
 
-    private Model<Cobranca> modelo;
-    private ModelList<Cobranca> list;
+    private Model<CobrancaVariavel> modelo;
+    private ModelList<CobrancaVariavel> list;
     private NotaEmitidaBV notaBV;
     private NotaEmitida nota;
 
@@ -133,7 +133,7 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
 
     public void recalculaValorAFaturar() {
 
-        BigDecimal cobrancas = list.getList() == null ? BigDecimal.ZERO : list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal cobrancas = list.getList() == null ? BigDecimal.ZERO : list.getList().stream().map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal dinheiro = notaBV.getTotalEmDinheiro() == null ? BigDecimal.ZERO : notaBV.getTotalEmDinheiro();
         BigDecimal soma = cobrancas.add(dinheiro);
 
@@ -143,7 +143,7 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
     @Override
     public void update() {
         try {
-            for (Cobranca c : list.getList()) {
+            for (CobrancaVariavel c : list.getList()) {
                 if (c.getId() != null) {
                     nota.atualiza(c);
                 } else {
@@ -151,11 +151,11 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
                 }
             }
 
-            List<Cobranca> removidos = list.getRemovidos().stream().filter(m -> ((Cobranca) m.getObject()).getId() != null).map(m -> (Cobranca) m.getObject()).collect(Collectors.toList());
+            List<CobrancaVariavel> removidos = list.getRemovidos().stream().filter(m -> ((CobrancaVariavel) m.getObject()).getId() != null).map(m -> (CobrancaVariavel) m.getObject()).collect(Collectors.toList());
             removidos.forEach(c -> nota.remove(c));
 
             new AtualizaDAO<>().atualiza(nota);
-            for (Cobranca c : removidos) {
+            for (CobrancaVariavel c : removidos) {
                 new RemoveDAO<>().remove(c, c.getId());
             }
             InfoMessage.atualizado();
@@ -180,8 +180,8 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
                 this.nota = (NotaEmitida) obj;
                 this.notaBV = new NotaEmitidaBV(nota);
                 update();
-            } else if (obj instanceof Cobranca) {
-                Cobranca cb = (Cobranca) obj;
+            } else if (obj instanceof CobrancaVariavel) {
+                CobrancaVariavel cb = (CobrancaVariavel) obj;
                 list.add(cb);
                 recalculaValorAFaturar();
             } else if (obj instanceof Model) {
@@ -203,7 +203,7 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
 
     public void selecionaParcela(SelectEvent event) {
         try {
-            modelo = (Model<Cobranca>) event.getObject();
+            modelo = (Model<CobrancaVariavel>) event.getObject();
             removeDaSessao();
             SessionUtil.put(modelo, "model", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException ex) {
@@ -230,7 +230,7 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
 
     public String getTotalParcelas() {
         if (list != null) {
-            BigDecimal valor = list.getList().stream().map(Cobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal valor = list.getList().stream().map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
             return MoedaFormatter.format(nota.getMoedaPadrao(), valor);
         }
         return "";
@@ -244,11 +244,11 @@ public class RetificacaoDeVendaView extends BasicMBImpl<NotaEmitida, NotaEmitida
         this.nota = nota;
     }
 
-    public ModelList<Cobranca> getList() {
+    public ModelList<CobrancaVariavel> getList() {
         return list;
     }
 
-    public void setList(ModelList<Cobranca> list) {
+    public void setList(ModelList<CobrancaVariavel> list) {
         this.list = list;
     }
 

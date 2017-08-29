@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("BOLETO_DE_CARTAO")
-public class BoletoDeCartao extends Cobranca implements Serializable {
+public class BoletoDeCartao extends CobrancaVariavel implements Serializable {
 
     @NotNull(message = "{cartao_not_null}")
     @ManyToOne

@@ -2,6 +2,8 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.CobrancaFixa;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
@@ -15,7 +17,6 @@ import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.PagamentoBV;
@@ -64,8 +65,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void limparJanela() {
         try {
             removeDaSessao();
-            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance())
-            , (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
+                     (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
@@ -94,9 +95,9 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
                 TipoDeCobranca tipo = (TipoDeCobranca) obj;
                 boolean possuiCobranca = false;
                 if (tipo.getCobranca() != null) {
-                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null && tp.getCobranca() instanceof CobrancaVariavel).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
                 } else {
-                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobrancaFixa() != null).filter(tp -> tp.getCobrancaFixa().getId() != null).map(TipoDeCobranca::getCobrancaFixa).anyMatch(co -> co.getId().equals(tipo.getCobrancaFixa().getId()));
+                    possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null && tp.getCobranca() instanceof CobrancaFixa).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
                 }
                 if (!possuiCobranca) {
                     tiposDeCobranca.add(tipo);
@@ -152,13 +153,13 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
 
     public void abreDespesaProvisionada() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
-        SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.DESPESA_PROVISIONADA, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
 
     public void abreDespesaEventual() throws DadoInvalidoException {
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
-        SessionUtil.put(ModalidadeDeCobrancaFixa.DESPESA_EVENTUAL, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        SessionUtil.put(ModalidadeDeCobranca.DESPESA_EVENTUAL, "modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         adicionaEmissaoNaSessao();
     }
 

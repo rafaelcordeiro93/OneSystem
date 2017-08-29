@@ -37,23 +37,23 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         String tipo = tipoDeCobranca.getTipoDocumento();
 
         if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobrancaFixa().adiciona(getJuros(tipo));
+            tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
         }
         if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobrancaFixa().adiciona(getMulta(tipo));
+            tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
         }
         if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobrancaFixa().adiciona(getDesconto(tipo));
+            tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
         }
-        tipoDeCobranca.getCobrancaFixa().adiciona(getValor(tipo));
+        tipoDeCobranca.getCobranca().adiciona(getValor(tipo));
 
         //Atualiza situação da Cobrança 
-        tipoDeCobranca.getCobrancaFixa().atualizaSituacao();
+        tipoDeCobranca.getCobranca().atualizaSituacao();
     }
 
     private Baixa getValor(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaFixaBuilder();
-        builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobrancaFixa().getOperacaoFinanceira());
+        builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
         if (tipoDeCobranca.getRecebimento() != null) {
             builder.comReceita(tipoReceita).comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
@@ -65,7 +65,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
     private Baixa getDesconto(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaFixaBuilder();
         builder.comValor(tipoDeCobranca.getDesconto())
-                .comOperacaoFinanceira(tipoDeCobranca.getCobrancaFixa().getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
+                .comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
 
         if (tipoDeCobranca.getRecebimento() != null) {
             builder.comDespesa(conf.getDespesaDeDescontosConcedidos()).comHistorico(msg.getMessage("Desconto_concedido_sobre_recebimento_de") + " " + tipo + getHistorico());
@@ -78,7 +78,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
 
     private Baixa getMulta(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaFixaBuilder();
-        builder.comValor(tipoDeCobranca.getMulta()).comOperacaoFinanceira(tipoDeCobranca.getCobrancaFixa().getOperacaoFinanceira());
+        builder.comValor(tipoDeCobranca.getMulta()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
         if (tipoDeCobranca.getRecebimento() != null) {
             builder.comReceita(conf.getReceitaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_recebimento_de") + " " + tipo + getHistorico());
@@ -91,7 +91,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
 
     private Baixa getJuros(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaFixaBuilder();
-        builder.comValor(tipoDeCobranca.getJuros()).comOperacaoFinanceira(tipoDeCobranca.getCobrancaFixa().getOperacaoFinanceira());
+        builder.comValor(tipoDeCobranca.getJuros()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
         if (tipoDeCobranca.getRecebimento() != null) {
             builder.comReceita(conf.getReceitaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_recebimento_de") + " " + tipo + getHistorico());
@@ -112,17 +112,17 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
 
         return baixaBuilder.
                 comCotacao(tipoDeCobranca.getCotacao()).
-                comCobrancaFixa(tipoDeCobranca.getCobrancaFixa()).comTipoDeCobranca(tipoDeCobranca).
-                comPessoa(tipoDeCobranca.getCobrancaFixa().getPessoa());
+                comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
+                comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }
 
     private String getHistorico() {
         String pessoa = "";
-        if (tipoDeCobranca.getCobrancaFixa().getPessoa() != null) {
-            pessoa = " " + msg.getMessage("de") + " " + tipoDeCobranca.getCobrancaFixa().getPessoa().getNome();
+        if (tipoDeCobranca.getCobranca().getPessoa() != null) {
+            pessoa = " " + msg.getMessage("de") + " " + tipoDeCobranca.getCobranca().getPessoa().getNome();
         }
 
-        String id = tipoDeCobranca.getCobrancaFixa().getId() == null ? "" : " " + tipoDeCobranca.getCobrancaFixa().getId().toString();
+        String id = tipoDeCobranca.getCobranca().getId() == null ? "" : " " + tipoDeCobranca.getCobranca().getId().toString();
         return id + pessoa;
     }
 

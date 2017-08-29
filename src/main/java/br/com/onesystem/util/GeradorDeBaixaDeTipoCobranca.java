@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Titulo;
@@ -97,13 +98,13 @@ public class GeradorDeBaixaDeTipoCobranca {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
         if (tipoDeCobranca.getRecebimento() != null) {
-            if (tipoDeCobranca.getCobranca().getNota() != null) {
-                builder.comReceita(tipoDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
+            if (((CobrancaVariavel)tipoDeCobranca.getCobranca()).getNota() != null) {
+                builder.comReceita(((CobrancaVariavel)tipoDeCobranca.getCobranca()).getNota().getOperacao().getVendaAPrazo());
             }
             builder.comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
         } else {
-            if (tipoDeCobranca.getCobranca().getNota() != null) {
-                builder.comDespesa(tipoDeCobranca.getCobranca().getNota().getOperacao().getCompraAPrazo());
+            if (((CobrancaVariavel)tipoDeCobranca.getCobranca()).getNota() != null) {
+                builder.comDespesa(((CobrancaVariavel)tipoDeCobranca.getCobranca()).getNota().getOperacao().getCompraAPrazo());
             }
             builder.comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
         }

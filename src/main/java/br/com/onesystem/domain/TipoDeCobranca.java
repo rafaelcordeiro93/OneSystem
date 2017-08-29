@@ -45,9 +45,6 @@ public class TipoDeCobranca implements Serializable {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cobranca cobranca;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private CobrancaFixa cobrancaFixa;
-
     @ManyToOne
     private Recebimento recebimento;
 
@@ -89,7 +86,7 @@ public class TipoDeCobranca implements Serializable {
 
     public TipoDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
             BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao,
-            CobrancaFixa cobrancaFixa, Conta conta, Pagamento pagamento) throws DadoInvalidoException {
+            Conta conta, Pagamento pagamento) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
         this.recebimento = recebimento;
@@ -100,7 +97,6 @@ public class TipoDeCobranca implements Serializable {
         this.observacao = observacao;
         this.cotacao = cotacao;
         this.conta = conta;
-        this.cobrancaFixa = cobrancaFixa;
         this.pagamento = pagamento;
         ehValido();
     }
@@ -160,10 +156,6 @@ public class TipoDeCobranca implements Serializable {
         return desconto;
     }
 
-    public CobrancaFixa getCobrancaFixa() {
-        return cobrancaFixa;
-    }
-
     public Pagamento getPagamento() {
         return pagamento;
     }
@@ -205,19 +197,19 @@ public class TipoDeCobranca implements Serializable {
                 return new BundleUtil().getLabel("Cheque");
             } else if (cobranca instanceof BoletoDeCartao) {
                 return new BundleUtil().getLabel("Boleto_De_Cartao");
-            } else {
+            } else if (cobranca instanceof Credito) {
                 return new BundleUtil().getLabel("Credito");
-            }
-        } else {
-            if (cobrancaFixa instanceof ReceitaEventual) {
+            } else if (cobranca instanceof ReceitaEventual) {
                 return new BundleUtil().getLabel("Receita_Eventual");
-            } else if (cobrancaFixa instanceof ReceitaProvisionada) {
+            } else if (cobranca instanceof ReceitaProvisionada) {
                 return new BundleUtil().getLabel("Receita_Provisionada");
-            } else if (cobrancaFixa instanceof DespesaEventual) {
+            } else if (cobranca instanceof DespesaEventual) {
                 return new BundleUtil().getLabel("Despesa_Eventual");
             } else {
                 return new BundleUtil().getLabel("Despesa_Provisionada");
             }
+        } else {
+            return null;
         }
     }
 

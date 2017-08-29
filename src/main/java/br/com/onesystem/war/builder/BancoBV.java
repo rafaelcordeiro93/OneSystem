@@ -16,7 +16,6 @@ public class BancoBV implements Serializable, BuilderView<Banco> {
     private String codigo;
 
     public BancoBV(Banco bancoSelecionado) {
-        System.out.println("Banco: " + bancoSelecionado);
         this.id = bancoSelecionado.getId();
         this.nome = bancoSelecionado.getNome();
         this.codigo = bancoSelecionado.getCodigo();

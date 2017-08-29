@@ -103,9 +103,7 @@ public abstract class Pessoa implements Serializable {
     @ManyToOne
     private ConfiguracaoCambio configuracaoCambio;
     @OneToMany(mappedBy = "pessoa")
-    private List<Cobranca> parcelas;
-    @OneToMany(mappedBy = "pessoa")
-    private List<CobrancaFixa> movimentosFixos;
+    private List<Cobranca> cobrancas;
     @OneToMany(mappedBy = "pessoa")
     private List<Nota> notas;
     @OneToMany(mappedBy = "pessoa")
@@ -241,10 +239,6 @@ public abstract class Pessoa implements Serializable {
 
     public void setConfiguracaoCambio(ConfiguracaoCambio configuracaoCambio) {
         this.configuracaoCambio = configuracaoCambio;
-    }
-
-    public List<Cobranca> getPerfilDePagamentos() {
-        return parcelas;
     }
 
     public Date getNascimento() {

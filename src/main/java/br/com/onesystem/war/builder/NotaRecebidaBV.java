@@ -11,7 +11,7 @@ import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Pedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
@@ -40,7 +40,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Pessoa pessoa;
     private Operacao operacao;
     private List<ItemDeNota> itens;
-    private List<Cobranca> cobrancas;
+    private List<CobrancaVariavel> cobrancas;
     private List<ValorPorCotacao> valorPorCotacao;
     private ListaDePreco listaDePreco;
     private Date emissao = new Date();
@@ -112,7 +112,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.valorPorCotacao.add(valorPorCotacao);
     }
 
-    public void adiciona(Cobranca cobranca) throws DadoInvalidoException {
+    public void adiciona(CobrancaVariavel cobranca) throws DadoInvalidoException {
         if (cobranca instanceof Cheque) {
             Cheque cheque = (Cheque) cobranca;
             ChequeBV builder = new ChequeBV(cheque);
@@ -132,11 +132,11 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.cobrancas.add(cobranca);
     }
 
-    public void atualiza(Cobranca cobrancaSelecionada, Cobranca cobranca) {
+    public void atualiza(CobrancaVariavel cobrancaSelecionada, CobrancaVariavel cobranca) {
         cobrancas.set(cobrancas.indexOf(cobrancaSelecionada), cobranca);
     }
 
-    public void remove(Cobranca cobranca) {
+    public void remove(CobrancaVariavel cobranca) {
         cobrancas.remove(cobranca);
     }
 
@@ -144,7 +144,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         Long id = (long) 1;
         try {
             if (!cobrancas.isEmpty()) {
-                for (Cobranca c : cobrancas) {
+                for (CobrancaVariavel c : cobrancas) {
                     if (c.getId() >= id) {
                         id = c.getId() + 1;
                     }
@@ -156,10 +156,10 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return id;
     }
 
-    public List<Cobranca> getChequesDeEntradas() {
+    public List<CobrancaVariavel> getChequesDeEntradas() {
         if (cobrancas != null) {
-            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
-            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            List<CobrancaVariavel> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
             return entradas;
         } else {
             return null;
@@ -169,7 +169,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     public BigDecimal getTotalChequeDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
-            for (Cobranca c : cobrancas) {
+            for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof Cheque && c.getEntrada() != null && c.getEntrada() == true) {
                     if (c.getCotacao() != null && c.getCotacao() != cotacao) {
                         total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
@@ -284,11 +284,11 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.cotacao = cotacao;
     }
 
-    public List<Cobranca> getCobrancas() {
+    public List<CobrancaVariavel> getCobrancas() {
         return cobrancas;
     }
 
-    public void setParcelas(List<Cobranca> parcelas) {
+    public void setParcelas(List<CobrancaVariavel> parcelas) {
         this.cobrancas = parcelas;
     }
 

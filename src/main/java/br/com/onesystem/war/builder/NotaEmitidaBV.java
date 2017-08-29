@@ -13,7 +13,7 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Cotacao;
@@ -43,7 +43,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private Pessoa pessoa;
     private Operacao operacao;
     private List<ItemDeNota> itens;
-    private List<Cobranca> cobrancas;
+    private List<CobrancaVariavel> cobrancas;
     private List<ValorPorCotacao> valorPorCotacao;
     private ListaDePreco listaDePreco;
     private Date emissao = new Date();
@@ -129,7 +129,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.valorPorCotacao.add(valorPorCotacao);
     }
 
-    public void adiciona(Cobranca cobranca) throws DadoInvalidoException {
+    public void adiciona(CobrancaVariavel cobranca) throws DadoInvalidoException {
         if (cobranca instanceof Cheque) {
             Cheque cheque = (Cheque) cobranca;
             ChequeBV builder = new ChequeBV(cheque);
@@ -149,11 +149,11 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.cobrancas.add(cobranca);
     }
 
-    public void atualiza(Cobranca cobrancaSelecionada, Cobranca cobranca) {
+    public void atualiza(CobrancaVariavel cobrancaSelecionada, CobrancaVariavel cobranca) {
         cobrancas.set(cobrancas.indexOf(cobrancaSelecionada), cobranca);
     }
 
-    public void remove(Cobranca cobranca) {
+    public void remove(CobrancaVariavel cobranca) {
         cobrancas.remove(cobranca);
     }
 
@@ -161,7 +161,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         Long id = (long) 1;
         try {
             if (!cobrancas.isEmpty()) {
-                for (Cobranca c : cobrancas) {
+                for (CobrancaVariavel c : cobrancas) {
                     if (c.getId() >= id) {
                         id = c.getId() + 1;
                     }
@@ -176,7 +176,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     public BigDecimal getTotalChequeDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
-            for (Cobranca c : cobrancas) {
+            for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof Cheque && c.getEntrada() != null && c.getEntrada() == true) {
                     if (c.getCotacao() != null && c.getCotacao() != cotacao) {
                         total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
@@ -198,7 +198,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     public BigDecimal getTotalCartaoDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
-            for (Cobranca c : cobrancas) {
+            for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof BoletoDeCartao && c.getEntrada() != null && c.getEntrada() == true) {
                     if (c.getCotacao() != null && c.getCotacao() != cotacao) {
                         total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
@@ -313,10 +313,10 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.cotacao = cotacao;
     }
 
-    public List<Cobranca> getParcelas() {
+    public List<CobrancaVariavel> getParcelas() {
         if (cobrancas != null) {
-            List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
-            parcelamento.sort(Comparator.comparingLong(Cobranca::getDias));
+            List<CobrancaVariavel> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());
+            parcelamento.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
             return parcelamento;
         } else {
             return null;
@@ -325,7 +325,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public BigDecimal getTotalParcelas() {
         BigDecimal totalParcela = BigDecimal.ZERO;
-        for (Cobranca p : getParcelas()) {
+        for (CobrancaVariavel p : getParcelas()) {
             if (p.getCotacao() != null && p.getCotacao() != cotacao) {
                 totalParcela = totalParcela.add(p.getValor().divide(p.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
             } else {
@@ -342,10 +342,10 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         return MoedaFormatter.format(moedaPadrao, totalParcelas);
     }
 
-    public List<Cobranca> getChequesDeEntradas() {
+    public List<CobrancaVariavel> getChequesDeEntradas() {
         if (cobrancas != null) {
-            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
-            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
+            List<CobrancaVariavel> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
             return entradas;
         } else {
             return null;
@@ -354,9 +354,9 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
 
     public BoletoDeCartaoBV getCartaoDeEntrada() {
         if (cobrancas != null) {
-            List<Cobranca> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof BoletoDeCartao).collect(Collectors.toList());
-            entradas.sort(Comparator.comparingLong(Cobranca::getDias));
-            for (Cobranca c : entradas) {
+            List<CobrancaVariavel> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof BoletoDeCartao).collect(Collectors.toList());
+            entradas.sort(Comparator.comparingLong(CobrancaVariavel::getDias));
+            for (CobrancaVariavel c : entradas) {
                 return new BoletoDeCartaoBV(c);
             }
             return null;
@@ -365,11 +365,11 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         }
     }
 
-    public List<Cobranca> getCobrancas() {
+    public List<CobrancaVariavel> getCobrancas() {
         return cobrancas;
     }
 
-    public void setParcelas(List<Cobranca> parcelas) {
+    public void setParcelas(List<CobrancaVariavel> parcelas) {
         this.cobrancas = parcelas;
     }
 

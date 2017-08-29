@@ -7,6 +7,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Credito;
@@ -28,7 +29,6 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
-import br.com.onesystem.valueobjects.ModalidadeDeCobrancaFixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamento;
@@ -70,7 +70,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     private DespesaProvisionada despesaProvisionada;
     private ReceitaProvisionada receitaProvisionada;
     private ModalidadeDeCobranca modalidadeDeCobranca;
-    private ModalidadeDeCobrancaFixa modalidadeDeCobrancaFixa;
+    private ModalidadeDeCobranca modalidadeDeCobrancaFixa;
     private Model<TipoDeCobranca> model;
     private List<Cotacao> cotacaoLista;
     private List<Conta> contaComCotacao;
@@ -105,7 +105,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     private void buscaDaSessao() throws DadoInvalidoException {
         recebimentoOuPagamento = (NaturezaFinanceira) SessionUtil.getObject("naturezaFinanceira", FacesContext.getCurrentInstance());
         modalidadeDeCobranca = (ModalidadeDeCobranca) SessionUtil.getObject("modalidadeDeCobranca", FacesContext.getCurrentInstance());
-        modalidadeDeCobrancaFixa = (ModalidadeDeCobrancaFixa) SessionUtil.getObject("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
+        modalidadeDeCobrancaFixa = (ModalidadeDeCobranca) SessionUtil.getObject("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         if (modalidadeDeCobranca != null || modalidadeDeCobrancaFixa != null) {
             emissao = (Date) SessionUtil.getObject("emissao", FacesContext.getCurrentInstance());
             model = (Model<TipoDeCobranca>) SessionUtil.getObject("modelTipo", FacesContext.getCurrentInstance());
@@ -133,27 +133,25 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
                     credito = new CreditoBV((Credito) model.getObject().getCobranca());
                     modalidadeDeCobranca = ModalidadeDeCobranca.CREDITO;
                     modalidadeDeCobrancaFixa = null;
-                } else {
+                } else if (model.getObject().getCobranca() instanceof Cheque) {
                     cheque = (Cheque) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.CHEQUE;
                     modalidadeDeCobrancaFixa = null;
-                }
-            } else {
-                if (model.getObject().getCobrancaFixa() instanceof ReceitaEventual) {
-                    receitaEventualBV = new ReceitaEventualBV((ReceitaEventual) model.getObject().getCobrancaFixa());
-                    modalidadeDeCobrancaFixa = ModalidadeDeCobrancaFixa.RECEITA_EVENTUAL;
+                } else if (model.getObject().getCobranca() instanceof ReceitaEventual) {
+                    receitaEventualBV = new ReceitaEventualBV((ReceitaEventual) model.getObject().getCobranca());
+                    modalidadeDeCobrancaFixa = ModalidadeDeCobranca.RECEITA_EVENTUAL;
                     modalidadeDeCobranca = null;
-                } else if (model.getObject().getCobrancaFixa() instanceof ReceitaProvisionada) {
-                    receitaProvisionada = (ReceitaProvisionada) model.getObject().getCobrancaFixa();
-                    modalidadeDeCobrancaFixa = ModalidadeDeCobrancaFixa.RECEITA_PROVISIONADA;
+                } else if (model.getObject().getCobranca() instanceof ReceitaProvisionada) {
+                    receitaProvisionada = (ReceitaProvisionada) model.getObject().getCobranca();
+                    modalidadeDeCobrancaFixa = ModalidadeDeCobranca.RECEITA_PROVISIONADA;
                     modalidadeDeCobranca = null;
-                } else if (model.getObject().getCobrancaFixa() instanceof DespesaEventual) {
-                    despesaEventualBV = new DespesaEventualBV((DespesaEventual) model.getObject().getCobrancaFixa());
-                    modalidadeDeCobrancaFixa = ModalidadeDeCobrancaFixa.DESPESA_EVENTUAL;
+                } else if (model.getObject().getCobranca() instanceof DespesaEventual) {
+                    despesaEventualBV = new DespesaEventualBV((DespesaEventual) model.getObject().getCobranca());
+                    modalidadeDeCobrancaFixa = ModalidadeDeCobranca.DESPESA_EVENTUAL;
                     modalidadeDeCobranca = null;
                 } else {
-                    despesaProvisionada = (DespesaProvisionada) model.getObject().getCobrancaFixa();
-                    modalidadeDeCobrancaFixa = ModalidadeDeCobrancaFixa.DESPESA_PROVISIONADA;
+                    despesaProvisionada = (DespesaProvisionada) model.getObject().getCobranca();
+                    modalidadeDeCobrancaFixa = ModalidadeDeCobranca.DESPESA_PROVISIONADA;
                     modalidadeDeCobranca = null;
                 }
             }
@@ -209,8 +207,8 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         String id = event.getComponent().getId();
-        if (obj instanceof Cobranca) {
-            e.setCobranca((Cobranca) event.getObject());
+        if (obj instanceof CobrancaVariavel) {
+            e.setCobranca((CobrancaVariavel) event.getObject());
             selecionaCobrancaNoObjeto();
         } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
             credito.setPessoa((Pessoa) obj);
@@ -278,7 +276,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
                 credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             }
             e.setCobranca(credito.construirComID());
-        } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobrancaFixa.RECEITA_EVENTUAL) {
+        } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobranca.RECEITA_EVENTUAL) {
             receitaEventualBV.setCotacao(e.getCotacao());
             receitaEventualBV.setValor(e.getValor());
             receitaEventualBV.setEmissao(emissao);
@@ -286,8 +284,8 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             receitaEventualBV.setHistorico(e.getObservacao());
             receitaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             receitaEventualBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            e.setCobrancaFixa(receitaEventualBV.construirComID());
-        } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobrancaFixa.DESPESA_EVENTUAL) {
+            e.setCobranca(receitaEventualBV.construirComID());
+        } else if (modalidadeDeCobrancaFixa == ModalidadeDeCobranca.DESPESA_EVENTUAL) {
             despesaEventualBV.setCotacao(e.getCotacao());
             despesaEventualBV.setValor(e.getValor());
             despesaEventualBV.setEmissao(emissao);
@@ -295,7 +293,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             despesaEventualBV.setHistorico(e.getObservacao());
             despesaEventualBV.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             despesaEventualBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            e.setCobrancaFixa(despesaEventualBV.construirComID());
+            e.setCobranca(despesaEventualBV.construirComID());
         }
     }
 
@@ -380,11 +378,11 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         this.serviceConf = serviceConf;
     }
 
-    public ModalidadeDeCobrancaFixa getModalidadeDeCobrancaFixa() {
+    public ModalidadeDeCobranca getModalidadeDeCobrancaFixa() {
         return modalidadeDeCobrancaFixa;
     }
 
-    public void setModalidadeDeCobrancaFixa(ModalidadeDeCobrancaFixa modalidadeDeCobrancaFixa) {
+    public void setModalidadeDeCobrancaFixa(ModalidadeDeCobranca modalidadeDeCobrancaFixa) {
         this.modalidadeDeCobrancaFixa = modalidadeDeCobrancaFixa;
     }
 

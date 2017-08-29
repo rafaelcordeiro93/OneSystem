@@ -1,7 +1,7 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Moeda;
@@ -368,7 +368,7 @@ public class ImpressoraDeRelatorioDinamico {
 
     public static void main(String[] args) throws JRException, IOException, FDadoInvalidoException {
 
-        List<Cobranca> registros = new ArmazemDeRegistros<Cobranca>(Cobranca.class).listaTodosOsRegistros();
+        List<CobrancaVariavel> registros = new ArmazemDeRegistros<CobrancaVariavel>(CobrancaVariavel.class).listaTodosOsRegistros();
         Filial filial = new ArmazemDeRegistros<Filial>(Filial.class).find(new Long(1));
 
         List<Coluna> colunas = new ArrayList<>();
@@ -377,11 +377,11 @@ public class ImpressoraDeRelatorioDinamico {
 
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
 
-        colunas.add(new Coluna("Id", "Cobrança", "id", Cobranca.class, Long.class));
+        colunas.add(new Coluna("Id", "Cobrança", "id", CobrancaVariavel.class, Long.class));
         colunas.add(pessoa);
-        colunas.add(new Coluna("Emissão", "Cobrança", "emissao", Cobranca.class, Date.class));
-        colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", Cobranca.class, Date.class));
-        colunas.add(new Coluna("Valor", "Cobrança", "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        colunas.add(new Coluna("Emissão", "Cobrança", "emissao", CobrancaVariavel.class, Date.class));
+        colunas.add(new Coluna("Vencimento", "Cobrança", "vencimento", CobrancaVariavel.class, Date.class));
+        colunas.add(new Coluna("Valor", "Cobrança", "valor", CobrancaVariavel.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         impressora.imprimir(registros, "Relatório de Contas a Pagar Abertas", colunas, null, filial).noConsole();
 

@@ -1,7 +1,7 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.Cobranca;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.CobrancaService;
 import br.com.onesystem.war.service.CobrancaService;
@@ -15,7 +15,7 @@ import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
-public class SelecaoCobrancaView extends BasicCrudMBImpl<Cobranca> implements Serializable {
+public class SelecaoCobrancaView extends BasicCrudMBImpl<CobrancaVariavel> implements Serializable {
 
     @Inject
     private CobrancaService service;
@@ -36,11 +36,11 @@ public class SelecaoCobrancaView extends BasicCrudMBImpl<Cobranca> implements Se
     }
 
     @Override
-    public List<Cobranca> complete(String query) {
-        List<Cobranca> cobrancasFIltradas = new ArrayList<>();
+    public List<CobrancaVariavel> complete(String query) {
+        List<CobrancaVariavel> cobrancasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
-            for (Cobranca c : beans) {
+            for (CobrancaVariavel c : beans) {
                 if (StringUtils.startsWithIgnoreCase(c.getId().toString(), query)) {
                     cobrancasFIltradas.add(c);
                 }

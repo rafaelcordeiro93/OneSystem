@@ -8,7 +8,7 @@ import br.com.onesystem.domain.Cep;
 import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cidade;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Configuracao;
@@ -72,7 +72,6 @@ import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
-import br.com.onesystem.war.builder.ModeloDeRelatorioBV;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Date;
@@ -961,10 +960,10 @@ public class DadosIniciais {
                 .comTipoRelatorio(TipoRelatorio.COBRANCA)
                 .construir();
         //Filtros
-        Coluna colOperacaoFinanceira = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        Coluna colOperacaoFinanceira = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", CobrancaVariavel.class, OperacaoFinanceira.class);
         FiltroDeRelatorio filtroOF = new FiltroDeRelatorio(null, colOperacaoFinanceira, TipoDeBusca.IGUAL_A);
         filtroOF.add(OperacaoFinanceira.SAIDA);
-        Coluna colSituacaoDeCobranca = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        Coluna colSituacaoDeCobranca = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", CobrancaVariavel.class, SituacaoDeCobranca.class);
         FiltroDeRelatorio filtroSDC = new FiltroDeRelatorio(null, colSituacaoDeCobranca, TipoDeBusca.IGUAL_A);
         filtroSDC.add(SituacaoDeCobranca.ABERTO);
         relatorioDeContasAPagar.addFiltro(filtroOF);
@@ -972,11 +971,11 @@ public class DadosIniciais {
         //Colunas Exibidas
         Coluna pessoa = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
         pessoa.setTamanho(30);
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", CobrancaVariavel.class, Long.class));
         relatorioDeContasAPagar.addColunaExibida(pessoa);
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", CobrancaVariavel.class, Date.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaVariavel.class, Date.class));
+        relatorioDeContasAPagar.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaVariavel.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAPagar);
 
         return relatorioDeContasAPagar;
@@ -991,11 +990,11 @@ public class DadosIniciais {
                 .construir();
 
         //Filtros
-        Coluna colOperacaoFinanceiracCAR = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", Cobranca.class, OperacaoFinanceira.class);
+        Coluna colOperacaoFinanceiracCAR = new Coluna(bundle.getLabel("Operacao_Financeira"), "Cobranca", "operacaoFinanceira", CobrancaVariavel.class, OperacaoFinanceira.class);
         FiltroDeRelatorio filtroOFCAR = new FiltroDeRelatorio(null, colOperacaoFinanceiracCAR, TipoDeBusca.IGUAL_A);
         filtroOFCAR.add(OperacaoFinanceira.ENTRADA);
 
-        Coluna colSituacaoDeCobrancaCAR = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", Cobranca.class, SituacaoDeCobranca.class);
+        Coluna colSituacaoDeCobrancaCAR = new Coluna(bundle.getLabel("Situacao_de_Cobranca"), "Cobranca", "situacaoDeCobranca", CobrancaVariavel.class, SituacaoDeCobranca.class);
         FiltroDeRelatorio filtroSDCCAR = new FiltroDeRelatorio(null, colSituacaoDeCobrancaCAR, TipoDeBusca.IGUAL_A);
         filtroSDCCAR.add(SituacaoDeCobranca.ABERTO);
 
@@ -1006,11 +1005,11 @@ public class DadosIniciais {
         Coluna pessoaCAR = new Coluna(bundle.getLabel("Nome") + "(" + bundle.getLabel("Pessoa") + ")", bundle.getLabel("Pessoa"), "pessoa", "nome", Pessoa.class, String.class);
         pessoaCAR.setTamanho(30);
 
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", Cobranca.class, Long.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Id"), bundle.getLabel("Cobranca"), "id", CobrancaVariavel.class, Long.class));
         relatorioDeContasAReceber.addColunaExibida(pessoaCAR);
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", Cobranca.class, Date.class));
-        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", Cobranca.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Emissao"), bundle.getLabel("Cobranca"), "emissao", CobrancaVariavel.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Vencimento"), bundle.getLabel("Cobranca"), "vencimento", CobrancaVariavel.class, Date.class));
+        relatorioDeContasAReceber.addColunaExibida(new Coluna(bundle.getLabel("Valor"), bundle.getLabel("Cobranca"), "valor", CobrancaVariavel.class, BigDecimal.class, TipoFormatacaoNumero.MOEDA, Totalizador.SUM));
 
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
     }
@@ -1461,11 +1460,11 @@ public class DadosIniciais {
         relatorioDeChequesRecebidosAbertos.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesRecebidosAbertos.addColunaExibida(id);
@@ -1496,11 +1495,11 @@ public class DadosIniciais {
         relatorioDeChequesDescontados.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesDescontados.addColunaExibida(id);
@@ -1531,11 +1530,11 @@ public class DadosIniciais {
         relatorioDeChequesCancelados.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesCancelados.addColunaExibida(id);
@@ -1566,11 +1565,11 @@ public class DadosIniciais {
         relatorioDeChequesDevolvidos.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesDevolvidos.addColunaExibida(id);
@@ -1601,11 +1600,11 @@ public class DadosIniciais {
         relatorioDeChequesRecebidosAbertos.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesRecebidosAbertos.addColunaExibida(id);
@@ -1636,11 +1635,11 @@ public class DadosIniciais {
         relatorioDeChequesDescontados.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesDescontados.addColunaExibida(id);
@@ -1671,11 +1670,11 @@ public class DadosIniciais {
         relatorioDeChequesCancelados.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesCancelados.addColunaExibida(id);
@@ -1706,11 +1705,11 @@ public class DadosIniciais {
         relatorioDeChequesDevolvidos.addFiltro(filtroTipoLancamento);
 
         //Cria as Colunas Exibidas
-        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, Cobranca.class, Long.class, null, null, 20, null);
+        Coluna id = new Coluna(bundle.getLabel("Id"), "Cobranca", "id", null, null, null, CobrancaVariavel.class, Long.class, null, null, 20, null);
         Coluna cotacaoContaMoedaNome = new Coluna(bundle.getLabel("Nome"), "Cotacao", "cotacao", "conta", "moeda", "nome", Cotacao.class, String.class, null, null, 20, null);
-        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, Cobranca.class, Long.class, null, Totalizador.SUM, 20, null);
+        Coluna valor = new Coluna(bundle.getLabel("Valor"), "Cobranca", "valor", null, null, null, CobrancaVariavel.class, Long.class, null, Totalizador.SUM, 20, null);
         Coluna emitente = new Coluna(bundle.getLabel("Emitente"), "Cheque", "emitente", null, null, null, Cheque.class, String.class, null, null, 20, null);
-        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, Cobranca.class, Date.class, null, null, 20, null);
+        Coluna emissao = new Coluna(bundle.getLabel("Emissao"), "Cobranca", "emissao", null, null, null, CobrancaVariavel.class, Date.class, null, null, 20, null);
 
         //Adiciona colunas exibidas no modelo
         relatorioDeChequesDevolvidos.addColunaExibida(id);

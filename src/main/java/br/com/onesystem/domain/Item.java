@@ -258,7 +258,7 @@ public class Item implements Serializable {
     }
 
     public BigDecimal getSaldo() {
-        return new EstoqueService().buscaSaldoTotalDeEstoque(this, null);
+        return new EstoqueService().buscaSaldoTotalDeEstoque(this, new Date());
     }
 
     public BigDecimal getSaldo(Date data) {

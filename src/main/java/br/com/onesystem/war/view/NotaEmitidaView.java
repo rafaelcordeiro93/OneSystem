@@ -11,7 +11,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Configuracao;
@@ -342,7 +342,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
             if (nota.getCobrancas() != null && !nota.getCobrancas().isEmpty()) {
 
-                List<Cobranca> lista = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+                List<CobrancaVariavel> lista = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
                 if (!lista.isEmpty()) {
                     if (!layoutTitulo.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
                         RequestContext.getCurrentInstance().execute("PF('imprimirTitulosDialog').show()"); // chama a impressao dos titulos
@@ -364,7 +364,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void imprimirTitulos() {
         try {
-            List<Cobranca> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+            List<CobrancaVariavel> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
             new ImpressoraDeLayout(titulos, layoutTitulo).visualizarPDF();
         } catch (DadoInvalidoException die) {
             die.print();

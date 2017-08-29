@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("TITULO")
-public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
+public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl {
 
     @Column(nullable = false)
     private BigDecimal saldo;
@@ -175,13 +175,6 @@ public class Titulo extends Cobranca implements RelatorioContaAbertaImpl {
     @Override
     public String toString() {
         return "Titulo{" + getId() + ", saldo=" + saldo + ", operacaoFinanceira=" + getOperacaoFinanceira() + ", recepcao=" + (recepcao != null ? recepcao.getId() : null) + ", cambio=" + (cambio != null ? cambio.getId() : null) + ", nota=" + (getNota() != null ? getNota().getId() : null) + ", tipoFormaPagRec=" + tipoFormaPagRec + ", conhecimentoDeFrete=" + (conhecimentoDeFrete != null ? conhecimentoDeFrete.getId() : null) + '}';
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 89 * hash + Objects.hashCode(getId());
-        return hash;
     }
 
     public String getDetalhes() {
