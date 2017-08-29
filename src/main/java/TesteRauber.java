@@ -1,9 +1,12 @@
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.PrecoDeItemDAO;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.Titulo;
@@ -13,6 +16,8 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.util.ImpressoraDeLayoutConsole;
 import br.com.onesystem.valueobjects.TipoLayout;
+import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import java.net.URL;
 import java.time.LocalDate;
@@ -38,12 +43,11 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        Titulo titulo = new ArmazemDeRegistros<>(Titulo.class).find(new Long(5));
-        Titulo titulon = new ArmazemDeRegistros<>(Titulo.class).find(new Long(6));
+        Cotacao resultado = new CotacaoService().getCotacaoPadrao(new Date());
         
-        LayoutDeImpressao layout = new LayoutDeImpressaoService().getLayoutPorTipoDeLayout(TipoLayout.TITULO);
+        System.out.println( new CotacaoDAO().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(new Date()).getConsulta());
         
-        new ImpressoraDeLayoutConsole(Arrays.asList(titulo,titulon), layout).visualizar();
+        System.out.println("Resultado: " + resultado);
 
     }
 }

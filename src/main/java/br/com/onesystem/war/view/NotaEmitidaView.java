@@ -88,7 +88,9 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -132,6 +134,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private Condicional condicionalSelecionada;
     private ConfiguracaoEstoque configuracaoEstoque;
     private LayoutDeImpressao layout;
+    private LayoutDeImpressao layoutTitulo;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -331,11 +334,21 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         try {
             new AdicionaDAO<>().adiciona(nota);
             InfoMessage.adicionado();
-            layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.TITULO);
-            if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
-            }
             limparJanela();
+            layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
+            layoutTitulo = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.TITULO);
+            if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao da nota
+            }
+            if (nota.getCobrancas() != null && !nota.getCobrancas().isEmpty()) {
+
+                List<Cobranca> lista = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+                if (!lista.isEmpty()) {
+                    if (!layoutTitulo.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                        RequestContext.getCurrentInstance().execute("PF('imprimirTitulosDialog').show()"); // chama a impressao dos titulos
+                    }
+                }
+            }
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -343,12 +356,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void imprimir() {
         try {
-            if (nota.getCobrancas() != null && !nota.getCobrancas().isEmpty()) {
-                List<Cobranca> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
-                if (!titulos.isEmpty()) {
-                    new ImpressoraDeLayout(titulos, layout).visualizarPDF();
-                }
-            }
+            new ImpressoraDeLayout(nota.getItens(), layout).addParametro("notaEmitida", nota).visualizarPDF();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTitulos() {
+        try {
+            List<Cobranca> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+            new ImpressoraDeLayout(titulos, layoutTitulo).visualizarPDF();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -502,7 +519,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void criaParcelas() {
         try {
             if (notaEmitida.getAFaturar() != null && (notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0
-                    || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0)) {
+                    || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0) && notaEmitida.getNumeroParcelas() > 0) {
                 Integer numParcelas = notaEmitida.getNumeroParcelas(); //Número de cobranca
                 TipoPeriodicidade tipoPeridiocidade = notaEmitida.getFormaDeRecebimento().getTipoPeriodicidade();
                 Integer periodicidade = notaEmitida.getFormaDeRecebimento().getPeriodicidade();
@@ -531,6 +548,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     recalculaValorAFaturar();
                 }
             } else {
+                cobrancas = new ArrayList<>();
                 ErrorMessage.print(new BundleUtil().getMessage("Nao_Existe_Valor_A_Faturar"));
             }
         } catch (CurrencyMissmatchException cme) {

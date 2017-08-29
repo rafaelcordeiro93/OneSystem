@@ -6,11 +6,15 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.reportTemplate.TemplateFormaPagamento;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
@@ -96,7 +100,7 @@ public abstract class Nota implements Serializable {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne(optional = false)
     private Filial filial;
-    
+
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
     }
@@ -220,6 +224,35 @@ public abstract class Nota implements Serializable {
         return emissao;
     }
 
+    @MetodoInacessivelRelatorio
+    public List<TemplateFormaPagamento> getTemplateFormaPagamento() {
+        List<TemplateFormaPagamento> lista = new ArrayList<>();
+        int id = 0;
+        for (ValorPorCotacao v : valorPorCotacao) {
+            lista.add(new TemplateFormaPagamento(id, v.getCotacao().getConta().getMoeda().getNome(), null, v.getValorFormatado()));
+            id++;
+        }
+        List<Cobranca> entradas = cobrancas.stream().filter(c -> c.getEntrada() == true).sorted(Comparator.comparing(c -> c.getVencimento())).collect(Collectors.toList());
+        List<Cobranca> parcelas = cobrancas.stream().filter(c -> c.getEntrada() == false).sorted(Comparator.comparing(c -> c.getParcela())).collect(Collectors.toList());
+
+        for (Cobranca c : entradas) {
+            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
+            id++;
+        }
+
+        for (Cobranca c : parcelas) {
+            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
+            id++;
+        }
+
+        return lista;
+    }
+
+    public String getEmissaoFormatada() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(emissao);
+    }
+
     public Nota getNotaDeOrigem() {
         return notaDeOrigem;
     }
@@ -243,7 +276,7 @@ public abstract class Nota implements Serializable {
     public Filial getFilial() {
         return filial;
     }
-    
+
     public List<Cobranca> getParcelas() {
         if (cobrancas != null) {
             List<Cobranca> parcelamento = this.cobrancas.stream().filter(p -> p.getEntrada() != true).collect(Collectors.toList());

@@ -240,25 +240,26 @@
                                                    value="#{notaEmitidaView.notaEmitida.porcentagemAcrescimo}">
                                         <p:ajax event="change" update="neAcrescimo nePDesconto neDesconto neDinheiro totalNota neAFaturar neCredito" 
                                                 listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
                                     <p:inputNumber id="neAcrescimo" maxValue="999999999999.99" minValue="0.00" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaEmitidaView.notaEmitida.acrescimo}">
                                         <p:ajax event="change" update="nePAcrescimo nePDesconto neDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                        <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber>
 
                                     <p:outputLabel value="#{l.Porcentagem_Desconto}"/>
                                     <p:inputNumber id="nePDesconto" maxValue="999999999999.99" minValue="0.00" symbol=" %" symbolPosition="right"
                                                    decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaEmitidaView.notaEmitida.porcentagemDesconto}">
-                                        <p:ajax event="change" update="neDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="neDesconto neDinheiro totalNota neCredito neParcelas" listener="#{notaEmitidaView.calculaValorAcrescimoEDesconto}"/>
                                     </p:inputNumber>                                     
                                     <p:inputNumber id="neDesconto" maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="."
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} "
                                                    styleClass="Wid90" value="#{notaEmitidaView.notaEmitida.desconto}">
-                                        <p:ajax event="change" update="nePDesconto neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
-                                        <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
+                                        <p:ajax event="change" update="nePDesconto neDinheiro totalNota neCredito neParcelas" listener="#{notaEmitidaView.calculaPorcentagemAcrescimoEDesconto}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:spacer/>
@@ -266,14 +267,16 @@
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaEmitidaView.notaEmitida.despesaCobranca}"
                                                    symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                        <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="neDinheiro totalNota neCredito neParcelas" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar neParcelas" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber> 
 
                                     <p:spacer/>
                                     <p:outputLabel value="#{l.Frete}"/>
                                     <p:inputNumber maxValue="999999999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." styleClass="Wid90"
                                                    value="#{notaEmitidaView.notaEmitida.frete}" symbol="#{notaEmitidaView.configuracao.moedaPadrao.sigla} ">
-                                        <p:ajax event="change" update="neDinheiro totalNota neCredito" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="neDinheiro totalNota neCredito neParcelas" listener="#{notaEmitidaView.calculaValoresTotais}"/>
+                                        <p:ajax event="change" update="totalNota neAFaturar" listener="#{notaEmitidaView.recalculaValores}"/>
                                     </p:inputNumber>    
 
                                 </p:panelGrid>
@@ -443,6 +446,18 @@
                 </div>
             </div>
         </h:form>
+
+        <p:dialog widgetVar="imprimirTitulosDialog" modal="true" width="400" height="200" visible="false" header="#{l.Imprimir}">
+            <p:panelGrid styleClass="ui-panelgrid-blank form-group form-elements" layout="grid" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1, ui-g-10 ui-md-10 ui-lg-10 PaddingTop6Px">
+                <i class="Fs28 fa fa-print "/>
+                <p:outputLabel value="#{l.Imprimir_Titulos}?"/>
+            </p:panelGrid>
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Sim}" icon="fa fa-check Fs14 White" actionListener="#{notaEmitidaView.imprimirTitulos()}" ajax="false" onclick="this.form.target = '_blank'"/>
+            <p:commandButton id="fecharDialog" icon="fa fa-close Fs14 White" value="#{l.Fechar}" onclick="PF('imprimirTitulosDialog').hide()"/>
+        </p:dialog>
 
         <p:dialog widgetVar="cotacaoVal" width="900" header="#{l.Cambio}"  modal="true" closable="false">
 
