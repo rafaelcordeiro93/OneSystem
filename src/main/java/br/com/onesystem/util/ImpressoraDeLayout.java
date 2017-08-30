@@ -2,6 +2,7 @@ package br.com.onesystem.util;
 
 import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoLayout;
@@ -71,7 +72,7 @@ public class ImpressoraDeLayout {
             stream.close();
             FacesContext.getCurrentInstance().responseComplete();
         } catch (JRException ex) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Layout_nao_definido_no_gerenciador_de_layouts"));
+            throw new ADadoInvalidoException(new BundleUtil().getMessage("Layout_nao_definido_no_gerenciador_de_layouts"));
         } catch (IOException ex) {
             throw new FDadoInvalidoException(new BundleUtil().getMessage("Erro_Exibir_Relatorio") + ": (ImpressoraDeLayout - ExportarPDF)" + ex.getMessage(), "Error");
         }
@@ -95,7 +96,7 @@ public class ImpressoraDeLayout {
             FacesContext.getCurrentInstance().responseComplete();
         } catch (JRException ex) {
             Logger.getLogger(ImpressoraDeLayout.class.getName()).log(Level.SEVERE, "Erro: " + ex.getMessage(), ex);
-            throw new EDadoInvalidoException("Error: " + ex.getMessage()); 
+            throw new ADadoInvalidoException("Error: " + ex.getMessage()); 
         } catch (IOException ex) {
             throw new FDadoInvalidoException(new BundleUtil().getMessage("Erro_Exibir_Relatorio") + ": (ImpressoraDeLayout - ExportarPDF)" + ex.getMessage(), "Error");
         }

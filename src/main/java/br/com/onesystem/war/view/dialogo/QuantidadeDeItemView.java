@@ -66,6 +66,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDep
         opcoes.put("modal", true);
         opcoes.put("resizable", true);
         opcoes.put("width", 400);
+        opcoes.put("height", 300);
         opcoes.put("draggable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");

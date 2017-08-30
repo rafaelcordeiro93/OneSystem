@@ -30,9 +30,9 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="id" class="java.lang.Long"/>
-	<field name="item.nome" class="java.lang.String"/>
-	<field name="quantidade" class="java.math.BigDecimal"/>
+	<field name="cobranca.id" class="java.lang.Long"/>
+	<field name="cobranca.emissaoFormatadaSemHoras" class="java.lang.String"/>
+	<field name="cobranca.vencimentoFormatadoSemHoras" class="java.lang.String"/>
 	<field name="unitarioFormatado" class="java.lang.String"/>
 	<field name="item.unidadeDeMedida.sigla" class="java.lang.String"/>
 	<field name="totalFormatado" class="java.lang.String"/>
@@ -296,28 +296,28 @@ $P{recebimento}.getFilial().getCep().getCidade().getEstado().getPais().getNome()
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cobranca.id}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="90" y="4" width="71" height="20" uuid="5f977cc2-5065-43c0-96b9-642c131322a5">
+				<reportElement x="60" y="0" width="60" height="20" uuid="5f977cc2-5065-43c0-96b9-642c131322a5">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Left" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{item.nome}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cobranca.emissaoFormatadaSemHoras}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="300" y="0" width="25" height="20" uuid="6f4098e3-368c-4146-9362-3d6d27ebd232">
+				<reportElement x="180" y="0" width="65" height="20" uuid="6f4098e3-368c-4146-9362-3d6d27ebd232">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{item.unidadeDeMedida.sigla}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="326" y="0" width="68" height="20" uuid="c68f3c63-7f0a-45bb-a97b-29f1dd0bda56">
+				<reportElement x="120" y="0" width="60" height="20" uuid="c68f3c63-7f0a-45bb-a97b-29f1dd0bda56">
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{cobranca.vencimentoFormatadoSemHoras}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="395" y="0" width="74" height="20" uuid="c19cca27-7d2c-4e13-998a-965feb2dec4b">

@@ -133,7 +133,7 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco " placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
                                         <p:ajax event="itemSelect" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
                                         <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
                                     </a:inputTextDialog>
@@ -141,7 +141,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputNumberDialog id="neQuantidade" value="#{notaEmitidaView.itemEmitido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" readonly="true" decimalPlaces="#{notaEmitidaView.itemEmitido.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="."/>
+                                    <a:inputNumberDialog id="neQuantidade" symbol="#{notaEmitidaView.itemEmitido.item.unidadeDeMedida.sigla}" value="#{notaEmitidaView.itemEmitido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" decimalPlaces="#{notaEmitidaView.itemEmitido.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator=".">
+                                        <p:ajax event="change" listener="#{notaEmitidaView.geraListaDeEstoquePadrao}" process="@this" />
+                                    </a:inputNumberDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >

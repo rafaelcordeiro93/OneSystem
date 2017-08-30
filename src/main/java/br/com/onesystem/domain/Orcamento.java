@@ -108,7 +108,7 @@ public class Orcamento implements Serializable {
         this.despesaCobranca = despesaCobranca;
         this.frete = frete;
         this.emissao = new Date();
-        this.estado = EstadoDeOrcamento.EM_DEFINICAO;
+        this.estado = estado == null ? EstadoDeOrcamento.EM_APROVACAO : estado;
         this.itensOrcados = itensOrcados;
         this.filial = filial;
         geraItensOrcados(itensOrcados);
@@ -166,7 +166,7 @@ public class Orcamento implements Serializable {
     public Filial getFilial() {
         return filial;
     }
-    
+
     public String getAcrescimoFormatado() {
         if (cotacao != null) {
             return MoedaFormatter.format(cotacao.getConta().getMoeda(), getAcrescimo());

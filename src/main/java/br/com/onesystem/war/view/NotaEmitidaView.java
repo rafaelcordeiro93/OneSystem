@@ -135,6 +135,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private ConfiguracaoEstoque configuracaoEstoque;
     private LayoutDeImpressao layout;
     private LayoutDeImpressao layoutTitulo;
+    private boolean buscouDeposito = false;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -672,6 +673,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 List<QuantidadeDeItemPorDeposito> lista = (List<QuantidadeDeItemPorDeposito>) event.getObject();
                 itemEmitido.setListaDeQuantidade(lista);
                 itemEmitido.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+                buscouDeposito = true;
             } else if (obj instanceof List && "exibeOrcamento-btn".equals(idComponent)) {
                 List<ItemOrcadoBV> lista = (List<ItemOrcadoBV>) event.getObject();
                 if (!lista.isEmpty()) {
@@ -724,6 +726,14 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    public void geraListaDeEstoquePadrao() {
+        if (!buscouDeposito) {
+            itemEmitido.setListaDeQuantidade(Arrays.asList(new QuantidadeDeItemPorDeposito(null, new SaldoDeEstoque(null, configuracaoEstoque.getDepositoPadrao(), null), itemEmitido.getQuantidade())));
+        } else {
+            buscouDeposito = false;
         }
     }
 

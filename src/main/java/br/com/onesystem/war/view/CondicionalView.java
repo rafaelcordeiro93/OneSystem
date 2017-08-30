@@ -81,10 +81,9 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     private void iniciarConfiguracoes() {
         try {
-            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
             configuracaoVenda = configuracaoVendaService.buscar();
             configuracao = configuracaoService.buscar();
-            cotacao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(new Date()).resultado();
+            cotacao = cotacaoService.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -127,6 +126,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
             addNoBanco(condicional);
             t = condicional;
+            layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
                 RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
             }

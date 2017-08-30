@@ -12,6 +12,7 @@
         <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
         <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
         <composite:attribute name="placeholder" shortDescription="Nome exibido no campo."/>
+        <composite:attribute name="symbol" shortDescription="Símbolo exibido no campo."/>
         <composite:attribute name="readonly" default="false" shortDescription="Define se o campo somente será de leitura." />
         <composite:attribute name="decimalPlaces" default="0" shortDescription="Define a quantidade de casas decimais." />
         <composite:attribute name="decimalSeparator" default="" shortDescription="Define o separador de casas decimais." />
@@ -19,6 +20,7 @@
         <composite:attribute name="update" default="" shortDescription="Atualiza componte por ajax."/>
         <composite:attribute name="style" shortDescription="Estilo CSS aplicado quando renderizado o componente."/>
         <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
+        <composite:clientBehavior event="change" targets="#{cc.attrs.id}-txt" name="change"/>
     </composite:interface>
 
     <composite:implementation>
@@ -26,7 +28,7 @@
         <f:loadBundle basename="label_messages" var="l"/>
 
         <div class="submit-line md-inputfield #{cc.attrs.styleClass}" style="#{cc.attrs.style}">
-            <p:inputNumber id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" decimalPlaces="#{cc.attrs.decimalPlaces}" decimalSeparator="#{cc.attrs.decimalSeparator}" thousandSeparator="#{cc.attrs.thousandSeparator}" readonly="true"/>
+            <p:inputNumber id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" symbol="#{cc.attrs.symbol} " decimalPlaces="#{cc.attrs.decimalPlaces}" decimalSeparator="#{cc.attrs.decimalSeparator}" thousandSeparator="#{cc.attrs.thousandSeparator}" readonly="#{cc.attrs.readonly}"/>
             <p:outputLabel value="#{cc.attrs.placeholder}"/>
             <p:commandButton id="#{cc.attrs.id}-btn" icon="fa fa-search" styleClass="submit-edit" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
                 <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update}"/>
