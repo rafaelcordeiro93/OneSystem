@@ -20,6 +20,7 @@ import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.FaturaLegadaBV;
+import br.com.onesystem.war.builder.TituloBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.war.view.dialogo.DialogoCobrancaView;
 import java.io.Serializable;
@@ -51,8 +52,12 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
     public void add() {
         try {
             FaturaLegada f = e.construir();
+            int parcela = 1;
             for (Titulo t : list.getList()) {
-                f.adiciona(t);
+                TituloBV bv = new TituloBV(t);
+                bv.setParcela(parcela);
+                parcela++;
+                f.adiciona(bv.construir());
             }
             addNoBanco(f);
         } catch (DadoInvalidoException ex) {
@@ -64,7 +69,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
         try {
             if (modeloSelecionado != null) {
                 SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
-                SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
+                //SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
             }
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
@@ -79,9 +84,12 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             List<Titulo> removidos = list.getRemovidos().stream().filter(m -> ((Titulo) m.getObject()).getId() != null).map(m -> (Titulo) m.getObject()).collect(Collectors.toList());
             FaturaLegada f = e.construirComID();
             removidos.forEach(c -> f.remove(c));
-
+            int parcela = 1;
             for (Titulo t : list.getList()) {
-                f.atualiza(t);
+                TituloBV bv = new TituloBV(t);
+                bv.setParcela(parcela);
+                parcela++;
+                f.atualiza(bv.construirComID());
             }
             new AtualizaDAO<>().atualiza(f);
             for (Titulo c : removidos) {
@@ -130,6 +138,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             modeloSelecionado = (Model<Titulo>) event.getObject();
             removeDaSessao();
             SessionUtil.put(modeloSelecionado, "model", FacesContext.getCurrentInstance());
+            SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

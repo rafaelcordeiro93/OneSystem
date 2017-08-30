@@ -67,7 +67,7 @@
                                 <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{faturaLegadaView.remover}" styleClass="orange-btn"  update="parcelas"/>
                             </p:panelGrid>
 
-                            <p:dataTable id="parcelas" var="model" value="#{faturaLegadaView.list}"
+                            <p:dataTable id="parcelas" var="model" value="#{faturaLegadaView.list}" rowIndexVar="rowIndex"
                                          styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" disabledSelection="#{model.object.possuiPagamento}"
                                          paginatorAlwaysVisible="false" rows="12" paginator="true" rowStyleClass="#{model.object.possuiPagamento ? 'rowSoftBlue' : ''}"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -76,7 +76,7 @@
                                 <p:ajax event="rowSelect" listener="#{faturaLegadaView.selecionaParcela}" update="@this" />
 
                                 <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
-                                    <h:outputText value="#{model.id + 1}" />
+                                    #{rowIndex+1}
                                 </p:column>
                                 <p:column headerText="#{l.Modalidade}" styleClass="TexAlCenter">
                                     <h:outputText value="#{model.object.modalidade.nome}"/>
