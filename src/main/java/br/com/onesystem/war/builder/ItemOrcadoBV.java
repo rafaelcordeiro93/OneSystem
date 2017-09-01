@@ -135,8 +135,7 @@ public class ItemOrcadoBV {
     }
 
     public BigDecimal getTotal() {
-
-        return getQuantidade() == null ? BigDecimal.ZERO : getQuantidade().multiply(unitario == null ? BigDecimal.ZERO : unitario);
+        return getFaturar() == null ? BigDecimal.ZERO : getFaturar().multiply(unitario == null ? BigDecimal.ZERO : unitario);
     }
 
     public ItemOrcado construir() throws DadoInvalidoException {

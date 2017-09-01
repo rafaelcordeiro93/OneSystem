@@ -76,7 +76,7 @@
                                         <p:inputNumber id="condQuanastidade" maxValue="999999999999.99" minValue="0.00"  styleClass="Wid90" decimalPlaces="#{itemOrcadoBV.item.unidadeDeMedida.casasDecimais}" 
                                                        decimalSeparator="," thousandSeparator="." value="#{itemOrcadoBV.faturar}"> 
                                             <p:ajax event="focus" listener="#{dialogoOrcamentoView.selecionaNoFocus(itemOrcadoBV)}"/>
-                                            <p:ajax event="change" listener="#{dialogoOrcamentoView.geraListaDeEstoquePadrao}" update=":tempDialog:tabs:itensOrcadosOrcamento:0:totalFaturar"/>
+                                            <p:ajax event="change" listener="#{dialogoOrcamentoView.geraListaDeEstoquePadrao}" update="tempDialog:tabs:itensOrcadosOrcamento"/>
                                         </p:inputNumber>
                                     </f:facet>
                                 </p:cellEditor>
@@ -89,7 +89,7 @@
                                 <p:commandLink id="attr-btn" action="#{dialogoOrcamentoView.atribuiItemASessao(itemOrcadoBV)}"><i class="fa fa-plus Fs10"/></p:commandLink>
 
                                 <p:commandButton id="exibeQuantidade-btn" action="#{quantidadeDeItemView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                                    <p:ajax event="dialogReturn" listener="#{dialogoOrcamentoView.selecionar}" process="@this" update="@form condQuanastidade"/>
+                                    <p:ajax event="dialogReturn" listener="#{dialogoOrcamentoView.selecionar}" process="@this" update="@form"/>
                                 </p:commandButton>
 
                             </p:column>
