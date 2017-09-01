@@ -12,6 +12,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
+import br.com.onesystem.war.service.CotacaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -143,6 +144,18 @@ public class ValorPorCotacao implements Serializable {
 
     public BigDecimal getValor() {
         return valor;
+    }
+
+    public String getValorNaMoedaPadraoFormatado() {
+        if (nota != null) {
+            return MoedaFormatter.format(nota.getMoedaPadrao(), getValorNaMoedaPadrao());
+        } else {
+            return "";
+        }
+    }
+
+    public BigDecimal getValorNaMoedaPadrao() {
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getValor(), getCotacao());
     }
 
     public String getValorFormatado() {

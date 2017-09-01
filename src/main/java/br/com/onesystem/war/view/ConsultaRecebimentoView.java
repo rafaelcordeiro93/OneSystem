@@ -5,12 +5,14 @@ import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
@@ -18,10 +20,12 @@ import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -48,6 +52,9 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     @Inject
     private CotacaoService service;
 
+    @Inject
+    private LayoutDeImpressaoService layoutService;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -120,6 +127,20 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
     public void atualizaEmissao() throws DadoInvalidoException {
         e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
     }
+    
+    public void imprimir() {
+        try {
+            if (t != null) {
+                LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
+                new ImpressoraDeLayout(t.getTipoDeCobranca(), layout).addParametro("recebimento", t).visualizarPDF();
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
 
     @Override
     public void selecionar(SelectEvent event) {
@@ -127,6 +148,7 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             Object obj = event.getObject();
             if (obj instanceof Recebimento) {
                 e = new RecebimentoBV((Recebimento) obj);
+                t = (Recebimento) obj;
                 tiposDeCobranca = new ModelList<>(e.getTiposDeCobranca());
                 formasDeCobranca = new ModelList<>(e.getFormasDeCobranca());
             } else if (obj instanceof TipoDeCobranca) {

@@ -57,9 +57,12 @@
                         <p:column headerText="#{l.Valor}">
                             <h:outputText value="#{m.object.totalFormatado}"/>
                         </p:column>
+                        <p:column headerText="#{l.Valor_Convertido}">
+                            <h:outputText value="#{m.object.totalNaMoedaPadraoFormatado}"/>
+                        </p:column>
                         <p:columnGroup type="footer">
                             <p:row>
-                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column colspan="12" style="text-align:right" footerText="#{l.Total}: " />
                                 <p:column styleClass="Blue" footerText="#{recebimentoView.totalTipoNaCotacaoPadraoFormatado}"/>
                             </p:row>                                    
                         </p:columnGroup>
@@ -133,9 +136,12 @@
                         <p:column headerText="#{l.Valor}">
                             <h:outputText value="#{m.object.totalFormatado}"/>
                         </p:column>
+                         <p:column headerText="#{l.Valor_Convertido}">
+                            <h:outputText value="#{m.object.totalNaMoedaPadraoFormatado}"/>
+                        </p:column>
                         <p:columnGroup type="footer">
                             <p:row>
-                                <p:column colspan="11" style="text-align:right" footerText="#{l.Total}: " />
+                                <p:column colspan="12" style="text-align:right" footerText="#{l.Total}: " />
                                 <p:column styleClass="Blue" footerText="#{recebimentoView.totalFormaNaCotacaoPadraoFormatado}"/>
                             </p:row>                                    
                         </p:columnGroup>
@@ -171,6 +177,7 @@
 
                     <p:separator/>
                     <p:commandButton value="#{l.Receber_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White"  action="#{recebimentoView.receber()}" />
+                    <h:commandButton id="imprimir" actionListener="#{recebimentoView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
                 </div>
             </div>
         </div>

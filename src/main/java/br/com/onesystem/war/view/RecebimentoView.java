@@ -5,22 +5,27 @@ import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.TipoImpressao;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -28,6 +33,7 @@ import java.util.Date;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
@@ -40,9 +46,13 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private ModelList<FormaDeCobranca> formasDeCobranca;
     private TipoDeCobrancaBV tipoDeCobrancaBV;
     private FormaDeCobrancaBV formaDeCobrancaBV;
+    private LayoutDeImpressao layoutDeImpressao;
 
     @Inject
     private CotacaoService service;
+
+    @Inject
+    private LayoutDeImpressaoService layoutService;
 
     public void receber() {
         try {
@@ -53,9 +63,23 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             recebimento.ehRegistroValido();
             recebimento.geraBaixas();
             addNoBanco(recebimento);
+            t = recebimento;
+            layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
+            if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao da nota
+            }
         } catch (DadoInvalidoException die) {
             die.print();
             limparJanela();
+        }
+    }
+
+    public void imprimir() {
+        try {
+            new ImpressoraDeLayout(t.getTipoDeCobranca(), layoutDeImpressao).addParametro("recebimento", t).visualizarPDF();
+            t = null;
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

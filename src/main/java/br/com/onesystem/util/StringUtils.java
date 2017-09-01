@@ -34,4 +34,16 @@ public class StringUtils {
         }
         return false;
     }
+
+    public static String primeiraLetraMaiusculaAposEspaco(String str) {
+        String split[] = str.split(" ");
+        str = "";
+        for (int i = 0; i < split.length; i++) {
+            str += split[i].substring(0, 1).toUpperCase() + split[i].substring(1).toLowerCase();
+            if (i != (split.length - 1)) {
+                str += " ";
+            }
+        }
+        return str;
+    }
 }

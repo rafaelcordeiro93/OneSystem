@@ -210,7 +210,8 @@ public class DadosNecessarios implements Serializable {
                 break;
         }
         // Filial obrigatória para todas as janelas.
-        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")) {
+        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")
+                && !janela.equals("/login.xhtml")) {
             getFilial();
         }
         return pendencias;

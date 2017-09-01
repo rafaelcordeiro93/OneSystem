@@ -12,6 +12,9 @@ public class MoedaBuilder {
 
     private Long ID;
     private String nome;
+    private String nomePlural;
+    private String nomeCasasDecimais;
+    private String nomeCasasDecimaisPlural;
     private String sigla;
     private TipoBandeira bandeira;
 
@@ -25,18 +28,33 @@ public class MoedaBuilder {
         return this;
     }
 
+    public MoedaBuilder comNomePlural(String nomePlural) {
+        this.nomePlural = nomePlural;
+        return this;
+    }
+
+    public MoedaBuilder comNomeCasasDecimais(String nomeCasasDecimais) {
+        this.nomeCasasDecimais = nomeCasasDecimais;
+        return this;
+    }
+
+    public MoedaBuilder comNomeCasasDecimaisPlural(String nomeCasasDecimaisPlural) {
+        this.nomeCasasDecimaisPlural = nomeCasasDecimaisPlural;
+        return this;
+    }
+
     public MoedaBuilder comSigla(String sigla) {
         this.sigla = sigla;
         return this;
     }
 
-    public MoedaBuilder comBandeira(TipoBandeira bandeira){
+    public MoedaBuilder comBandeira(TipoBandeira bandeira) {
         this.bandeira = bandeira;
         return this;
     }
-    
+
     public Moeda construir() throws DadoInvalidoException {
-        return new Moeda(ID, nome, sigla, bandeira);
+        return new Moeda(ID, nome, sigla, nomePlural, nomeCasasDecimais, nomeCasasDecimaisPlural, bandeira);
     }
 
 }
