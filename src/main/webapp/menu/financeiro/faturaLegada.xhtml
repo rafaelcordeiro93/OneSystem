@@ -56,15 +56,24 @@
                         <!--  ================================================   -->
 
                         <div class="ui-g">  
+                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2>">
 
-                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
-                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{faturaLegadaView.addNovaParcela}" process="@this" update="@none" >
-                                    <p:ajax event="dialogReturn"  listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
-                                </p:commandButton>
-                                <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
-                                    <p:ajax event="dialogReturn" listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
-                                </p:commandButton>
-                                <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{faturaLegadaView.remover}" styleClass="orange-btn"  update="parcelas"/>
+                                <p:outputLabel value="#{l.Conta}"/>
+                                <a:inputTextDialog id="pessoaIDNota"  value="#{faturaLegadaView.conta}" dialog="#{selecaoContaView}"  mbView="#{faturaLegadaView}" 
+                                                   var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" disabledSearch="#{faturaLegadaView.habilitaBotaoConta()}" 
+                                                   readonly="#{faturaLegadaView.habilitaBotaoConta()}" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+
+
+                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                    <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{faturaLegadaView.addNovaParcela}" process="@this" update="@none" >
+                                        <p:ajax event="dialogReturn"  listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
+                                        <p:ajax event="dialogReturn" listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
+                                    </p:commandButton>
+                                    <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{faturaLegadaView.remover}" styleClass="orange-btn"  update="parcelas"/>
+                                </p:panelGrid>
                             </p:panelGrid>
 
                             <p:dataTable id="parcelas" var="model" value="#{faturaLegadaView.list}" rowIndexVar="rowIndex"

@@ -97,7 +97,7 @@ public class DadosIniciais {
         //Cidade ====================================================
         Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comEstado(estado).construir();
         new AdicionaDAO<>().adiciona(city);
-        
+
         //Cep =======================================================
         Cep cep = new CepBuilder().comCep("85950-000").comCidade(city).construir();
         new AdicionaDAO<>().adiciona(cep);
@@ -498,70 +498,66 @@ public class DadosIniciais {
         // -- Adiciona Grupo Financeiro
         AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
 
-        GrupoFinanceiro aje = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
-        GrupoFinanceiro dev = new GrupoFinanceiro(null, "(-) Devoluções de Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
-        GrupoFinanceiro imp = new GrupoFinanceiro(null, "Impostos Sobre Faturamento", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
-        GrupoFinanceiro tot = new GrupoFinanceiro(null, "Total dos Custos Variáveis", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
-        GrupoFinanceiro depv = new GrupoFinanceiro(null, "Despesas Com Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro depp = new GrupoFinanceiro(null, "Despesas Com Pessoal", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro depa = new GrupoFinanceiro(null, "Despesas Administrativas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro dept = new GrupoFinanceiro(null, "Despesas Tributarias", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro depf = new GrupoFinanceiro(null, "Despesas Financeiras", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
-        GrupoFinanceiro depo = new GrupoFinanceiro(null, "Despesas Não Operacionais", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
-        GrupoFinanceiro ope = new GrupoFinanceiro(null, "Operações Com Estoque", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
-        GrupoFinanceiro opi = new GrupoFinanceiro(null, "Operações Com Imobilizado", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
-        GrupoFinanceiro oo = new GrupoFinanceiro(null, "Outras Operações", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
-        GrupoFinanceiro cp = new GrupoFinanceiro(null, "Custos de Produção", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
-        
-        GrupoFinanceiro gfReceitaAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
-        GrupoFinanceiro gfReceitaM = new GrupoFinanceiro(null, bundle.getLabel("Receita_com_Vendas_de_Mercadorias"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro gfReceitaPS = new GrupoFinanceiro(null, bundle.getLabel("Receitas_com_Prestacao_de_Servicos"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro gfReceitaDV = new GrupoFinanceiro(null, "(-) "+ bundle.getLabel("Devoluciones de Ventas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
-        GrupoFinanceiro gfReceitaRF = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Financeiras"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.FINANCEIRAS);
-        GrupoFinanceiro gfReceitaRD = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Diversas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS_OPERACIONAIS);
-        GrupoFinanceiro gfReceitaRO = new GrupoFinanceiro(null, bundle.getLabel("Receitas_nao_Operacionais"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
-        GrupoFinanceiro gfReceitaOE = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Estoque"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
-        GrupoFinanceiro gfReceitaOI = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Imobilizado"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
-        GrupoFinanceiro gfReceitaOU = new GrupoFinanceiro(null, bundle.getLabel("Outras_Operacoes"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfDAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfDDevVendas = new GrupoFinanceiro(null, "(-) " + bundle.getLabel("Devolucoes_de_Vendas"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro gfDImpFaturamento = new GrupoFinanceiro(null, bundle.getLabel("Impostos_Sobre_Faturamento"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro gfDCustoVariavel = new GrupoFinanceiro(null, bundle.getLabel("Total_Custos_Variaveis"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        GrupoFinanceiro gfDVendas = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Vendas"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfDPessoal = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Pessoal"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfDAdm = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Administrativas"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfDTributarias = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Tributarias"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfDFinan = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Financeiras"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        GrupoFinanceiro gfDNaoOP = new GrupoFinanceiro(null, bundle.getLabel("Despesas_Nao_Operacionais"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro gfDEstoque = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_Estoque"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfDImobilizado = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_Imobilizado"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro gfDOperacoes = new GrupoFinanceiro(null, bundle.getLabel("Outras_Operacoes"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro gfDAProducao = new GrupoFinanceiro(null, bundle.getLabel("Custos_Producao"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        daoGrupoFinanceiro.adiciona(gfDAjuste);
+        daoGrupoFinanceiro.adiciona(gfDDevVendas);
+        daoGrupoFinanceiro.adiciona(gfDImpFaturamento);
+        daoGrupoFinanceiro.adiciona(gfDCustoVariavel);
+        daoGrupoFinanceiro.adiciona(gfDVendas);
+        daoGrupoFinanceiro.adiciona(gfDPessoal);
+        daoGrupoFinanceiro.adiciona(gfDAdm);
+        daoGrupoFinanceiro.adiciona(gfDTributarias);
+        daoGrupoFinanceiro.adiciona(gfDFinan);
+        daoGrupoFinanceiro.adiciona(gfDNaoOP);
+        daoGrupoFinanceiro.adiciona(gfDEstoque);
+        daoGrupoFinanceiro.adiciona(gfDImobilizado);
+        daoGrupoFinanceiro.adiciona(gfDOperacoes);
+        daoGrupoFinanceiro.adiciona(gfDAProducao);
 
-        daoGrupoFinanceiro.adiciona(aje);
-        daoGrupoFinanceiro.adiciona(dev);
-        daoGrupoFinanceiro.adiciona(imp);
-        daoGrupoFinanceiro.adiciona(tot);
-        daoGrupoFinanceiro.adiciona(depv);
-        daoGrupoFinanceiro.adiciona(depp);
-        daoGrupoFinanceiro.adiciona(depa);
-        daoGrupoFinanceiro.adiciona(dept);
-        daoGrupoFinanceiro.adiciona(depf);
-        daoGrupoFinanceiro.adiciona(depo);
-        daoGrupoFinanceiro.adiciona(ope);
-        daoGrupoFinanceiro.adiciona(opi);
-        daoGrupoFinanceiro.adiciona(oo);
-        daoGrupoFinanceiro.adiciona(cp);
-        
-        daoGrupoFinanceiro.adiciona(gfReceitaAjuste);
-        daoGrupoFinanceiro.adiciona(gfReceitaM);
-        daoGrupoFinanceiro.adiciona(gfReceitaPS);
-        daoGrupoFinanceiro.adiciona(gfReceitaDV);
-        daoGrupoFinanceiro.adiciona(gfReceitaRF);
-        daoGrupoFinanceiro.adiciona(gfReceitaRD);
-        daoGrupoFinanceiro.adiciona(gfReceitaRO);
-        daoGrupoFinanceiro.adiciona(gfReceitaOE);
-        daoGrupoFinanceiro.adiciona(gfReceitaOI);
-        daoGrupoFinanceiro.adiciona(gfReceitaOU);
+        GrupoFinanceiro gfRAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfRVendaMercad = new GrupoFinanceiro(null, bundle.getLabel("Receita_com_Vendas_de_Mercadorias"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfRPrestServicos = new GrupoFinanceiro(null, bundle.getLabel("Receitas_com_Prestacao_de_Servicos"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfRDevoVendas = new GrupoFinanceiro(null, "(-) " + bundle.getLabel("Devolucoes_de_Vendas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro gfRFinan = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Financeiras"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.FINANCEIRAS);
+        GrupoFinanceiro gfRDiversas = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Diversas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS_OPERACIONAIS);
+        GrupoFinanceiro gfRNaoOP = new GrupoFinanceiro(null, bundle.getLabel("Receitas_nao_Operacionais"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro gfREstoque = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Estoque"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfRImobilizado = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Imobilizado"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfROutrasOP = new GrupoFinanceiro(null, bundle.getLabel("Outras_Operacoes"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        daoGrupoFinanceiro.adiciona(gfRAjuste);
+        daoGrupoFinanceiro.adiciona(gfRVendaMercad);
+        daoGrupoFinanceiro.adiciona(gfRPrestServicos);
+        daoGrupoFinanceiro.adiciona(gfRDevoVendas);
+        daoGrupoFinanceiro.adiciona(gfRFinan);
+        daoGrupoFinanceiro.adiciona(gfRDiversas);
+        daoGrupoFinanceiro.adiciona(gfRNaoOP);
+        daoGrupoFinanceiro.adiciona(gfREstoque);
+        daoGrupoFinanceiro.adiciona(gfRImobilizado);
+        daoGrupoFinanceiro.adiciona(gfROutrasOP);
 
         // -- Adiciona TipoDespesa
         AdicionaDAO<TipoDespesa> daoDespesa = new AdicionaDAO<>();
 
-        TipoDespesa descontosConcedidos = new TipoDespesa(null, "Descontos Concedidos", tot);
-        TipoDespesa jurosPagos = new TipoDespesa(null, "Juros Pagos", tot);
-        TipoDespesa multasPagas = new TipoDespesa(null, "Multas Pagas", depf);
-        TipoDespesa despesaCambial = new TipoDespesa(null, "Despesa com variação cambial", tot);
-        TipoDespesa comprasNormais = new TipoDespesa(null, "Compras Normais", ope);
-        TipoDespesa outrasD = new TipoDespesa(null, "Outras", ope);
-
-        TipoDespesa custoDaMercadoriaVendida = new TipoDespesa(null, "Custo da Mercadoria Vendida", tot);
-
+        TipoDespesa descontosConcedidos = new TipoDespesa(null, bundle.getLabel("Descontos_Concedidos"), gfDCustoVariavel);
+        TipoDespesa jurosPagos = new TipoDespesa(null, bundle.getLabel("Juros_Pagos"), gfDCustoVariavel);
+        TipoDespesa multasPagas = new TipoDespesa(null, bundle.getLabel("Multas_Pagas"), gfDFinan);
+        TipoDespesa despesaCambial = new TipoDespesa(null, bundle.getLabel("Despesa_Variacao_Cambial"), gfDCustoVariavel);
+        TipoDespesa comprasNormais = new TipoDespesa(null, bundle.getLabel("Compras_Normais"), gfDEstoque);
+        TipoDespesa outrasD = new TipoDespesa(null, bundle.getLabel("Outras"), gfDEstoque);
+        TipoDespesa custoDaMercadoriaVendida = new TipoDespesa(null, bundle.getLabel("Custo_Mercadoria_Vendida"), gfDCustoVariavel);
         daoDespesa.adiciona(descontosConcedidos);
         daoDespesa.adiciona(jurosPagos);
         daoDespesa.adiciona(multasPagas);
@@ -569,92 +565,98 @@ public class DadosIniciais {
         daoDespesa.adiciona(comprasNormais);
         daoDespesa.adiciona(custoDaMercadoriaVendida);
         daoDespesa.adiciona(outrasD);
-        daoDespesa.adiciona(new TipoDespesa(null, "Ajuste de Saldo Inicial", aje));
-        daoDespesa.adiciona(new TipoDespesa(null, "PIS Sobre Faturamento", imp));
-        daoDespesa.adiciona(new TipoDespesa(null, "COFINS Sobre Faturamento", imp));
-        daoDespesa.adiciona(new TipoDespesa(null, "ICMS Sobre Mercadorias", imp));
-        daoDespesa.adiciona(new TipoDespesa(null, "ISS Sobre Servicos", imp));
-        daoDespesa.adiciona(new TipoDespesa(null, "DARF - Simples Sobre Faturamento", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "(-) Devolucoes de Vendas", dev));
-        daoDespesa.adiciona(new TipoDespesa(null, "Custo dos Servicos Prestados", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Comissoes Sobre Venda", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Propaganda e Publicidade", depv));
-        daoDespesa.adiciona(new TipoDespesa(null, "Doacoes, Brindes e Bonificacoes", depv));
-        daoDespesa.adiciona(new TipoDespesa(null, "Desp. De Frete de Entregas", depv));
-        daoDespesa.adiciona(new TipoDespesa(null, "Salarios", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outras Comissoes", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Gratificacoes", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Estagiarios", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "13º Salario", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Ferias", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Vale Transporte", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Assistencia a Empregados", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Aviso Previo e Indeniz. Trabalhista", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Treinamentos", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "FGTS", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "INSS", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "Pro-labore", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Agua", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Telefone", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Energia Eletrica", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Aluguel Comercial", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Aluguel de Sistemas", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Honorarios Profissionais", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Combustiveis e Lubrificantes", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Contribuicoes a Assoc. e Entidades", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Contribuicoes Sindicais", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Taxas Diversas", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Pedagio", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Cartorio", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Correios", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Dispendio c/ Alimentacao", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Feiras, Congressos e Cursos", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Passagens, Viagens e Estadias", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Fotocopias e Impressoes", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Fretes de Compras", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "IOF IMP. OPER. FINANCEIRA", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Depreciacoes", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Manutencao e Conservacao do Predio", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Manutencao de Veiculos", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Material de Expediente, Limpeza e Consumo", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Servicos de Terc. Pessoa Fisica", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Confraternizacoes", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outras Administrativas", depa));
-        daoDespesa.adiciona(new TipoDespesa(null, "MEDICINA DO TRABALHO", depp));
-        daoDespesa.adiciona(new TipoDespesa(null, "IRPJ", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Contribuicao Social S/ Lucro Liquido", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outros Impostos Estaduais", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outros Impostos Municipais", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Impostos e Taxas Diversas", dept));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outras Financeiras", depf));
-        daoDespesa.adiciona(new TipoDespesa(null, "Tarifas Bancarias", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Correcao Monetaria Paga", depf));
-        daoDespesa.adiciona(new TipoDespesa(null, "Encargos e Moras Fiscais", depf));
-        daoDespesa.adiciona(new TipoDespesa(null, "Despesas com Cobrancas", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Taxa de Adm Cartao de Credito", tot));
-        daoDespesa.adiciona(new TipoDespesa(null, "Despesas Indedutiveis", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Infracoes Fiscais", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Prejuizos na Venda de Imobilizado", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Sinistros", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Perdas com Estoque", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Outras nao Operacionais", depo));
-        daoDespesa.adiciona(new TipoDespesa(null, "Compras em Consignacao", ope));
-        daoDespesa.adiciona(new TipoDespesa(null, "Compras de Ativo Imobilizado", opi));
-        daoDespesa.adiciona(new TipoDespesa(null, "Compras p/ Recebimento Futuro", ope));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Ajuste_Saldo_Inicial"), gfDAjuste));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("PIS_Sobre_Faturamento"), gfDImpFaturamento));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("COFINS_Sobre_Faturamento"), gfDImpFaturamento));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("ICMS_Sobre_Mercadorias"), gfDImpFaturamento));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("ISS_Sobre_Servicos"), gfDImpFaturamento));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("DARF_Simples_Sobre_Faturamento"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, "(-) " + bundle.getLabel("Devolucoes_Vendas"), gfDDevVendas));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Custo_Servicos_Prestados"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Comissoes_Sobre_Venda"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Propaganda_Publicidade"), gfDVendas));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Doacoes_Brindes_Bonificacoes"), gfDVendas));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Desp_Frete_Entregas"), gfDVendas));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Salarios"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outras_Comissoes"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Gratificacoes"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Estagiarios"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("13_Salario"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Ferias"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Vale_Transporte"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Assistencia_Empregados"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Aviso_Previo_Indenizacao_Trabalhista"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Treinamentos"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("FGTS"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("INSS"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Pro_labore"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Agua"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Telefone"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Energia_Eletrica"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Aluguel_Comercial"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Aluguel_Sistemas"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Honorarios_Profissionais"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Combustiveis_Lubrificantes"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Contribuicoes_Associacoes_Entidades"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Contribuicoes_Sindicais"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Taxas_Diversas"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Pedagio"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Cartorio"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Correios"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Dispendio_Alimentacao"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Feiras_Congressos_Cursos"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Passagens_Viagens_Estadias"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Fotocopias_Impressoes"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Fretes_Compras"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("IOF_Imp_Oper_Financeira"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Depreciacoes"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Manutencao_Conservacao_Predio"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Manutencao_Veiculos"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Material_Expediente_Limpeza_Consumo"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Servicos_Tercerizado_Pessoa_Fisica"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Confraternizacoes"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outras_Administrativas"), gfDAdm));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Medicina_Trabalho"), gfDPessoal));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("IRPJ"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Contribuicao_Social_Lucro_Liquido"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outros_Impostos_Estaduais"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outros_Impostos_Municipais"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Impostos_Taxas_Diversas"), gfDTributarias));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outras_Financeiras"), gfDFinan));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Tarifas_Bancarias"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Correcao_Monetaria_Paga"), gfDFinan));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Encargos_Moras_Fiscais"), gfDFinan));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Despesas_Cobrancas"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Taxa_Adm_Cartao_Credito"), gfDCustoVariavel));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Despesas_Indedutiveis"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Infracoes_Fiscais"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Prejuizos_Venda_Imobilizado"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Sinistros"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Perdas_Estoque"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Outras_Operacionais"), gfDNaoOP));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Compras_Consignacao"), gfDEstoque));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Compras_Ativo_Imobilizado"), gfDImobilizado));
+        daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Compras_Recebimento_Futuro"), gfDEstoque));
 
         // -- Adiciona Receitas
         AdicionaDAO<TipoReceita> daoReceita = new AdicionaDAO<>();
 
-        TipoReceita descontosRecebidos = new TipoReceita(null, "Descontos Recebidos", tot);
-        TipoReceita jurosRecebidos = new TipoReceita(null, "Juros Recebidos", tot);
-        TipoReceita multasRecebidas = new TipoReceita(null, "Multas Recebidas", depf);
-        TipoReceita receitaCambial = new TipoReceita(null, "Receita com variação cambial", tot);
-        TipoReceita receitaFrete = new TipoReceita(null, "Receita com frete", tot);
-        TipoReceita outras = new TipoReceita(null, "Outras", tot);
-        TipoReceita vendaAVista = new TipoReceita(null, "Venda a Vista", imp);
-        TipoReceita servicoAVista = new TipoReceita(null, "Serviço a Vista", imp);
-        TipoReceita vendaAPrazo = new TipoReceita(null, "Venda a Prazo", imp);
-        TipoReceita servicoAPrazo = new TipoReceita(null, "Serviço a Prazo", imp);
+        TipoReceita descontosRecebidos = new TipoReceita(null, bundle.getLabel("Descontos_Recebidos"), gfRFinan);
+        TipoReceita jurosRecebidos = new TipoReceita(null, bundle.getLabel("Juros_Recebidos"), gfRFinan);
+        TipoReceita multasRecebidas = new TipoReceita(null, bundle.getLabel("Multas_Recebidas"), gfRFinan);
+        TipoReceita receitaCambial = new TipoReceita(null, bundle.getLabel("Receita_Variacao_Cambial"), gfRFinan);
+        TipoReceita receitaFrete = new TipoReceita(null, bundle.getLabel("Receita_Frete"), gfRDiversas);
+        TipoReceita outras = new TipoReceita(null, bundle.getLabel("Outras"), gfROutrasOP);
+        TipoReceita vendaAVista = new TipoReceita(null, bundle.getLabel("Venda_AVista"), gfRVendaMercad);
+        TipoReceita servicoAVista = new TipoReceita(null, bundle.getLabel("Servico_AVista"), gfRPrestServicos);
+        TipoReceita vendaAPrazo = new TipoReceita(null, bundle.getLabel("Venda_APrazo"), gfRVendaMercad);
+        TipoReceita servicoAPrazo = new TipoReceita(null, bundle.getLabel("Servico_APrazo"), gfRPrestServicos);
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Receitas_Aplicacoes_Financeiras"), gfRFinan));
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Bonificacoes_Brindes_Recebidos"), gfRDiversas));
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Reembolso_Sinistros"), gfRNaoOP));
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Agio_Venda_Imobilizado"), gfRNaoOP));
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Venda_Imobilizado"), gfRImobilizado));
+        daoReceita.adiciona(new TipoReceita(null, bundle.getLabel("Ajuste_Saldo_Inicial"), gfDAjuste));
 
         daoReceita.adiciona(descontosRecebidos);
         daoReceita.adiciona(jurosRecebidos);
@@ -666,8 +668,6 @@ public class DadosIniciais {
         daoReceita.adiciona(vendaAPrazo);
         daoReceita.adiciona(servicoAVista);
         daoReceita.adiciona(servicoAPrazo);
-
-        daoReceita.adiciona(new TipoReceita(null, "Ajuste de Saldo Inicial", aje));
 
         // -- Adiciona Bancos
         AdicionaDAO<Banco> daoBanco = new AdicionaDAO<>();
@@ -813,10 +813,10 @@ public class DadosIniciais {
         //Conta de Estoque
         // ---------------------------------------------------------------------
         AdicionaDAO<ContaDeEstoque> contaDeEstoqueDao = new AdicionaDAO<ContaDeEstoque>();
-        ContaDeEstoque contaDaEmpresa = new ContaDeEstoqueBuilder().comNome("Estoque da empresa").construir();
-        ContaDeEstoque contaEstoqueDaEmpresa = new ContaDeEstoqueBuilder().comNome("Estoque da empresa em posse da empresa").construir();
-        ContaDeEstoque contaDaEmpresaEmPosseDeTerceiros = new ContaDeEstoqueBuilder().comNome("Estoque da empresa em posse de terceiros").construir();
-        ContaDeEstoque contaDeTerceiros = new ContaDeEstoqueBuilder().comNome("Estoque de terceiros em posse da empresa").construir();
+        ContaDeEstoque contaDaEmpresa = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa")).construir();
+        ContaDeEstoque contaEstoqueDaEmpresa = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa_em_posse_da_empresa")).construir();
+        ContaDeEstoque contaDaEmpresaEmPosseDeTerceiros = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa_em_posse_de_terceiros")).construir();
+        ContaDeEstoque contaDeTerceiros = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_de_terceiros_em_posse_da_empresa")).construir();
 
         contaDeEstoqueDao.adiciona(contaDaEmpresa);
         contaDeEstoqueDao.adiciona(contaEstoqueDaEmpresa);
@@ -858,7 +858,7 @@ public class DadosIniciais {
 
         // Unidade De Medida Item
         // ---------------------------------------------------------------------
-        UnidadeMedidaItem unidade = new UnidadeMedidaItem(null, "Unidade", "UN", 0);
+        UnidadeMedidaItem unidade = new UnidadeMedidaItem(null, bundle.getLabel("Unidade"), "UN", 0);
         new AdicionaDAO<UnidadeMedidaItem>().adiciona(unidade);
 
         // TabelaDeTributacao
@@ -1511,7 +1511,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.DESCONTADO);
         relatorioDeChequesDescontados.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.RECEBIDA);
@@ -1546,7 +1546,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.CANCELADO);
         relatorioDeChequesCancelados.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.RECEBIDA);
@@ -1581,7 +1581,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.DEVOLVIDO);
         relatorioDeChequesDevolvidos.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.RECEBIDA);
@@ -1651,7 +1651,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.DESCONTADO);
         relatorioDeChequesDescontados.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.EMITIDA);
@@ -1686,7 +1686,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.CANCELADO);
         relatorioDeChequesCancelados.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.EMITIDA);
@@ -1721,7 +1721,7 @@ public class DadosIniciais {
         FiltroDeRelatorio filtroEstado = new FiltroDeRelatorio(null, estado, TipoDeBusca.IGUAL_A);
         filtroEstado.add(EstadoDeCheque.DEVOLVIDO);
         relatorioDeChequesDevolvidos.addFiltro(filtroEstado);
-        
+
         Coluna tipoLancamento = new Coluna(bundle.getLabel("TipoLancamento"), "Cheque", "tipoLancamento", null, null, null, Cheque.class, TipoLancamento.class, null, null, 20, null);
         FiltroDeRelatorio filtroTipoLancamento = new FiltroDeRelatorio(null, tipoLancamento, TipoDeBusca.IGUAL_A);
         filtroTipoLancamento.add(TipoLancamento.EMITIDA);
@@ -1743,7 +1743,7 @@ public class DadosIniciais {
 
         //Adiciona no Banco
         new AdicionaDAO<>().adiciona(relatorioDeChequesDevolvidos);
-        
+
     }
-    
+
 }
