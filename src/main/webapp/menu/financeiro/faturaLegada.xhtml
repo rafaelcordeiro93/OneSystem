@@ -60,7 +60,7 @@
                                          columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2>">
 
                                 <p:outputLabel value="#{l.Conta}"/>
-                                <a:inputTextDialog id="pessoaIDNota"  value="#{faturaLegadaView.conta}" dialog="#{selecaoContaView}"  mbView="#{faturaLegadaView}" 
+                                <a:inputTextDialog id="contaIDNota"  value="#{faturaLegadaView.conta}" dialog="#{selecaoContaView}"  mbView="#{faturaLegadaView}" 
                                                    var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" disabledSearch="#{faturaLegadaView.habilitaBotaoConta()}" 
                                                    readonly="#{faturaLegadaView.habilitaBotaoConta()}" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
 

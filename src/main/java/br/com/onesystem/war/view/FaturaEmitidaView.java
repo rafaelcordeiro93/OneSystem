@@ -11,6 +11,7 @@ import br.com.onesystem.dao.FaturaEmitidaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
@@ -20,6 +21,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
@@ -54,6 +56,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaEmitida notaEmitidaSelecionada;
     private Pessoa pessoaNota;
+    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -150,9 +153,10 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (modeloSelecionado != null) {
-                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
+            if (conta == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
             }
+            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
@@ -258,6 +262,14 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
         }
     }
 
+    public boolean habilitaBotaoConta() {
+        if (list.getList().size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void addPessoaSessao(Pessoa ps) {
         try {
             SessionUtil.put(ps, "pessoaFaturaEmitida", FacesContext.getCurrentInstance());
@@ -303,6 +315,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             valorPorCotacaoList = new ArrayList<>();
             notaEmitidaSelecionada = null;
             pessoaNota = null;
+            conta = null;
             removePessoaSessao();
         } catch (FDadoInvalidoException ex) {
             ex.print();
@@ -368,4 +381,13 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
     public void setPessoaNota(Pessoa pessoaNota) {
         this.pessoaNota = pessoaNota;
     }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
 }

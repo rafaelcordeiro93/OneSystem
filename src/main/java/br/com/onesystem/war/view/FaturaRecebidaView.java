@@ -11,6 +11,7 @@ import br.com.onesystem.dao.FaturaRecebidaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
@@ -20,6 +21,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
@@ -54,6 +56,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
     private Pessoa pessoaNota;
+    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -149,9 +152,10 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (modeloSelecionado != null) {
-                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
+            if (conta == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
             }
+            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -253,6 +257,14 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
         }
     }
 
+    public boolean habilitaBotaoConta() {
+        if (list.getList().size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void addPessoaSessao(Pessoa ps) {
         try {
             SessionUtil.put(ps, "pessoaFaturaRecebida", FacesContext.getCurrentInstance());
@@ -298,6 +310,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             valorPorCotacaoList = new ArrayList<>();
             notaRecebidaSelecionada = null;
             pessoaNota = null;
+            conta = null;
             removePessoaSessao();
         } catch (FDadoInvalidoException ex) {
             ex.print();
