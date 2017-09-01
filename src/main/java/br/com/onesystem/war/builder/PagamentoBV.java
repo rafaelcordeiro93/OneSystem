@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
@@ -34,6 +35,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     private EstadoDeLancamento estado;
     private Caixa caixa;
     private Filial filial;
+    private List<ValorPorCotacao> valorPorCotacao;
 
     public PagamentoBV() {
     }
@@ -54,6 +56,7 @@ public class PagamentoBV implements BuilderView<Pagamento> {
         this.estado = r.getEstado();
         this.caixa = r.getCaixa();
         this.filial = r.getFilial();
+        this.valorPorCotacao = r.getValorPorCotacao();
     }
 
     public Long getId() {
@@ -110,8 +113,9 @@ public class PagamentoBV implements BuilderView<Pagamento> {
 
     public void setEstado(EstadoDeLancamento estado) {
         this.estado = estado;
-    
+
     }
+
     public Caixa getCaixa() {
         return caixa;
     }
@@ -127,18 +131,26 @@ public class PagamentoBV implements BuilderView<Pagamento> {
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
-    
+
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
+    public void setValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+    }
+
     public Pagamento construir() throws DadoInvalidoException {
         return new PagamentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comFilial(filial)
-                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 
     @Override
     public Pagamento construirComID() throws DadoInvalidoException {
         return new PagamentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca).comFilial(filial)
-                .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
+                .comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao).comEstadoDeLancamento(estado).comCaixa(caixa).construir();
     }
 
 }

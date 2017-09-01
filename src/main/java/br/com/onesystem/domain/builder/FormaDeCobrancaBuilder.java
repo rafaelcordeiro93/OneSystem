@@ -10,6 +10,7 @@ import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -23,8 +24,7 @@ public class FormaDeCobrancaBuilder {
 
     private Long id;
     private CobrancaVariavel cobranca;
-    private Recebimento recebimento;
-    private Pagamento pagamento;
+    private Movimento movimento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -44,13 +44,8 @@ public class FormaDeCobrancaBuilder {
         return this;
     }
 
-    public FormaDeCobrancaBuilder comRecebimento(Recebimento recebimento) {
-        this.recebimento = recebimento;
-        return this;
-    }
-
-    public FormaDeCobrancaBuilder comPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
+    public FormaDeCobrancaBuilder comMovimento(Movimento movimento) {
+        this.movimento = movimento;
         return this;
     }
 
@@ -95,7 +90,7 @@ public class FormaDeCobrancaBuilder {
     }
 
     public FormaDeCobranca construir() throws DadoInvalidoException {
-        return new FormaDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, observacao, cotacao, pagamento, caixa, operacaoFinanceira);
+        return new FormaDeCobranca(id, cobranca, movimento, valor, juros, multa, desconto, observacao, cotacao, caixa, operacaoFinanceira);
     }
 
 }

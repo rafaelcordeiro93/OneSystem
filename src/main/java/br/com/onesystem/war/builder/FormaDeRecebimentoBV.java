@@ -1,5 +1,6 @@
 package br.com.onesystem.war.builder;
 
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.builder.FormaDeRecebimentoBuilder;
@@ -37,32 +38,33 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
     private Integer diasPrimeiraParcela;
     private ModalidadeDeCobranca formaPadraoDeRecebimentoParcela;
     private Cartao cartao;
+    private Conta conta;
     
-    public FormaDeRecebimentoBV(FormaDeRecebimento formaDeRecebimentoSelecionada) {
-        this.id = formaDeRecebimentoSelecionada.getId();
-        this.nome = formaDeRecebimentoSelecionada.getNome();
-        this.ativo = formaDeRecebimentoSelecionada.isAtivo();
-        this.entrada = formaDeRecebimentoSelecionada.isEntrada();
-        this.porcentagemDeEntrada = formaDeRecebimentoSelecionada.getPorcentagemDeEntrada();
-        this.formaPadraoDeEntrada = formaDeRecebimentoSelecionada.getFormaPadraoDeEntrada();
-        this.entradaEmCartao = formaDeRecebimentoSelecionada.isEntradaEmCartao();
-        this.entradaEmDinheiro = formaDeRecebimentoSelecionada.isEntradaEmDinheiro();
-        this.entradaEmCheque = formaDeRecebimentoSelecionada.isEntradaEmCheque();
-        this.entradaEmCredito = formaDeRecebimentoSelecionada.isEntradaEmCredito();
-        this.parcelaEmCheque = formaDeRecebimentoSelecionada.isParcelaEmCheque();
-        this.parcelaEmCartao = formaDeRecebimentoSelecionada.isParcelaEmCartao();
-        this.parcelaEmConta = formaDeRecebimentoSelecionada.isParcelaEmConta();
-        this.minimoDeParcelas = formaDeRecebimentoSelecionada.getMinimoDeParcelas();
-        this.maximoDeParcelas = formaDeRecebimentoSelecionada.getMaximoDeParcelas();
-        this.periodicidade = formaDeRecebimentoSelecionada.getPeriodicidade();
-        this.tipoPeriodicidade = formaDeRecebimentoSelecionada.getTipoPeriodicidade();
-        this.diasPrimeiraParcela = formaDeRecebimentoSelecionada.getDiasPrimeiraParcela();
-        this.formaPadraoDeRecebimentoParcela = formaDeRecebimentoSelecionada.getFormaPadraoDeParcela();
-        this.cartao = formaDeRecebimentoSelecionada.getCartao();
+    public FormaDeRecebimentoBV(FormaDeRecebimento f) {
+        this.id = f.getId();
+        this.nome = f.getNome();
+        this.ativo = f.isAtivo();
+        this.entrada = f.isEntrada();
+        this.porcentagemDeEntrada = f.getPorcentagemDeEntrada();
+        this.formaPadraoDeEntrada = f.getFormaPadraoDeEntrada();
+        this.entradaEmCartao = f.isEntradaEmCartao();
+        this.entradaEmDinheiro = f.isEntradaEmDinheiro();
+        this.entradaEmCheque = f.isEntradaEmCheque();
+        this.entradaEmCredito = f.isEntradaEmCredito();
+        this.parcelaEmCheque = f.isParcelaEmCheque();
+        this.parcelaEmCartao = f.isParcelaEmCartao();
+        this.parcelaEmConta = f.isParcelaEmConta();
+        this.minimoDeParcelas = f.getMinimoDeParcelas();
+        this.maximoDeParcelas = f.getMaximoDeParcelas();
+        this.periodicidade = f.getPeriodicidade();
+        this.tipoPeriodicidade = f.getTipoPeriodicidade();
+        this.diasPrimeiraParcela = f.getDiasPrimeiraParcela();
+        this.formaPadraoDeRecebimentoParcela = f.getFormaPadraoDeParcela();
+        this.cartao = f.getCartao();
+        this.conta = f.getConta();
     }
     
     public FormaDeRecebimentoBV() {
-        
     }
     
     public Long getId() {
@@ -224,12 +226,20 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
     public void setCartao(Cartao cartao) {
         this.cartao = cartao;
     }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
     
     public FormaDeRecebimento construirComID() throws DadoInvalidoException {
         return new FormaDeRecebimentoBuilder().comID(id).comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao)
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao).comConta(conta)
                 .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
     
@@ -237,7 +247,7 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
         return new FormaDeRecebimentoBuilder().comNome(nome).comAtivo(ativo).comEntrada(entrada).comPorcentagemDeEntrada(porcentagemDeEntrada).comFormaPadraoEntrada(formaPadraoDeEntrada)
                 .comEntradaEmCartao(entradaEmCartao).comEntradaEmCredito(entradaEmCredito).comEntradaEmCheque(entradaEmCheque).comEntradaEmDinheiro(entradaEmDinheiro).comParcelaEmCartao(parcelaEmCartao)
                 .comParcelaEmCheque(parcelaEmCheque).comParcelaEmConta(parcelaEmConta).comMinimoDeParcelas(minimoDeParcelas).comMaximoDeParcelas(maximoDeParcelas).comPeriodicidade(periodicidade)
-                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao)
+                .comTipoPeriodicidade(tipoPeriodicidade).comDiasPrimeiraParcela(diasPrimeiraParcela).comCartao(cartao).comConta(conta)
                 .comFormaPadraoParcela(formaPadraoDeRecebimentoParcela).construir();
     }
     

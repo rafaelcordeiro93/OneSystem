@@ -12,6 +12,7 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
@@ -34,6 +35,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     private EstadoDeLancamento estado;
     private Caixa caixa;
     private Filial filial;
+    private List<ValorPorCotacao> valorPorCotacao;
 
     public RecebimentoBV() {
     }
@@ -57,6 +59,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         this.estado = r.getEstado();
         this.caixa = r.getCaixa();
         this.filial = r.getFilial();
+        this.valorPorCotacao = r.getValorPorCotacao();
     }
 
     public Long getId() {
@@ -130,12 +133,20 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
+
+    public List<ValorPorCotacao> getValorPorCotacao() {
+        return valorPorCotacao;
+    }
+
+    public void setValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+    }
     
     public Recebimento construir() throws DadoInvalidoException {
         return new RecebimentoBuilder().comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa)
-                .comFilial(filial).construir();
+                .comFilial(filial).comValorPorCotacao(valorPorCotacao).construir();
     }
 
     @Override
@@ -143,7 +154,7 @@ public class RecebimentoBV implements BuilderView<Recebimento> {
         return new RecebimentoBuilder().comId(id).comCotacaoPadrao(cotacaoPadrao).comEmissao(emissao)
                 .comFormasDeCobranca(formasDeCobranca).comTipoDeCobranca(tiposDeCobranca)
                 .comTotalEmDinheiro(totalEmDinheiro).comEstadoDeLancamento(estado).comCaixa(caixa)
-                .comFilial(filial).construir();
+                .comFilial(filial).comValorPorCotacao(valorPorCotacao).construir();
     }
 
 }

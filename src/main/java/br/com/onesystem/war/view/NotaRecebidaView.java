@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
@@ -430,6 +431,12 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                     // Busca o primeiro vencimento das cobranca
                     Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
 
+                    // Busca a conta bancária para caso a geração for de título.
+                    Conta conta = null;
+                    if (notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela() == ModalidadeDeCobranca.TITULO) {
+                        conta = notaRecebida.getFormaDeRecebimento().getConta();
+                    }
+
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
                         cobrancas.add(new CobrancaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
@@ -438,7 +445,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaRecebida.getFilial()).comParcela(i + 1).construir());
+                                .comFilial(notaRecebida.getFilial()).comParcela(i + 1).comContaBancaria(conta).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 

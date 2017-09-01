@@ -58,6 +58,9 @@ public class ValorPorCotacao implements Serializable {
     private Nota nota;
 
     @ManyToOne
+    private Movimento movimento;
+
+    @ManyToOne
     private FaturaEmitida faturaEmitida;
 
     @ManyToOne
@@ -82,6 +85,18 @@ public class ValorPorCotacao implements Serializable {
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("valor", "cotacao");
         new ValidadorDeCampos<>().valida(this, campos);
+    }
+
+    public void geraBaixaPor(Movimento movimento) throws DadoInvalidoException {
+//        BundleUtil msg = new BundleUtil();
+//        String historico = movimento instanceof Recebimento ? msg.getLabel("Recebimento_de") : msg.getLabel("Pagamento_de")
+//                + " " + msg.getMessage("de") + " " + nota.getPessoa().getNome();
+//
+//        this.movimento = movimento;
+//        baixa = new BaixaBuilder().comFilial(nota.getFilial()).comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(historico)
+//                .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
+//                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
+//                .comValorPorCotacao(this).construir();
     }
 
     public void geraBaixaPor(Nota nota) throws DadoInvalidoException {

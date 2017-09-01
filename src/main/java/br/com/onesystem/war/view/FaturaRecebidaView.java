@@ -165,6 +165,7 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             valorBanco = new FaturaRecebidaDAO().porId(e.getId()).resultado().getDinheiro();
         }
         if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
+            SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
         } else if (e.getId() == null) {
@@ -175,44 +176,49 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     }
 
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        String cid = event.getComponent().getId();
-        if (obj instanceof FaturaRecebida) {
-            limparJanela();
-            e = new FaturaRecebidaBV((FaturaRecebida) obj);
-            if (e.getNotaRecebida().size() > 0 && e.getNotaRecebida() != null) {
-                notaRecebidaList = e.getNotaRecebida();
+        try {
+            Object obj = event.getObject();
+            String cid = event.getComponent().getId();
+            if (obj instanceof FaturaRecebida) {
+                limparJanela();
+                e = new FaturaRecebidaBV((FaturaRecebida) obj);
+                if (e.getNotaRecebida().size() > 0 && e.getNotaRecebida() != null) {
+                    notaRecebidaList = e.getNotaRecebida();
+                }
+                buscaPessoaNota();
+                if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
+                    list = new ModelList<>(e.getTitulo());
+                }
+                try {
+                    SessionUtil.put(e.construirComID(), "fatura", FacesContext.getCurrentInstance());
+                } catch (DadoInvalidoException ex) {
+                    ex.print();
+                }
+            } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
+                e.setPessoa((Pessoa) obj);
+            } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
+                pessoaNota = (Pessoa) obj;
+                addPessoaSessao((Pessoa) obj);
+            } else if (obj instanceof NotaRecebida) {
+                addNotaRecebidaNaLista((NotaRecebida) obj);
+            } else if (obj instanceof Titulo) {
+                Titulo cb = (Titulo) obj;
+                list.add(cb);
+            } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
+                valorPorCotacaoList = (List<ValorPorCotacao>) obj;
+                SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
+                if (e.getId() != null) {
+                    update();
+                } else {
+                    add();
+                }
+            } else if (obj instanceof Model) {
+                Model m = (Model) obj;
+                list.set(m);
+                modeloSelecionado = null;
             }
-            buscaPessoaNota();
-            if (e.getTitulo().size() > 0 && e.getTitulo() != null) {
-                list = new ModelList<>(e.getTitulo());
-            }
-            try {
-                SessionUtil.put(e.construirComID(), "fatura", FacesContext.getCurrentInstance());
-            } catch (DadoInvalidoException ex) {
-                ex.print();
-            }
-        } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
-            e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
-            pessoaNota = (Pessoa) obj;
-            addPessoaSessao((Pessoa) obj);
-        } else if (obj instanceof NotaRecebida) {
-            addNotaRecebidaNaLista((NotaRecebida) obj);
-        } else if (obj instanceof Titulo) {
-            Titulo cb = (Titulo) obj;
-            list.add(cb);
-        } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
-            valorPorCotacaoList = (List<ValorPorCotacao>) obj;
-            if (e.getId() != null) {
-                update();
-            } else {
-                add();
-            }
-        } else if (obj instanceof Model) {
-            Model m = (Model) obj;
-            list.set(m);
-            modeloSelecionado = null;
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

@@ -7,6 +7,7 @@ package br.com.onesystem.util;
 
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.ConfiguracaoContabil;
+import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -15,7 +16,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  *
@@ -55,11 +55,12 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         BaixaBuilder builder = getCobrancaFixaBuilder();
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
-        if (tipoDeCobranca.getRecebimento() != null) {
+        if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comReceita(tipoReceita).comHistorico(msg.getMessage("Recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(tipoDespesa).comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
-        } return builder.construir();
+        }
+        return builder.construir();
     }
 
     private Baixa getDesconto(String tipo) throws DadoInvalidoException {
@@ -67,7 +68,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         builder.comValor(tipoDeCobranca.getDesconto())
                 .comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
 
-        if (tipoDeCobranca.getRecebimento() != null) {
+        if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comDespesa(conf.getDespesaDeDescontosConcedidos()).comHistorico(msg.getMessage("Desconto_concedido_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comReceita(conf.getReceitaDeDescontosObtidos()).comHistorico(msg.getMessage("Desconto_recebido_sobre_pagamento_de") + " " + tipo + getHistorico());
@@ -80,7 +81,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         BaixaBuilder builder = getCobrancaFixaBuilder();
         builder.comValor(tipoDeCobranca.getMulta()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
-        if (tipoDeCobranca.getRecebimento() != null) {
+        if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comReceita(conf.getReceitaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_pagamento_de") + " " + tipo + getHistorico());
@@ -93,7 +94,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
         BaixaBuilder builder = getCobrancaFixaBuilder();
         builder.comValor(tipoDeCobranca.getJuros()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
 
-        if (tipoDeCobranca.getRecebimento() != null) {
+        if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comReceita(conf.getReceitaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_pagamento_de") + " " + tipo + getHistorico());
@@ -104,11 +105,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa {
 
     private BaixaBuilder getCobrancaFixaBuilder() {
         BaixaBuilder baixaBuilder = new BaixaBuilder();
-        if (tipoDeCobranca.getRecebimento() != null) {
-            baixaBuilder.comFilial(tipoDeCobranca.getRecebimento().getFilial()).comEmissao(tipoDeCobranca.getRecebimento().getEmissao()).comCaixa(tipoDeCobranca.getRecebimento().getCaixa());
-        } else {
-            baixaBuilder.comFilial(tipoDeCobranca.getPagamento().getFilial()).comEmissao(tipoDeCobranca.getPagamento().getEmissao()).comCaixa(tipoDeCobranca.getPagamento().getCaixa());
-        }
+        baixaBuilder.comFilial(tipoDeCobranca.getMovimento().getFilial()).comEmissao(tipoDeCobranca.getMovimento().getEmissao()).comCaixa(tipoDeCobranca.getMovimento().getCaixa());
 
         return baixaBuilder.
                 comCotacao(tipoDeCobranca.getCotacao()).

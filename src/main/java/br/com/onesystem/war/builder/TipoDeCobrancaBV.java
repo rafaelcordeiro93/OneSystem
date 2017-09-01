@@ -10,6 +10,7 @@ import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.Recebimento;
@@ -28,8 +29,6 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
 
     private Long id;
     private Cobranca cobranca;
-    private Recebimento recebimento;
-    private Pagamento pagamento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -38,6 +37,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     private Cotacao cotacao;
     private Conta conta;
     private Date dataCompensacao;
+    private Movimento movimento;
 
     public TipoDeCobrancaBV() {
     }
@@ -45,7 +45,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
     public TipoDeCobrancaBV(TipoDeCobranca f) {
         this.id = f.getId();
         this.cobranca = f.getCobranca();
-        this.recebimento = f.getRecebimento();
+        this.movimento = f.getMovimento();
         this.valor = f.getValor();
         this.juros = f.getJuros();
         this.multa = f.getMulta();
@@ -53,7 +53,7 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.observacao = f.getObservacao();
         this.cotacao = f.getCotacao();
         this.conta = f.getConta();
-        this.pagamento = f.getPagamento();
+        this.movimento = movimento;
     }
 
     public Long getId() {
@@ -70,14 +70,6 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
 
     public void setCobranca(Cobranca cobranca) {
         this.cobranca = cobranca;
-    }
-
-    public Recebimento getRecebimento() {
-        return recebimento;
-    }
-
-    public void setRecebimento(Recebimento recebimento) {
-        this.recebimento = recebimento;
     }
 
     public BigDecimal getValor() {
@@ -112,14 +104,6 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.desconto = desconto;
     }
 
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
     public String getObservacao() {
         return observacao;
     }
@@ -152,17 +136,25 @@ public class TipoDeCobrancaBV implements BuilderView<TipoDeCobranca> {
         this.dataCompensacao = dataCompensacao;
     }
 
+    public Movimento getMovimento() {
+        return movimento;
+    }
+
+    public void setMovimento(Movimento movimento) {
+        this.movimento = movimento;
+    }
+    
     public TipoDeCobranca construir() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
-                .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comConta(conta).comPagamento(pagamento).construir();
+                .comObservacao(observacao).comJuros(juros).comMulta(multa).comMovimento(movimento).comValor(valor)
+                .comConta(conta).construir();
     }
 
     @Override
     public TipoDeCobranca construirComID() throws DadoInvalidoException {
         return new TipoDeCobrancaBuilder().comId(id).comCobranca(cobranca).comCotacao(cotacao).comDesconto(desconto)
-                .comObservacao(observacao).comJuros(juros).comMulta(multa).comRecebimento(recebimento).comValor(valor)
-                .comConta(conta).comPagamento(pagamento).construir();
+                .comObservacao(observacao).comJuros(juros).comMulta(multa).comMovimento(movimento).comValor(valor)
+                .comConta(conta).construir();
     }
 
 }

@@ -10,6 +10,7 @@ import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Filial;
@@ -67,6 +68,7 @@ public class CobrancaBuilder {
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
     private Integer parcela;
+    private Conta contaBancaria;
 
     public CobrancaBuilder comID(Long ID) {
         this.id = ID;
@@ -227,20 +229,24 @@ public class CobrancaBuilder {
         this.situacaoDeCobranca = situacaoDeCobranca;
         return this;
     }
-    
+
     public CobrancaBuilder comFilial(Filial filial) {
         this.filial = filial;
         return this;
     }
-    
-    public CobrancaBuilder comParcela(Integer parcela){
+
+    public CobrancaBuilder comParcela(Integer parcela) {
         this.parcela = parcela;
         return this;
     }
-    
-    public CobrancaBV construir() {
-        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial, parcela);
+
+    public CobrancaBuilder comContaBancaria(Conta contaBancaria) {
+        this.contaBancaria = contaBancaria;
+        return this;
     }
 
+    public CobrancaBV construir() {
+        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial, parcela, contaBancaria);
+    }
 
 }

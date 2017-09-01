@@ -15,6 +15,10 @@
 
                     <h2 class="BigTopic">#{l.Receber_Valores}</h2>
 
+                    <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this"/>
+                    </p:commandButton>
+
                     <table>
                         <tr>
                             <td>
@@ -136,7 +140,7 @@
                         <p:column headerText="#{l.Valor}">
                             <h:outputText value="#{m.object.totalFormatado}"/>
                         </p:column>
-                         <p:column headerText="#{l.Valor_Convertido}">
+                        <p:column headerText="#{l.Valor_Convertido}">
                             <h:outputText value="#{m.object.totalNaMoedaPadraoFormatado}"/>
                         </p:column>
                         <p:columnGroup type="footer">

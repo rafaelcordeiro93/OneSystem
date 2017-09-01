@@ -3,9 +3,11 @@ package br.com.onesystem.war.view.dialogo;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Fatura;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -35,10 +37,10 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
 
     private List<ValorPorCotacaoBV> cotacoes;
     private Nota nota;
-    private FaturaEmitida faturaEmitida;
-    private FaturaRecebida faturaRecebida;
+    private Fatura fatura;
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private BigDecimal dinheiro;
+    private Movimento movimento;
 
     @PostConstruct
     public void init() {
@@ -52,40 +54,41 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
 
     /**
      * @author Rafael Fernando Rauber
-     * @date
      *
      * Método utilizado para buscar os objetos da sessão
      */
     private void buscaDaSessao() throws DadoInvalidoException {
-        // Rafael Cordeiro - 01/08/2017 - Adequação para as classes de Fatura Emitida e Recebida
-        nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
+        FacesContext context = FacesContext.getCurrentInstance();
+        nota = (Nota) SessionUtil.getObject("nota", context);
         if (nota != null) {
-            inicializaCotacoes(nota.getEmissao(), nota.getMoedaPadrao());
-            dinheiro = nota.getTotalEmDinheiro();
-            calculaCotacoes();
+            inicializaObjetoDaSessao(nota.getEmissao(), nota.getMoedaPadrao(), nota.getTotalEmDinheiro());
             return;
         }
-        faturaEmitida = (FaturaEmitida) SessionUtil.getObject("faturaEmitida", FacesContext.getCurrentInstance());
-        if (faturaEmitida != null) {
-            inicializaCotacoes(faturaEmitida.getEmissao(), faturaEmitida.getMoedaPadrao());
-            dinheiro = faturaEmitida.getDinheiro();
-            calculaCotacoes();
+        // =====================================================================
+        // Rafael Fernando Rauber - 01/09/2017 - Readequação de Fatura Emitida/Recebida para Fatura 
+        fatura = (Fatura) SessionUtil.getObject("fatura", context);
+        if (fatura != null) {
+            inicializaObjetoDaSessao(fatura.getEmissao(), fatura.getMoedaPadrao(), fatura.getDinheiro());
             return;
         }
-        faturaRecebida = (FaturaRecebida) SessionUtil.getObject("faturaRecebida", FacesContext.getCurrentInstance());
-        if (faturaRecebida != null) {
-            inicializaCotacoes(faturaRecebida.getEmissao(), faturaRecebida.getMoedaPadrao());
-            dinheiro = faturaRecebida.getDinheiro();
-            calculaCotacoes();
-            return;
-        }
-        conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", FacesContext.getCurrentInstance());
+        // =====================================================================
+        conhecimentoDeFrete = (ConhecimentoDeFrete) SessionUtil.getObject("conhecimentoDeFrete", context);
         if (conhecimentoDeFrete != null) {
-            inicializaCotacoes(conhecimentoDeFrete.getEmissao(), conhecimentoDeFrete.getMoedaPadrao());
-            dinheiro = conhecimentoDeFrete.getDinheiro();
-            calculaCotacoes();
+            inicializaObjetoDaSessao(conhecimentoDeFrete.getEmissao(), conhecimentoDeFrete.getMoedaPadrao(), conhecimentoDeFrete.getDinheiro());
             return;
         }
+        // =====================================================================
+        movimento = (Movimento) SessionUtil.getObject("movimento", context);
+        if (movimento != null) {
+            inicializaObjetoDaSessao(movimento.getEmissao(), movimento.getCotacaoPadrao().getConta().getMoeda(), movimento.getTotalEmDinheiro());
+            return;
+        }
+    }
+
+    private void inicializaObjetoDaSessao(Date emissao, Moeda moeda, BigDecimal dinheiro) {
+        inicializaCotacoes(emissao, moeda);
+        this.dinheiro = dinheiro;
+        calculaCotacoes();
     }
 
     private void inicializaCotacoes(Date emissao, Moeda moedaPadrao) {
@@ -130,12 +133,12 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         try {
             if (nota != null) {
                 return nota.getMoedaPadrao();
-            } else if (faturaEmitida != null) {
-                return faturaEmitida.getMoedaPadrao();
-            } else if (faturaRecebida != null) {
-                return faturaRecebida.getMoedaPadrao();
+            } else if (fatura != null) {
+                return fatura.getMoedaPadrao();
             } else if (conhecimentoDeFrete != null) {
                 return conhecimentoDeFrete.getMoedaPadrao();
+            } else if (movimento != null) {
+                return movimento.getCotacaoPadrao().getConta().getMoeda();
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -151,8 +154,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
                 }
                 RequestContext.getCurrentInstance().closeDialog(nota);
                 return;
-            }
-            if (faturaEmitida != null || faturaRecebida != null || conhecimentoDeFrete != null) {
+            } else {
                 RequestContext.getCurrentInstance().closeDialog(constroiListValorPorCotacao());
                 return;
             }
@@ -211,8 +213,8 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     public void limparJanela() {
         cotacoes = new ArrayList<>();
         nota = null;
-        faturaEmitida = null;
-        faturaRecebida = null;
+        fatura = null;
+        movimento = null;
         conhecimentoDeFrete = null;
         dinheiro = BigDecimal.ZERO;
     }

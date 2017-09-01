@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.FaturaEmitidaDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
@@ -8,6 +9,7 @@ import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -30,6 +32,7 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -53,15 +56,22 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
+    private List<ValorPorCotacao> valorPorCotacao;
+
+    public void validaDinheiro() throws DadoInvalidoException {
+        e.setTotalEmDinheiro(getTotalEmDinheiro());
+        if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0) {
+            SessionUtil.put(e.construir(), "movimento", FacesContext.getCurrentInstance());
+            RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else {
+            receber();
+        }
+    }
 
     public void receber() {
         try {
-            e.setTotalEmDinheiro(getTotalEmDinheiro());
-            Recebimento recebimento = e.construirComID();
-            tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp));
-            formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f));
-            recebimento.ehRegistroValido();
-            recebimento.geraBaixas();
+            Recebimento recebimento = constroiRecebimento();
+//            recebimento.geraBaixas();
             addNoBanco(recebimento);
             t = recebimento;
             layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
@@ -72,6 +82,25 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             die.print();
             limparJanela();
         }
+    }
+
+    /**
+     * Constroi Recebimento adicionando tipos,formas e valor por cotação. Após
+     * contrução gera as baixas e valida o objeto.
+     *
+     * @return retorna o recebimento, construído e validado.
+     */
+    private Recebimento constroiRecebimento() throws DadoInvalidoException {
+        Recebimento recebimento = e.construirComID(); // Constroi Recebimento **throws DadoInvalidoException
+        tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp)); // Adiciona Tipos
+        formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f)); // Adiciona Forma
+        for (ValorPorCotacao v : valorPorCotacao) { //Adiciona Valor por cotação **throws DadoInvalidoException
+            recebimento.adiciona(v);
+        }
+        
+        recebimento.geraBaixas();
+        recebimento.ehRegistroValido();// Valida **throws DadoInvalidoException
+        return recebimento;
     }
 
     public void imprimir() {
@@ -113,6 +142,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void selecionar(SelectEvent event) {
         try {
             Object obj = event.getObject();
+            String componentId = event.getComponent().getId();
             if (obj instanceof TipoDeCobranca) {
                 TipoDeCobranca tipo = (TipoDeCobranca) obj;
                 boolean possuiCobranca = false;
@@ -141,6 +171,9 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
                 } else {
                     formasDeCobranca.set(model);
                 }
+            } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(componentId)) {
+                valorPorCotacao = (List<ValorPorCotacao>) obj;
+                receber();
             }
             tipoSelecionado = null;
             formaSelecionado = null;

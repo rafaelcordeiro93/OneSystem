@@ -11,6 +11,8 @@ import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
+//import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
+//import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
@@ -52,10 +54,7 @@ public class TipoDeCobranca implements Serializable {
     private Cobranca cobranca;
 
     @ManyToOne
-    private Recebimento recebimento;
-
-    @ManyToOne
-    private Pagamento pagamento;
+    private Movimento movimento;
 
     @NotNull(message = "{valor_not_null}")
     @Min(value = 0, message = "{valor_min}")
@@ -90,12 +89,12 @@ public class TipoDeCobranca implements Serializable {
     public TipoDeCobranca() {
     }
 
-    public TipoDeCobranca(Long id, Cobranca cobranca, Recebimento recebimento, BigDecimal valor,
+    public TipoDeCobranca(Long id, Cobranca cobranca, Movimento movimento, BigDecimal valor,
             BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao,
-            Conta conta, Pagamento pagamento) throws DadoInvalidoException {
+            Conta conta) throws DadoInvalidoException {
         this.id = id;
         this.cobranca = cobranca;
-        this.recebimento = recebimento;
+        this.movimento = movimento;
         this.valor = valor;
         this.juros = juros;
         this.multa = multa;
@@ -103,7 +102,6 @@ public class TipoDeCobranca implements Serializable {
         this.observacao = observacao;
         this.cotacao = cotacao;
         this.conta = conta;
-        this.pagamento = pagamento;
         ehValido();
     }
 
@@ -126,12 +124,8 @@ public class TipoDeCobranca implements Serializable {
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
-    public void setRecebimento(Recebimento recebimento) {
-        this.recebimento = recebimento;
-    }
-
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
+    public void setMovimento(Movimento movimento) {
+        this.movimento = movimento;
     }
 
     public Long getId() {
@@ -140,10 +134,6 @@ public class TipoDeCobranca implements Serializable {
 
     public Cobranca getCobranca() {
         return cobranca;
-    }
-
-    public Recebimento getRecebimento() {
-        return recebimento;
     }
 
     public BigDecimal getValor() {
@@ -162,10 +152,6 @@ public class TipoDeCobranca implements Serializable {
         return desconto;
     }
 
-    public Pagamento getPagamento() {
-        return pagamento;
-    }
-
     public Conta getConta() {
         return conta;
     }
@@ -176,6 +162,10 @@ public class TipoDeCobranca implements Serializable {
 
     public Cotacao getCotacao() {
         return cotacao;
+    }
+
+    public Movimento getMovimento() {
+        return movimento;
     }
 
     public List<Baixa> getBaixas() {
@@ -264,10 +254,8 @@ public class TipoDeCobranca implements Serializable {
     }
 
     public EstadoDeLancamento getEstado() {
-        if (recebimento != null) {
-            return recebimento.getEstado();
-        } else if (pagamento != null) {
-            return pagamento.getEstado();
+        if (movimento != null) {
+            return movimento.getEstado();
         } else {
             return null;
         }
@@ -287,10 +275,8 @@ public class TipoDeCobranca implements Serializable {
 
     @MetodoInacessivelRelatorio
     public Cotacao getCotacaoPadraoDoRecebimentoOuPagamento() {
-        if (recebimento != null) {
-            return recebimento.getCotacaoPadrao();
-        } else if (pagamento != null) {
-            return pagamento.getCotacaoPadrao();
+        if (movimento != null) {
+            return movimento.getCotacaoPadrao();
         } else {
             try {
                 return new CotacaoService().getCotacaoPadrao(new Date());
@@ -318,7 +304,7 @@ public class TipoDeCobranca implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoDeCobranca{" + "id=" + id + ", cobranca=" + cobranca + ", recebimento=" + recebimento + ", valor=" + valor + ", juros=" + juros + ", multa=" + multa + ", desconto=" + desconto + ", observacao=" + observacao + ", cotacao=" + cotacao + '}';
+        return "TipoDeCobranca{" + "id=" + id + ", cobranca=" + cobranca + ", recebimento=" + movimento + ", valor=" + valor + ", juros=" + juros + ", multa=" + multa + ", desconto=" + desconto + ", observacao=" + observacao + ", cotacao=" + cotacao + '}';
     }
 
 }

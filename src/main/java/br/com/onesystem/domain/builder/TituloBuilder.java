@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Fatura;
 import br.com.onesystem.domain.FaturaEmitida;
@@ -49,6 +50,7 @@ public class TituloBuilder {
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
     private Integer parcela;
+    private Conta conta;
 
     public TituloBuilder comId(Long id) {
         this.id = id;
@@ -145,14 +147,19 @@ public class TituloBuilder {
         return this;
     }
 
-     public TituloBuilder comParcela(Integer parcela) {
+    public TituloBuilder comParcela(Integer parcela) {
         this.parcela = parcela;
         return this;
     }
-    
+
+    public TituloBuilder comConta(Conta conta) {
+        this.conta = conta;
+        return this;
+    }
+
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira, tipoFormaPagRec,
-                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial, parcela);
+                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial, parcela, conta);
     }
 
 }

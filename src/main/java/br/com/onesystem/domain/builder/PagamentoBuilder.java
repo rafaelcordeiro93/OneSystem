@@ -11,6 +11,7 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.math.BigDecimal;
@@ -32,6 +33,7 @@ public class PagamentoBuilder {
     private EstadoDeLancamento estado;
     private Caixa caixa;
     private Filial filial;
+    private List<ValorPorCotacao> valorPorCotacao;
 
     public PagamentoBuilder comId(Long id) {
         this.id = id;
@@ -72,14 +74,19 @@ public class PagamentoBuilder {
         this.caixa = caixa;
         return this;
     }
-    
-    public PagamentoBuilder comFilial(Filial filial){
+
+    public PagamentoBuilder comFilial(Filial filial) {
         this.filial = filial;
         return this;
     }
 
+    public PagamentoBuilder comValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
+        this.valorPorCotacao = valorPorCotacao;
+        return this;
+    }
+
     public Pagamento construir() throws DadoInvalidoException {
-        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa, filial);
+        return new Pagamento(id, tiposDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, totalEmDinheiro, estado, caixa, filial, valorPorCotacao);
     }
 
 }

@@ -8,6 +8,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -22,7 +23,7 @@ public class TipoDeCobrancaBuilder {
 
     private Long id;
     private Cobranca cobranca;
-    private Recebimento recebimento;
+    private Movimento movimento;
     private BigDecimal valor;
     private BigDecimal juros;
     private BigDecimal multa;
@@ -30,7 +31,6 @@ public class TipoDeCobrancaBuilder {
     private String historico;
     private Cotacao cotacao;
     private Conta conta;
-    private Pagamento pagamento;
 
     public TipoDeCobrancaBuilder comId(Long id) {
         this.id = id;
@@ -42,13 +42,8 @@ public class TipoDeCobrancaBuilder {
         return this;
     }
 
-    public TipoDeCobrancaBuilder comPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-        return this;
-    }
-
-    public TipoDeCobrancaBuilder comRecebimento(Recebimento recebimento) {
-        this.recebimento = recebimento;
+    public TipoDeCobrancaBuilder comMovimento(Movimento movimento) {
+        this.movimento = movimento;
         return this;
     }
 
@@ -88,7 +83,7 @@ public class TipoDeCobrancaBuilder {
     }
 
     public TipoDeCobranca construir() throws DadoInvalidoException {
-        return new TipoDeCobranca(id, cobranca, recebimento, valor, juros, multa, desconto, historico, cotacao, conta, pagamento);
+        return new TipoDeCobranca(id, cobranca, movimento, valor, juros, multa, desconto, historico, cotacao, conta);
     }
 
 }

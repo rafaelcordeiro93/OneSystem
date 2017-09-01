@@ -48,8 +48,6 @@ public class Cotacao implements Serializable {
     private List<Orcamento> orcamentos;
     @OneToMany(mappedBy = "cotacao")
     private List<ValorPorCotacao> valores;
-    @OneToMany(mappedBy = "cotacaoPadrao")
-    private List<Recebimento> recebimentos;
     @OneToMany(mappedBy = "cotacao")
     private List<TipoDeCobranca> tiposDeCobranca;
     @OneToMany(mappedBy = "cotacao")

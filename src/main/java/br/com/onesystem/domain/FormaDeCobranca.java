@@ -10,6 +10,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeFormaCobranca;
+//import br.com.onesystem.util.GeradorDeBaixaDeFormaCobranca;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -51,10 +52,7 @@ public class FormaDeCobranca implements Serializable {
     private CobrancaVariavel cobrancaVariavel;
 
     @ManyToOne
-    private Recebimento recebimento;
-
-    @ManyToOne
-    private Pagamento pagamento;
+    private Movimento movimento;
 
     @NotNull(message = "{valor_not_null}")
     @Min(value = 0, message = "{valor_min}")
@@ -93,19 +91,18 @@ public class FormaDeCobranca implements Serializable {
     public FormaDeCobranca() {
     }
 
-    public FormaDeCobranca(Long id, CobrancaVariavel cobrancaVariavel, Recebimento recebimento, BigDecimal valor,
-            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Pagamento pagamento, Caixa caixa,
+    public FormaDeCobranca(Long id, CobrancaVariavel cobrancaVariavel, Movimento movimento, BigDecimal valor,
+            BigDecimal juros, BigDecimal multa, BigDecimal desconto, String observacao, Cotacao cotacao, Caixa caixa,
             OperacaoFinanceira operacaoFinanceira) throws DadoInvalidoException {
         this.id = id;
         this.cobrancaVariavel = cobrancaVariavel;
-        this.recebimento = recebimento;
+        this.movimento = movimento;
         this.valor = valor;
         this.juros = juros;
         this.multa = multa;
         this.desconto = desconto;
         this.observacao = observacao;
         this.cotacao = cotacao;
-        this.pagamento = pagamento;
         this.caixa = caixa;
         this.operacaoFinanceira = operacaoFinanceira;
         ehValido();
@@ -116,8 +113,8 @@ public class FormaDeCobranca implements Serializable {
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
-    public void setRecebimento(Recebimento recebimento) {
-        this.recebimento = recebimento;
+    public void setMovimento(Movimento movimento) {
+        this.movimento = movimento;
     }
 
     public void cancela() throws DadoInvalidoException {
@@ -143,20 +140,12 @@ public class FormaDeCobranca implements Serializable {
         }
     }
 
-    public void setPagamento(Pagamento pagamento) {
-        this.pagamento = pagamento;
-    }
-
     public Long getId() {
         return id;
     }
 
     public CobrancaVariavel getCobranca() {
         return cobrancaVariavel;
-    }
-
-    public Recebimento getRecebimento() {
-        return recebimento;
     }
 
     public BigDecimal getValor() {
@@ -191,15 +180,17 @@ public class FormaDeCobranca implements Serializable {
         return cotacao;
     }
 
+    public Movimento getMovimento() {
+        return movimento;
+    }
+
     public List<Baixa> getBaixas() {
         return baixas;
     }
 
     public EstadoDeLancamento getEstado() {
-        if (recebimento != null) {
-            return recebimento.getEstado();
-        } else if (pagamento != null) {
-            return pagamento.getEstado();
+        if (movimento != null) {
+            return movimento.getEstado();
         } else {
             return null;
         }
@@ -220,10 +211,8 @@ public class FormaDeCobranca implements Serializable {
 
     @MetodoInacessivelRelatorio
     public Cotacao getCotacaoPadraoDoRecebimentoOuPagamento() {
-        if (recebimento != null) {
-            return recebimento.getCotacaoPadrao();
-        } else if (pagamento != null) {
-            return pagamento.getCotacaoPadrao();
+        if (movimento != null) {
+            return movimento.getCotacaoPadrao();
         } else {
             try {
                 return new CotacaoService().getCotacaoPadrao(new Date());
@@ -232,10 +221,6 @@ public class FormaDeCobranca implements Serializable {
                 return null;
             }
         }
-    }
-
-    public Pagamento getPagamento() {
-        return pagamento;
     }
 
     public String getTipoDocumento() {

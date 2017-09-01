@@ -9,6 +9,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
@@ -47,7 +48,7 @@ public class GeradorDeBaixaDeFormaCobranca {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(formaDeCobranca.getValor()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
-        if (formaDeCobranca.getRecebimento() == null) {//pagamento
+        if (formaDeCobranca.getMovimento() instanceof Pagamento) {//pagamento
             if (formaDeCobranca.getCobranca().getNota() != null) {
                 builder.comReceita(formaDeCobranca.getCobranca().getNota().getOperacao().getVendaAPrazo());
             }
@@ -76,7 +77,7 @@ public class GeradorDeBaixaDeFormaCobranca {
         builder.comValor(formaDeCobranca.getDesconto())
                 .comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
 
-        if (formaDeCobranca.getRecebimento() == null) {
+        if (formaDeCobranca.getMovimento() instanceof Pagamento) {
             builder.comDespesa(conf.getDespesaDeDescontosConcedidos()).comHistorico(msg.getMessage("Desconto_concedido_sobre_recebimento_de") + " " + forma + getHistorico());
         } else {
             builder.comReceita(conf.getReceitaDeDescontosObtidos()).comHistorico(msg.getMessage("Desconto_recebido_sobre_pagamento_de") + " " + forma + getHistorico());
@@ -88,7 +89,7 @@ public class GeradorDeBaixaDeFormaCobranca {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(formaDeCobranca.getMulta()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
-        if (formaDeCobranca.getRecebimento() == null) {
+        if (formaDeCobranca.getMovimento() instanceof Pagamento) {
             builder.comReceita(conf.getReceitaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_recebimento_de") + " " + forma + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_pagamento_de") + " " + forma + getHistorico());
@@ -101,7 +102,7 @@ public class GeradorDeBaixaDeFormaCobranca {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(formaDeCobranca.getJuros()).comOperacaoFinanceira(formaDeCobranca.getOperacaoFinanceira());
 
-        if (formaDeCobranca.getRecebimento() == null) {
+        if (formaDeCobranca.getMovimento() instanceof Pagamento) {
             builder.comReceita(conf.getReceitaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_recebimento_de") + " " + forma + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_pagamento_de") + " " + forma + getHistorico());
@@ -112,11 +113,7 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     private BaixaBuilder getCobrancaBuilder() {
         BaixaBuilder baixaBuilder = new BaixaBuilder();
-        if (formaDeCobranca.getRecebimento() != null) {
-            baixaBuilder.comFilial(formaDeCobranca.getRecebimento().getFilial()).comEmissao(formaDeCobranca.getRecebimento().getEmissao()).comCaixa(formaDeCobranca.getRecebimento().getCaixa());
-        } else {
-            baixaBuilder.comFilial(formaDeCobranca.getRecebimento().getFilial()).comEmissao(formaDeCobranca.getPagamento().getEmissao()).comCaixa(formaDeCobranca.getPagamento().getCaixa());
-        }
+            baixaBuilder.comFilial(formaDeCobranca.getMovimento().getFilial()).comEmissao(formaDeCobranca.getMovimento().getEmissao()).comCaixa(formaDeCobranca.getMovimento().getCaixa());
 
         return baixaBuilder.
                 comCotacao(formaDeCobranca.getCotacao()).

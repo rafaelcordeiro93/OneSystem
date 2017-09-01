@@ -5,268 +5,34 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.TemplateFormaPagamento;
-import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
-import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
 @Entity
-@SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_RECEBIMENTO",
-        sequenceName = "SEQ_RECEBIMENTO")
-public class Recebimento implements Serializable {
-
-    @Id
-    @GeneratedValue(generator = "SEQ_RECEBIMENTO", strategy = GenerationType.SEQUENCE)
-    private Long id;
-
-    @OneToMany(mappedBy = "recebimento", cascade = CascadeType.ALL)
-    private List<TipoDeCobranca> tipoDeCobranca;
-
-    @OneToMany(mappedBy = "recebimento", cascade = CascadeType.ALL)
-    private List<FormaDeCobranca> formasDeCobranca;
-
-    private BigDecimal totalEmDinheiro = BigDecimal.ZERO;
-
-    @ManyToOne
-    private Cotacao cotacaoPadrao;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao;
-
-    @Enumerated(EnumType.STRING)
-    private EstadoDeLancamento estado;
-
-    @NotNull(message = "{caixa_not_null}")
-    @ManyToOne(optional = false)
-    private Caixa caixa;
-
-    @NotNull(message = "{filial_not_null}")
-    @ManyToOne(optional = false)
-    private Filial filial;
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "RECEBIMENTO_CLASSE_NOME")
+public class Recebimento extends Movimento implements Serializable {
 
     public Recebimento() {
+        super();
     }
 
     public Recebimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
             Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado, Caixa caixa,
-            Filial filial) throws DadoInvalidoException {
-        this.id = id;
-        this.tipoDeCobranca = tipoDeCobranca;
-        this.formasDeCobranca = formasDeCobranca;
-        this.cotacaoPadrao = cotacaoPadrao;
-        this.emissao = emissao;
-        this.totalEmDinheiro = totalEmDinheiro;
-        this.estado = estado;
-        this.caixa = caixa;
-        this.filial = filial;
-        ehValido();
-    }
-
-    private final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("caixa", "filial");
-        new ValidadorDeCampos<>().valida(this, campos);
-    }
-
-    public void ehRegistroValido() throws DadoInvalidoException {
-        if ((tipoDeCobranca == null || tipoDeCobranca.isEmpty()) && (formasDeCobranca == null || formasDeCobranca.isEmpty())) {
-            throw new EDadoInvalidoException("Deve_possuir_recebimentos_informados");
-        }
-    }
-
-    public void adiciona(TipoDeCobranca tipo) {
-        if (tipoDeCobranca == null) {
-            tipoDeCobranca = new ArrayList<>();
-        }
-        tipo.setRecebimento(this);
-        tipoDeCobranca.add(tipo);
-    }
-
-    public void atualiza(TipoDeCobranca tipo) {
-        tipoDeCobranca.set(tipoDeCobranca.indexOf(tipo), tipo);
-    }
-
-    public void remove(TipoDeCobranca tipo) {
-        tipoDeCobranca.remove(tipo);
-    }
-
-    public void adiciona(FormaDeCobranca forma) {
-        if (formasDeCobranca == null) {
-            formasDeCobranca = new ArrayList<>();
-        }
-        forma.setRecebimento(this);
-        formasDeCobranca.add(forma);
-    }
-
-    public void atualiza(FormaDeCobranca forma) {
-        formasDeCobranca.set(formasDeCobranca.indexOf(forma), forma);
-    }
-
-    public void atualizaBaixas(FormaDeCobranca forma) {
-        List<Baixa> bx = new BaixaDAO().ePorFormaDeCobranca(forma).listaDeResultados();
-        bx.forEach((b) -> {
-            b.atualizaValor(forma.getValor());
-        });
-    }
-
-    public void atualizaBaixas(TipoDeCobranca tipo) {
-        List<Baixa> bx = new BaixaDAO().ePorTipoDeCobranca(tipo).listaDeResultados();
-        bx.forEach((b) -> {
-            b.atualizaValor(tipo.getValor());
-        });
-    }
-
-    public void remove(FormaDeCobranca forma) {
-        formasDeCobranca.remove(forma);
-    }
-
-    public void geraBaixas() {
-        if (tipoDeCobranca != null) {
-            tipoDeCobranca.forEach(t -> t.geraBaixas());
-        }
-        if (formasDeCobranca != null) {
-            formasDeCobranca.forEach(f -> f.geraBaixas());
-        }
-    }
-
-    public void efetiva() {
-        estado = EstadoDeLancamento.EFETIVADO;
-    }
-
-    public void efetivaBaixas() throws DadoInvalidoException {
-        for (TipoDeCobranca t : tipoDeCobranca) {
-            t.descancelar();
-        }
-        for (FormaDeCobranca f : formasDeCobranca) {
-            f.descancelar();
-        }
-    }
-
-    public void cancela() throws DadoInvalidoException {
-        estado = EstadoDeLancamento.CANCELADO;
-        for (TipoDeCobranca t : tipoDeCobranca) {
-            t.cancela();
-        }
-        for (FormaDeCobranca f : formasDeCobranca) {
-            f.cancela();
-        }
-    }
-
-    @MetodoInacessivelRelatorio
-    public List<TemplateFormaPagamento> getTemplateFormaPagamento() {
-        List<TemplateFormaPagamento> forma = new ArrayList<>();
-        int i = 0;
-        if (totalEmDinheiro.compareTo(BigDecimal.ZERO) != 0) {
-            forma.add(new TemplateFormaPagamento(i, cotacaoPadrao.getConta().getNome(), null, getTotalEmDinheiroFormatado(), getTotalEmDinheiroFormatado()));
-            i++;
-        }
-        if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
-            for (FormaDeCobranca f : formasDeCobranca) {
-                forma.add(new TemplateFormaPagamento(i, f.getCobranca().getModalidade().getNome(), f.getCobranca().getVencimentoFormatadoSemHoras(), f.getTotalFormatado(), f.getTotalNaMoedaPadraoFormatado()));
-                i++;
-            }
-        }
-        return forma;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Caixa getCaixa() {
-        return caixa;
-    }
-
-    public String getTotalNaMoedaPadraoPorExtenso() {
-        return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacaoPadrao.getConta().getMoeda(), getTotalNaMoedaPadrao()));
-    }
-
-    public String getTotalEmDinheiroFormatado() {
-        return MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), totalEmDinheiro);
-    }
-
-    public String getTotalNaMoedaPadraoFormatado() {
-        return MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), getTotalNaMoedaPadrao());
-    }
-
-    public BigDecimal getTotalNaMoedaPadrao() {
-        return tipoDeCobranca.stream().map(TipoDeCobranca::getTotalNaMoedaPadrao).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    public List<TipoDeCobranca> getTipoDeCobranca() {
-        return tipoDeCobranca;
-    }
-
-    public List<FormaDeCobranca> getFormasDeCobranca() {
-        return formasDeCobranca;
-    }
-
-    public BigDecimal getTotalEmDinheiro() {
-        return totalEmDinheiro;
-    }
-
-    public Cotacao getCotacaoPadrao() {
-        return cotacaoPadrao;
-    }
-
-    public Date getEmissao() {
-        return emissao;
-    }
-
-    public String getEmissaoFormatadaSemHoras() {
-        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
-        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
-    }
-
-    public Filial getFilial() {
-        return filial;
-    }
-
-    public EstadoDeLancamento getEstado() {
-        return estado;
-    }
-
-    @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
-            return false;
-        }
-        if (!(objeto instanceof Recebimento)) {
-            return false;
-        }
-        Recebimento outro = (Recebimento) objeto;
-        if (this.id == null) {
-            return false;
-        }
-        return this.id.equals(outro.id);
+            Filial filial, List<ValorPorCotacao> valorPorCotacao) throws DadoInvalidoException {
+        super(id, tipoDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, estado, caixa, filial, valorPorCotacao);
     }
 
 }

@@ -153,6 +153,7 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             if (modeloSelecionado != null) {
                 SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
             }
+            SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -176,31 +177,36 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
     }
 
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        String cid = event.getComponent().getId();
-        if (obj instanceof FaturaEmitida) {
-            inicializaFaturaEmitida(obj);
-        } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
-            e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
-            pessoaNota = (Pessoa) obj;
-            addPessoaSessao((Pessoa) obj);
-        } else if (obj instanceof NotaEmitida) {
-            addNotaEmitidaNaLista((NotaEmitida) obj);
-        } else if (obj instanceof Titulo) {
-            Titulo cb = (Titulo) obj;
-            list.add(cb);
-        } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
-            valorPorCotacaoList = (List<ValorPorCotacao>) obj;
-            if (e.getId() != null) {
-                update();
-            } else {
-                add();
+        try {
+            Object obj = event.getObject();
+            String cid = event.getComponent().getId();
+            if (obj instanceof FaturaEmitida) {
+                inicializaFaturaEmitida(obj);
+            } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
+                e.setPessoa((Pessoa) obj);
+            } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
+                pessoaNota = (Pessoa) obj;
+                addPessoaSessao((Pessoa) obj);
+            } else if (obj instanceof NotaEmitida) {
+                addNotaEmitidaNaLista((NotaEmitida) obj);
+            } else if (obj instanceof Titulo) {
+                Titulo cb = (Titulo) obj;
+                list.add(cb);
+            } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(cid)) {
+                valorPorCotacaoList = (List<ValorPorCotacao>) obj;
+                SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
+                if (e.getId() != null) {
+                    update();
+                } else {
+                    add();
+                }
+            } else if (obj instanceof Model) {
+                Model m = (Model) obj;
+                list.set(m);
+                modeloSelecionado = null;
             }
-        } else if (obj instanceof Model) {
-            Model m = (Model) obj;
-            list.set(m);
-            modeloSelecionado = null;
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

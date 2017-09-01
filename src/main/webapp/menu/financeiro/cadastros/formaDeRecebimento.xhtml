@@ -92,6 +92,9 @@
                             <p:outputLabel value="#{l.Parcela_Conta}" />
                             <p:selectBooleanCheckbox  id="formaDeRecebimentoParcelaemConta" value="#{formaDeRecebimentoView.e.parcelaEmConta}"/>
 
+                            <p:outputLabel  value="#{l.Conta}"/>
+                            <a:inputTextDialog id="conta" dialog="#{selecaoContaView}" mbView="#{formaDeRecebimentoView}" value="#{formaDeRecebimentoView.e.conta}" var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+
                             <p:outputLabel value="#{l.Padrao}" />
                             <p:selectOneMenu  id="formaDeRecebimentoPadraoDeParcela" value="#{formaDeRecebimentoView.e.formaPadraoDeRecebimentoParcela}">
                                 <f:selectItems value="#{formaDeRecebimentoView.tipoFormaDeRecebimentoPadraoParcela}" var="tipoFormaDeRecebimento" itemValue="#{tipoFormaDeRecebimento}" itemLabel="#{tipoFormaDeRecebimento.nome}" />

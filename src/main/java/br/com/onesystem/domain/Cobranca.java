@@ -7,7 +7,6 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
-import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;

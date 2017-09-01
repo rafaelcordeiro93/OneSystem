@@ -102,6 +102,8 @@ public class FormaDeRecebimento implements Serializable {
     private List<Orcamento> orcamentos;
     @OneToMany(mappedBy = "formaDeRecebimento")
     private List<Pedido> pedido;
+    @ManyToOne
+    private Conta conta;
 
     public FormaDeRecebimento() {
     }
@@ -110,7 +112,7 @@ public class FormaDeRecebimento implements Serializable {
             TipoFormaDeRecebimento formaPadraoDeEntrada, boolean entradaEmCartao, boolean entradaEmDinheiro, boolean entradaEmCheque,
             boolean entradaEmCredito, boolean parcelaEmCheque, boolean parcelaEmCartao, boolean parcelaEmConta, Integer minimoDeParcelas,
             Integer maximoDeParcelas, Integer periodicidade, TipoPeriodicidade tipoPeriodicidade, Integer diasPrimeiraParcela,
-            ModalidadeDeCobranca formaPadraoDeParcela, Cartao cartao) throws DadoInvalidoException {
+            ModalidadeDeCobranca formaPadraoDeParcela, Cartao cartao, Conta conta) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.ativo = ativo;
@@ -131,6 +133,7 @@ public class FormaDeRecebimento implements Serializable {
         this.diasPrimeiraParcela = diasPrimeiraParcela;
         this.formaPadraoDeParcela = formaPadraoDeParcela;
         this.cartao = cartao;
+        this.conta = conta;
         ehValido();
     }
 
@@ -218,6 +221,10 @@ public class FormaDeRecebimento implements Serializable {
         return formaPadraoDeParcela;
     }
 
+    public Conta getConta() {
+        return conta;
+    }
+    
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "ativo", "entrada", "porcentagemDeEntrada", "formaPadraoDeEntrada", "entradaEmCartao", "entradaEmDinheiro",
                 "entradaEmCheque", "entradaEmCredito", "parcelaEmCheque", "parcelaEmCartao", "parcelaEmConta", "minimoDeParcelas", "maximoDeParcelas",
