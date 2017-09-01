@@ -1,7 +1,7 @@
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.war.builder.PessoaBV;
+import br.com.onesystem.domain.Recebimento;
+import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import java.io.Serializable;
 import javax.faces.component.UIComponent;
@@ -20,25 +20,25 @@ public class RecebimentoBVConverter implements Converter, Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && !value.isEmpty()) {
             Object object = uic.getAttributes().get(value);
-            if (object instanceof Pessoa) {
-                return new PessoaBV((Pessoa) object);
-            } else if (object instanceof PessoaBV) {
-                return (PessoaBV) object;
+            if (object instanceof Recebimento) {
+                return new RecebimentoBV((Recebimento) object);
+            } else if (object instanceof RecebimentoBV) {
+                return (RecebimentoBV) object;
             }
         }
-        return new PessoaBV();
+        return new RecebimentoBV();
     }
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         if (object != null) {
-            if (object instanceof PessoaBV) {
-                String id = String.valueOf(((PessoaBV) object).getId());
-                uic.getAttributes().put(id, (PessoaBV) object);
+            if (object instanceof RecebimentoBV) {
+                String id = String.valueOf(((RecebimentoBV) object).getId());
+                uic.getAttributes().put(id, (RecebimentoBV) object);
                 return id;
-            } else if (object instanceof Pessoa) {
-                String id = String.valueOf(((Pessoa) object).getId());
-                uic.getAttributes().put(id, (Pessoa) object);
+            } else if (object instanceof Recebimento) {
+                String id = String.valueOf(((Recebimento) object).getId());
+                uic.getAttributes().put(id, (Recebimento) object);
                 return id;
             } else {
                 return object.toString();

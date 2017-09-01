@@ -62,7 +62,7 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
                 new ImpressoraDeLayout(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
                 t = null; // libera memoria do objeto impresso.
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getLabel("Selecione_um_registro"));
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
             }
         } catch (DadoInvalidoException die) {
             die.print();

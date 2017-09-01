@@ -5,14 +5,18 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.TemplateFormaPagamento;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
+import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -38,7 +42,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @SequenceGenerator(allocationSize = 1, initialValue = 1, name = "SEQ_RECEBIMENTO",
         sequenceName = "SEQ_RECEBIMENTO")
-public class Recebimento implements Serializable{
+public class Recebimento implements Serializable {
 
     @Id
     @GeneratedValue(generator = "SEQ_RECEBIMENTO", strategy = GenerationType.SEQUENCE)
@@ -176,12 +180,45 @@ public class Recebimento implements Serializable{
         }
     }
 
+    @MetodoInacessivelRelatorio
+    public List<TemplateFormaPagamento> getTemplateFormaPagamento() {
+        List<TemplateFormaPagamento> forma = new ArrayList<>();
+        int i = 0;
+        if (totalEmDinheiro.compareTo(BigDecimal.ZERO) != 0) {
+            forma.add(new TemplateFormaPagamento(i, cotacaoPadrao.getConta().getNome(), null, getTotalEmDinheiroFormatado(), getTotalEmDinheiroFormatado()));
+            i++;
+        }
+        if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
+            for (FormaDeCobranca f : formasDeCobranca) {
+                forma.add(new TemplateFormaPagamento(i, f.getCobranca().getModalidade().getNome(), f.getCobranca().getVencimentoFormatadoSemHoras(), f.getTotalFormatado(), f.getTotalNaMoedaPadraoFormatado()));
+                i++;
+            }
+        }
+        return forma;
+    }
+
     public Long getId() {
         return id;
     }
 
     public Caixa getCaixa() {
         return caixa;
+    }
+
+    public String getTotalNaMoedaPadraoPorExtenso() {
+        return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacaoPadrao.getConta().getMoeda(), getTotalNaMoedaPadrao()));
+    }
+
+    public String getTotalEmDinheiroFormatado() {
+        return MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), totalEmDinheiro);
+    }
+
+    public String getTotalNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), getTotalNaMoedaPadrao());
+    }
+
+    public BigDecimal getTotalNaMoedaPadrao() {
+        return tipoDeCobranca.stream().map(TipoDeCobranca::getTotalNaMoedaPadrao).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public List<TipoDeCobranca> getTipoDeCobranca() {
@@ -202,6 +239,11 @@ public class Recebimento implements Serializable{
 
     public Date getEmissao() {
         return emissao;
+    }
+
+    public String getEmissaoFormatadaSemHoras() {
+        SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
     }
 
     public Filial getFilial() {

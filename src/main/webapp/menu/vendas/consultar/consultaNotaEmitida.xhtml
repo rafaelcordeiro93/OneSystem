@@ -9,47 +9,52 @@
     <ui:define name="content">
 
         <div class="ui-g">
-            <div class="ui-g-10" style="margin-left: 8%">
+            <div class="ui-g-12 template-card">
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
-                    <h2 class="BigTopic">#{l.Consulta_De_Registro}</h2>
+                    <h2 class="BigTopic">#{l.Consulta_De_Registro}
+                        <p:panelGrid columns="2" style="right: 12%; position: absolute" styleClass="ui-panelgrid-blank" columnClasses="NoPadding, NoPadding">
+                            <p:commandButton title="#{l.Imprimir}" value="#{l.Imprimir}" action="#{consultaNotaEmitidaView.imprimir}" ajax="false" onclick="this.form.target = '_blank'" icon="fa fa-print" />
+                            <p:commandButton title="#{l.Ajuda}" value="#{l.Ajuda}" disabled="true" ajax="false" icon="fa fa-question" />
+                        </p:panelGrid>
+                    </h2>
                     <div class="EmptyBox20"/>
 
-                    <div class="ui-fluid">
+                    <div class="ui-fluid template-card-inbox">
 
                         <div id="nota" class="ui-g">
-                            <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Nota_Emitida}:"/>
+                            <p:outputLabel class="ui-g-12 ui-md-4 ui-lg-4"  value="#{l.Nota_Emitida}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{consultaNotaEmitidaView.notaEmitida}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog class="ui-g-12 ui-md-4 ui-lg-4" id="cNotaEmitida" value="#{consultaNotaEmitidaView.t}" update=":conteudo" dialog="#{selecaoNotaEmitidaView}" mbView="#{consultaNotaEmitidaView}" var="notaEmitida" converter="notaEmitidaConverter" itemLabel="#{notaEmitida.id}" itemValue="#{notaEmitida}" editVisible="false" onlyNumber="true"/>
                             <p:commandButton value="#{l.Cancelar}" actionListener="#{consultaNotaEmitidaView.cancela}" icon="fa fa-ban"
                                              styleClass="orange-btn" style="width: auto !important" update=":conteudo"
-                                             rendered="#{consultaNotaEmitidaView.notaEmitida.estado ne null ? (consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.comanda.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
+                                             rendered="#{consultaNotaEmitidaView.t.estado ne null ? (consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.comanda.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
                         </div>
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  value="#{l.Estado}: "/>
-                            <p:outputLabel class="#{consultaNotaEmitidaView.notaEmitida.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
-                                                    consultaNotaEmitidaView.notaEmitida.estado eq 'EFETIVADO' ? 'label label-success' :
-                                                    consultaNotaEmitidaView.notaEmitida.estado eq 'CANCELADO' ? 'label label-warning' :
-                                                    ''}"> #{consultaNotaEmitidaView.notaEmitida.estado.nome}</p:outputLabel>
+                            <p:outputLabel class="#{consultaNotaEmitidaView.t.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaNotaEmitidaView.t.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaNotaEmitidaView.t.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaNotaEmitidaView.t.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Pessoa}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.notaEmitida.pessoa.id} #{consultaNotaEmitidaView.notaEmitida.pessoa ne null ? '-' : ''}  #{consultaNotaEmitidaView.notaEmitida.pessoa.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.t.pessoa.id} #{consultaNotaEmitidaView.t.pessoa ne null ? '-' : ''}  #{consultaNotaEmitidaView.t.pessoa.nome}"/>
 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Operacao}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.notaEmitida.operacao.id} #{consultaNotaEmitidaView.notaEmitida.operacao ne null ? '-' : ''}  #{consultaNotaEmitidaView.notaEmitida.operacao.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.t.operacao.id} #{consultaNotaEmitidaView.t.operacao ne null ? '-' : ''}  #{consultaNotaEmitidaView.t.operacao.nome}"/>
 
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.notaEmitida.listaDePreco.id} #{consultaNotaEmitidaView.notaEmitida.listaDePreco ne null ? '-' : ''}  #{consultaNotaEmitidaView.notaEmitida.listaDePreco.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaNotaEmitidaView.t.listaDePreco.id} #{consultaNotaEmitidaView.t.listaDePreco ne null ? '-' : ''}  #{consultaNotaEmitidaView.t.listaDePreco.nome}"/>
                         </div>
 
                         <p:tabView style="border: 1px solid #d8d8d8;">
 
                             <p:tab id="item" title="#{l.Itens}">
 
-                                <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{consultaNotaEmitidaView.notaEmitida.itens}" rowKey="#{itemEmitido.id}" 
+                                <p:dataTable id="itensEmitidosNota" var="itemEmitido" value="#{consultaNotaEmitidaView.t.itens}" rowKey="#{itemEmitido.id}" 
                                              emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
 
                                     <f:facet name="header">
@@ -80,10 +85,10 @@
 
                                     <p:columnGroup type="footer">
                                         <p:row>
-                                            <p:column colspan="1" footerText="#{consultaNotaEmitidaView.notaEmitida.itens.size() eq 0 ? '' : consultaNotaEmitidaView.notaEmitida.itens.size()}" />
+                                            <p:column colspan="1" footerText="#{consultaNotaEmitidaView.t.itens.size() eq 0 ? '' : consultaNotaEmitidaView.t.itens.size()}" />
                                             <p:column colspan="6"/>
                                             <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
-                                            <p:column colspan="2" footerText="#{consultaNotaEmitidaView.notaEmitida.totalItensFormatado}"/>
+                                            <p:column colspan="2" footerText="#{consultaNotaEmitidaView.t.totalItensFormatado}"/>
                                         </p:row>
                                     </p:columnGroup> 
 
@@ -95,47 +100,47 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{l.Forma_Recebimento}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{consultaNotaEmitidaView.notaEmitida.formaDeRecebimento.id} #{consultaNotaEmitidaView.notaEmitida.pessoa ne null ? '-' : ''}  #{consultaNotaEmitidaView.notaEmitida.formaDeRecebimento.nome}"/>
+                                    <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-10" value="#{consultaNotaEmitidaView.t.formaDeRecebimento.id} #{consultaNotaEmitidaView.t.pessoa ne null ? '-' : ''}  #{consultaNotaEmitidaView.t.formaDeRecebimento.nome}"/>
                                 </div>
 
                                 <p:separator/>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.acrescimoFormatado}" />                             
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.acrescimoFormatado}" />                             
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Dinheiro}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.totalEmDinheiroFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.totalEmDinheiroFormatado}" />    
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Nota}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.totalFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.totalFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.descontoFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.descontoFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Credito}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.credito.valorFormatado eq null ? consultaNotaEmitidaView.zero : consultaNotaEmitidaView.notaEmitida.credito.valorFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.credito.valorFormatado eq null ? consultaNotaEmitidaView.zero : consultaNotaEmitidaView.t.credito.valorFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.despesaCobrancaFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.despesaCobrancaFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cheque}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.totalChequeDeEntradaFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.totalChequeDeEntradaFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.freteFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.freteFormatado}" />
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1 " value="#{l.Cartao}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.notaEmitida.totalCartaoDeEntradaFormatado eq null ? consultaNotaEmitidaView.zero : consultaNotaEmitidaView.notaEmitida.totalCartaoDeEntradaFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaNotaEmitidaView.t.totalCartaoDeEntradaFormatado eq null ? consultaNotaEmitidaView.zero : consultaNotaEmitidaView.t.totalCartaoDeEntradaFormatado}" />    
                                 </div>                           
 
-                                <p:dataTable var="parcela" value="#{consultaNotaEmitidaView.notaEmitida.parcelas}" 
+                                <p:dataTable var="parcela" value="#{consultaNotaEmitidaView.t.parcelas}" 
                                              styleClass="ui-g-2" rowKey="#{parcela.id}"
                                              paginatorAlwaysVisible="false" rows="12" paginator="true"
                                              paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -176,7 +181,7 @@
                                     <p:columnGroup type="footer">
                                         <p:row>
                                             <p:column colspan="3" style="text-align:right" footerText="#{l.Total}" />
-                                            <p:column footerText="#{consultaNotaEmitidaView.notaEmitida.totalParcelasFormatado}"/>
+                                            <p:column footerText="#{consultaNotaEmitidaView.t.totalParcelasFormatado}"/>
                                             <p:column colspan="4"/>
                                         </p:row>                                  
                                     </p:columnGroup>

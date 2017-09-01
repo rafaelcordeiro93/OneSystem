@@ -46,6 +46,7 @@ import br.com.onesystem.domain.builder.CepBuilder;
 import br.com.onesystem.domain.builder.CfopBuilder;
 import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
+import br.com.onesystem.domain.builder.GrupoFinanceiroBuilder;
 import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.domain.builder.SituacaoFiscalBuilder;
@@ -497,7 +498,7 @@ public class DadosIniciais {
         // -- Adiciona Grupo Financeiro
         AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
 
-        GrupoFinanceiro aje = new GrupoFinanceiro(null, "Ajuste de Saldo Inicial", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro aje = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
         GrupoFinanceiro dev = new GrupoFinanceiro(null, "(-) Devoluções de Vendas", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
         GrupoFinanceiro imp = new GrupoFinanceiro(null, "Impostos Sobre Faturamento", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
         GrupoFinanceiro tot = new GrupoFinanceiro(null, "Total dos Custos Variáveis", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
@@ -511,6 +512,17 @@ public class DadosIniciais {
         GrupoFinanceiro opi = new GrupoFinanceiro(null, "Operações Com Imobilizado", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
         GrupoFinanceiro oo = new GrupoFinanceiro(null, "Outras Operações", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
         GrupoFinanceiro cp = new GrupoFinanceiro(null, "Custos de Produção", NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.CUSTOS_OPERACIONAIS);
+        
+        GrupoFinanceiro gfReceitaAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfReceitaM = new GrupoFinanceiro(null, bundle.getLabel("Receita_com_Vendas_de_Mercadorias"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfReceitaPS = new GrupoFinanceiro(null, bundle.getLabel("Receitas_com_Prestacao_de_Servicos"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
+        GrupoFinanceiro gfReceitaDV = new GrupoFinanceiro(null, "(-) "+ bundle.getLabel("Devoluciones de Ventas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro gfReceitaRF = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Financeiras"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.FINANCEIRAS);
+        GrupoFinanceiro gfReceitaRD = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Diversas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS_OPERACIONAIS);
+        GrupoFinanceiro gfReceitaRO = new GrupoFinanceiro(null, bundle.getLabel("Receitas_nao_Operacionais"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.NAO_OPERACIONAIS);
+        GrupoFinanceiro gfReceitaOE = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Estoque"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfReceitaOI = new GrupoFinanceiro(null, bundle.getLabel("Operacoes_com_Imobilizado"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
+        GrupoFinanceiro gfReceitaOU = new GrupoFinanceiro(null, bundle.getLabel("Outras_Operacoes"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
 
         daoGrupoFinanceiro.adiciona(aje);
         daoGrupoFinanceiro.adiciona(dev);
@@ -526,6 +538,17 @@ public class DadosIniciais {
         daoGrupoFinanceiro.adiciona(opi);
         daoGrupoFinanceiro.adiciona(oo);
         daoGrupoFinanceiro.adiciona(cp);
+        
+        daoGrupoFinanceiro.adiciona(gfReceitaAjuste);
+        daoGrupoFinanceiro.adiciona(gfReceitaM);
+        daoGrupoFinanceiro.adiciona(gfReceitaPS);
+        daoGrupoFinanceiro.adiciona(gfReceitaDV);
+        daoGrupoFinanceiro.adiciona(gfReceitaRF);
+        daoGrupoFinanceiro.adiciona(gfReceitaRD);
+        daoGrupoFinanceiro.adiciona(gfReceitaRO);
+        daoGrupoFinanceiro.adiciona(gfReceitaOE);
+        daoGrupoFinanceiro.adiciona(gfReceitaOI);
+        daoGrupoFinanceiro.adiciona(gfReceitaOU);
 
         // -- Adiciona TipoDespesa
         AdicionaDAO<TipoDespesa> daoDespesa = new AdicionaDAO<>();
@@ -778,9 +801,9 @@ public class DadosIniciais {
 
         //Moeda
         // ---------------------------------------------------------------------
-        Moeda real = new Moeda(null, "Real", "R$", TipoBandeira.BRASIL);
-        Moeda dolar = new Moeda(null, "Dólar", "$", TipoBandeira.ESTADOS_UNIDOS);
-        Moeda guarani = new Moeda(null, "Guarani", "Gs", TipoBandeira.PARAGUAI);
+        Moeda real = new Moeda(null, "Real", "R$", "Reais", "Centavo", "Centavos", TipoBandeira.BRASIL);
+        Moeda dolar = new Moeda(null, "Dólar", "$", "Dólares", "Cent", "Cents", TipoBandeira.ESTADOS_UNIDOS);
+        Moeda guarani = new Moeda(null, "Guaraní", "Gs", "Guaraníes", "centimo", "centimos", TipoBandeira.PARAGUAI);
 
         AdicionaDAO<Moeda> daoMoeda = new AdicionaDAO<Moeda>();
         daoMoeda.adiciona(real);

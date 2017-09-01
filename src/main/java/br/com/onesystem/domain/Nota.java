@@ -229,19 +229,19 @@ public abstract class Nota implements Serializable {
         List<TemplateFormaPagamento> lista = new ArrayList<>();
         int id = 0;
         for (ValorPorCotacao v : valorPorCotacao) {
-            lista.add(new TemplateFormaPagamento(id, v.getCotacao().getConta().getMoeda().getNome(), null, v.getValorFormatado()));
+            lista.add(new TemplateFormaPagamento(id, v.getCotacao().getConta().getMoeda().getNome(), null, v.getValorFormatado(), v.getValorNaMoedaPadraoFormatado()));
             id++;
         }
         List<CobrancaVariavel> entradas = cobrancas.stream().filter(c -> c.getEntrada() == true).sorted(Comparator.comparing(c -> c.getVencimento())).collect(Collectors.toList());
         List<CobrancaVariavel> parcelas = cobrancas.stream().filter(c -> c.getEntrada() == false).sorted(Comparator.comparing(c -> c.getParcela())).collect(Collectors.toList());
 
         for (CobrancaVariavel c : entradas) {
-            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
+            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado(), c.getValorNaMoedaPadraoFormatado()));
             id++;
         }
 
         for (CobrancaVariavel c : parcelas) {
-            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado()));
+            lista.add(new TemplateFormaPagamento(id, c.getModalidade().getNome(), c.getVencimentoFormatadoSemHoras(), c.getValorFormatado(), c.getValorNaMoedaPadraoFormatado()));
             id++;
         }
 

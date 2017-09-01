@@ -17,12 +17,14 @@ public class TemplateFormaPagamento {
     private String nome;
     private String vencimento;
     private String valorFormatado;
+    private String valorConvertido;
 
-    public TemplateFormaPagamento(int id, String nome, String vencimento, String valorFormatado) {
+    public TemplateFormaPagamento(int id, String nome, String vencimento, String valorFormatado, String valorConvertido) {
         this.id = id;
         this.nome = nome;
         this.vencimento = vencimento;
         this.valorFormatado = valorFormatado;
+        this.valorConvertido = valorConvertido;
     }
 
     public int getId() {
@@ -39,6 +41,15 @@ public class TemplateFormaPagamento {
 
     public String getValorFormatado() {
         return valorFormatado;
+    }
+
+    public String getValorConvertido() {
+        return valorConvertido;
+    }
+
+    @Override
+    public String toString() {
+        return "TemplateFormaPagamento{" + "id=" + id + ", nome=" + nome + ", vencimento=" + vencimento + ", valorFormatado=" + valorFormatado + ", valorConvertido=" + valorConvertido + '}';
     }
     
 }

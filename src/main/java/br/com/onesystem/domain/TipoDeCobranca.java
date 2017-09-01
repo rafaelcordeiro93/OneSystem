@@ -7,15 +7,21 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobranca;
 import br.com.onesystem.util.GeradorDeBaixaDeTipoCobrancaFixa;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
+import br.com.onesystem.war.service.CotacaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -213,12 +219,48 @@ public class TipoDeCobranca implements Serializable {
         }
     }
 
+    public String getTotalPorExtenso() {
+        return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacao.getConta().getMoeda(), getTotal()));
+    }
+
+    public String getTotalNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(getCotacaoPadraoDoRecebimentoOuPagamento().getConta().getMoeda(), getTotalNaMoedaPadrao());
+    }
+
+    public String getJurosNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(getCotacaoPadraoDoRecebimentoOuPagamento().getConta().getMoeda(), getJurosNaMoedaPadrao());
+    }
+
+    public String getDescontoNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(getCotacaoPadraoDoRecebimentoOuPagamento().getConta().getMoeda(), getDescontoNaMoedaPadrao());
+    }
+
+    public String getMultaNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(getCotacaoPadraoDoRecebimentoOuPagamento().getConta().getMoeda(), getMultaNaMoedaPadrao());
+    }
+
+    public String getValorNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(getCotacaoPadraoDoRecebimentoOuPagamento().getConta().getMoeda(), getValorNaMoedaPadrao());
+    }
+
+    public BigDecimal getDescontoNaMoedaPadrao() {
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getDesconto(), getCotacao());
+    }
+
+    public BigDecimal getJurosNaMoedaPadrao() {
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getJuros(), getCotacao());
+    }
+
+    public BigDecimal getMultaNaMoedaPadrao() {
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getMulta(), getCotacao());
+    }
+
     public BigDecimal getTotalNaMoedaPadrao() {
-        if (getCobranca() != null) {
-            return getTotal().divide(getCotacao().getValor(), 2, BigDecimal.ROUND_UP);
-        } else {
-            return BigDecimal.ZERO;
-        }
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getTotal(), getCotacao());
+    }
+
+    public BigDecimal getValorNaMoedaPadrao() {
+        return MoedaFormatter.valorConvertidoNaMoedaPadrao(getValor(), getCotacao());
     }
 
     public EstadoDeLancamento getEstado() {
@@ -243,8 +285,20 @@ public class TipoDeCobranca implements Serializable {
         }
     }
 
-    public String getTotalNaMoedaPadraoFormatado() {
-        return MoedaFormatter.format(recebimento.getCotacaoPadrao().getConta().getMoeda(), getTotalNaMoedaPadrao());
+    @MetodoInacessivelRelatorio
+    public Cotacao getCotacaoPadraoDoRecebimentoOuPagamento() {
+        if (recebimento != null) {
+            return recebimento.getCotacaoPadrao();
+        } else if (pagamento != null) {
+            return pagamento.getCotacaoPadrao();
+        } else {
+            try {
+                return new CotacaoService().getCotacaoPadrao(new Date());
+            } catch (DadoInvalidoException ex) {
+                ex.print();
+                return null;
+            }
+        }
     }
 
     @Override

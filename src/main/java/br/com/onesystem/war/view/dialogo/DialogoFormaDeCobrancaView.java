@@ -10,6 +10,7 @@ import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Credito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Titulo;
@@ -124,12 +125,12 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     modalidadeDeCobranca = ModalidadeDeCobranca.CHEQUE;
                 }
             }
+        } else {
+            cotacaoLista = new CotacaoDAO().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+            contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
+            e.setCotacao(cotacaoPadrao);
         }
-
-        cotacaoLista = new CotacaoDAO().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
-        contaComCotacao = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
-        e.setCotacao(cotacaoPadrao);
     }
 
     public void abrirDialogo() {
@@ -209,6 +210,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
     }
 
     private void construir() throws DadoInvalidoException {
+        Filial filial = (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance());
         if (null != modalidadeDeCobranca) {
             switch (modalidadeDeCobranca) {
                 case TITULO:
@@ -220,6 +222,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     cheque.setValor(e.getValor());
                     cheque.setHistorico(e.getObservacao());
                     cheque.setCotacao(e.getCotacao());
+                    cheque.setFilial(filial);
                     if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {//cheque recebido
                         cheque.setTipoLancamento(TipoLancamento.RECEBIDA);///emitido ou recebido
                         cheque.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
@@ -242,6 +245,7 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     boletoDeCartao.setValor(e.getValor());
                     boletoDeCartao.setSituacao(SituacaoDeCartao.ABERTO);
                     boletoDeCartao.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                    boletoDeCartao.setFilial(filial);
                     e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
                     e.setCobranca(boletoDeCartao.construirComID());
                     break;
@@ -251,12 +255,13 @@ public class DialogoFormaDeCobrancaView extends BasicMBImpl<FormaDeCobranca, For
                     credito.setVencimento(emissao);
                     credito.setCotacao(e.getCotacao());
                     credito.setHistorico(e.getObservacao());
+                    credito.setFilial(filial);
                     if (recebimentoOuPagamento == NaturezaFinanceira.RECEITA) {
-                        credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
-                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
-                    } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
                         credito.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
                         e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
+                    } else if (recebimentoOuPagamento == NaturezaFinanceira.DESPESA) {
+                        credito.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
+                        e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
                     }
                     e.setCobranca(credito.construirComID());
                     break;

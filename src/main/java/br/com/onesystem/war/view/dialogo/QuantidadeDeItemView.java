@@ -65,6 +65,7 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDep
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("modal", true);
         opcoes.put("resizable", true);
+        opcoes.put("responsive", true);
         opcoes.put("width", 400);
         opcoes.put("height", 300);
         opcoes.put("draggable", true);

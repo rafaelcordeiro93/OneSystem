@@ -12,11 +12,16 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.NotaEmitidaBV;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -36,8 +41,9 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
     @Inject
     private BundleUtil msg;
 
-    private NotaEmitida notaEmitida;
-
+    @Inject
+    private LayoutDeImpressaoService service;
+    
     @PostConstruct
     public void construir() {
     }
@@ -46,21 +52,27 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof NotaEmitida) {
-            notaEmitida = (NotaEmitida) obj;
+            t = (NotaEmitida) obj;
+        }
+    }
+    
+    public void imprimir() {
+        try {
+            if (t != null) {
+                LayoutDeImpressao layout = service.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
+                new ImpressoraDeLayout(t.getItens(), layout).addParametro("notaEmitida", t).visualizarPDF();
+                t = null; // libera memoria do objeto impresso.
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
-    public NotaEmitida getNotaEmitida() {
-        return notaEmitida;
-    }
-
-    public void setNotaEmitida(NotaEmitida notaEmitida) {
-        this.notaEmitida = notaEmitida;
-    }
-
     public String getZero() {
-        if (notaEmitida != null) {
-            return MoedaFormatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+        if (t != null) {
+            return MoedaFormatter.format(t.getMoedaPadrao(), BigDecimal.ZERO);
         } else {
             return "";
         }
@@ -68,8 +80,8 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
     
      public void cancela() {
         try {
-            notaEmitida.cancela();
-            new AtualizaDAO<>().atualiza(notaEmitida);
+            t.cancela();
+            new AtualizaDAO<>().atualiza(t);
             InfoMessage.atualizado();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -102,6 +114,6 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
 
     @Override
     public void limparJanela() {
-        notaEmitida = null;
+        t = null;
     }
 }

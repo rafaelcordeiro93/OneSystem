@@ -34,6 +34,21 @@ public class Moeda implements Serializable {
     @Length(min = 3, max = 30, message = "{nome_lenght}")
     @Column(nullable = false, length = 30, unique = true)
     private String nome;
+    @NotNull(message = "{nomePlural_not_null}")
+    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nomePlural_type_letter_space}")
+    @Length(min = 3, max = 30, message = "{nomePlural_lenght}")
+    @Column(nullable = false, length = 30, unique = true)
+    private String nomePlural;
+    @NotNull(message = "{nomeCasasDecimais_not_null}")
+    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nomeCasasDecimais_type_letter_space}")
+    @Length(min = 3, max = 30, message = "{nomeCasasDecimais_lenght}")
+    @Column(nullable = false, length = 30, unique = true)
+    private String nomeCasasDecimais;
+    @NotNull(message = "{nomeCasasDecimaisPlural_not_null}")
+    @CharacterType(value = CaseType.LETTER_SPACE, message = "{nomeCasasDecimaisPlural_type_letter_space}")
+    @Length(min = 3, max = 30, message = "{nomeCasasDecimaisPlural_lenght}")
+    @Column(nullable = false, length = 30, unique = true)
+    private String nomeCasasDecimaisPlural;
     @NotNull(message = "{sigla_not_null}")
     @Length(min = 1, max = 3, message = "{sigla_length}")
     @Column(nullable = false, length = 3)
@@ -50,11 +65,14 @@ public class Moeda implements Serializable {
     public Moeda() {
     }
 
-    public Moeda(Long id, String nome, String sigla, TipoBandeira bandeira) throws DadoInvalidoException {
+    public Moeda(Long id, String nome, String sigla, String nomePlural, String nomeCasasDecimais, String nomeCasasDecimaisPlural, TipoBandeira bandeira) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
+        this.nomePlural = nomePlural;
+        this.nomeCasasDecimais = nomeCasasDecimais;
         this.sigla = sigla;
         this.bandeira = bandeira;
+        this.nomeCasasDecimaisPlural = nomeCasasDecimaisPlural;
         ehValido();
     }
 
@@ -78,6 +96,18 @@ public class Moeda implements Serializable {
         return bandeira;
     }
 
+    public String getNomePlural() {
+        return nomePlural;
+    }
+
+    public String getNomeCasasDecimais() {
+        return nomeCasasDecimais;
+    }
+
+    public String getNomeCasasDecimaisPlural() {
+        return nomeCasasDecimaisPlural;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {
@@ -94,7 +124,7 @@ public class Moeda implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome", "sigla");
+        List<String> campos = Arrays.asList("nome", "sigla", "nomePlural", "nomeCasasDecimais", "nomeCasasDecimaisPlural");
         new ValidadorDeCampos<Moeda>().valida(this, campos);
     }
 

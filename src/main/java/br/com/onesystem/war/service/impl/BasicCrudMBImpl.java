@@ -15,6 +15,7 @@ public abstract class BasicCrudMBImpl<Bean> {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("modal", true);
         opcoes.put("resizable", false);
+        opcoes.put("responsive", true);
         opcoes.put("width", 950);
         opcoes.put("draggable", false);
         opcoes.put("height", 471);
