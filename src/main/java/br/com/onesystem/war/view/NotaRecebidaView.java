@@ -13,6 +13,7 @@ import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
@@ -31,6 +32,7 @@ import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
@@ -60,6 +62,7 @@ import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
+import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -67,6 +70,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -107,6 +111,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
     private PedidoAFornecedores pedidoAFornecedores;
+    private ConfiguracaoEstoque configuracaoEstoque;
+    private boolean buscouDeposito = false;
 
     @Inject
     private ConfiguracaoService configuracaoService;
@@ -116,6 +122,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     @Inject
     private EstoqueService serviceEstoque;
+
+    @Inject
+    private ConfiguracaoEstoqueService confEstoqueService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -128,6 +137,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             configuracao = configuracaoService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
+            configuracaoEstoque = confEstoqueService.buscar();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -560,12 +570,21 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 List<QuantidadeDeItemPorDeposito> lista = (List<QuantidadeDeItemPorDeposito>) event.getObject();
                 itemRecebido.setListaDeQuantidade(lista);
                 itemRecebido.setQuantidade(lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
+                buscouDeposito = true;
             } else if (obj instanceof List && "exibePedidoAFornecedores-btn".equals(idComponent)) {
                 List<ItemDePedidoBV> lista = (List<ItemDePedidoBV>) event.getObject();
                 importaItensDe(lista);
             }
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    public void geraListaDeEstoquePadrao() {
+        if (!buscouDeposito) {
+            itemRecebido.setListaDeQuantidade(Arrays.asList(new QuantidadeDeItemPorDeposito(null, new SaldoDeEstoque(null, configuracaoEstoque.getDepositoPadrao(), null), itemRecebido.getQuantidade())));
+        } else {
+            buscouDeposito = false;
         }
     }
 

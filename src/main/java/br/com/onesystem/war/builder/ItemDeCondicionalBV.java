@@ -13,8 +13,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.MoedaFormatter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *

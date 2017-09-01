@@ -10,7 +10,7 @@
     <ui:define name="title">#{l.Orcamento}</ui:define>
 
     <ui:define name="content">      
-        
+
         <div class="card" style="border: solid 1px; border-color: #C9D3DD">
             <h2 class="BigTopic">#{l.Orcamento}</h2>
             <div class="EmptyBox5"/>
@@ -44,7 +44,7 @@
 
                     <p:tab title="#{l.Itens}" id="itemTabOrcamento">
 
-                        <p:dataTable id="itensOrcadosOrcamento" var="itemOrcadoBV" value="#{dialogoOrcamentoView.itensOrcados}" rowKey="#{itemOrcadoBV.id}" 
+                        <p:dataTable id="itensOrcadosOrcamento" var="itemOrcadoBV" value="#{dialogoOrcamentoView.itensOrcados}" rowKey="#{itemOrcadoBV.id}" editMode="cell" editable="true" selectionMode="single"
                                      emptyMessage="#{l.Nao_Ha_Registros}" reflow="true" style="font-size: 12px;" tableStyle="padding: 2px !important" rowStyleClass="#{itemOrcadoBV.quantidadeDeFaturamento eq 0 ? 'rowGreen' : itemOrcadoBV.quantidadeDeFaturamento eq 1 ? 'rowYellow' : 'rowRed'}">
 
                             <f:facet name="header">
@@ -69,8 +69,20 @@
                             <p:column headerText="#{l.Unitario}" style=" text-align: center">
                                 <h:outputText value="#{itemOrcadoBV.unitarioFormatado}" />
                             </p:column>
+                            <p:column headerText="#{l.A_Faturar}" style=" text-align: center" colspan="2" >
+                                <p:cellEditor>
+                                    <f:facet name="output"><h:outputText style = "display: block;"  id="outaFaturar" value="#{itemOrcadoBV.item.unidadeDeMedida.sigla} #{itemOrcadoBV.faturar}"/></f:facet>
+                                    <f:facet name="input">
+                                        <p:inputNumber id="condQuanastidade" maxValue="999999999999.99" minValue="0.00"  styleClass="Wid90" decimalPlaces="#{itemOrcadoBV.item.unidadeDeMedida.casasDecimais}" 
+                                                       decimalSeparator="," thousandSeparator="." value="#{itemOrcadoBV.faturar}"> 
+                                            <p:ajax event="focus" listener="#{dialogoOrcamentoView.selecionaNoFocus(itemOrcadoBV)}"/>
+                                            <p:ajax event="change" listener="#{dialogoOrcamentoView.geraListaDeEstoquePadrao}" update="tempDialog:tabs:itensOrcadosOrcamento"/>
+                                        </p:inputNumber>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
                             <p:column headerText="#{l.Total}" sortBy="#{itemOrcadoBV.totalFormatado}" colspan="2" style=" text-align: center">
-                                <h:outputText value="#{itemOrcadoBV.totalFormatado   }" />
+                                <h:outputText id="totalFaturar" value="#{itemOrcadoBV.totalFormatado   }" />
                             </p:column>
 
                             <p:column headerText="+" width="7%" style="text-align: center;">
@@ -85,7 +97,7 @@
                             <p:columnGroup type="footer">
                                 <p:row>
                                     <p:column colspan="1" footerText="#{dialogoOrcamentoView.orcamento.itensOrcados.size() eq 0 ? '' : dialogoOrcamentoView.orcamento.itensOrcados.size()}" />
-                                    <p:column colspan="6"/>
+                                    <p:column colspan="7"/>
                                     <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
                                     <p:column colspan="2" footerText="#{dialogoOrcamentoView.orcamento.totalItensFormatado}"/>
                                     <p:column colspan="1"/>
