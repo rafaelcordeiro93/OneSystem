@@ -28,6 +28,7 @@ public class ItemOrcadoBV {
     private BigDecimal quantidade;
     private List<QuantidadeDeItemPorDeposito> quantidadePorDeposito = new ArrayList<>();
     private Orcamento orcamento;
+    private BigDecimal faturar;
 
     public ItemOrcadoBV() {
     }
@@ -73,6 +74,18 @@ public class ItemOrcadoBV {
         this.quantidade = quantidade;
     }
 
+    public BigDecimal getFaturar() {
+        return faturar;
+    }
+
+    public void setFaturar(BigDecimal faturar) {
+        this.faturar = faturar;
+    }
+
+    public String getTotalAFaturarFormatado() {
+        return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), getUnitario().multiply(faturar));
+    }
+
     public String getTotalFormatado() {
         if (orcamento != null) {
             return MoedaFormatter.format(orcamento.getCotacao().getConta().getMoeda(), getTotal());
@@ -104,18 +117,25 @@ public class ItemOrcadoBV {
     public void setQuantidadePorDeposito(List<QuantidadeDeItemPorDeposito> quantidadePorDeposito) {
         this.quantidadePorDeposito = quantidadePorDeposito;
     }
-    
-    public int getQuantidadeDeFaturamento(){
+
+    public int getQuantidadeDeFaturamento() {
         BigDecimal b = BigDecimal.ZERO;
-        for(QuantidadeDeItemPorDeposito q : quantidadePorDeposito){
+        for (QuantidadeDeItemPorDeposito q : quantidadePorDeposito) {
             b = b.add(q.getQuantidade());
         }
-        return quantidade.compareTo(b);
+        return faturar.compareTo(b);
+    }
+
+    public BigDecimal getQuantidadeAFaturar() {
+        BigDecimal b = BigDecimal.ZERO;
+        for (QuantidadeDeItemPorDeposito q : quantidadePorDeposito) {
+            b = b.add(q.getQuantidade());
+        }
+        return b;
     }
 
     public BigDecimal getTotal() {
-
-        return getQuantidade() == null ? BigDecimal.ZERO : getQuantidade().multiply(unitario == null ? BigDecimal.ZERO : unitario);
+        return getFaturar() == null ? BigDecimal.ZERO : getFaturar().multiply(unitario == null ? BigDecimal.ZERO : unitario);
     }
 
     public ItemOrcado construir() throws DadoInvalidoException {

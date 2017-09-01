@@ -42,7 +42,7 @@
                         <p:commandButton id="exibeOrcamento-btn" action="#{dialogoOrcamentoView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this" update=":conteudo"/>
                         </p:commandButton>
-                        
+
                         <p:commandButton id="exibePedidoAFornecedores-btn" action="#{dialogoPedidoAFornecedoresView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaRecebidaView.selecionar}" process="@this"/>
                         </p:commandButton>
@@ -93,7 +93,9 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputNumberDialog id="neQuantidade" value="#{notaRecebidaView.itemRecebido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaRecebidaView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" readonly="true" decimalPlaces="#{notaRecebidaView.itemRecebido.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator="."/>
+                                    <a:inputNumberDialog id="neQuantidade" symbol="#{notaRecebidaView.itemRecebido.item.unidadeDeMedida.sigla}" value="#{notaRecebidaView.itemRecebido.quantidade}" dialog="#{quantidadeDeItemView}" mbView="#{notaRecebidaView}" update=":conteudo:growl" placeholder="#{l.Quantidade}" decimalPlaces="#{notaRecebidaView.itemRecebido.item.unidadeDeMedida.casasDecimais}" decimalSeparator="," thousandSeparator=".">
+                                        <p:ajax event="change" listener="#{notaRecebidaView.geraListaDeEstoquePadrao}" process="@this" />
+                                    </a:inputNumberDialog>
                                 </h:panelGrid>
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
@@ -173,7 +175,7 @@
                         <div class="ui-fluid ui-g-12">
                             <h:panelGrid columns="1" styleClass="Wid100">
                                 <p:outputLabel value="#{l.Forma_Recebimento}"/>
-                                <a:inputTextDialog styleDiv="max-width: 326px" style="max-width: 326px" id="neFormaRec" value="#{notaRecebidaView.notaRecebida.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{notaRecebidaView}" update=":conteudo" var="formaDeRecebimento" converter="formaDeRecebimentoConverter" itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}" editVisible="true" readonly="true"/>
+                                <a:inputTextDialog styleDiv="max-width: 326px" style="max-width: 326px" id="neFormaRec" value="#{notaRecebidaView.notaRecebida.formaDeRecebimento}" dialog="#{selecaoFormaDeRecebimentoAtivaView}" mbView="#{notaRecebidaView}" update=":conteudo" var="formaDeRecebimento" converter="formaDeRecebimentoConverter" itemLabel="#{formaDeRecebimento.nome}" itemValue="#{formaDeRecebimento}" itemLabelTabVisible="true" itemLabelTab="#{formaDeRecebimento.nome}"/>
                             </h:panelGrid>
                         </div>
 

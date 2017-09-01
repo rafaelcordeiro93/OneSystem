@@ -3,8 +3,6 @@ package br.com.onesystem.war.view.dialogo;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
@@ -13,6 +11,7 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,11 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
     private Orcamento orcamento;
     private List<ItemOrcadoBV> itensOrcados;
     private ItemOrcadoBV itemOrcadoBV;
+    private boolean criarDepositos = false;
+    private ConfiguracaoEstoque configuracaoEstoque;
+
+    @Inject
+    private ConfiguracaoEstoqueService confEstoqueService;
 
     @Inject
     private EstoqueService serviceEstoque;
@@ -48,8 +52,9 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
             orcamento.getItensOrcados().forEach((io) -> {
                 ItemOrcadoBV iobv = new ItemOrcadoBV(io);
                 List<SaldoDeEstoque> listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(iobv.getItem(), null);
-                List<QuantidadeDeItemPorDeposito> lista = criaLista(listaDeEstoque, iobv);
+                List<QuantidadeDeItemPorDeposito> lista = criaLista(listaDeEstoque, iobv.getQuantidade());
                 iobv.setQuantidadePorDeposito(lista);
+                iobv.setFaturar(iobv.getQuantidadeAFaturar());
                 itensOrcados.add(iobv);
             });
         }
@@ -61,11 +66,11 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
 
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
-        opcoes.put("resizable", false);
-        opcoes.put("width", 800);
-        opcoes.put("draggable", false);
+        opcoes.put("resizable", true);
+        opcoes.put("width", 900);
+        opcoes.put("draggable", true);
         opcoes.put("height", 600);
-        opcoes.put("closable", false);
+        opcoes.put("closable", true);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
@@ -77,8 +82,26 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof List) {
+            criarDepositos = true;
             List<QuantidadeDeItemPorDeposito> list = (List<QuantidadeDeItemPorDeposito>) event.getObject();
             itemOrcadoBV.setQuantidadePorDeposito((List<QuantidadeDeItemPorDeposito>) event.getObject());
+            itemOrcadoBV.setFaturar(itemOrcadoBV.getQuantidadeAFaturar());
+            itensOrcados.set(itensOrcados.indexOf(itemOrcadoBV), itemOrcadoBV);
+          //  RequestContext.getCurrentInstance().update("tempDialog");
+//            itensOrcados.forEach((io) -> {
+//                try {
+//                    List<QuantidadeDeItemPorDeposito> list = (List<QuantidadeDeItemPorDeposito>) event.getObject();
+//                    ItemOrcadoBV iobv = new ItemOrcadoBV(io.construirComId());
+//                    iobv.setQuantidadePorDeposito((List<QuantidadeDeItemPorDeposito>) event.getObject());
+//                    iobv.setFaturar(iobv.getQuantidadeAFaturar());
+//                    if (itemOrcadoBV.equals(io)) {
+//                        itensOrcados.set(itensOrcados.indexOf(io), iobv);
+//                    }
+//                } catch (DadoInvalidoException ex) {
+//                    Logger.getLogger(DialogoOrcamentoView.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            });
+
         }
     }
 
@@ -87,13 +110,12 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.quantidadeLista.token");
         session.setAttribute("onesystem.quantidadeLista.token", itemOrcado.getQuantidadePorDeposito());
-
         itemOrcadoBV = itemOrcado;
         abrirJanelaQuantidade();
     }
 
-    public List<QuantidadeDeItemPorDeposito> criaLista(List<SaldoDeEstoque> listaDeEstoque, ItemOrcadoBV itemOrcado) {
-        BigDecimal quantidade = itemOrcado.getQuantidade();
+    public List<QuantidadeDeItemPorDeposito> criaLista(List<SaldoDeEstoque> listaDeEstoque, BigDecimal qtd) {
+        BigDecimal quantidade = qtd;
 
         List<QuantidadeDeItemPorDeposito> lista = new ArrayList<QuantidadeDeItemPorDeposito>();
         for (SaldoDeEstoque saldo : listaDeEstoque) {
@@ -113,7 +135,7 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
         }
         if (quantidade.compareTo(BigDecimal.ZERO) > 0) {
             for (SaldoDeEstoque saldo : listaDeEstoque) {
-                QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, itemOrcado.getQuantidade());
+                QuantidadeDeItemPorDeposito quantidadeDeItem = new QuantidadeDeItemPorDeposito(new Long(lista.size() + 1), saldo, qtd);
                 lista.add(quantidadeDeItem);
             }
         }
@@ -125,22 +147,36 @@ public class DialogoOrcamentoView extends BasicMBImpl<Orcamento, ItemOrcadoBV> i
     }
 
     public void salvar() {
-        for (ItemOrcadoBV ib : itensOrcados) {
-            if (ib.getQuantidadeDeFaturamento() != 0) {
-                ErrorMessage.print(new BundleUtil().getMessage("Existem_Quantidade_Diferente_Da_Orcada"));
-                return;
-            }
-        }
+
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("onesystem.orcamento.token");
         RequestContext.getCurrentInstance().closeDialog(itensOrcados);
     }
 
+    public void geraListaDeEstoquePadrao() {
+        try {
+            if (!criarDepositos) {
+                List<SaldoDeEstoque> listaDeEstoque = serviceEstoque.buscaListaDeSaldoDeEstoque(itemOrcadoBV.getItem(), null);
+                itemOrcadoBV.setQuantidadePorDeposito((Arrays.asList(new QuantidadeDeItemPorDeposito(null, new SaldoDeEstoque(null, configuracaoEstoque.getDepositoPadrao(), null), itemOrcadoBV.getFaturar()))));
+            } else {
+                criarDepositos = false;
+            }
+        } catch (NullPointerException npe) {
+            npe.printStackTrace();
+        }
+    }
+
+    public void selecionaNoFocus(ItemOrcadoBV io) {
+        itemOrcadoBV = io;
+    }
+
     @Override
     public void limparJanela() {
         itemOrcadoBV = new ItemOrcadoBV();
         itensOrcados = new ArrayList<>();
+        configuracaoEstoque = confEstoqueService.buscar();
+        criarDepositos = false;
     }
 
     public Orcamento getOrcamento() {
