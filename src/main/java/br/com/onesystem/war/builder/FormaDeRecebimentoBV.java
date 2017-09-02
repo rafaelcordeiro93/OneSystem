@@ -20,7 +20,7 @@ public class FormaDeRecebimentoBV implements Serializable, BuilderView<FormaDeRe
     
     private Long id;
     private String nome;
-    private boolean ativo;
+    private boolean ativo = true;
     private boolean entrada;
     private BigDecimal porcentagemDeEntrada;
     private TipoFormaDeRecebimento formaPadraoDeEntrada;

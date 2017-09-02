@@ -3,6 +3,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoFormaDeRecebimento;
@@ -23,7 +24,7 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, FormaDeRecebimentoBV> implements Serializable {
 
-     private Configuracao configuracao;
+    private Configuracao configuracao;
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
@@ -50,8 +51,9 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, Form
         Object obj = event.getObject();
         if (obj instanceof FormaDeRecebimento) {
             e = new FormaDeRecebimentoBV((FormaDeRecebimento) event.getObject());
-        }
-        if (obj instanceof Cartao) {
+        } else if (obj instanceof Conta) {
+            e.setConta((Conta) obj);
+        } else if (obj instanceof Cartao) {
             e.setCartao((Cartao) obj);
         }
     }
@@ -61,7 +63,7 @@ public class FormaDeRecebimentoView extends BasicMBImpl<FormaDeRecebimento, Form
     }
 
     public List<ModalidadeDeCobranca> getTipoFormaDeRecebimentoPadraoParcela() {
-        return Arrays.asList(ModalidadeDeCobranca.CARTAO,ModalidadeDeCobranca.CHEQUE,ModalidadeDeCobranca.CREDITO, ModalidadeDeCobranca.TITULO);
+        return Arrays.asList(ModalidadeDeCobranca.CARTAO, ModalidadeDeCobranca.CHEQUE, ModalidadeDeCobranca.CREDITO, ModalidadeDeCobranca.TITULO);
     }
 
     public List<TipoPeriodicidade> getTipoPeriodicidade() {
