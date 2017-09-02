@@ -198,6 +198,8 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
                 } catch (DadoInvalidoException ex) {
                     ex.print();
                 }
+            } else if (obj instanceof Conta) {
+                conta = ((Conta) obj);
             } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
                 e.setPessoa((Pessoa) obj);
             } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
@@ -251,14 +253,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public boolean habilitaBotaoPessoa() {
         if (notaRecebidaList.size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean habilitaBotaoConta() {
-        if (list.getList().size() > 0) {
             return true;
         } else {
             return false;
@@ -376,4 +370,13 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     public void setPessoaNota(Pessoa pessoaNota) {
         this.pessoaNota = pessoaNota;
     }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
 }

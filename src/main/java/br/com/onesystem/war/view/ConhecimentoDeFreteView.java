@@ -189,6 +189,8 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             e.setOperacao((Operacao) obj);
         } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
             e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof Conta) {
+            conta = ((Conta) obj);
         } else if (obj instanceof NotaRecebida) {
             addNotaRecebidaNaLista((NotaRecebida) obj);
         } else if (obj instanceof Titulo) {
@@ -220,14 +222,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             if (e.getId() != null) {
                 notaRecebidaRemovidas.add(notaRecebidaSelecionada);
             }
-        }
-    }
-
-    public boolean habilitaBotaoConta() {
-        if (list.getList().size() > 0) {
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -323,4 +317,13 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     public void setNotaRecebidaList(List<NotaRecebida> notaRecebidaList) {
         this.notaRecebidaList = notaRecebidaList;
     }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
 }

@@ -191,6 +191,8 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
             } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
                 pessoaNota = (Pessoa) obj;
                 addPessoaSessao((Pessoa) obj);
+            } else if (obj instanceof Conta) {
+                conta = (Conta) obj;
             } else if (obj instanceof NotaEmitida) {
                 addNotaEmitidaNaLista((NotaEmitida) obj);
             } else if (obj instanceof Titulo) {
@@ -256,14 +258,6 @@ public class FaturaEmitidaView extends BasicMBImpl<FaturaEmitida, FaturaEmitidaB
 
     public boolean habilitaBotaoPessoa() {
         if (notaEmitidaList.size() > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean habilitaBotaoConta() {
-        if (list.getList().size() > 0) {
             return true;
         } else {
             return false;

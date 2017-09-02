@@ -71,6 +71,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         model = (Model<CobrancaVariavel>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         fatura = (Fatura) SessionUtil.getObject("fatura", FacesContext.getCurrentInstance());
         if (model == null) {
+            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setParcela((Integer) SessionUtil.getObject("parcela", FacesContext.getCurrentInstance()));
         }
@@ -82,7 +83,6 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         }
         if (fatura != null) {
             cotacaoLista = new CotacaoDAO().naEmissao(fatura.getEmissao()).listaDeResultados();
-            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
             e.setCotacao(new CotacaoDAO().porMoeda(fatura.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(fatura.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.EMITIDA);
@@ -100,7 +100,6 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
             return;
         }
         if (conhecimentoDeFrete != null) {
-            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
             cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
             e.setCotacao(new CotacaoDAO().porMoeda(conhecimentoDeFrete.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(conhecimentoDeFrete.getEmissao()).resultado());

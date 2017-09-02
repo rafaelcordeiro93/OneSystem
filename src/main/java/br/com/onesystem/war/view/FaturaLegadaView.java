@@ -121,6 +121,8 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             }
         } else if (obj instanceof Pessoa) {
             e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof Conta) {
+            conta = ((Conta) obj);
         } else if (obj instanceof Titulo) {
             Titulo cb = (Titulo) obj;
             list.add(cb);
@@ -158,14 +160,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             conta = null;
         } catch (FDadoInvalidoException ex) {
             ex.print();
-        }
-    }
-    
-     public boolean habilitaBotaoConta() {
-        if (list.getList().size() > 0) {
-            return true;
-        } else {
-            return false;
         }
     }
 
