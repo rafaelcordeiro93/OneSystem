@@ -2,6 +2,7 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
@@ -26,4 +27,7 @@ public class CotacaoService implements Serializable {
         return new CotacaoDAO().porMoeda(new ConfiguracaoService().buscar().getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(emissao).resultado();
     }
 
+    public Cotacao getCotacaoNaUltimaEmissaoPor(Conta conta, Date emissao) throws DadoInvalidoException {
+        return new CotacaoDAO().porConta(conta).porCotacaoBancaria().naUltimaEmissao(emissao).resultado();
+    }
 }

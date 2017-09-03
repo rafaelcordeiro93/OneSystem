@@ -88,15 +88,17 @@ public class ValorPorCotacao implements Serializable {
     }
 
     public void geraBaixaPor(Movimento movimento) throws DadoInvalidoException {
-//        BundleUtil msg = new BundleUtil();
-//        String historico = movimento instanceof Recebimento ? msg.getLabel("Recebimento_de") : msg.getLabel("Pagamento_de")
-//                + " " + msg.getMessage("de") + " " + nota.getPessoa().getNome();
-//
-//        this.movimento = movimento;
-//        baixa = new BaixaBuilder().comFilial(nota.getFilial()).comCotacao(cotacao).comEmissao(nota.getEmissao()).comHistorico(historico)
-//                .comOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira()).comPessoa(nota.getPessoa())
-//                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
-//                .comValorPorCotacao(this).construir();
+        BundleUtil msg = new BundleUtil();
+        String historico = movimento instanceof Recebimento ? msg.getLabel("Recebimento_de") : msg.getLabel("Pagamento_de")
+                + this.getValorFormatado() + " " + msg.getMessage("de") + " " + msg.getLabel("registro") + " " +  movimento.getId();
+
+        OperacaoFinanceira operacaoFinanceira = movimento instanceof Recebimento ? OperacaoFinanceira.ENTRADA : OperacaoFinanceira.SAIDA;
+        
+        this.movimento = movimento;
+        baixa = new BaixaBuilder().comFilial(movimento.getFilial()).comCotacao(cotacao).comEmissao(movimento.getEmissao()).comHistorico(historico)
+                .comOperacaoFinanceira(operacaoFinanceira).comMovimento(movimento)
+                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
+                .comValorPorCotacao(this).construir();
     }
 
     public void geraBaixaPor(Nota nota) throws DadoInvalidoException {

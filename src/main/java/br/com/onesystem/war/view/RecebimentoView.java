@@ -71,7 +71,6 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void receber() {
         try {
             Recebimento recebimento = constroiRecebimento();
-//            recebimento.geraBaixas();
             addNoBanco(recebimento);
             t = recebimento;
             layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);

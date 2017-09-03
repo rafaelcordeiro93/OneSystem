@@ -2,7 +2,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.services.Movimento;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.NumberUtils;
@@ -41,7 +41,7 @@ import org.hibernate.validator.constraints.Length;
 @Entity
 @SequenceGenerator(name = "SEQ_BAIXA", sequenceName = "SEQ_BAIXA",
         allocationSize = 1, initialValue = 1)
-public class Baixa implements Serializable, Movimento {
+public class Baixa implements Serializable {
 
     @Id
     @GeneratedValue(generator = "SEQ_BAIXA", strategy = GenerationType.SEQUENCE)
@@ -125,6 +125,9 @@ public class Baixa implements Serializable, Movimento {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne
     private Filial filial;
+    
+    @ManyToOne
+    private Movimento movimento;
 
     public Baixa() {
     }
@@ -136,7 +139,7 @@ public class Baixa implements Serializable, Movimento {
             TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca, Caixa caixa, 
             DepositoBancario depositoBancario, SaqueBancario saqueBancario, 
             LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, 
-            EstadoDeBaixa estado, Filial filial) throws DadoInvalidoException {
+            EstadoDeBaixa estado, Filial filial, Movimento movimento) throws DadoInvalidoException {
         this.id = id;
         setEstado(estado);
         this.valor = valor;
@@ -161,6 +164,7 @@ public class Baixa implements Serializable, Movimento {
         this.cambioEmpresa = cambioEmpresa;
         this.lancamentoBancario = lancamentoBancario;
         this.filial = filial;
+        this.movimento = movimento;
         if (receita != null) {
             naturezaFinanceira = NaturezaFinanceira.RECEITA;
         } else if (despesa != null) {
@@ -355,7 +359,6 @@ public class Baixa implements Serializable, Movimento {
         return formaDeCobranca;
     }
 
-    @Override
     public Date getVencimento() {
         return null;
     }
@@ -376,9 +379,12 @@ public class Baixa implements Serializable, Movimento {
         return dataCancelamento;
     }
 
-    @Override
     public Date getUltimoPagamento() {
         return emissao;
+    }
+
+    public Movimento getMovimento() {
+        return movimento;
     }
 
     public Long getDocumentoOriginal() {
@@ -393,7 +399,6 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
-    @Override
     public Long getIdOrigem() {
         if (cambio != null) {
             return cambio.getId();
@@ -410,7 +415,6 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
-    @Override
     public String getOrigem() {
         if (cambio != null) {
             return TipoOperacao.CAMBIO.getNome();
@@ -431,7 +435,6 @@ public class Baixa implements Serializable, Movimento {
         }
     }
 
-    @Override
     public BigDecimal getValorBaixado() {
         if (cobranca instanceof Titulo) {
             return ((Titulo) cobranca).getValorBaixado();

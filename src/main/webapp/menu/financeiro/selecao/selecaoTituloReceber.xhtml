@@ -17,8 +17,8 @@
                 <p:column headerText="#{l.Nome}" sortBy="#{bean.pessoa.nome}" footerText="#{l.Nome}" filterBy="#{bean.pessoa.nome}" filterMatchMode="contains">
                     <h:outputText value="#{bean.pessoa.nome}" />
                 </p:column>                
-                <p:column headerText="#{l.Vencimento}" sortBy="#{bean.vencimento}" footerText="#{l.Vencimento}" filterBy="#{bean.vencimento}" filterMatchMode="contains">
-                    <h:outputText value="#{bean.vencimento}" />
+                <p:column headerText="#{l.Vencimento}" sortBy="#{bean.vencimentoFormatadoSemHoras}" footerText="#{l.Vencimento}" filterBy="#{bean.vencimentoFormatadoSemHoras}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.vencimentoFormatadoSemHoras}" />
                 </p:column>
                 <p:column headerText="#{l.Emissao}" sortBy="#{bean.emissaoFormatadaSemHoras}" footerText="#{l.Emissao}" filterBy="#{bean.emissaoFormatadaSemHoras}" filterMatchMode="contains">
                     <h:outputText value="#{bean.emissaoFormatadaSemHoras}" />

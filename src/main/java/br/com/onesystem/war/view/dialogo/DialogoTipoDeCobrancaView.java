@@ -37,6 +37,7 @@ import br.com.onesystem.war.builder.DespesaEventualBV;
 import br.com.onesystem.war.builder.ReceitaEventualBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -74,13 +75,18 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     private Model<TipoDeCobranca> model;
     private List<Cotacao> cotacaoLista;
     private List<Conta> contaComCotacao;
+    private boolean tituloEmBanco = false;
+    private Cotacao cotacaoBancariaTitulo;
+    private Cotacao cotacaoPadrao;
 
     @Inject
     private ConfiguracaoService serviceConf;
 
     @Inject
     private CreditoService creditoService;
-    private Cotacao cotacaoPadrao;
+
+    @Inject
+    private CotacaoService cotacaoService;
 
     @PostConstruct
     public void init() {
@@ -125,6 +131,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
                     titulo = (Titulo) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.TITULO;
                     modalidadeDeCobrancaFixa = null;
+                    e.setCotacao(cotacaoPadrao);
                 } else if (model.getObject().getCobranca() instanceof BoletoDeCartao) {
                     boletoDeCartao = (BoletoDeCartao) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.CARTAO;
@@ -170,7 +177,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     private void exibeNaTela() {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("resizable", false);
-        opcoes.put("width", 670);
+        opcoes.put("width", 700);
         opcoes.put("draggable", true);
         opcoes.put("height", 440);
         opcoes.put("closable", false);
@@ -186,20 +193,26 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     }
 
     public void selecionaCobrancaNoObjeto() {
-        Cobranca c = e.getCobranca();
-        if (c instanceof Titulo) {
-            titulo = (Titulo) c;
-        } else if (c instanceof Cheque) {
-            cheque = (Cheque) c;
-            e.setValor(cheque.getValor());
-            e.setCotacao(cheque.getCotacao());
-            e.setConta(cheque.getCotacao().getConta());
-            e.setDataCompensacao(cheque.getCompensacao());
-        } else if (c instanceof BoletoDeCartao) {
-            boletoDeCartao = (BoletoDeCartao) c;
-            e.setValor(boletoDeCartao.getValor());
-            e.setCotacao(boletoDeCartao.getCotacao());
-            e.setConta(boletoDeCartao.getCotacao().getConta());
+        try {
+            Cobranca c = e.getCobranca();
+            if (c instanceof Titulo) {
+                titulo = (Titulo) c;
+                cotacaoBancariaTitulo = cotacaoService.getCotacaoNaUltimaEmissaoPor(titulo.getConta(), emissao);
+                selecionaCotacaoBancariaTitulo();
+            } else if (c instanceof Cheque) {
+                cheque = (Cheque) c;
+                e.setValor(cheque.getValor());
+                e.setCotacao(cheque.getCotacao());
+                e.setConta(cheque.getCotacao().getConta());
+                e.setDataCompensacao(cheque.getCompensacao());
+            } else if (c instanceof BoletoDeCartao) {
+                boletoDeCartao = (BoletoDeCartao) c;
+                e.setValor(boletoDeCartao.getValor());
+                e.setCotacao(boletoDeCartao.getCotacao());
+                e.setConta(boletoDeCartao.getCotacao().getConta());
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -227,9 +240,9 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         }
     }
 
-    public void selecionaCotacaoConformeConta() {
+    public void selecionaCotacaoConformeConta() throws DadoInvalidoException {
         if (e.getConta() != null) {
-            e.setCotacao(new CotacaoDAO().porConta(e.getConta()).naMaiorEmissao(emissao).resultado());
+            e.setCotacao(cotacaoService.getCotacaoNaUltimaEmissaoPor(e.getConta(), emissao));
         } else {
             e.setCotacao(cotacaoPadrao);
         }
@@ -312,6 +325,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
+    }
+
+    public void selecionaCotacaoBancariaTitulo() {
+        if (tituloEmBanco) {
+            e.setCotacao(cotacaoBancariaTitulo);
+        } else {
+            e.setCotacao(cotacaoPadrao);
+        }
     }
 
     public List<Cotacao> getCotacaoLista() {
@@ -439,6 +460,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
 
     public void setRecebimentoOuPagamento(NaturezaFinanceira recebimentoOuPagamento) {
         this.recebimentoOuPagamento = recebimentoOuPagamento;
+    }
+
+    public boolean isTituloEmBanco() {
+        return tituloEmBanco;
+    }
+
+    public void setTituloEmBanco(boolean tituloEmBanco) {
+        this.tituloEmBanco = tituloEmBanco;
     }
 
 }

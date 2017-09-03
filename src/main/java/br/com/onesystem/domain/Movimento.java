@@ -165,11 +165,14 @@ public abstract class Movimento implements Serializable {
     }
 
     public void geraBaixas() {
-        if (tipoDeCobranca != null) {
+        if (tipoDeCobranca != null && !tipoDeCobranca.isEmpty()) {
             tipoDeCobranca.forEach(t -> t.geraBaixas());
         }
-        if (formasDeCobranca != null) {
+        if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
             formasDeCobranca.forEach(f -> f.geraBaixas());
+        }
+        if(valorPorCotacao != null && !valorPorCotacao.isEmpty()){
+            valorPorCotacao.forEach(v -> v.geraBaixaPor(this));
         }
     }
 

@@ -129,14 +129,10 @@ public class FormaDeCobranca implements Serializable {
         }
     }
 
-    public void geraBaixas() {
-        try {
-            if (cobrancaVariavel != null) {
-                GeradorDeBaixaDeFormaCobranca gerador = new GeradorDeBaixaDeFormaCobranca(this);
-                gerador.geraBaixas();
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
+    public void geraBaixas() throws DadoInvalidoException {
+        if (cobrancaVariavel != null) {
+            GeradorDeBaixaDeFormaCobranca gerador = new GeradorDeBaixaDeFormaCobranca(this);
+            gerador.geraBaixas();
         }
     }
 

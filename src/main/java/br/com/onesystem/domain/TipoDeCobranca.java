@@ -105,17 +105,13 @@ public class TipoDeCobranca implements Serializable {
         ehValido();
     }
 
-    public void geraBaixas() {
-        try {
-            if (cobranca instanceof CobrancaVariavel) {
-                GeradorDeBaixaDeTipoCobranca gerador = new GeradorDeBaixaDeTipoCobranca(this);
-                gerador.geraBaixas();
-            } else {
-                GeradorDeBaixaDeTipoCobrancaFixa gerador = new GeradorDeBaixaDeTipoCobrancaFixa(this);
-                gerador.geraBaixas();
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
+    public void geraBaixas() throws DadoInvalidoException {
+        if (cobranca instanceof CobrancaVariavel) {
+            GeradorDeBaixaDeTipoCobranca gerador = new GeradorDeBaixaDeTipoCobranca(this);
+            gerador.geraBaixas();
+        } else {
+            GeradorDeBaixaDeTipoCobrancaFixa gerador = new GeradorDeBaixaDeTipoCobrancaFixa(this);
+            gerador.geraBaixas();
         }
     }
 
