@@ -56,8 +56,13 @@
                         <!--  ================================================   -->
 
                         <div class="ui-g">  
+                            <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
 
-                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                <p:outputLabel value="#{l.Conta}"/>
+                                <a:inputTextDialog id="contaIDNota"  value="#{faturaLegadaView.conta}" dialog="#{selecaoContaView}"  mbView="#{faturaLegadaView}" 
+                                                   var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+
                                 <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaLegadaView.removeDaSessao}" actionListener="#{faturaLegadaView.addNovaParcela}" process="@this" update="@none" >
                                     <p:ajax event="dialogReturn"  listener="#{faturaLegadaView.selecionar}" process="@this" update="parcelas"/>
                                 </p:commandButton>

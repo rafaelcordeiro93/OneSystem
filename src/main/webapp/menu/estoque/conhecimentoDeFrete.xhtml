@@ -114,7 +114,13 @@
                             <p:tab title="Contas a Receber">
                                 <div class="ui-g">  
 
-                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">
+                                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                 columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
+
+                                        <p:outputLabel value="#{l.Conta}"/>
+                                        <a:inputTextDialog id="contaIDNota"  value="#{conhecimentoDeFreteView.conta}" dialog="#{selecaoContaView}"  mbView="#{conhecimentoDeFreteView}" 
+                                                           var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
+
                                         <p:commandButton icon="fa fa-plus Fs14 White" action="#{conhecimentoDeFreteView.removeDaSessao}" actionListener="#{conhecimentoDeFreteView.addNovaParcela}" process="@this" update="@none" >
                                             <p:ajax event="dialogReturn"  listener="#{conhecimentoDeFreteView.selecionar}" process="@this" update="parcelas"/>
                                         </p:commandButton>
@@ -122,8 +128,8 @@
                                             <p:ajax event="dialogReturn" listener="#{conhecimentoDeFreteView.selecionar}" process="@this" update="parcelas"/>
                                         </p:commandButton>
                                         <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{conhecimentoDeFreteView.remover}" styleClass="orange-btn"  update="parcelas"/>
-                                    </p:panelGrid>
 
+                                    </p:panelGrid>
                                     <p:dataTable id="parcelas" var="model" value="#{conhecimentoDeFreteView.list}"
                                                  styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" disabledSelection="#{model.object.possuiPagamento}"
                                                  paginatorAlwaysVisible="false" rows="12" paginator="true" rowStyleClass="#{model.object.possuiPagamento ? 'rowSoftBlue' : ''}"

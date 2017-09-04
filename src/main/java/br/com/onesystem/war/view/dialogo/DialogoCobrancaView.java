@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Fatura;
 import br.com.onesystem.domain.FaturaEmitida;
@@ -12,6 +13,7 @@ import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -69,6 +71,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         model = (Model<CobrancaVariavel>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         fatura = (Fatura) SessionUtil.getObject("fatura", FacesContext.getCurrentInstance());
         if (model == null) {
+            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setParcela((Integer) SessionUtil.getObject("parcela", FacesContext.getCurrentInstance()));
         }
@@ -115,7 +118,6 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         }
         nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
         if (nota != null) {
-
             cotacaoLista = new CotacaoDAO().naEmissao(nota.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
             e.setCotacao(new CotacaoDAO().porMoeda(nota.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(nota.getEmissao()).resultado());
@@ -203,6 +205,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
         SessionUtil.remove("conhecimentoDeFrete", FacesContext.getCurrentInstance());
         SessionUtil.remove("fatura", FacesContext.getCurrentInstance());
+        SessionUtil.remove("conta", FacesContext.getCurrentInstance());
     }
 
     @Override

@@ -8,6 +8,7 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.FaturaLegada;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Pessoa;
@@ -15,6 +16,7 @@ import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
@@ -43,6 +45,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     private Model<Titulo> modeloSelecionado;
     private ModelList<Titulo> list;
+    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -67,10 +70,10 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (modeloSelecionado != null) {
-                SessionUtil.remove("parcela", FacesContext.getCurrentInstance());
-                //SessionUtil.put(list.getList().size() + 1, "parcela", FacesContext.getCurrentInstance());
+            if (conta == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
             }
+            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -118,6 +121,8 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             }
         } else if (obj instanceof Pessoa) {
             e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof Conta) {
+            conta = ((Conta) obj);
         } else if (obj instanceof Titulo) {
             Titulo cb = (Titulo) obj;
             list.add(cb);
@@ -152,6 +157,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
+            conta = null;
         } catch (FDadoInvalidoException ex) {
             ex.print();
         }
@@ -184,6 +190,14 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public void setModelo(Model modelo) {
         this.modeloSelecionado = modelo;
+    }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
     }
 
 }
