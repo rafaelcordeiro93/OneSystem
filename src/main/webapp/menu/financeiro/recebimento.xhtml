@@ -180,7 +180,7 @@
                     </div>
 
                     <p:separator/>
-                    <p:commandButton value="#{l.Receber_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White"  action="#{recebimentoView.receber()}" />
+                    <p:commandButton value="#{l.Receber_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White"  action="#{recebimentoView.validaDinheiro}" />
                     <h:commandButton id="imprimir" actionListener="#{recebimentoView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
                 </div>
             </div>

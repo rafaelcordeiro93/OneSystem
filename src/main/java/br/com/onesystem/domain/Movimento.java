@@ -89,7 +89,7 @@ public abstract class Movimento implements Serializable {
     public Movimento() {
     }
 
-    public Movimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca, Cotacao cotacaoPadrao, Date emissao, EstadoDeLancamento estado, Caixa caixa, Filial filial, List<ValorPorCotacao> valorPorCotacao) throws DadoInvalidoException {
+    public Movimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca, Cotacao cotacaoPadrao, Date emissao, EstadoDeLancamento estado, Caixa caixa, Filial filial, List<ValorPorCotacao> valorPorCotacao, BigDecimal totalEmDinheiro) throws DadoInvalidoException {
         this.id = id;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formasDeCobranca = formasDeCobranca;
@@ -99,6 +99,7 @@ public abstract class Movimento implements Serializable {
         this.caixa = caixa;
         this.filial = filial;
         this.valorPorCotacao = valorPorCotacao;
+        this.totalEmDinheiro = totalEmDinheiro;
         ehValido();
     }
 
@@ -114,6 +115,9 @@ public abstract class Movimento implements Serializable {
     }
 
     public void adiciona(ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
+        if (this.valorPorCotacao == null) {
+            this.valorPorCotacao = new ArrayList<>();
+        }
         valorPorCotacao.geraBaixaPor(this);
         this.valorPorCotacao.add(valorPorCotacao);
     }
@@ -164,15 +168,21 @@ public abstract class Movimento implements Serializable {
         formasDeCobranca.remove(forma);
     }
 
-    public void geraBaixas() {
+    public void geraBaixas() throws DadoInvalidoException {
         if (tipoDeCobranca != null && !tipoDeCobranca.isEmpty()) {
-            tipoDeCobranca.forEach(t -> t.geraBaixas());
+            for (TipoDeCobranca t : tipoDeCobranca) {
+                t.geraBaixas();
+            }
         }
         if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
-            formasDeCobranca.forEach(f -> f.geraBaixas());
+            for (FormaDeCobranca f : formasDeCobranca) {
+                f.geraBaixas();
+            }
         }
-        if(valorPorCotacao != null && !valorPorCotacao.isEmpty()){
-            valorPorCotacao.forEach(v -> v.geraBaixaPor(this));
+        if (valorPorCotacao != null && !valorPorCotacao.isEmpty()) {
+            for (ValorPorCotacao v : valorPorCotacao) {
+                v.geraBaixaPor(this);
+            }
         }
     }
 

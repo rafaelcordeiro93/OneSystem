@@ -516,7 +516,7 @@ public class DadosIniciais {
         GrupoFinanceiro gfReceitaAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS);
         GrupoFinanceiro gfReceitaM = new GrupoFinanceiro(null, bundle.getLabel("Receita_com_Vendas_de_Mercadorias"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
         GrupoFinanceiro gfReceitaPS = new GrupoFinanceiro(null, bundle.getLabel("Receitas_com_Prestacao_de_Servicos"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OPERACIONAIS);
-        GrupoFinanceiro gfReceitaDV = new GrupoFinanceiro(null, "(-) "+ bundle.getLabel("Devoluciones de Ventas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
+        GrupoFinanceiro gfReceitaDV = new GrupoFinanceiro(null, "(-) "+ bundle.getLabel("Devolucoes_de_Vendas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
         GrupoFinanceiro gfReceitaRF = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Financeiras"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.FINANCEIRAS);
         GrupoFinanceiro gfReceitaRD = new GrupoFinanceiro(null, bundle.getLabel("Receitas_Diversas"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.OUTRAS_OPERACIONAIS);
         GrupoFinanceiro gfReceitaRO = new GrupoFinanceiro(null, bundle.getLabel("Receitas_nao_Operacionais"), NaturezaFinanceira.RECEITA, ClassificacaoFinanceira.NAO_OPERACIONAIS);

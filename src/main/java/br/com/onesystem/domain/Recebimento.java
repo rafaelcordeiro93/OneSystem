@@ -32,7 +32,7 @@ public class Recebimento extends Movimento implements Serializable {
     public Recebimento(Long id, List<TipoDeCobranca> tipoDeCobranca, List<FormaDeCobranca> formasDeCobranca,
             Cotacao cotacaoPadrao, Date emissao, BigDecimal totalEmDinheiro, EstadoDeLancamento estado, Caixa caixa,
             Filial filial, List<ValorPorCotacao> valorPorCotacao) throws DadoInvalidoException {
-        super(id, tipoDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, estado, caixa, filial, valorPorCotacao);
+        super(id, tipoDeCobranca, formasDeCobranca, cotacaoPadrao, emissao, estado, caixa, filial, valorPorCotacao, totalEmDinheiro);
     }
 
 }

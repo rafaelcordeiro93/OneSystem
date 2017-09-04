@@ -97,7 +97,7 @@ public class ValorPorCotacao implements Serializable {
         this.movimento = movimento;
         baixa = new BaixaBuilder().comFilial(movimento.getFilial()).comCotacao(cotacao).comEmissao(movimento.getEmissao()).comHistorico(historico)
                 .comOperacaoFinanceira(operacaoFinanceira).comMovimento(movimento)
-                .comReceita(nota.getOperacao().getVendaAVista()).comValor(valor).comCaixa(nota.getCaixa())
+                .comValor(valor).comCaixa(movimento.getCaixa())
                 .comValorPorCotacao(this).construir();
     }
 
