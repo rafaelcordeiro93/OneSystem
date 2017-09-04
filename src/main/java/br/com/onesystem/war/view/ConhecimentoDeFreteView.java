@@ -12,6 +12,7 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
+import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
@@ -21,6 +22,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
@@ -53,6 +55,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     private List<NotaRecebida> notaRecebidaRemovidas;
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
+    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -71,7 +74,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             valorPorCotacaoList.forEach((v) -> {
                 f.adiciona(v);
             });
-                      new AdicionaDAO<>().adiciona(f);
+            new AdicionaDAO<>().adiciona(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -139,6 +142,10 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
+            if (conta == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
+            }
+            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -182,6 +189,8 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             e.setOperacao((Operacao) obj);
         } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
             e.setPessoa((Pessoa) obj);
+        } else if (obj instanceof Conta) {
+            conta = ((Conta) obj);
         } else if (obj instanceof NotaRecebida) {
             addNotaRecebidaNaLista((NotaRecebida) obj);
         } else if (obj instanceof Titulo) {
@@ -251,6 +260,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             notaRecebidaRemovidas = new ArrayList<>();
             valorPorCotacaoList = new ArrayList<>();
             notaRecebidaSelecionada = null;
+            conta = null;
         } catch (FDadoInvalidoException ex) {
             ex.print();
         }
@@ -307,4 +317,13 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     public void setNotaRecebidaList(List<NotaRecebida> notaRecebidaList) {
         this.notaRecebidaList = notaRecebidaList;
     }
+
+    public Conta getConta() {
+        return conta;
+    }
+
+    public void setConta(Conta conta) {
+        this.conta = conta;
+    }
+
 }
