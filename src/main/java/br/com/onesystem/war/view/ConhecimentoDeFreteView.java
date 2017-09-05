@@ -55,7 +55,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     private List<NotaRecebida> notaRecebidaRemovidas;
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
-    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -142,10 +141,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (conta == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
-            }
-            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -189,8 +184,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             e.setOperacao((Operacao) obj);
         } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
             e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof Conta) {
-            conta = ((Conta) obj);
         } else if (obj instanceof NotaRecebida) {
             addNotaRecebidaNaLista((NotaRecebida) obj);
         } else if (obj instanceof Titulo) {
@@ -260,7 +253,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             notaRecebidaRemovidas = new ArrayList<>();
             valorPorCotacaoList = new ArrayList<>();
             notaRecebidaSelecionada = null;
-            conta = null;
         } catch (FDadoInvalidoException ex) {
             ex.print();
         }
@@ -316,14 +308,6 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
 
     public void setNotaRecebidaList(List<NotaRecebida> notaRecebidaList) {
         this.notaRecebidaList = notaRecebidaList;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
     }
 
 }

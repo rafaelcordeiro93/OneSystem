@@ -56,7 +56,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
     private Pessoa pessoaNota;
-    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -152,10 +151,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (conta == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
-            }
-            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -198,8 +193,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
                 } catch (DadoInvalidoException ex) {
                     ex.print();
                 }
-            } else if (obj instanceof Conta) {
-                conta = ((Conta) obj);
             } else if (obj instanceof Pessoa && cid.equals("pessoaID-search")) {
                 e.setPessoa((Pessoa) obj);
             } else if (obj instanceof Pessoa && cid.equals("pessoaIDNota-search")) {
@@ -304,7 +297,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
             valorPorCotacaoList = new ArrayList<>();
             notaRecebidaSelecionada = null;
             pessoaNota = null;
-            conta = null;
             removePessoaSessao();
         } catch (FDadoInvalidoException ex) {
             ex.print();
@@ -369,14 +361,6 @@ public class FaturaRecebidaView extends BasicMBImpl<FaturaRecebida, FaturaRecebi
 
     public void setPessoaNota(Pessoa pessoaNota) {
         this.pessoaNota = pessoaNota;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
     }
 
 }

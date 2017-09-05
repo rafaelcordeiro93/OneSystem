@@ -61,16 +61,15 @@
                             <!--  ================================================   -->
                             <!--  ===================== NotaEmitida =====================   -->
                             <!--  ================================================   -->
-                            <p:tab title="Notas">
+                            <p:tab title="#{l.Notas}">
                                 <div class="ui-g">
                                     <div class="EmptyBox10"/>
 
-                                    <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                                  columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-5,ui-g-12 ui-md-4 ,ui-g-12 ui-md-1">
 
                                         <p:outputLabel value="#{l.Pessoa}"/>
                                         <a:inputTextDialog id="pessoaIDNota"  value="#{faturaEmitidaView.pessoaNota}" dialog="#{selecaoPessoaView}"  mbView="#{faturaEmitidaView}" var="pessoa" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" editVisible="false" converter="pessoaConverter" disabledSearch="#{faturaEmitidaView.habilitaBotaoPessoa()}" readonly="#{faturaEmitidaView.habilitaBotaoPessoa()}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}"/>
-
 
                                         <p:commandButton icon="fa fa-plus Fs14 White" value="#{l.Nota_Emitida}" actionListener="#{selecaoNotaEmitidaAFaturarView.abrirDialogo()}" process="@this" update="@none" styleClass="green-btn">
                                             <p:ajax event="dialogReturn" listener="#{faturaEmitidaView.selecionar}" process="@this" update=":conteudo:tabView:notasFatura pessoaIDNota :conteudo:total" />
@@ -111,16 +110,12 @@
                             <!--  ================================================   -->
                             <!--  ===================== Parcelas =====================   -->
                             <!--  ================================================   -->
-                            <p:tab title="Contas a Receber">
+                            <p:tab title="#{l.Contas_AReceber}">
                                 <div class="ui-g">  
 
-                                    <p:panelGrid columns="5" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                                 columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-6,ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
-
-                                        <p:outputLabel value="#{l.Conta}"/>
-                                        <a:inputTextDialog id="contaIDNota"  value="#{faturaEmitidaView.conta}" dialog="#{selecaoContaView}"  mbView="#{faturaEmitidaView}" 
-                                                           var="conta" itemLabel="#{conta.nome}" itemValue="#{conta}" converter="contaConverter" itemLabelTabVisible="true" itemLabelTab="#{conta.nome}"/>
-
+                                    <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                 columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
+                                        
                                         <p:commandButton icon="fa fa-plus Fs14 White" action="#{faturaEmitidaView.removeDaSessao}" actionListener="#{faturaEmitidaView.addNovaParcela}" process="@this" update="@none" >
                                             <p:ajax event="dialogReturn"  listener="#{faturaEmitidaView.selecionar}" process="@this" update="parcelas"/>
                                         </p:commandButton>
