@@ -138,11 +138,11 @@
                         <p:panelGrid id="cobrancaFixa" columns="1"  styleClass="Wid100 ui-panelgrid-blank form-group form-elements"  columnClasses="ui-g-12"
                                      rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 8 ? true : dialogoTipoDeCobrancaView.modalidadeDeCobrancaFixa.id eq 6 ? true : false}">
 
-                            <p:outputLabel value="#{l.Codigo}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.id}"/>
-                            <p:outputLabel value="#{l.Pessoa}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.pessoa.nome}"/>
-                            <p:outputLabel value="#{l.Emissao}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.emissaoFormatadaSemHoras}"/>
-                            <p:outputLabel value="#{l.Historico}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.historico}"/> 
-                            <p:outputLabel value="#{l.Valor}: #{dialogoTipoDeCobrancaView.e.cobrancaFixa.valorFormatado}" styleClass="Blue"/>
+                            <p:outputLabel value="#{l.Codigo}: #{dialogoTipoDeCobrancaView.e.cobranca.id}"/>
+                            <p:outputLabel value="#{l.Pessoa}: #{dialogoTipoDeCobrancaView.e.cobranca.pessoa.nome}"/>
+                            <p:outputLabel value="#{l.Emissao}: #{dialogoTipoDeCobrancaView.e.cobranca.emissaoFormatadaSemHoras}"/>
+                            <p:outputLabel value="#{l.Historico}: #{dialogoTipoDeCobrancaView.e.cobranca.historico}"/> 
+                            <p:outputLabel value="#{l.Valor}: #{dialogoTipoDeCobrancaView.e.cobranca.valorFormatado}" styleClass="Blue"/>
 
                         </p:panelGrid>
 
@@ -200,9 +200,14 @@
                         <p:outputLabel value="#{l.Compensado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" />
                         <p:calendar id="compensado" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1 and dialogoTipoDeCobrancaView.recebimentoOuPagamento.id eq 2}" pattern="dd/MM/yyyy" mask="99/99/9999" value="#{dialogoTipoDeCobrancaView.e.dataCompensacao}" size="8"/>
 
-                        <p:outputLabel value="#{l.Cotacao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2}"/>
+                        <p:outputLabel value="#{l.Receber_no_Banco}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3}"/>
+                        <p:selectBooleanButton value="#{dialogoTipoDeCobrancaView.tituloEmBanco}" onLabel="#{l.Sim}" offLabel="#{l.Nao}" onIcon="ui-icon-check" offIcon="ui-icon-close" style="width:60px" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 3}" >
+                            <p:ajax listener="#{dialogoTipoDeCobrancaView.selecionaCotacaoBancariaTitulo()}" update="tempDialog" />
+                        </p:selectBooleanButton>
+
+                        <p:outputLabel value="#{l.Cotacao}: " rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 3 ? true : false : false}"/>
                         <p:inputText value="#{dialogoTipoDeCobrancaView.e.cotacao.valorFormatado}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id eq 1}" readonly="true"/>
-                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 1 ? true : false : false}" >
+                        <p:selectOneMenu  id="dceCotacao" value="#{dialogoTipoDeCobrancaView.e.cotacao}" converter="cotacaoConverter" disabled="#{dialogoTipoDeCobrancaView.e.conta != null}" rendered="#{dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 2 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 1 ? dialogoTipoDeCobrancaView.modalidadeDeCobranca.id ne 3 ? true : false : false : false}" >
                             <p:ajax update="tempDialog"/>
                             <f:selectItems value="#{dialogoTipoDeCobrancaView.cotacaoLista}" var="cotacao" itemValue="#{cotacao}" itemLabel="#{cotacao.valorFormatado}"/>
                         </p:selectOneMenu>

@@ -18,6 +18,7 @@ import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.LancamentoBancario;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.Recepcao;
@@ -63,6 +64,7 @@ public class BaixaBuilder {
     private CambioEmpresa cambioEmpresa;
     private LancamentoBancario lancamentoBancario;
     private Filial filial;
+    private Movimento movimento;
 
     public BaixaBuilder() {
     }
@@ -89,6 +91,8 @@ public class BaixaBuilder {
         this.caixa = baixa.getCaixa();
         this.formaDeCobranca = baixa.getFormaDeCobranca();
         this.lancamentoBancario = baixa.getLancamentoBancario();
+        this.filial = filial;
+        this.movimento = movimento;
     }
 
     public BaixaBuilder comId(Long id) {
@@ -210,10 +214,15 @@ public class BaixaBuilder {
         this.filial = filial;
         return this;
     }
+    
+    public BaixaBuilder comMovimento(Movimento movimento){
+        this.movimento = movimento;
+        return this;
+    }
 
     public Baixa construir() throws DadoInvalidoException {
         return new Baixa(id, valor, emissao, dataCompensacao, historico, operacaoFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
-                recepcao, cobranca, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial);
+                recepcao, cobranca, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial, movimento);
     }
 
 }
