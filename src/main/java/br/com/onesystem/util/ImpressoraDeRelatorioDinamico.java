@@ -1,6 +1,8 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.CobrancaDAO;
+import br.com.onesystem.dao.FilialDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.domain.Filial;
@@ -200,7 +202,7 @@ public class ImpressoraDeRelatorioDinamico {
         res.addHeader("Content-disposition", "attachment; filename=" + nomeRelatorio + new Date() + ".pdf");
         ServletOutputStream stream = res.getOutputStream();
         relatorio.toPdf(stream);
-        
+
         stream.flush();
         stream.close();
         FacesContext.getCurrentInstance().responseComplete();
@@ -368,8 +370,8 @@ public class ImpressoraDeRelatorioDinamico {
 
     public static void main(String[] args) throws JRException, IOException, FDadoInvalidoException {
 
-        List<CobrancaVariavel> registros = new ArmazemDeRegistros<CobrancaVariavel>(CobrancaVariavel.class).listaTodosOsRegistros();
-        Filial filial = new ArmazemDeRegistros<Filial>(Filial.class).find(new Long(1));
+        List<CobrancaVariavel> registros = new CobrancaDAO().listaDeResultados();
+        Filial filial = new FilialDAO().porId(new Long(1)).resultado();
 
         List<Coluna> colunas = new ArrayList<>();
         Coluna pessoa = new Coluna("Nome (Pessoa)", "Pessoa", "pessoa", "nome", Pessoa.class, String.class);

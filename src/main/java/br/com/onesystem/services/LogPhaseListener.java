@@ -58,7 +58,7 @@ public class LogPhaseListener implements PhaseListener {
 
         } else if (!login.equals("Anonymous")) { //Verifica a permissao nas janelas que forem abertas
             UsuarioLogadoUtil usuarioLogado = new UsuarioLogadoUtil();
-            Usuario usuario = new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado();
+            Usuario usuario = new UsuarioDAO().porEmailString(login).resultado();
             boolean consulta = usuarioLogado.buscaPermissoesNoBanco(new BundleUtil().getLabel("Consultar"), janela, usuario);
 
             if (consulta) {

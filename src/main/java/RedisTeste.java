@@ -1,6 +1,7 @@
 
 import br.com.onesystem.aop.ClassTypeAdapter;
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.MarcaDAO;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import com.google.gson.Gson;
@@ -21,7 +22,7 @@ public class RedisTeste {
 
         Gson gson = new GsonBuilder().registerTypeAdapter(Class.class, new ClassTypeAdapter()).create();
 
-        Marca marca = new ArmazemDeRegistros<Marca>(Marca.class).find(new Long(1));
+        Marca marca = new MarcaDAO().porId(new Long(1)).resultado();
         
         System.out.println("Marca" + marca);
         

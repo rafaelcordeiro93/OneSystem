@@ -34,7 +34,7 @@ public class UsuarioLogadoUtil implements Serializable {
         }
         String janela = context.getViewRoot().getViewId();
 
-        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
+        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().porEmailString(login).resultado());
     }
 
     public boolean getPrivilegio(String tipo, String j) throws DadoInvalidoException {
@@ -47,7 +47,7 @@ public class UsuarioLogadoUtil implements Serializable {
         }
         String janela = j;
 
-        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().buscarUsuarios().porEmailString(login).resultado());
+        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().porEmailString(login).resultado());
     }
 
     public boolean buscaPermissoesNoBanco(String tipo, String janela, Usuario usuario) throws DadoInvalidoException {
@@ -126,7 +126,7 @@ public class UsuarioLogadoUtil implements Serializable {
     }
 
     public Usuario getUsuario() {
-        return new UsuarioDAO().buscarUsuarios().porEmailString(getEmailUsuario()).resultado();
+        return new UsuarioDAO().porEmailString(getEmailUsuario()).resultado();
     }
 
     public String getNomeUsuario() {

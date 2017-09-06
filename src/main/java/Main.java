@@ -1,20 +1,11 @@
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.BaixaDAO;
-import br.com.onesystem.dao.ConfiguracaoCambioDAO;
-import br.com.onesystem.dao.DespesaProvisionadaDAO;
-import br.com.onesystem.dao.RecepcaoDAO;
+import br.com.onesystem.dao.MoedaDAO;
 import br.com.onesystem.domain.Baixa;
-import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.domain.Moeda;
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.reportTemplate.ResumoDeMoeda;
-import br.com.onesystem.util.ImpressoraDeRelatorio;
 import br.com.onesystem.util.ImpressoraDeRelatorioConsole;
-import br.com.onesystem.util.JPAUtil;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -51,7 +42,7 @@ public class Main {
 
         System.out.println("Res: " + resultados.size());
 
-        List<Moeda> listaMoeda = new ArmazemDeRegistros<Moeda>(Moeda.class).listaTodosOsRegistros();
+        List<Moeda> listaMoeda = new MoedaDAO().listaDeResultados();
 
         List<ResumoDeMoeda> resumo = new ArrayList<ResumoDeMoeda>();
 
