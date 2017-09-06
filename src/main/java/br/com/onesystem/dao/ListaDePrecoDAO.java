@@ -5,69 +5,28 @@
  */
 package br.com.onesystem.dao;
 
-import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.ListaDePreco;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.NoResultException;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
-public class ListaDePrecoDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class ListaDePrecoDAO extends GenericDAO<ListaDePreco> {
 
     public ListaDePrecoDAO() {
-        limpar();
-    }
-
-    private void limpar() {
-        consulta = "";
-        msg = new BundleUtil();
-        parametros = new HashMap<String, Object>();
-    }
-
-    public ListaDePrecoDAO buscarListaDePrecoW() {
-        consulta += "select l from ListaDePreco l where l.id > 0 ";
-        return this;
+        super(ListaDePreco.class);
     }
 
     public ListaDePrecoDAO porId(Long id) {
-        consulta += "and l.id = :lId ";
+        where += "and listaDePreco.id = :lId ";
         parametros.put("lId", id);
         return this;
     }
 
     public ListaDePrecoDAO porNome(ListaDePreco listaDePreco) {
-        consulta += " and l.nome = :lNome ";
+        where += " and listaDePreco.nome = :lNome ";
         parametros.put("lNome", listaDePreco.getNome());
         return this;
-    }
-
-    public List<ListaDePreco> listaDeResultados() {
-        List<ListaDePreco> resultado = new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
-    }
-
-    public ListaDePreco resultado() throws DadoInvalidoException {
-        try {
-            ListaDePreco resultado = new ArmazemDeRegistros<ListaDePreco>(ListaDePreco.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);
-            limpar();
-            return resultado;
-        } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
-        }
     }
 
 }

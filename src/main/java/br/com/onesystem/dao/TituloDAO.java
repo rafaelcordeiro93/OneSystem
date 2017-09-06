@@ -64,8 +64,8 @@ public class TituloDAO extends GenericDAO<Titulo> {
         }
         return this;
     }
-    
-     public TituloDAO ePorFaturaEmitida(FaturaEmitida fatura) {
+
+    public TituloDAO ePorFaturaEmitida(FaturaEmitida fatura) {
         if (fatura != null) {
             where += "and t.faturaEmitida = :pFaturaEmitida ";
             parametros.put("pFaturaEmitida", fatura);
@@ -114,11 +114,10 @@ public class TituloDAO extends GenericDAO<Titulo> {
         return this;
     }
 
-    public List<SomaSaldoDeTituloPorMoedaReportTemplate> resultadoSomaPorMoeda() {
-        List<SomaSaldoDeTituloPorMoedaReportTemplate> resultado = new ArmazemDeRegistros<SomaSaldoDeTituloPorMoedaReportTemplate>(SomaSaldoDeTituloPorMoedaReportTemplate.class)
-                .listaRegistrosDaConsulta(getConsulta(), parametros);
-        limpar();
-        return resultado;
-    }
-
+//    public List<SomaSaldoDeTituloPorMoedaReportTemplate> resultadoSomaPorMoeda() {
+//        List<SomaSaldoDeTituloPorMoedaReportTemplate> resultado = new ArmazemDeRegistros<SomaSaldoDeTituloPorMoedaReportTemplate>(SomaSaldoDeTituloPorMoedaReportTemplate.class)
+//                .listaRegistrosDaConsulta(getConsulta(), parametros);
+//        limpar();
+//        return resultado;
+//    }
 }

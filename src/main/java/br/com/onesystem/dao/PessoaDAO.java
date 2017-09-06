@@ -6,7 +6,6 @@ public class PessoaDAO extends GenericDAO<Pessoa> {
 
     public PessoaDAO() {
         super(Pessoa.class);
-        limpar();
     }
 
     public PessoaDAO porNome(Pessoa pessoa) {

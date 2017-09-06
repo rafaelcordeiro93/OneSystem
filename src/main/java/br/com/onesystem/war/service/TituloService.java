@@ -35,7 +35,8 @@ public class TituloService implements Serializable {
     }
 
     public List<SomaSaldoDeTituloPorMoedaReportTemplate> buscarSaldoDeTitulosAPagarDeRecepcaoPara(Pessoa pessoa) {
-        return new TituloDAO().buscarSaldoPorMoedaDeTitulos().aPagar().eComRecepcao().ePorPessoa(pessoa).agrupadoPorMoeda().resultadoSomaPorMoeda();
+        //return new TituloDAO().buscarSaldoPorMoedaDeTitulos().aPagar().eComRecepcao().ePorPessoa(pessoa).agrupadoPorMoeda().resultadoSomaPorMoeda();
+        return null;
     }
 
 }
