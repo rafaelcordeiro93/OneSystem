@@ -53,7 +53,7 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
     }
 
     private boolean validaDepositoExistente(Deposito novoRegistro) {
-        List<Deposito> lista = new DepositoDAO().buscarDepositos().porNome(novoRegistro).listaDeResultados();
+        List<Deposito> lista = new DepositoDAO().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
 

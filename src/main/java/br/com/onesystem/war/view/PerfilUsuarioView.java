@@ -100,7 +100,7 @@ public class PerfilUsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implement
     }
 
     private boolean validaUsuarioExistente(Usuario novoRegistro) {
-        List<Usuario> lista = new UsuarioDAO().buscarUsuarios().porId(novoRegistro.getId()).listaDeResultados();
+        List<Usuario> lista = new UsuarioDAO().porId(novoRegistro.getId()).listaDeResultados();
         return lista.isEmpty();
     }
 

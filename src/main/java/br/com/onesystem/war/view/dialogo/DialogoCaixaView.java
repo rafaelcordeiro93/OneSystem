@@ -45,7 +45,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     private void popularLista() {
-        caixas = new CaixaDAO().buscarCaixas().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
+        caixas = new CaixaDAO().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
     }
 
     public void reloadPage() throws IOException {

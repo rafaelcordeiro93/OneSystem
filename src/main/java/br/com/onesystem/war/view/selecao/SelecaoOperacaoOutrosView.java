@@ -17,7 +17,7 @@ public class SelecaoOperacaoOutrosView extends BasicCrudMBImpl<Operacao> impleme
 
     @PostConstruct
     public void init() {
-        beans = new OperacaoDAO().buscarOperacao().porTipoDeLancamento(TipoLancamento.OUTROS).listaDeResultados();
+        beans = new OperacaoDAO().porTipoDeLancamento(TipoLancamento.OUTROS).listaDeResultados();
     }
 
     @Override

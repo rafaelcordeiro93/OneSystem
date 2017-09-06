@@ -22,7 +22,7 @@ public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCar
 
     @PostConstruct
     public void init() {
-        beans = new BoletoDeCartaoDAO().buscarBoletosDeCartao().porSituacao(SituacaoDeCartao.ABERTO).listaDeResultados();
+        beans = new BoletoDeCartaoDAO().porSituacao(SituacaoDeCartao.ABERTO).listaDeResultados();
     }
 
     public void abrirDialogo() {

@@ -65,7 +65,7 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
             e.setEmissao(new Date());
             cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
             cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
-            contaComCotacaoEmpresa = new ContaDAO().buscarContaW().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            contaComCotacaoEmpresa = new ContaDAO().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         } catch (DadoInvalidoException die) {
         }
     }

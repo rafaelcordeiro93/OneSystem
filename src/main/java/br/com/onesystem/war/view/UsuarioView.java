@@ -100,12 +100,12 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
     }
 
     private boolean validaPessoaExistente(Usuario novoRegistro) {
-        List<Usuario> lista = new UsuarioDAO().buscarUsuarios().porPessoa(novoRegistro.getPessoa()).listaDeResultados();
+        List<Usuario> lista = new UsuarioDAO().porPessoa(novoRegistro.getPessoa()).listaDeResultados();
         return lista.isEmpty();
     }
 
     private boolean validaUsuarioExistente(Usuario novoRegistro) {
-        List<Usuario> lista = new UsuarioDAO().buscarUsuarios().porId(novoRegistro.getId()).listaDeResultados();
+        List<Usuario> lista = new UsuarioDAO().porId(novoRegistro.getId()).listaDeResultados();
         return lista.isEmpty();
     }
 
@@ -113,7 +113,7 @@ public class UsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implements Seri
         if (user.getSenha() != null && user.getSenha().length() >= 4) {
             e.setSenha(new MD5Util().md5Hex(e.getSenha()));
         } else if (!validaUsuarioExistente(user) && user.getSenha().length() >= 4) { //busca a senha q ja estava no cadastro se não houve alteração.
-            Usuario buscar = new UsuarioDAO().buscarUsuarios().porId(user.getId()).resultado();
+            Usuario buscar = new UsuarioDAO().porId(user.getId()).resultado();
             e.setSenha(buscar.getSenha());
         } else {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("informar_senha"));

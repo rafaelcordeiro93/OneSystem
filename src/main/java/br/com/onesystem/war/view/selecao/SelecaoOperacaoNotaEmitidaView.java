@@ -18,7 +18,7 @@ public class SelecaoOperacaoNotaEmitidaView extends BasicCrudMBImpl<Operacao> im
 
     @PostConstruct
     public void init() {
-        beans = new OperacaoDAO().buscarOperacao().porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados();
+        beans = new OperacaoDAO().porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados();
     }
 
     @Override

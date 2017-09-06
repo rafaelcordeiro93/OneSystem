@@ -53,7 +53,7 @@ public class CidadeView extends BasicMBImpl<Cidade, CidadeBV> implements Seriali
     }
 
     private boolean validaCidadeExistente(Cidade novoRegistro) {
-        List<Cidade> lista = new CidadeDAO().buscarCidades().porNome(novoRegistro).listaDeResultados();
+        List<Cidade> lista = new CidadeDAO().porNome(novoRegistro).listaDeResultados();
         return lista.isEmpty();
     }
 

@@ -64,7 +64,7 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
             e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
             cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
             cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            contaComCotacaoBancaria = new ContaDAO().buscarContaW().comBanco().listaDeResultados();
+            contaComCotacaoBancaria = new ContaDAO().comBanco().listaDeResultados();
         } catch (DadoInvalidoException die) {
             die.print();
         }

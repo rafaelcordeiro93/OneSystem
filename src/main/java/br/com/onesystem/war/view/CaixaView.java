@@ -68,7 +68,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void buscaUsuarioDaSessao() {
-        e.setUsuario(new UsuarioDAO().buscarUsuarios().porEmailString(new UsuarioLogadoUtil().getEmailUsuario()).resultado());
+        e.setUsuario(new UsuarioDAO().porEmailString(new UsuarioLogadoUtil().getEmailUsuario()).resultado());
     }
 
     private void adicionaCotacaoInicial() {
@@ -77,8 +77,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void populaCampos() throws DadoInvalidoException {
-        try {
-            e = new CaixaBV(new CaixaDAO().buscarCaixas().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
+            e = new CaixaBV(new CaixaDAO().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
             if (e.getId() != null) {
                 alteraEstadoCaixa();
                 return;
@@ -86,9 +85,6 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
                 buscaUsuarioDaSessao();
                 adicionaCotacaoInicial();
             }
-        } catch (EDadoInvalidoException die) {
-            die.print();
-        }
     }
 
     public void add() {

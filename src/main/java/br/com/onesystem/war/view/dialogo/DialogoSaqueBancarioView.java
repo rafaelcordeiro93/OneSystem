@@ -62,8 +62,8 @@ public class DialogoSaqueBancarioView extends BasicMBImpl<SaqueBancario, SaqueBa
             cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
             cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
             cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            contaComCotacaoEmpresa = new ContaDAO().buscarContaW().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-            contaComCotacaoBancaria = new ContaDAO().buscarContaW().comBanco().ePorMoedas(cotacaoBancariaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            contaComCotacaoEmpresa = new ContaDAO().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            contaComCotacaoBancaria = new ContaDAO().comBanco().ePorMoedas(cotacaoBancariaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         } catch (DadoInvalidoException die) {
         }
     }

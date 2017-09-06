@@ -18,7 +18,7 @@ public class SelecaoOperacaoCondicionalView extends BasicCrudMBImpl<Operacao> im
 
     @PostConstruct
     public void init() {
-        beans = new OperacaoDAO().buscarOperacao().porTipoDeOperacao(TipoOperacao.CONDICIONAL).listaDeResultados();
+        beans = new OperacaoDAO().porTipoDeOperacao(TipoOperacao.CONDICIONAL).listaDeResultados();
     }
 
     @Override
