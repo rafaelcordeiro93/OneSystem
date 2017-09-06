@@ -3,16 +3,15 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.JPAUtil;
-import br.com.onesystem.util.ImpressoraDeRelatorio;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import net.sf.jasperreports.engine.JRException;
 
-public class CambioDAO {
+public class CambioDAO extends GenericDAO<Cambio> {
+
+    public CambioDAO() {
+        super(Cambio.class);
+        limpar();
+    }
 
     public List<Cambio> buscarCambioPor(Date dataInicial, Date dataFinal, Pessoa pessoa) throws DadoInvalidoException {
 //        EntityManager manager = JPAUtil.getEntityManager();
@@ -31,7 +30,7 @@ public class CambioDAO {
 //        }
 //        List<Cambio> lista = query.getResultList();
 //        return lista;
-                    return null;
+        return null;
 
     }
 

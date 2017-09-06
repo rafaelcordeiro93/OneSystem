@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ComandaDAO;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.valueobjects.EstadoDeComanda;
@@ -10,7 +9,7 @@ import java.util.List;
 public class ComandaService implements Serializable {
 
     public List<Comanda> buscarComandas() {
-        return new ArmazemDeRegistros<>(Comanda.class).listaTodosOsRegistros();
+        return new ComandaDAO().listaDeResultados();
     }
 
     public List<Comanda> buscarComandasNo(EstadoDeComanda estadoDeComanda) {

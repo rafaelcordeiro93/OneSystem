@@ -21,7 +21,7 @@ public class CreditoService implements Serializable {
 
     public BigDecimal buscarSaldo(Pessoa pessoa) {
 
-        List<Credito> resutados = new CreditoDAO().buscarCreditos().porPessoa(pessoa).listaDeResultados();
+        List<Credito> resutados = new CreditoDAO().porPessoa(pessoa).listaDeResultados();
 
         BigDecimal entradas = resutados.stream().filter(c -> c.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA).map(Credito::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal saidas = resutados.stream().filter(c -> c.getOperacaoFinanceira() == OperacaoFinanceira.SAIDA).map(Credito::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);

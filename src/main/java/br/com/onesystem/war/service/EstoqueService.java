@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class EstoqueService implements Serializable {
 
     public List<Estoque> buscarEstoques() {
-        return new ArmazemDeRegistros<Estoque>(Estoque.class).listaTodosOsRegistros();
+      return new EstoqueDAO().listaDeResultados();
     }
 
     public BigDecimal buscaSaldoTotalDeEstoque(Item item, Date data) {
