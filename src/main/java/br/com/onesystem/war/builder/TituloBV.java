@@ -2,7 +2,6 @@ package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cambio;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
-import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaEmitida;
@@ -18,7 +17,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class TituloBV implements Serializable {
-    
+
     private Long id;
     private Pessoa pessoa;
     private String historico;
@@ -35,8 +34,7 @@ public class TituloBV implements Serializable {
     private Cotacao cotacao;
     private Filial filial;
     private Integer parcela;
-    private Conta conta;
-    
+
     public TituloBV(Titulo tituloSelecionado) {
         this.id = tituloSelecionado.getId();
         this.pessoa = tituloSelecionado.getPessoa();
@@ -52,13 +50,12 @@ public class TituloBV implements Serializable {
         this.cotacao = tituloSelecionado.getCotacao();
         this.filial = tituloSelecionado.getFilial();
         this.parcela = tituloSelecionado.getParcela();
-        this.conta = tituloSelecionado.getConta();
     }
-    
+
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo,
             Date vencimento, Date emissao, OperacaoFinanceira unidadeFinanceira,
             Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao, ConhecimentoDeFrete conhecimentoDeFrete,
-            Filial filial, Integer parcela, Conta conta) {
+            Filial filial, Integer parcela) {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -74,161 +71,152 @@ public class TituloBV implements Serializable {
         this.cotacao = cotacao;
         this.filial = filial;
         this.parcela = parcela;
-        this.conta = conta;
     }
-    
+
     public TituloBV() {
     }
-    
+
     public Long getId() {
         return id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     public Pessoa getPessoa() {
         return pessoa;
     }
-    
+
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    
+
     public String getHistorico() {
         return historico;
     }
-    
+
     public void setHistorico(String historico) {
         this.historico = historico;
     }
-    
+
     public BigDecimal getValor() {
         return valor;
     }
-    
+
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
-    
+
     public BigDecimal getSaldo() {
         return saldo;
     }
-    
+
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-    
+
     public Date getVencimento() {
         return vencimento;
     }
-    
+
     public void setVencimento(Date vencimento) {
         this.vencimento = vencimento;
     }
-    
+
     public Date getEmissao() {
         return emissao;
     }
-    
+
     public void setEmissao(Date emissao) {
         this.emissao = emissao;
     }
-    
+
     public OperacaoFinanceira getUnidadeFinanceira() {
         return unidadeFinanceira;
     }
-    
+
     public void setUnidadeFinanceira(OperacaoFinanceira unidadeFinanceira) {
         this.unidadeFinanceira = unidadeFinanceira;
     }
-    
+
     public Recepcao getRecepcao() {
         return recepcao;
     }
-    
+
     public void setRecepcao(Recepcao recepcao) {
         this.recepcao = recepcao;
     }
-    
+
     public Cambio getCambio() {
         return cambio;
     }
-    
+
     public void setCambio(Cambio cambio) {
         this.cambio = cambio;
     }
-    
+
     public TipoFormaPagRec getTipoFormaPagRec() {
         return tipoFormaPagRec;
     }
-    
+
     public void setTipoFormaPagRec(TipoFormaPagRec tipoFormaPagRec) {
         this.tipoFormaPagRec = tipoFormaPagRec;
     }
-    
+
     public Cotacao getCotacao() {
         return cotacao;
     }
-    
+
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
     }
-    
+
     public NotaEmitida getNotaEmitida() {
         return notaEmitida;
     }
-    
+
     public void setNotaEmitida(NotaEmitida notaEmitida) {
         this.notaEmitida = notaEmitida;
     }
-    
+
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }
-    
+
     public void setConhecimentoDeFrete(ConhecimentoDeFrete conhecimentoDeFrete) {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
-    
+
     public Filial getFilial() {
         return filial;
     }
-    
+
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
-    
+
     public Integer getParcela() {
         return parcela;
     }
-    
+
     public void setParcela(Integer parcela) {
         this.parcela = parcela;
     }
-    
-    public Conta getConta() {
-        return conta;
-    }
-    
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-    
+
     public Titulo construir() throws DadoInvalidoException {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comParcela(parcela).comFilial(filial).comConta(conta).construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
-    
+
     public Titulo construirComID() throws DadoInvalidoException {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor).comId(id)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comParcela(parcela).comFilial(filial).comConta(conta).construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
 }

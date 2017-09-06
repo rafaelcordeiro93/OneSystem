@@ -322,16 +322,14 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     }
     
     public void selecionaCotacaoBancariaTitulo() {
-        try {
-            if (tituloEmBanco) {
-                e.setCotacao(cotacaoService.getCotacaoNaUltimaEmissaoPor(titulo.getConta(), emissao));
-                e.setConta(e.getCotacao().getConta());
-            } else {
-                e.setCotacao(cotacaoPadrao);
-                e.setConta(e.getCotacao().getConta());
-            }
-        } catch (DadoInvalidoException die) {
-            die.print();
+        if (tituloEmBanco) {
+            // e.setCotacao(new CotacaoDAO().porMoeda(.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(conhecimentoDeFrete.getEmissao()).resultado());
+            //  e.setConta(e.getCotacao().getConta());
+            e.setCotacao(cotacaoPadrao);
+            e.setConta(e.getCotacao().getConta());
+        } else {
+            e.setCotacao(cotacaoPadrao);
+            e.setConta(e.getCotacao().getConta());
         }
     }
     

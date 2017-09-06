@@ -46,7 +46,6 @@ import br.com.onesystem.domain.builder.CepBuilder;
 import br.com.onesystem.domain.builder.CfopBuilder;
 import br.com.onesystem.domain.builder.CidadeBuilder;
 import br.com.onesystem.domain.builder.ContaDeEstoqueBuilder;
-import br.com.onesystem.domain.builder.GrupoFinanceiroBuilder;
 import br.com.onesystem.domain.builder.ModeloDeRelatorioBuilder;
 import br.com.onesystem.domain.builder.OperacaoBuilder;
 import br.com.onesystem.domain.builder.SituacaoFiscalBuilder;

@@ -45,7 +45,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     private Model<Titulo> modeloSelecionado;
     private ModelList<Titulo> list;
-    private Conta conta;
 
     @PostConstruct
     public void init() {
@@ -70,10 +69,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public void addNovaParcela() throws DadoInvalidoException {
         try {
-            if (conta == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("conta_not_null"));
-            }
-            SessionUtil.put(conta, "conta", FacesContext.getCurrentInstance());
             SessionUtil.put(e.construir(), "fatura", FacesContext.getCurrentInstance());
             new DialogoCobrancaView().abrirDialogo();
         } catch (EDadoInvalidoException die) {
@@ -121,8 +116,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             }
         } else if (obj instanceof Pessoa) {
             e.setPessoa((Pessoa) obj);
-        } else if (obj instanceof Conta) {
-            conta = ((Conta) obj);
         } else if (obj instanceof Titulo) {
             Titulo cb = (Titulo) obj;
             list.add(cb);
@@ -157,7 +150,7 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             modeloSelecionado = null;
             list = new ModelList<>();
-            conta = null;
+
         } catch (FDadoInvalidoException ex) {
             ex.print();
         }
@@ -190,14 +183,6 @@ public class FaturaLegadaView extends BasicMBImpl<FaturaLegada, FaturaLegadaBV> 
 
     public void setModelo(Model modelo) {
         this.modeloSelecionado = modelo;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
     }
 
 }
