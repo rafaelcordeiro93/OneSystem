@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.PedidoAFornecedoresDAO;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.valueobjects.EstadoDePedido;
@@ -10,7 +9,7 @@ import java.util.List;
 public class PedidoAFornecedoresService implements Serializable {
 
     public List<PedidoAFornecedores> buscarPedidosAFornecedores() {
-        return new ArmazemDeRegistros<>(PedidoAFornecedores.class).listaTodosOsRegistros();
+        return new PedidoAFornecedoresDAO().listaDeResultados();
     }
 
     public List<PedidoAFornecedores> buscarPedidosAFornecedoresEmDefinicao() {

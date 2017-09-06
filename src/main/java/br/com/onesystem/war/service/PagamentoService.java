@@ -8,7 +8,7 @@ import java.util.List;
 public class PagamentoService implements Serializable {
     
     public List<Pagamento> buscarPagamentos() {
-        return new PagamentoDAO().buscarPagamentos().listaDeResultados();
+        return new PagamentoDAO().listaDeResultados();
     }
     
 }

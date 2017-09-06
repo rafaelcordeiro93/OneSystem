@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ItemDeNotaDAO;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
@@ -14,7 +13,7 @@ import java.util.List;
 public class ItemDeNotaService implements Serializable {
 
     public List<ItemDeNota> buscarItensEmitidos() {
-        return new ArmazemDeRegistros<ItemDeNota>(ItemDeNota.class).listaTodosOsRegistros();
+        return new ItemDeNotaDAO().listaDeResultados();
     }
 
     public BigDecimal buscaQuantidadeFaturadaPor(ItemDeCondicional item, Condicional condicional) throws DadoInvalidoException {

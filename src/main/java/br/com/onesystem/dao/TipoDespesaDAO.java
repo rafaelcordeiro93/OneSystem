@@ -11,20 +11,20 @@ import br.com.onesystem.domain.TipoDespesa;
  *
  * @author Rafael
  */
-public class DespesaDAO extends GenericDAO<TipoDespesa> {
+public class TipoDespesaDAO extends GenericDAO<TipoDespesa> {
 
-    public DespesaDAO() {
+    public TipoDespesaDAO() {
         super(TipoDespesa.class);
         limpar();
     }
 
-    public DespesaDAO ePorMoeda(TipoDespesa despesa) {
+    public TipoDespesaDAO ePorMoeda(TipoDespesa despesa) {
         where += "and tipoDespesa.nome = :dNome ";
         parametros.put("dNome", despesa.getNome());
         return this;
     }
 
-    public DespesaDAO porId(Long id) {
+    public TipoDespesaDAO porId(Long id) {
         where += " and tipoDespesa.id = :dId ";
         parametros.put("dId", id);
         return this;

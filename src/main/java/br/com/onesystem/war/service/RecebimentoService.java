@@ -8,7 +8,7 @@ import java.util.List;
 public class RecebimentoService implements Serializable {
     
     public List<Recebimento> buscarRecebimentos() {
-        return new RecebimentoDAO().buscarReceitasProvisionadas().listaDeResultados();
+        return new RecebimentoDAO().listaDeResultados();
     }
     
 }

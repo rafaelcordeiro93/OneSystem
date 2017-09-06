@@ -10,7 +10,7 @@ import java.util.List;
 public class RecepcaoService implements Serializable {
     
     public List<Recepcao> buscarRecepcoes(){
-        return new ArmazemDeRegistros<Recepcao>(Recepcao.class).listaTodosOsRegistros();
+        return null;
     }
 
     public String buscarUltimaRecepcaoDa(Pessoa pessoa) {

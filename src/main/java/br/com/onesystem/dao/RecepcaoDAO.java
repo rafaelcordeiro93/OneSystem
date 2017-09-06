@@ -1,20 +1,17 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Conta;
-import br.com.onesystem.domain.ContratoDeCambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.JPAUtil;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
-public class RecepcaoDAO {
+public class RecepcaoDAO extends GenericDAO<Recepcao> {
+
+    public RecepcaoDAO() {
+        super(Recepcao.class);
+    }
 
     public String buscarDataDaUltimaRecepcaoDaPessoa(Pessoa pessoa) {
 //        EntityManager manager = JPAUtil.getEntityManager();

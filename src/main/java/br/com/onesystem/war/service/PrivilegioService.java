@@ -10,11 +10,11 @@ import java.util.List;
 public class PrivilegioService implements Serializable {
     
     public List<Privilegio> buscarPrivilegioDoGrupo(GrupoDePrivilegio grupo){
-        return new PrivilegioDAO().buscarPrivilegiosW().ePorGrupoDePrivilegio(grupo).listaDeResultados();
+        return new PrivilegioDAO().ePorGrupoDePrivilegio(grupo).listaDeResultados();
     }
     
     public List<Privilegio> buscarPrivilegioDoModulo(Modulo modulo){
-        return new PrivilegioDAO().buscarPrivilegiosW().ePorModulo(modulo).listaDeResultados();
+        return new PrivilegioDAO().ePorModulo(modulo).listaDeResultados();
     }
         
 }

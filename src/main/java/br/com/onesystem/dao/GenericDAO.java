@@ -6,14 +6,11 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Coluna;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoDeBusca;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
 
 /**
@@ -39,6 +37,9 @@ public abstract class GenericDAO<T> {
     protected String group;
     protected BundleUtil msg;
     protected Map<String, Object> parametros;
+
+    @Inject
+    private ArmazemDeRegistros armazem;
 
     public GenericDAO(Class clazz) {
         this.clazz = clazz;
@@ -65,15 +66,14 @@ public abstract class GenericDAO<T> {
     }
 
     public List<T> listaDeResultados() {
-        List<T> resultado = new ArmazemDeRegistros<T>((Class<T>) clazz).listaRegistrosDaConsulta(getConsulta(), parametros);
+        List<T> resultado = armazem.daClasse((Class<T>) clazz).listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
     }
 
     public T resultado() {
         try {
-            T resultado = new ArmazemDeRegistros<T>((Class<T>) clazz)
-                    .resultadoUnicoDaConsulta(getConsulta(), parametros);
+            T resultado = (T) armazem.daClasse((Class<T>) clazz).resultadoUnicoDaConsulta(getConsulta(), parametros);
             limpar();
             return resultado;
         } catch (NoResultException nre) {
@@ -82,7 +82,7 @@ public abstract class GenericDAO<T> {
     }
 
     public BigDecimal resultadoOperacaoMatematica() throws NoResultException {
-        BigDecimal resultado = new ArmazemDeRegistros<T>((Class<T>) clazz)
+        BigDecimal resultado = armazem.daClasse((Class<T>) clazz)
                 .resultadoOperacaoMatematica(getConsulta(), parametros);
         limpar();
         return resultado;

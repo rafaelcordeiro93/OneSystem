@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.domain.Item;
 import java.io.Serializable;
@@ -9,7 +8,7 @@ import java.util.List;
 public class ItemService implements Serializable {
 
     public List<Item> buscarItems() {
-        return new ArmazemDeRegistros<Item>(Item.class).listaTodosOsRegistros();
+        return new ItemDAO().listaDeResultados();
     }
 
     public List<Item> buscarItemsRelatorio(Item item) {

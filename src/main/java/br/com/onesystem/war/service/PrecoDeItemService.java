@@ -1,21 +1,18 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.PrecoDeItemDAO;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.PrecoDeItem;
-import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 public class PrecoDeItemService implements Serializable {
 
     public List<PrecoDeItem> buscarPrecos() {
-        return new ArmazemDeRegistros<PrecoDeItem>(PrecoDeItem.class).listaTodosOsRegistros();
+        return new PrecoDeItemDAO().listaDeResultados();
     }
 
     public PrecoDeItem buscaListaDePrecoAtual(Item item, ListaDePreco listaDePreco, Date emissao) {

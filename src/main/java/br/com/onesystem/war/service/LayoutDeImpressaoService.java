@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.LayoutDeImpressaoDAO;
 import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -13,7 +12,7 @@ import java.util.List;
 public class LayoutDeImpressaoService implements Serializable {
 
     public List<LayoutDeImpressao> buscaLayouts() {
-        return new ArmazemDeRegistros<LayoutDeImpressao>(LayoutDeImpressao.class).listaTodosOsRegistros();
+        return new LayoutDeImpressaoDAO().listaDeResultados();
     }
 
     public LayoutDeImpressao getLayoutPorTipoDeLayout(TipoLayout tipoLayout) throws DadoInvalidoException {

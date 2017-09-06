@@ -15,7 +15,7 @@ import java.util.List;
 public class NotaEmitidaService implements Serializable {
 
     public List<NotaEmitida> buscarNotasEmitidas() {
-        return new ArmazemDeRegistros<>(NotaEmitida.class).listaTodosOsRegistros();
+        return new NotaEmitidaDAO().listaDeResultados();
     }
  
     public List<NotaEmitida> buscarVendasDoPeriodo(Date dataInicial, Date dataFinal) throws DadoInvalidoException {

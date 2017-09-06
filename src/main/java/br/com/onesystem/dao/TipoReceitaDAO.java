@@ -11,19 +11,19 @@ import br.com.onesystem.domain.TipoReceita;
  *
  * @author Rafael
  */
-public class ReceitaDAO extends GenericDAO<TipoReceita> {
+public class TipoReceitaDAO extends GenericDAO<TipoReceita> {
 
-    public ReceitaDAO() {
+    public TipoReceitaDAO() {
         super(TipoReceita.class);
     }
 
-    public ReceitaDAO ePorMoeda(TipoReceita receita) {
+    public TipoReceitaDAO ePorMoeda(TipoReceita receita) {
         where += "and tipoReceita.nome = :rNome ";
         parametros.put("rNome", receita.getNome());
         return this;
     }
 
-    public ReceitaDAO porId(Long id) {
+    public TipoReceitaDAO porId(Long id) {
         where += " and tipoReceita.id = :rId ";
         parametros.put("rId", id);
         return this;
