@@ -11,6 +11,7 @@ import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Coluna;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
@@ -49,6 +50,7 @@ import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.GeradorDeCodigoFonteDeModeloDeRelatorio;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
@@ -62,6 +64,7 @@ import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
+import javax.faces.context.FacesContext;
 import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 /**
@@ -448,10 +451,11 @@ public abstract class BasicMBReportImpl<T> {
         ImpressoraDeRelatorioDinamico impressora = new ImpressoraDeRelatorioDinamico();
         String nomeRelatorio = modeloDeRelatorioSelecionadoString != null && !modeloDeRelatorioSelecionadoString.trim().isEmpty() ? modeloDeRelatorioSelecionadoString : tipoRelatorio.getNome();
         try {
+            Filial filial = (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance());
             if (registrosFiltrados == null || registrosFiltrados.isEmpty()) {
-                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), null).naWeb();
+                impressora.imprimir(registros, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), filial).naWeb();
             } else {
-                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), null).naWeb();
+                impressora.imprimir(registrosFiltrados, nomeRelatorio, camposExibidos.getList(), mapPath.get(Moeda.class), filial).naWeb();
             }
         } catch (DRException | IOException | FDadoInvalidoException ex) {
             Logger.getLogger(BasicMBReportImpl.class.getName()).log(Level.SEVERE, null, ex);
@@ -467,7 +471,7 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
+                        ModeloDeRelatorio find = new ModeloDeRelatorioDAO().porId(m.getId()).resultado();
                         new RemoveDAO<>().remove(find, find.getId());
                         modeloRemovido = m; // * Necessario para não soltar CuncurrentException
                         break;
@@ -567,7 +571,7 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui modelo existente
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        ModeloDeRelatorio find = new ArmazemDeRegistros<>(ModeloDeRelatorio.class).find(m.getId());
+                        ModeloDeRelatorio find = new ModeloDeRelatorioDAO().porId(m.getId()).resultado();
                         new RemoveDAO<>().remove(find, find.getId());
                         limpaFiltrosECampos();
                         init();

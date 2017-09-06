@@ -33,9 +33,6 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
     @Column(nullable = false)
     private BigDecimal saldo;
     
-    @ManyToOne
-    private Conta conta;
-
     @OneToOne
     private Recepcao recepcao;
 
@@ -58,7 +55,7 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
             Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, Fatura fatura, 
-            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela, Conta conta) throws DadoInvalidoException {
+            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.saldo = saldo;
         this.tipoFormaPagRec = tipoFormaPagRec;
@@ -66,7 +63,6 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
         this.cambio = cambio;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.fatura = fatura;
-        this.conta = conta;
         ehValido();
     }
 
@@ -96,10 +92,6 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
         this.saldo = saldo.subtract(valor);
     }
 
-    public Conta getConta() {
-        return conta;
-    }
-    
     public BigDecimal atualizaSaldo(BigDecimal valor) throws DadoInvalidoException {
         if (valor.compareTo(saldo) == 1) {
             throw new EDadoInvalidoException("O valor deve ser menor ou igual ao saldo!");

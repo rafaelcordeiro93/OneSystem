@@ -14,23 +14,27 @@ import javax.persistence.TypedQuery;
 public class ConfiguracaoCambioDAO {
 
     public ConfiguracaoCambio buscar() throws EDadoInvalidoException {
-        try {
-            EntityManager manager = JPAUtil.getEntityManager();
-            TypedQuery<ConfiguracaoCambio> query = manager.createNamedQuery("ConfiguracaoCambio.busca", ConfiguracaoCambio.class);
-            return query.getSingleResult();
-        } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_Cambio_nao_definida"));
-        }
+//        try {
+//            EntityManager manager = JPAUtil.getEntityManager();
+//            TypedQuery<ConfiguracaoCambio> query = manager.createNamedQuery("ConfiguracaoCambio.busca", ConfiguracaoCambio.class);
+//            return query.getSingleResult();
+//        } catch (NoResultException nre) {
+//            throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_Cambio_nao_definida"));
+//        }
+        return null;
+
     }
 
     public List<Pessoa> buscarPessoas() {
-        try {
-            EntityManager manager = JPAUtil.getEntityManager();
-            TypedQuery<Pessoa> query = manager.createNamedQuery("ConfiguracaoCambio.buscaPessoas", Pessoa.class);
-            return query.getResultList();
-        } catch (NoResultException nre) {
-            return null;
-        }
+//        try {
+//            EntityManager manager = JPAUtil.getEntityManager();
+//            TypedQuery<Pessoa> query = manager.createNamedQuery("ConfiguracaoCambio.buscaPessoas", Pessoa.class);
+//            return query.getResultList();
+//        } catch (NoResultException nre) {
+//            return null;
+//        }
+        return null;
+
     }
 
 }

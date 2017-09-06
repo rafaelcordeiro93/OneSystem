@@ -9,7 +9,9 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -19,7 +21,8 @@ import org.hibernate.exception.ConstraintViolationException;
  */
 public class AtualizaDAO<T> {
 
-    private EntityManager em = JPAUtil.getEntityManager();
+    @PersistenceContext
+    private EntityManager em;
 
     ;
     

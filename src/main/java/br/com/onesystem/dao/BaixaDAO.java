@@ -308,15 +308,6 @@ public class BaixaDAO extends GenericDAO<Baixa> {
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 
-    public Date buscarUltimoPagamentoDe(Titulo titulo) {
-        EntityManager manager = JPAUtil.getEntityManager();
-        String where = "select max(baixa.emissao) from Baixa baixa where baixa.titulo = :pTitulo and baixa.cancelada = :pNaoCancelada";
-        TypedQuery<Date> query = manager.createQuery(where, Date.class);
-        query.setParameter("pTitulo", titulo);
-        query.setParameter("pNaoCancelada", false);
-        return query.getSingleResult();
-    }
-
     public BigDecimal resultadoSomaTotal() {
         BigDecimal resultado = new ArmazemDeRegistros<BigDecimal>(BigDecimal.class)
                 .resultadoUnicoDaConsulta(getConsulta(), parametros);

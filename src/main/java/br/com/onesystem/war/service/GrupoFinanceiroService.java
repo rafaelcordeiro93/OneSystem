@@ -9,15 +9,15 @@ import java.util.List;
 public class GrupoFinanceiroService implements Serializable {
     
     public List<GrupoFinanceiro> buscarGruposFinanceiros(){
-        return new ArmazemDeRegistros<GrupoFinanceiro>(GrupoFinanceiro.class).listaTodosOsRegistros();
+        return new ArmazemDeRegistros<>(GrupoFinanceiro.class).listaTodosOsRegistros();
     }
     
     public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoReceitas(){
-        return new GrupoFinanceiroDAO().buscarGruposDeReceitas();
+        return new GrupoFinanceiroDAO().porReceitas().listaDeResultados();
     }
     
     public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoDespesas(){
-        return new GrupoFinanceiroDAO().buscarGruposDeDespesas();
+        return new GrupoFinanceiroDAO().porDespesas().listaDeResultados();
     }
     
 }

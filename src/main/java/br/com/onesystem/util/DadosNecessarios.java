@@ -26,6 +26,7 @@ import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.OperacaoService;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -60,6 +61,13 @@ public class DadosNecessarios implements Serializable {
 
     public List<DadosNecessariosBV> valida(String janela) {
         init();
+        // Filial obrigatória para todas as janelas.
+        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")
+                && !janela.equals("/login.xhtml")) {
+            getFilial();
+            return pendencias;
+        }
+
         switch (janela) {
             case "/menu/vendas/notaEmitida.xhtml": {
                 Moeda moeda = getMoedaPadrao();
@@ -209,11 +217,6 @@ public class DadosNecessarios implements Serializable {
             default:
                 break;
         }
-        // Filial obrigatória para todas as janelas.
-        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")
-                && !janela.equals("/login.xhtml")) {
-            getFilial();
-        }
         return pendencias;
     }
 
@@ -264,7 +267,7 @@ public class DadosNecessarios implements Serializable {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/menu/financeiro/cotacao.xhtml");
         try {
             if (moeda != null) {
-                Cotacao cotacao = new CotacaoDAO().porMoeda(moeda).porCotacaoEmpresa().naMaiorEmissao(new Date()).resultado();
+                Cotacao cotacao = new CotacaoService().getCotacaoPadrao(new Date());
                 if (cotacao == null) {
                     throw new FDadoInvalidoException("");
                 }

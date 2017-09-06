@@ -722,3 +722,6 @@ body .ui-button.red-btn.ui-state-active {
 .template-card-inbox{
     padding: 0% 8% 0% 8%;
 }
+.dialog-responsive{
+    width: 800px;
+}

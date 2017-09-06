@@ -35,7 +35,6 @@ public class TituloBV implements Serializable {
     private Cotacao cotacao;
     private Filial filial;
     private Integer parcela;
-    private Conta conta;
     
     public TituloBV(Titulo tituloSelecionado) {
         this.id = tituloSelecionado.getId();
@@ -52,13 +51,12 @@ public class TituloBV implements Serializable {
         this.cotacao = tituloSelecionado.getCotacao();
         this.filial = tituloSelecionado.getFilial();
         this.parcela = tituloSelecionado.getParcela();
-        this.conta = tituloSelecionado.getConta();
     }
     
     public TituloBV(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo,
             Date vencimento, Date emissao, OperacaoFinanceira unidadeFinanceira,
             Recepcao recepcao, Cambio cambio, TipoFormaPagRec tipoFormaPagRec, Cotacao cotacao, ConhecimentoDeFrete conhecimentoDeFrete,
-            Filial filial, Integer parcela, Conta conta) {
+            Filial filial, Integer parcela) {
         this.id = id;
         this.pessoa = pessoa;
         this.historico = historico;
@@ -74,7 +72,6 @@ public class TituloBV implements Serializable {
         this.cotacao = cotacao;
         this.filial = filial;
         this.parcela = parcela;
-        this.conta = conta;
     }
     
     public TituloBV() {
@@ -208,20 +205,12 @@ public class TituloBV implements Serializable {
         this.parcela = parcela;
     }
     
-    public Conta getConta() {
-        return conta;
-    }
-    
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-    
     public Titulo construir() throws DadoInvalidoException {
         return new TituloBuilder().comPessoa(pessoa).comHistorico(historico).comValor(valor)
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comParcela(parcela).comFilial(filial).comConta(conta).construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
     
     public Titulo construirComID() throws DadoInvalidoException {
@@ -229,6 +218,6 @@ public class TituloBV implements Serializable {
                 .comSaldo(saldo).comEmissao(emissao).comOperacaoFinanceira(unidadeFinanceira)
                 .comTipoFormaPagRec(tipoFormaPagRec).comVencimento(vencimento).comRecepcao(recepcao)
                 .comCambio(cambio).comCotacao(cotacao).comNota(notaEmitida).comConhecimentoDeFrete(conhecimentoDeFrete)
-                .comParcela(parcela).comFilial(filial).comConta(conta).construir();
+                .comParcela(parcela).comFilial(filial).construir();
     }
 }

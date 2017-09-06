@@ -60,7 +60,7 @@ public class RelatorioDeRecepcaoView implements Serializable {
     }
 
     private Map<String, Object> criarListaDeTotais(List<Recepcao> lista) {
-        List<Moeda> listaMoeda = new ArmazemDeRegistros<Moeda>(Moeda.class).listaTodosOsRegistros();
+        List<Moeda> listaMoeda = null; //new ArmazemDeRegistros<Moeda>(Moeda.class).listaTodosOsRegistros();
         List<ResumoDeMoeda> resumo = new ArrayList<ResumoDeMoeda>();
 
         for (Moeda moeda : listaMoeda) {

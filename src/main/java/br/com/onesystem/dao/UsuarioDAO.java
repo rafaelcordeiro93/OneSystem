@@ -70,19 +70,6 @@ public class UsuarioDAO {
         return this;
     }
 
-    public String getFirstNameLastNameUserByEmail(String email) {
-        EntityManager manager = JPAUtil.getEntityManager();
-
-        TypedQuery<Usuario> query = manager.createQuery("select u from Usuario u where u.email = :pEmail ",
-                Usuario.class);
-
-        query.setParameter("pEmail", email);
-        Usuario usuario = new Usuario();
-        usuario = query.getSingleResult();
-
-        return usuario.getPessoa().getFirstNameLastName();
-    }
-
     public List<Usuario> listaDeResultados() {
         List<Usuario> resultado = new ArmazemDeRegistros<Usuario>(Usuario.class)
                 .listaRegistrosDaConsulta(consulta, parametros);

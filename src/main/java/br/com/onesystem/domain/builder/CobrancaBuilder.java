@@ -240,13 +240,8 @@ public class CobrancaBuilder {
         return this;
     }
 
-    public CobrancaBuilder comContaBancaria(Conta contaBancaria) {
-        this.contaBancaria = contaBancaria;
-        return this;
-    }
-
     public CobrancaBV construir() {
-        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial, parcela, contaBancaria);
+        return new CobrancaBV(id, notaEmitida, conhecimentoDeFrete, operacaoFinanceira, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, situacaoDeCheque, multas, juros, descontos, emitente, observacao, cartao, codigoTransacao, situacaoDeCartao, moeda, cambio, recepcao, tipoFormaDeRecebimentoParcela, dias, cotacao, tipoLancamento, pessoa, entrada, historico, faturaLegada, situacaoDeCobranca, filial, parcela);
     }
 
 }

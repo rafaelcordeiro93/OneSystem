@@ -9,7 +9,10 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -17,12 +20,12 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
+@Stateless
 public class AdicionaDAO<T> {
 
-    private EntityManager em = JPAUtil.getEntityManager();
+    @PersistenceContext
+    private EntityManager em;
 
-    ;
-  
     public AdicionaDAO() {
     }
 
@@ -30,15 +33,9 @@ public class AdicionaDAO<T> {
 
         try {
 
-            // abre transacao
-            em.getTransaction().begin();
-
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
-
-            // commita a transacao
-            em.getTransaction().commit();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

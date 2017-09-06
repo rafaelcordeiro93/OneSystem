@@ -281,6 +281,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public String getTotalTipoNaCotacaoPadraoFormatado() {
+        System.out.println("1: " + e.getCotacaoPadrao().getConta().getMoeda());
+        System.out.println("2: " + getTotalTipoNaCotacaoPadrao());
         return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
     }
 

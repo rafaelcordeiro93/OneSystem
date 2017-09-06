@@ -93,7 +93,6 @@ public class CobrancaBV implements Serializable {
     private SituacaoDeCobranca situacaoDeCobranca;
     private Filial filial;
     private Integer parcela;
-    private Conta contaBancaria;
 
     public CobrancaBV() {
         entrada = false;
@@ -134,7 +133,6 @@ public class CobrancaBV implements Serializable {
         this.situacaoDeCobranca = p.getSituacaoDeCobranca();
         this.filial = p.getFilial();
         this.parcela = p.getParcela();
-        this.contaBancaria = p.getContaBancaria();
     }
 
     public CobrancaBV(Long id, Nota notaEmitida, ConhecimentoDeFrete conhecimentoDeFrete,
@@ -146,7 +144,7 @@ public class CobrancaBV implements Serializable {
             SituacaoDeCartao tipoSituacaoCartao, Moeda moeda, Cambio cambio,
             Recepcao recepcao, ModalidadeDeCobranca tipoFormaDeRecebimentoParcela,
             Integer dias, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, String historico, Fatura fatura,
-            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela, Conta contaBancaria) {
+            SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) {
         this.id = id;
         this.nota = notaEmitida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
@@ -181,7 +179,6 @@ public class CobrancaBV implements Serializable {
         this.fatura = fatura;
         this.filial = filial;
         this.parcela = parcela;
-        this.contaBancaria = contaBancaria;
     }
 
     public CobrancaBV(CobrancaVariavel p) {
@@ -227,7 +224,6 @@ public class CobrancaBV implements Serializable {
             this.modalidadeDeCobranca = ((Titulo) p).getModalidade();
             this.fatura = ((Titulo) p).getFatura();
             this.conhecimentoDeFrete = ((Titulo) p).getConhecimentoDeFrete();
-            this.contaBancaria = ((Titulo) p).getConta();
         } else if (p instanceof Credito) {
             this.modalidadeDeCobranca = ((Credito) p).getModalidade();
         }
@@ -547,14 +543,6 @@ public class CobrancaBV implements Serializable {
         this.filial = filial;
     }
 
-    public Conta getContaBancaria() {
-        return contaBancaria;
-    }
-
-    public void setContaBancaria(Conta contaBancaria) {
-        this.contaBancaria = contaBancaria;
-    }
-
     public Integer getParcela() {
         return parcela;
     }
@@ -582,7 +570,7 @@ public class CobrancaBV implements Serializable {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento).comBaixas(baixas)
                 .comSituacaoDeCobranca(situacaoDeCobranca).comEntrada(entrada).comFatura(fatura).comParcela(parcela).comFilial(filial)
-                .comConta(contaBancaria).construir();
+                .construir();
     }
 
     public Credito construirCredito() throws DadoInvalidoException {
@@ -610,7 +598,7 @@ public class CobrancaBV implements Serializable {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comFilial(filial).comEntrada(entrada).comNota(nota).comFatura(fatura)
-                .comParcela(parcela).comConhecimentoDeFrete(conhecimentoDeFrete).comConta(contaBancaria).construir();
+                .comParcela(parcela).comConhecimentoDeFrete(conhecimentoDeFrete).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {

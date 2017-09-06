@@ -126,6 +126,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     @Inject
     private ConfiguracaoEstoqueService confEstoqueService;
+    private Cotacao cotacaoDeTitulo;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -426,6 +427,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
      */
     public void criaParcelas() {
         try {
+            if (notaRecebida.getFormaDeRecebimento().getConta() != null && cotacaoDeTitulo == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Deve_existir_cotacao_na_conta_bancaria") + ": " + notaRecebida.getFormaDeRecebimento().getConta().getNome());
+            }
             if (notaRecebida.getAFaturar() != null && (notaRecebida.getAFaturar().compareTo(BigDecimal.ZERO) > 0
                     || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0)) {
                 Integer numParcelas = notaRecebida.getNumeroParcelas(); //Número de cobranca
@@ -450,12 +454,12 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
                         cobrancas.add(new CobrancaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
-                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaRecebida.getEmissao())
+                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacaoDeTitulo != null ? cotacaoDeTitulo : cotacao).comEmissao(notaRecebida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaRecebida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaRecebida.getOperacao().getOperacaoFinanceira()).comCartao(notaRecebida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaRecebida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.EMITIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaRecebida.getFilial()).comParcela(i + 1).comContaBancaria(conta).construir());
+                                .comFilial(notaRecebida.getFilial()).comParcela(i + 1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -468,6 +472,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             ErrorMessage.print("Erro ao calcular o valor das parcelas.");
         } catch (NullPointerException npe) {
             ErrorMessage.print(new BundleUtil().getMessage("operacao_not_null"));
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -563,6 +569,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 notaRecebida.setFormaDeRecebimento(formaDeRecebimento);
                 calculaTotaisFormaDeRecebimento();
                 recalculaValores();
+                buscaCotacaoDeTitulo(formaDeRecebimento);
             } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
                 cheque.setBanco((Banco) obj);
             } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
@@ -584,6 +591,15 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             }
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    private void buscaCotacaoDeTitulo(FormaDeRecebimento formaDeRecebimento) throws DadoInvalidoException {
+        if (formaDeRecebimento.getConta() != null) {
+            cotacaoDeTitulo = service.getCotacaoNaUltimaEmissaoPor(formaDeRecebimento.getConta(), new Date());
+            if (cotacaoDeTitulo == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Deve_existir_cotacao_na_conta_bancaria") + ": " + formaDeRecebimento.getConta().getNome());
+            }
         }
     }
 

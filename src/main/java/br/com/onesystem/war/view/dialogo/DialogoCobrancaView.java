@@ -71,7 +71,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         model = (Model<CobrancaVariavel>) SessionUtil.getObject("model", FacesContext.getCurrentInstance());
         fatura = (Fatura) SessionUtil.getObject("fatura", FacesContext.getCurrentInstance());
         if (model == null) {
-            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
+//            e.setContaBancaria((Conta) SessionUtil.getObject("conta", FacesContext.getCurrentInstance()));
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             e.setParcela((Integer) SessionUtil.getObject("parcela", FacesContext.getCurrentInstance()));
         }

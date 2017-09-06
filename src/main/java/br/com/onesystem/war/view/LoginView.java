@@ -41,6 +41,9 @@ public class LoginView implements Serializable {
     @Inject
     private FilialService filialService;
 
+    @Inject
+    private ArmazemDeRegistros<Usuario> armazem;
+
     public String logar() {
         try {
             if (!listaDeUsuarios.isEmpty()) {
@@ -59,9 +62,9 @@ public class LoginView implements Serializable {
                         if (service.getCaixaAbertoDo(usuarioCadastrado) != null) {
                             SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
                         }
-                        
+
                         List<Filial> filiais = filialService.buscarFiliais();
-                        if(filiais.size() == 1){
+                        if (filiais.size() == 1) {
                             SessionUtil.put(filiais.get(0), "filial", FacesContext.getCurrentInstance());
                         }
                         return "dashboard?faces-redirect=true";
@@ -83,7 +86,7 @@ public class LoginView implements Serializable {
 
     @PostConstruct
     public void construct() {
-        listaDeUsuarios = new ArmazemDeRegistros<Usuario>(Usuario.class).listaTodosOsRegistros();
+        listaDeUsuarios = armazem.daClasse(Usuario.class).listaTodosOsRegistros();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("minds.login.token");

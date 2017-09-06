@@ -158,6 +158,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     @Inject
     private LayoutDeImpressaoService serviceLayout;
+    private Cotacao cotacaoDeTitulo;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -520,6 +521,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void criaParcelas() {
         try {
+            if (notaEmitida.getFormaDeRecebimento().getConta() != null && cotacaoDeTitulo == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Deve_existir_cotacao_na_conta_bancaria") + ": " + notaEmitida.getFormaDeRecebimento().getConta().getNome());
+            }
             if (notaEmitida.getAFaturar() != null && (notaEmitida.getAFaturar().compareTo(BigDecimal.ZERO) > 0
                     || getTotalParcelas().compareTo(BigDecimal.ZERO) > 0) && notaEmitida.getNumeroParcelas() > 0) {
                 Integer numParcelas = notaEmitida.getNumeroParcelas(); //Número de cobranca
@@ -535,21 +539,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     // Busca o primeiro vencimento das cobranca
                     Date vencimento = new DateUtil().getPeriodicidadeCalculada(new Date(), tipoPeridiocidade, periodicidade);
 
-                    // Busca a conta bancária para caso a geração for de título.
-                    Conta conta = null;
-                    if(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela() == ModalidadeDeCobranca.TITULO){
-                        conta = notaEmitida.getFormaDeRecebimento().getConta();
-                    }
-                    
                     cobrancas = new ArrayList<>();
                     for (int i = 0; i < numParcelas; i++) {
                         cobrancas.add(new CobrancaBuilder().comID(getIdParcela()).comValor(distribute[i].getAmount())
-                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacao).comEmissao(notaEmitida.getEmissao())
+                                .comVencimento(vencimento).comDias(getDiasDeVencimento(vencimento)).comCotacao(cotacaoDeTitulo != null ? cotacaoDeTitulo : cotacao).comEmissao(notaEmitida.getEmissao())
                                 .comTipoFormaDeRecebimentoParcela(notaEmitida.getFormaDeRecebimento().getFormaPadraoDeParcela()).comCodigoTransacao("000000")
                                 .comOperacaoFinanceira(notaEmitida.getOperacao().getOperacaoFinanceira()).comCartao(notaEmitida.getFormaDeRecebimento().getCartao())
                                 .comSituacaoDeCartao(SituacaoDeCartao.ABERTO).comSituacaoDeCheque(EstadoDeCheque.ABERTO).comPessoa(notaEmitida.getPessoa())
                                 .comEntrada(false).comTipoLancamento(TipoLancamento.RECEBIDA).comSituacaoDeCobranca(SituacaoDeCobranca.ABERTO)
-                                .comFilial(notaEmitida.getFilial()).comParcela(i + 1).comContaBancaria(conta).construir());
+                                .comFilial(notaEmitida.getFilial()).comParcela(i + 1).construir());
                         vencimento = new DateUtil().getPeriodicidadeCalculada(vencimento, tipoPeridiocidade, periodicidade);
                     }
 
@@ -563,6 +561,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             ErrorMessage.print("Erro ao calcular o valor das parcelas.");
         } catch (NullPointerException npe) {
             ErrorMessage.print(new BundleUtil().getMessage("operacao_not_null"));
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -660,6 +660,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 notaEmitida.setFormaDeRecebimento(formaDeRecebimento);
                 calculaTotaisFormaDeRecebimento();
                 recalculaValores();
+                buscaCotacaoDeTitulo(formaDeRecebimento);
             } else if (obj instanceof Banco && "detbanco-search".equals(idComponent)) {
                 cheque.setBanco((Banco) obj);
             } else if (obj instanceof Banco && "bancoParcelas-search".equals(idComponent)) {
@@ -733,6 +734,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             }
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    private void buscaCotacaoDeTitulo(FormaDeRecebimento formaDeRecebimento) throws DadoInvalidoException {
+        if (formaDeRecebimento.getConta() != null) {
+            cotacaoDeTitulo = service.getCotacaoNaUltimaEmissaoPor(formaDeRecebimento.getConta(), new Date());
+            if (cotacaoDeTitulo == null) {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Deve_existir_cotacao_na_conta_bancaria") + ": " + formaDeRecebimento.getConta().getNome());
+            }
         }
     }
 

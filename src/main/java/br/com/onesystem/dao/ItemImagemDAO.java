@@ -18,6 +18,12 @@ public class ItemImagemDAO extends GenericDAO<ItemImagem> {
         super(ItemImagem.class);
     }
 
+    public ItemImagemDAO porId(Long id) {
+        where += " and itemImagem.id = :pId ";
+        parametros.put("pId", id);
+        return this;
+    }
+
     public ItemImagemDAO porItem(Item item) {
         where += " and itemImagem.item = :pItem ";
         parametros.put("pItem", item);
