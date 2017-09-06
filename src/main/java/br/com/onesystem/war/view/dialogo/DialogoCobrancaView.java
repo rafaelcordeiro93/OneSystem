@@ -22,6 +22,7 @@ import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.CobrancaBV;
+import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -115,7 +116,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         if (nota != null) {
             cotacaoLista = new CotacaoDAO().naEmissao(nota.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
-            e.setCotacao(new CotacaoDAO().porMoeda(nota.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(nota.getEmissao()).resultado());
+            e.setCotacao(new CotacaoService().getCotacaoNaUltimaEmissaoPor(nota.getFormaDeRecebimento().getConta(), nota.getEmissao()));
             e.setTipoLancamento(nota.getOperacao().getTipoNota());
             e.setMoeda(nota.getMoedaPadrao());
             e.setNota(nota);
