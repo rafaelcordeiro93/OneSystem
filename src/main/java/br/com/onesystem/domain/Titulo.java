@@ -7,7 +7,6 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.services.impl.RelatorioContaAbertaImpl;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
 import br.com.onesystem.valueobjects.TipoOperacao;
@@ -16,7 +15,6 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -32,7 +30,7 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
 
     @Column(nullable = false)
     private BigDecimal saldo;
-    
+
     @OneToOne
     private Recepcao recepcao;
 
@@ -54,7 +52,7 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
 
     public Titulo(Long id, Pessoa pessoa, String historico, BigDecimal valor, BigDecimal saldo, Date emissao,
             OperacaoFinanceira operacaoFinanceira, TipoFormaPagRec tipoFormaPagRec, Date vencimento, Recepcao recepcao,
-            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, Fatura fatura, 
+            Cambio cambio, Cotacao cotacao, Nota nota, ConhecimentoDeFrete conhecimentoDeFrete, List<Baixa> baixas, Boolean entrada, Fatura fatura,
             SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
         super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.saldo = saldo;
@@ -134,7 +132,7 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
     }
 
     public String getValorFaturaOuNota() throws DadoInvalidoException {
-        return fatura == null ? getNota().getTotalFormatado(): fatura.getTotalFormatado();
+        return fatura == null ? getNota().getTotalFormatado() : fatura.getTotalFormatado();
     }
 
     @MetodoInacessivelRelatorio
