@@ -10,16 +10,12 @@ import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Recepcao;
 import br.com.onesystem.domain.TipoDeCobranca;
-import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
-import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
 public class BaixaDAO extends GenericDAO<Baixa> {
 
@@ -268,16 +264,16 @@ public class BaixaDAO extends GenericDAO<Baixa> {
     }
 
     public BigDecimal buscarSaldoAnterior(Date data, Conta conta) {
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;
     }
 
     public BigDecimal buscarSaldoAnterior(Date data, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eEntrada().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoOperacaoMatematica();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorDa(data).eSaida().ePorConta(conta).ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().resultadoOperacaoMatematica();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado;
@@ -285,33 +281,26 @@ public class BaixaDAO extends GenericDAO<Baixa> {
 
     public BigDecimal buscarSaldoFinal(Date dataFinal, Conta conta) {
 
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoMenorIgualDa(dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta) {
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).eNaoCancelada().resultadoOperacaoMatematica();
         BigDecimal resultado = entradas.subtract(saidas);
 
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
-        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
-        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoSomaTotal();
+        BigDecimal entradas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoOperacaoMatematica();
+        BigDecimal saidas = selectSomaBaixaValor().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).ePorCaixa(caixa).eNaoCancelada().resultadoOperacaoMatematica();
         BigDecimal resultado = entradas.subtract(saidas);
 
-        return resultado == null ? BigDecimal.ZERO : resultado;
-    }
-
-    public BigDecimal resultadoSomaTotal() {
-        BigDecimal resultado = new ArmazemDeRegistros<BigDecimal>(BigDecimal.class)
-                .resultadoUnicoDaConsulta(getConsulta(), parametros);
-        limpar();
         return resultado == null ? BigDecimal.ZERO : resultado;
     }
 

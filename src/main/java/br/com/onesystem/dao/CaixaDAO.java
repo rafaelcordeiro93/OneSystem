@@ -2,56 +2,35 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Usuario;
-import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.NoResultException;
 
-public class CaixaDAO {
-
-    private String consulta;
-    private BundleUtil msg;
-    private Map<String, Object> parametros;
+public class CaixaDAO extends GenericDAO<Caixa> {
 
     public CaixaDAO() {
+        super(Caixa.class);
         limpar();
     }
 
-    private void limpar() {
-        consulta = "";
-        msg = new BundleUtil();
-        parametros = new HashMap<String, Object>();
-    }
-
-    public CaixaDAO buscarCaixas() {
-        consulta += "select c from Caixa c where c.id > 0 ";
-        return this;
-    }
-
     public CaixaDAO porEmailDeUsuario(String usuario) {
-        consulta += " and c.usuario.pessoa.email = :cEmailDeUsuario ";
+        where += " and caixa.usuario.pessoa.email = :cEmailDeUsuario ";
         parametros.put("cEmailDeUsuario", usuario);
         return this;
     }
 
     public CaixaDAO porUsuario(Usuario usuario) {
-        consulta += " and c.usuario = :cUsuario ";
+        where += " and caixa.usuario = :cUsuario ";
         parametros.put("cUsuario", usuario);
         return this;
     }
 
     public CaixaDAO emAberto() {
-        consulta += " and c.fechamento = null ";
+        where += " and caixa.fechamento = null ";
         return this;
     }
 
     public CaixaDAO porUltimoAberto() {
-        consulta += " and c.abertura in (select max(ct.abertura) from Caixa ct where ct.fechamento = null) ";
+        where += " and caixa.abertura in (select max(ct.abertura) from Caixa ct where ct.fechamento = null) ";
         return this;
     }
 
@@ -74,26 +53,9 @@ public class CaixaDAO {
     }
 
     public CaixaDAO porId(Long id) {
-        consulta += " and c.id = :cId ";
+        where += " and caixa.id = :cId ";
         parametros.put("cId", id);
         return this;
     }
 
-    public List<Caixa> listaDeResultados() {
-        List<Caixa> resultado = new ArmazemDeRegistros<Caixa>(Caixa.class)
-                .listaRegistrosDaConsulta(consulta, parametros);
-        limpar();
-        return resultado;
-    }
-
-    public Caixa resultado() throws DadoInvalidoException {
-        try {
-            Caixa resultado = new ArmazemDeRegistros<Caixa>(Caixa.class)
-                    .resultadoUnicoDaConsulta(consulta, parametros);
-            limpar();
-            return resultado;
-        } catch (NoResultException nre) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
-        }
-    }
 }
