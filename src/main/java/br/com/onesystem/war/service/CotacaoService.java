@@ -12,7 +12,7 @@ import java.util.List;
 public class CotacaoService implements Serializable {
 
     public List<Cotacao> buscarCotacoes() {
-        return new ArmazemDeRegistros<Cotacao>(Cotacao.class).listaTodosOsRegistros();
+        return new CotacaoDAO().listaDeResultados();
     }
 
     public List<Cotacao> buscarCotacoesDoDiaAtual() {

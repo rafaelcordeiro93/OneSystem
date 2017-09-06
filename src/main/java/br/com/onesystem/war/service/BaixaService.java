@@ -61,17 +61,17 @@ public class BaixaService implements Serializable {
 
     public BigDecimal buscarEntradasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
         } else {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoSomaTotal();
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
         }
     }
 
     public BigDecimal buscarSaidasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
         } else {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoSomaTotal().multiply(new BigDecimal(-1));
+            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
         }
     }
 

@@ -3,14 +3,15 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.ContratoDeCambio;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.JPAUtil;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 
-public class ContratoDeCambioDAO {
+public class ContratoDeCambioDAO extends GenericDAO<ContratoDeCambio> {
+
+    public ContratoDeCambioDAO() {
+        super(ContratoDeCambio.class);
+        limpar();
+    }
 
     public List<ContratoDeCambio> buscarContratosDeHoje() {
 //        EntityManager manager = JPAUtil.getEntityManager();
