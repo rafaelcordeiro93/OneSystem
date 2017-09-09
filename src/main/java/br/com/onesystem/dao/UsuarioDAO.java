@@ -16,6 +16,7 @@ public class UsuarioDAO extends GenericDAO<Usuario> implements Serializable{
 
     public UsuarioDAO() {
         super(Usuario.class);
+        limpar();
     }
 
     public UsuarioDAO porNome(Usuario usuario) {

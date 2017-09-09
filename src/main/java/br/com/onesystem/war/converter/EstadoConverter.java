@@ -6,7 +6,6 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Estado;
-import br.com.onesystem.domain.Estado;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.EstadoService;
 import java.io.Serializable;
@@ -17,6 +16,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
+import javax.inject.Inject;
 
 /**
  *
@@ -25,11 +25,14 @@ import javax.faces.convert.FacesConverter;
 @FacesConverter(value = "estadoConverter", forClass = Estado.class)
 public class EstadoConverter implements Converter, Serializable {
 
+    @Inject
+    private EstadoService estadoService;
+    
     @Override
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && value.trim().length() > 0) {
             try {
-                List<Estado> lista = new EstadoService().buscarEstados();
+                List<Estado> lista = estadoService.buscarEstados();
                 if (StringUtils.containsLetter(value)) {
                     for (Estado estado : lista) {
                         if (estado.getNome().equals(value)) {

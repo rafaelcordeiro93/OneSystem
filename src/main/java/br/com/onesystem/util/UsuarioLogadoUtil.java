@@ -14,12 +14,16 @@ import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 @Named
 @ViewScoped //javax.faces.view.ViewScoped;
 public class UsuarioLogadoUtil implements Serializable {
+    
+    @Inject
+    private UsuarioDAO usuarioDAO;
 
     public boolean getPrivilegio(String tipo) throws DadoInvalidoException {
         FacesContext context = FacesContext.getCurrentInstance();
@@ -31,7 +35,7 @@ public class UsuarioLogadoUtil implements Serializable {
         }
         String janela = context.getViewRoot().getViewId();
 
-        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().porEmailString(login).resultado());
+        return buscaPermissoesNoBanco(tipo, janela, usuarioDAO.porEmailString(login).resultado());
     }
 
     public boolean getPrivilegio(String tipo, String j) throws DadoInvalidoException {
@@ -44,14 +48,14 @@ public class UsuarioLogadoUtil implements Serializable {
         }
         String janela = j;
 
-        return buscaPermissoesNoBanco(tipo, janela, new UsuarioDAO().porEmailString(login).resultado());
+        return buscaPermissoesNoBanco(tipo, janela, usuarioDAO.porEmailString(login).resultado());
     }
 
     public boolean buscaPermissoesNoBanco(String tipo, String janela, Usuario usuario) throws DadoInvalidoException {
         List<Privilegio> listaPrivilegios = usuario.getGrupoDePrivilegio().getListaPrivilegios();
         if (usuario.isSupervisor() == true) {//se for supervisor não passa pelas regras 
             return true;
-        }
+        }        
         if (tipo == new BundleUtil().getLabel("Consultar")) {
             return getPrivilegioConsultar(listaPrivilegios, janela);
         }
@@ -123,7 +127,7 @@ public class UsuarioLogadoUtil implements Serializable {
     }
 
     public Usuario getUsuario() {
-        return new UsuarioDAO().porEmailString(getEmailUsuario()).resultado();
+        return usuarioDAO.porEmailString(getEmailUsuario()).resultado();
     }
 
     public String getNomeUsuario() {
