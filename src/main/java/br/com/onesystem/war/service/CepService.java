@@ -4,11 +4,15 @@ import br.com.onesystem.dao.CepDAO;
 import br.com.onesystem.domain.Cep;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class CepService implements Serializable {
 
+    @Inject
+    private CepDAO dao;
+    
     public List<Cep> buscarCeps() {
-        return new CepDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
 }

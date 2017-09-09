@@ -62,7 +62,6 @@ public class LogPhaseListener implements PhaseListener {
             ec.redirect("/OneSystem-war/login.xhtml");
         } else if (login == null && janela.equals("/login.xhtml")) {
         } else if (login.equals("Anonymous") && !janela.equals("/OneSystem-war/configuracaoNecessaria.xhtml")) {//Adicionar funcionalidade de supervisor
-            System.out.println("2");
             carregaDados(janela, session, ec);
             return;
         } else if (janela.contains("selecao") || janela.contains("dialogo")) {//Faz com que as janelas de Selecao nao precisem de permissoes
@@ -99,7 +98,6 @@ public class LogPhaseListener implements PhaseListener {
         Object object = session.getAttribute("onesystem.dadosNecessarios.list");
         if (!pendencias.isEmpty() && object == null) {
             session.setAttribute("onesystem.dadosNecessarios.list", pendencias);
-            System.out.println("Entrou");
             ec.redirect("/OneSystem-war/configuracaoNecessaria.xhtml");
         }
     }
