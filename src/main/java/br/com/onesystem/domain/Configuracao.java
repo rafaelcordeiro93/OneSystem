@@ -3,22 +3,20 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import java.io.Serializable;
+import javax.enterprise.inject.Any;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1,
         sequenceName = "SEQ_CONFIGURACAO", name = "SEQ_CONFIGURACAO")
-@NamedQueries({
-    @NamedQuery(name = "Configuracao.busca", query = "select c from Configuracao c ")})
 public class Configuracao implements Serializable {
 
     @Id

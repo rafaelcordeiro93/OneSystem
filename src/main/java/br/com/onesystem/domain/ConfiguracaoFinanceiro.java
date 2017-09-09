@@ -1,6 +1,7 @@
 package br.com.onesystem.domain;
 
 import java.io.Serializable;
+import javax.enterprise.inject.Any;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,12 +12,10 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOFINANCEIRO",
         name = "SEQ_CONFIGURACAOFINANCEIRO")
-@NamedQueries({
-    @NamedQuery(name = "ConfiguracaoFinanceiro.busca", query = "select c from ConfiguracaoFinanceiro c")
-})
 public class ConfiguracaoFinanceiro implements Serializable {
 
     @Id

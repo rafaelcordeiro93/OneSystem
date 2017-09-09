@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoContabil;
@@ -22,10 +21,6 @@ import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.OperacaoService;
 import java.io.Serializable;
@@ -33,36 +28,46 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
+@Named
 public class DadosNecessarios implements Serializable {
 
     private List<DadosNecessariosBV> pendencias = new ArrayList<>();
     private FacesContext fc = FacesContext.getCurrentInstance();
     private BundleUtil b = new BundleUtil();
-    private ConfiguracaoContabil configuracaoContabil;
-    private ConfiguracaoEstoque configuracaoEstoque;
+
+
+    @Inject
     private Configuracao configuracao;
+
+    @Inject
     private ConfiguracaoVenda configuracaoVenda;
 
-    public void init() {
-        try {
-            configuracaoContabil = new ConfiguracaoContabilService().buscar();
-            configuracaoEstoque = new ConfiguracaoEstoqueService().buscar();
-            configuracao = new ConfiguracaoService().buscar();
-            configuracaoVenda = new ConfiguracaoVendaService().buscar();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
-    }
+    @Inject
+    private ConfiguracaoEstoque configuracaoEstoque;
 
+    @Inject
+    private ConfiguracaoContabil configuracaoContabil;
+
+    @Inject
+    private CotacaoService cotacaoService;
+    
+    @Inject
+    private OperacaoService operacaoService;
+    
     public List<DadosNecessariosBV> valida(String janela) {
-        init();
         // Filial obrigatória para todas as janelas.
-        if (!janela.equals("/dashboard.xhtml") && !janela.equals("/menu/topbar/preferencias/filial.xhtml") && !janela.equals("/configuracaoNecessaria.xhtml")
+        pendencias = new ArrayList<>();
+        
+        if (!janela.equals("/dashboard.xhtml") 
+                && !janela.equals("/menu/topbar/preferencias/filial.xhtml") 
+                && !janela.equals("/configuracaoNecessaria.xhtml")
                 && !janela.equals("/login.xhtml")) {
             getFilial();
             return pendencias;
@@ -267,7 +272,7 @@ public class DadosNecessarios implements Serializable {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Cotacao"), "/menu/financeiro/cotacao.xhtml");
         try {
             if (moeda != null) {
-                Cotacao cotacao = new CotacaoService().getCotacaoPadrao(new Date());
+                Cotacao cotacao = cotacaoService.getCotacaoPadrao(new Date());
                 if (cotacao == null) {
                     throw new FDadoInvalidoException("");
                 }
@@ -313,7 +318,6 @@ public class DadosNecessarios implements Serializable {
     private List<Operacao> getOperacoes() {
         DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Operacao"), "/menu/contabil/operacoes.xhtml");
         try {
-            OperacaoService operacaoService = new OperacaoService();
             List<Operacao> operacoes = operacaoService.buscar();
             if (operacoes.isEmpty()) {
                 throw new NullPointerException();

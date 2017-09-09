@@ -41,7 +41,6 @@ public class Estoque implements Serializable {
     @Min(value = 0, message = "{quantidade_min}")
     @Column(nullable = false)
     private BigDecimal quantidade;
-    @Enumerated(EnumType.STRING)
     @NotNull(message = "{emissao_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
     private Date emissao = new Date();

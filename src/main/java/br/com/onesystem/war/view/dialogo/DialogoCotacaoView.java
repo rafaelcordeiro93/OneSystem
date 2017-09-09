@@ -27,6 +27,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -42,6 +43,9 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     private BigDecimal dinheiro;
     private Movimento movimento;
 
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+    
     @PostConstruct
     public void init() {
         try {
@@ -92,7 +96,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     }
 
     private void inicializaCotacoes(Date emissao, Moeda moedaPadrao) {
-        List<Cotacao> cotacaoLista = new CotacaoDAO().naMaiorEmissao(emissao).listaDeResultados();
+        List<Cotacao> cotacaoLista = cotacaoDAO.naMaiorEmissao(emissao).listaDeResultados();
         for (Cotacao c : cotacaoLista) {
             cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, moedaPadrao));
         }

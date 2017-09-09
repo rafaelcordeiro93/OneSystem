@@ -12,7 +12,6 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.CaixaBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
@@ -29,11 +28,10 @@ import org.primefaces.event.SelectEvent;
 public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializable {
 
     private String estado = "FECHADO";
-    private Configuracao configuracao;
     private List<Cotacao> cotacaoLista;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
     private CotacaoService serviceCotacao;
@@ -41,7 +39,6 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     @PostConstruct
     public void init() {
         limparJanela();
-        iniciarConfiguracoes();
         try {
             populaCampos();//TEM QUE ESTAR LOGADO COM USUARIO VALIDO PARA FUNCIONAR
         } catch (DadoInvalidoException ex) {
@@ -53,14 +50,6 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     public void limparJanela() {
         e = new CaixaBV();
         estado = null;
-    }
-
-    private void iniciarConfiguracoes() {
-        try {
-            configuracao = configuracaoService.buscar();
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     private void inicializaCotacoes() {
@@ -164,14 +153,6 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
 
     public void setServiceCotacao(CotacaoService serviceCotacao) {
         this.serviceCotacao = serviceCotacao;
-    }
-
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
     }
 
 }

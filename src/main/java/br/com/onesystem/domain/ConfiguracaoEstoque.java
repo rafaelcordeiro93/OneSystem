@@ -5,6 +5,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import javax.enterprise.inject.Any;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,12 +16,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOESTOQUE",
         name = "SEQ_CONFIGURACAOESTOQUE")
-@NamedQueries({
-    @NamedQuery(name = "ConfiguracaoEstoque.busca", query = "select c from ConfiguracaoEstoque c")
-})
 public class ConfiguracaoEstoque implements Serializable {
 
     @Id

@@ -1,7 +1,7 @@
 
 import br.com.onesystem.domain.builder.EstadoBuilder;
 import br.com.onesystem.domain.builder.PaisBuilder;
-import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AdicionaDAOConsole;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cep;
@@ -87,30 +87,30 @@ public class DadosIniciais {
 
         //País ====================================================
         Pais pais = new PaisBuilder().comNome("Paraguai").comCodigoPais(new Long(12)).comCodigoReceita(new Long(32)).construir();
-        new AdicionaDAO<>().adiciona(pais);
+        new AdicionaDAOConsole<>().adiciona(pais);
 
         //Estado ====================================================
         Estado estado = new EstadoBuilder().comNome("Alto Paraná").comPais(pais).comSigla("CD").construir();
-        new AdicionaDAO<>().adiciona(estado);
+        new AdicionaDAOConsole<>().adiciona(estado);
 
         //Cidade ====================================================
         Cidade city = new CidadeBuilder().comNome("Ciudad del Leste").comEstado(estado).construir();
-        new AdicionaDAO<>().adiciona(city);
+        new AdicionaDAOConsole<>().adiciona(city);
 
         //Cep =======================================================
         Cep cep = new CepBuilder().comCep("85950-000").comCidade(city).construir();
-        new AdicionaDAO<>().adiciona(cep);
+        new AdicionaDAOConsole<>().adiciona(cep);
 
         Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "rauber@rrminds.com", null, "768");
         Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "cordeiro@rrminds.com", null, "635A");
-        new AdicionaDAO<Pessoa>().adiciona(cordeiro);
-        new AdicionaDAO<Pessoa>().adiciona(rauber);
+        new AdicionaDAOConsole<Pessoa>().adiciona(cordeiro);
+        new AdicionaDAOConsole<Pessoa>().adiciona(rauber);
 
         GrupoDePrivilegio grupoDePrivilegio = new GrupoDePrivilegio(null, "Administrador");
-        new AdicionaDAO<GrupoDePrivilegio>().adiciona(grupoDePrivilegio);
+        new AdicionaDAOConsole<GrupoDePrivilegio>().adiciona(grupoDePrivilegio);
 
         // -- Adiciona Módulos
-        AdicionaDAO<Modulo> daoModulo = new AdicionaDAO<>();
+        AdicionaDAOConsole<Modulo> daoModulo = new AdicionaDAOConsole<>();
 
         Modulo arq = new Modulo(null, "Arquivo");
         Modulo fin = new Modulo(null, "Financeiro");
@@ -135,7 +135,7 @@ public class DadosIniciais {
         daoModulo.adiciona(vendas);
 
         // -- Adiciona Módulos
-        AdicionaDAO<Janela> daoJanela = new AdicionaDAO<>();
+        AdicionaDAOConsole<Janela> daoJanela = new AdicionaDAOConsole<>();
 
         //Modulo de Arquivo
         Janela dashboard = new Janela(null, "Dashbord", "/dashboard.xhtml", arq);
@@ -382,7 +382,7 @@ public class DadosIniciais {
         daoJanela.adiciona(jlogin);
 
         // -- Adiciona Privilégios
-        AdicionaDAO<Privilegio> daoPrivilegio = new AdicionaDAO<>();
+        AdicionaDAOConsole<Privilegio> daoPrivilegio = new AdicionaDAOConsole<>();
         List<Privilegio> listaPrivilegios = Arrays.asList(
                 new Privilegio(null, dashboard, true, true, true, true, grupoDePrivilegio),
                 new Privilegio(null, jpessoa, true, true, true, true, grupoDePrivilegio),
@@ -492,10 +492,10 @@ public class DadosIniciais {
         }
         Usuario usercordeiro = new Usuario(null, cordeiro, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, TipoCorMenu.CINZA, false);
         Usuario userrauber = new Usuario(null, rauber, "81dc9bdb52d04dc20036dbd8313ed055", grupoDePrivilegio, true, "steel", "blue", true, TipoCorMenu.CINZA, false);
-        new AdicionaDAO<Usuario>().adiciona(usercordeiro);
-        new AdicionaDAO<Usuario>().adiciona(userrauber);
+        new AdicionaDAOConsole<Usuario>().adiciona(usercordeiro);
+        new AdicionaDAOConsole<Usuario>().adiciona(userrauber);
         // -- Adiciona Grupo Financeiro
-        AdicionaDAO<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAO<>();
+        AdicionaDAOConsole<GrupoFinanceiro> daoGrupoFinanceiro = new AdicionaDAOConsole<>();
 
         GrupoFinanceiro gfDAjuste = new GrupoFinanceiro(null, bundle.getLabel("Ajuste_Saldo_Inicial"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.OUTRAS);
         GrupoFinanceiro gfDDevVendas = new GrupoFinanceiro(null, "(-) " + bundle.getLabel("Devolucoes_de_Vendas"), NaturezaFinanceira.DESPESA, ClassificacaoFinanceira.DEDUCOES_DE_RECEITA_BRUTA);
@@ -548,7 +548,7 @@ public class DadosIniciais {
         daoGrupoFinanceiro.adiciona(gfROutrasOP);
 
         // -- Adiciona TipoDespesa
-        AdicionaDAO<TipoDespesa> daoDespesa = new AdicionaDAO<>();
+        AdicionaDAOConsole<TipoDespesa> daoDespesa = new AdicionaDAOConsole<>();
 
         TipoDespesa descontosConcedidos = new TipoDespesa(null, bundle.getLabel("Descontos_Concedidos"), gfDCustoVariavel);
         TipoDespesa jurosPagos = new TipoDespesa(null, bundle.getLabel("Juros_Pagos"), gfDCustoVariavel);
@@ -638,7 +638,7 @@ public class DadosIniciais {
         daoDespesa.adiciona(new TipoDespesa(null, bundle.getLabel("Compras_Recebimento_Futuro"), gfDEstoque));
 
         // -- Adiciona Receitas
-        AdicionaDAO<TipoReceita> daoReceita = new AdicionaDAO<>();
+        AdicionaDAOConsole<TipoReceita> daoReceita = new AdicionaDAOConsole<>();
 
         TipoReceita descontosRecebidos = new TipoReceita(null, bundle.getLabel("Descontos_Recebidos"), gfRFinan);
         TipoReceita jurosRecebidos = new TipoReceita(null, bundle.getLabel("Juros_Recebidos"), gfRFinan);
@@ -669,7 +669,7 @@ public class DadosIniciais {
         daoReceita.adiciona(servicoAPrazo);
 
         // -- Adiciona Bancos
-        AdicionaDAO<Banco> daoBanco = new AdicionaDAO<>();
+        AdicionaDAOConsole<Banco> daoBanco = new AdicionaDAOConsole<>();
 
         daoBanco.adiciona(new Banco(null, "246", "Banco ABC Brasil S.A.", "www.abcbrasil.com.br"));
         daoBanco.adiciona(new Banco(null, "75", "Banco ABN AMRO S.A.", "www.bancocr2.com.br"));
@@ -804,14 +804,14 @@ public class DadosIniciais {
         Moeda dolar = new Moeda(null, "Dólar", "$", "Dólares", "Cent", "Cents", TipoBandeira.ESTADOS_UNIDOS);
         Moeda guarani = new Moeda(null, "Guaraní", "Gs", "Guaraníes", "centimo", "centimos", TipoBandeira.PARAGUAI);
 
-        AdicionaDAO<Moeda> daoMoeda = new AdicionaDAO<Moeda>();
+        AdicionaDAOConsole<Moeda> daoMoeda = new AdicionaDAOConsole<Moeda>();
         daoMoeda.adiciona(real);
         daoMoeda.adiciona(dolar);
         daoMoeda.adiciona(guarani);
 
         //Conta de Estoque
         // ---------------------------------------------------------------------
-        AdicionaDAO<ContaDeEstoque> contaDeEstoqueDao = new AdicionaDAO<ContaDeEstoque>();
+        AdicionaDAOConsole<ContaDeEstoque> contaDeEstoqueDao = new AdicionaDAOConsole<ContaDeEstoque>();
         ContaDeEstoque contaDaEmpresa = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa")).construir();
         ContaDeEstoque contaEstoqueDaEmpresa = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa_em_posse_da_empresa")).construir();
         ContaDeEstoque contaDaEmpresaEmPosseDeTerceiros = new ContaDeEstoqueBuilder().comNome(bundle.getLabel("Estoque_da_empresa_em_posse_de_terceiros")).construir();
@@ -825,26 +825,26 @@ public class DadosIniciais {
         // Deposito
         // ---------------------------------------------------------------------
         Deposito deposito = new Deposito(null, "Depósito Exemplo");
-        new AdicionaDAO<>().adiciona(deposito);
+        new AdicionaDAOConsole<>().adiciona(deposito);
 
         //Configuracao
         // ---------------------------------------------------------------------
         Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO);
-        new AdicionaDAO<>().adiciona(configuracao);
+        new AdicionaDAOConsole<>().adiciona(configuracao);
 
         //ConfiguracaoEstoque
         // ---------------------------------------------------------------------
         ConfiguracaoEstoque configuracaoEstoque = new ConfiguracaoEstoque(null, contaDaEmpresa, null, deposito);
-        new AdicionaDAO<>().adiciona(configuracaoEstoque);
+        new AdicionaDAOConsole<>().adiciona(configuracaoEstoque);
 
         //ConfiguracaoContabil
         // ---------------------------------------------------------------------
         ConfiguracaoContabil configuracaoContabil = new ConfiguracaoContabil(null, jurosRecebidos, multasRecebidas, descontosRecebidos, receitaCambial, jurosPagos, multasPagas, descontosConcedidos, despesaCambial);
-        new AdicionaDAO<>().adiciona(configuracaoContabil);
+        new AdicionaDAOConsole<>().adiciona(configuracaoContabil);
 
         // Conta
         // ---------------------------------------------------------------------
-        AdicionaDAO<Conta> contaDao = new AdicionaDAO<Conta>();
+        AdicionaDAOConsole<Conta> contaDao = new AdicionaDAOConsole<Conta>();
         Conta contaReal = new Conta(null, "C/C 1222", banco, real);
         Conta contaDolar = new Conta(null, "C/C 1224", banco, dolar);
         contaDao.adiciona(contaReal);
@@ -853,33 +853,33 @@ public class DadosIniciais {
         //Cotacao
         // ---------------------------------------------------------------------
         Cotacao cotacao = new Cotacao(null, BigDecimal.ZERO, new Date(), contaDolar);
-        new AdicionaDAO<>().adiciona(cotacao);
+        new AdicionaDAOConsole<>().adiciona(cotacao);
 
         // Unidade De Medida Item
         // ---------------------------------------------------------------------
         UnidadeMedidaItem unidade = new UnidadeMedidaItem(null, bundle.getLabel("Unidade"), "UN", 0);
-        new AdicionaDAO<UnidadeMedidaItem>().adiciona(unidade);
+        new AdicionaDAOConsole<UnidadeMedidaItem>().adiciona(unidade);
 
         // TabelaDeTributacao
         // ---------------------------------------------------------------------
         TabelaDeTributacao tabelaDeTributação = new TabelaDeTributacao(null, new BigDecimal(10), "IVA 10%");
-        new AdicionaDAO<TabelaDeTributacao>().adiciona(tabelaDeTributação);
+        new AdicionaDAOConsole<TabelaDeTributacao>().adiciona(tabelaDeTributação);
 
         // Grupo Fiscal
         // ---------------------------------------------------------------------
         GrupoFiscal grupoFiscal = new GrupoFiscal(null, "IVA 10%", tabelaDeTributação);
-        new AdicionaDAO<GrupoFiscal>().adiciona(grupoFiscal);
+        new AdicionaDAOConsole<GrupoFiscal>().adiciona(grupoFiscal);
 
         // Item
         Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,
                 grupoFiscal, unidade, null, null, null, null, null, null, null);
-        new AdicionaDAO<Item>().adiciona(item);
+        new AdicionaDAOConsole<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");
 
         //Operação
         //------------------------------------------------------------------------
-        AdicionaDAO<Operacao> operacaoDao = new AdicionaDAO<>();
+        AdicionaDAOConsole<Operacao> operacaoDao = new AdicionaDAOConsole<>();
 
         Operacao compraNormal = new OperacaoBuilder()
                 .comNome(bundle.getLabel("Compra_Normal"))
@@ -918,7 +918,7 @@ public class DadosIniciais {
 
         //Cfop
         //------------------------------------------------------------------------
-        AdicionaDAO<Cfop> cfopDao = new AdicionaDAO<>();
+        AdicionaDAOConsole<Cfop> cfopDao = new AdicionaDAOConsole<>();
 
         Cfop cfop = new CfopBuilder()
                 .comCfop(new Long(5102))
@@ -935,7 +935,7 @@ public class DadosIniciais {
 
         //SituacaoFiscal
         //------------------------------------------------------------------------
-        AdicionaDAO<SituacaoFiscal> situacaoFiscalDao = new AdicionaDAO<>();
+        AdicionaDAOConsole<SituacaoFiscal> situacaoFiscalDao = new AdicionaDAOConsole<>();
         SituacaoFiscal situacaoFiscal = new SituacaoFiscalBuilder()
                 .comCFOP(cfop)
                 .comTabelaDeTributacao(tabelaDeTributação)
@@ -947,7 +947,7 @@ public class DadosIniciais {
         situacaoFiscalDao.adiciona(situacaoFiscal);
 
         //Modelo de Relatórios
-        AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAO<ModeloDeRelatorio>();
+        AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO = new AdicionaDAOConsole<ModeloDeRelatorio>();
 
         relatorioDeContasAPagar(bundle, modeloDeRelatorioDAO);
         relatorioDeContasAReceber(bundle, modeloDeRelatorioDAO);
@@ -974,7 +974,7 @@ public class DadosIniciais {
 
     }
 
-    private static ModeloDeRelatorio relatorioDeContasAPagar(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException {
+    private static ModeloDeRelatorio relatorioDeContasAPagar(BundleUtil bundle, AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException {
         //Relatório de Contas a Pagar.
         //========================================================
         ModeloDeRelatorio relatorioDeContasAPagar = new ModeloDeRelatorioBuilder()
@@ -1003,7 +1003,7 @@ public class DadosIniciais {
         return relatorioDeContasAPagar;
     }
 
-    private static void relatorioDeContasAReceber(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
+    private static void relatorioDeContasAReceber(BundleUtil bundle, AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
         //Relatório de Contas a Receber
         //========================================================
         ModeloDeRelatorio relatorioDeContasAReceber = new ModeloDeRelatorioBuilder()
@@ -1036,7 +1036,7 @@ public class DadosIniciais {
         modeloDeRelatorioDAO.adiciona(relatorioDeContasAReceber);
     }
 
-    private static void relatorioDeContasFixasAPagar(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
+    private static void relatorioDeContasFixasAPagar(BundleUtil bundle, AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO) throws ConstraintViolationException, DadoInvalidoException {
         //Relatório de Contas Fixas a Pagar.
         //========================================================
         ModeloDeRelatorio relatorioDeContasFixasAPagar = new ModeloDeRelatorioBuilder()
@@ -1069,7 +1069,7 @@ public class DadosIniciais {
         modeloDeRelatorioDAO.adiciona(relatorioDeContasFixasAPagar);
     }
 
-    private static void relatorioDeContasFixasAReceber(BundleUtil bundle, AdicionaDAO<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException, ConstraintViolationException {
+    private static void relatorioDeContasFixasAReceber(BundleUtil bundle, AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException, ConstraintViolationException {
         //Relatório de Contas Fixas a Receber
         //========================================================
         ModeloDeRelatorio relatorioDeContasFixasAReceber = new ModeloDeRelatorioBuilder()
@@ -1140,7 +1140,7 @@ public class DadosIniciais {
         extratoDeDespesas.addColunaExibida(valor);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(extratoDeDespesas);
+        new AdicionaDAOConsole<>().adiciona(extratoDeDespesas);
     }
 
     private static void extratoDeReceitas() throws ConstraintViolationException, DadoInvalidoException {
@@ -1180,7 +1180,7 @@ public class DadosIniciais {
         extratoDeReceitas.addColunaExibida(valor);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(extratoDeReceitas);
+        new AdicionaDAOConsole<>().adiciona(extratoDeReceitas);
     }
 
     private static void relatorioDeVendaParaEntregaFutura() throws ConstraintViolationException, DadoInvalidoException {
@@ -1215,7 +1215,7 @@ public class DadosIniciais {
         relatorioDeVendaParaEntregaFutura.addColunaExibida(totalNota);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeVendaParaEntregaFutura);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeVendaParaEntregaFutura);
     }
 
     private static void relatorioDeDevolucaoParaFornecedores() throws ConstraintViolationException, DadoInvalidoException {
@@ -1250,7 +1250,7 @@ public class DadosIniciais {
         relatorioDeDevolucaoParaFornecedores.addColunaExibida(totalNota);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeDevolucaoParaFornecedores);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeDevolucaoParaFornecedores);
     }
 
     private static void relatorioDeCompras(BundleUtil bundle) throws ConstraintViolationException, DadoInvalidoException {
@@ -1285,7 +1285,7 @@ public class DadosIniciais {
         relatorioDeCompras.addColunaExibida(totalNota);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeCompras);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeCompras);
     }
 
     private static void relatorioDeBalancoFisico(BundleUtil bundle) throws ConstraintViolationException, DadoInvalidoException {
@@ -1323,7 +1323,7 @@ public class DadosIniciais {
         relatorioDeItem.addColunaExibida(itemCustoMedio);
         relatorioDeItem.addColunaExibida(itemCustoTotal);
 
-        new AdicionaDAO<>().adiciona(relatorioDeItem);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeItem);
     }
 
     private static void relatorioDeAniversariantes(BundleUtil bundle) throws DadoInvalidoException, ConstraintViolationException {
@@ -1352,7 +1352,7 @@ public class DadosIniciais {
         relatorioDeAniversariantes.addColunaExibida(pessoaTelefone);
         relatorioDeAniversariantes.addColunaExibida(pessoaCidadeNome);
 
-        new AdicionaDAO<>().adiciona(relatorioDeAniversariantes);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeAniversariantes);
     }
 
     private static void relatorioDeVendasEmitidas(BundleUtil bundle) throws DadoInvalidoException, ConstraintViolationException {
@@ -1388,7 +1388,7 @@ public class DadosIniciais {
         relatorioDeVendaDeMercadorias.addColunaExibida(totalNota);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeVendaDeMercadorias);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeVendaDeMercadorias);
     }
 
     public static void relatorioDeDevolucaoDeClientes(BundleUtil bundle) throws ConstraintViolationException, DadoInvalidoException {
@@ -1422,7 +1422,7 @@ public class DadosIniciais {
         relatorioDeNotasDeDevolucaoDeClientes.addColunaExibida(totalNota);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeNotasDeDevolucaoDeClientes);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeNotasDeDevolucaoDeClientes);
     }
 
     private static void relatorioDeMercadoriasVendidas() throws ConstraintViolationException, DadoInvalidoException {
@@ -1461,7 +1461,7 @@ public class DadosIniciais {
         relatorioDeMercadoriasVendidas.addColunaExibida(total);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeMercadoriasVendidas);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeMercadoriasVendidas);
     }
 
     public static void relatorioDeChequesRecebidosAbertos() throws ConstraintViolationException, DadoInvalidoException {
@@ -1496,7 +1496,7 @@ public class DadosIniciais {
         relatorioDeChequesRecebidosAbertos.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesRecebidosAbertos);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesRecebidosAbertos);
     }
 
     public static void relatorioDeChequesRecebidosDescontados() throws ConstraintViolationException, DadoInvalidoException {
@@ -1531,7 +1531,7 @@ public class DadosIniciais {
         relatorioDeChequesDescontados.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesDescontados);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesDescontados);
     }
 
     public static void relatorioDeChequesRecebidosCancelados() throws ConstraintViolationException, DadoInvalidoException {
@@ -1566,7 +1566,7 @@ public class DadosIniciais {
         relatorioDeChequesCancelados.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesCancelados);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesCancelados);
     }
 
     public static void relatorioDeChequesRecebidosDevolvidos() throws ConstraintViolationException, DadoInvalidoException {
@@ -1601,7 +1601,7 @@ public class DadosIniciais {
         relatorioDeChequesDevolvidos.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesDevolvidos);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesDevolvidos);
     }
 
     public static void relatorioDeChequesEmitidosAbertos() throws ConstraintViolationException, DadoInvalidoException {
@@ -1636,7 +1636,7 @@ public class DadosIniciais {
         relatorioDeChequesRecebidosAbertos.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesRecebidosAbertos);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesRecebidosAbertos);
     }
 
     public static void relatorioDeChequesEmitidosDescontados() throws ConstraintViolationException, DadoInvalidoException {
@@ -1671,7 +1671,7 @@ public class DadosIniciais {
         relatorioDeChequesDescontados.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesDescontados);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesDescontados);
     }
 
     public static void relatorioDeChequesEmitidosCancelados() throws ConstraintViolationException, DadoInvalidoException {
@@ -1706,7 +1706,7 @@ public class DadosIniciais {
         relatorioDeChequesCancelados.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesCancelados);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesCancelados);
     }
 
     public static void relatorioDeChequesEmitidosDevolvidos() throws ConstraintViolationException, DadoInvalidoException {
@@ -1741,7 +1741,7 @@ public class DadosIniciais {
         relatorioDeChequesDevolvidos.addColunaExibida(emissao);
 
         //Adiciona no Banco
-        new AdicionaDAO<>().adiciona(relatorioDeChequesDevolvidos);
+        new AdicionaDAOConsole<>().adiciona(relatorioDeChequesDevolvidos);
 
     }
 

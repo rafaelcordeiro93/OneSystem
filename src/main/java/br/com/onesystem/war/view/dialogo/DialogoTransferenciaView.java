@@ -4,6 +4,7 @@ import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
@@ -19,7 +20,6 @@ import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.builder.TransferenciaBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,7 +30,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -49,7 +48,13 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
     private List<Cotacao> cotacaoLista;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private Configuracao configuracao;
+
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private ContaDAO contaDAO;
 
     @PostConstruct
     public void init() {
@@ -59,25 +64,22 @@ public class DialogoTransferenciaView extends BasicMBImpl<Transferencia, Transfe
 
     @Override
     public void limparJanela() {
-        try{
-        t = null;
-        e = new TransferenciaBV();
-        e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-        baixas = new ModelList<>();
-        limparBaixa();
-        }catch(DadoInvalidoException die){
+        try {
+            t = null;
+            e = new TransferenciaBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            baixas = new ModelList<>();
+            limparBaixa();
+        } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
     public void inicializar() {
-        try {
-            e.setEmissao(new Date());
-            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-            cotacaoLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            contaComCotacao = new ContaDAO().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        } catch (DadoInvalidoException die) {
-        }
+        e.setEmissao(new Date());
+        cotacaoPadrao = cotacaoDAO.porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+        cotacaoLista = cotacaoDAO.naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+        contaComCotacao = contaDAO.comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
     }
 
     public void abrirDialogo() {

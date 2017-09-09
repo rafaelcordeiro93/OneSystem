@@ -5,12 +5,10 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Log;
-import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -23,7 +21,7 @@ import org.hibernate.exception.ConstraintViolationException;
 @Stateless
 public class AdicionaDAO<T> {
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "alkatar")
     private EntityManager em;
 
     public AdicionaDAO() {
@@ -40,18 +38,14 @@ public class AdicionaDAO<T> {
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                em.getTransaction().rollback();
                 throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
             }
-            em.getTransaction().rollback();
             throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
             System.out.println("Erro: " + ex.getMessage());
-            em.getTransaction().rollback();
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             System.out.println("Verifique Lista do toString()");
-            em.getTransaction().rollback();
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         } finally {
 //            em.close(); Comentado na alteração de versão do Hibernate para 5.2

@@ -7,9 +7,7 @@ import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.war.builder.ConfiguracaoBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
@@ -27,19 +25,17 @@ import org.primefaces.event.SelectEvent;
 public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> implements Serializable {
 
     private ConfiguracaoBV configuracaoBV;
-    private Configuracao configuracao;
 
     @Inject
-    private ConfiguracaoService service;
+    private Configuracao configuracao;
 
     @PostConstruct
     public void init() {
         try {
-            configuracao = service.buscar();
             if (configuracao != null) {
                 configuracaoBV = new ConfiguracaoBV(configuracao);
             }
-        } catch (EDadoInvalidoException ex) {
+        } catch (NullPointerException ex) {
             configuracaoBV = new ConfiguracaoBV();
         }
     }
@@ -91,14 +87,6 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> 
 
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
-    }
-
-    public ConfiguracaoService getService() {
-        return service;
-    }
-
-    public void setService(ConfiguracaoService service) {
-        this.service = service;
     }
 
     @Override

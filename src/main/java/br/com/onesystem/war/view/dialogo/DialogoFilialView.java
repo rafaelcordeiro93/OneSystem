@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -25,6 +26,9 @@ public class DialogoFilialView extends BasicMBImpl<Filial, FilialBV> implements 
     private Filial filial;
     private List<Filial> filiais;
 
+    @Inject
+    private FilialDAO dao;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -44,7 +48,7 @@ public class DialogoFilialView extends BasicMBImpl<Filial, FilialBV> implements 
     }
 
     private void popularLista() {
-        filiais = new FilialDAO().listaDeResultados();
+        filiais = dao.listaDeResultados();
     }
 
     public void reloadPage() throws IOException {

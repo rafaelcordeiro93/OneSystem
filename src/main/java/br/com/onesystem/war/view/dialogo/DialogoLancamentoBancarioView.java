@@ -3,6 +3,7 @@ package br.com.onesystem.war.view.dialogo;
 import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
@@ -38,7 +39,13 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
     private Boolean yesNoRadio;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private Configuracao configuracao;
+
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private ContaDAO contaDAO;
 
     @PostConstruct
     public void init() {
@@ -48,26 +55,22 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
 
     @Override
     public void limparJanela() {
-        try{
-        t = null;
-        e = new LancamentoBancarioBV();
-        e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-        yesNoRadio = true;
-        }catch(DadoInvalidoException die){
+        try {
+            t = null;
+            e = new LancamentoBancarioBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            yesNoRadio = true;
+        } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
     public void inicializar() {
-        try {
-            e.setEmissao(new Date());
-            e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
-            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-            cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            contaComCotacaoBancaria = new ContaDAO().comBanco().listaDeResultados();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
+        e.setEmissao(new Date());
+        e.setTipoLancamentoBancario(TipoLancamentoBancario.LANCAMENTO);
+        cotacaoPadrao = cotacaoDAO.porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+        cotacaoBancariaLista = cotacaoDAO.naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+        contaComCotacaoBancaria = contaDAO.comBanco().listaDeResultados();
     }
 
     public void abrirDialogo() {
@@ -142,14 +145,6 @@ public class DialogoLancamentoBancarioView extends BasicMBImpl<LancamentoBancari
 
     public void setCotacaoBancariaLista(List<Cotacao> cotacaoBancariaLista) {
         this.cotacaoBancariaLista = cotacaoBancariaLista;
-    }
-
-    public ConfiguracaoService getServiceConf() {
-        return serviceConf;
-    }
-
-    public void setServiceConf(ConfiguracaoService serviceConf) {
-        this.serviceConf = serviceConf;
     }
 
     public Boolean getYesNoRadio() {

@@ -10,10 +10,7 @@ import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -21,19 +18,23 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
-@Stateless
-public class RemoveDAO<T> {
+public class RemoveDAOConsole<T> {
 
-    @PersistenceContext(unitName = "alkatar")
-    private EntityManager em;
+    private EntityManager em = JPAUtil.getEntityManager();
 
     public void remove(T t, Long id) throws PersistenceException, DadoInvalidoException {
 
         try {
 
+            // abre transacao
+            em.getTransaction().begin();
+
             // persiste o objeto e log do mesmo
             em.remove(em.find(t.getClass(), id));
             em.persist(new Log("Excluído: " + t, TipoTransacao.EXCLUSAO));
+
+            // commita a transacao
+            em.getTransaction().commit();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

@@ -7,9 +7,6 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.valueobjects.TipoOperacao;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -24,23 +21,12 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEstoqueBV> implements Serializable {
 
-    private Configuracao configuracao;
-
     @Inject
-    private ConfiguracaoService serviceConfigurcao;
+    private Configuracao configuracao;
 
     @PostConstruct
     public void init() {
-        inicializarConfiguracoes();
         limparJanela();
-    }
-
-    private void inicializarConfiguracoes() {
-        try {
-            configuracao = serviceConfigurcao.buscar();
-        } catch (EDadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     @Override

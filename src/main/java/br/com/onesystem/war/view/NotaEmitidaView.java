@@ -116,8 +116,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private ItemDeNotaBV itemEmitido;
     private ItemDeNota itemEmitidoSelecionado;
     private EstoqueBV estoqueBV;
-    private Configuracao configuracao;
-    private ConfiguracaoVenda configuracaoVenda;
     private ValorPorCotacaoBV cotacaoValoresSelecionado;
     private List<Cotacao> cotacaoLista;
     private List<ValorPorCotacaoBV> cotacoes;
@@ -133,16 +131,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private boolean editarItensEParcelas;
     private Comanda comandaSelecionada;
     private Condicional condicionalSelecionada;
-    private ConfiguracaoEstoque configuracaoEstoque;
     private LayoutDeImpressao layout;
     private LayoutDeImpressao layoutTitulo;
     private boolean buscouDeposito = false;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
-    private ConfiguracaoVendaService configuracaoVendaService;
+    private ConfiguracaoVenda configuracaoVenda;
 
     @Inject
     private CotacaoService service;
@@ -154,7 +151,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private EstoqueService serviceEstoque;
 
     @Inject
-    private ConfiguracaoEstoqueService confEstoqueService;
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     @Inject
     private LayoutDeImpressaoService serviceLayout;
@@ -169,9 +166,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     private void iniciarConfiguracoes() {
         try {
-            configuracao = configuracaoService.buscar();
-            configuracaoVenda = configuracaoVendaService.buscar();
-            configuracaoEstoque = confEstoqueService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -1242,14 +1236,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         this.cobrancas = cobrancas;
     }
 
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
-    }
-
     public CotacaoService getService() {
         return service;
     }
@@ -1356,14 +1342,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void setConfiguracaoVenda(ConfiguracaoVenda configuracaoVenda) {
         this.configuracaoVenda = configuracaoVenda;
-    }
-
-    public ConfiguracaoVendaService getConfiguracaoVendaService() {
-        return configuracaoVendaService;
-    }
-
-    public void setConfiguracaoVendaService(ConfiguracaoVendaService configuracaoVendaService) {
-        this.configuracaoVendaService = configuracaoVendaService;
     }
 
     public CreditoService getCreditoService() {

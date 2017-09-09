@@ -8,6 +8,7 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Coluna;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.TipoDeBusca;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.NoResultException;
 
 /**
@@ -26,7 +28,8 @@ import javax.persistence.NoResultException;
  * @author Rafael Fernando Rauber
  * @param <T>
  */
-public abstract class GenericDAO<T> {
+@Named
+public abstract class GenericDAO<T> implements Serializable{
 
     private T t;
     private Class clazz;
@@ -73,9 +76,13 @@ public abstract class GenericDAO<T> {
 
     public T resultado() {
         try {
-            T resultado = (T) armazem.daClasse((Class<T>) clazz).resultadoUnicoDaConsulta(getConsulta(), parametros);
-            limpar();
-            return resultado;
+            Object resultado = armazem.daClasse((Class<T>) clazz).resultadoUnicoDaConsulta(getConsulta(), parametros);
+            if (resultado != null) {
+                limpar();
+                return (T) resultado;
+            } else {
+                return null;
+            }
         } catch (NoResultException nre) {
             return null;
         }

@@ -4,7 +4,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Usuario;
@@ -13,7 +12,9 @@ import br.com.onesystem.util.MD5Util;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.service.CaixaService;
 import br.com.onesystem.war.service.FilialService;
+import br.com.onesystem.war.service.UsuarioService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
@@ -32,18 +33,18 @@ public class LoginView implements Serializable {
 
     private String login;
     private String senha;
-    private List<Usuario> listaDeUsuarios;
+    private List<Usuario> listaDeUsuarios = new ArrayList<>();
     private String mensagem = null;
 
     @Inject
-    private CaixaService service;
+    private CaixaService caixaService;
 
     @Inject
     private FilialService filialService;
 
     @Inject
-    private ArmazemDeRegistros<Usuario> armazem;
-
+    private UsuarioService usuarioService;
+    
     public String logar() {
         try {
             if (!listaDeUsuarios.isEmpty()) {
@@ -58,8 +59,8 @@ public class LoginView implements Serializable {
                         session.setAttribute("minds.nome.token", usuarioCadastrado.getPessoa().getNome());
                         session.setAttribute("minds.GrupoPV.token", usuarioCadastrado.getGrupoDePrivilegio().getNome());
 
-                        Caixa caixa = service.getCaixaAbertoDo(usuarioCadastrado);
-                        if (service.getCaixaAbertoDo(usuarioCadastrado) != null) {
+                        Caixa caixa = caixaService.getCaixaAbertoDo(usuarioCadastrado);
+                        if (caixaService.getCaixaAbertoDo(usuarioCadastrado) != null) {
                             SessionUtil.put(caixa, "caixa", FacesContext.getCurrentInstance());
                         }
 
@@ -86,7 +87,7 @@ public class LoginView implements Serializable {
 
     @PostConstruct
     public void construct() {
-        listaDeUsuarios = armazem.daClasse(Usuario.class).listaTodosOsRegistros();
+        listaDeUsuarios = usuarioService.buscarUsuarios();
         FacesContext context = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
         session.removeAttribute("minds.login.token");

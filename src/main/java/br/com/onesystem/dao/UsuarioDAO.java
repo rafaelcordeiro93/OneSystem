@@ -6,12 +6,13 @@ package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.Usuario;
+import java.io.Serializable;
 
 /**
  *
  * @author Rafael-Pc
  */
-public class UsuarioDAO extends GenericDAO<Usuario> {
+public class UsuarioDAO extends GenericDAO<Usuario> implements Serializable{
 
     public UsuarioDAO() {
         super(Usuario.class);

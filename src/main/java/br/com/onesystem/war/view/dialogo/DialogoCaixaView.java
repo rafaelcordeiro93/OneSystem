@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -26,6 +27,9 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     private Caixa caixa;
     private List<Caixa> caixas;
 
+    @Inject
+    private CaixaDAO dao;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -45,7 +49,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     private void popularLista() {
-        caixas = new CaixaDAO().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
+        caixas = dao.porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
     }
 
     public void reloadPage() throws IOException {

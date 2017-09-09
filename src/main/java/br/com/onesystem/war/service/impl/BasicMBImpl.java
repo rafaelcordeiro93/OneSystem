@@ -9,6 +9,7 @@ import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -21,6 +22,15 @@ public abstract class BasicMBImpl<T, E> {
 
     protected T t; //Objeto da persistência
     protected E e; //BuilderView da View
+
+    @Inject
+    private AdicionaDAO<T> adicionaDAO;
+
+    @Inject
+    private AtualizaDAO<T> atualizaDAO;
+
+    @Inject
+    private RemoveDAO<T> removeDAO;
 
     public abstract void selecionar(SelectEvent event);
 
@@ -45,13 +55,13 @@ public abstract class BasicMBImpl<T, E> {
     }
 
     public void addNoBanco(T objeto) throws DadoInvalidoException {
-        new AdicionaDAO<>().adiciona(objeto);
+        adicionaDAO.adiciona(objeto);
         InfoMessage.adicionado();
         limparJanela();
     }
 
     public void addNoBanco() throws DadoInvalidoException {
-        new AdicionaDAO<>().adiciona(t);
+        adicionaDAO.adiciona(t);
         InfoMessage.adicionado();
         limparJanela();
     }
@@ -70,13 +80,13 @@ public abstract class BasicMBImpl<T, E> {
     }
 
     public void updateNoBanco(T objeto) throws DadoInvalidoException {
-        new AtualizaDAO<>().atualiza(objeto);
+        atualizaDAO.atualiza(objeto);
         InfoMessage.atualizado();
         limparJanela();
     }
 
     public void updateNoBanco() throws DadoInvalidoException {
-        new AtualizaDAO<>().atualiza(t);
+        atualizaDAO.atualiza(t);
         InfoMessage.atualizado();
         limparJanela();
     }
@@ -93,7 +103,7 @@ public abstract class BasicMBImpl<T, E> {
     }
 
     public void deleteNoBanco(T objeto, Long id) throws DadoInvalidoException {
-        new RemoveDAO<>().remove(objeto, id);
+        removeDAO.remove(objeto, id);
         InfoMessage.removido();
         limparJanela();
     }

@@ -184,7 +184,7 @@ public class Cambio implements Serializable {
 
     public void gerarComissao() throws DadoInvalidoException {
         if (comissaoCalculada != null && comissaoCalculada.compareTo(BigDecimal.ZERO) == 1) {
-            Configuracao c = new ConfiguracaoDAO().buscar();
+            Configuracao c = new ConfiguracaoDAO().resultado();
             comissao = new DespesaProvisionadaBuilder().comPessoa(pessoaComissionada).comValor(comissaoCalculada)
                     .comCotacao(cotacao).comCambio(this).comDespesa(c.getDespesaDeComissao()).construir();
         }

@@ -2,26 +2,21 @@ package br.com.onesystem.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.enterprise.inject.Any;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
-import javax.validation.constraints.NotNull;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1,
         sequenceName = "SEQ_CONFCAMBIO", name = "SEQ_CONFCAMBIO")
-@NamedQueries({    
-    @NamedQuery(name = "ConfiguracaoCambio.busca", query = "select c from ConfiguracaoCambio c"),
-    @NamedQuery(name = "ConfiguracaoCambio.buscaPessoas", query = "select p from Pessoa p where p.configuracaoCambio is not null"),
-})
 public class ConfiguracaoCambio implements Serializable {
 
     @Id

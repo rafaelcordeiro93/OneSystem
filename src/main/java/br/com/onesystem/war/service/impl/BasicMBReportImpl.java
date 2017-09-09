@@ -6,7 +6,6 @@
 package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.GenericDAO;
 import br.com.onesystem.dao.ModeloDeRelatorioDAO;
 import br.com.onesystem.dao.RemoveDAO;
@@ -47,7 +46,6 @@ import net.sf.dynamicreports.report.exception.DRException;
 import org.primefaces.event.ReorderEvent;
 import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
-import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.GeradorDeCodigoFonteDeModeloDeRelatorio;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.SessionUtil;
@@ -56,16 +54,13 @@ import br.com.onesystem.valueobjects.TipoRelatorio;
 import br.com.onesystem.valueobjects.Totalizador;
 import br.com.onesystem.war.builder.ColunaBV;
 import br.com.onesystem.war.builder.FiltroDeRelatorioBV;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import javax.faces.context.FacesContext;
-import org.primefaces.extensions.event.ClipboardSuccessEvent;
+import javax.inject.Inject;
 
 /**
  *
@@ -104,6 +99,15 @@ public abstract class BasicMBReportImpl<T> {
     private String codigoFonteModelo;
     private String bundlePendentes;
 
+    @Inject
+    private ModeloDeRelatorioDAO modeloRelatorioDAO;
+
+    @Inject
+    private AdicionaDAO<ModeloDeRelatorio> adicionaModeloDAO;
+
+    @Inject
+    private RemoveDAO<ModeloDeRelatorio> removeModeloDAO;
+    
     protected abstract void init();
 
     /**
@@ -471,8 +475,8 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui o  modelo
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        ModeloDeRelatorio find = new ModeloDeRelatorioDAO().porId(m.getId()).resultado();
-                        new RemoveDAO<>().remove(find, find.getId());
+                        ModeloDeRelatorio find = modeloRelatorioDAO.porId(m.getId()).resultado();
+                        removeModeloDAO.remove(find, find.getId());
                         modeloRemovido = m; // * Necessario para não soltar CuncurrentException
                         break;
                     }
@@ -487,7 +491,7 @@ public abstract class BasicMBReportImpl<T> {
                 ModeloDeRelatorio modelo = criarModelo();
 
                 //Adiciona no banco novo registro
-                new AdicionaDAO<>().adiciona(modelo);
+                adicionaModeloDAO.adiciona(modelo);
                 modelosDeRelatorio.add(modelo);
 
                 InfoMessage.adicionado();
@@ -571,8 +575,8 @@ public abstract class BasicMBReportImpl<T> {
                 //Exclui modelo existente
                 for (ModeloDeRelatorio m : modelosDeRelatorio) {
                     if (m.getNome().equals(modeloDeRelatorioSelecionadoString)) {
-                        ModeloDeRelatorio find = new ModeloDeRelatorioDAO().porId(m.getId()).resultado();
-                        new RemoveDAO<>().remove(find, find.getId());
+                        ModeloDeRelatorio find = modeloRelatorioDAO.porId(m.getId()).resultado();
+                        removeModeloDAO.remove(find, find.getId());
                         limpaFiltrosECampos();
                         init();
                         //Limpa o campo do modelo inicializa campos padros e busca dados do banco.

@@ -9,10 +9,7 @@ import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -20,19 +17,23 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
-@Stateless
-public class AtualizaDAO<T> {
+public class AtualizaDAOConsole<T> {
 
-    @PersistenceContext(unitName = "alkatar")
-    private EntityManager em;
+    private EntityManager em = JPAUtil.getEntityManager();
 
     public void atualiza(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {
 
+            // abre transacao
+            em.getTransaction().begin();
+
             // persiste o objeto e log do mesmo
             em.merge(t);
             em.persist(new Log("Alterado: " + t, TipoTransacao.ALTERACAO));
+
+            // commita a transacao
+            em.getTransaction().commit();
 
         } catch (PersistenceException pe) {
             System.out.println("PersistenceException:  " + pe);

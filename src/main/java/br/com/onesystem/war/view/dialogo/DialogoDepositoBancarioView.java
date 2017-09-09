@@ -40,6 +40,15 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
     @Inject
     private ConfiguracaoService serviceConf;
 
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private ContaDAO contaDAO;
+    
+    @Inject
+    private AdicionaDAO<DepositoBancario> dao;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -57,11 +66,11 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
         try {
             e.setEmissao(new Date());
             e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-            cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
-            cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            contaComCotacaoEmpresa = new ContaDAO().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-            contaComCotacaoBancaria = new ContaDAO().comBanco().ePorMoedas(cotacaoBancariaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            cotacaoPadrao = cotacaoDAO.porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+            cotacaoEmpresaLista = cotacaoDAO.naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
+            cotacaoBancariaLista = cotacaoDAO.naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+            contaComCotacaoEmpresa = contaDAO.semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+            contaComCotacaoBancaria = contaDAO.comBanco().ePorMoedas(cotacaoBancariaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -93,7 +102,7 @@ public class DialogoDepositoBancarioView extends BasicMBImpl<DepositoBancario, D
         try {
             t = e.construir();
             t.geraBaixaDeDeposito(e.getCotacaoDeOrigem(), e.getCotacaoDeDestino());
-            new AdicionaDAO<>().adiciona(t);
+            dao.adiciona(t);
             RequestContext.getCurrentInstance().closeDialog(t);
             limparJanela();
         } catch (DadoInvalidoException ex) {

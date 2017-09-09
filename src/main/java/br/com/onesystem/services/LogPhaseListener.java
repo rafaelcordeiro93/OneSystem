@@ -12,14 +12,17 @@ import br.com.onesystem.util.DadosNecessarios;
 import br.com.onesystem.war.builder.DadosNecessariosBV;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
+import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -27,6 +30,15 @@ import javax.servlet.http.HttpSession;
  * @author Rauber
  */
 public class LogPhaseListener implements PhaseListener {
+
+    @Inject
+    private UsuarioDAO dao;
+
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+
+    @Inject
+    private DadosNecessarios dadosNecessarios;
 
     @Override
     public void afterPhase(PhaseEvent event) {
@@ -49,23 +61,25 @@ public class LogPhaseListener implements PhaseListener {
         if (login == null && !janela.equals("/login.xhtml")) {
             ec.redirect("/OneSystem-war/login.xhtml");
         } else if (login == null && janela.equals("/login.xhtml")) {
-        } else if (login.equals("Anonymous")) {//Adicionar funcionalidade de supervisor
+        } else if (login.equals("Anonymous") && !janela.equals("/OneSystem-war/configuracaoNecessaria.xhtml")) {//Adicionar funcionalidade de supervisor
+            System.out.println("2");
             carregaDados(janela, session, ec);
             return;
         } else if (janela.contains("selecao") || janela.contains("dialogo")) {//Faz com que as janelas de Selecao nao precisem de permissoes
             return;
         } else if (janela.equals("/access.xhtml")) {
 
-        } else if (!login.equals("Anonymous")) { //Verifica a permissao nas janelas que forem abertas
-            UsuarioLogadoUtil usuarioLogado = new UsuarioLogadoUtil();
-            Usuario usuario = new UsuarioDAO().porEmailString(login).resultado();
+        } else if (!login.equals("Anonymous") && !janela.equals("/OneSystem-war/configuracaoNecessaria.xhtml")) { //Verifica a permissao nas janelas que forem abertas
+            Usuario usuario = dao.porEmailString(login).resultado();
             boolean consulta = usuarioLogado.buscaPermissoesNoBanco(new BundleUtil().getLabel("Consultar"), janela, usuario);
 
             if (consulta) {
                 usuarioLogado.carregaPreferenciasDo(usuario);
                 carregaDados(janela, session, ec);
             } else {
-                ec.redirect("/OneSystem-war/access.xhtml");
+                if (!janela.equals("/OneSystem-war/access.xhtml")) {
+                    ec.redirect("/OneSystem-war/access.xhtml");
+                }
             }
         }
     }
@@ -80,9 +94,12 @@ public class LogPhaseListener implements PhaseListener {
     }
 
     private void carregaDados(String janela, HttpSession session, ExternalContext ec) throws IOException {
-        List<DadosNecessariosBV> pendencias = new DadosNecessarios().valida(janela);
-        if (!pendencias.isEmpty()) {
+        List<DadosNecessariosBV> pendencias = dadosNecessarios.valida(janela);
+
+        Object object = session.getAttribute("onesystem.dadosNecessarios.list");
+        if (!pendencias.isEmpty() && object == null) {
             session.setAttribute("onesystem.dadosNecessarios.list", pendencias);
+            System.out.println("Entrou");
             ec.redirect("/OneSystem-war/configuracaoNecessaria.xhtml");
         }
     }

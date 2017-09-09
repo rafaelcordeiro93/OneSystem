@@ -157,12 +157,8 @@ public class ImpressoraDeRelatorioDinamico {
 //                    .title(cmp.text(moedas.get(masterRowNumber - 1).getNome()).setStyle(Templates.bold12CenteredStyle));
 
             if (moedas == null) {
-                try {
-                    Moeda moedaPadrao = new ConfiguracaoService().buscar().getMoedaPadrao();
-                    criarColunas(colunas, report, new CurrencyType(moedaPadrao != null ? moedaPadrao.getSigla() : null));
-                } catch (DadoInvalidoException die) {
-                    die.printStackTrace();
-                }
+                Moeda moedaPadrao = new ConfiguracaoService().buscar().getMoedaPadrao();
+                criarColunas(colunas, report, new CurrencyType(moedaPadrao != null ? moedaPadrao.getSigla() : null));
             } else {
                 criarColunas(colunas, report, new CurrencyType(moedas.get(masterRowNumber - 1).getSigla()));
             }

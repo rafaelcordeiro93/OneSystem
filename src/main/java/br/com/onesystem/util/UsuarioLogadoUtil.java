@@ -5,13 +5,10 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.util.PreferenciasDeUsuario;
 import br.com.onesystem.dao.UsuarioDAO;
 import br.com.onesystem.domain.Privilegio;
 import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.BeanUtil;
-import br.com.onesystem.util.BundleUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.faces.view.ViewScoped;

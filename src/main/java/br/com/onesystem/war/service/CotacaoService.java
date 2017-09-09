@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
@@ -10,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 public class CotacaoService implements Serializable {
+
+    public CotacaoService() {
+    }
 
     public List<Cotacao> buscarCotacoes() {
         return new CotacaoDAO().listaDeResultados();

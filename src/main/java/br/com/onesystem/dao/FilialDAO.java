@@ -1,12 +1,12 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Filial;
+import java.io.Serializable;
 
-public class FilialDAO extends GenericDAO<Filial> {
+public class FilialDAO extends GenericDAO<Filial> implements Serializable {
 
     public FilialDAO() {
         super(Filial.class);
-        limpar();
     }
 
     public FilialDAO porId(Long id) {

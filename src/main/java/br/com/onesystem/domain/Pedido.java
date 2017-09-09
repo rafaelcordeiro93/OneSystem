@@ -138,13 +138,13 @@ public abstract class Pedido implements Serializable {
             i.paraPedido(this);
         }
     }
-   
+
     public List<ItemDePedido> getItensDePedido() {
         itens.sort(Comparator.comparing(ItemDePedido::getId));
         return itens;
     }
-    
-     public void adiciona(ItemDePedido item) {
+
+    public void adiciona(ItemDePedido item) {
         if (itens == null) {
             itens = new ArrayList<>();
         }
@@ -165,7 +165,6 @@ public abstract class Pedido implements Serializable {
         itens.remove(item);
     }
 
-   
     public void atualiza(ItemDePedidoCancelado item) {
         if (itensCancelados == null) {
             itensCancelados = new ArrayList<>();
@@ -202,7 +201,6 @@ public abstract class Pedido implements Serializable {
     public void remove(ParcelaDePedido parcela) {
         parcelaDePedido.remove(parcela);
     }
-
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("pessoa", "operacao", "moeda");
@@ -334,13 +332,8 @@ public abstract class Pedido implements Serializable {
     }
 
     public Moeda getMoedaPadrao() {
-        try {
-            Configuracao cfg = new ConfiguracaoService().buscar();
-            return cfg.getMoedaPadrao();
-        } catch (DadoInvalidoException die) {
-            die.print();
-            return null;
-        }
+        Configuracao cfg = new ConfiguracaoService().buscar();
+        return cfg.getMoedaPadrao();
     }
 
     @Override

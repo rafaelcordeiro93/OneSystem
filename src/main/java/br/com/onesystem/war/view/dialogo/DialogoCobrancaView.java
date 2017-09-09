@@ -51,6 +51,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
     private Model<CobrancaVariavel> model;
 
     @Inject
+    private CotacaoDAO cotacaoDAO;
 
     @PostConstruct
     public void init() {
@@ -74,13 +75,13 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         if (model != null && fatura != null) {
             cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().naEmissao(fatura.getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(fatura.getEmissao()).listaDeResultados();
             return;
         }
         if (fatura != null) {
-            cotacaoLista = new CotacaoDAO().naEmissao(fatura.getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(fatura.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.ENTRADA);
-            e.setCotacao(new CotacaoDAO().porMoeda(fatura.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(fatura.getEmissao()).resultado());
+            e.setCotacao(cotacaoDAO.porMoeda(fatura.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(fatura.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.EMITIDA);
             e.setMoeda(fatura.getMoedaPadrao());
             e.setFatura(fatura);
@@ -92,13 +93,13 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         if (model != null && conhecimentoDeFrete != null) {
             cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
             return;
         }
         if (conhecimentoDeFrete != null) {
-            cotacaoLista = new CotacaoDAO().naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(conhecimentoDeFrete.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(OperacaoFinanceira.SAIDA);
-            e.setCotacao(new CotacaoDAO().porMoeda(conhecimentoDeFrete.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(conhecimentoDeFrete.getEmissao()).resultado());
+            e.setCotacao(cotacaoDAO.porMoeda(conhecimentoDeFrete.getMoedaPadrao()).porCotacaoEmpresa().naMaiorEmissao(conhecimentoDeFrete.getEmissao()).resultado());
             e.setTipoLancamento(TipoLancamento.RECEBIDA);
             e.setMoeda(conhecimentoDeFrete.getMoedaPadrao());
             e.setConhecimentoDeFrete(conhecimentoDeFrete);
@@ -109,12 +110,12 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
         if (model != null) { //NOTA
             cobranca = (CobrancaVariavel) model.getObject();
             e = new CobrancaBV(cobranca);
-            cotacaoLista = new CotacaoDAO().naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(cobranca.getNota().getEmissao()).listaDeResultados();
             return;
         }
         nota = (Nota) SessionUtil.getObject("nota", FacesContext.getCurrentInstance());
         if (nota != null) {
-            cotacaoLista = new CotacaoDAO().naEmissao(nota.getEmissao()).listaDeResultados();
+            cotacaoLista = cotacaoDAO.naEmissao(nota.getEmissao()).listaDeResultados();
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
             e.setCotacao(new CotacaoService().getCotacaoNaUltimaEmissaoPor(nota.getFormaDeRecebimento().getConta(), nota.getEmissao()));
             e.setTipoLancamento(nota.getOperacao().getTipoNota());

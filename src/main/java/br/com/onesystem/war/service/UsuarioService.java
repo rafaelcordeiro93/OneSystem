@@ -5,17 +5,21 @@ import br.com.onesystem.domain.Usuario;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class UsuarioService implements Serializable {
 
+    @Inject
+    private UsuarioDAO dao;
+
     public List<Usuario> buscarUsuarios() {
-        return new UsuarioDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public Usuario buscarUsuarioPerfil() {
         String user = new UsuarioLogadoUtil().getEmailUsuario();
         if (user != null) {
-            return new UsuarioDAO().porEmailString(user).resultado();
+            return dao.porEmailString(user).resultado();
         } else {
             return null;
         }

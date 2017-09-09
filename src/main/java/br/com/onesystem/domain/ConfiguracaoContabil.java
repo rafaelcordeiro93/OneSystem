@@ -1,21 +1,18 @@
 package br.com.onesystem.domain;
 
 import java.io.Serializable;
+import javax.enterprise.inject.Any;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOCONTABIL",
         name = "SEQ_CONFIGURACAOCONTABIL")
-@NamedQueries({
-    @NamedQuery(name = "ConfiguracaoContabil.busca", query = "select c from ConfiguracaoContabil c")
-})
 public class ConfiguracaoContabil implements Serializable {
 
     @Id

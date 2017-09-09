@@ -1,45 +1,30 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.util.JPAUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-@Stateless
-public class ArmazemDeRegistros<T> implements Serializable {
+public class ArmazemDeRegistrosConsole<T> implements Serializable {
 
-    private Class<T> classe;
+    private EntityManager em = JPAUtil.getEntityManager();
 
-    @PersistenceContext(unitName = "alkatar")
-    private EntityManager em;
+    private final Class<T> classe;
 
-    public ArmazemDeRegistros() {
-    }
-
-    public ArmazemDeRegistros daClasse(Class<T> classe) {
+    public ArmazemDeRegistrosConsole(Class<T> classe) {
         this.classe = classe;
-        return this;
-    }
-
-    public ArmazemDeRegistros daClasse(Class<T> classe, EntityManager em) {
-        this.em = em;
-        this.classe = classe;
-        return this;
     }
 
     public List<T> listaTodosOsRegistros() {
-        List<T> lista = new ArrayList<>();
         CriteriaQuery<T> query = em.getCriteriaBuilder().createQuery(classe);
         query.select(query.from(classe));
-        lista = em.createQuery(query).getResultList();
+        List<T> lista = em.createQuery(query).getResultList();
 
         return lista;
     }

@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class ConfiguracaoFinanceiroService implements Serializable {
 
     public ConfiguracaoFinanceiro buscar() {
-        return new ConfiguracaoFinanceiroDAO().buscar();
+        return new ConfiguracaoFinanceiroDAO().resultado();
     }
 
 }

@@ -11,6 +11,7 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import javax.enterprise.inject.Any;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,12 +22,10 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 
+@Any
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, sequenceName = "SEQ_CONFIGURACAOVENDA",
         name = "SEQ_CONFIGURACAOVENDA")
-@NamedQueries({
-    @NamedQuery(name = "ConfiguracaoVenda.busca", query = "select v from ConfiguracaoVenda v")
-})
 public class ConfiguracaoVenda implements Serializable {
 
     @Id

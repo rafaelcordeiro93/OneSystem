@@ -2,13 +2,20 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ConfiguracaoDAO;
 import br.com.onesystem.domain.Configuracao;
-import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Named;
 
 public class ConfiguracaoService implements Serializable {
 
-    public Configuracao buscar() throws EDadoInvalidoException {
-        return new ConfiguracaoDAO().buscar();
+    public ConfiguracaoService() {
+    }
+
+    @RequestScoped
+    @Produces
+    public Configuracao buscar() {
+        return new ConfiguracaoDAO().resultado();
     }
 
 }

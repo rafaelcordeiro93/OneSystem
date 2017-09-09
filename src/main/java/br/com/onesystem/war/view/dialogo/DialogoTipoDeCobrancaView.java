@@ -87,6 +87,12 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     @Inject
     private CotacaoService cotacaoService;
 
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private ContaDAO contaDAO;
+    
     @PostConstruct
     public void init() {
         try {
@@ -163,9 +169,9 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             }
         }
 
-        cotacaoLista = new CotacaoDAO().naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
-        contaComCotacao = new ContaDAO().comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
+        cotacaoLista = cotacaoDAO.naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+        contaComCotacao = contaDAO.comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
+        cotacaoPadrao = cotacaoDAO.porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
         e.setCotacao(cotacaoPadrao);
     }
 

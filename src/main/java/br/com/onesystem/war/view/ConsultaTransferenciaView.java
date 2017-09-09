@@ -11,6 +11,7 @@ import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.dao.TransferenciaDAO;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Transferencia;
@@ -46,7 +47,7 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
     private List<Cotacao> cotacaoBancariaLista;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private Configuracao configuracao;
 
     @PostConstruct
     public void init() {
@@ -54,12 +55,8 @@ public class ConsultaTransferenciaView extends BasicMBImpl<Transferencia, Transf
     }
 
     public void inicializar() {
-        try {
-            cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
-            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-        } catch (DadoInvalidoException die) {
-            die.print();
-        }
+        cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+        cotacaoPadrao = new CotacaoDAO().porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
     }
 
     @Override

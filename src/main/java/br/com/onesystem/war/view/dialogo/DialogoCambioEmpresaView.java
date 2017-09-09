@@ -7,6 +7,7 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.CambioEmpresa;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -44,8 +45,13 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
     private List<Cotacao> cotacaoEmpresaLista;
 
     @Inject
-    private ConfiguracaoService serviceConf;
+    private Configuracao configuracao;
 
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+    
+    @Inject ContaDAO contaDAO;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -61,13 +67,10 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
     }
 
     public void inicializar() {
-        try {
-            e.setEmissao(new Date());
-            cotacaoPadrao = new CotacaoDAO().porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
-            cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
-            contaComCotacaoEmpresa = new ContaDAO().semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
-        } catch (DadoInvalidoException die) {
-        }
+        e.setEmissao(new Date());
+        cotacaoPadrao = cotacaoDAO.porMoeda(configuracao.getMoedaPadrao()).naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().resultado();
+        cotacaoEmpresaLista = cotacaoDAO.naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
+        contaComCotacaoEmpresa = contaDAO.semBanco().ePorMoedas(cotacaoEmpresaLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
     }
 
     public void abrirDialogo() {
@@ -194,14 +197,6 @@ public class DialogoCambioEmpresaView extends BasicMBImpl<CambioEmpresa, CambioE
 
     public void setCotacaoEmpresaLista(List<Cotacao> cotacaoEmpresaLista) {
         this.cotacaoEmpresaLista = cotacaoEmpresaLista;
-    }
-
-    public ConfiguracaoService getServiceConf() {
-        return serviceConf;
-    }
-
-    public void setServiceConf(ConfiguracaoService serviceConf) {
-        this.serviceConf = serviceConf;
     }
 
     public BaixaBV getBaixaBV() {
