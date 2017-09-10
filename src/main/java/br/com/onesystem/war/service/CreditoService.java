@@ -12,6 +12,7 @@ import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -19,9 +20,12 @@ import java.util.List;
  */
 public class CreditoService implements Serializable {
 
+    @Inject
+    private CreditoDAO dao;
+    
     public BigDecimal buscarSaldo(Pessoa pessoa) {
 
-        List<Credito> resutados = new CreditoDAO().porPessoa(pessoa).listaDeResultados();
+        List<Credito> resutados = dao.porPessoa(pessoa).listaDeResultados();
 
         BigDecimal entradas = resutados.stream().filter(c -> c.getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA).map(Credito::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal saidas = resutados.stream().filter(c -> c.getOperacaoFinanceira() == OperacaoFinanceira.SAIDA).map(Credito::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);

@@ -6,15 +6,19 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class ConfiguracaoCambioService implements Serializable {
 
+    @Inject
+    private ConfiguracaoCambioDAO dao;
+    
     public ConfiguracaoCambio buscar() throws EDadoInvalidoException {
-        return new ConfiguracaoCambioDAO().buscar();
+        return dao.buscar();
     }
 
     public List<Pessoa> buscarPessoas() {
-        return new ConfiguracaoCambioDAO().buscarPessoas();
+        return dao.buscarPessoas();
     }
 
 }

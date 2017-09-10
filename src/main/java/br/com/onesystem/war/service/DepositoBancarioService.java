@@ -4,15 +4,19 @@ import br.com.onesystem.dao.DepositoBancarioDAO;
 import br.com.onesystem.domain.DepositoBancario;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class DepositoBancarioService implements Serializable {
 
+    @Inject
+    private DepositoBancarioDAO dao;
+    
   public List<DepositoBancario> buscarDepositoBancarios() {
-        return new DepositoBancarioDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
   
    public List<DepositoBancario> buscarDepositoBancariosTipoLancamento() {
-        return new DepositoBancarioDAO().porTipoLancamento().listaDeResultados();
+        return dao.porTipoLancamento().listaDeResultados();
     }
    
 }

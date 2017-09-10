@@ -5,15 +5,19 @@ import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.valueobjects.EstadoDeComanda;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class ComandaService implements Serializable {
 
+    @Inject
+    private ComandaDAO dao;
+    
     public List<Comanda> buscarComandas() {
-        return new ComandaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public List<Comanda> buscarComandasNo(EstadoDeComanda estadoDeComanda) {
-        return new ComandaDAO().porEstado(estadoDeComanda).listaDeResultados();
+        return dao.porEstado(estadoDeComanda).listaDeResultados();
     }
 
 }

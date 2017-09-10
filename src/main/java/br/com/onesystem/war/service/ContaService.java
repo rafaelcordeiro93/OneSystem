@@ -5,15 +5,19 @@ import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Moeda;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class ContaService implements Serializable {
 
+    @Inject
+    private ContaDAO dao;
+    
     public List<Conta> buscarContas() {
-        return new ContaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public List<Conta> buscarContasPorMoeda(Moeda moeda) {
-        return new ContaDAO().ePorMoeda(moeda).listaDeResultados();
+        return dao.ePorMoeda(moeda).listaDeResultados();
     }
 
 }

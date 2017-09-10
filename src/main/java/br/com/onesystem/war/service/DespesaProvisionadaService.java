@@ -5,23 +5,27 @@ import br.com.onesystem.domain.DespesaProvisionada;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 public class DespesaProvisionadaService implements Serializable {
 
+    @Inject
+    private DespesaProvisionadaDAO dao;
+    
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagar() {
-        return new DespesaProvisionadaDAO().wAPagar().listaDeResultados();
+        return dao.wAPagar().listaDeResultados();
     }
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagarComVencimentoEntre(Date dataInicial, Date dataFinal) {
-        return new DespesaProvisionadaDAO().wAPagar().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
+        return dao.wAPagar().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
     }
 
     public List<DespesaProvisionada> buscarDespesaProvisionadas() {
-        return new DespesaProvisionadaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     } 
 
     public List<DespesaProvisionada> buscarDespesaProvisionadasAPagarDivisaoLucro() {
-        return new DespesaProvisionadaDAO().wAPagar().eComDivisaoDeLucro().listaDeResultados();
+        return dao.wAPagar().eComDivisaoDeLucro().listaDeResultados();
     }
 
 }

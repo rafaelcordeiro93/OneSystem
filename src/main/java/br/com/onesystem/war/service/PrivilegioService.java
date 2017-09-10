@@ -6,15 +6,19 @@ import br.com.onesystem.domain.Modulo;
 import br.com.onesystem.domain.Privilegio;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class PrivilegioService implements Serializable {
     
+    @Inject
+    private PrivilegioDAO dao;
+    
     public List<Privilegio> buscarPrivilegioDoGrupo(GrupoDePrivilegio grupo){
-        return new PrivilegioDAO().ePorGrupoDePrivilegio(grupo).listaDeResultados();
+        return dao.ePorGrupoDePrivilegio(grupo).listaDeResultados();
     }
     
     public List<Privilegio> buscarPrivilegioDoModulo(Modulo modulo){
-        return new PrivilegioDAO().ePorModulo(modulo).listaDeResultados();
+        return dao.ePorModulo(modulo).listaDeResultados();
     }
         
 }

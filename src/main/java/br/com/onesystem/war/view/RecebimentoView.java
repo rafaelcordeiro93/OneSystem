@@ -1,6 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.FaturaEmitidaDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;

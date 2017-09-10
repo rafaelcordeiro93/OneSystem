@@ -9,11 +9,15 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.inject.Inject;
 
 public class ItemDeNotaService implements Serializable {
 
+    @Inject
+    private ItemDeNotaDAO dao;
+    
     public List<ItemDeNota> buscarItensEmitidos() {
-        return new ItemDeNotaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public BigDecimal buscaQuantidadeFaturadaPor(ItemDeCondicional item, Condicional condicional) throws DadoInvalidoException {
@@ -23,7 +27,7 @@ public class ItemDeNotaService implements Serializable {
         BigDecimal saldo = BigDecimal.ZERO;
         
         if (condicional.getNotasEmitidas() != null && !condicional.getNotasEmitidas().isEmpty()) {
-            List<ItemDeNota> itensDeNotas = new ItemDeNotaDAO().porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item.getItem())
+            List<ItemDeNota> itensDeNotas = dao.porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item.getItem())
                     .porNaoCancelado().listaDeResultados();
             saldo = itensDeNotas.stream().map(ItemDeNota::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
         }

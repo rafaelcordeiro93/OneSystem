@@ -4,19 +4,23 @@ import br.com.onesystem.dao.GrupoFinanceiroDAO;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class GrupoFinanceiroService implements Serializable {
 
+    @Inject
+    private GrupoFinanceiroDAO dao;
+    
     public List<GrupoFinanceiro> buscarGruposFinanceiros() {
-        return new GrupoFinanceiroDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoReceitas() {
-        return new GrupoFinanceiroDAO().porReceitas().listaDeResultados();
+        return dao.porReceitas().listaDeResultados();
     }
 
     public List<GrupoFinanceiro> buscarGruposFInanceirosDoTipoDespesas() {
-        return new GrupoFinanceiroDAO().porDespesas().listaDeResultados();
+        return dao.porDespesas().listaDeResultados();
     }
 
 }

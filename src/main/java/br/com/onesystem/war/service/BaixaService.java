@@ -10,36 +10,40 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 public class BaixaService implements Serializable {
 
+    @Inject
+    private BaixaDAO dao;
+    
     public List<Baixa> buscarBaixas() {
-        return new BaixaDAO().orderByEmissaoEId().listaDeResultados();
+        return dao.orderByEmissaoEId().listaDeResultados();
     }
 
     public List<Baixa> buscarBaixasPelaData(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
-            return new BaixaDAO().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
+            return dao.ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
                     .ePorCaixa(caixa).ePorEstadoDeBaixa(estado).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         } else {
-            return new BaixaDAO().ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
+            return dao.ePorEmissaoEntre(dataInicial, dataFinal).ePorConta(conta)
                     .ePorEstadoDeBaixa(estado).eNaoCancelada().orderByEmissaoEId().listaDeResultados();
         }
     }
 
     public BigDecimal buscarSaldoAnterior(Date dataAnterior, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
+            return dao.buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
         } else {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, null, estado);
+            return dao.buscarSaldoAnterior(dataAnterior, conta, null, estado);
         }
     }
 
     public BigDecimal buscarSaldoFinal(Date dataAnterior, Conta conta, Caixa caixa, EstadoDeBaixa estado) {
         if (caixa != null) {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
+            return dao.buscarSaldoAnterior(dataAnterior, conta, caixa, estado);
         } else {
-            return new BaixaDAO().buscarSaldoAnterior(dataAnterior, conta, null, estado);
+            return dao.buscarSaldoAnterior(dataAnterior, conta, null, estado);
         }
     }
 
@@ -61,25 +65,25 @@ public class BaixaService implements Serializable {
 
     public BigDecimal buscarEntradasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
+            return dao.selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
         } else {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
+            return dao.selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eEntrada().ePorConta(conta).resultadoOperacaoMatematica();
         }
     }
 
     public BigDecimal buscarSaidasPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
+            return dao.selectSomaBaixaValor().eNaoCancelada().ePorCaixa(caixa).ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
         } else {
-            return new BaixaDAO().selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
+            return dao.selectSomaBaixaValor().eNaoCancelada().ePorEmissaoEntre(dataInicial, dataFinal).eSaida().ePorConta(conta).resultadoOperacaoMatematica().multiply(new BigDecimal(-1));
         }
     }
 
     public BigDecimal buscarSaldoPorDataEConta(Date dataInicial, Date dataFinal, Conta conta, Caixa caixa) {
         if (caixa != null) {
-            return new BaixaDAO().buscarSaldoPorDataEConta(dataInicial, dataFinal, conta, caixa);
+            return dao.buscarSaldoPorDataEConta(dataInicial, dataFinal, conta, caixa);
         } else {
-            return new BaixaDAO().buscarSaldoPorDataEConta(dataInicial, dataFinal, conta);
+            return dao.buscarSaldoPorDataEConta(dataInicial, dataFinal, conta);
         }
     }
 

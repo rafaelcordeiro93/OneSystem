@@ -17,7 +17,7 @@
                     <p:menuitem value="#{l.País}"  icon="fa fa-flag-o" outcome="/menu/arquivo/pais" />
                     <p:menuitem value="#{l.Estado}"  icon="fa fa-flag-checkered" outcome="/menu/arquivo/estado" />
                     <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/menu/arquivo/cidade" />
-                    <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/menu/arquivo/pessoa" />   
+                    <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/menu/arquivo/pessoa" styleClass="separator-menu-item" />   
                     <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/menu/arquivo/importarPessoa" />    
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Pessoa}" icon="fa fa-minus" outcome="/menu/arquivo/listar/relatorioDePessoas" />
@@ -29,42 +29,42 @@
                 <pa:menu widgetVar="mat">
                     <p:menuitem value="#{l.Comanda}" icon="fa fa-superpowers" outcome="/menu/vendas/comanda" />
                     <p:menuitem value="#{l.Condicional}" icon="fa fa-compress" outcome="/menu/vendas/condicional" />
-                    <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-cart-plus" outcome="/menu/vendas/notaEmitida" />
                     <p:menuitem value="#{l.Orcamento}" icon="fa fa-random" outcome="/menu/vendas/orcamento" />
+                    <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-cart-plus" outcome="/menu/vendas/notaEmitida" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Retificacao_De_Venda}" icon="fa fa-american-sign-language-interpreting" outcome="/menu/vendas/retificacaoDeVenda" />
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">
                         <p:menuitem value="#{l.Comanda}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaComanda" />
                         <p:menuitem value="#{l.Condicional}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaCondicional" />
-                        <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaNotaEmitida" />
                         <p:menuitem value="#{l.Orcamentos}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaOrcamento" />
+                        <p:menuitem value="#{l.Notas_Emitidas}" icon="fa fa-shield fa-rotate-270" outcome="/menu/vendas/consultar/consultaNotaEmitida" />
                     </p:submenu>
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeNotasEmitidas" />
                         <p:menuitem value="#{l.Item_Emitido}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemEmitido" />
-                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeOrcamento" />
+                        <p:menuitem value="#{l.Nota_Emitida}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeNotasEmitidas" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Item_Orcado}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemOrcado" />
-                        <p:menuitem value="#{l.Condicional}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeCondicional" />
+                        <p:menuitem value="#{l.Orcamento}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeOrcamento" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Item_Condicional}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemCondicional" />
+                        <p:menuitem value="#{l.Condicional}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeCondicional" styleClass="separator-menu-item" />
+                        <p:menuitem value="#{l.Item_Comanda}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemComanda"  />
                         <p:menuitem value="#{l.Comanda}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeComanda" />
-                        <p:menuitem value="#{l.Item_Comanda}" icon="fa fa-minus" outcome="/menu/vendas/listar/relatorioDeItemComanda" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>
 
             <pa:tab icon="fa fa-cubes" title="#{l.Estoque}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/estoque/ajusteDeEstoque" />
-                    <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/menu/estoque/conhecimentoDeFrete" />
-                    <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/menu/estoque/contaDeEstoque" />
                     <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/estoque/item" />
                     <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa-address-book-o" outcome="/menu/estoque/pedidoAFornecedores" />
                     <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-cart-arrow-down" outcome="/menu/estoque/notaRecebida" />
+                    <p:menuitem value="#{l.Conhecimento_De_Frete}" icon="fa fa-shopping-cart" outcome="/menu/estoque/conhecimentoDeFrete" styleClass="separator-menu-item" />
+                    <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/estoque/ajusteDeEstoque" styleClass="separator-menu-item"/>
+                    <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/menu/estoque/contaDeEstoque" styleClass="separator-menu-item"/>
                     <p:menuitem value="#{l.Retificacao_De_Compra}" icon="fa fa-american-sign-language-interpreting" outcome="/menu/estoque/retificacaoDeCompra" />
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
                         <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/menu/estoque/cadastros/comissao" />
-                        <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/menu/estoque/cadastros/deposito" />
+                        <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/menu/estoque/cadastros/deposito" styleClass="separator-menu-item" />
+                        <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/menu/estoque/cadastros/listaDePreco" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/menu/estoque/cadastros/grupo" />
-                        <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/menu/estoque/cadastros/listaDePreco" />
                         <p:menuitem value="#{l.Marca}" icon="fa fa-gg" outcome="/menu/estoque/cadastros/marca" />
                         <p:menuitem value="#{l.Margem}" icon="fa fa-compress" outcome="/menu/estoque/cadastros/margem" /> 
                         <p:menuitem value="#{l.Unidade_Medida}" icon="fa fa-arrows-v" outcome="/menu/estoque/cadastros/unidadeMedidaItem" />
@@ -74,12 +74,12 @@
                         <p:menuitem value="#{l.Pedido_AFornecedores}" icon="fa fa-shield fa-rotate-270" outcome="/menu/estoque/consultar/consultaPedidoAFornecedores" />
                     </p:submenu>
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
-                        <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeNotasRecebidas" />
-                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeAjusteDeEstoque" />
-                        <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeItem" />
+                        <p:menuitem value="#{l.Item}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeItem" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Item_Recebido}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeItemRecebido" />
+                        <p:menuitem value="#{l.Nota_Recebida}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeNotasRecebidas" styleClass="separator-menu-item" />
+                        <p:menuitem value="#{l.Conhecimento_de_Frete}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeConhecimentoDeFrete" styleClass="separator-menu-item" />
+                        <p:menuitem value="#{l.Ajuste_De_Estoque}" icon="fa fa-archive" outcome="/menu/estoque/listar/relatorioDeAjusteDeEstoque" />
                         <p:menuitem value="#{l.Estoque}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeEstoque" />
-                        <p:menuitem value="#{l.Conhecimento_de_Frete}" icon="fa fa-minus" outcome="/menu/estoque/listar/relatorioDeConhecimentoDeFrete" />
                     </p:submenu>
                 </pa:menu>
             </pa:tab>
@@ -132,10 +132,10 @@
 
             <pa:tab icon="fa fa-balance-scale" title="#{l.Contabil}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Operacoes}" icon="fa fa-fw fa-arrows" outcome="/menu/contabil/operacoes" />
+                    <p:menuitem value="#{l.Operacoes}" icon="fa fa-fw fa-arrows" outcome="/menu/contabil/operacoes" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/menu/contabil/grupoFiscal" />  
                     <p:menuitem value="#{l.Cfop}" icon="fa fa-bandcamp" outcome="/menu/contabil/cfop" />  
-                    <p:menuitem value="#{l.Tabela_de_Tributacao}" icon="fa fa-strikethrough" outcome="/menu/contabil/tabelaDeTributacao" />
+                    <p:menuitem value="#{l.Tabela_de_Tributacao}" icon="fa fa-strikethrough" outcome="/menu/contabil/tabelaDeTributacao" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-share-alt-square" outcome="/menu/contabil/grupoFinanceiro" />
                     <p:menuitem value="#{l.Tipo_Receita}" icon="fa fa-level-up" outcome="/menu/contabil/tipoReceita" />
                     <p:menuitem value="#{l.Tipo_Despesa}" icon="fa fa-level-down" outcome="/menu/contabil/tipoDespesa" />

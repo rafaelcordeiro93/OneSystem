@@ -8,21 +8,25 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 public class PrecoDeItemService implements Serializable {
 
+    @Inject
+    private PrecoDeItemDAO dao;
+    
     public List<PrecoDeItem> buscarPrecos() {
-        return new PrecoDeItemDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public PrecoDeItem buscaListaDePrecoAtual(Item item, ListaDePreco listaDePreco, Date emissao) {
-        PrecoDeItem preco = new PrecoDeItemDAO().porItem(item).porListaDePreco(listaDePreco)
+        PrecoDeItem preco = dao.porItem(item).porListaDePreco(listaDePreco)
                 .eNaoExpirado().naMaiorEmissao(emissao).resultado();
         return preco;
     }
 
     public List<PrecoDeItem> buscaListaDePrecoAtual(Item item) {
-        List<PrecoDeItem> precos = new PrecoDeItemDAO().porItem(item)
+        List<PrecoDeItem> precos = dao.porItem(item)
                 .naMaiorEmissao(new Date()).eNaoExpirado().listaDeResultados();
         List<PrecoDeItem> lista = new ArrayList<PrecoDeItem>();
         for (PrecoDeItem p : precos) {
@@ -43,7 +47,7 @@ public class PrecoDeItemService implements Serializable {
     }
 
     public List<PrecoDeItem> buscaTodosPrecos(Item item) {
-        List<PrecoDeItem> precos = new PrecoDeItemDAO().porItem(item).listaDeResultados();
+        List<PrecoDeItem> precos = dao.porItem(item).listaDeResultados();
         return precos;
     }
 

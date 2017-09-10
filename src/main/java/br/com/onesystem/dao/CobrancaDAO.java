@@ -1,7 +1,6 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.CobrancaVariavel;
-import br.com.onesystem.valueobjects.OperacaoFinanceira;
 
 public class CobrancaDAO extends GenericDAO<CobrancaVariavel> {
 

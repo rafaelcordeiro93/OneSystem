@@ -5,16 +5,20 @@ import br.com.onesystem.domain.ConfiguracaoContabil;
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 public class ConfiguracaoContabilService implements Serializable {
 
+    @Inject
+    private ConfiguracaoContabilDAO dao;
+    
     public ConfiguracaoContabilService() {
     }
 
     @Produces
     @RequestScoped
     public ConfiguracaoContabil buscar() {
-        return new ConfiguracaoContabilDAO().resultado();
+        return dao.resultado();
     }
 
 }

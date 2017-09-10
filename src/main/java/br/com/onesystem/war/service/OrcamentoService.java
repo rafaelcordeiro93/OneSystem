@@ -5,15 +5,19 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class OrcamentoService implements Serializable {
 
+    @Inject
+    private OrcamentoDAO dao;
+    
     public List<Orcamento> buscarOrcamentos() {
-        return new OrcamentoDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
     public List<Orcamento> buscarOrcamentosNo(EstadoDeOrcamento estadoDeOrcamento) {
-        return new OrcamentoDAO().porEstado(estadoDeOrcamento).listaDeResultados();
+        return dao.porEstado(estadoDeOrcamento).listaDeResultados();
     }
     
 }

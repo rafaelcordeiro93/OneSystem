@@ -4,15 +4,19 @@ import br.com.onesystem.dao.TransferenciaDAO;
 import br.com.onesystem.domain.Transferencia;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class TransferenciaService implements Serializable {
 
-  public List<Transferencia> buscarTransferencias() {
-        return new TransferenciaDAO().listaDeResultados();
+    @Inject
+    private TransferenciaDAO dao;
+
+    public List<Transferencia> buscarTransferencias() {
+        return dao.listaDeResultados();
     }
-  
-   public List<Transferencia> buscarTransferenciasTipoLancamento() {
-        return new TransferenciaDAO().porTipoLancamento().listaDeResultados();
+
+    public List<Transferencia> buscarTransferenciasTipoLancamento() {
+        return dao.porTipoLancamento().listaDeResultados();
     }
-   
+
 }

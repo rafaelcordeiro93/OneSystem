@@ -4,11 +4,15 @@ import br.com.onesystem.dao.SituacaoFiscalDAO;
 import br.com.onesystem.domain.SituacaoFiscal;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class SituacaoFiscalService implements Serializable {
     
+    @Inject
+    private SituacaoFiscalDAO dao;
+    
     public List<SituacaoFiscal> buscarSituacoesFiscais(){
-        return new SituacaoFiscalDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
     
 }

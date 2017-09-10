@@ -5,11 +5,15 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import java.io.Serializable;
 import java.util.List;
+import javax.inject.Inject;
 
 public class OperacaoDeEstoqueService implements Serializable {
     
+    @Inject
+    private OperacaoDeEstoqueDAO dao;
+    
     public List<OperacaoDeEstoque> buscarOperacoesDeEstoquePor(Operacao operacao){
-        return new OperacaoDeEstoqueDAO().porOperacao(operacao).listaDeResultados();
+        return dao.porOperacao(operacao).listaDeResultados();
     }
         
 }

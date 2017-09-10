@@ -5,19 +5,23 @@ import br.com.onesystem.domain.ReceitaProvisionada;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 public class ReceitaProvisionadaService implements Serializable {
 
+    @Inject
+    private ReceitaProvisionadaDAO dao;
+    
     public List<ReceitaProvisionada> buscarReceitaProvisionadasAReceber() {
-        return new ReceitaProvisionadaDAO().aReceber().listaDeResultados();
+        return dao.aReceber().listaDeResultados();
     }
 
     public List<ReceitaProvisionada> buscarReceitaProvisionadasAReceberComVencimentoEntre(Date dataInicial, Date dataFinal) {
-        return new ReceitaProvisionadaDAO().aReceber().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
+        return dao.aReceber().ePorVencimento(dataInicial, dataFinal).listaDeResultados();
     }
 
     public List<ReceitaProvisionada> buscarReceitaProvisionadas() {
-        return new ReceitaProvisionadaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
 }
