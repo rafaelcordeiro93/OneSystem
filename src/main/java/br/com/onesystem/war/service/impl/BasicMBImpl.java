@@ -24,13 +24,13 @@ public abstract class BasicMBImpl<T, E> {
     protected E e; //BuilderView da View
 
     @Inject
-    private AdicionaDAO<T> adicionaDAO;
+    protected AdicionaDAO<T> adicionaDAO;
 
     @Inject
-    private AtualizaDAO<T> atualizaDAO;
+    protected AtualizaDAO<T> atualizaDAO;
 
     @Inject
-    private RemoveDAO<T> removeDAO;
+    protected RemoveDAO<T> removeDAO;
 
     public abstract void selecionar(SelectEvent event);
 

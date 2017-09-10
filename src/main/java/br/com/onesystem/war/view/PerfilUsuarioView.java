@@ -36,6 +36,15 @@ public class PerfilUsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implement
     @Inject
     private UsuarioService service;
 
+    @Inject
+    private AtualizaDAO<Pessoa> atualizaDAOPessoa;
+    
+    @Inject
+    private PessoaDAO pessoaDAO;
+    
+    @Inject
+    private UsuarioDAO usuarioDAO;
+    
     @PostConstruct
     public void init() {
         buscaUsuario();
@@ -46,8 +55,8 @@ public class PerfilUsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implement
             validaSenha();
             t = e.construirComID();
             if (t.getId() != null) {
-                new AtualizaDAO<Pessoa>().atualiza(pessoa.construirComID());
-                new AtualizaDAO<Usuario>().atualiza(t);
+                atualizaDAOPessoa.atualiza(pessoa.construirComID());
+                atualizaDAO.atualiza(t);
                 refresh();
                 InfoMessage.atualizado();
             } else {
@@ -79,7 +88,7 @@ public class PerfilUsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implement
         t = service.buscarUsuarioPerfil();
         if (t != null) {
             e = new UsuarioBV(t);
-            pessoa = new PessoaBV(new PessoaDAO().porId(e.getId()).resultado());
+            pessoa = new PessoaBV(pessoaDAO.porId(e.getId()).resultado());
         }
     }
 
@@ -100,7 +109,7 @@ public class PerfilUsuarioView extends BasicMBImpl<Usuario, UsuarioBV> implement
     }
 
     private boolean validaUsuarioExistente(Usuario novoRegistro) {
-        List<Usuario> lista = new UsuarioDAO().porId(novoRegistro.getId()).listaDeResultados();
+        List<Usuario> lista = usuarioDAO.porId(novoRegistro.getId()).listaDeResultados();
         return lista.isEmpty();
     }
 
