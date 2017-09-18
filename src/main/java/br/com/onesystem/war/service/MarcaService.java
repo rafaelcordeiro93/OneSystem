@@ -12,7 +12,7 @@ public class MarcaService implements Serializable {
     private MarcaDAO dao;
     
     public List<Marca> buscarMarcas() {
-        return new MarcaDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
 
 }

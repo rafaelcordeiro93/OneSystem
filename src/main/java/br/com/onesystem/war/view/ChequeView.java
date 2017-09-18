@@ -9,7 +9,6 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
-import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -38,11 +37,28 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Serializable {
 
-    private Configuracao configuracao;
     private List<Cotacao> listaCotacao;
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
+
+    @Inject
+    private Configuracao configuracao;
+
+    @Inject
+    private AdicionaDAO<Cheque> adicionaDAO;
+
+    @Inject
+    private AtualizaDAO<Cheque> atualizaDAO;
+
+    @Inject
+    private AtualizaDAO<Baixa> atualizaBaixaDAO;
+
+    @Inject
+    private BaixaDAO baixaDAO;
+
+    @Inject
+    private CotacaoDAO cotacaoDAO;
 
     @PostConstruct
     public void init() {
@@ -66,7 +82,7 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
             setOperacaoFinanceira();
             Cheque ch = e.construir();
             ch.geraBaixaDeCheque();
-            new AdicionaDAO<>().adiciona(ch);
+            adicionaDAO.adiciona(ch);
             InfoMessage.adicionado();
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -78,7 +94,7 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
         try {
             setOperacaoFinanceira();
             Cheque ch = e.construirComID();
-            new AtualizaDAO<>().atualiza(ch);
+            atualizaDAO.atualiza(ch);
             if (ch.getCompensacao() != null && ch.getEstadoDeCheque() == EstadoDeCheque.COMPENSADO) {
                 atualizaBaixasCompensação(ch);
             } else if (ch.getEstadoDeCheque() == EstadoDeCheque.CANCELADO) {
@@ -96,49 +112,49 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
     }
 
     private void atualizaBaixasCompensação(Cheque d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorCobranca(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             bv.setOperacaoFinanceira(d.getOperacaoFinanceira());
             bv.setDataCompensacao(d.getCompensacao());
             bv.setDataCancelamento(null);
             bv.setEstado(EstadoDeBaixa.EFETIVADO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 
     private void atualizaBaixasCancelado(Cheque d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorCobranca(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             bv.setDataCompensacao(null);
             Baixa a = bv.construirComID();
             a.cancela();
-            new AtualizaDAO<>().atualiza(a);
+            atualizaBaixaDAO.atualiza(a);
         }
     }
 
     private void atualizaBaixasDescontado(Cheque d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorCobranca(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             bv.setOperacaoFinanceira(d.getOperacaoFinanceira());
             bv.setDataCompensacao(null);
             bv.setDataCancelamento(null);
             bv.setEstado(EstadoDeBaixa.EFETIVADO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 
     private void atualizaBaixasEmAberto(Cheque d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorCobranca(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             bv.setOperacaoFinanceira(d.getOperacaoFinanceira());
             bv.setDataCompensacao(null);
             bv.setDataCancelamento(null);
             bv.setEstado(EstadoDeBaixa.EM_DEFINICAO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 
@@ -150,9 +166,9 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
             e.setCompensacao(null);
         }
     }
-    
-    public void setDataCompensacaoNull(){
-        if(e.getTipoLancamento() != TipoLancamento.EMITIDA){
+
+    public void setDataCompensacaoNull() {
+        if (e.getTipoLancamento() != TipoLancamento.EMITIDA) {
             e.setCompensacao(null);
         }
     }
@@ -170,7 +186,7 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
             e.setCompensacao(null);
             e.setEstadoDeCheque(EstadoDeCheque.ABERTO);
             Cheque d = e.construirComID();
-            new AtualizaDAO<>().atualiza(d);
+            atualizaDAO.atualiza(d);
             cancelaCompensacaoBaixas(d);
             InfoMessage.atualizado();
             limparJanela();
@@ -180,12 +196,12 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
     }
 
     private void cancelaCompensacaoBaixas(Cheque d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorCobranca(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             bv.setDataCompensacao(null);
             bv.setEstado(EstadoDeBaixa.EM_DEFINICAO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 
@@ -217,7 +233,7 @@ public class ChequeView extends BasicMBImpl<Cheque, ChequeBV> implements Seriali
     }
 
     public List<Cotacao> buscarListaDeCotacao() {
-        listaCotacao = new CotacaoDAO().naEmissao(new Date()).listaDeResultados();
+        listaCotacao = cotacaoDAO.naEmissao(new Date()).listaDeResultados();
         return listaCotacao;
     }
 

@@ -15,17 +15,23 @@ public class ItemDeNotaService implements Serializable {
 
     @Inject
     private ItemDeNotaDAO dao;
+
+    @Inject
+    private ConfiguracaoEstoqueService serv;
     
+    @Inject
+    private ConfiguracaoEstoque conf;
+
     public List<ItemDeNota> buscarItensEmitidos() {
         return dao.listaDeResultados();
     }
 
     public BigDecimal buscaQuantidadeFaturadaPor(ItemDeCondicional item, Condicional condicional) throws DadoInvalidoException {
-        ConfiguracaoEstoqueService serv = new ConfiguracaoEstoqueService();
-        ConfiguracaoEstoque conf = serv.buscar();
+
+        conf = serv.buscar();
 
         BigDecimal saldo = BigDecimal.ZERO;
-        
+
         if (condicional.getNotasEmitidas() != null && !condicional.getNotasEmitidas().isEmpty()) {
             List<ItemDeNota> itensDeNotas = dao.porNotasEmitidas(condicional.getNotasEmitidas()).porItem(item.getItem())
                     .porNaoCancelado().listaDeResultados();

@@ -9,15 +9,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
 public class SelecaoOperacaoNotaRecebidaView extends BasicCrudMBImpl<Operacao> implements Serializable {
 
+    @Inject
+    private OperacaoDAO operacaoDAO;
+    
     @PostConstruct
     public void init() {
-        beans = new OperacaoDAO().porTipoDeLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
     }
 
     @Override

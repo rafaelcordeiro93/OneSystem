@@ -21,7 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import org.primefaces.event.SelectEvent;
- 
+
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Serializable {
@@ -31,10 +31,15 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
     private TaxaDeAdministracaoBV taxa;
     private TaxaDeAdministracao taxaSelecionado;
     private List<TaxaDeAdministracao> listaTaxaDeletada;
+
+    @Inject
     private Configuracao configuracao;
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
+
+    @Inject
+    private RemoveDAO<TaxaDeAdministracao> removeDAO;
 
     @PostConstruct
     public void init() {
@@ -84,7 +89,7 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
 
     private void deletarTaxas() throws PersistenceException, DadoInvalidoException {
         for (TaxaDeAdministracao lista : listaTaxaDeletada) {
-            new RemoveDAO<>().remove(lista, lista.getId());
+            removeDAO.remove(lista, lista.getId());
         }
     }
 

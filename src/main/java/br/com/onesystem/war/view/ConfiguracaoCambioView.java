@@ -32,6 +32,12 @@ public class ConfiguracaoCambioView implements Serializable {
 
     @Inject
     private ConfiguracaoCambioService service;
+    @Inject
+    private AdicionaDAO<ConfiguracaoCambio> adicionaCCDAO;
+    @Inject
+    private AtualizaDAO<ConfiguracaoCambio> atualizaCCDAO;
+    @Inject
+    private AtualizaDAO<Pessoa> atualizaPessoaDAO;
 
     @PostConstruct
     public void init() {
@@ -79,7 +85,7 @@ public class ConfiguracaoCambioView implements Serializable {
             ConfiguracaoCambio conf = configuracaoCambioBV.construir();
             if (configuracaoCambioBV.getId() == null) {
                 validarDados();
-                new AdicionaDAO<ConfiguracaoCambio>().adiciona(conf);
+                adicionaCCDAO.adiciona(conf);
                 configuracaoCambioBV.setId(conf.getId());
                 addCambio(conf);
                 atualizarLista();
@@ -87,7 +93,7 @@ public class ConfiguracaoCambioView implements Serializable {
                 validarDados();
                 deleteCambio();
                 addCambio(conf);
-                new AtualizaDAO<ConfiguracaoCambio>().atualiza(configuracaoCambioBV.construir());
+                atualizaCCDAO.atualiza(configuracaoCambioBV.construir());
                 atualizarLista();
             }
             InfoMessage.print("Configurações de Câmbio gravadas com sucesso!");
@@ -121,7 +127,7 @@ public class ConfiguracaoCambioView implements Serializable {
         for (Pessoa pessoa : pessoasDivisaoLucro) {
             if (!configuracaoCambioBV.getPessoaDivisaoLucro().contains(pessoa)) {
                 pessoa.setConfiguracaoCambio(null);
-                new AtualizaDAO<Pessoa>().atualiza(pessoa);
+                atualizaPessoaDAO.atualiza(pessoa);
             }
         }
     }
@@ -129,7 +135,7 @@ public class ConfiguracaoCambioView implements Serializable {
     private void addCambio(ConfiguracaoCambio conf) throws ConstraintViolationException, DadoInvalidoException {
         for (Pessoa pessoa : configuracaoCambioBV.getPessoaDivisaoLucro()) {
             pessoa.setConfiguracaoCambio(conf);
-            new AtualizaDAO<Pessoa>().atualiza(pessoa);
+            atualizaPessoaDAO.atualiza(pessoa);
         }
     }
 

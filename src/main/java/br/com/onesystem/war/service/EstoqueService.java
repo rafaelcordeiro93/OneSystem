@@ -47,7 +47,7 @@ public class EstoqueService implements Serializable {
     public List<SaldoDeEstoque> buscaListaDeSaldoDeEstoque(Item item, Date data) {
         List<Estoque> estoque = dao.porItem(item).porEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
                 .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
-        List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
+        List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<>();
         for (Estoque e : estoque) {
             boolean operacao = false;
             for (SaldoDeEstoque saldo : saldoDeEstoque) {

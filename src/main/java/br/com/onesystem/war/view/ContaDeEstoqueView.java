@@ -2,7 +2,6 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
-import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
@@ -21,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.PersistenceException;
 import org.primefaces.event.SelectEvent;
@@ -28,16 +28,22 @@ import org.primefaces.event.SelectEvent;
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoqueBV> implements Serializable {
-    
+
     private OperacaoDeEstoqueBV operacaoDeEstoque;
     private Model operacaoDeEstoqueSelecionado;
     private ModelList<OperacaoDeEstoque> operacaoEstoqueList;
-    
+
+    @Inject
+    private RemoveDAO removeDAO;
+
+    @Inject
+    private AtualizaDAO atualizaDAO;
+
     @PostConstruct
     public void init() {
         limparJanela();
     }
-    
+
     public void add() {
         try {
             e.setOperacoesDeEstoque(null);
@@ -50,17 +56,17 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             die.print();
         }
     }
-    
+
     public void update() {
         try {
             if (e != null && e.getId() != null) {
                 t = e.construirComID();
                 atualizaOperacoes();
-                
+
                 List<OperacaoDeEstoque> removidos = operacaoEstoqueList.getRemovidos().stream().filter(m -> ((OperacaoDeEstoque) m.getObject()).getId() != null).map(m -> (OperacaoDeEstoque) m.getObject()).collect(Collectors.toList());
                 removidos.forEach(c -> t.remove(c));
-                
-                new AtualizaDAO<>().atualiza(t);
+
+                atualizaDAO.atualiza(t);
                 removeOperacoes(removidos);
                 limparJanela();
                 InfoMessage.atualizado();
@@ -71,13 +77,13 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             die.print();
         }
     }
-    
+
     private void removeOperacoes(List<OperacaoDeEstoque> removidos) throws DadoInvalidoException, PersistenceException {
         for (OperacaoDeEstoque c : removidos) {
-            new RemoveDAO<>().remove(c, c.getId());
+            removeDAO.remove(c, c.getId());
         }
     }
-    
+
     private void atualizaOperacoes() throws DadoInvalidoException {
         for (OperacaoDeEstoque op : operacaoEstoqueList.getList()) {
             if (op.getId() == null) {
@@ -87,37 +93,36 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             }
         }
     }
-    
+
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof ContaDeEstoque) {
             limparJanela();
-            ContaDeEstoque c = (ContaDeEstoque) obj;
-            this.e = new ContaDeEstoqueBV(c);
+            e = new ContaDeEstoqueBV((ContaDeEstoque) obj);
             selecionaConta();
         } else if (obj instanceof Operacao) {
             this.operacaoDeEstoque.setOperacao((Operacao) obj);
         }
     }
-    
+
     public void selecionaConta() {
         if (e == null && (e.getOperacoesDeEstoque() == null || e.getOperacoesDeEstoque().isEmpty())) {
-            operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
+      
         } else {
-            operacaoEstoqueList = new ModelList<OperacaoDeEstoque>(e.getOperacoesDeEstoque());
+            operacaoEstoqueList = new ModelList<>(e.getOperacoesDeEstoque());
         }
     }
-    
+
     public List<OperacaoFisica> getOperacaoFisica() {
         return Arrays.asList(OperacaoFisica.values());
     }
-    
+
     public void selecionaOperacaoDeEstoque(SelectEvent event) {
         this.operacaoDeEstoqueSelecionado = (Model) event.getObject();
         this.operacaoDeEstoque = new OperacaoDeEstoqueBV((OperacaoDeEstoque) operacaoDeEstoqueSelecionado.getObject());
     }
-    
+
     public void addOperacoesNaLista() {
         try {
             if (operacaoDeEstoque.getOperacao() != null) {
@@ -128,7 +133,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             ex.print();
         }
     }
-    
+
     public void updateOperacoesNaLista() {
         try {
             if (operacaoDeEstoqueSelecionado != null) {
@@ -140,56 +145,56 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             ex.print();
         }
     }
-    
+
     public void deleteOperacoesNaLista() throws DadoInvalidoException {
         if (operacaoDeEstoqueSelecionado != null) {
             operacaoEstoqueList.remove(operacaoDeEstoqueSelecionado);
             limparOperacao();
         }
     }
-    
+
     public void limparOperacao() {
         operacaoDeEstoque = new OperacaoDeEstoqueBV();
         operacaoDeEstoqueSelecionado = null;
     }
-    
+
     public void limparJanela() {
         e = new ContaDeEstoqueBV();
         operacaoDeEstoque = new OperacaoDeEstoqueBV();
         operacaoEstoqueList = new ModelList<>();
         operacaoDeEstoqueSelecionado = null;
     }
-    
+
     public OperacaoDeEstoqueBV getOperacoes() {
         return operacaoDeEstoque;
     }
-    
+
     public void setOperacoes(OperacaoDeEstoqueBV operacaoDeEstoque) {
         this.operacaoDeEstoque = operacaoDeEstoque;
     }
-    
+
     public OperacaoDeEstoqueBV getOperacaoDeEstoque() {
         return operacaoDeEstoque;
     }
-    
+
     public void setOperacaoDeEstoque(OperacaoDeEstoqueBV operacaoDeEstoque) {
         this.operacaoDeEstoque = operacaoDeEstoque;
     }
-    
+
     public Model getOperacaoDeEstoqueSelecionado() {
         return operacaoDeEstoqueSelecionado;
     }
-    
+
     public void setOperacaoDeEstoqueSelecionado(Model operacaoDeEstoqueSelecionado) {
         this.operacaoDeEstoqueSelecionado = operacaoDeEstoqueSelecionado;
     }
-    
+
     public ModelList<OperacaoDeEstoque> getOperacaoEstoqueList() {
         return operacaoEstoqueList;
     }
-    
+
     public void setOperacaoEstoqueList(ModelList<OperacaoDeEstoque> operacaoEstoqueList) {
         this.operacaoEstoqueList = operacaoEstoqueList;
     }
-    
+
 }

@@ -17,7 +17,6 @@ import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
-import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Filial;
@@ -33,7 +32,6 @@ import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
-import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -68,9 +66,6 @@ import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.EstoqueService;
@@ -89,9 +84,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
@@ -157,6 +150,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     private LayoutDeImpressaoService serviceLayout;
     private Cotacao cotacaoDeTitulo;
 
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private AdicionaDAO<NotaEmitida> adicionaDAO;
+
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
@@ -178,7 +180,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             notaEmitida = new NotaEmitidaBV();
             notaEmitida.setEmissao(new Date());
             notaEmitida.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            notaEmitida.setUsuario(new UsuarioLogadoUtil().getUsuario());
+            notaEmitida.setUsuario(usuarioLogado.getUsuario());
             notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaEmitida.setListaDePreco(configuracaoEstoque.getListaDePreco());
@@ -248,7 +250,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 if (boletoDeCartao.getCartao() != null) {
-                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado());
+                    boletoDeCartao.setCotacao(cotacaoDAO.porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado());
                 }
                 nota.adiciona(boletoDeCartao.construir());
             }
@@ -280,7 +282,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         if (p.getCartao() != null) {
-                            Cotacao resultado = new CotacaoDAO().porConta(p.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado();
+                            Cotacao resultado = cotacaoDAO.porConta(p.getCartao().getConta()).naMaiorEmissao(notaEmitida.getEmissao()).resultado();
                             if (resultado != null) {
                                 p.setCotacao(resultado);
                             } else {
@@ -329,7 +331,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
-            new AdicionaDAO<>().adiciona(nota);
+            adicionaDAO.adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
             layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);

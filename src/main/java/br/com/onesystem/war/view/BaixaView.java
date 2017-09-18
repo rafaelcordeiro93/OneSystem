@@ -13,6 +13,7 @@ import br.com.onesystem.war.builder.BaixaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -26,6 +27,9 @@ public class BaixaView extends BasicMBImpl<Baixa, BaixaBV> implements Serializab
 
     private Baixa baixa;
     private String statusButton = "RedButton";
+
+    @Inject
+    private AtualizaDAO<Baixa> atualizaDAO;
 
     @PostConstruct
     public void init() {
@@ -69,7 +73,7 @@ public class BaixaView extends BasicMBImpl<Baixa, BaixaBV> implements Serializab
         try {
             Baixa b = e.construirComID();
             b.cancela();
-            new AtualizaDAO<>().atualiza(b);
+            atualizaDAO.atualiza(b);
             InfoMessage.atualizado();
         } catch (DadoInvalidoException ex) {
             ex.print();

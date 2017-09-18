@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Item;
