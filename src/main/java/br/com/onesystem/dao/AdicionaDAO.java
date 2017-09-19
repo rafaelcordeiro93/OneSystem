@@ -38,18 +38,14 @@ public class AdicionaDAO<T> {
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
+                throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
             }
             throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
-            System.out.println("Erro: " + ex.getMessage());
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
-            System.out.println("Verifique Lista do toString()");
             throw new FDadoInvalidoException("Verifique Lista do toString()");
-        } finally {
-//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
-        }
+        } 
     }
 
     private String getMessage(ConstraintViolationException cve) {

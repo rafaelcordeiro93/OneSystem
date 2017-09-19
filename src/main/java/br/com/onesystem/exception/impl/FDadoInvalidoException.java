@@ -2,6 +2,7 @@ package br.com.onesystem.exception.impl;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.TipoDadoInvalido;
+import javax.ejb.ApplicationException;
 import javax.faces.application.FacesMessage;
 import javax.faces.application.FacesMessage.Severity;
 
@@ -11,6 +12,7 @@ import javax.faces.application.FacesMessage.Severity;
  * @funcao Enviar excessões que podem ocorrer durante a execução. Deve ser usado
  * como um padrão para todas informações.
  */
+@ApplicationException(rollback = true)
 public class FDadoInvalidoException extends DadoInvalidoException {
 
     private String valor;
