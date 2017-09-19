@@ -12,7 +12,6 @@ import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.dao.ValorPorCotacaoDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
-import br.com.onesystem.domain.Conta;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
@@ -22,7 +21,6 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.Model;
@@ -37,6 +35,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -56,6 +55,21 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     private List<ValorPorCotacao> valorPorCotacaoList;
     private NotaRecebida notaRecebidaSelecionada;
 
+    @Inject
+    private AdicionaDAO<ConhecimentoDeFrete> adicionaDAO;
+    @Inject
+    private AtualizaDAO<ConhecimentoDeFrete> atualizaDAO;
+    @Inject
+    private AtualizaDAO<NotaRecebida> atualizaNotaDAO;
+    @Inject
+    private ConhecimentoDeFreteDAO conhecimentoDeFreteDAO;
+    @Inject
+    private RemoveDAO<Titulo> removeTituloDAO;
+    @Inject
+    private RemoveDAO<ValorPorCotacao> removeValoresDAO;
+    @Inject
+    private ValorPorCotacaoDAO valorPorCotacaoDAO;
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -73,7 +87,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             valorPorCotacaoList.forEach((v) -> {
                 f.adiciona(v);
             });
-            new AdicionaDAO<>().adiciona(f);
+            adicionaDAO.adiciona(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -89,7 +103,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             ConhecimentoDeFrete f = e.construirComID();
             removidos.forEach(c -> f.remove(c));
             notaRecebidaRemovidas.forEach(c -> f.remove(c));
-            List<ValorPorCotacao> valoresARemover = new ValorPorCotacaoDAO().porConhecimentoDeFrete(f).listaDeResultados();
+            List<ValorPorCotacao> valoresARemover = valorPorCotacaoDAO.porConhecimentoDeFrete(f).listaDeResultados();
             if (valorPorCotacaoList.size() > 0) {
                 valoresARemover.forEach(v -> f.remove(v));
             }
@@ -102,18 +116,18 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
             valorPorCotacaoList.forEach((v) -> {
                 f.adiciona(v);//Adiciona as os ValoresPorCotacão Novos
             });
-            new AtualizaDAO<>().atualiza(f);
+            atualizaDAO.atualiza(f);
             if (valorPorCotacaoList.size() > 0) {
                 for (ValorPorCotacao v : valoresARemover) {
-                    new RemoveDAO<>().remove(v, v.getId());
+                    removeValoresDAO.remove(v, v.getId());
                 }
             }
             for (NotaRecebida ne : notaRecebidaRemovidas) {
                 ne.setConhecimentoDeFrete(null);
-                new AtualizaDAO<>().atualiza(ne);
+                atualizaNotaDAO.atualiza(ne);
             }
             for (Titulo c : removidos) {
-                new RemoveDAO<>().remove(c, c.getId());
+                removeTituloDAO.remove(c, c.getId());
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -128,11 +142,11 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
         try {
             for (NotaRecebida ne : e.getNotaRecebida()) {
                 ne.setConhecimentoDeFrete(null);
-                new AtualizaDAO<>().atualiza(ne);
+                atualizaNotaDAO.atualiza(ne);
             }
             e.setNotaRecebida(null);
             ConhecimentoDeFrete f = e.construirComID();
-            new AtualizaDAO<>().atualiza(f);
+            atualizaDAO.atualiza(f);
             deleteNoBanco(f, f.getId());
         } catch (DadoInvalidoException die) {
             die.print();
@@ -151,7 +165,7 @@ public class ConhecimentoDeFreteView extends BasicMBImpl<ConhecimentoDeFrete, Co
     public void validaDinheiro() throws DadoInvalidoException {
         BigDecimal valorBanco = BigDecimal.ZERO; // Se existir valor em dinheiro abre a janela de cotações.     
         if (e.getId() != null) {
-            valorBanco = new ConhecimentoDeFreteDAO().porId(e.getId()).resultado().getDinheiro();
+            valorBanco = conhecimentoDeFreteDAO.porId(e.getId()).resultado().getDinheiro();
         }
         if (e.getDinheiro() != null && e.getDinheiro().compareTo(BigDecimal.ZERO) > 0 && valorBanco.subtract(e.getDinheiro()).compareTo(BigDecimal.ZERO) != 0) {
             SessionUtil.put(e.construir(), "conhecimentoDeFrete", FacesContext.getCurrentInstance());

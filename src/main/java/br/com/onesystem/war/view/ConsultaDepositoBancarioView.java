@@ -14,7 +14,6 @@ import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.domain.Filial;
-import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
@@ -32,6 +31,7 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
@@ -48,14 +48,27 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     private List<Cotacao> cotacaoBancariaLista;
     private List<Cotacao> cotacaoEmpresaLista;
 
+    @Inject
+    private AdicionaDAO<DepositoBancario> adicionaDAO;
+    @Inject
+    private AtualizaDAO<DepositoBancario> atualizaDAO;
+    @Inject
+    private AtualizaDAO<Baixa> atualizaBaixaDAO;
+    @Inject
+    private BaixaDAO baixaDAO;
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+    @Inject
+    private DepositoBancarioDAO depositoBancarioDAO;
+
     @PostConstruct
     public void init() {
         limparJanela();
     }
 
     public void inicializar() {
-        cotacaoEmpresaLista = new CotacaoDAO().naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
-        cotacaoBancariaLista = new CotacaoDAO().naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
+        cotacaoEmpresaLista = cotacaoDAO.naMaiorEmissao(e.getEmissao()).porCotacaoEmpresa().listaDeResultados();
+        cotacaoBancariaLista = cotacaoDAO.naUltimaEmissao(e.getEmissao()).porCotacaoBancaria().listaDeResultados();
     }
 
     @Override
@@ -93,7 +106,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
             depositoEstonado.setIdRelacaoEstorno(e.getId());
             DepositoBancario d = depositoEstonado.construir();
             d.geraEstornoDoDepositoCom(depositoEstonado.getCotacaoDeOrigem(), depositoEstonado.getCotacaoDeDestino());
-            new AdicionaDAO<>().adiciona(d);
+            adicionaDAO.adiciona(d);
             atualizaDeposito(d);
             InfoMessage.atualizado();
             limparJanela();
@@ -108,7 +121,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
             if (d.getCompensacao() == null) {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Data_Compensacao_Deve_Ser_Informada"));
             }
-            new AtualizaDAO<>().atualiza(d);
+            atualizaDAO.atualiza(d);
             atualizaBaixas(d);
             InfoMessage.atualizado();
             limparJanela();
@@ -121,7 +134,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
         try {
             e.setCompensacao(null);
             DepositoBancario d = e.construirComID();
-            new AtualizaDAO<>().atualiza(d);
+            atualizaDAO.atualiza(d);
             cancelaCompensacaoBaixas(d);
             InfoMessage.atualizado();
             limparJanela();
@@ -145,7 +158,7 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
             e.setCompensacao(null);
             t = e.construirComID();
             t.setIdRelacaoEstorno(d);
-            new AtualizaDAO<>().atualiza(t);
+            atualizaDAO.atualiza(t);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -164,33 +177,33 @@ public class ConsultaDepositoBancarioView extends BasicMBImpl<DepositoBancario, 
     }
 
     private void cancelaEstorno() throws ConstraintViolationException, DadoInvalidoException {
-        DepositoBancarioBV de = new DepositoBancarioBV(new DepositoBancarioDAO().porId(t.getIdRelacaoEstorno()).resultado());
+        DepositoBancarioBV de = new DepositoBancarioBV(depositoBancarioDAO.porId(t.getIdRelacaoEstorno()).resultado());
         de.setIdRelacaoEstorno(null);
         de.setEstornado(false);
-        new AtualizaDAO<>().atualiza(de.construirComID());
+        atualizaDAO.atualiza(de.construirComID());
     }
 
     private void atualizaBaixas(DepositoBancario d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorDepositoBancario(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorDepositoBancario(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             if (b.getOperacaoFinanceira().equals(OperacaoFinanceira.ENTRADA)) {
                 bv.setDataCompensacao(d.getCompensacao());
             }
             bv.setEstado(EstadoDeBaixa.EFETIVADO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 
     private void cancelaCompensacaoBaixas(DepositoBancario d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorDepositoBancario(d).listaDeResultados();
+        List<Baixa> listaBaixa = baixaDAO.ePorDepositoBancario(d).listaDeResultados();
         for (Baixa b : listaBaixa) {
             BaixaBV bv = new BaixaBV(b);
             if (b.getOperacaoFinanceira().equals(OperacaoFinanceira.ENTRADA)) {
                 bv.setDataCompensacao(null);
             }
             bv.setEstado(EstadoDeBaixa.EM_DEFINICAO);
-            new AtualizaDAO<>().atualiza(bv.construirComID());
+            atualizaBaixaDAO.atualiza(bv.construirComID());
         }
     }
 

@@ -75,8 +75,7 @@ public class ConsultaCondicionalView extends BasicMBImpl<Condicional, Condiciona
     public void cancela() {
         try {
             t.cancela();
-            new AtualizaDAO<>().atualiza(t);
-            InfoMessage.atualizado();
+            updateNoBanco(t);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

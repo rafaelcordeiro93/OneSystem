@@ -31,6 +31,8 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     private OperacaoDeEstoqueBV operacaoDeEstoque;
     private Model operacaoDeEstoqueSelecionado;
+    
+    @Inject
     private ModelList<OperacaoDeEstoque> operacaoEstoqueList;
 
     @Inject
@@ -108,7 +110,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     public void selecionaConta() {
         if (e == null && (e.getOperacoesDeEstoque() == null || e.getOperacoesDeEstoque().isEmpty())) {
-      
+            operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
         } else {
             operacaoEstoqueList = new ModelList<>(e.getOperacoesDeEstoque());
         }
@@ -161,7 +163,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
     public void limparJanela() {
         e = new ContaDeEstoqueBV();
         operacaoDeEstoque = new OperacaoDeEstoqueBV();
-        operacaoEstoqueList = new ModelList<>();
+        operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
         operacaoDeEstoqueSelecionado = null;
     }
 

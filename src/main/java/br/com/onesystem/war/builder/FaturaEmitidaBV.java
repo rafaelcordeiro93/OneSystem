@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -34,6 +35,8 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     private List<ValorPorCotacao> valorPorCotacao = new ArrayList<>();
     private BigDecimal dinheiro;
     private Filial filial;
+    @Inject
+    private Configuracao cfg;
 
     public FaturaEmitidaBV(FaturaEmitida faturaEmitidaSelecionada) {
         this.id = faturaEmitidaSelecionada.getId();
@@ -125,7 +128,6 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     }
 
     public String getMoedaPadrao() throws EDadoInvalidoException {
-        Configuracao cfg = new ConfiguracaoService().buscar();
         return cfg.getMoedaPadrao().getSigla();
     }
 
@@ -136,7 +138,7 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
-    
+
     public FaturaEmitida construirComID() throws DadoInvalidoException {
         return new FaturaEmitidaBuilder().comID(id).comCodigo(codigo).comTotal(total).comEmissao(emissao).
                 comPessoa(pessoa).comTitulo(titulo).comNotaEmitida(notaEmitida).comValorPorCotacaos(valorPorCotacao).
