@@ -36,6 +36,12 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     @Inject
     private CotacaoService serviceCotacao;
 
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+    
+    @Inject
+    private CaixaDAO caixaDAO;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -57,7 +63,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void buscaUsuarioDaSessao() {
-        e.setUsuario(new UsuarioDAO().porEmailString(new UsuarioLogadoUtil().getEmailUsuario()).resultado());
+        e.setUsuario(usuarioLogado.getUsuario());
     }
 
     private void adicionaCotacaoInicial() {
@@ -66,7 +72,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void populaCampos() throws DadoInvalidoException {
-            e = new CaixaBV(new CaixaDAO().porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
+            e = new CaixaBV(caixaDAO.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).porUltimoAberto().resultado());
             if (e.getId() != null) {
                 alteraEstadoCaixa();
                 return;
@@ -113,9 +119,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
                 }
                 Caixa c = e.construirComID();
                 c.fecharCaixa();
-                new AtualizaDAO<>().atualiza(c);
-                InfoMessage.atualizado();
-                limparJanela();
+                updateNoBanco(c);
                 populaCampos();
             }
         } catch (EDadoInvalidoException die) {

@@ -63,7 +63,6 @@ import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -98,7 +97,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private ItemDeNotaBV itemRecebido;
     private ItemDeNota itemRecebidoSelecionado;
     private EstoqueBV estoqueBV;
-    private Configuracao configuracao;
     private ValorPorCotacaoBV cotacaoValoresSelecionado;
     private List<Cotacao> cotacaoLista;
     private List<ValorPorCotacaoBV> cotacoes;
@@ -112,11 +110,11 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private ChequeBV cheque;
     private Cheque chequeSelecionado;
     private PedidoAFornecedores pedidoAFornecedores;
-    private ConfiguracaoEstoque configuracaoEstoque;
     private boolean buscouDeposito = false;
+    private Cotacao cotacaoDeTitulo;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
     private CotacaoService service;
@@ -125,8 +123,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private EstoqueService serviceEstoque;
 
     @Inject
-    private ConfiguracaoEstoqueService confEstoqueService;
-    private Cotacao cotacaoDeTitulo;
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -137,9 +134,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     private void iniciarConfiguracoes() {
         try {
-            configuracao = configuracaoService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
-            configuracaoEstoque = confEstoqueService.buscar();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -1049,14 +1044,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     public void setCobrancas(List<CobrancaBV> cobrancas) {
         this.cobrancas = cobrancas;
-    }
-
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
     }
 
     public CotacaoService getService() {

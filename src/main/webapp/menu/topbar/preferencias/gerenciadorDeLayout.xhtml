@@ -21,7 +21,7 @@
 
                         <div class="ui-g">
                             <p:dataTable id="tiposLayout" widgetVar="tipoLayoutTable" var="m" value="#{gerenciadorDeLayoutView.tipoLayouts}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}" 
-                                         rowKey="#{m.id}" reflow="true" style="border: none;" styleClass="ui-g-12 ui-md-4" selection="#{gerenciadorDeLayoutView.layoutSelecionado}" >
+                                         rowKey="#{m.id}" style="border: none;" styleClass="ui-g-12 ui-md-4" selection="#{gerenciadorDeLayoutView.layoutSelecionado}" >
 
                                 <p:ajax event="rowSelect" listener="#{gerenciadorDeLayoutView.selecionaTipoLayout}" update=":conteudo" />
 

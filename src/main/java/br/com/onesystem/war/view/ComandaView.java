@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Item;
@@ -22,8 +21,6 @@ import br.com.onesystem.valueobjects.EstadoDeComanda;
 import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.ComandaBV;
 import br.com.onesystem.war.service.ComandaService;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -52,15 +49,13 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
     private ItemDeComandaBV itemDeComanda;
     private ItemDeComanda itemDeComandaSelecionado;
     private List<ItemDeComanda> itensDeComandas;
-    private Configuracao configuracao;
-    private ConfiguracaoEstoque configuracaoEstoque;
     private Cotacao cotacao;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
-    private ConfiguracaoEstoqueService configuracaoEstoqueService;
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     @Inject
     private CotacaoService cotacaoService;
@@ -78,8 +73,6 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
     private void iniciarConfiguracoes() {
         try {
             comandasAbertas = service.buscarComandasNo(EstadoDeComanda.EM_DEFINICAO);
-            configuracao = configuracaoService.buscar();
-            configuracaoEstoque = configuracaoEstoqueService.buscar();
             cotacao = cotacaoService.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -339,14 +332,6 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
 
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
-    }
-
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
     }
 
     public CotacaoService getCotacaoService() {

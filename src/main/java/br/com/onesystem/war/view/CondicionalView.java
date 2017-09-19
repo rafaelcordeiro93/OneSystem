@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Item;
@@ -55,16 +54,14 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     private ItemDeCondicionalBV itemDeCondicional;
     private ItemDeCondicional itemDeCondicionalSelecionado;
     private List<ItemDeCondicional> itensDeCondicionais;
-    private Configuracao configuracao;
-    private ConfiguracaoVenda configuracaoVenda;
     private Cotacao cotacao;
     private LayoutDeImpressao layout;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
-    private ConfiguracaoVendaService configuracaoVendaService;
+    private ConfiguracaoVenda configuracaoVenda;
 
     @Inject
     private CotacaoService cotacaoService;
@@ -81,8 +78,6 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     private void iniciarConfiguracoes() {
         try {
-            configuracaoVenda = configuracaoVendaService.buscar();
-            configuracao = configuracaoService.buscar();
             cotacao = cotacaoService.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -352,22 +347,6 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
-    }
-
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
-    }
-
-    public ConfiguracaoVendaService getConfiguracaoVendaService() {
-        return configuracaoVendaService;
-    }
-
-    public void setConfiguracaoVendaService(ConfiguracaoVendaService configuracaoVendaService) {
-        this.configuracaoVendaService = configuracaoVendaService;
     }
 
     public CotacaoService getCotacaoService() {
