@@ -12,12 +12,15 @@ public class UsuarioService implements Serializable {
     @Inject
     private UsuarioDAO dao;
 
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+
     public List<Usuario> buscarUsuarios() {
         return dao.listaDeResultados();
     }
 
     public Usuario buscarUsuarioPerfil() {
-        String user = new UsuarioLogadoUtil().getEmailUsuario();
+        String user = usuarioLogado.getEmailUsuario();
         if (user != null) {
             return dao.porEmailString(user).resultado();
         } else {

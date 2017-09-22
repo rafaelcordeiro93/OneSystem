@@ -12,7 +12,7 @@ public class BancoService implements Serializable {
     private BancoDAO dao;
     
     public List<Banco> buscarBancos(){
-        return new BancoDAO().listaDeResultados();
+        return dao.listaDeResultados();
     }
     
 }

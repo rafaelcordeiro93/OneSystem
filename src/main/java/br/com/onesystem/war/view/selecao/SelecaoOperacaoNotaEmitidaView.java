@@ -10,27 +10,31 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
 @javax.enterprise.context.RequestScoped
 public class SelecaoOperacaoNotaEmitidaView extends BasicCrudMBImpl<Operacao> implements Serializable {
 
+    @Inject
+    private OperacaoDAO operacaoDAO;
+
     @PostConstruct
     public void init() {
-        beans = new OperacaoDAO().porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados();
+        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados();
     }
 
     @Override
     public void abrirDialogo() {
         exibirNaTela("contabil/selecao/selecaoOperacaoNotaEmitida");
     }
-    
+
     @Override
-    public String abrirEdicao(){
+    public String abrirEdicao() {
         return "/menu/contabil/operacoes";
     }
-    
+
     @Override
     public List<Operacao> complete(String query) {
         List<Operacao> listaFIltrada = new ArrayList<>();

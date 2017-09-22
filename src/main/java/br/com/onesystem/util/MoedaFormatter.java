@@ -5,13 +5,10 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import com.ibm.icu.text.NumberFormat;
-import com.sun.org.apache.xml.internal.security.Init;
 import java.math.BigDecimal;
-import javax.inject.Inject;
 
 /**
  *

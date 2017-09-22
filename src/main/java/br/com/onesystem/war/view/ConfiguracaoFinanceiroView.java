@@ -24,6 +24,12 @@ public class ConfiguracaoFinanceiroView implements Serializable {
     @Inject
     private ConfiguracaoFinanceiroService service;
 
+    @Inject
+    private AdicionaDAO<ConfiguracaoFinanceiro> adicionaDAO;
+
+    @Inject
+    private AtualizaDAO<ConfiguracaoFinanceiro> atualizaDAO;
+
     @PostConstruct
     public void init() {
         configuracao = service.buscar();
@@ -38,10 +44,10 @@ public class ConfiguracaoFinanceiroView implements Serializable {
         try {
             ConfiguracaoFinanceiro conf = configuracaoFinanceiroBV.construir();
             if (configuracao == null) {
-                new AdicionaDAO<ConfiguracaoFinanceiro>().adiciona(conf);
+                adicionaDAO.adiciona(conf);
                 configuracao = conf;
             } else {
-                new AtualizaDAO<ConfiguracaoFinanceiro>().atualiza(conf);
+                atualizaDAO.atualiza(conf);
             }
             InfoMessage.print("Configurações gravadas com sucesso!");
         } catch (DadoInvalidoException die) {

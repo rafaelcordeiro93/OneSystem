@@ -44,10 +44,12 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> 
         try {
             Configuracao conf = configuracaoBV.construirComID();
             if (configuracao == null) {
-                new AdicionaDAO<>().adiciona(conf);
+                addNoBanco(conf);
+                //adicionaDAO.adiciona(conf);
                 configuracao = conf;
             } else {
-                new AtualizaDAO<>().atualiza(conf);
+                updateNoBanco(conf);
+                // atualizaDAO.atualiza(conf);
             }
             InfoMessage.print(new BundleUtil().getMessage("Configuracao_gravada"));
         } catch (DadoInvalidoException die) {
@@ -91,7 +93,7 @@ public class ConfiguracaoView extends BasicMBImpl<Configuracao, ConfiguracaoBV> 
 
     @Override
     public void limparJanela() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
 }
