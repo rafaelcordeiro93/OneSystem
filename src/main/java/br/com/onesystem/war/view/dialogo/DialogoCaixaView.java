@@ -30,6 +30,9 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     @Inject
     private CaixaDAO dao;
     
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -49,7 +52,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     private void popularLista() {
-        caixas = dao.porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).emAberto().listaDeResultados();
+        caixas = dao.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).emAberto().listaDeResultados();
     }
 
     public void reloadPage() throws IOException {

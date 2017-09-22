@@ -5,10 +5,13 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Moeda;
 import com.ibm.icu.text.NumberFormat;
+import com.sun.org.apache.xml.internal.security.Init;
 import java.math.BigDecimal;
+import javax.inject.Inject;
 
 /**
  *
@@ -35,7 +38,7 @@ public class MoedaFormatter {
         Double v = valor == null ? 0 : valor == 0 ? 0 : valor;
         return NumberFormat.getCurrencyInstance().format(v);
     }
-
+    
     /**
      * O valor a converter deve ser verificado se diferente de nulo e maior que
      * zero, assim também confere se a cotacao foi informada e o seu valor

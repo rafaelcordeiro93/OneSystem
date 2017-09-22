@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
@@ -17,17 +16,14 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.ImpressoraDeLayout;
-import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.ItemOrcadoBV;
 import br.com.onesystem.war.builder.OrcamentoBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -35,15 +31,11 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.apache.http.protocol.RequestContent;
 import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
@@ -58,12 +50,11 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private ItemOrcadoBV itemOrcado;
     private ItemOrcado itemOrcadoSelecionado;
-    private Configuracao configuracao;
     private Cotacao cotacao;
     private LayoutDeImpressao layout;
 
     @Inject
-    private ConfiguracaoService configuracaoService;
+    private Configuracao configuracao;
 
     @Inject
     private CotacaoService service;
@@ -80,7 +71,6 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     private void iniciarConfiguracoes() {
         try {
-            configuracao = configuracaoService.buscar();
             cotacao = service.getCotacaoPadrao(new Date());
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -303,14 +293,6 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
 
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
-    }
-
-    public ConfiguracaoService getConfiguracaoService() {
-        return configuracaoService;
-    }
-
-    public void setConfiguracaoService(ConfiguracaoService configuracaoService) {
-        this.configuracaoService = configuracaoService;
     }
 
     public CotacaoService getService() {

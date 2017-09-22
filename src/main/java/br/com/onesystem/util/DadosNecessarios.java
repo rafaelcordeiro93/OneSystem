@@ -42,7 +42,6 @@ public class DadosNecessarios implements Serializable {
     private FacesContext fc = FacesContext.getCurrentInstance();
     private BundleUtil b = new BundleUtil();
 
-
     @Inject
     private Configuracao configuracao;
 
@@ -57,20 +56,23 @@ public class DadosNecessarios implements Serializable {
 
     @Inject
     private CotacaoService cotacaoService;
-    
+
     @Inject
     private OperacaoService operacaoService;
-    
+
     public List<DadosNecessariosBV> valida(String janela) {
         // Filial obrigatória para todas as janelas.
         pendencias = new ArrayList<>();
-        
-        if (!janela.equals("/dashboard.xhtml") 
-                && !janela.equals("/menu/topbar/preferencias/filial.xhtml") 
+
+        if (janela.contains("/OneSystem-war")) {
+            janela = janela.substring(janela.indexOf("/OneSystem-war") + 14);
+        }
+
+        if (!janela.equals("/dashboard.xhtml")
+                && !janela.equals("/menu/topbar/preferencias/filial.xhtml")
                 && !janela.equals("/configuracaoNecessaria.xhtml")
                 && !janela.equals("/login.xhtml")) {
             getFilial();
-            return pendencias;
         }
 
         switch (janela) {

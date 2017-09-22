@@ -108,6 +108,7 @@ public class Caixa implements Serializable {
     }
     
     public String getSaldoFormatado() throws EDadoInvalidoException {
+        
         Configuracao cfg = new ConfiguracaoService().buscar();
         return MoedaFormatter.format(cfg.getMoedaPadrao(), getSaldo());
     }

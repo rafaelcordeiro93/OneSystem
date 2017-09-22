@@ -35,26 +35,16 @@ public class AtualizaDAO<T> {
             em.persist(new Log("Alterado: " + t, TipoTransacao.ALTERACAO));
 
         } catch (PersistenceException pe) {
-            System.out.println("PersistenceException:  " + pe);
-            try {
-
-                if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                    ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                    throw new ConstraintViolationException(getMessage(cve), null, getConstraint(cve));
-                }
-            } catch (NullPointerException e) {
-                throw new FDadoInvalidoException("null pointer" + e.getCause());
+            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+                throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
             }
-        } catch (StackOverflowError soe) {
-            System.out.println("Verifique Lista do toString()");
-            throw new FDadoInvalidoException("Verifique Lista do toString()");
+            throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
             throw new FDadoInvalidoException("<AtualizaDAO> Erro de Gravação: " + ex.getMessage());
-        } finally {
-            // fecha a entity manager
-//            em.close(); Comentado na alteração de versão do Hibernate para 5.2
+        } catch (StackOverflowError soe) {
+            throw new FDadoInvalidoException("Verifique Lista do toString()");
         }
-
     }
 
     private String getMessage(ConstraintViolationException cve) {

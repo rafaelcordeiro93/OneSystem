@@ -37,14 +37,11 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     private CotacaoService serviceCotacao;
 
     @Inject
-    private UsuarioDAO usuarioDAO;
-
+    private UsuarioLogadoUtil usuarioLogado;
+    
     @Inject
     private CaixaDAO caixaDAO;
-
-    @Inject
-    private AtualizaDAO<Caixa> atualizaDAO;
-
+    
     @PostConstruct
     public void init() {
         limparJanela();
@@ -66,7 +63,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void buscaUsuarioDaSessao() {
-        e.setUsuario(usuarioDAO.porEmailString(new UsuarioLogadoUtil().getEmailUsuario()).resultado());
+        e.setUsuario(usuarioLogado.getUsuario());
     }
 
     private void adicionaCotacaoInicial() {
@@ -75,14 +72,14 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void populaCampos() throws DadoInvalidoException {
-        e = new CaixaBV(caixaDAO.porEmailDeUsuario(new UsuarioLogadoUtil().getEmailUsuario()).porUltimoAberto().resultado());
-        if (e.getId() != null) {
-            alteraEstadoCaixa();
-            return;
-        } else if (e.getId() == null) {
-            buscaUsuarioDaSessao();
-            adicionaCotacaoInicial();
-        }
+            e = new CaixaBV(caixaDAO.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).porUltimoAberto().resultado());
+            if (e.getId() != null) {
+                alteraEstadoCaixa();
+                return;
+            } else if (e.getId() == null) {
+                buscaUsuarioDaSessao();
+                adicionaCotacaoInicial();
+            }
     }
 
     public void add() {
@@ -122,9 +119,7 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
                 }
                 Caixa c = e.construirComID();
                 c.fecharCaixa();
-                atualizaDAO.atualiza(c);
-                InfoMessage.atualizado();
-                limparJanela();
+                updateNoBanco(c);
                 populaCampos();
             }
         } catch (EDadoInvalidoException die) {
