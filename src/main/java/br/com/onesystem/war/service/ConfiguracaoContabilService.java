@@ -16,7 +16,6 @@ public class ConfiguracaoContabilService implements Serializable {
     }
 
     @Produces
-    @RequestScoped
     public ConfiguracaoContabil buscar() {
         return dao.resultado();
     }

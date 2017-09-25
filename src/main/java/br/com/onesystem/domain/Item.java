@@ -14,6 +14,8 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +27,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -216,61 +219,6 @@ public class Item implements Serializable {
 
     public ItemImagem getImagemFavorita() {
         return imagens.stream().filter(ItemImagem::isFavorita).findAny().get();
-    }
-
-    public BigDecimal getPrecoTotal() {
-        if (getSaldo().compareTo(BigDecimal.ZERO) == 0) {
-            return getPreco();
-        } else {
-            return getSaldo().multiply(getPreco()).setScale(2, RoundingMode.HALF_UP);
-        }
-    }
-
-    public BigDecimal getPreco(ListaDePreco listaDePreco) {
-        PrecoDeItem preco = new PrecoDeItemService().buscaListaDePrecoAtual(this, listaDePreco, new Date());
-        if (preco == null) {
-            return BigDecimal.ZERO;
-        } else {
-            return preco.getValor();
-        }
-    }
-
-    public BigDecimal getPreco() {
-        ConfiguracaoEstoque conf = new ConfiguracaoEstoqueService().buscar();
-        if (conf != null && conf.getListaDePreco() != null) {
-            PrecoDeItem preco = new PrecoDeItemService().buscaListaDePrecoAtual(this, conf.getListaDePreco(), new Date());
-            if (preco == null) {
-                return BigDecimal.ZERO;
-            } else {
-                return preco.getValor();
-            }
-        } else {
-            return BigDecimal.ZERO;
-        }
-    }
-
-    public BigDecimal getCustoTotal() {
-        if (getSaldo().compareTo(BigDecimal.ZERO) == 0) {
-            return getPreco();
-        } else {
-            return getSaldo().multiply(getUltimoCusto()).setScale(2, RoundingMode.HALF_UP);
-        }
-    }
-
-    public BigDecimal getSaldo() {
-        return new EstoqueService().buscaSaldoTotalDeEstoque(this, new Date());
-    }
-
-    public BigDecimal getSaldo(Date data) {
-        return new EstoqueService().buscaSaldoTotalDeEstoque(this, data);
-    }
-
-    public BigDecimal getUltimoCusto() {
-        return new EstoqueService().buscaUltimoCustoItem(this, new Date());
-    }
-
-    public BigDecimal getCustoMedio() {
-        return new EstoqueService().buscaCustoMedioDeItem(this, new Date());
     }
 
     @Override

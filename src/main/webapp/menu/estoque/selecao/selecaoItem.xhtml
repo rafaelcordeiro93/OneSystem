@@ -20,8 +20,8 @@
             <p:column headerText="#{l.Codigo_De_Barras}" sortBy="#{bean.barras}" filterBy="#{bean.barras}" footerText="#{l.Codigo_De_Barras}" filterMatchMode="contains">
                 <h:outputText value="#{bean.barras}" />
             </p:column>
-            <p:column headerText="#{l.Saldo}" sortBy="#{bean.saldo}" filterBy="#{bean.saldo}" footerText="#{l.Saldo}" filterMatchMode="contains" styleClass="TexAlCenter">
-                <h:outputText value="#{bean.saldo}"/>
+            <p:column headerText="#{l.Saldo}" sortBy="#{selecaoItemView.service.getSaldo(bean)}" filterBy="#{selecaoItemView.service.getSaldo(bean)}" footerText="#{l.Saldo}" filterMatchMode="contains" styleClass="TexAlCenter">
+                <h:outputText value="#{selecaoItemView.service.getSaldo(bean)}"/>
             </p:column>
             <p:column headerText="#{l.Marca}" sortBy="#{bean.marca.nome}" filterBy="#{bean.marca.nome}" footerText="#{l.Marca}" filterMatchMode="contains">
                 <h:outputText value="#{bean.marca.nome}" />

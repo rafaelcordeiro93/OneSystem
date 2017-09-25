@@ -14,6 +14,7 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
+import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -40,6 +41,9 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     @Inject
     private AtualizaDAO atualizaDAO;
+    
+    @Inject
+    private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @PostConstruct
     public void init() {
@@ -101,7 +105,9 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         Object obj = event.getObject();
         if (obj instanceof ContaDeEstoque) {
             limparJanela();
-            e = new ContaDeEstoqueBV((ContaDeEstoque) obj);
+            ContaDeEstoque c = (ContaDeEstoque) obj;
+            e = new ContaDeEstoqueBV(c);
+            e.setOperacoesDeEstoque(operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(c));
             selecionaConta();
         } else if (obj instanceof Operacao) {
             this.operacaoDeEstoque.setOperacao((Operacao) obj);
