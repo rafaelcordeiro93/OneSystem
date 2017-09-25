@@ -16,6 +16,8 @@ import org.json.simple.parser.ParseException;
 
 public class Teste {
 
+    private static final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\layoutNotaEmitidaDesenhada.json";
+
     public static void main(String[] args) throws DadoInvalidoException, JRException, FileNotFoundException, UnsupportedEncodingException, IOException, ParseException {
         ImpressoraDeTexto t = new ImpressoraDeTexto();
 
@@ -23,13 +25,13 @@ public class Teste {
         t.setOutSize(35, 70);
 
         JSONParser parser = new JSONParser();
-        Object obj = parser.parse(new FileReader("c:\\layoutNotaEmitida.json"));
+        Object obj = parser.parse(new FileReader(diretorio));
         JSONObject jsonObject = (JSONObject) obj;
 
         JSONArray dados = (JSONArray) jsonObject.get("dados");
 
         List<GenericLayout> listaLayout = new ArrayList<>();
-        
+
         for (Object o : dados) {
             JSONObject j = (JSONObject) o;
             String tabela = (String) j.get("tabela");

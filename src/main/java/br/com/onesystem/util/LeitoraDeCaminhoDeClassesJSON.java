@@ -31,7 +31,7 @@ import org.json.simple.parser.ParseException;
 //@ApplicationScoped
 public class LeitoraDeCaminhoDeClassesJSON implements Serializable {
 
-    private static final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\conf\\extraClass.json";
+    private final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\conf\\extraClass.json";
 
     public List<CaminhoDeClasse> getCaminhos(Class classeOriginal) {
         try {

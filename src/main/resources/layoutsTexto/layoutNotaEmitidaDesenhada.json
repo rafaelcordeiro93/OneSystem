@@ -1,0 +1,198 @@
+
+
+{
+ "layout": [{
+		"linha1":  "=====================================================================================================================================",
+		"linha2":  ".                                                       O R C A M E N T O                                                            ",
+		"linha3":  ".                                                                                                                    Num.:           ",
+		"linha4":  ".                                                                                                                    Data:           ",
+		"linha5":  "=====================================================================================================================================",
+		"linha6":  "Cliente..:                                                                 Codigo...:                  Vendedor:                     ",
+		"linha7":  "Endereco.:                                   Bairro:                       Municipio:                                          UF:   ",
+		"linha8":  "Fone.....:               Fax:                                                                                                        ",
+		"linha9":  "Codigo | Descricao                                                                        | Quantidade | Und | Unitario |      Total ",
+		"linha10": "-------+----------------------------------------------------------------------------------+------------+-----+----------+------------",
+		"linha11": "-      |                                                                                  |            |     |          |            ",
+		"linha12": "-      |                                                                                  |            |     |          |            ",
+		"linha13": "-      |                                                                                  |            |     |          |            ",
+		"linha14": "-      |                                                                                  |            |     |          |            ",
+		"linha15": "-      |                                                                                  |            |     |          |            ",
+		"linha16": "-      |                                                                                  |            |     |          |            ",
+		"linha17": "-      |                                                                                  |            |     |          |            ",
+		"linha18": "-      |                                                                                  |            |     |          |            ",
+		"linha19": "-      |                                                                                  |            |     |          |            ",
+		"linha20": "-      |                                                                                  |            |     |          |            ",
+		"linha21": "-      |                                                                                  |            |     |          |            ",
+		"linha22": "-      |                                                                                  |            |     |          |            ",
+		"linha23": "-      |                                                                                  |            |     |          |            ",
+		"linha24": "-      |                                                                                  |            |     |          |            ",
+		"linha25": "-      |                                                                                  |            |     |          |            ",
+		"linha26": "-      |                                                                                  |            |     |          |            ",
+		"linha27": "-------+----------------------------------------------------------------------------------+------------+-----+----------+------------",
+		"linha28": "Validade...:                                                                                       Total......:                      ",
+		"linha29": "Condicoes..:                                                                                                                         ",
+		"linha30": "Observacoes:                                                                                                                         ",
+		"linha31": "=====================================================================================================================================",
+		"linha32": "  Nao e documento fiscal                                                                                                             ",
+		"linha33": "  Documento nao e valido como garantia da mercadoria                                                                                 "
+    }],
+
+  "dados": [
+	{
+      "tabela": "notaEmitida",
+      "coluna": "Paginacao",
+      "left": 11 ,
+      "top": 3 
+    },
+    {
+      "tabela": "notaEmitida",
+      "coluna": "dia",
+      "left": 15 ,
+      "top": 8 
+    },
+    {
+      "tabela": "notaEmitida",
+      "coluna": "mes",
+      "left": 25 ,
+      "top": 8 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "ano",
+      "left": 40 ,
+      "top": 8 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "nome",
+      "left": 12 ,
+      "top": 6 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "ruc",
+      "left": 45 ,
+      "top": 9 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "endereco",
+      "left": 15 ,
+      "top": 10 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "telefone",
+      "left": 45 ,
+      "top": 10 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "notaDeRemicao",
+      "left": 15 ,
+      "top": 11 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "vendedor",
+      "left": 35 ,
+      "top": 11 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "condicaoVendaAVista",
+      "left": 55 ,
+      "top": 11
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "condicaoVendaAPrazo",
+      "left": 60 ,
+      "top": 11
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "it",
+      "left": 5 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "item",
+      "left": 7 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "quantidade",
+      "left": 15 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "tipo",
+      "left": 20 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "codigoItem",
+      "left": 24 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "nomeItem",
+      "left": 35 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "precoUnitario",
+      "left": 50 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "ivaIsento",
+      "left": 55 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "iva",
+      "left": 60 ,
+      "top": 16 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "totalBruto",
+      "left": 60 ,
+      "top":  54
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "totalIsento",
+      "left": 60 ,
+      "top": 56 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "descontos",
+      "left": 60 ,
+      "top": 58 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "totalLiquido",
+      "left": 60 ,
+      "top": 60 
+    },
+	{
+      "tabela": "notaEmitida",
+      "coluna": "totalIva",
+      "left": 20 ,
+      "top": 63
+    }	
+  ]
+}
