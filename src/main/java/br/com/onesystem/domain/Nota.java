@@ -138,7 +138,7 @@ public abstract class Nota implements Serializable {
         ehValido();
     }
 
-    protected abstract void adicionaNoEstoque() throws DadoInvalidoException;
+    protected abstract void adicionaNotaNoItem() throws DadoInvalidoException;
 
     public void adiciona(ValorPorCotacao valorPorCotacao) throws DadoInvalidoException {
         valorPorCotacao.geraBaixaPor(this);

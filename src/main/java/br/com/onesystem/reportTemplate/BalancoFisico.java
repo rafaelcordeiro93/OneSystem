@@ -7,9 +7,11 @@ package br.com.onesystem.reportTemplate;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Moeda;
+import br.com.onesystem.war.service.ItemService;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 
 /**
  *
@@ -21,11 +23,13 @@ public class BalancoFisico {
     private BigDecimal custoMedio;
     private BigDecimal saldo;
    
+    @Inject
+    private ItemService service;
 
     public BalancoFisico(Item item, BigDecimal custoMedio, Date data) {
         this.item = item;
         this.custoMedio = custoMedio;
-        this.saldo = item.getSaldo(data);
+        this.saldo = service.getSaldo(item, data);
        
     }
 

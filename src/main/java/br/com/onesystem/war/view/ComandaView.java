@@ -22,6 +22,7 @@ import br.com.onesystem.war.builder.ItemDeComandaBV;
 import br.com.onesystem.war.builder.ComandaBV;
 import br.com.onesystem.war.service.ComandaService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -62,6 +63,9 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
 
     @Inject
     private ComandaService service;
+
+    @Inject
+    private ItemService itemService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -209,7 +213,7 @@ public class ComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Seri
      */
     public void atualizaValorDeItemDeComanda() {
         if (e.getListaDePreco() != null && itemDeComanda.getItem() != null) {
-            itemDeComanda.setUnitario(itemDeComanda.getItem().getPreco(e.getListaDePreco()));
+            itemDeComanda.setUnitario(itemService.getPreco(itemDeComanda.getItem(), e.getListaDePreco()));
         }
     }
 

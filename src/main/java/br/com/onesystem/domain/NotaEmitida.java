@@ -59,7 +59,7 @@ public class NotaEmitida extends Nota implements Serializable {
         if (id == null) {
             adicionaNotaNaComanda();
             adicionaNotaNaCondicional();
-            adicionaNoEstoque();
+            adicionaNotaNoItem();
         }
     }
 
@@ -79,12 +79,9 @@ public class NotaEmitida extends Nota implements Serializable {
         }
     }
 
-    protected void adicionaNoEstoque() throws DadoInvalidoException {
+    protected void adicionaNotaNoItem() throws DadoInvalidoException {
         for (ItemDeNota i : getItens()) {
             i.setNota(this);
-            if (condicional == null || (condicional != null && !(condicional.getOperacao().getOperacaoDeEstoque().equals(getOperacao().getOperacaoDeEstoque())))) {
-                i.geraEstoque();
-            }
         }
     }
 
