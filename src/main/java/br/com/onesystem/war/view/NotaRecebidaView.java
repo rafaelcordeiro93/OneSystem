@@ -34,6 +34,7 @@ import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.services.GeradorDeEstoque;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
@@ -124,6 +125,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     @Inject
     private ConfiguracaoEstoque configuracaoEstoque;
+
+    @Inject
+    private GeradorDeEstoque geradorDeEstoque;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -261,6 +265,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
      */
     public void add() {
         try {
+            geradorDeEstoque.geraEstoqueDe(nota);
             new AdicionaDAO<>().adiciona(nota);
             efetivaPedidoAFornecedores();
             InfoMessage.adicionado();

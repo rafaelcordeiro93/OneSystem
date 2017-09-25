@@ -18,7 +18,6 @@ public class ContaDeEstoqueBV implements Serializable, BuilderView<ContaDeEstoqu
     public ContaDeEstoqueBV(ContaDeEstoque contaDeEstoqueSelecionada) {
         this.id = contaDeEstoqueSelecionada.getId();
         this.nome = contaDeEstoqueSelecionada.getNome();
-        this.operacoesDeEstoque = contaDeEstoqueSelecionada.getOperacaoDeEstoque();
     }
 
     public ContaDeEstoqueBV() {

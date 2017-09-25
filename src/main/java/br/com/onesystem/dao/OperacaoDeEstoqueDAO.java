@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -20,6 +21,12 @@ public class OperacaoDeEstoqueDAO extends GenericDAO<OperacaoDeEstoque> {
     public OperacaoDeEstoqueDAO porOperacao(Operacao operacao) {
         where += " and operacaoDeEstoque.operacao = :oOperacao ";
         parametros.put("oOperacao", operacao);
+        return this;
+    }
+
+    public OperacaoDeEstoqueDAO porContaDeEstoque(ContaDeEstoque contaDeEstoque) {
+        where += " and operacaoDeEstoque.contaDeEstoque = :oContaDeEstoque ";
+        parametros.put("oContaDeEstoque", contaDeEstoque);
         return this;
     }
 

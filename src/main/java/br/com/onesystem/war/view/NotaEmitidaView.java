@@ -37,6 +37,7 @@ import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.services.GeradorDeEstoque;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
@@ -74,6 +75,7 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
+import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -159,6 +161,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
 
+    @Inject
+    private OperacaoDeEstoqueService operacaoDeEstoqueService;
+
+    @Inject
+    private ItemService itemService;
+
+    @Inject
+    private GeradorDeEstoque geradorDeEstoque;
+    
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
@@ -331,6 +342,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void add() {
         try {
+            geradorDeEstoque.geraEstoqueDe(nota);
             adicionaDAO.adiciona(nota);
             InfoMessage.adicionado();
             limparJanela();
@@ -635,7 +647,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                List<OperacaoDeEstoque> operacoesDeEstoque = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(operacao);
+                List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
                 if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
@@ -756,7 +768,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
      */
     public void atualizaValorDeItemDeNota() {
         if (notaEmitida.getListaDePreco() != null && itemEmitido.getItem() != null) {
-            itemEmitido.setUnitario(itemEmitido.getItem().getPreco(notaEmitida.getListaDePreco()));
+            itemEmitido.setUnitario(itemService.getPreco(itemEmitido.getItem(), notaEmitida.getListaDePreco()));
         }
     }
 

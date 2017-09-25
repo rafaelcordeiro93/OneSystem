@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.services.GeradorDeEstoque;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
@@ -20,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,22 +83,25 @@ public class ItemDeNota implements Serializable {
         this.quantidade = lista.stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public void setNota(Nota nota) {
-        this.nota = nota;
+    /**
+     * @author Rafael Fernando Rauber
+     * @date 25/09/2017
+     * 
+     * Para gerar o estoque, deve ser utilizado a classe
+     * GeradorDeEstoque, utilizando o metodo geraEstoqueDe
+     * 
+     * @see GeradorDeEstoque
+     * @param estoque ja gerado no gerador de estoque.
+     */
+    public void adicionaNoEstoque(Estoque estoque) {
+        if (estoques == null) {
+            estoques = new ArrayList();
+        }
+        estoques.add(estoque);
     }
 
-    public void geraEstoque() throws DadoInvalidoException {
-        estoques = new ArrayList<>();
-        List<OperacaoDeEstoque> listaDeOperacoes = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(nota.getOperacao());
-        for (QuantidadeDeItemPorDeposito q : listaDeQuantidade) {
-
-            for (OperacaoDeEstoque operacaoDeEstoque : listaDeOperacoes) {
-                Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade())
-                        .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(this).construir();
-                // Adiciona no estoque
-                estoques.add(e);
-            }
-        }
+    public void setNota(Nota nota) {
+        this.nota = nota;
     }
 
     public Long getId() {

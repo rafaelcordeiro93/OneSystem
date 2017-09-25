@@ -15,7 +15,6 @@ public class ConfiguracaoService implements Serializable {
     public ConfiguracaoService() {
     }
 
-    @RequestScoped
     @Produces
     public Configuracao buscar() {
         return dao.resultado();

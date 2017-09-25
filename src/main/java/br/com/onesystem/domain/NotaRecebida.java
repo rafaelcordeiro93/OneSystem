@@ -47,14 +47,13 @@ public class NotaRecebida extends Nota implements Serializable {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.pedidoAFornecedores = pedidoAFornecedores;
         if (id == null) {
-            adicionaNoEstoque();
+            adicionaNotaNoItem();
         }
     }
 
-    protected void adicionaNoEstoque() throws DadoInvalidoException {
+    protected void adicionaNotaNoItem() throws DadoInvalidoException {
         for (ItemDeNota i : getItens()) {
             i.setNota(this);
-            i.geraEstoque();
         }
     }
 
