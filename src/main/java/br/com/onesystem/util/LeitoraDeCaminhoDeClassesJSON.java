@@ -42,17 +42,21 @@ public class LeitoraDeCaminhoDeClassesJSON implements Serializable {
 
             List<CaminhoDeClasse> listaLayout = new ArrayList<>();
 
-            for (Object o : dados) {
-                JSONObject j = (JSONObject) o;
-                Class classeDestino = Class.forName((String) j.get("classeDestino"));
-                String caminho = (String) j.get("caminho");
+            if (dados != null) {
+                for (Object o : dados) {
+                    JSONObject j = (JSONObject) o;
+                    Class classeDestino = Class.forName((String) j.get("classeDestino"));
+                    String caminho = (String) j.get("caminho");
 
-                CaminhoDeClasse c = new CaminhoDeClasse(classeOriginal, classeDestino, caminho);
-                listaLayout.add(c);
+                    CaminhoDeClasse c = new CaminhoDeClasse(classeOriginal, classeDestino, caminho);
+                    listaLayout.add(c);
+                }
             }
             return listaLayout;
-        } catch (IOException | ParseException | ClassNotFoundException ex) {
+        } catch (IOException | ParseException ex) {
             throw new RuntimeException("Erro desconhecido: " + ex.getMessage());
+        } catch (ClassNotFoundException cnf) {
+            throw new RuntimeException("Classe nao encontrada! " + classeOriginal);
         }
     }
 
