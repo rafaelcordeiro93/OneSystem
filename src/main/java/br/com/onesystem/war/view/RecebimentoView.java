@@ -12,6 +12,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeLayout;
 import br.com.onesystem.util.Model;
@@ -57,7 +58,10 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
-
+    
+    @Inject
+    private GeradorDeBaixas geradorDeBaixas;
+    
     public void validaDinheiro() throws DadoInvalidoException {
         e.setTotalEmDinheiro(getTotalEmDinheiro());
         if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0) {
@@ -90,20 +94,14 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
      * @return retorna o recebimento, construído e validado.
      */
     private Recebimento constroiRecebimento() throws DadoInvalidoException {
-        System.out.println("1");
         Recebimento recebimento = e.construirComID(); // Constroi Recebimento **throws DadoInvalidoException
-        System.out.println("2");
         tiposDeCobranca.getList().forEach(tp -> recebimento.adiciona(tp)); // Adiciona Tipos
-        System.out.println("3");
         formasDeCobranca.getList().forEach(f -> recebimento.adiciona(f)); // Adiciona Forma
-        System.out.println("4");
         for (ValorPorCotacao v : valorPorCotacao) { //Adiciona Valor por cotação **throws DadoInvalidoException
             recebimento.adiciona(v);
         }
-        System.out.println("5");
 
-        recebimento.geraBaixas();
-        System.out.println("6");
+        geradorDeBaixas.geraBaixasDe(recebimento); //Gera as baixas de recebimento
         recebimento.ehRegistroValido();// Valida **throws DadoInvalidoException
         return recebimento;
     }
@@ -158,6 +156,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
                     possuiCobranca = tiposDeCobranca.getList().stream().filter(tp -> tp.getCobranca() != null && tp.getCobranca() instanceof CobrancaFixa).filter(tp -> tp.getCobranca().getId() != null).map(TipoDeCobranca::getCobranca).anyMatch(co -> co.getId().equals(tipo.getCobranca().getId()));
                 }
                 if (!possuiCobranca) {
+                    tipo.setMovimento(e.construirComID());
                     tiposDeCobranca.add(tipo);
                 } else {
                     throw new EDadoInvalidoException(new BundleUtil().getMessage("Tipo_Cobranca_Já_Está_Informado"));
@@ -280,8 +279,6 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public String getTotalTipoNaCotacaoPadraoFormatado() {
-        System.out.println("1: " + e.getCotacaoPadrao().getConta().getMoeda());
-        System.out.println("2: " + getTotalTipoNaCotacaoPadrao());
         return MoedaFormatter.format(e.getCotacaoPadrao().getConta().getMoeda(), getTotalTipoNaCotacaoPadrao());
     }
 

@@ -118,7 +118,7 @@ public abstract class Movimento implements Serializable {
         if (this.valorPorCotacao == null) {
             this.valorPorCotacao = new ArrayList<>();
         }
-        valorPorCotacao.geraBaixaPor(this);
+        valorPorCotacao.setMovimento(this);
         this.valorPorCotacao.add(valorPorCotacao);
     }
 
@@ -166,24 +166,6 @@ public abstract class Movimento implements Serializable {
 
     public void remove(FormaDeCobranca forma) {
         formasDeCobranca.remove(forma);
-    }
-
-    public void geraBaixas() throws DadoInvalidoException {
-        if (tipoDeCobranca != null && !tipoDeCobranca.isEmpty()) {
-            for (TipoDeCobranca t : tipoDeCobranca) {
-                t.geraBaixas();
-            }
-        }
-        if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
-            for (FormaDeCobranca f : formasDeCobranca) {
-                f.geraBaixas();
-            }
-        }
-        if (valorPorCotacao != null && !valorPorCotacao.isEmpty()) {
-            for (ValorPorCotacao v : valorPorCotacao) {
-                v.geraBaixaPor(this);
-            }
-        }
     }
 
     public void efetiva() {

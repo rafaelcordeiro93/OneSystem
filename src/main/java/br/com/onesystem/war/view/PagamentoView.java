@@ -11,6 +11,7 @@ import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
@@ -45,6 +46,9 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
 
     @Inject
     private CotacaoService service;
+    
+    @Inject
+    private GeradorDeBaixas geradorDeBaixas;
 
     public void pagar() {
         try {
@@ -52,7 +56,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
             Pagamento pagamento = e.construirComID();
             tiposDeCobranca.getList().forEach(tp -> pagamento.adiciona(tp));
             formasDeCobranca.getList().forEach(f -> pagamento.adiciona(f));
-            pagamento.geraBaixas();
+            
+            geradorDeBaixas.geraBaixasDe(pagamento);
             pagamento.ehRegistroValido();
             addNoBanco(pagamento);
         } catch (DadoInvalidoException die) {

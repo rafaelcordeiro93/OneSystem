@@ -21,30 +21,29 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.valueobjects.TipoLancamentoBancario;
 import br.com.onesystem.war.builder.BaixaBV;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
-public class GeradorDeBaixaDeTipoCobranca {
+public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable{
 
     private TipoDeCobranca tipoDeCobranca;
     private BundleUtil msg = new BundleUtil();
-    private ConfiguracaoContabil conf = new ConfiguracaoContabilService().buscar();
     private boolean entrou = false;
+    
+    @Inject
+    private ConfiguracaoContabil conf;
 
-    public GeradorDeBaixaDeTipoCobranca(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
+    public void geraBaixas(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
         this.tipoDeCobranca = tipoDeCobranca;
-    }
-
-    public void geraBaixas() throws DadoInvalidoException {
         String tipo = tipoDeCobranca.getTipoDocumento();
 
         if (tipoDeCobranca.getCobranca() instanceof Cheque) {

@@ -1,0 +1,39 @@
+{
+    "br.com.onesystem.domain.CobrancaVariavel": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Moeda",
+            "caminho": "cotacao.conta.moeda"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Cotacao",
+            "caminho": "cotacao"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Cheque",
+            "caminho": "cheque"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        }
+    ],
+
+    "br.com.onesystem.domain.Nota": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Operacao",
+            "caminho": "operacao"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.NotaEmitida",
+            "caminho": "notaEmitida"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.NotaRecebida",
+            "caminho": "notaRecebida"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        }
+    ]
+}
