@@ -14,26 +14,26 @@ import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
+import java.io.Serializable;
 import java.math.BigDecimal;
+import javax.inject.Inject;
 
 /**
  *
  * @author Rafael Fernando Rauber
  */
-public class GeradorDeBaixaDeTipoCobrancaFixa {
+public class GeradorDeBaixaDeTipoCobrancaFixa implements Serializable{
 
     private TipoDeCobranca tipoDeCobranca;
     private TipoReceita tipoReceita;
     private TipoDespesa tipoDespesa;
     private BundleUtil msg = new BundleUtil();
-    private ConfiguracaoContabil conf = new ConfiguracaoContabilService().buscar();
 
-    public GeradorDeBaixaDeTipoCobrancaFixa(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
+    @Inject
+    private ConfiguracaoContabil conf;
+
+    public void geraBaixas(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
         this.tipoDeCobranca = tipoDeCobranca;
-    }
-
-    public void geraBaixas() throws DadoInvalidoException {
         String tipo = tipoDeCobranca.getTipoDocumento();
 
         if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {

@@ -1,7 +1,17 @@
 
+import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
+import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.Marca;
+import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.reportTemplate.CaminhoDeClasse;
+import br.com.onesystem.util.LeitoraDeCaminhoDeClassesJSON;
+import java.util.List;
 import net.sf.jasperreports.engine.JRException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -13,13 +23,12 @@ import net.sf.jasperreports.engine.JRException;
  * @author Rafael Fernando Rauber
  */
 public class TesteRauber {
-
+    
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        String str = "/OneSystem-war/menu/financeiro/recebimento.xhtml";
-
-        System.out.println(str.substring(str.indexOf("/OneSystem-war")));
+        List<CaminhoDeClasse> listaLayout = new LeitoraDeCaminhoDeClassesJSON().getCaminhos(Pessoa.class);
         
+        listaLayout.forEach(System.out::println);
         
     }
 }

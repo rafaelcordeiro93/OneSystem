@@ -207,6 +207,10 @@ public class ValorPorCotacao implements Serializable {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
     }
 
+    public void setMovimento(Movimento movimento) {
+        this.movimento = movimento;
+    }
+    
     public ConhecimentoDeFrete getConhecimentoDeFrete() {
         return conhecimentoDeFrete;
     }

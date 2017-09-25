@@ -28,6 +28,8 @@ public class Teste {
 
     @Inject
     public NotaEmitidaService service;
+    private static final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\layoutNotaEmitidaDesenhada.json";
+
 
     public static void main(String[] args) throws DadoInvalidoException, JRException, FileNotFoundException, UnsupportedEncodingException, IOException, ParseException {
 
@@ -37,10 +39,11 @@ public class Teste {
         t.setOutSize(70, 70);
 
         //  JSONParser parser = new JSONParser();
-        JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader("c:\\layoutNotaEmitidaSoTexto.json"));
+        JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(diretorio));
         //JSONObject jsonObject = (JSONObject) obj;
 
         JSONArray dados = (JSONArray) jsonObject.get("dados");
+
         JSONArray layout = (JSONArray) jsonObject.get("layout");
 
         t.carregaLayout(layout);
