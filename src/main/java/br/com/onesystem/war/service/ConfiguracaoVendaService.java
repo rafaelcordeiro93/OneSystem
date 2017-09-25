@@ -11,7 +11,7 @@ public class ConfiguracaoVendaService implements Serializable {
 
     @Inject
     private ConfiguracaoVendaDAO dao;
-    
+
     public ConfiguracaoVendaService() {
     }
 
