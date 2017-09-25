@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -67,6 +68,9 @@ public abstract class Fatura implements Serializable {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne(optional = false)
     private Filial filial;
+    
+    @Inject
+    private Configuracao cfg;
 
     public Fatura() {
     }
@@ -144,7 +148,6 @@ public abstract class Fatura implements Serializable {
     }
 
     public Moeda getMoedaPadrao() throws EDadoInvalidoException {
-        Configuracao cfg = new ConfiguracaoService().buscar();
         return cfg.getMoedaPadrao();
     }
 

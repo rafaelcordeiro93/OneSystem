@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -48,6 +50,21 @@ public class ImpressoraDeTexto {
                 linha++;
             }
         }
+    }
+
+    public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
+        List<GenericLayout> listaLayout = new ArrayList<>();
+        for (Object o : dados) {
+            JSONObject j = (JSONObject) o;
+            String tabela = (String) j.get("tabela");
+            String coluna = (String) j.get("coluna");
+            Integer left = ((Long) j.get("left")).intValue();
+            Integer top = ((Long) j.get("top")).intValue();
+
+            GenericLayout g = new GenericLayout(tabela, coluna, left, top);
+            listaLayout.add(g);
+        }
+        return listaLayout;
     }
 
     public void setOutSize(int lin, int col) {
@@ -501,6 +518,5 @@ public class ImpressoraDeTexto {
 //
 //        // t.toImageFile("printermatrix.jpg");
 //    }
-
     private String page[][];
 }

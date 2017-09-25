@@ -35,6 +35,7 @@ public class FaturaEmitidaBV implements Serializable, BuilderView<FaturaEmitida>
     private List<ValorPorCotacao> valorPorCotacao = new ArrayList<>();
     private BigDecimal dinheiro;
     private Filial filial;
+   
     @Inject
     private Configuracao cfg;
 
