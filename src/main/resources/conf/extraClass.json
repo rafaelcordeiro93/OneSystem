@@ -37,6 +37,13 @@
         }
     ],
     
+     "br.com.onesystem.domain.CobrancaVariavel": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        }
+    ],
+    
     "br.com.onesystem.domain.Pessoa": [
         {
             "classeDestino": "br.com.onesystem.domain.Cidade",
