@@ -1,17 +1,25 @@
 
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
 import br.com.onesystem.dao.NotaEmitidaDAO;
+import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.ImpressoraDeTexto;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.reportTemplate.CaminhoDeClasse;
 import br.com.onesystem.util.GenericLayout;
+import br.com.onesystem.util.LeitoraDeCaminhoDeClassesJSON;
 import br.com.onesystem.war.service.NotaEmitidaService;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,10 +36,9 @@ public class Teste {
 
     @Inject
     public NotaEmitidaService service;
-    private static final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\layoutNotaEmitidaDesenhada.json";
+    private static final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\recebimentoDeTitulo.json";
 
-
-    public static void main(String[] args) throws DadoInvalidoException, JRException, FileNotFoundException, UnsupportedEncodingException, IOException, ParseException {
+    public static void main(String[] args) throws DadoInvalidoException, JRException, FileNotFoundException, UnsupportedEncodingException, IOException, ParseException, ClassNotFoundException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 
         ImpressoraDeTexto t = new ImpressoraDeTexto();
 
@@ -48,125 +55,80 @@ public class Teste {
 
         t.carregaLayout(layout);
 
-        List<NotaEmitida> listaImpressao = new ArmazemDeRegistrosConsole<NotaEmitida>(NotaEmitida.class).listaTodosOsRegistros();
-        for (NotaEmitida p : listaImpressao) {
+        Class clazz = CobrancaVariavel.class;
 
-            for (GenericLayout g : t.criaListaGenericLayout(dados)) {
+        List<CaminhoDeClasse> clazzes = new LeitoraDeCaminhoDeClassesJSON().getCaminhos(CobrancaVariavel.class);
 
-                if (g.getColuna().equals("dia")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), new Date().toString());
-                    continue;
-                }
-                if (g.getColuna().equals("mes")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("ano")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("nome")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getNome());
-                    continue;
-                }
-                if (g.getColuna().equals("ruc")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getRuc());
-                    continue;
-                }
-                if (g.getColuna().equals("endereco")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getEndereco());
-                    continue;
-                }
-                if (g.getColuna().equals("telefone")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), p.getPessoa().getTelefone());
-                    continue;
-                }
-                if (g.getColuna().equals("notaDeRemicao")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("vendedor")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("condicaoVendaAVista")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("condicaoVendaAPrazo")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
+        Titulo nota = new ArmazemDeRegistrosConsole<Titulo>(Titulo.class).find(new Long(1));
 
-                Integer linhaItens = 0;
-                for (ItemDeNota i : p.getItens()) {
+        for (GenericLayout g : t.criaListaGenericLayout(dados)) {
+            Class clazzDado = Class.forName(g.getTabela());
+            CaminhoDeClasse caminhoDeClasse = null;
 
-                    for (int j = linhaItens; j < p.getItens().size(); j++) {
+            Object obj = null;
 
-                        if (g.getColuna().equals("it")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), "");
+            try {
+                if (clazz.equals(clazzDado) || clazz.equals(clazzDado.getSuperclass())) {
+
+                    if (g.getColuna().contains("/")) {
+                        String[] col = g.getColuna().split("/");
+                        String str = "";
+                        for (String s : col) {
+                            Method method = Class.forName(g.getTabela()).getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                            str += ", " + method.invoke(nota).toString();
                         }
-                        if (g.getColuna().equals("item")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), "");
-
-                        }
-                        if (g.getColuna().equals("quantidade")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getQuantidade().toString());
-
-                        }
-                        if (g.getColuna().equals("tipo")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getTipoItem().toString());
-
-                        }
-                        if (g.getColuna().equals("codigoItem")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getId().toString());
-
-                        }
-                        if (g.getColuna().equals("nomeItem")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getItem().getNome());
-
-                        }
-                        if (g.getColuna().equals("precoUnitario")) {
-                            t.printTextLinCol(g.getTop() + j, g.getLeft(), i.getUnitario().toString());
+                        t.printTextLinCol(g.getTop(), g.getLeft(), str.substring(2));
+                    } else {
+                        Method field = Class.forName(g.getTabela()).getMethod("get" + g.getColuna().substring(0, 1).toUpperCase()
+                                + g.getColuna().substring(1), null);
+                        obj = field.invoke(nota);
+                        t.printTextLinCol(g.getTop(), g.getLeft(), obj.toString());
+                    }
+                } else {
+                    Class cl = null;
+                    for (CaminhoDeClasse c : clazzes) {
+                        if (c.getClasseDeDestino() == clazzDado) {
+                            cl = clazzDado;
+                            caminhoDeClasse = c;
                         }
                     }
-                    linhaItens++;
-                }
+                    if (cl == null) {
+                        throw new RuntimeException("Configuracao nao definida no arquivo de configuracao Extra Class: " + clazzDado);
+                    } else {
+                        String[] split = caminhoDeClasse.getCaminho().split("\\.");
 
-                if (g.getColuna().equals("ivaIsento")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("iva")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("totalBruto")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-                if (g.getColuna().equals("totalIsento")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
+                        Method method = null;
+                        Class clazzIterada = caminhoDeClasse.getClasseDeOrigem();
+                        obj = nota;
 
-                if (g.getColuna().equals("descontos")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
+                        for (String s : split) {
+                            method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                            obj = method.invoke(obj);
+                            clazzIterada = obj.getClass();
+                        }
+                        if (clazzIterada == caminhoDeClasse.getClasseDeDestino() || clazzIterada.getSuperclass() == caminhoDeClasse.getClasseDeDestino()) {
+                            if (g.getColuna().contains("/")) {
+                                String[] col = g.getColuna().split("/");
+                                String str = "";
+                                for (String s : col) {
+                                    method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                                    str += ", " + method.invoke(obj).toString();
+                                }
+                                t.printTextLinCol(g.getTop(), g.getLeft(), str.substring(2));
+                            } else {
+                                method = clazzIterada.getMethod("get" + g.getColuna().substring(0, 1).toUpperCase() + g.getColuna().substring(1), null);
+                                t.printTextLinCol(g.getTop(), g.getLeft(), method.invoke(obj).toString());
+                            }
+                        } else {
+                            throw new RuntimeException("Classe " + clazzIterada + " nao encontrada!");
+                        }
+                    }
                 }
-
-                if (g.getColuna().equals("totalLiquido")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-
-                if (g.getColuna().equals("totalIva")) {
-                    t.printTextLinCol(g.getTop(), g.getLeft(), "");
-                    continue;
-                }
-
-                //t.printTextLinCol(6, 1, t.centralizar(70, "CENTRALIZAR"));
+            } catch (NoSuchMethodException nsm) {
+                throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
             }
+
+//            
         }
         //  t.toPrinterMatricial();
         t.show();

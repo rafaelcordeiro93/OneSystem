@@ -1,17 +1,16 @@
 
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
-import br.com.onesystem.domain.Item;
-import br.com.onesystem.domain.Marca;
+import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.CaminhoDeClasse;
-import br.com.onesystem.util.LeitoraDeCaminhoDeClassesJSON;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import net.sf.jasperreports.engine.JRException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.reflections.Reflections;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,12 +22,8 @@ import org.json.simple.JSONObject;
  * @author Rafael Fernando Rauber
  */
 public class TesteRauber {
-    
-    public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException {
 
-        List<CaminhoDeClasse> listaLayout = new LeitoraDeCaminhoDeClassesJSON().getCaminhos(Pessoa.class);
-        
-        listaLayout.forEach(System.out::println);
-        
+    public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
+        System.out.println(CobrancaVariavel.class.getSuperclass());
     }
 }

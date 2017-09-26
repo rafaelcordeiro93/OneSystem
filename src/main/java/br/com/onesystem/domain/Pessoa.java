@@ -271,6 +271,31 @@ public abstract class Pessoa implements Serializable {
     }
 
     @MetodoInacessivelRelatorio
+    public String getEnderecoNumeroBairroCidadeFormatado() {
+        String str = "";
+        if (endereco != null) {
+            str += endereco;
+        }
+        if (numero != null) {
+            if (endereco != null) {
+                str += ", ";
+            }
+            str += "Nº " + numero;
+        }
+        if (bairro != null) {
+            if (endereco != null || numero != null) {
+                str += " - ";
+            }
+            str += bairro;
+        }
+        if (cep != null && cep.getCidade() != null && cep.getCidade().getNome() != null) {
+            str += " - ";
+            str += cep.getCidade().getNome();
+        }
+        return str;
+    }
+
+    @MetodoInacessivelRelatorio
     public String getTelefoneEmailFormatado() {
         String str = "";
         if (telefone != null) {
