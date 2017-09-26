@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import net.sf.dynamicreports.report.constant.BreakType;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 //
@@ -25,6 +26,7 @@ import org.json.simple.JSONObject;
 public class ImpressoraDeTexto {
 
     public String impressora;
+    private String page[][];
 
     public ImpressoraDeTexto() {
         try {
@@ -46,11 +48,24 @@ public class ImpressoraDeTexto {
         for (Object o : layout) {
             JSONObject j = (JSONObject) o;
             while (j.get("linha" + Integer.toString(linha)) != null) {
-                printTextLinCol(linha, 1, (String) j.get("linha" + Integer.toString(linha)));
+                insertTextoNaLinhaColuna(linha, 1, (String) j.get("linha" + Integer.toString(linha)));
                 linha++;
             }
         }
     }
+    
+    public void insertTextoNaLinhaColuna(int lin, int colunaIn, String text) {
+        int colunaEnd = page[0].length;
+        int charPoss = 0;
+        for (int col = 0; col < colunaEnd; col++) {
+            if (col >= colunaIn - 1 && charPoss < text.length() && col <= colunaEnd) {
+                page[lin - 1][col] = Character.toString(text.charAt(charPoss));
+                charPoss++;
+            }
+        }
+    }
+
+    
 
     public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
         List<GenericLayout> listaLayout = new ArrayList<>();
@@ -89,16 +104,6 @@ public class ImpressoraDeTexto {
 
     }
 
-    public void printTextLinCol(int lin, int coluna, String text) {
-        // text = RemoveAcentos(text);
-        for (int i = 0; i < coluna; i++) {
-            if (i == coluna - 1 && i <= 70) {
-                page[lin - 1][i] = text;
-            }
-        }
-
-    }
-
     public String printTextLin(int linha, String text) {
         text = RemoveAcentos(text);
         String newText = "";
@@ -108,6 +113,16 @@ public class ImpressoraDeTexto {
         return newText + text;
     }
 
+    public void printTextLinCol(int lin, int coluna, String text) {
+        // text = RemoveAcentos(text);
+        // for (int i = 0; i < coluna; i++) {
+        // if (i == coluna - 1 && i <= 70) {
+        page[lin - 1][coluna - 1] = text;
+        // }
+        //   }
+
+    }
+    
     public void printCharAtLinCol(int linIn, int linEnd, int colunaIn, int colunaEnd, String text) {
         for (int i = 0; i < linEnd; i++) {
             if (i < linIn - 1 || i > linEnd - 1) {
@@ -497,26 +512,33 @@ public class ImpressoraDeTexto {
         return str;
     }
 
+    
+//
 //    public static void main(String args[]) {
 //        System.out.print("");
 //        ImpressoraDeTexto t = new ImpressoraDeTexto();
+//
 //        //t.p
-//        t.setOutSize(15, 70);
-//        t.printCharAtCol(1, 1, 70, "-");
-//        t.printTextLinCol(2, 1, "NOME.....:");
-//        t.printTextLinCol(3, 1, "ENDEREÇO.:");
-//        t.printTextLinCol(4, 1, "CIDADE...:");
-//        t.printTextLinCol(5, 1, "ATIVIDADE:");
-//        t.printTextLinCol(2, 11, "Nome TEste");
-//        t.printTextLinCol(3, 11, "TESTE PAH");
-//        t.printTextLinCol(4, 11, "ASSIS SÃO PAULO");
-//        t.printTextLinCol(5, 11, "ATIVIDADE ATESTEAKLJ ÇLSAKJFAÇSLKDJFASLFJKASaaaaaa");
-//        t.printTextLinCol(6, 1, t.centralizar(70, "CENTRALIZAR"));
+//        //          linha/coluna
+//        t.setOutSize(15, 250);
+//        t.insertTextoNaLinhaColuna(2, 1, "NOME.....:");
+//        t.insertTextoNaLinhaColuna(3, 1, "ENDEREÇO.:");
+//        t.insertTextoNaLinhaColuna(4, 1, "CIDADE...:");
+//        t.insertTextoNaLinhaColuna(5, 1, "ATIVIDADE:");
+//        t.insertTextoNaLinhaColuna(2, 11, "Rafael Cordeiro");
+//        t.insertTextoNaLinhaColuna(3, 11, "TESTE PAH ");
+//        t.insertTextoNaLinhaColuna(4, 11, "ASSIS SÃO PAULO ");
+//        t.insertTextoNaLinhaColuna(5, 11, "ATIVIDADE ATESTEAKLJ");
+//        // t.printTextLinCol(6, 1, t.centralizar(70, "TEXTO CENTRALIZAdo"));
+//         t.insertTextoNaLinhaColuna(2, 1, "TTTT");
+//         t.insertTextoNaLinhaColuna(5, 1, "     ");
+//        t.insertTextoNaLinhaColuna(5, 12, "Coco");
 //        //t.toFile("impresso.txt");
+//
 //        t.show();
 //        //  t.toPrinterMatricial();
 //
 //        // t.toImageFile("printermatrix.jpg");
 //    }
-    private String page[][];
+
 }

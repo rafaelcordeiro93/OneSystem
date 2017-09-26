@@ -39,8 +39,8 @@
         {
             "tabela": "br.com.onesystem.domain.Pessoa",
             "coluna": "nome",
-            "left": 20,
-            "top": 2 
+            "left": 41,
+            "top": 7 
         }
     ]
 }
