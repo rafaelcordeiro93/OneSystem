@@ -72,13 +72,11 @@
                                 <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                              columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
 
-                                    <p:commandButton icon="fa fa-plus Fs14 White" action="#{loteNotaFiscalView.removeDaSessao}" actionListener="#{loteNotaFiscalView.addNovaParcela}" process="@this" update="@none" >
-                                        <p:ajax event="dialogReturn"  listener="#{loteNotaFiscalView.selecionar}" process="@this" update="parcelas"/>
-                                    </p:commandButton>
-                                    <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
-                                        <p:ajax event="dialogReturn" listener="#{loteNotaFiscalView.selecionar}" process="@this" update="parcelas"/>
-                                    </p:commandButton>
-                                    <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{loteNotaFiscalView.remover}" styleClass="orange-btn"  update="parcelas"/>
+                                    <p:commandButton icon="fa fa-plus Fs14 White" action="#{loteNotaFiscalView.addNumeracao}" process="@this" update="@none" />
+                                   
+                                    <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{loteNotaFiscalView.updateNumeracao}" process="@this" update="@none" styleClass="green-btn"/>
+                                     
+                                    <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{loteNotaFiscalView.removeNumeracao}" styleClass="orange-btn"  update="parcelas"/>
 
                                 </p:panelGrid>
 
@@ -91,7 +89,7 @@
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                <p:ajax event="rowSelect" listener="#{loteNotaFiscalView.selecionaParcela}" update="@this" />
+                                <p:ajax event="rowSelect" listener="#{loteNotaFiscalView.selecionaNumeracao}" update="@this" />
 
                                 <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
                                     #{rowIndex+1}
@@ -103,8 +101,6 @@
                                 <p:column headerText="#{l.Dia_Semana}" colspan="2">
                                     <h:outputText id="diaDaSemana" value="#{model.object.numeroNF}"/>
                                 </p:column>
-
-
                             </p:dataTable>
                         </div>
 
