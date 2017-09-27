@@ -1,0 +1,32 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"               
+                xmlns:a="http://java.sun.com/jsf/composite/application"
+                template="/WEB-INF/templateDialog.xhtml">
+
+
+    <ui:define name="title">#{l.Selecao_De_Lote_Nota_Fiscal}</ui:define>
+
+    <ui:define name="content">
+        <a:dataTable id="pessoaDT" managedBeanName="#{selecaoLoteNotaFiscalView}">
+
+            <p:column headerText="#{l.Id}" sortBy="#{bean.id}" filterBy="#{bean.id}" footerText="#{l.Id}" filterMatchMode="contains">                                        
+                <h:outputText value="#{bean.id}" />
+            </p:column>
+            <p:column headerText="#{l.Nome}" sortBy="#{bean.nome}" filterBy="#{bean.nome}" footerText="#{l.Nome}" filterMatchMode="contains">
+                <h:outputText value="#{bean.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Modelo}" sortBy="#{bean.modelo.nome}" filterBy="#{bean.modelo.nome}" footerText="#{l.Modelo}" filterMatchMode="contains">
+                <h:outputText value="#{bean.modelo.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Especie}" sortBy="#{bean.especie.nome}" filterBy="#{bean.especie.nome}" footerText="#{l.Especie}" filterMatchMode="contains">
+                <h:outputText value="#{bean.especie.nome}" />
+            </p:column>
+            <p:column headerText="#{l.Data_Inicio}" sortBy="#{bean.dataDeInicio}" filterBy="#{bean.dataDeInicio}" footerText="#{l.Data_Inicio}" filterMatchMode="contains">
+                <h:outputText value="#{bean.dataDeInicio}" />
+            </p:column>
+        </a:dataTable>
+
+    </ui:define>
+</ui:composition>

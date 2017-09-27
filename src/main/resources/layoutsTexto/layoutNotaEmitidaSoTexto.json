@@ -1,0 +1,32 @@
+
+
+{
+    "layout": [{}],
+
+    "dados": [
+        {
+            "tabela": "br.com.onesystem.domain.Pessoa",
+            "coluna": "nome",
+            "left": 15,
+            "top": 9 
+        },
+        {
+            "tabela": "br.com.onesystem.domain.Pessoa",
+            "coluna": "ruc",
+            "left": 45,
+            "top": 9 
+        },
+        {
+            "tabela": "br.com.onesystem.domain.Pessoa",
+            "coluna": "enderecoNumeroBairroCidadeFormatado",
+            "left": 15,
+            "top": 10 
+        },
+        {
+            "tabela": "br.com.onesystem.domain.Pessoa",
+            "coluna": "telefone",
+            "left": 45,
+            "top": 10 
+        }
+    ]
+}

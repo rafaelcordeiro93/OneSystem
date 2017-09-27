@@ -14,8 +14,8 @@ import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
-import br.com.onesystem.war.service.ConfiguracaoContabilService;
 import java.math.BigDecimal;
+import javax.inject.Inject;
 
 /**
  *
@@ -25,13 +25,12 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     private FormaDeCobranca formaDeCobranca;
     private BundleUtil msg = new BundleUtil();
-    private ConfiguracaoContabil conf = new ConfiguracaoContabilService().buscar();
+    
+    @Inject
+    private ConfiguracaoContabil conf;
 
-    public GeradorDeBaixaDeFormaCobranca(FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
+    public void geraBaixas(FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
         this.formaDeCobranca = formaDeCobranca;
-    }
-
-    public void geraBaixas() throws DadoInvalidoException {
         if (formaDeCobranca.getJuros() != null && formaDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
             formaDeCobranca.getCobranca().adiciona(getJuros(formaDeCobranca.getTipoDocumento()));
         }
@@ -113,7 +112,7 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     private BaixaBuilder getCobrancaBuilder() {
         BaixaBuilder baixaBuilder = new BaixaBuilder();
-            baixaBuilder.comFilial(formaDeCobranca.getMovimento().getFilial()).comEmissao(formaDeCobranca.getMovimento().getEmissao()).comCaixa(formaDeCobranca.getMovimento().getCaixa());
+        baixaBuilder.comFilial(formaDeCobranca.getMovimento().getFilial()).comEmissao(formaDeCobranca.getMovimento().getEmissao()).comCaixa(formaDeCobranca.getMovimento().getCaixa());
 
         return baixaBuilder.
                 comCotacao(formaDeCobranca.getCotacao()).

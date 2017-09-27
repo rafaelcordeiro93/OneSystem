@@ -129,13 +129,6 @@ public class FormaDeCobranca implements Serializable {
         }
     }
 
-    public void geraBaixas() throws DadoInvalidoException {
-        if (cobrancaVariavel != null) {
-            GeradorDeBaixaDeFormaCobranca gerador = new GeradorDeBaixaDeFormaCobranca(this);
-            gerador.geraBaixas();
-        }
-    }
-
     public Long getId() {
         return id;
     }

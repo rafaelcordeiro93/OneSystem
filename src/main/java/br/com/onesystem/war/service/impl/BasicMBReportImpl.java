@@ -48,6 +48,7 @@ import org.reflections.Reflections;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.GeradorDeCodigoFonteDeModeloDeRelatorio;
 import br.com.onesystem.util.InfoMessage;
+import br.com.onesystem.util.LeitoraDeCaminhoDeClassesJSON;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoFormatacaoNumero;
 import br.com.onesystem.valueobjects.TipoRelatorio;
@@ -107,7 +108,10 @@ public abstract class BasicMBReportImpl<T> {
 
     @Inject
     private RemoveDAO<ModeloDeRelatorio> removeModeloDAO;
-    
+
+    @Inject
+    private LeitoraDeCaminhoDeClassesJSON leitoraDeClasses;
+
     protected abstract void init();
 
     /**
@@ -125,6 +129,7 @@ public abstract class BasicMBReportImpl<T> {
             this.tipoRelatorio = tipoRelatorio;
             inicializarRegistros();
             inicializarCampos();
+            inicializaCaminhoDeClasses();
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException cnf) {
             FatalMessage.print("Erro: BasicMBReport: Classe não encontrada!", cnf);
         }
@@ -133,6 +138,10 @@ public abstract class BasicMBReportImpl<T> {
     private void inicializarRegistros() throws InstantiationException, IllegalAccessException {
         buscaDadosDoBancoComFiltros();
         modelosDeRelatorio = new ModeloDeRelatorioDAO().porTipoRelatorio(tipoRelatorio).listaDeResultados();
+    }
+
+    private void inicializaCaminhoDeClasses() {
+        leitoraDeClasses.getCaminhos(clazz).forEach(c -> addExtraClass(c.getClasseDeDestino(), c.getCaminho()));
     }
 
     private void inicializarCampos() throws ClassNotFoundException {
@@ -255,14 +264,18 @@ public abstract class BasicMBReportImpl<T> {
     }
 
     protected BasicMBReportImpl<T> addExtraClass(Class clazz, String path) {
-        this.classes.add(clazz);
-        this.mapPath.put(clazz, path);
-        if (clazz.equals(Moeda.class)) {
-            String[] property = new String[4];
-            String[] split = path.split("\\.");
-            System.arraycopy(split, 0, property, 0, split.length);
-            property[split.length] = "sigla";
-            siglaMoeda = new Coluna(null, null, property[0], property[1], property[2], property[3], this.clazz, clazz);
+        if (!classes.contains(clazz)) {
+            this.classes.add(clazz);
+            this.mapPath.put(clazz, path);
+            if (clazz.equals(Moeda.class)) {
+                String[] property = new String[4];
+                String[] split = path.split("\\.");
+                System.arraycopy(split, 0, property, 0, split.length);
+                property[split.length] = "sigla";
+                siglaMoeda = new Coluna(null, null, property[0], property[1], property[2], property[3], this.clazz, clazz);
+            }
+        }else{
+            throw new RuntimeException("Classe ja registrada na configuracao.");
         }
         return this;
     }
