@@ -1,24 +1,26 @@
 package br.com.onesystem.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-@Stateless
+@Stateful
 public class ArmazemDeRegistros<T> implements Serializable {
 
     private Class<T> classe;
 
-    @PersistenceContext(unitName = "alkatar")
+    @PersistenceContext(unitName = "alkatar", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
 
     public ArmazemDeRegistros() {
@@ -75,6 +77,41 @@ public class ArmazemDeRegistros<T> implements Serializable {
 
     public T find(Long id) {
         return em.find(classe, id);
+    }
+
+    /**
+     * 
+     * Inicializa a instância lazy.
+     * 
+     * @param objeto Objeto que contem o campo a ser inicializado
+     * @param campo Nome do campo a ser inicializado
+     * @param id Id do objeto a ser buscado no banco
+     */
+    public void initialize(Object objeto, String campo, Long id) {
+        //Busca o valor do banco
+        System.out.println("1");
+        Object objetoInicializado = em.find(classe, id);
+
+        System.out.println("2");
+        Class<?> clazz = objeto.getClass();
+        try {
+            System.out.println("3");
+            Field field = clazz.getDeclaredField(campo);
+            System.out.println("4");
+            field.setAccessible(true);
+            System.out.println("5");
+            field.set(objeto, objetoInicializado);
+
+            System.out.println("6");
+        } catch (NoSuchFieldException ex) {
+            throw new RuntimeException("O nome do campo " + campo + " não existe na classe " + clazz);
+        } catch (SecurityException ex) {
+            throw new RuntimeException("Erro de segurança ao acessar o campo " + campo + " da classe " + clazz);
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Erro ao setar o objeto, parametros inválidos");
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException("Erro ao setar o objeto, não foi possível obter acesso.");
+        }
     }
 
 }
