@@ -10,6 +10,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.EspecieDeNotaFiscal;
 import br.com.onesystem.valueobjects.ModeloDeNotaFiscal;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -55,6 +56,8 @@ public class LoteNotaFiscal implements Serializable {
     private String observacao;
     @OneToMany(mappedBy = "loteNotaFiscal", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<NumeracaoDeNotaFiscal> numeracaoDeNotaFiscal;
+    @OneToMany(mappedBy = "loteNotaFiscal")
+    private List<Operacao> operacao;
 
     public LoteNotaFiscal() {
     }
@@ -70,6 +73,27 @@ public class LoteNotaFiscal implements Serializable {
         this.dataDeInicio = dataDeInicio;
         this.observacao = observacao;
         this.numeracaoDeNotaFiscal = numeracaoDeNotaFiscal;
+    }
+
+    public void adiciona(NumeracaoDeNotaFiscal n) {
+        if (numeracaoDeNotaFiscal == null) {
+            numeracaoDeNotaFiscal = new ArrayList<>();
+        }
+        n.setLoteNotaFiscal(this);
+        numeracaoDeNotaFiscal.add(n);
+    }
+
+    public void atualiza(NumeracaoDeNotaFiscal n) {
+        if (numeracaoDeNotaFiscal.contains(n)) {
+            numeracaoDeNotaFiscal.set(numeracaoDeNotaFiscal.indexOf(n), n);
+        } else {
+            n.setLoteNotaFiscal(this);
+            numeracaoDeNotaFiscal.add(n);
+        }
+    }
+
+    public void remove(NumeracaoDeNotaFiscal n) {
+        numeracaoDeNotaFiscal.remove(n);
     }
 
     private void ehValido() throws DadoInvalidoException {
@@ -107,6 +131,10 @@ public class LoteNotaFiscal implements Serializable {
 
     public String getObservacao() {
         return observacao;
+    }
+
+    public List<Operacao> getOperacao() {
+        return operacao;
     }
 
     public List<NumeracaoDeNotaFiscal> getNumeracaoDeNotaFiscal() {

@@ -3,6 +3,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -32,6 +33,7 @@ public class OperacaoBuilder {
     private TipoDespesa compraAVista;
     private TipoDespesa compraAPrazo;
     private List<OperacaoDeEstoque> operacaoDeEstoque;
+    private LoteNotaFiscal loteNotaFiscal;
 
     public OperacaoBuilder comID(Long ID) {
         this.id = ID;
@@ -102,15 +104,20 @@ public class OperacaoBuilder {
         this.compraAPrazo = compraAPrazo;
         return this;
     }
-    
-     public OperacaoBuilder comOperacaoDeEstoque(List<OperacaoDeEstoque> operacaoDeEstoque) {
+
+    public OperacaoBuilder comOperacaoDeEstoque(List<OperacaoDeEstoque> operacaoDeEstoque) {
         this.operacaoDeEstoque = operacaoDeEstoque;
+        return this;
+    }
+
+    public OperacaoBuilder comLoteNotaFiscal(LoteNotaFiscal loteNotaFiscal) {
+        this.loteNotaFiscal = loteNotaFiscal;
         return this;
     }
 
     public Operacao construir() throws DadoInvalidoException {
         return new Operacao(id, nome, operacaoFinanceira, tipoNota, tipoOperacao, vendaAVista, vendaAPrazo, servicoAVista,
-                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo, operacaoDeEstoque);
+                servicoAPrazo, receitaFrete, despesaCMV, contabilizarCMV, compraAVista, compraAPrazo, operacaoDeEstoque, loteNotaFiscal);
     }
 
 }
