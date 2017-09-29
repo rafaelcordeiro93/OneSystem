@@ -38,13 +38,11 @@ public abstract class BasicCrudMBImpl<Bean> {
     public abstract String abrirEdicao();
 
     public void selecionar() {
-        inicializaRegistro(beanSelecionado);
+        inicializaRegistro(beanSelecionado); //Inicializa listas do registro selecionado.
         RequestContext.getCurrentInstance().closeDialog(beanSelecionado);
     }
 
     public void inicializaRegistro(Bean bean) {
-        System.out.println("A desgraca entrando aqui..");
-        
         try {
             Method[] methods = bean.getClass().getMethods();
             for (Method m : methods) {

@@ -5,9 +5,8 @@
  */
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.util.BeanUtil;
-import br.com.onesystem.war.view.selecao.SelecaoCartaoView;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -18,16 +17,13 @@ import javax.faces.context.FacesContext;
  *
  * @author Rafael
  */
-public abstract class BasicBVConverter<Bean, BeanBV, SelecaoBean extends BasicCrudMBImpl> implements Serializable {
+public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, SelecaoBean extends BasicCrudMBImpl> implements Serializable {
 
     private Class clazz;
     private Class clazzBV;
     private Class selecaoClazz;
 
-    public BasicBVConverter() {
-    }
-
-    public void setClass(Class clazz, Class clazzBV, Class selecaoClazz) {
+    public BasicBVConverter(Class clazz, Class clazzBV, Class selecaoClazz) {
         this.clazz = clazz;
         this.clazzBV = clazzBV;
         this.selecaoClazz = selecaoClazz;

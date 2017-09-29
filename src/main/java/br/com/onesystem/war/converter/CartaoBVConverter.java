@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.war.builder.CartaoBV;
 import br.com.onesystem.war.service.impl.BasicBVConverter;
@@ -13,8 +12,6 @@ import br.com.onesystem.war.view.selecao.SelecaoCartaoView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
-import javax.inject.Named;
 
 /**
  *
@@ -24,6 +21,7 @@ import javax.inject.Named;
 public class CartaoBVConverter extends BasicBVConverter<Cartao, CartaoBV, SelecaoCartaoView> implements Converter, Serializable {
 
     public CartaoBVConverter() {
-        setClass(Cartao.class, CartaoBV.class, SelecaoCartaoView.class);
+        super(Cartao.class, CartaoBV.class, SelecaoCartaoView.class);
     }
+
 }

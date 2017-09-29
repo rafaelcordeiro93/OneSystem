@@ -45,13 +45,9 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
 
     public void add() {
         try {
-            System.out.println("1");
             Cartao novoRegistro = e.construir();
-            System.out.println("2");
             preparaParaInclusaoDeTaxa(novoRegistro);
-            System.out.println("3");
             addNoBanco(novoRegistro);
-            System.out.println("4");
         } catch (DadoInvalidoException die) {
             die.print();
         }

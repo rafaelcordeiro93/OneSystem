@@ -32,9 +32,6 @@ public class GeradorDeBaixaDeFormaCobranca {
     @Inject
     private ConfiguracaoContabil conf;
 
-    @Inject
-    private ArmazemDeRegistros<CobrancaVariavel> armazem;
-    
     public void geraBaixas(FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
         this.formaDeCobranca = formaDeCobranca;
         

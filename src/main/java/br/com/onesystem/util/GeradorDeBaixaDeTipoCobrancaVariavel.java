@@ -49,9 +49,6 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable {
     @Inject
     private AtualizaDAO<Baixa> atualizaDao;
     
-    @Inject
-    private ArmazemDeRegistros<Cobranca> armazem;
-    
     public void geraBaixas(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
         this.tipoDeCobranca = tipoDeCobranca;
         String tipo = tipoDeCobranca.getTipoDocumento();
