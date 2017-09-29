@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TipoReceita;
 import br.com.onesystem.war.builder.TipoReceitaBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoTipoReceitaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "tipoReceitaBVConverter", forClass = TipoReceitaBV.class)
-public class TipoReceitaBVConverter implements Converter, Serializable {
+public class TipoReceitaBVConverter extends BasicBVConverter<TipoReceita, TipoReceitaBV, SelecaoTipoReceitaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof TipoReceita) {
-                return new TipoReceitaBV((TipoReceita) object);
-            } else if (object instanceof TipoReceitaBV) {
-                return (TipoReceitaBV) object;
-            }
-        }
-        return new TipoReceitaBV();
+    public TipoReceitaBVConverter() {
+        super(TipoReceita.class, TipoReceitaBV.class, SelecaoTipoReceitaView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof TipoReceitaBV) {
-                String id = String.valueOf(((TipoReceitaBV) object).getId());
-                uic.getAttributes().put(id, (TipoReceitaBV) object);
-                return id;
-            } else if (object instanceof TipoReceita) {
-                String id = String.valueOf(((TipoReceita) object).getId());
-                uic.getAttributes().put(id, (TipoReceita) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

@@ -22,5 +22,4 @@ public class UsuarioConverter extends BasicConverter<Usuario, SelecaoUsuarioView
     public UsuarioConverter() {
         super(Usuario.class, SelecaoUsuarioView.class);
     }
-
 }

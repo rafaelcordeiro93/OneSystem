@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.DespesaProvisionada;
 import br.com.onesystem.war.builder.DespesaProvisionadaBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoDespesaProvisionadaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "despesaProvisionadaBVConverter", forClass = DespesaProvisionada.class)
-public class DespesaProvisionadaBVConverter implements Converter, Serializable {
+public class DespesaProvisionadaBVConverter extends BasicBVConverter<DespesaProvisionada, DespesaProvisionadaBV, SelecaoDespesaProvisionadaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof DespesaProvisionada) {
-                return new DespesaProvisionadaBV((DespesaProvisionada) object);
-            } else if (object instanceof DespesaProvisionadaBV) {
-                return (DespesaProvisionadaBV) object;
-            }
-        }
-        return new DespesaProvisionadaBV();
+    public DespesaProvisionadaBVConverter() {
+        super(DespesaProvisionada.class, DespesaProvisionadaBV.class, SelecaoDespesaProvisionadaView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof DespesaProvisionadaBV) {
-                String id = String.valueOf(((DespesaProvisionadaBV) object).getId());
-                uic.getAttributes().put(id, (DespesaProvisionadaBV) object);
-                return id;
-            } else if (object instanceof DespesaProvisionada) {
-                String id = String.valueOf(((DespesaProvisionada) object).getId());
-                uic.getAttributes().put(id, (DespesaProvisionada) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

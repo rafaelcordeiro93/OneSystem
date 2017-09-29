@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.war.builder.GrupoFiscalBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoGrupoFiscalView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "grupoFiscalBVConverter", forClass = GrupoFiscalBV.class)
-public class GrupoFiscalBVConverter implements Converter, Serializable {
+public class GrupoFiscalBVConverter extends BasicBVConverter<GrupoFiscal, GrupoFiscalBV, SelecaoGrupoFiscalView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof GrupoFiscal) {
-                return new GrupoFiscalBV((GrupoFiscal) object);
-            } else if (object instanceof GrupoFiscalBV) {
-                return (GrupoFiscalBV) object;
-            }
-        }
-        return new GrupoFiscalBV();
+    public GrupoFiscalBVConverter() {
+        super(GrupoFiscal.class, GrupoFiscalBV.class, SelecaoGrupoFiscalView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof GrupoFiscalBV) {
-                String id = String.valueOf(((GrupoFiscalBV) object).getId());
-                uic.getAttributes().put(id, (GrupoFiscalBV) object);
-                return id;
-            } else if (object instanceof GrupoFiscal) {
-                String id = String.valueOf(((GrupoFiscal) object).getId());
-                uic.getAttributes().put(id, (GrupoFiscal) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

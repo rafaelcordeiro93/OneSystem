@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Estado;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoEstadoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "estadoConverter", forClass = Estado.class)
-public class EstadoConverter implements Converter, Serializable {
+public class EstadoConverter extends BasicConverter<Estado, SelecaoEstadoView> implements Converter, Serializable {
 
-   @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Estado) {
-                return (Estado) object;
-            } 
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Estado) {
-                String id = String.valueOf(((Estado) object).getId());
-                uic.getAttributes().put(id, (Estado) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public EstadoConverter() {
+        super(Estado.class, SelecaoEstadoView.class);
     }
 }

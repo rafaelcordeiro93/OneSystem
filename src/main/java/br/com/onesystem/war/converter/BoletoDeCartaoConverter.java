@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.BoletoDeCartao;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoBoletoDeCartaoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "boletoDeCartaoConverter", forClass = BoletoDeCartao.class)
-public class BoletoDeCartaoConverter implements Converter, Serializable {
+public class BoletoDeCartaoConverter extends BasicConverter<BoletoDeCartao, SelecaoBoletoDeCartaoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof BoletoDeCartao) {
-                return (BoletoDeCartao) object;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof BoletoDeCartao) {
-                String id = String.valueOf(((BoletoDeCartao) object).getId());
-                uic.getAttributes().put(id, (BoletoDeCartao) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public BoletoDeCartaoConverter() {
+        super(BoletoDeCartao.class, SelecaoBoletoDeCartaoView.class);
     }
 }
