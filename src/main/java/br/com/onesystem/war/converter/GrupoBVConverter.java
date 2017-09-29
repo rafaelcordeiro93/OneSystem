@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.war.builder.GrupoBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoGrupoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "grupoBVConverter", forClass = GrupoBV.class)
-public class GrupoBVConverter implements Converter, Serializable {
+public class GrupoBVConverter extends BasicBVConverter<Grupo, GrupoBV, SelecaoGrupoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Grupo) {
-                return new GrupoBV((Grupo) object);
-            } else if (object instanceof GrupoBV) {
-                return (GrupoBV) object;
-            }
-        }
-        return new GrupoBV();
+    public GrupoBVConverter() {
+        super(Grupo.class, GrupoBV.class, SelecaoGrupoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof GrupoBV) {
-                String id = String.valueOf(((GrupoBV) object).getId());
-                uic.getAttributes().put(id, (GrupoBV) object);
-                return id;
-            } else if (object instanceof Grupo) {
-                String id = String.valueOf(((Grupo) object).getId());
-                uic.getAttributes().put(id, (Grupo) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

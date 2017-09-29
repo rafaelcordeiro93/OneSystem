@@ -2,9 +2,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.war.builder.DepositoBancarioBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoDepositoBancarioView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -13,37 +13,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "depositoBancarioBVConverter", forClass = DepositoBancarioBV.class)
-public class DepositoBancarioBVConverter implements Converter, Serializable {
+public class DepositoBancarioBVConverter extends BasicBVConverter<DepositoBancario, DepositoBancarioBV, SelecaoDepositoBancarioView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof DepositoBancario) {
-                return new DepositoBancarioBV((DepositoBancario) object);
-            } else if (object instanceof DepositoBancarioBV) {
-                return (DepositoBancarioBV) object;
-            }
-        }
-        return new DepositoBancarioBV();
+    public DepositoBancarioBVConverter() {
+        super(DepositoBancario.class, DepositoBancarioBV.class, SelecaoDepositoBancarioView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof DepositoBancarioBV) {
-                String id = String.valueOf(((DepositoBancarioBV) object).getId());
-                uic.getAttributes().put(id, (DepositoBancarioBV) object);
-                return id;
-            } else if (object instanceof DepositoBancario) {
-                String id = String.valueOf(((DepositoBancario) object).getId());
-                uic.getAttributes().put(id, (DepositoBancario) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Comissao;
 import br.com.onesystem.war.builder.ComissaoBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoComissaoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "comissaoBVConverter", forClass = ComissaoBV.class)
-public class ComissaoBVConverter implements Converter, Serializable {
+public class ComissaoBVConverter extends BasicBVConverter<Comissao, ComissaoBV, SelecaoComissaoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Comissao) {
-                return new ComissaoBV((Comissao) object);
-            } else if (object instanceof ComissaoBV) {
-                return (ComissaoBV) object;
-            }
-        }
-        return new ComissaoBV();
+    public ComissaoBVConverter() {
+        super(Comissao.class, ComissaoBV.class, SelecaoComissaoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof ComissaoBV) {
-                String id = String.valueOf(((ComissaoBV) object).getId());
-                uic.getAttributes().put(id, (ComissaoBV) object);
-                return id;
-            } else if (object instanceof Comissao) {
-                String id = String.valueOf(((Comissao) object).getId());
-                uic.getAttributes().put(id, (Comissao) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

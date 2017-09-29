@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TipoReceita;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoTipoReceitaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "tipoReceitaConverter", forClass = TipoReceita.class)
-public class TipoReceitaConverter implements Converter, Serializable {
+public class TipoReceitaConverter extends BasicConverter<TipoReceita, SelecaoTipoReceitaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof TipoReceita) {
-                return (TipoReceita) object;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof TipoReceita) {
-                String id = String.valueOf(((TipoReceita) object).getId());
-                uic.getAttributes().put(id, (TipoReceita) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public TipoReceitaConverter() {
+        super(TipoReceita.class, SelecaoTipoReceitaView.class);
     }
 }

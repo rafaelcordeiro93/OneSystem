@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.war.builder.ItemBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoItemView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "itemBVConverter", forClass = ItemBV.class)
-public class ItemBVConverter implements Converter, Serializable {
+public class ItemBVConverter extends BasicBVConverter<Item, ItemBV, SelecaoItemView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Item) {
-                return new ItemBV((Item) object);
-            } else if (object instanceof ItemBV) {
-                return (ItemBV) object;
-            }
-        }
-        return new ItemBV();
+    public ItemBVConverter() {
+        super(Item.class, ItemBV.class, SelecaoItemView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof ItemBV) {
-                String id = String.valueOf(((ItemBV) object).getId());
-                uic.getAttributes().put(id, (ItemBV) object);
-                return id;
-            } else if (object instanceof Item) {
-                String id = String.valueOf(((Item) object).getId());
-                uic.getAttributes().put(id, (Item) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

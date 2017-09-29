@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoAjusteDeEstoqueView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "ajusteDeEstoqueBVConverter", forClass = AjusteDeEstoque.class)
-public class AjusteDeEstoqueBVConverter implements Converter, Serializable {
+public class AjusteDeEstoqueBVConverter extends BasicBVConverter<AjusteDeEstoque, AjusteDeEstoqueBV, SelecaoAjusteDeEstoqueView> implements Converter, Serializable {
 
-     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof AjusteDeEstoque) {
-                return new AjusteDeEstoqueBV((AjusteDeEstoque) object);
-            } else if (object instanceof AjusteDeEstoqueBV) {
-                return (AjusteDeEstoqueBV) object;
-            }
-        }
-        return new AjusteDeEstoqueBV();
+    public AjusteDeEstoqueBVConverter() {
+        super(AjusteDeEstoque.class, AjusteDeEstoqueBV.class, SelecaoAjusteDeEstoqueView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof AjusteDeEstoqueBV) {
-                String id = String.valueOf(((AjusteDeEstoqueBV) object).getId());
-                uic.getAttributes().put(id, (AjusteDeEstoqueBV) object);
-                return id;
-            } else if (object instanceof AjusteDeEstoque) {
-                String id = String.valueOf(((AjusteDeEstoque) object).getId());
-                uic.getAttributes().put(id, (AjusteDeEstoque) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

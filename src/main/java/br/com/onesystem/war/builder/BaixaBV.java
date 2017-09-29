@@ -22,6 +22,7 @@ import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.domain.builder.BaixaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
@@ -30,7 +31,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-public class BaixaBV implements Serializable {
+public class BaixaBV implements Serializable, BuilderView<Baixa> {
 
     private Long id;
     private BigDecimal valor = BigDecimal.ZERO;

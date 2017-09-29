@@ -5,12 +5,11 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.war.builder.ContaDeEstoqueBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoContaDeEstoqueView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -19,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "contaDeEstoqueBVConverter", forClass = ContaDeEstoqueBV.class)
-public class ContaDeEstoqueBVConverter implements Converter, Serializable {
+public class ContaDeEstoqueBVConverter extends BasicBVConverter<ContaDeEstoque, ContaDeEstoqueBV, SelecaoContaDeEstoqueView> implements Converter, Serializable {
 
-     @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof ContaDeEstoque) {
-                return new ContaDeEstoqueBV((ContaDeEstoque) object);
-            } else if (object instanceof ContaDeEstoqueBV) {
-                return (ContaDeEstoqueBV) object;
-            }
-        }
-        return new ContaDeEstoqueBV();
+    public ContaDeEstoqueBVConverter() {
+        super(ContaDeEstoque.class, ContaDeEstoqueBV.class, SelecaoContaDeEstoqueView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof ContaDeEstoqueBV) {
-                String id = String.valueOf(((ContaDeEstoqueBV) object).getId());
-                uic.getAttributes().put(id, (ContaDeEstoqueBV) object);
-                return id;
-            } else if (object instanceof ContaDeEstoque) {
-                String id = String.valueOf(((ContaDeEstoque) object).getId());
-                uic.getAttributes().put(id, (ContaDeEstoque) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }
