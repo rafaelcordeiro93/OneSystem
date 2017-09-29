@@ -37,7 +37,6 @@ public class TituloBuilder {
     private Recepcao recepcao;
     private Cambio cambio;
     private Nota nota;
-    private List<Baixa> baixas = new ArrayList<Baixa>();
     private TipoFormaPagRec tipoFormaPagRec;
     private Cotacao cotacao;
     private Fatura fatura;
@@ -112,11 +111,6 @@ public class TituloBuilder {
         return this;
     }
 
-    public TituloBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public TituloBuilder comTipoFormaPagRec(TipoFormaPagRec tipoFormaPagRec) {
         this.tipoFormaPagRec = tipoFormaPagRec;
         return this;
@@ -149,7 +143,7 @@ public class TituloBuilder {
 
     public Titulo construir() throws DadoInvalidoException {
         return new Titulo(id, pessoa, historico, valor, saldo, emissao, operacaoFinanceira, tipoFormaPagRec,
-                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, baixas, entrada, fatura, situacaoDeCobranca, filial, parcela);
+                vencimento, recepcao, cambio, cotacao, nota, conhecimentoDeFrete, entrada, fatura, situacaoDeCobranca, filial, parcela);
     }
 
 }

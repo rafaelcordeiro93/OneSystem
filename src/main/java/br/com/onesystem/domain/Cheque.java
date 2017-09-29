@@ -65,9 +65,9 @@ public class Cheque extends CobrancaVariavel implements Serializable {
 
     public Cheque(Long id, Nota nota, BigDecimal valor, Date emissao, Date vencimento, Banco banco, String agencia,
             String conta, String numeroCheque, EstadoDeCheque tipoSituacao, BigDecimal multas, BigDecimal juros, BigDecimal descontos, String emitente, OperacaoFinanceira operacaoFinanceira,
-            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, List<Baixa> baixas, Boolean entrada, 
+            String historico, Cotacao cotacao, TipoLancamento tipoLancamento, Pessoa pessoa, Boolean entrada, 
             SituacaoDeCobranca situacaoDeCobranca, Date compensacao, Filial filial, Integer parcela) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
+        super(id, emissao, pessoa, cotacao, historico, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
         this.banco = banco;
         this.agencia = agencia;
         this.conta = conta;
@@ -90,43 +90,43 @@ public class Cheque extends CobrancaVariavel implements Serializable {
 
     /* Deve ser utilizado para gerar a baixa do depósito */
     public void geraBaixaDeCheque() throws DadoInvalidoException {
-        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
-        if (this.compensacao != null && this.tipoLancamento == TipoLancamento.EMITIDA) {
-            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
-        } else if (this.tipoLancamento == TipoLancamento.EMITIDA) {
-            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
-        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
-            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
-        }
+//        Caixa caixa = (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance());
+//        if (this.compensacao != null && this.tipoLancamento == TipoLancamento.EMITIDA) {
+//            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comEstadoDeBaixa(EstadoDeBaixa.EFETIVADO).comDataCompensacao(compensacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas Compensadas
+//        } else if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+//            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.SAIDA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+//        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+//            adiciona(new BaixaBuilder().comFilial(getFilial()).comValor(valor).comOperacaoFinanceira(OperacaoFinanceira.ENTRADA).comCotacao(cotacao).comCaixa(caixa).comPessoa(pessoa).construir());//Baixas do Lançamento
+//        }
     }
 
-    /* Adiciona Baixa*/
-    @Override
-    public void adiciona(Baixa baixa) {
-        try {
-            BaixaBuilder b = new BaixaBuilder(baixa);
-            if (baixas == null) {
-                this.baixas = new ArrayList<>();
-            }
-            if(baixa.getHistorico() == null){
-            geraHistorico(b);
-            }
-            b.comCobranca(this);
-            b.comEmissao(emissao);
-            this.baixas.add(b.construir());
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
-    }
-
-    private void geraHistorico(BaixaBuilder b) {
-        BundleUtil msg = new BundleUtil();
-        if (this.tipoLancamento == TipoLancamento.EMITIDA) {
-            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Emitido") + " " + msg.getLabel("para") + " " + pessoa.getFirstNameLastName());
-        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
-            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Recebido") + " " + msg.getLabel("de") + " " + pessoa.getFirstNameLastName());
-        }
-    }
+//    /* Adiciona Baixa*/
+//    @Override
+//    public void adiciona(Baixa baixa) {
+//        try {
+//            BaixaBuilder b = new BaixaBuilder(baixa);
+//            if (baixas == null) {
+//                this.baixas = new ArrayList<>();
+//            }
+//            if(baixa.getHistorico() == null){
+//            geraHistorico(b);
+//            }
+//            b.comCobranca(this);
+//            b.comEmissao(emissao);
+//            this.baixas.add(b.construir());
+//        } catch (DadoInvalidoException ex) {
+//            ex.print();
+//        }
+//    }
+//
+//    private void geraHistorico(BaixaBuilder b) {
+//        BundleUtil msg = new BundleUtil();
+//        if (this.tipoLancamento == TipoLancamento.EMITIDA) {
+//            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Emitido") + " " + msg.getLabel("para") + " " + pessoa.getFirstNameLastName());
+//        } else if (this.tipoLancamento == TipoLancamento.RECEBIDA) {
+//            b.comHistorico(msg.getLabel("Cheque") + " " + msg.getLabel("Recebido") + " " + msg.getLabel("de") + " " + pessoa.getFirstNameLastName());
+//        }
+//    }
 
     @Override
     public ModalidadeDeCobranca getModalidade() {

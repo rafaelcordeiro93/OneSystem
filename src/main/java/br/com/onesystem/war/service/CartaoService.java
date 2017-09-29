@@ -11,7 +11,7 @@ public class CartaoService implements Serializable {
     @Inject
     private CartaoDAO dao;
     
-    public List<Cartao> buscarCartaos() {
+    public List<Cartao> buscarCartoes() {
        return dao.listaDeResultados();
     }
 }

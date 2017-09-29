@@ -72,9 +72,6 @@ public class Baixa implements Serializable {
     private ValorPorCotacao valorPorCotacao;
 
     @ManyToOne
-    private Cobranca cobranca;
-
-    @ManyToOne
     private TipoDespesa despesa;
 
     @ManyToOne
@@ -135,7 +132,7 @@ public class Baixa implements Serializable {
     public Baixa(Long id, BigDecimal valor, Date emissao, Date dataCompensacao, String historico,
             OperacaoFinanceira tipoMovimentacaoFinanceira, Pessoa pessoa, TipoDespesa despesa,
             Cotacao cotacao, TipoReceita receita, Cambio cambio, Transferencia transferencia,
-            Recepcao recepcao, Cobranca cobranca, ValorPorCotacao valorPorCotacao,
+            Recepcao recepcao, ValorPorCotacao valorPorCotacao,
             TipoDeCobranca tipoDeCobranca, FormaDeCobranca formaDeCobranca, Caixa caixa, 
             DepositoBancario depositoBancario, SaqueBancario saqueBancario, 
             LancamentoBancario lancamentoBancario, CambioEmpresa cambioEmpresa, 
@@ -154,7 +151,6 @@ public class Baixa implements Serializable {
         this.cambio = cambio;
         this.transferencia = transferencia;
         this.recepcao = recepcao;
-        this.cobranca = cobranca;
         this.valorPorCotacao = valorPorCotacao;
         this.tipoDeCobranca = tipoDeCobranca;
         this.formaDeCobranca = formaDeCobranca;
@@ -238,11 +234,11 @@ public class Baixa implements Serializable {
         if (getCambio() != null) {
             throw new EDadoInvalidoException("Baixas com referências de câmbio não podem ser canceladas!");
         }
-        if (cobranca instanceof Titulo) {
-            ((Titulo) cobranca).cancelarSaldoDeBaixa(valor);
+        if (tipoDeCobranca != null && tipoDeCobranca.getCobranca() instanceof Titulo) {
+            ((Titulo) tipoDeCobranca.getCobranca()).cancelarSaldoDeBaixa(valor);
         }
-        if (cobranca instanceof CobrancaVariavel) {
-            ((CobrancaVariavel) cobranca).atualizaSituacao();
+        if (tipoDeCobranca != null && tipoDeCobranca.getCobranca() instanceof CobrancaVariavel) {
+            ((CobrancaVariavel) tipoDeCobranca.getCobranca()).atualizaSituacao();
         }
 
         this.estado = EstadoDeBaixa.CANCELADO;
@@ -251,11 +247,11 @@ public class Baixa implements Serializable {
     }
 
     public void descancela() throws EDadoInvalidoException {
-        if (cobranca instanceof Titulo) {
-            ((Titulo) cobranca).descancelarSaldoDeBaixa(valor);
+        if (tipoDeCobranca != null && tipoDeCobranca.getCobranca() instanceof Titulo) {
+            ((Titulo) tipoDeCobranca.getCobranca()).descancelarSaldoDeBaixa(valor);
         }
-        if (cobranca instanceof CobrancaVariavel) {
-            ((CobrancaVariavel) cobranca).atualizaSituacao();
+        if (tipoDeCobranca != null && tipoDeCobranca.getCobranca() instanceof CobrancaVariavel) {
+            ((CobrancaVariavel) tipoDeCobranca.getCobranca()).atualizaSituacao();
         }
         this.estado = EstadoDeBaixa.EFETIVADO;
         this.dataCancelamento = null;
@@ -311,10 +307,6 @@ public class Baixa implements Serializable {
         return operacaoFinanceira;
     }
 
-    public Cobranca getCobranca() {
-        return cobranca;
-    }
-
     public ValorPorCotacao getValorPorCotacao() {
         return valorPorCotacao;
     }
@@ -344,8 +336,8 @@ public class Baixa implements Serializable {
     }
 
     public Date getDataCompetencia() {
-        if (cobranca != null && cobranca instanceof CobrancaFixa) {
-            return ((CobrancaFixa) cobranca).getReferencia();
+        if (tipoDeCobranca != null && tipoDeCobranca.getCobranca() instanceof CobrancaFixa) {
+            return ((CobrancaFixa) tipoDeCobranca.getCobranca()).getReferencia();
         } else {
             return emissao;
         }
@@ -390,10 +382,10 @@ public class Baixa implements Serializable {
     public Long getDocumentoOriginal() {
         if (cambio != null) {
             return this.cambio.getId();
-        } else if (recepcao != null && cobranca instanceof Titulo) {
+        } else if (recepcao != null && tipoDeCobranca.getCobranca() instanceof Titulo) {
             return this.recepcao.getId();
-        } else if (recepcao != null && !(cobranca instanceof Titulo)) {
-            return ((Titulo) cobranca).getId();
+        } else if (recepcao != null && !(tipoDeCobranca.getCobranca() instanceof Titulo)) {
+            return ((Titulo) tipoDeCobranca.getCobranca()).getId();
         } else {
             return this.id;
         }
@@ -408,8 +400,8 @@ public class Baixa implements Serializable {
             return despesa.getId();
         } else if (receita != null) {
             return receita.getId();
-        } else if (cobranca != null) {
-            return cobranca.getId();
+        } else if (tipoDeCobranca != null) {
+            return tipoDeCobranca.getCobranca().getId();
         } else {
             return getId();
         }
@@ -424,20 +416,20 @@ public class Baixa implements Serializable {
             return despesa.getNome();
         } else if (receita != null) {
             return receita.getNome();
-        } else if (cobranca instanceof Titulo) {
+        } else if (tipoDeCobranca.getCobranca() instanceof Titulo) {
             return TipoOperacao.TITULO.getNome();
-        } else if (cobranca instanceof DespesaProvisionada) {
-            return ((DespesaProvisionada) cobranca).getTipoDespesa().getNome();
-        } else if (cobranca instanceof ReceitaProvisionada) {
-            return ((ReceitaProvisionada) cobranca).getPessoa().getNome();
+        } else if (tipoDeCobranca.getCobranca() instanceof DespesaProvisionada) {
+            return ((DespesaProvisionada) tipoDeCobranca.getCobranca()).getTipoDespesa().getNome();
+        } else if (tipoDeCobranca.getCobranca() instanceof ReceitaProvisionada) {
+            return ((ReceitaProvisionada) tipoDeCobranca.getCobranca()).getPessoa().getNome();
         } else {
             return TipoOperacao.AVULSO.getNome();
         }
     }
 
     public BigDecimal getValorBaixado() {
-        if (cobranca instanceof Titulo) {
-            return ((Titulo) cobranca).getValorBaixado();
+        if (tipoDeCobranca.getCobranca() instanceof Titulo) {
+            return ((Titulo) tipoDeCobranca.getCobranca()).getValorBaixado();
         } else {
             return getValor();
         }
@@ -449,7 +441,6 @@ public class Baixa implements Serializable {
         return "Baixa{" + "id=" + id + ",valor=" + valor + ", historico="
                 + historico + ", emissao=" + emissao + ", naturezaFinanceira="
                 + operacaoFinanceira + ", cotacao=" + (cotacao != null ? cotacao.getId() : null)
-                + ", perfilDeValor=" + (cobranca != null ? cobranca.getId() : null)
                 + ", despesa=" + (despesa != null ? despesa.getId() : null) + ", receita="
                 + (receita != null ? receita.getId() : null) + ", pessoa=" + (pessoa != null ? pessoa.getId() : null)
                 + ", cambio=" + (cambio != null ? cambio.getId() : null)

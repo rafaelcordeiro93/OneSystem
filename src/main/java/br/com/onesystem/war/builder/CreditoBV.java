@@ -26,7 +26,6 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira operacaoFinanceira;
     private Nota nota;
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private Boolean entrada;
     private Filial filial;
@@ -43,7 +42,6 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
         this.historico = c.getHistorico();
         this.vencimento = c.getVencimento();
         this.operacaoFinanceira = c.getOperacaoFinanceira();
-        this.baixas = c.getBaixas();
         this.cotacao = c.getCotacao();
         this.entrada = c.getEntrada();
         this.filial = c.getFilial();
@@ -113,14 +111,6 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
         this.nota = nota;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-    }
-
     public Cotacao getCotacao() {
         return cotacao;
     }
@@ -146,13 +136,13 @@ public class CreditoBV implements Serializable, BuilderView<Credito> {
     }
 
     public Credito construir() throws DadoInvalidoException {
-        return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+        return new CreditoBuilder().comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comValor(valor).comVencimento(vencimento).comFilial(filial).construir();
     }
 
     public Credito construirComID() throws DadoInvalidoException {
-        return new CreditoBuilder().comId(id).comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+        return new CreditoBuilder().comId(id).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comValor(valor).comVencimento(vencimento).comFilial(filial).construir();
     }

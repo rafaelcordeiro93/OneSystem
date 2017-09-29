@@ -28,9 +28,9 @@ public class Credito extends CobrancaVariavel implements Serializable {
     public Credito() {
     }
 
-    public Credito(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira,
+    public Credito(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico, OperacaoFinanceira operacaoFinanceira,
             BigDecimal valor, Date vencimento, Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
+        super(id, emissao, pessoa, cotacao, historico, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
     }
 
     @Override

@@ -1,9 +1,14 @@
 package br.com.onesystem.war.service.impl;
 
+import br.com.onesystem.domain.Nota;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import org.primefaces.context.RequestContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class BasicCrudMBImpl<Bean> {
 
@@ -33,7 +38,36 @@ public abstract class BasicCrudMBImpl<Bean> {
     public abstract String abrirEdicao();
 
     public void selecionar() {
+        inicializaRegistro(beanSelecionado);
         RequestContext.getCurrentInstance().closeDialog(beanSelecionado);
+    }
+
+    public void inicializaRegistro(Bean bean) {
+        System.out.println("A desgraca entrando aqui..");
+        
+        try {
+            Method[] methods = bean.getClass().getMethods();
+            for (Method m : methods) {
+                if (m.getReturnType().equals(List.class)) {
+                    Method mList = List.class.getMethod("size", null);
+
+                    m.setAccessible(true);
+                    mList.setAccessible(true);
+
+                    mList.invoke(m.invoke(bean, null), null);
+                }
+            }
+        } catch (IllegalAccessException ex) {
+            throw new RuntimeException("Erro de acesso ao método.");
+        } catch (IllegalArgumentException ex) {
+            throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
+        } catch (InvocationTargetException ex) {
+            throw new RuntimeException("Erro na invocação do método.");
+        } catch (NoSuchMethodException ex) {
+            throw new RuntimeException("Erro o método não existe.");
+        } catch (SecurityException ex) {
+            throw new RuntimeException("Erro de segurança ao realizar o acesso.");
+        } 
     }
 
     public Bean getBeanSelecionado() {

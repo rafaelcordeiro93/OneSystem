@@ -61,7 +61,7 @@ public abstract class Nota implements Serializable {
     @ManyToOne
     private Operacao operacao;
     @ManyToOne
-    private FormaDeRecebimento formaDeRecebimento;
+    private FormaDeRecebimento formaDeRecebimento; 
     @ManyToOne
     private ListaDePreco listaDePreco;
     @Temporal(TemporalType.TIMESTAMP)

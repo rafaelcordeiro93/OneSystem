@@ -20,7 +20,7 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCartaos();
+        beans = service.buscarCartoes();
     }
 
     public void abrirDialogo() {

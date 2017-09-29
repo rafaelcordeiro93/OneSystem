@@ -113,6 +113,10 @@
         <class>br.com.onesystem.domain.LayoutDeImpressao</class>
         <class>br.com.onesystem.domain.CobrancaVariavel</class>
         <class>br.com.onesystem.domain.Cobranca</class>
+        <class>br.com.onesystem.domain.FormaDeRecebimento</class>
+        <class>br.com.onesystem.domain.PedidoAFornecedores</class>
+        <class>br.com.onesystem.domain.ItemDePedidoCancelado</class>
+        
         <properties>
             <!--  Propriedades JDBC POSTGRE -->
             <!--   <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
@@ -141,5 +145,5 @@
             <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
         </properties>
     </persistence-unit>
-   
+     
 </persistence>

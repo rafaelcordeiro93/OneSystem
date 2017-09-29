@@ -36,33 +36,22 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
     private Configuracao configuracao;
 
     @Inject
-    private ConfiguracaoService serviceConfigurcao;
-
-    @Inject
     private RemoveDAO<TaxaDeAdministracao> removeDAO;
 
     @PostConstruct
     public void init() {
         limparJanela();
-        inicializarConfiguracoes();
-    }
-
-    private void inicializarConfiguracoes() {
-        try {
-            configuracao = serviceConfigurcao.buscar();
-            if (configuracao.getMoedaPadrao() == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
-            }
-        } catch (EDadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     public void add() {
         try {
+            System.out.println("1");
             Cartao novoRegistro = e.construir();
+            System.out.println("2");
             preparaParaInclusaoDeTaxa(novoRegistro);
+            System.out.println("3");
             addNoBanco(novoRegistro);
+            System.out.println("4");
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -106,7 +95,9 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
         Object obj = (Object) event.getObject();
         String idComponent = event.getComponent().getId();
         if (obj instanceof Cartao) {
+            Cartao name = (Cartao) obj;
             e = new CartaoBV((Cartao) obj);
+            name.getTaxaDeAdministracao().forEach(System.out::println);
         } else if (obj instanceof Conta) {
             e.setConta((Conta) obj);
         } else if (obj instanceof TipoDespesa && "despesasId-search".equals(idComponent)) {
@@ -194,14 +185,6 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
 
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
-    }
-
-    public ConfiguracaoService getServiceConfigurcao() {
-        return serviceConfigurcao;
-    }
-
-    public void setServiceConfigurcao(ConfiguracaoService serviceConfigurcao) {
-        this.serviceConfigurcao = serviceConfigurcao;
     }
 
 }

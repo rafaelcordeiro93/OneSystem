@@ -26,7 +26,6 @@ public class ReceitaEventualBV implements Serializable {
     private Date emissao;
     private String historico;
     private Cotacao cotacao;
-    private List<Baixa> baixas;
     private Date referencia;
     private Filial filial;
 
@@ -39,7 +38,6 @@ public class ReceitaEventualBV implements Serializable {
         this.emissao = receitaEventualSelecionada.getEmissao();
         this.historico = receitaEventualSelecionada.getHistorico();
         this.cotacao = receitaEventualSelecionada.getCotacao();
-        this.baixas = receitaEventualSelecionada.getBaixas();
         this.operacaoFinanceira = receitaEventualSelecionada.getOperacaoFinanceira();
         this.referencia = receitaEventualSelecionada.getReferencia();
     }
@@ -55,7 +53,6 @@ public class ReceitaEventualBV implements Serializable {
         this.emissao = emissao;
         this.historico = historico;
         this.cotacao = cotacao;
-        this.baixas = baixas;
         this.operacaoFinanceira = operacaoFinanceira;
         this.referencia = referencia;
     }
@@ -132,14 +129,6 @@ public class ReceitaEventualBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-    }
-
     public OperacaoFinanceira getOperacaoFinanceira() {
         return operacaoFinanceira;
     }
@@ -166,14 +155,14 @@ public class ReceitaEventualBV implements Serializable {
     
     public ReceitaEventual construir() throws DadoInvalidoException {
         return new ReceitaEventualBuilder().comPessoa(pessoa).comValor(valor).comOperacaoFinanceira(operacaoFinanceira)
-                .comReceita(receita).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comReceita(receita).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
                 .comReferencia(referencia).comFilial(filial).construir();
 
     }
 
     public ReceitaEventual construirComID() throws DadoInvalidoException {
         return new ReceitaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comOperacaoFinanceira(operacaoFinanceira)
-                .comReceita(receita).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comReceita(receita).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
                 .comReferencia(referencia).comFilial(filial).construir();
     }
 }

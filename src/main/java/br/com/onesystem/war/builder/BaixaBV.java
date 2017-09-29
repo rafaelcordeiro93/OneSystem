@@ -40,7 +40,6 @@ public class BaixaBV implements Serializable {
     private OperacaoFinanceira operacaoFinanceira;
     private NaturezaFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private Cobranca cobranca;
     private TipoDespesa despesa;
     private TipoReceita receita;
     private Pessoa pessoa;
@@ -73,7 +72,6 @@ public class BaixaBV implements Serializable {
         this.despesa = baixa.getDespesa();
         this.cambio = baixa.getCambio();
         this.recepcao = baixa.getRecepcao();
-        this.cobranca = baixa.getCobranca();
         this.receita = baixa.getReceita();
         this.transferencia = baixa.getTransferencia();
         this.cotacao = baixa.getCotacao();
@@ -91,7 +89,6 @@ public class BaixaBV implements Serializable {
         this.historico = titulo.getHistorico();
         this.operacaoFinanceira = titulo.getOperacaoFinanceira();
         this.recepcao = titulo.getRecepcao();
-        this.cobranca = titulo;
         this.valor = titulo.getSaldo();
         this.cambio = titulo.getCambio();
         this.filial = titulo.getFilial();
@@ -102,7 +99,6 @@ public class BaixaBV implements Serializable {
         this.valor = despesaProvisionada.getValor();
         this.emissao = despesaProvisionada.getEmissao();
         this.historico = despesaProvisionada.getHistorico();
-        this.cobranca = despesaProvisionada;
         this.despesa = despesaProvisionada.getTipoDespesa();
         this.cambio = despesaProvisionada.getCambio();
         this.filial = despesaProvisionada.getFilial();
@@ -113,7 +109,6 @@ public class BaixaBV implements Serializable {
         this.valor = receitaProvisionada.getValor();
         this.emissao = receitaProvisionada.getEmissao();
         this.historico = receitaProvisionada.getHistorico();
-        this.cobranca = receitaProvisionada;
         this.filial = receitaProvisionada.getFilial();
     }
 
@@ -171,14 +166,6 @@ public class BaixaBV implements Serializable {
 
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
-    }
-
-    public Cobranca getCobranca() {
-        return cobranca;
-    }
-
-    public void setCobranca(Cobranca cobranca) {
-        this.cobranca = cobranca;
     }
 
     public TipoDespesa getDespesa() {
@@ -304,7 +291,7 @@ public class BaixaBV implements Serializable {
     public Baixa construir() throws DadoInvalidoException {
         return new BaixaBuilder().comCambio(cambio)
                 .comCotacao(cotacao).comDespesa(despesa).comEmissao(emissao).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao).comTipoDeCobranca(tipoDeCobranca).comCaixa(caixa)
-                .comHistorico(historico).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(cobranca)
+                .comHistorico(historico).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao)
                 .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario).comValorPorCotacao(valorPorCotacao)
                 .comFilial(filial).construir();
     }
@@ -314,7 +301,7 @@ public class BaixaBV implements Serializable {
                 .comCotacao(cotacao).comDespesa(despesa).comId(id).comCaixa(caixa)
                 .comEmissao(emissao).comHistorico(historico).comTipoDeCobranca(tipoDeCobranca)
                 .comOperacaoFinanceira(operacaoFinanceira).comEstadoDeBaixa(estado).comDataCompensacao(dataCompensacao)
-                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao).comCobranca(cobranca)
+                .comPessoa(pessoa).comReceita(receita).comRecepcao(recepcao)
                 .comTransferencia(transferencia).comValor(valor).comDepositoBancario(depositoBancario).comLancamentoBancario(lancamentoBancario)
                 .comFilial(filial).comValorPorCotacao(valorPorCotacao).construir();
     }

@@ -1,6 +1,8 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Caixa;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Filial;
@@ -58,10 +60,13 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
-    
+
     @Inject
     private GeradorDeBaixas geradorDeBaixas;
-    
+
+    @Inject
+    private AtualizaDAO<Cobranca> dao;
+
     public void validaDinheiro() throws DadoInvalidoException {
         e.setTotalEmDinheiro(getTotalEmDinheiro());
         if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0) {
@@ -76,6 +81,21 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         try {
             Recebimento recebimento = constroiRecebimento();
             addNoBanco(recebimento);
+
+            //O cascade não está atualizando a cobrança, realizado atualização manual.
+            if (recebimento.getTipoDeCobranca() != null && recebimento.getTipoDeCobranca().isEmpty()) {
+                for (TipoDeCobranca tipo : recebimento.getTipoDeCobranca()) {
+                    dao.atualiza(tipo.getCobranca());
+                }
+            }
+
+            //O cascade não está atualizando a cobrança, realizado atualização manual.
+            if (recebimento.getFormasDeCobranca() != null && recebimento.getFormasDeCobranca().isEmpty()) {
+                for (FormaDeCobranca forma : recebimento.getFormasDeCobranca()) {
+                    dao.atualiza(forma.getCobranca());
+                }
+            }
+
             t = recebimento;
             layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
             if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {

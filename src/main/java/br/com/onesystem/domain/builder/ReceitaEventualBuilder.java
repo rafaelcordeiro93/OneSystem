@@ -26,7 +26,6 @@ public class ReceitaEventualBuilder {
     private BigDecimal valor;
     private Date vencimento;
     private Date emissao = Calendar.getInstance().getTime();
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
@@ -74,11 +73,6 @@ public class ReceitaEventualBuilder {
         return this;
     }
 
-    public ReceitaEventualBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public ReceitaEventualBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
@@ -100,7 +94,7 @@ public class ReceitaEventualBuilder {
     }
     
     public ReceitaEventual construir() throws DadoInvalidoException {
-        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
+        return new ReceitaEventual(id, pessoa, receita, valor, emissao, historico, cotacao, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

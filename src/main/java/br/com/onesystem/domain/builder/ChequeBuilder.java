@@ -39,7 +39,6 @@ public class ChequeBuilder {
     private Cotacao cotacao;
     private TipoLancamento tipoLancamento;
     private Pessoa pessoa;
-    private List<Baixa> baixas;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
     private Nota nota;
@@ -139,11 +138,6 @@ public class ChequeBuilder {
         return this;
     }
 
-    public ChequeBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public ChequeBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
@@ -180,7 +174,7 @@ public class ChequeBuilder {
     }
     
     public Cheque construir() throws DadoInvalidoException {
-        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, baixas, entrada, situacaoDeCobranca, compensacao, filial, parcela);
+        return new Cheque(id, nota, valor, emissao, vencimento, banco, agencia, conta, numeroCheque, tipoSituacao, multas, juros, descontos, emitente, operacaoFinanceira, historico, cotacao, tipoLancamento, pessoa, entrada, situacaoDeCobranca, compensacao, filial, parcela);
     }
 
 }

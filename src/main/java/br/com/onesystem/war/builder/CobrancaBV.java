@@ -84,7 +84,6 @@ public class CobrancaBV implements Serializable {
     private Pessoa pessoa;
     private Nota nota;
     private String historico;
-    private List<Baixa> baixas;
     private Boolean entrada;
     private Fatura fatura;
     private SituacaoDeCobranca situacaoDeCobranca;
@@ -188,7 +187,6 @@ public class CobrancaBV implements Serializable {
         this.cotacao = p.getCotacao();
         this.historico = p.getHistorico();
         this.operacaoFinanceira = p.getOperacaoFinanceira();
-        this.baixas = p.getBaixas();
         this.nota = p.getNota();
         this.entrada = p.getEntrada();
         this.moeda = p.getCotacao().getConta().getMoeda();
@@ -380,14 +378,6 @@ public class CobrancaBV implements Serializable {
         this.historico = historico;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-    }
-
     public void setJuros(BigDecimal juros) {
         this.juros = juros;
     }
@@ -500,10 +490,6 @@ public class CobrancaBV implements Serializable {
         return entrada;
     }
 
-    public boolean getPossuiPagamento() {
-        return baixas == null ? false : baixas.isEmpty() ? false : true;
-    }
-
     public void setEntrada(Boolean entrada) {
         this.entrada = entrada;
     }
@@ -551,7 +537,7 @@ public class CobrancaBV implements Serializable {
     public BoletoDeCartao construirBoletoDeCartao() throws DadoInvalidoException {
         return new BoletoDeCartaoBuilder().comCartao(cartao).comCodigoTransacao(codigoTransacao).
                 comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada)
-                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira).comBaixas(baixas)
+                .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira)
                 .comSituacaoDeCobranca(situacaoDeCobranca).comFilial(filial).comParcela(parcela).construir();
     }
 
@@ -559,25 +545,25 @@ public class CobrancaBV implements Serializable {
         return new ChequeBuilder().comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
                 .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada)
-                .comTipoSituacao(EstadoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comBaixas(baixas)
+                .comTipoSituacao(EstadoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento)
                 .comSituacaoDeCobranca(situacaoDeCobranca).comParcela(parcela).comFilial(filial).construir();
     }
 
     public Titulo construirTitulo() throws DadoInvalidoException {
         return new TituloBuilder().comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento).comBaixas(baixas)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(observacao).comVencimento(vencimento)
                 .comSituacaoDeCobranca(situacaoDeCobranca).comEntrada(entrada).comFatura(fatura).comParcela(parcela).comFilial(filial)
                 .construir();
     }
 
     public Credito construirCredito() throws DadoInvalidoException {
-        return new CreditoBuilder().comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+        return new CreditoBuilder().comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comValor(valor).comVencimento(vencimento).comParcela(parcela).comFilial(filial).construir();
     }
 
     public BoletoDeCartao construirBoletoDeCartaoComId() throws DadoInvalidoException {
-        return new BoletoDeCartaoBuilder().comID(id).comCartao(cartao).comCodigoTransacao(codigoTransacao).comBaixas(baixas)
+        return new BoletoDeCartaoBuilder().comID(id).comCartao(cartao).comCodigoTransacao(codigoTransacao)
                 .comVencimento(vencimento).comEmissao(emissao).comCotacao(cotacao).comPessoa(pessoa).comEntrada(entrada).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comTipoSituacao(SituacaoDeCartao.ABERTO).comValor(valor).comOperacaoFinanceira(operacaoFinanceira).comNota(nota).comHistorico(historico)
                 .comParcela(parcela).comFilial(filial).construir();
@@ -585,7 +571,7 @@ public class CobrancaBV implements Serializable {
 
     public Cheque construirChequeComID() throws DadoInvalidoException {
         return new ChequeBuilder().comID(id).comAgencia(agencia).comBanco(banco).comConta(conta).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
+                .comEmissao(emissao).comEmitente(emitente).comNumeroCheque(numeroCheque).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comObservacao(observacao).comCotacao(cotacao).comTipoLancamento(tipoLancamento).comEntrada(entrada).comHistorico(historico)
                 .comTipoSituacao(EstadoDeCheque.ABERTO).comValor(valor).comVencimento(vencimento).comNota(nota)
                 .comParcela(parcela).comFilial(filial).construir();
@@ -593,13 +579,13 @@ public class CobrancaBV implements Serializable {
 
     public Titulo construirTituloComID() throws DadoInvalidoException {
         return new TituloBuilder().comId(id).comValor(valor).comSaldo(valor).comEmissao(emissao).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa)
-                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comBaixas(baixas).comSituacaoDeCobranca(situacaoDeCobranca)
+                .comTipoFormaPagRec(TipoFormaPagRec.A_PRAZO).comCotacao(cotacao).comHistorico(historico).comVencimento(vencimento).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comFilial(filial).comEntrada(entrada).comNota(nota).comFatura(fatura)
                 .comParcela(parcela).comConhecimentoDeFrete(conhecimentoDeFrete).construir();
     }
 
     public Credito construirCreditoComID() throws DadoInvalidoException {
-        return new CreditoBuilder().comId(id).comBaixas(baixas).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
+        return new CreditoBuilder().comId(id).comCotacao(cotacao).comEmissao(emissao).comEntrada(entrada)
                 .comHistorico(historico).comNota(nota).comOperacaoFinanceira(operacaoFinanceira).comPessoa(pessoa).comSituacaoDeCobranca(situacaoDeCobranca)
                 .comParcela(parcela).comValor(valor).comVencimento(vencimento).comFilial(filial).construir();
     }

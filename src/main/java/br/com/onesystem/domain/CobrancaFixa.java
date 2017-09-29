@@ -39,9 +39,9 @@ public abstract class CobrancaFixa extends Cobranca implements Serializable {
     }
 
     public CobrancaFixa(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
+            OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
             Date referencia, SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
-        super(id, valor, emissao, pessoa, cotacao, historico, baixas, situacaoDeCobranca, filial, vencimento, operacaoFinanceira);
+        super(id, valor, emissao, pessoa, cotacao, historico, situacaoDeCobranca, filial, vencimento, operacaoFinanceira);
         this.referencia = referencia;
         ehAbstracaoValida();
     }

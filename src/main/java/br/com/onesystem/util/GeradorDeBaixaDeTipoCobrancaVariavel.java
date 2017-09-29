@@ -56,22 +56,19 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable {
         this.tipoDeCobranca = tipoDeCobranca;
         String tipo = tipoDeCobranca.getTipoDocumento();
 
-        //Inicializa cobranca - Previne o LazyLoadingException ao carregas as baixas da cobrança
-        tipoDeCobranca.setCobranca((Cobranca) armazem.daClasse(Cobranca.class).find(tipoDeCobranca.getCobranca().getId()));
-        
         if (tipoDeCobranca.getCobranca() instanceof Cheque) {
             verificaBaixasExistentes(tipoDeCobranca.getCobranca());
         }
         if (entrou == false) {
             
             if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
+                tipoDeCobranca.adiciona(getJuros(tipo));
             }
             if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
+                tipoDeCobranca.adiciona(getMulta(tipo));
             }
             if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
+                tipoDeCobranca.adiciona(getDesconto(tipo));
             }
             tipoDeCobranca.adiciona(getValor(tipo));
             if (tipoDeCobranca.getCobranca() instanceof Titulo) {
@@ -169,8 +166,7 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable {
         baixaBuilder.comFilial(tipoDeCobranca.getMovimento().getFilial()).comEmissao(tipoDeCobranca.getMovimento().getEmissao()).comCaixa(tipoDeCobranca.getMovimento().getCaixa());
         
         return baixaBuilder.
-                comCotacao(tipoDeCobranca.getCotacao()).
-                comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
+                comCotacao(tipoDeCobranca.getCotacao()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }
     
