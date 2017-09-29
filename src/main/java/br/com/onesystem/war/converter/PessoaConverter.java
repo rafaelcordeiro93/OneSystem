@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoPessoaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "pessoaConverter", forClass = Pessoa.class)
-public class PessoaConverter implements Converter, Serializable {
+public class PessoaConverter extends BasicConverter<Pessoa, SelecaoPessoaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Pessoa) {
-                return (Pessoa) object;
-            } 
-        }
-        return null;
+    public PessoaConverter() {
+        super(Pessoa.class, SelecaoPessoaView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Pessoa) {
-                String id = String.valueOf(((Pessoa) object).getId());
-                uic.getAttributes().put(id, (Pessoa) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

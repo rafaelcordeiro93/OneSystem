@@ -26,7 +26,7 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="margem" value="#{grupoDeMargemView.e}" dialog="#{selecaoGrupoDeMargemView}" mbView="#{grupoDeMargemView}" update=":conteudo" process="@this" var="margem" converter="margemBVConverter" itemLabel="#{margem.id}" itemValue="#{margem}" itemLabelTab="#{margem.nome}" itemLabelTabVisible="true" onlyNumber="true" editVisible="false"/>
+                            <a:inputTextDialog id="margem" value="#{grupoDeMargemView.e}" dialog="#{selecaoMargemView}" mbView="#{grupoDeMargemView}" update=":conteudo" process="@this" var="margem" converter="margemBVConverter" itemLabel="#{margem.id}" itemValue="#{margem}" itemLabelTab="#{margem.nome}" itemLabelTabVisible="true" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{grupoDeMargemView.e.nome}" />

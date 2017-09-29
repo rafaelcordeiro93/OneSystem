@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Motivo;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoMotivoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael Cordeiro
  */
 @FacesConverter(value = "motivoConverter", forClass = Motivo.class)
-public class MotivoConverter implements Converter, Serializable {
+public class MotivoConverter extends BasicConverter<Motivo, SelecaoMotivoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Motivo) {
-                return (Motivo) object;
-            } 
-        }
-        return null;
+    public MotivoConverter() {
+        super(Motivo.class, SelecaoMotivoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Motivo) {
-                String id = String.valueOf(((Motivo) object).getId());
-                uic.getAttributes().put(id, (Motivo) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

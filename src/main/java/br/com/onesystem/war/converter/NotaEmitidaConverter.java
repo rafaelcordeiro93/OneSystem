@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoNotaEmitidaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "notaEmitidaConverter", forClass = NotaEmitida.class)
-public class NotaEmitidaConverter implements Converter, Serializable {
+public class NotaEmitidaConverter extends BasicConverter<NotaEmitida, SelecaoNotaEmitidaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof NotaEmitida) {
-                return (NotaEmitida) object;
-            }
-        }
-        return null;
+    public NotaEmitidaConverter() {
+        super(NotaEmitida.class, SelecaoNotaEmitidaView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof NotaEmitida) {
-                String id = String.valueOf(((NotaEmitida) object).getId());
-                uic.getAttributes().put(id, (NotaEmitida) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }
