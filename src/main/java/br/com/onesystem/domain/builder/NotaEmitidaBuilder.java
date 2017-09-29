@@ -21,6 +21,7 @@ import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.Filial;
+import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.Usuario;
@@ -66,6 +67,8 @@ public class NotaEmitidaBuilder {
     private Usuario usuario;
     private FaturaEmitida faturaEmitida;
     private Filial filial;
+    private LoteNotaFiscal loteNotaFiscal;
+    private Integer numeroNF;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -215,14 +218,26 @@ public class NotaEmitidaBuilder {
         this.usuario = usuario;
         return this;
     }
-    
-    public NotaEmitidaBuilder comFilial(Filial filial){
+
+    public NotaEmitidaBuilder comFilial(Filial filial) {
         this.filial = filial;
         return this;
     }
 
+    public NotaEmitidaBuilder comNumeroNF(Integer numeroNF) {
+        this.numeroNF = numeroNF;
+        return this;
+    }
+
+    public NotaEmitidaBuilder comLoteNotaFiscal(LoteNotaFiscal loteNotaFiscal) {
+        this.loteNotaFiscal = loteNotaFiscal;
+        return this;
+    }
+
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, comanda, condicional, emissao, caixa, usuario, faturaEmitida, filial);
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
+                orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro,
+                notaDeOrigem, comanda, condicional, emissao, caixa, usuario, faturaEmitida, filial, numeroNF, loteNotaFiscal);
     }
 
 }

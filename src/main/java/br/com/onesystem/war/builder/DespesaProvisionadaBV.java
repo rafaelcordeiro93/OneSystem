@@ -29,7 +29,6 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
     private Cotacao cotacao;
     private OperacaoFinanceira operacaoFinanceira;
     private Cambio cambio;
-    private List<Baixa> baixas;
     private Date referencia;
 
     public DespesaProvisionadaBV(DespesaProvisionada despesaProvisionadaSelecionada) {
@@ -43,7 +42,6 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
         this.divisaoLucroCambioCaixa = despesaProvisionadaSelecionada.isDivisaoLucroCambioCaixa();
         this.cotacao = despesaProvisionadaSelecionada.getCotacao();
         this.cambio = despesaProvisionadaSelecionada.getCambio();
-        this.baixas = despesaProvisionadaSelecionada.getBaixas();
         this.referencia = despesaProvisionadaSelecionada.getReferencia();
         this.operacaoFinanceira = despesaProvisionadaSelecionada.getOperacaoFinanceira();
     }
@@ -61,7 +59,6 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
         this.cotacao = cotacao;
         this.cambio = cambio;
-        this.baixas = baixas;
         this.referencia = referencia;
         this.operacaoFinanceira = operacaoFinanceira;
     }
@@ -159,14 +156,6 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
         this.cambio = cambio;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-    }
-
     public Date getReferencia() {
         return referencia;
     }
@@ -185,14 +174,14 @@ public class DespesaProvisionadaBV implements Serializable, BuilderView<DespesaP
 
     public DespesaProvisionada construir() throws DadoInvalidoException {
         return new DespesaProvisionadaBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas).comReferencia(referencia)
+                .comDespesa(despesa).comCambio(cambio).comReferencia(referencia)
                 .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).comOperacaoFinanceira(operacaoFinanceira).construir();
 
     }
 
     public DespesaProvisionada construirComID() throws DadoInvalidoException {
         return new DespesaProvisionadaBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento)
-                .comDespesa(despesa).comCambio(cambio).comBaixas(baixas).comReferencia(referencia)
+                .comDespesa(despesa).comCambio(cambio).comReferencia(referencia)
                 .comEmissao(emissao).comHistorico(historico).comCotacao(cotacao).comOperacaoFinanceira(operacaoFinanceira).construir();
     }
 }

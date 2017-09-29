@@ -45,9 +45,9 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
     }
 
     public CobrancaVariavel(Long id, Date emissao, Pessoa pessoa, Cotacao cotacao, String historico,
-            List<Baixa> baixas, OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
+            OperacaoFinanceira operacaoFinanceira, BigDecimal valor, Date vencimento,
             Nota nota, Boolean entrada, SituacaoDeCobranca situacaoDeCobranca, Filial filial, Integer parcela) throws DadoInvalidoException {
-        super(id, valor, emissao, pessoa, cotacao, historico, baixas, situacaoDeCobranca, filial, vencimento, operacaoFinanceira);
+        super(id, valor, emissao, pessoa, cotacao, historico, situacaoDeCobranca, filial, vencimento, operacaoFinanceira);
         this.emissao = emissao == null ? new Date() : emissao;
         this.entrada = entrada;
         this.nota = nota;
@@ -86,7 +86,7 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
 
     @Override
     public String toString() {
-        return "Cobranca{" + "id=" + super.getId() + ", valor=" + valor + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cotacao=" + cotacao + ", historico=" + historico + ", baixas=" + baixas + ", operacaoFinanceira=" + operacaoFinanceira + ", nota=" + nota + ", entrada=" + entrada + '}';
+        return "Cobranca{" + "id=" + super.getId() + ", valor=" + valor + ", emissao=" + emissao + ", pessoa=" + pessoa + ", cotacao=" + cotacao + ", historico=" + historico + ", operacaoFinanceira=" + operacaoFinanceira + ", nota=" + nota + ", entrada=" + entrada + '}';
     }
 
 }

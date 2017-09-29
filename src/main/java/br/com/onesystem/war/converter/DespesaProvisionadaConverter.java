@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.DespesaProvisionada;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoDespesaProvisionadaView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "despesaProvisionadaConverter", forClass = DespesaProvisionada.class)
-public class DespesaProvisionadaConverter implements Converter, Serializable {
+public class DespesaProvisionadaConverter extends BasicConverter<DespesaProvisionada, SelecaoDespesaProvisionadaView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof DespesaProvisionada) {
-                return (DespesaProvisionada) object;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof DespesaProvisionada) {
-                String id = String.valueOf(((DespesaProvisionada) object).getId());
-                uic.getAttributes().put(id, (DespesaProvisionada) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public DespesaProvisionadaConverter() {
+        super(DespesaProvisionada.class, SelecaoDespesaProvisionadaView.class);
     }
 }

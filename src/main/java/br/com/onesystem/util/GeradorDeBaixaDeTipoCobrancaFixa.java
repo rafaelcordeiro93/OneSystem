@@ -5,7 +5,9 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Baixa;
+import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -37,15 +39,15 @@ public class GeradorDeBaixaDeTipoCobrancaFixa implements Serializable{
         String tipo = tipoDeCobranca.getTipoDocumento();
 
         if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
+            tipoDeCobranca.adiciona(getJuros(tipo));
         }
         if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
+            tipoDeCobranca.adiciona(getMulta(tipo));
         }
         if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-            tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
+            tipoDeCobranca.adiciona(getDesconto(tipo));
         }
-        tipoDeCobranca.getCobranca().adiciona(getValor(tipo));
+        tipoDeCobranca.adiciona(getValor(tipo));
 
         //Atualiza situação da Cobrança 
         tipoDeCobranca.getCobranca().atualizaSituacao();
@@ -108,8 +110,7 @@ public class GeradorDeBaixaDeTipoCobrancaFixa implements Serializable{
         baixaBuilder.comFilial(tipoDeCobranca.getMovimento().getFilial()).comEmissao(tipoDeCobranca.getMovimento().getEmissao()).comCaixa(tipoDeCobranca.getMovimento().getCaixa());
 
         return baixaBuilder.
-                comCotacao(tipoDeCobranca.getCotacao()).
-                comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
+                comCotacao(tipoDeCobranca.getCotacao()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }
 

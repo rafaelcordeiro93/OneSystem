@@ -19,13 +19,9 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -81,9 +77,6 @@ public abstract class Cobranca implements Serializable {
     @Column(length = 250, nullable = true)
     protected String historico;
 
-    @OneToMany(mappedBy = "cobranca", cascade = {CascadeType.ALL})
-    protected List<Baixa> baixas;
-
     @OneToMany(mappedBy = "cobranca")
     private List<TipoDeCobranca> tiposDeCobranca;
 
@@ -107,7 +100,7 @@ public abstract class Cobranca implements Serializable {
     }
 
     public Cobranca(Long id, BigDecimal valor, Date emissao, Pessoa pessoa,
-            Cotacao cotacao, String historico, List<Baixa> baixas,
+            Cotacao cotacao, String historico,
             SituacaoDeCobranca situacaoDeCobranca, Filial filial,
             Date vencimento, OperacaoFinanceira operacaoFinanceira) {
         this.id = id;
@@ -116,7 +109,6 @@ public abstract class Cobranca implements Serializable {
         this.pessoa = pessoa;
         this.cotacao = cotacao;
         this.historico = historico;
-        this.baixas = baixas;
         this.filial = filial;
         this.vencimento = vencimento;
         this.operacaoFinanceira = operacaoFinanceira;
@@ -131,18 +123,11 @@ public abstract class Cobranca implements Serializable {
 
     public abstract String getDetalhes();
 
-    public void adiciona(Baixa baixa) {
-        if (baixas == null) {
-            baixas = new ArrayList<>();
-        }
-        this.baixas.add(baixa);
-    }
-
     /**
      * Utilizado no GeradorDeBaixaDeTipoCobranca no método geraBaixas para
      * atualizar a situação da cobrança ao receber o pagamento.
      *
-     * Quando a soma do valor das baixas for maior ou igual ao valor da
+     * Quando a soma do valor dos tipos de cobranca for maior ou igual ao valor da
      * cobrança, a mesma é considerada paga, caso contrário é considerada
      * aberta. Não existe situação Parcial.
      *
@@ -151,8 +136,8 @@ public abstract class Cobranca implements Serializable {
      * @see GeradorDeBaixaDeTipoCobranca
      */
     public final void atualizaSituacao() {
-        if (baixas != null) {
-            BigDecimal soma = baixas.stream().map(Baixa::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (tiposDeCobranca != null) {
+            BigDecimal soma = tiposDeCobranca.stream().map(TipoDeCobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
             if (soma.compareTo(this.valor) >= 0) {
                 situacaoDeCobranca = SituacaoDeCobranca.PAGO;
             } else {
@@ -167,16 +152,12 @@ public abstract class Cobranca implements Serializable {
         return operacaoFinanceira;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
     public Filial getFilial() {
         return filial;
     }
 
     public boolean getPossuiPagamento() {
-        return baixas == null ? false : baixas.isEmpty() ? false : true;
+        return tiposDeCobranca == null ? false : tiposDeCobranca.isEmpty() ? false : true;
     }
 
     @MetodoInacessivelRelatorio

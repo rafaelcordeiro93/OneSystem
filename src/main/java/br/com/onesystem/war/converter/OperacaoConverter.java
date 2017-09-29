@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "operacaoConverter", forClass = Operacao.class)
-public class OperacaoConverter implements Converter, Serializable {
+public class OperacaoConverter extends BasicConverter<Operacao, SelecaoOperacaoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Operacao) {
-                return (Operacao) object;
-            }
-        }
-        return null;
+    public OperacaoConverter() {
+        super(Operacao.class, SelecaoOperacaoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Operacao) {
-                String id = String.valueOf(((Operacao) object).getId());
-                uic.getAttributes().put(id, (Operacao) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

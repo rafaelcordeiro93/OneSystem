@@ -95,7 +95,7 @@ public class Conta implements Serializable {
 
     @Override
     public String toString() {
-        return "Conta{" + "id=" + id + ", nome=" + nome + ", banco=" + banco + ", moeda=" + moeda + ", cotacoes=" + cotacoes + '}';
+        return "Conta{" + "id=" + id + ", nome=" + nome + ", banco=" + banco + ", moeda=" + moeda + '}';
     }
 
 }

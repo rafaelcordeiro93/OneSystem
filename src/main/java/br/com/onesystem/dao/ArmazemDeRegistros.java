@@ -1,24 +1,26 @@
 package br.com.onesystem.dao;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.Stateless;
+import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-@Stateless
+@Stateful
 public class ArmazemDeRegistros<T> implements Serializable {
 
     private Class<T> classe;
 
-    @PersistenceContext(unitName = "alkatar")
+    @PersistenceContext(unitName = "alkatar", type = PersistenceContextType.EXTENDED)
     private EntityManager em;
 
     public ArmazemDeRegistros() {

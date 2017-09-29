@@ -26,7 +26,6 @@ public class ReceitaProvisionadaBuilder {
     private BigDecimal valor;
     private Date vencimento;
     private Date emissao = Calendar.getInstance().getTime();
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private TipoReceita receita;
     private OperacaoFinanceira operacaoFinanceira;
@@ -74,11 +73,6 @@ public class ReceitaProvisionadaBuilder {
         return this;
     }
 
-    public ReceitaProvisionadaBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public ReceitaProvisionadaBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
@@ -100,7 +94,7 @@ public class ReceitaProvisionadaBuilder {
     }
     
     public ReceitaProvisionada construir() throws DadoInvalidoException {
-        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, baixas, referencia, situacaoDeCobranca, filial);
+        return new ReceitaProvisionada(id, pessoa, receita, valor, operacaoFinanceira, vencimento, emissao, historico, cotacao, referencia, situacaoDeCobranca, filial);
     }
 
 }

@@ -29,7 +29,6 @@ public class CreditoBuilder {
     private Date emissao = Calendar.getInstance().getTime();
     private OperacaoFinanceira operacaoFinanceira;
     private Nota nota;
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
@@ -76,11 +75,6 @@ public class CreditoBuilder {
         return this;
     }
 
-    public CreditoBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public CreditoBuilder comCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
         return this;
@@ -107,7 +101,7 @@ public class CreditoBuilder {
     }
 
     public Credito construir() throws DadoInvalidoException {
-        return new Credito(id, emissao, pessoa, cotacao, historico, baixas, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
+        return new Credito(id, emissao, pessoa, cotacao, historico, operacaoFinanceira, valor, vencimento, nota, entrada, situacaoDeCobranca, filial, parcela);
     }
 
 }

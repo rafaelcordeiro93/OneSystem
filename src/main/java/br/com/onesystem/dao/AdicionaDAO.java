@@ -8,6 +8,7 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,7 +19,7 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
-@Stateless
+@Stateful
 public class AdicionaDAO<T> {
 
     @PersistenceContext(unitName = "alkatar")

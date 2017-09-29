@@ -26,7 +26,6 @@ public class DespesaEventualBV implements Serializable {
     private Date emissao;
     private String historico;
     private Cotacao cotacao;
-    private List<Baixa> baixas;
     private Date referencia;
     private Filial filial;
 
@@ -39,7 +38,6 @@ public class DespesaEventualBV implements Serializable {
         this.emissao = despesaEventualSelecionada.getEmissao();
         this.historico = despesaEventualSelecionada.getHistorico();
         this.cotacao = despesaEventualSelecionada.getCotacao();
-        this.baixas = despesaEventualSelecionada.getBaixas();
         this.operacaoFinanceira = despesaEventualSelecionada.getOperacaoFinanceira();
         this.referencia = despesaEventualSelecionada.getReferencia();
         this.filial = despesaEventualSelecionada.getFilial();
@@ -56,7 +54,6 @@ public class DespesaEventualBV implements Serializable {
         this.emissao = emissao;
         this.historico = historico;
         this.cotacao = cotacao;
-        this.baixas = baixas;
         this.operacaoFinanceira = operacaoFinanceira;
         this.referencia = referencia;
         this.filial = filial;
@@ -142,14 +139,6 @@ public class DespesaEventualBV implements Serializable {
         this.cotacao = cotacao;
     }
 
-    public List<Baixa> getBaixas() {
-        return baixas;
-    }
-
-    public void setBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-    }
-
     public Date getReferencia() {
         return referencia; 
     }
@@ -168,14 +157,14 @@ public class DespesaEventualBV implements Serializable {
     
     public DespesaEventual construir() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
-                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comDespesa(despesa).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
                 .comReferencia(referencia).comFilial(filial).construir();
 
     }
 
     public DespesaEventual construirComID() throws DadoInvalidoException {
         return new DespesaEventualBuilder().comId(id).comPessoa(pessoa).comValor(valor).comVencimento(vencimento).comOperacaoFinanceira(operacaoFinanceira)
-                .comDespesa(despesa).comBaixas(baixas).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
+                .comDespesa(despesa).comEmissao(emissao).comHistorico(historico).comCotacao(cotacao)
                 .comReferencia(referencia).comFilial(filial).construir();
     }
 }

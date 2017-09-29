@@ -1,16 +1,12 @@
 
-import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
-import br.com.onesystem.domain.CobrancaVariavel;
-import br.com.onesystem.domain.Moeda;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import java.lang.reflect.Field;
+import br.com.onesystem.war.view.selecao.SelecaoCartaoView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import net.sf.jasperreports.engine.JRException;
-import org.reflections.Reflections;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +19,9 @@ import org.reflections.Reflections;
  */
 public class TesteRauber {
 
-    public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException, IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-        System.out.println(CobrancaVariavel.class.getSuperclass());
+    public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+
+        System.out.println(SelecaoCartaoView.class.getSimpleName());
+
     }
 }

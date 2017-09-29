@@ -29,9 +29,9 @@ public class DespesaProvisionada extends CobrancaFixa implements RelatorioContaA
     }
 
     public DespesaProvisionada(Long id, Pessoa pessoa, TipoDespesa tipoDespesa, BigDecimal valor, Date vencimento, Date emissao, String historico,
-            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, List<Baixa> baixa, OperacaoFinanceira operacaoFinanceira,
+            Cambio cambio, boolean divisaoLucroCambioCaixa, Cotacao cotacao, OperacaoFinanceira operacaoFinanceira,
             Date referencia, SituacaoDeCobranca situacaoDeCobranca, Filial filial) throws DadoInvalidoException {
-        super(id, emissao, pessoa, cotacao, historico, baixa, operacaoFinanceira, valor, vencimento, referencia, situacaoDeCobranca, filial);
+        super(id, emissao, pessoa, cotacao, historico, operacaoFinanceira, valor, vencimento, referencia, situacaoDeCobranca, filial);
         this.tipoDespesa = tipoDespesa;
         this.cambio = cambio;
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;

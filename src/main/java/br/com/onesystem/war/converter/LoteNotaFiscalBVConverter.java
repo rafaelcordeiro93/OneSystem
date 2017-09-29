@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.war.builder.LoteNotaFiscalBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoLoteNotaFiscalView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael Cordeiro
  */
 @FacesConverter(value = "loteNotaFiscalBVConverter", forClass = LoteNotaFiscalBV.class)
-public class LoteNotaFiscalBVConverter implements Converter, Serializable {
+public class LoteNotaFiscalBVConverter extends BasicBVConverter<LoteNotaFiscal, LoteNotaFiscalBV, SelecaoLoteNotaFiscalView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof LoteNotaFiscal) {
-                return new LoteNotaFiscalBV((LoteNotaFiscal) object);
-            } else if (object instanceof LoteNotaFiscalBV) {
-                return (LoteNotaFiscalBV) object;
-            }
-        }
-        return new LoteNotaFiscalBV();
+    public LoteNotaFiscalBVConverter() {
+        super(LoteNotaFiscal.class, LoteNotaFiscalBV.class, SelecaoLoteNotaFiscalView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof LoteNotaFiscalBV) {
-                String id = String.valueOf(((LoteNotaFiscalBV) object).getId());
-                uic.getAttributes().put(id, (LoteNotaFiscalBV) object);
-                return id;
-            } else if (object instanceof LoteNotaFiscal) {
-                String id = String.valueOf(((LoteNotaFiscal) object).getId());
-                uic.getAttributes().put(id, (LoteNotaFiscal) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

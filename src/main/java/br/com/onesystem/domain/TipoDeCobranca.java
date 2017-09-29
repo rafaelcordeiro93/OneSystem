@@ -15,6 +15,7 @@ import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeLancamento;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -32,7 +33,7 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  *
- * @author Rafael Fernando Rauber
+ * @author Rafael Fernando Rauber  
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_TIPODECOBRANCA",
@@ -43,7 +44,7 @@ public class TipoDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_TIPODECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(cascade = {CascadeType.MERGE}) 
     private Cobranca cobranca;
 
     @ManyToOne
@@ -103,6 +104,10 @@ public class TipoDeCobranca implements Serializable {
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
+    public void setCobranca(Cobranca cobranca) {
+        this.cobranca = cobranca;
+    }
+    
     public void setMovimento(Movimento movimento) {
         this.movimento = movimento;
     }
@@ -239,6 +244,13 @@ public class TipoDeCobranca implements Serializable {
             return null;
         }
     }
+    
+    public void adiciona(Baixa baixa) {
+        if (baixas == null) {
+            baixas = new ArrayList<>();
+        }
+        this.baixas.add(baixa);
+    }
 
     public void cancela() throws DadoInvalidoException {
         for (Baixa b : baixas) {
@@ -269,7 +281,7 @@ public class TipoDeCobranca implements Serializable {
 
     @Override
     public String toString() {
-        return "TipoDeCobranca{" + "id=" + id + ", cobranca=" + cobranca + ", recebimento=" + movimento + ", valor=" + valor + ", juros=" + juros + ", multa=" + multa + ", desconto=" + desconto + ", observacao=" + observacao + ", cotacao=" + cotacao + '}';
+        return "TipoDeCobranca{" + "id=" + id + ", cobranca=" + cobranca.getId() + ", recebimento=" + movimento.getId() + ", valor=" + valor + ", juros=" + juros + ", multa=" + multa + ", desconto=" + desconto + ", observacao=" + observacao + ", cotacao=" + cotacao + '}';
     }
 
 }

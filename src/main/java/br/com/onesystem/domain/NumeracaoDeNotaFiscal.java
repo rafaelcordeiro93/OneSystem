@@ -42,6 +42,10 @@ public class NumeracaoDeNotaFiscal implements Serializable {
         this.filial = filial;
     }
 
+    public void setLoteNotaFiscal(LoteNotaFiscal loteNotaFiscal) {
+        this.loteNotaFiscal = loteNotaFiscal;
+    }
+
     public Long getId() {
         return id;
     }

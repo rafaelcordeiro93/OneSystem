@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.domain.NumeracaoDeNotaFiscal;
 
 public class NumeracaoDeNotaFiscalDAO extends GenericDAO<NumeracaoDeNotaFiscal> {
@@ -17,4 +18,11 @@ public class NumeracaoDeNotaFiscalDAO extends GenericDAO<NumeracaoDeNotaFiscal> 
         return this;
     }
 
+    public NumeracaoDeNotaFiscalDAO porLote(LoteNotaFiscal lote) {
+            where += " and numeracaoDeNotaFiscal.loteNotaFiscal = :pLote ";
+            parametros.put("pLote", lote);
+        return this;
+    }
+    
 }
+ 

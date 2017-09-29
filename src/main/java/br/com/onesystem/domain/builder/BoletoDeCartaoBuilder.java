@@ -32,7 +32,6 @@ public class BoletoDeCartaoBuilder {
     private SituacaoDeCartao tipoSituacao;
     private Cotacao cotacao;
     private Pessoa pessoa;
-    private List<Baixa> baixas;
     private OperacaoFinanceira operacaoFinanceira;
     private Boolean entrada;
     private SituacaoDeCobranca situacaoDeCobranca;
@@ -92,11 +91,6 @@ public class BoletoDeCartaoBuilder {
         return this;
     }
 
-    public BoletoDeCartaoBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public BoletoDeCartaoBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
@@ -128,7 +122,7 @@ public class BoletoDeCartaoBuilder {
     }
 
     public BoletoDeCartao construir() throws DadoInvalidoException {
-        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, baixas, operacaoFinanceira, entrada, situacaoDeCobranca, filial, parcela);
+        return new BoletoDeCartao(id, nota, cartao, emissao, valor, codigoTransacao, tipoSituacao, historico, vencimento, cotacao, pessoa, operacaoFinanceira, entrada, situacaoDeCobranca, filial, parcela);
     }
 
 }

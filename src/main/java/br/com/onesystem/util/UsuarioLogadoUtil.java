@@ -73,7 +73,7 @@ public class UsuarioLogadoUtil implements Serializable {
     }
 
     public void carregaPreferenciasDo(Usuario usuario) {
-        PreferenciasDeUsuario gp = (PreferenciasDeUsuario) new BeanUtil().getBeanNaSessao("preferenciasDeUsuario");
+        PreferenciasDeUsuario gp = (PreferenciasDeUsuario) BeanUtil.getBeanNaSessao("preferenciasDeUsuario");
 
         gp.setLayout(usuario.getCorLayout());
         gp.setCorMenu(usuario.getCorMenu());

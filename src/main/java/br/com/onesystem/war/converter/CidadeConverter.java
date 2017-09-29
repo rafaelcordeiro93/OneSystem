@@ -6,9 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cidade;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoCidadeView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -17,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "cidadeConverter", forClass = Cidade.class)
-public class CidadeConverter implements Converter, Serializable {
+public class CidadeConverter extends BasicConverter<Cidade, SelecaoCidadeView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Cidade) {
-                return (Cidade) object;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Cidade) {
-                String id = String.valueOf(((Cidade) object).getId());
-                uic.getAttributes().put(id, (Cidade) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public CidadeConverter() {
+        super(Cidade.class, SelecaoCidadeView.class);
     }
 }

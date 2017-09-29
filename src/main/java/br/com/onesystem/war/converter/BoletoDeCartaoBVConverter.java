@@ -6,15 +6,10 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.builder.BoletoDeCartaoBV;
-import br.com.onesystem.war.builder.BoletoDeCartaoBV;
-import br.com.onesystem.war.service.BoletoDeCartaoService;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoBoletoDeCartaoView;
 import java.io.Serializable;
-import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -23,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "boletoDeCartaoBVConverter", forClass = BoletoDeCartao.class)
-public class BoletoDeCartaoBVConverter implements Converter, Serializable {
+public class BoletoDeCartaoBVConverter extends BasicBVConverter<BoletoDeCartao, BoletoDeCartaoBV, SelecaoBoletoDeCartaoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof BoletoDeCartao) {
-                return new BoletoDeCartaoBV((BoletoDeCartao) object);
-            } else if (object instanceof BoletoDeCartaoBV) {
-                return (BoletoDeCartaoBV) object;
-            }
-        }
-        return new BoletoDeCartaoBV();
+    public BoletoDeCartaoBVConverter() {
+        super(BoletoDeCartao.class, BoletoDeCartaoBV.class, SelecaoBoletoDeCartaoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof BoletoDeCartaoBV) {
-                String id = String.valueOf(((BoletoDeCartaoBV) object).getId());
-                uic.getAttributes().put(id, (BoletoDeCartaoBV) object);
-                return id;
-            } else if (object instanceof BoletoDeCartao) {
-                String id = String.valueOf(((BoletoDeCartao) object).getId());
-                uic.getAttributes().put(id, (BoletoDeCartao) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

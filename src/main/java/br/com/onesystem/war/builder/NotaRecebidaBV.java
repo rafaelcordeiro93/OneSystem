@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
-
+    
     private static final long serialVersionUID = 6686124108160060627L;
-
+    
     private Long id;
     private Pessoa pessoa;
     private Operacao operacao;
@@ -61,7 +61,8 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Usuario usuario;
     private PedidoAFornecedores pedidoAFornecedores;
     private Filial filial;
-
+    private Integer numeroNF;
+    
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
         this.pessoa = nota.getPessoa();
@@ -75,27 +76,28 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.caixa = nota.getCaixa();
         this.moedaPadrao = nota.getMoedaPadrao();
         this.filial = nota.getFilial();
+        this.numeroNF = nota.getNumeroNF();
     }
-
+    
     public NotaRecebidaBV() {
         itens = new ArrayList<>();
         cobrancas = new ArrayList<>();
         valorPorCotacao = new ArrayList<>();
     }
-
+    
     public void adiciona(ItemDeNotaBV item) throws DadoInvalidoException {
         item.setId(getCodigoItem());
         this.itens.add(item.construirComId());
     }
-
+    
     public void atualiza(ItemDeNota itemSelecionado, ItemDeNota item) throws DadoInvalidoException {
         itens.set(itens.indexOf(itemSelecionado), item);
     }
-
+    
     public void remove(ItemDeNota item) {
         itens.remove(item);
     }
-
+    
     private Long getCodigoItem() {
         Long id = (long) 1;
         if (!getItens().isEmpty()) {
@@ -107,11 +109,11 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         }
         return id;
     }
-
+    
     public void adiciona(ValorPorCotacao valorPorCotacao) {
         this.valorPorCotacao.add(valorPorCotacao);
     }
-
+    
     public void adiciona(CobrancaVariavel cobranca) throws DadoInvalidoException {
         if (cobranca instanceof Cheque) {
             Cheque cheque = (Cheque) cobranca;
@@ -131,15 +133,15 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         }
         this.cobrancas.add(cobranca);
     }
-
+    
     public void atualiza(CobrancaVariavel cobrancaSelecionada, CobrancaVariavel cobranca) {
         cobrancas.set(cobrancas.indexOf(cobrancaSelecionada), cobranca);
     }
-
+    
     public void remove(CobrancaVariavel cobranca) {
         cobrancas.remove(cobranca);
     }
-
+    
     private Long getIdCobranca() {
         Long id = (long) 1;
         try {
@@ -155,7 +157,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         }
         return id;
     }
-
+    
     public List<CobrancaVariavel> getChequesDeEntradas() {
         if (cobrancas != null) {
             List<CobrancaVariavel> entradas = cobrancas.stream().filter(p -> p.getEntrada() == true).filter(p -> p instanceof Cheque).collect(Collectors.toList());
@@ -165,7 +167,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
             return null;
         }
     }
-
+    
     public BigDecimal getTotalChequeDeEntrada() {
         BigDecimal total = BigDecimal.ZERO;
         try {
@@ -183,19 +185,19 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         }
         return total.compareTo(BigDecimal.ZERO) == 0 ? null : total;
     }
-
+    
     public String getTotalChequeDeEntradaFormatado() {
         return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
     }
-
+    
     public BigDecimal getTotalItens() {
         return itens.stream().map(ItemDeNota::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
+    
     public String getTotalItensFormatado() {
         return MoedaFormatter.format(moedaPadrao, getTotalItens());
     }
-
+    
     public BigDecimal getTotalNota() {
         BigDecimal a = acrescimo == null ? BigDecimal.ZERO : acrescimo;
         BigDecimal f = frete == null ? BigDecimal.ZERO : frete;
@@ -203,187 +205,187 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         BigDecimal d = desconto == null ? BigDecimal.ZERO : desconto;
         return getTotalItens().add(a.add(f.add(c))).subtract(d);
     }
-
+    
     public Long getId() {
         return id;
     }
-
+    
     public void setId(Long id) {
         this.id = id;
     }
-
+    
     public Pessoa getPessoa() {
         return pessoa;
     }
-
+    
     public Caixa getCaixa() {
         return caixa;
     }
-
+    
     public void setCaixa(Caixa caixa) {
         this.caixa = caixa;
     }
-
+    
     public ListaDePreco getListaDePreco() {
         return listaDePreco;
     }
-
+    
     public void setListaDePreco(ListaDePreco listaDePreco) {
         this.listaDePreco = listaDePreco;
     }
-
+    
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-
+    
     public Operacao getOperacao() {
         return operacao;
     }
-
+    
     public Moeda getMoedaPadrao() {
         return moedaPadrao;
     }
-
+    
     public void setMoedaPadrao(Moeda moedaPadrao) {
         this.moedaPadrao = moedaPadrao;
     }
-
+    
     public void setOperacao(Operacao operacao) {
         this.operacao = operacao;
     }
-
+    
     public List<ItemDeNota> getItens() {
         return itens;
     }
-
+    
     public void setItens(List<ItemDeNota> itensEmitidos) {
         this.itens = itensEmitidos;
     }
-
+    
     public FormaDeRecebimento getFormaDeRecebimento() {
         return formaDeRecebimento;
     }
-
+    
     public void setFormaDeRecebimento(FormaDeRecebimento formaDeRecebimento) {
         this.formaDeRecebimento = formaDeRecebimento;
     }
-
+    
     public Date getEmissao() {
         return emissao;
     }
-
+    
     public void setEmissao(Date emissao) {
         this.emissao = emissao;
     }
-
+    
     public Cotacao getCotacao() {
         return cotacao;
     }
-
+    
     public void setCotacao(Cotacao cotacao) {
         this.cotacao = cotacao;
     }
-
+    
     public List<CobrancaVariavel> getCobrancas() {
         return cobrancas;
     }
-
+    
     public void setParcelas(List<CobrancaVariavel> parcelas) {
         this.cobrancas = parcelas;
     }
-
+    
     public List<ValorPorCotacao> getValoresPorCotacao() {
         return valorPorCotacao;
     }
-
+    
     public void setValoresPorCotacao(List<ValorPorCotacao> valoresPorCotacao) {
         this.valorPorCotacao = valoresPorCotacao;
     }
-
+    
     public BigDecimal getDesconto() {
         return desconto;
     }
-
+    
     public Integer getNumeroParcelas() {
         return numeroParcelas;
     }
-
+    
     public void setNumeroParcelas(Integer numeroParcelas) {
         this.numeroParcelas = numeroParcelas;
     }
-
+    
     public void setDesconto(BigDecimal desconto) {
         this.desconto = desconto;
     }
-
+    
     public BigDecimal getAcrescimo() {
         return acrescimo;
     }
-
+    
     public void setAcrescimo(BigDecimal acrescimo) {
         this.acrescimo = acrescimo;
     }
-
+    
     public BigDecimal getDespesaCobranca() {
         return despesaCobranca;
     }
-
+    
     public void setDespesaCobranca(BigDecimal despesaCobranca) {
         this.despesaCobranca = despesaCobranca;
     }
-
+    
     public BigDecimal getFrete() {
         return frete;
     }
-
+    
     public void setFrete(BigDecimal frete) {
         this.frete = frete;
     }
-
+    
     public BigDecimal getAFaturar() {
         return aFaturar;
     }
-
+    
     public void setAFaturar(BigDecimal aFaturar) {
         this.aFaturar = aFaturar;
     }
-
+    
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
     }
-
+    
     public void setTotalEmDinheiro(BigDecimal totalEmDinheiro) {
         this.totalEmDinheiro = totalEmDinheiro;
     }
-
+    
     public BigDecimal getPorcentagemAcrescimo() {
         return porcentagemAcrescimo;
     }
-
+    
     public void setPorcentagemAcrescimo(BigDecimal porcentagemAcrescimo) {
         this.porcentagemAcrescimo = porcentagemAcrescimo;
     }
-
+    
     public BigDecimal getPorcentagemDesconto() {
         return porcentagemDesconto;
     }
-
+    
     public void setPorcentagemDesconto(BigDecimal porcentagemDesconto) {
         this.porcentagemDesconto = porcentagemDesconto;
     }
-
+    
     public Usuario getUsuario() {
         return usuario;
     }
-
+    
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
+    
     public Pedido getPedidoAFornecedores() {
         return pedidoAFornecedores;
     }
-
+    
     public void setPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
         this.pedidoAFornecedores = pedidoAFornecedores;
     }
@@ -391,51 +393,59 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     public List<ValorPorCotacao> getValorPorCotacao() {
         return valorPorCotacao;
     }
-
+    
     public void setValorPorCotacao(List<ValorPorCotacao> valorPorCotacao) {
         this.valorPorCotacao = valorPorCotacao;
     }
-
+    
     public BigDecimal getaFaturar() {
         return aFaturar;
     }
-
+    
     public void setaFaturar(BigDecimal aFaturar) {
         this.aFaturar = aFaturar;
     }
-
+    
     public EstadoDeNota getEstado() {
         return estado;
     }
-
+    
     public void setEstado(EstadoDeNota estado) {
         this.estado = estado;
     }
-
+    
     public Filial getFilial() {
         return filial;
     }
-
+    
     public void setFilial(Filial filial) {
         this.filial = filial;
     }
-
+    
+    public Integer getNumeroNF() {
+        return numeroNF;
+    }
+    
+    public void setNumeroNF(Integer numeroNF) {
+        this.numeroNF = numeroNF;
+    }
+    
     public NotaRecebida construir() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
-                .comUsuairo(usuario).comFilial(filial).construir();
+                .comUsuairo(usuario).comFilial(filial).comNumeroNF(numeroNF).construir();
     }
-
+    
     public NotaRecebida construirComID() throws DadoInvalidoException {
         return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
                 .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
-                .comUsuairo(usuario).comFilial(filial).construir();
+                .comUsuairo(usuario).comFilial(filial).comNumeroNF(numeroNF).construir();
     }
-
+    
 }

@@ -47,7 +47,6 @@ public class BaixaBuilder {
     private OperacaoFinanceira operacaoFinanceira;
     private NaturezaFinanceira naturezaFinanceira;
     private Cotacao cotacao;
-    private Cobranca cobranca;
     private TipoDespesa despesa;
     private TipoReceita receita;
     private Pessoa pessoa;
@@ -78,14 +77,12 @@ public class BaixaBuilder {
         this.estado = baixa.getEstado();
         this.operacaoFinanceira = baixa.getOperacaoFinanceira();
         this.cotacao = baixa.getCotacao();
-        this.cobranca = baixa.getCobranca();
         this.despesa = baixa.getDespesa();
         this.receita = baixa.getReceita();
         this.pessoa = baixa.getPessoa();
         this.cambio = baixa.getCambio();
         this.transferencia = baixa.getTransferencia();
         this.recepcao = baixa.getRecepcao();
-        this.cobranca = baixa.getCobranca();
         this.valorPorCotacao = baixa.getValorPorCotacao();
         this.tipoDeCobranca = baixa.getTipoDeCobranca();
         this.caixa = baixa.getCaixa();
@@ -165,11 +162,6 @@ public class BaixaBuilder {
         return this;
     }
 
-    public BaixaBuilder comCobranca(Cobranca cobranca) {
-        this.cobranca = cobranca;
-        return this;
-    }
-
     public BaixaBuilder comTipoDeCobranca(TipoDeCobranca tipoDeCobranca) {
         this.tipoDeCobranca = tipoDeCobranca;
         return this;
@@ -222,7 +214,7 @@ public class BaixaBuilder {
 
     public Baixa construir() throws DadoInvalidoException {
         return new Baixa(id, valor, emissao, dataCompensacao, historico, operacaoFinanceira, pessoa, despesa, cotacao, receita, cambio, transferencia,
-                recepcao, cobranca, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial, movimento);
+                recepcao, valorPorCotacao, tipoDeCobranca, formaDeCobranca, caixa, depositoBancario, saqueBancario, lancamentoBancario, cambioEmpresa, estado, filial, movimento);
     }
 
 }

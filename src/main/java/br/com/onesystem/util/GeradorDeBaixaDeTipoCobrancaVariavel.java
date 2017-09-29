@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
@@ -33,15 +34,21 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael Fernando Rauber
  */
-public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable{
-
+public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable {
+    
     private TipoDeCobranca tipoDeCobranca;
     private BundleUtil msg = new BundleUtil();
     private boolean entrou = false;
     
     @Inject
-    private ConfiguracaoContabil conf;
-
+    private ConfiguracaoContabil conf; 
+    
+    @Inject
+    private BaixaDAO dao;
+    
+    @Inject
+    private AtualizaDAO<Baixa> atualizaDao;
+    
     public void geraBaixas(TipoDeCobranca tipoDeCobranca) throws DadoInvalidoException {
         this.tipoDeCobranca = tipoDeCobranca;
         String tipo = tipoDeCobranca.getTipoDocumento();
@@ -50,30 +57,29 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable{
             verificaBaixasExistentes(tipoDeCobranca.getCobranca());
         }
         if (entrou == false) {
-
+            
             if (tipoDeCobranca.getJuros() != null && tipoDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getJuros(tipo));
+                tipoDeCobranca.adiciona(getJuros(tipo));
             }
             if (tipoDeCobranca.getMulta() != null && tipoDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getMulta(tipo));
+                tipoDeCobranca.adiciona(getMulta(tipo));
             }
             if (tipoDeCobranca.getDesconto() != null && tipoDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-                tipoDeCobranca.getCobranca().adiciona(getDesconto(tipo));
+                tipoDeCobranca.adiciona(getDesconto(tipo));
             }
-            tipoDeCobranca.getCobranca().adiciona(getValor(tipo));
-
+            tipoDeCobranca.adiciona(getValor(tipo));
             if (tipoDeCobranca.getCobranca() instanceof Titulo) {
                 Titulo titulo = (Titulo) tipoDeCobranca.getCobranca();
                 titulo.atualizaSaldo(tipoDeCobranca.getValor());
             }
-
+            
         }
         //Atualiza situação da Cobrança 
         tipoDeCobranca.getCobranca().atualizaSituacao();
     }
-
+    
     private void verificaBaixasExistentes(Cobranca d) throws ConstraintViolationException, DadoInvalidoException {
-        List<Baixa> listaBaixa = new BaixaDAO().ePorCobranca(d).listaDeResultados();
+        List<Baixa> listaBaixa = dao.ePorCobranca(d).listaDeResultados();
         entrou = false;
         if (listaBaixa.size() > 0) {
             Cheque ch = (Cheque) tipoDeCobranca.getCobranca();
@@ -88,12 +94,12 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable{
                 bv.setDataCompensacao(ch.getCompensacao());
                 bv.setEstado(EstadoDeBaixa.EFETIVADO);
                 bv.setCaixa(caixa);
-                new AtualizaDAO<>().atualiza(bv.construirComID());
+                atualizaDao.atualiza(bv.construirComID());
             }
             entrou = true;
         }
     }
-
+    
     private Baixa getValor(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getValor()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
@@ -108,62 +114,61 @@ public class GeradorDeBaixaDeTipoCobrancaVariavel implements Serializable{
             }
             builder.comHistorico(msg.getMessage("Pagamento_de") + " " + tipo + getHistorico());
         }
-
+        
         return builder.construir();
     }
-
+    
     private Baixa getDesconto(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getDesconto())
                 .comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira() == OperacaoFinanceira.ENTRADA ? OperacaoFinanceira.SAIDA : OperacaoFinanceira.ENTRADA);
-
+        
         if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comDespesa(conf.getDespesaDeDescontosConcedidos()).comHistorico(msg.getMessage("Desconto_concedido_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comReceita(conf.getReceitaDeDescontosObtidos()).comHistorico(msg.getMessage("Desconto_recebido_sobre_pagamento_de") + " " + tipo + getHistorico());
         }
-
+        
         return builder.construir();
     }
-
+    
     private Baixa getMulta(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getMulta()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
-
+        
         if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comReceita(conf.getReceitaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeMultas()).comHistorico(msg.getMessage("Multa_sobre_pagamento_de") + " " + tipo + getHistorico());
         }
-
+        
         return builder.construir();
     }
-
+    
     private Baixa getJuros(String tipo) throws DadoInvalidoException {
         BaixaBuilder builder = getCobrancaBuilder();
         builder.comValor(tipoDeCobranca.getJuros()).comOperacaoFinanceira(tipoDeCobranca.getCobranca().getOperacaoFinanceira());
-
+        
         if (tipoDeCobranca.getMovimento() instanceof Recebimento) {
             builder.comReceita(conf.getReceitaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_recebimento_de") + " " + tipo + getHistorico());
         } else {
             builder.comDespesa(conf.getDespesaDeJuros()).comHistorico(msg.getMessage("Juros_sobre_pagamento_de") + " " + tipo + getHistorico());
         }
-
+        
         return builder.construir();
     }
-
+    
     private BaixaBuilder getCobrancaBuilder() {
         BaixaBuilder baixaBuilder = new BaixaBuilder();
         baixaBuilder.comFilial(tipoDeCobranca.getMovimento().getFilial()).comEmissao(tipoDeCobranca.getMovimento().getEmissao()).comCaixa(tipoDeCobranca.getMovimento().getCaixa());
-
+        
         return baixaBuilder.
-                comCotacao(tipoDeCobranca.getCotacao()).
-                comCobranca(tipoDeCobranca.getCobranca()).comTipoDeCobranca(tipoDeCobranca).
+                comCotacao(tipoDeCobranca.getCotacao()).comTipoDeCobranca(tipoDeCobranca).
                 comPessoa(tipoDeCobranca.getCobranca().getPessoa());
     }
-
+    
     private String getHistorico() {
         return " " + tipoDeCobranca.getCobranca().getId() + " " + msg.getMessage("de") + " " + tipoDeCobranca.getCobranca().getPessoa().getNome();
     }
-
+    
 }

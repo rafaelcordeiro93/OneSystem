@@ -26,7 +26,6 @@ public class DespesaEventualBuilder {
     private BigDecimal valor;
     private Date vencimento;
     private Date emissao = Calendar.getInstance().getTime();
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private TipoDespesa despesa;
     private OperacaoFinanceira operacaoFinanceira;
@@ -74,11 +73,6 @@ public class DespesaEventualBuilder {
         return this;
     }
 
-    public DespesaEventualBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public DespesaEventualBuilder comOperacaoFinanceira(OperacaoFinanceira operacaoFinanceira) {
         this.operacaoFinanceira = operacaoFinanceira;
         return this;
@@ -100,7 +94,7 @@ public class DespesaEventualBuilder {
     }
     
     public DespesaEventual construir() throws DadoInvalidoException {
-        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
+        return new DespesaEventual(id, pessoa, despesa, valor, emissao, historico, cotacao, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

@@ -93,9 +93,12 @@
 
                         <div class="ui-fluid">
 
-                            <h:panelGrid columns="1" rendered="false">
+                            <h:panelGrid columns="1">
                                 <p:outputLabel value="#{l.Emissao}" />
-                                <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3"/>
+                                <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3" readonly="true"/>
+                                
+                                <p:outputLabel value="#{l.Numero_Nota_Fiscal}" />
+                                <p:inputNumber value="#{notaEmitidaView.notaEmitida.numeroNF}" minValue="0" thousandSeparator="" decimalPlaces="0" decimalSeparator="" readonly="true"/>
                             </h:panelGrid>
 
                             <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 

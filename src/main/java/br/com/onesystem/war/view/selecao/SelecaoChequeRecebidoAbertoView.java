@@ -5,7 +5,6 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.war.service.ChequeService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,11 +18,11 @@ import javax.inject.Named;
 public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> implements Serializable {
 
     @Inject
-    private ChequeService service;
+    private ChequeDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = new ChequeDAO().porEstado(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        beans = dao.porEstado(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
     }
 
     public void abrirDialogo() {
@@ -48,11 +47,4 @@ public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> imp
         return listaFIltrada;
     }
 
-    public ChequeService getService() {
-        return service;
-    }
-
-    public void setService(ChequeService service) {
-        this.service = service;
-    }
 }

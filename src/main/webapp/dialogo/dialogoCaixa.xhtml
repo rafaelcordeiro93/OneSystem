@@ -33,7 +33,7 @@
                         <h:outputText value="#{caixa.id}" />
                     </p:column>
                     <p:column headerText="#{l.Saldo}" sortBy="#{caixa.saldo}"  colspan="1" >
-                        <h:outputText value="#{caixa.saldoFormatado}" />
+                        <h:outputText value="#{dialogoCaixaView.service.getSaldoFormatado(caixa)}" />
                     </p:column>
                     <p:column headerText="#{l.Abertura}" sortBy="#{caixa.aberturaFormatado}" colspan="3">
                         <h:outputText value="#{caixa.aberturaFormatado}" />

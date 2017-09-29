@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**

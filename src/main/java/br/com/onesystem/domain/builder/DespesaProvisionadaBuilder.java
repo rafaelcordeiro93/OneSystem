@@ -28,7 +28,6 @@ public class DespesaProvisionadaBuilder {
     private Date vencimento;
     private Date emissao = Calendar.getInstance().getTime();
     private Cambio cambio;
-    private List<Baixa> baixas;
     private Cotacao cotacao;
     private TipoDespesa despesa;
     private boolean divisaoLucroCambioCaixa;
@@ -82,11 +81,6 @@ public class DespesaProvisionadaBuilder {
         return this;
     }
 
-    public DespesaProvisionadaBuilder comBaixas(List<Baixa> baixas) {
-        this.baixas = baixas;
-        return this;
-    }
-
     public DespesaProvisionadaBuilder comDivisaoLucroCambioCaixa(boolean divisaoLucroCambioCaixa) {
         this.divisaoLucroCambioCaixa = divisaoLucroCambioCaixa;
         return this;
@@ -113,7 +107,7 @@ public class DespesaProvisionadaBuilder {
     }
 
     public DespesaProvisionada construir() throws DadoInvalidoException {
-        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, baixas, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
+        return new DespesaProvisionada(id, pessoa, despesa, valor, vencimento, emissao, historico, cambio, divisaoLucroCambioCaixa, cotacao, operacaoFinanceira, referencia, situacaoDeCobranca, filial);
     }
 
 }

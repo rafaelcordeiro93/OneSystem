@@ -5,8 +5,11 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
+import br.com.onesystem.domain.Cobranca;
+import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;
@@ -31,16 +34,17 @@ public class GeradorDeBaixaDeFormaCobranca {
 
     public void geraBaixas(FormaDeCobranca formaDeCobranca) throws DadoInvalidoException {
         this.formaDeCobranca = formaDeCobranca;
+        
         if (formaDeCobranca.getJuros() != null && formaDeCobranca.getJuros().compareTo(BigDecimal.ZERO) > 0) {
-            formaDeCobranca.getCobranca().adiciona(getJuros(formaDeCobranca.getTipoDocumento()));
+            formaDeCobranca.adiciona(getJuros(formaDeCobranca.getTipoDocumento()));
         }
         if (formaDeCobranca.getMulta() != null && formaDeCobranca.getMulta().compareTo(BigDecimal.ZERO) > 0) {
-            formaDeCobranca.getCobranca().adiciona(getMulta(formaDeCobranca.getTipoDocumento()));
+            formaDeCobranca.adiciona(getMulta(formaDeCobranca.getTipoDocumento()));
         }
         if (formaDeCobranca.getDesconto() != null && formaDeCobranca.getDesconto().compareTo(BigDecimal.ZERO) > 0) {
-            formaDeCobranca.getCobranca().adiciona(getDesconto(formaDeCobranca.getTipoDocumento()));
+            formaDeCobranca.adiciona(getDesconto(formaDeCobranca.getTipoDocumento()));
         }
-        formaDeCobranca.getCobranca().adiciona(getValor(formaDeCobranca.getTipoDocumento()));
+        formaDeCobranca.adiciona(getValor(formaDeCobranca.getTipoDocumento()));
     }
 
     private Baixa getValor(String forma) throws DadoInvalidoException {
@@ -115,8 +119,7 @@ public class GeradorDeBaixaDeFormaCobranca {
         baixaBuilder.comFilial(formaDeCobranca.getMovimento().getFilial()).comEmissao(formaDeCobranca.getMovimento().getEmissao()).comCaixa(formaDeCobranca.getMovimento().getCaixa());
 
         return baixaBuilder.
-                comCotacao(formaDeCobranca.getCotacao()).
-                comCobranca(formaDeCobranca.getCobranca()).comFormaDeCobranca(formaDeCobranca).
+                comCotacao(formaDeCobranca.getCotacao()).comFormaDeCobranca(formaDeCobranca).
                 comPessoa(formaDeCobranca.getCobranca().getPessoa());
     }
 

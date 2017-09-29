@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.war.builder.GrupoFinanceiroBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoGrupoFinanceiroView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "grupoFinanceiroBVConverter", forClass = GrupoFinanceiroBV.class)
-public class GrupoFinanceiroBVConverter implements Converter, Serializable {
+public class GrupoFinanceiroBVConverter extends BasicBVConverter<GrupoFinanceiro, GrupoFinanceiroBV, SelecaoGrupoFinanceiroView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof GrupoFinanceiro) {
-                return new GrupoFinanceiroBV((GrupoFinanceiro) object);
-            } else if (object instanceof GrupoFinanceiroBV) {
-                return (GrupoFinanceiroBV) object;
-            }
-        }
-        return new GrupoFinanceiroBV();
+    public GrupoFinanceiroBVConverter() {
+        super(GrupoFinanceiro.class, GrupoFinanceiroBV.class, SelecaoGrupoFinanceiroView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof GrupoFinanceiroBV) {
-                String id = String.valueOf(((GrupoFinanceiroBV) object).getId());
-                uic.getAttributes().put(id, (GrupoFinanceiroBV) object);
-                return id;
-            } else if (object instanceof GrupoFinanceiro) {
-                String id = String.valueOf(((GrupoFinanceiro) object).getId());
-                uic.getAttributes().put(id, (GrupoFinanceiro) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

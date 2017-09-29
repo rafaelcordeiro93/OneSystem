@@ -7,9 +7,9 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Motivo;
 import br.com.onesystem.war.builder.MotivoBV;
+import br.com.onesystem.war.service.impl.BasicBVConverter;
+import br.com.onesystem.war.view.selecao.SelecaoMotivoView;
 import java.io.Serializable;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -18,37 +18,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "motivoBVConverter", forClass = MotivoBV.class)
-public class MotivoBVConverter implements Converter, Serializable {
+public class MotivoBVConverter extends BasicBVConverter<Motivo, MotivoBV, SelecaoMotivoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Motivo) {
-                return new MotivoBV((Motivo) object);
-            } else if (object instanceof MotivoBV) {
-                return (MotivoBV) object;
-            }
-        }
-        return new MotivoBV();
+    public MotivoBVConverter() {
+        super(Motivo.class, MotivoBV.class, SelecaoMotivoView.class);
     }
 
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof MotivoBV) {
-                String id = String.valueOf(((MotivoBV) object).getId());
-                uic.getAttributes().put(id, (MotivoBV) object);
-                return id;
-            } else if (object instanceof Motivo) {
-                String id = String.valueOf(((Motivo) object).getId());
-                uic.getAttributes().put(id, (Motivo) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
-    }
 }

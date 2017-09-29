@@ -12,18 +12,20 @@
             <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
                 <span class="tab" />
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2%" ><i class="fa fa-object-ungroup Fs40" style="color: #848484"/> #{l.Lote_Nota_Fiscal}</h3>
+                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4.2%" ><i class="fa fa-file-archive-o Fs40" style="color: #848484"/> #{l.Lote_Nota_Fiscal}</h3>
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
                         <div class="EmptyBox20"/>
-                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-1,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="loteid" value="#{loteNotaFiscalView.e}" update=":conteudo" dialog="#{selecaoLoteNotaFiscalView}" mbView="#{loteNotaFiscalView}" var="loteNotaFiscal" converter="loteNotaFiscalBVConverter" process="@this" itemLabel="#{loteNotaFiscal.id}" itemValue="#{loteNotaFiscal}" editVisible="false" itemLabelTab="#{loteNotaFiscal.nome}" itemLabelTabVisible="true" onlyNumber="true"/>
+                            <a:inputTextDialog id="loteid" value="#{loteNotaFiscalView.e}" update=":conteudo" dialog="#{selecaoLoteNotaFiscalView}" mbView="#{loteNotaFiscalView}" var="loteNotaFiscal" converter="loteNotaFiscalBVConverter" process="@this" itemLabel="#{loteNotaFiscal.id}" itemValue="#{loteNotaFiscal}" editVisible="false" itemLabelTab="#{loteNotaFiscal.nome}" itemLabelTabVisible="true" onlyNumber="true">
+                                <p:ajax event="change" listener="#{loteNotaFiscalView.selecionaNumeracao}" update=":conteudo"/>
+                            </a:inputTextDialog>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{loteNotaFiscalView.e.nome}" maxlength="120"/>
@@ -50,7 +52,7 @@
                             <p:calendar pattern="dd/MM/yyyy" mask="99/99/9999" value="#{loteNotaFiscalView.e.dataDeFim}"/> 
 
                             <p:outputLabel value="#{l.Observacao}"/>
-                            <p:inputTextarea autoResize="true" rows="1" cols="26" maxlength="500" value="#{loteNotaFiscalView.e.observacao}"/>
+                            <p:inputTextarea autoResize="true" rows="3" cols="26" maxlength="500" value="#{loteNotaFiscalView.e.observacao}"/>
 
                         </p:panelGrid>
 
@@ -58,56 +60,45 @@
                         <h4 style="font-size: 15px" >#{l.Numeracao}</h4>
                         <p:separator/>
                         <div class="EmptyBox20"/>
-                        <div class="ui-g">  
-                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                         columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                        <div class="ui-g-12">  
 
+                            <p:panelGrid id="painelNumeracoes" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                         columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
                                 <p:outputLabel value="#{l.Filial}"/>
-                                <a:inputTextDialog id="Filial" dialog="#{selecaoFilialView}" mbView="#{loteNotaFiscalView}" value="#{loteNotaFiscalView.numeracaoNF.filial}" var="filial" itemLabel="#{filial.nome}" itemValue="#{filial}" converter="filialConverter" itemLabelTabVisible="true" itemLabelTab="#{filial.nome}"/>
+                                <a:inputTextDialog id="Filial" dialog="#{selecaoFilialView}" mbView="#{loteNotaFiscalView}" value="#{loteNotaFiscalView.numeracaoNF.filial}" var="filial" itemLabel="#{filial.fantasia}" itemValue="#{filial}" converter="filialConverter" itemLabelTabVisible="true" itemLabelTab="#{filial.fantasia}"/>
 
+                                <p:spacer/>
 
                                 <p:outputLabel value="#{l.Proximo_Numero}"/>
                                 <p:inputNumber value="#{loteNotaFiscalView.numeracaoNF.numeroNF}" decimalPlaces="0" decimalSeparator="" thousandSeparator="" minValue="0" maxValue="999999999" />
 
-                                <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                             columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-1,ui-g-12 ui-md-1">
-
-                                    <p:commandButton icon="fa fa-plus Fs14 White" action="#{loteNotaFiscalView.removeDaSessao}" actionListener="#{loteNotaFiscalView.addNovaParcela}" process="@this" update="@none" >
-                                        <p:ajax event="dialogReturn"  listener="#{loteNotaFiscalView.selecionar}" process="@this" update="parcelas"/>
-                                    </p:commandButton>
-                                    <p:commandButton icon="fa fa-refresh Fs14 White" actionListener="#{dialogoCobrancaView.abrirDialogo}" process="@this" update="@none" styleClass="green-btn">
-                                        <p:ajax event="dialogReturn" listener="#{loteNotaFiscalView.selecionar}" process="@this" update="parcelas"/>
-                                    </p:commandButton>
-                                    <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{loteNotaFiscalView.remover}" styleClass="orange-btn"  update="parcelas"/>
-
-                                </p:panelGrid>
-
-
+                                <h:panelGrid columns="3" style="margin-top: -2px">
+                                    <p:commandButton icon="fa fa-plus Fs14 White" action="#{loteNotaFiscalView.addNumeracao}" update="conteudo" />
+                                    <p:commandButton icon="fa fa-refresh Fs14 White" action="#{loteNotaFiscalView.updateNumeracao}" update="conteudo" styleClass="green-btn"/>
+                                    <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{loteNotaFiscalView.removeNumeracao}" styleClass="orange-btn"  update="conteudo"/>
+                                </h:panelGrid>
                             </p:panelGrid>
 
-                            <p:dataTable id="parcelas" var="model" value="#{loteNotaFiscalView.listaNumeracao}" rowIndexVar="rowIndex"
+                            <p:dataTable id="numeracoes" var="model" value="#{loteNotaFiscalView.listaNumeracao}" rowIndexVar="rowIndex"
                                          styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" 
                                          paginatorAlwaysVisible="false" rows="12" paginator="true"
                                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                          emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                <p:ajax event="rowSelect" listener="#{loteNotaFiscalView.selecionaParcela}" update="@this" />
+                                <p:ajax event="rowSelect" listener="#{loteNotaFiscalView.selecionaNumeracaoEdicao}" update=":conteudo:painelNumeracoes" />
 
                                 <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
                                     #{rowIndex+1}
                                 </p:column>
-
                                 <p:column headerText="#{l.Filial}">                                
-                                    <h:outputText id="diasParcela" value="#{model.object.dias}"/>
+                                    <h:outputText id="filial" value="#{model.object.filial.fantasia}"/>
                                 </p:column>
-                                <p:column headerText="#{l.Dia_Semana}" colspan="2">
-                                    <h:outputText id="diaDaSemana" value="#{model.object.numeroNF}"/>
+                                <p:column headerText="#{l.Proximo_Numero}">
+                                    <h:outputText id="proxNumero" value="#{model.object.numeroNF}"/>
                                 </p:column>
-
-
                             </p:dataTable>
-                        </div>
 
+                        </div>
 
                         <div class="EmptyBox20"/>
 

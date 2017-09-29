@@ -7,6 +7,7 @@ import br.com.onesystem.dao.SituacaoFiscalDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.GrupoFiscal;
+import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.domain.SituacaoFiscal;
 import br.com.onesystem.domain.TipoDespesa;
 import br.com.onesystem.domain.TipoReceita;
@@ -30,8 +31,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -297,6 +296,8 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
             e.setCompraAVista((TipoDespesa) obj);
         } else if (obj instanceof TipoDespesa && "despesaAPrazo-search".equals(idComponent)) {
             e.setCompraAPrazo((TipoDespesa) obj);
+        } else if (obj instanceof LoteNotaFiscal) {
+            e.setLoteNotaFiscal((LoteNotaFiscal) obj);
         } else if (obj instanceof GrupoFiscal) {
             grupoFiscalDuplicar = (GrupoFiscal) obj;
         } else if (obj instanceof Operacao) {

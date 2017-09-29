@@ -7,6 +7,7 @@ import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.war.builder.CaixaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
+import br.com.onesystem.war.service.CaixaService;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     private List<Caixa> caixas;
 
     @Inject
-    private CaixaDAO dao;
-    
+    private CaixaService service;
+
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -52,7 +53,7 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
     }
 
     private void popularLista() {
-        caixas = dao.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).emAberto().listaDeResultados();
+        caixas = service.getListaDeCaixaAbertoDo(usuarioLogado.getUsuario());
     }
 
     public void reloadPage() throws IOException {
@@ -144,6 +145,14 @@ public class DialogoCaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Ser
 
     public void setCaixas(List<Caixa> caixas) {
         this.caixas = caixas;
+    }
+
+    public CaixaService getService() {
+        return service;
+    }
+
+    public void setService(CaixaService service) {
+        this.service = service;
     }
 
 }

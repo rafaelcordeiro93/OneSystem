@@ -43,7 +43,7 @@ public class Teste {
         ImpressoraDeTexto t = new ImpressoraDeTexto();
 
         //lin x col
-        t.setOutSize(70, 162);
+        t.setTamanhoDaPagina(70, 162);
 
         //  JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) new JSONParser().parse(new FileReader(diretorio));
@@ -77,12 +77,12 @@ public class Teste {
                             Method method = Class.forName(g.getTabela()).getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
                             str += ", " + method.invoke(nota).toString();
                         }
-                        t.insertTextoNaLinhaColuna(g.getTop(), g.getLeft(), str.substring(2));
+                        t.insereTextoNaLinhaColuna(g.getTop(), g.getLeft(), str.substring(2));
                     } else {
                         Method field = Class.forName(g.getTabela()).getMethod("get" + g.getColuna().substring(0, 1).toUpperCase()
                                 + g.getColuna().substring(1), null);
                         obj = field.invoke(nota);
-                        t.insertTextoNaLinhaColuna(g.getTop(), g.getLeft(), obj.toString());
+                        t.insereTextoNaLinhaColuna(g.getTop(), g.getLeft(), obj.toString());
                     }
                 } else {
                     Class cl = null;
@@ -114,10 +114,10 @@ public class Teste {
                                     method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
                                     str += ", " + method.invoke(obj).toString();
                                 }
-                                t.insertTextoNaLinhaColuna(g.getTop(), g.getLeft(), str.substring(2));
+                                t.insereTextoNaLinhaColuna(g.getTop(), g.getLeft(), str.substring(2));
                             } else {
                                 method = clazzIterada.getMethod("get" + g.getColuna().substring(0, 1).toUpperCase() + g.getColuna().substring(1), null);
-                                t.insertTextoNaLinhaColuna(g.getTop(), g.getLeft(), method.invoke(obj).toString());
+                                t.insereTextoNaLinhaColuna(g.getTop(), g.getLeft(), method.invoke(obj).toString());
                             }
                         } else {
                             throw new RuntimeException("Classe " + clazzIterada + " nao encontrada!");
@@ -131,6 +131,6 @@ public class Teste {
 //            
         }
         //  t.toPrinterMatricial();
-        t.show();
+        t.imprimeNoConsole();
     }
 }

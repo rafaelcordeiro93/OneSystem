@@ -224,7 +224,7 @@ public class BaixaDAO extends GenericDAO<Baixa> {
     public BaixaDAO ePorCobranca(Cobranca cobranca) {
         if (cobranca != null) {
             parametros.put("pCobranca", cobranca);
-            where += "and baixa.cobranca = :pCobranca ";
+            where += "and baixa.tipoDeCobranca.cobranca = :pCobranca ";
         }
         return this;
     }
