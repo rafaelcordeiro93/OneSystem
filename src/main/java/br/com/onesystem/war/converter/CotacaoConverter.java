@@ -6,8 +6,9 @@
 package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cotacao;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import br.com.onesystem.war.service.impl.BasicConverter;
+import br.com.onesystem.war.view.selecao.SelecaoCotacaoView;
+import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 
@@ -16,31 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "cotacaoConverter", forClass = Cotacao.class)
-public class CotacaoConverter implements Converter {
+public class CotacaoConverter extends BasicConverter<Cotacao, SelecaoCotacaoView> implements Converter, Serializable {
 
-    @Override
-    public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
-        if (value != null && !value.isEmpty()) {
-            Object object = uic.getAttributes().get(value);
-            if (object instanceof Cotacao) {
-                return (Cotacao) object;
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        if (object != null) {
-            if (object instanceof Cotacao) {
-                String id = String.valueOf(((Cotacao) object).getId());
-                uic.getAttributes().put(id, (Cotacao) object);
-                return id;
-            } else {
-                return object.toString();
-            }
-        } else {
-            return "";
-        }
+    public CotacaoConverter() {
+        super(Cotacao.class, SelecaoCotacaoView.class);
     }
 }
