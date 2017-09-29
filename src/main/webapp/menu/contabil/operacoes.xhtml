@@ -100,6 +100,10 @@
                                                 </f:selectItems>
                                             </p:selectOneMenu>
 
+                                            <p:outputLabel value="#{l.Lote_Nota_Fiscal}"/>
+                                            <a:inputTextDialog id="LoteNotaFiscal" dialog="#{selecaoLoteNotaFiscalView}" mbView="#{operacaoView}" value="#{operacaoView.e.loteNotaFiscal}" var="loteNotaFiscal" itemLabel="#{loteNotaFiscal.nome}" itemValue="#{loteNotaFiscal}" converter="loteNotaFiscalConverter" itemLabelTabVisible="true" itemLabelTab="#{loteNotaFiscal.nome}"/>
+
+
                                         </p:panelGrid>
                                     </p:panel>
 

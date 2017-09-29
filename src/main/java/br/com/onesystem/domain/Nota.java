@@ -100,6 +100,8 @@ public abstract class Nota implements Serializable {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne(optional = false)
     private Filial filial;
+    @Column(nullable = false)
+    private Integer numeroNF;
 
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
@@ -109,7 +111,7 @@ public abstract class Nota implements Serializable {
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<CobrancaVariavel> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
-            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario, Filial filial) throws DadoInvalidoException {
+            BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario, Filial filial, Integer numeroNF) throws DadoInvalidoException {
         this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
         this.id = id;
         this.pessoa = pessoa;
@@ -131,6 +133,7 @@ public abstract class Nota implements Serializable {
         this.caixa = caixa;
         this.usuario = usuario;
         this.filial = filial;
+        this.numeroNF = numeroNF;
         if (id == null) {
             geraBaixaPorValorDeCotacao();
             geraCobrancas();
@@ -433,6 +436,10 @@ public abstract class Nota implements Serializable {
 
     public BigDecimal getTotalEmDinheiro() {
         return totalEmDinheiro;
+    }
+
+    public Integer getNumeroNF() {
+        return numeroNF;
     }
 
     @Override

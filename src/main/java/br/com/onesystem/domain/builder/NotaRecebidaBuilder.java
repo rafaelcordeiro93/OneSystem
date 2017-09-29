@@ -63,6 +63,7 @@ public class NotaRecebidaBuilder {
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Filial filial;
     private PedidoAFornecedores pedidoAFornecedores;
+    private Integer numeroNF;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -202,21 +203,27 @@ public class NotaRecebidaBuilder {
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         return this;
     }
-    
-      public NotaRecebidaBuilder comPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
+
+    public NotaRecebidaBuilder comPedidoAFornecedores(PedidoAFornecedores pedidoAFornecedores) {
         this.pedidoAFornecedores = pedidoAFornecedores;
         return this;
     }
-    
 
     public NotaRecebidaBuilder comFilial(Filial filial) {
         this.filial = filial;
         return this;
     }
 
+    public NotaRecebidaBuilder comNumeroNF(Integer numeroNF) {
+        this.numeroNF = numeroNF;
+        return this;
+    }
+
     public NotaRecebida construir() throws DadoInvalidoException {
-        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
-                valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida, conhecimentoDeFrete, filial, pedidoAFornecedores);
+        return new NotaRecebida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco,
+                cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete,
+                aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, faturaRecebida,
+                conhecimentoDeFrete, filial, pedidoAFornecedores, numeroNF);
     }
 
 }
