@@ -106,12 +106,6 @@ public class Caixa implements Serializable {
     public String getDescricao() {
         return descricao;
     }
-    
-    public String getSaldoFormatado() throws EDadoInvalidoException {
-        
-        Configuracao cfg = new ConfiguracaoService().buscar();
-        return MoedaFormatter.format(cfg.getMoedaPadrao(), getSaldo());
-    }
 
     public String getAberturaFormatado() {
         DateTimeFormatter formatadorBarra = DateTimeFormatter.ofPattern("dd/MM/yyyy");

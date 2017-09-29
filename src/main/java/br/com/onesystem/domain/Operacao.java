@@ -88,6 +88,8 @@ public class Operacao implements Serializable {
     private List<SituacaoFiscal> situacoesFiscais;
     @OneToMany(mappedBy = "operacao")
     private List<Pedido> pedido;
+    @ManyToOne
+    private LoteNotaFiscal loteNotaFiscal;
 
     public Operacao() {
     }
@@ -95,7 +97,7 @@ public class Operacao implements Serializable {
     public Operacao(Long id, String nome, OperacaoFinanceira operacaoFinanceira, TipoLancamento tipoNota,
             TipoOperacao tipoOperacao, TipoReceita vendaAVista, TipoReceita vendaAPrazo, TipoReceita servicoAVista,
             TipoReceita servicoAPrazo, TipoReceita receitaFrete, TipoDespesa despesaCMV, TipoContabil contabilizarCMV,
-            TipoDespesa compraAVista, TipoDespesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque) throws DadoInvalidoException {
+            TipoDespesa compraAVista, TipoDespesa compraAPrazo, List<OperacaoDeEstoque> operacaoDeEstoque, LoteNotaFiscal loteNotaFiscal) throws DadoInvalidoException {
         this.id = id;
         this.nome = nome;
         this.operacaoFinanceira = operacaoFinanceira;
@@ -111,6 +113,7 @@ public class Operacao implements Serializable {
         this.compraAVista = compraAVista;
         this.compraAPrazo = compraAPrazo;
         this.operacaoDeEstoque = operacaoDeEstoque;
+        this.loteNotaFiscal = loteNotaFiscal;
         ehValido();
     }
 
@@ -172,6 +175,10 @@ public class Operacao implements Serializable {
 
     public List<OperacaoDeEstoque> getOperacaoDeEstoque() {
         return operacaoDeEstoque;
+    }
+
+    public LoteNotaFiscal getLoteNotaFiscal() {
+        return loteNotaFiscal;
     }
 
     private void ehValido() throws DadoInvalidoException {
