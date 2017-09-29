@@ -43,6 +43,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import org.hibernate.Hibernate;
 import org.hibernate.validator.constraints.Length;
 
 /**
