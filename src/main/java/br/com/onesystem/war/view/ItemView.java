@@ -14,19 +14,28 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
+import br.com.onesystem.domain.LoteItem;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ItemBV;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.services.CalculadoraDePreco;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.Model;
+import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.WarningMessage;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
+import br.com.onesystem.war.builder.LoteItemBV;
+import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -34,6 +43,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -57,6 +67,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private boolean tab = true;
     private boolean renderBotoes = true;
     private ItemImagem itemImagem;
+    private LoteItemBV loteDeItemBV;
+    private Model<LoteItem> loteItemSelecionado;
+    private ModelList<LoteItem> listaLoteItem;
 
     @Inject
     private ConfiguracaoService serviceConfigurcao;
@@ -66,6 +79,27 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     @Inject
     private PrecoDeItemService servicePrecoDeItem;
+
+    @Inject
+    private ItemService itemService;
+
+    @Inject
+    private AdicionaDAO<PrecoDeItem> adicionaPrecoDAO;
+
+    @Inject
+    private AdicionaDAO<ItemImagem> adicionaImagemDAO;
+
+    @Inject
+    private RemoveDAO<ItemImagem> removeImagemDAO;
+
+    @Inject
+    private RemoveDAO<LoteItem> removeLoteItemDAO;
+
+    @Inject
+    private AtualizaDAO<ItemImagem> atualizaImagemDAO;
+
+    @Inject
+    private BundleUtil bundle;
 
     @PostConstruct
     public void init() {
@@ -77,10 +111,39 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         try {
             configuracao = serviceConfigurcao.buscar();
             if (configuracao.getMoedaPadrao() == null) {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+                throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
             }
         } catch (EDadoInvalidoException ex) {
             ex.print();
+        }
+    }
+
+    public void add() {
+        try {
+            Item f = e.construir();
+            listaLoteItem.getList().forEach((n) -> {
+                f.adiciona(n);
+            });
+            addNoBanco(f);
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    public void update() {
+        try {
+            Item f = e.construirComID();
+            List<LoteItem> removidos = listaLoteItem.getRemovidos().stream().filter(m -> ((LoteItem) m.getObject()).getId() != null).map(m -> (LoteItem) m.getObject()).collect(Collectors.toList());
+            removidos.forEach(c -> f.remove(c));
+            listaLoteItem.getList().forEach((n) -> {
+                f.atualiza(n);
+            });
+            updateNoBanco(f);
+            for (LoteItem c : removidos) {
+                removeLoteItemDAO.remove(c, c.getId());
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -88,7 +151,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         try {
             validaMargem();
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
-            new AdicionaDAO<PrecoDeItem>().adiciona(novoRegistro);
+            adicionaPrecoDAO.adiciona(novoRegistro);
             limparJanelaPreco();
             inicializaPrecos();
             InfoMessage.adicionado();
@@ -104,6 +167,8 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         limparJanelaPreco();
         tab = true;
         renderBotoes = true;
+        listaLoteItem = new ModelList<>();
+
     }
 
     @Override
@@ -114,6 +179,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 t = (Item) obj;
                 e = new ItemBV(t);
                 selecionaItem();
+                limparLoteItem();
             } else if (obj instanceof GrupoFiscal) {
                 e.setGrupoFiscal((GrupoFiscal) obj);
             } else if (obj instanceof Grupo) {
@@ -138,6 +204,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         if (e.getId() != null) {
             t = e.construirComID();
             inicializaDados();
+            listaLoteItem = new ModelList<LoteItem>(e.getLoteItem());
             tab = false;
         }
     }
@@ -149,16 +216,16 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
                         ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
             } else {
-                throw new EDadoInvalidoException(new BundleUtil().getMessage("Configuracao_nao_definida"));
+                throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
             }
         } else if (!precoPorMargem && e.getMargem() == null) {
-            WarningMessage.print(new BundleUtil().getMessage("Defina_Margem_Para_Calcular_Preco"));
+            WarningMessage.print(bundle.getMessage("Defina_Margem_Para_Calcular_Preco"));
         }
     }
 
     private void validaMargem() throws EDadoInvalidoException {
         if (!precoPorMargem && e.getMargem() == null) {
-            throw new EDadoInvalidoException(new BundleUtil().getMessage("margem_not_null"));
+            throw new EDadoInvalidoException(bundle.getMessage("margem_not_null"));
         }
     }
 
@@ -168,7 +235,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     }
 
     private void inicializaImagens() {
-        imagens = new ArrayList(new ItemImagemDAO().porItem(t).listaDeResultados());
+        imagens = new ArrayList(itemService.buscarImagemDo(t));
     }
 
     private void inicializaPrecos() throws DadoInvalidoException {
@@ -180,9 +247,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void onTabChange(TabChangeEvent event) {
         String str = event.getTab().getTitle();
-        if (str == new BundleUtil().getLabel("Preco") || str == new BundleUtil().getLabel("Estoque") || str == new BundleUtil().getLabel("Imagens")) {
+        if (str == bundle.getLabel("Preco") || str == bundle.getLabel("Estoque") || str == bundle.getLabel("Imagens")) {
             renderBotoes = false;
-            if (str == new BundleUtil().getLabel("Imagens")) {
+            if (str == bundle.getLabel("Imagens")) {
                 inicializaImagens();
             }
         } else {
@@ -199,8 +266,8 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             ItemImagem imgDesfavoritada = imagens.stream().filter(ItemImagem::isFavorita).filter(i -> (!i.getId().equals(itemImagem.getId()))).findAny().get();
             itemImagem.setFavorita(true);
             imgDesfavoritada.setFavorita(false);
-            new AtualizaDAO<>().atualiza(imgDesfavoritada);
-            new AtualizaDAO<>().atualiza(itemImagem);
+            atualizaImagemDAO.atualiza(imgDesfavoritada);
+            atualizaImagemDAO.atualiza(itemImagem);
             imagens.set(imagens.indexOf(imgDesfavoritada), imgDesfavoritada);
             imagens.set(imagens.indexOf(itemImagem), itemImagem);
             imagens.forEach(System.out::println);
@@ -219,7 +286,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 favorita = true;
             }
             ItemImagem itemImagem = new ItemImagem(null, fileName, contentType, contents, e.construirComID(), favorita);
-            new AdicionaDAO().adiciona(itemImagem);
+            adicionaImagemDAO.adiciona(itemImagem);
             imagens.add(itemImagem);
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -231,14 +298,59 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             if (itemImagem.isFavorita() && imagens.size() > 1) {
                 ItemImagem imgFavoritada = imagens.stream().filter(i -> (!i.getId().equals(itemImagem.getId()))).findFirst().get();
                 imgFavoritada.setFavorita(true);
-                new AtualizaDAO<>().atualiza(imgFavoritada);
+                atualizaImagemDAO.atualiza(imgFavoritada);
                 imagens.set(imagens.indexOf(imgFavoritada), imgFavoritada);
             }
-            new RemoveDAO<ItemImagem>().remove(itemImagem, itemImagem.getId());
+            removeImagemDAO.remove(itemImagem, itemImagem.getId());
             imagens.remove(itemImagem);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+    }
+
+    public void addLoteItem() {
+        try {
+            listaLoteItem.add(loteDeItemBV.construir());
+            limparLoteItem();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void updateLoteItem() {
+        try {
+            if (loteDeItemBV.getId() == null) {
+                loteItemSelecionado.setObject(loteDeItemBV.construir());
+            } else {
+                loteItemSelecionado.setObject(loteDeItemBV.construirComID());
+            }
+            listaLoteItem.set(loteItemSelecionado);
+            limparLoteItem();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void removeLoteItem() {
+        listaLoteItem.remove(loteItemSelecionado);
+        limparLoteItem();
+    }
+
+    public void selecionaLoteItem(SelectEvent event) {
+        loteItemSelecionado = (Model<LoteItem>) event.getObject();
+        loteDeItemBV = new LoteItemBV(loteItemSelecionado.getObject());;
+    }
+
+    public void limparLoteItem() {
+        loteDeItemBV = new LoteItemBV();
+        loteItemSelecionado = null;
+        if (t != null) {
+            loteDeItemBV.setItem(t);
+        }
+    }
+
+    public List<DetalhamentoDeItem> getDetalhamentoDeItem() {
+        return Arrays.asList(DetalhamentoDeItem.values());
     }
 
     public List<TipoItem> getTipoItem() {
@@ -367,6 +479,30 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void setItemImagem(ItemImagem itemImagem) {
         this.itemImagem = itemImagem;
+    }
+
+    public LoteItemBV getLoteDeItemBV() {
+        return loteDeItemBV;
+    }
+
+    public void setLoteDeItemBV(LoteItemBV loteDeItemBV) {
+        this.loteDeItemBV = loteDeItemBV;
+    }
+
+    public Model<LoteItem> getLoteItemSelecionado() {
+        return loteItemSelecionado;
+    }
+
+    public void setLoteItemSelecionado(Model<LoteItem> loteItemSelecionado) {
+        this.loteItemSelecionado = loteItemSelecionado;
+    }
+
+    public ModelList<LoteItem> getListaLoteItem() {
+        return listaLoteItem;
+    }
+
+    public void setListaLoteItem(ModelList<LoteItem> listaLoteItem) {
+        this.listaLoteItem = listaLoteItem;
     }
 
 }

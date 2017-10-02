@@ -10,12 +10,15 @@ import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ItemImagem;
 import br.com.onesystem.domain.ItemOrcado;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
+import br.com.onesystem.domain.builder.ItemBuilder;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +32,7 @@ public class ItemBV implements Serializable, BuilderView<Item> {
     private TipoItem tipoItem;
     private String ncm;
     private String idContabil;
-    private boolean ativo;
+    private boolean ativo = true;
     private GrupoFiscal grupoFiscal;
     private UnidadeMedidaItem unidadeDeMedida;
     private Marca marca;
@@ -42,8 +45,10 @@ public class ItemBV implements Serializable, BuilderView<Item> {
     private List<ItemDeComanda> itensDeComanda;
     private List<PrecoDeItem> precos;
     private List<ItemImagem> imagens;
+    private List<LoteItem> loteItem;
     private Margem margem;
     private Comissao comissao;
+    private DetalhamentoDeItem detalhamento;
 
     public ItemBV(Item itemSelecionado) {
         this.id = itemSelecionado.getId();
@@ -63,6 +68,8 @@ public class ItemBV implements Serializable, BuilderView<Item> {
         this.margem = itemSelecionado.getMargem();
         this.comissao = itemSelecionado.getComissao();
         this.imagens = itemSelecionado.getImagens();
+        this.detalhamento = itemSelecionado.getDetalhamento();
+        this.loteItem = itemSelecionado.getLoteItem();
     }
 
     public ItemBV() {
@@ -231,7 +238,7 @@ public class ItemBV implements Serializable, BuilderView<Item> {
     public void setImagens(List<ItemImagem> imagens) {
         this.imagens = imagens;
     }
-    
+
     public void setIdContabil(String idContabil) {
         this.idContabil = idContabil;
     }
@@ -244,11 +251,33 @@ public class ItemBV implements Serializable, BuilderView<Item> {
         this.estoqueMinimo = estoqueMinimo;
     }
 
+    public List<LoteItem> getLoteItem() {
+        return loteItem;
+    }
+
+    public void setLoteItem(List<LoteItem> loteItem) {
+        this.loteItem = loteItem;
+    }
+
+    public DetalhamentoDeItem getDetalhamento() {
+        return detalhamento;
+    }
+
+    public void setDetalhamento(DetalhamentoDeItem detalhamento) {
+        this.detalhamento = detalhamento;
+    }
+
     public Item construir() throws DadoInvalidoException {
-        return new Item(null, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao, imagens);
+        return new ItemBuilder().comBarras(barras).comNome(nome).comIdFabricante(idFabricante).comTipoItem(tipoItem).comNCM(ncm)
+                .comIdContabil(idContabil).comAtivo(ativo).comGrupoFiscal(grupoFiscal).comUnidadeDeMedida(unidadeDeMedida)
+                .comMarca(marca).comGrupo(grupo).comEstoqueMinimo(estoqueMinimo).comEstoqueMaximo(estoqueMaximo).comMargem(margem)
+                .comComissao(comissao).comImagens(imagens).comDetalhamento(detalhamento).comLoteItem(loteItem).construir();
     }
 
     public Item construirComID() throws DadoInvalidoException {
-        return new Item(id, barras, nome, idFabricante, tipoItem, ncm, idContabil, ativo, grupoFiscal, unidadeDeMedida, marca, grupo, estoqueMinimo, estoqueMaximo, margem, comissao, imagens);
+        return new ItemBuilder().comId(id).comBarras(barras).comNome(nome).comIdFabricante(idFabricante).comTipoItem(tipoItem).comNCM(ncm)
+                .comIdContabil(idContabil).comAtivo(ativo).comGrupoFiscal(grupoFiscal).comUnidadeDeMedida(unidadeDeMedida)
+                .comMarca(marca).comGrupo(grupo).comEstoqueMinimo(estoqueMinimo).comEstoqueMaximo(estoqueMaximo).comMargem(margem)
+                .comComissao(comissao).comImagens(imagens).comDetalhamento(detalhamento).comLoteItem(loteItem).construir();
     }
 }

@@ -52,6 +52,7 @@ import br.com.onesystem.domain.builder.SituacaoFiscalBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.ClassificacaoFinanceira;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.EstadoDeCheque;
 import br.com.onesystem.valueobjects.EstadoDeNota;
@@ -872,7 +873,7 @@ public class DadosIniciais {
 
         // Item
         Item item = new Item(null, null, "Exemplo", null, TipoItem.MERCADORIA, null, null, true,
-                grupoFiscal, unidade, null, null, null, null, null, null, null);
+                grupoFiscal, unidade, null, null, null, null, null, null, null, DetalhamentoDeItem.NORMAL, null);
         new AdicionaDAOConsole<Item>().adiciona(item);
 
         System.out.println("Dados criados com sucesso.");
