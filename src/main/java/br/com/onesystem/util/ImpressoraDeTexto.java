@@ -69,26 +69,11 @@ public class ImpressoraDeTexto {
         }
     }
 
-    public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
-        List<GenericLayout> listaLayout = new ArrayList<>();
-        for (Object o : dados) {
-            JSONObject j = (JSONObject) o;
-            String tabela = (String) j.get("tabela");
-            String coluna = (String) j.get("coluna");
-            Integer left = ((Long) j.get("left")).intValue();
-            Integer top = ((Long) j.get("top")).intValue();
-
-            GenericLayout g = new GenericLayout(tabela, coluna, left, top);
-            listaLayout.add(g);
-        }
-        return listaLayout;
-    }
-
     public void setTamanhoDaPagina(int lin, int col) {
         page = new String[lin][col];
     }
 
-    public void imprimeNoConsole() {
+    public void exibeNoConsole() {
         for (int i = 0; i < page.length; i++) {
             for (int b = 0; b < page[i].length;) {
                 String tmp = page[i][b];

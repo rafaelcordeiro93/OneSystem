@@ -1,7 +1,10 @@
 
+import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
+import br.com.onesystem.util.GerenciadorDeImpressoraDeTexto;
 import br.com.onesystem.war.view.selecao.SelecaoCartaoView;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -21,7 +24,8 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
-        System.out.println(SelecaoCartaoView.class.getSimpleName());
+        int i = 18;
+        System.out.println(Math.ceil((double)19 / 9));
 
     }
 }

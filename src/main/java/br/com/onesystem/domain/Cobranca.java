@@ -127,8 +127,8 @@ public abstract class Cobranca implements Serializable {
      * Utilizado no GeradorDeBaixaDeTipoCobranca no método geraBaixas para
      * atualizar a situação da cobrança ao receber o pagamento.
      *
-     * Quando a soma do valor dos tipos de cobranca for maior ou igual ao valor da
-     * cobrança, a mesma é considerada paga, caso contrário é considerada
+     * Quando a soma do valor dos tipos de cobranca for maior ou igual ao valor
+     * da cobrança, a mesma é considerada paga, caso contrário é considerada
      * aberta. Não existe situação Parcial.
      *
      * @date 10/08/2017
@@ -265,6 +265,15 @@ public abstract class Cobranca implements Serializable {
     public int hashCode() {
         int hash = 7;
         return hash;
+    }
+
+    public Long getIdNota() {
+        if (this instanceof CobrancaVariavel) {
+            CobrancaVariavel cobrancaVariavel = (CobrancaVariavel) this;
+            return cobrancaVariavel.getNota().getId();
+        } else {
+            return new Long(0);
+        }
     }
 
     @Override

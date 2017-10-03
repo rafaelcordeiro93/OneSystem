@@ -136,7 +136,6 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
                     titulo = (Titulo) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.TITULO;
                     modalidadeDeCobrancaFixa = null;
-                    e.setCotacao(cotacaoPadrao);
                 } else if (model.getObject().getCobranca() instanceof BoletoDeCartao) {
                     boletoDeCartao = (BoletoDeCartao) model.getObject().getCobranca();
                     modalidadeDeCobranca = ModalidadeDeCobranca.CARTAO;
@@ -172,7 +171,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         cotacaoLista = cotacaoDAO.naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         contaComCotacao = contaDAO.comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         cotacaoPadrao = cotacaoDAO.porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
-        e.setCotacao(cotacaoPadrao);
+        e.setCotacao(model.getObject().getCobranca().getCotacao());
     }
 
     public void abrirDialogo() {
