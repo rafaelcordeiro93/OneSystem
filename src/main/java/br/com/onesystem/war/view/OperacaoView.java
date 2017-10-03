@@ -25,6 +25,7 @@ import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.builder.SituacaoFiscalBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.SituacaoFiscalService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,6 +52,18 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
     @Inject
     private ConfiguracaoService serviceConfigurcao;
 
+    @Inject
+    private SituacaoFiscalService situacaoFiscalService;
+
+    @Inject
+    private AtualizaDAO<SituacaoFiscal> atualizaSituacaoFiscalDAO;
+
+    @Inject
+    private AdicionaDAO<SituacaoFiscal> adicionaSituacaoFiscalDAO;
+
+    @Inject
+    private RemoveDAO<SituacaoFiscal> removeSituacaoFiscalDAO;
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -71,7 +84,7 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
     public void buscaSituacoes() {
         if (e.getId() != null && grupoFiscalSelecionado != null) {
             try {
-                situacoesFiscais = new SituacaoFiscalDAO().porOperacao(e.construirComID()).porGrupoFiscal(grupoFiscalSelecionado).ordenadoPorSequencia().listaDeResultados();
+                situacoesFiscais = situacaoFiscalService.buscarSituacoesFiscaisPorOperacaoEGrupoFiscal(e.construirComID(), grupoFiscalSelecionado);
             } catch (DadoInvalidoException die) {
                 die.print();
             }
@@ -124,13 +137,13 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
                     situacaoFiscalSelecionada.setSequencia(situacaoFiscalSelecionada.getSequencia() - 1);
                     st = situacoesFiscais.get(situacoesFiscais.indexOf(situacaoFiscalSelecionada) - 1);
                     st.setSequencia(st.getSequencia() + 1);
-                    new AtualizaDAO<>().atualiza(st);
-                    new AtualizaDAO<>().atualiza(situacaoFiscalSelecionada);
+                    atualizaSituacaoFiscalDAO.atualiza(st);
+                    atualizaSituacaoFiscalDAO.atualiza(situacaoFiscalSelecionada);
                 }
             }
         } catch (IndexOutOfBoundsException | NullPointerException io) {
             try {
-                new AtualizaDAO<>().atualiza(situacaoFiscalSelecionada);
+                atualizaSituacaoFiscalDAO.atualiza(situacaoFiscalSelecionada);
             } catch (DadoInvalidoException die) {
                 die.print();
             }
@@ -148,13 +161,13 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
                     situacaoFiscalSelecionada.setSequencia(situacaoFiscalSelecionada.getSequencia() + 1);
                     st = situacoesFiscais.get(situacoesFiscais.indexOf(situacaoFiscalSelecionada) + 1);
                     st.setSequencia(st.getSequencia() - 1);
-                    new AtualizaDAO<>().atualiza(st);
-                    new AtualizaDAO<>().atualiza(situacaoFiscalSelecionada);
+                    atualizaSituacaoFiscalDAO.atualiza(st);
+                    atualizaSituacaoFiscalDAO.atualiza(situacaoFiscalSelecionada);
                 }
             }
         } catch (IndexOutOfBoundsException | NullPointerException io) {
             try {
-                new AtualizaDAO<>().atualiza(situacaoFiscalSelecionada);
+                atualizaSituacaoFiscalDAO.atualiza(situacaoFiscalSelecionada);
             } catch (DadoInvalidoException die) {
                 die.print();
             }
@@ -167,7 +180,7 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
     public void duplicarTodasSituacoes() {
         try {
             if (grupoFiscalDuplicar != null && operacaoDuplicar != null) {
-                List<SituacaoFiscal> listaDeSituacoesOperacaoDuplicar = new SituacaoFiscalDAO().porOperacao(operacaoDuplicar).porGrupoFiscal(grupoFiscalDuplicar).ordenadoPorSequencia().listaDeResultados();
+                List<SituacaoFiscal> listaDeSituacoesOperacaoDuplicar = situacaoFiscalService.buscarSituacoesFiscaisPorOperacaoEGrupoFiscal(operacaoDuplicar, grupoFiscalDuplicar);
                 Integer sequencia = 1;
                 if (listaDeSituacoesOperacaoDuplicar != null && !listaDeSituacoesOperacaoDuplicar.isEmpty()) {
                     sequencia = listaDeSituacoesOperacaoDuplicar.stream().max(Comparator.comparing(SituacaoFiscal::getSequencia)).get().getSequencia() + 1;
@@ -179,7 +192,7 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
                     bv.setGrupoFiscal(grupoFiscalDuplicar);
                     bv.setSequencia(sequencia);
                     SituacaoFiscal situacaoDuplicada = bv.construir();
-                    new AdicionaDAO<>().adiciona(situacaoDuplicada);
+                    adicionaSituacaoFiscalDAO.adiciona(situacaoDuplicada);
                     if (grupoFiscalDuplicar == grupoFiscalSelecionado && operacaoDuplicar.getId().equals(e.getId())) {
                         mesmoGrupoEOperacao.add(situacaoDuplicada);
                     }
@@ -211,7 +224,7 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
                     sequencia = situacoesFiscais.stream().max(Comparator.comparing(SituacaoFiscal::getSequencia)).get().getSequencia() + 1;
                 }
                 situacaoDuplicada.setSequencia(sequencia);
-                new AdicionaDAO<>().adiciona(situacaoDuplicada);
+                adicionaSituacaoFiscalDAO.adiciona(situacaoDuplicada);
                 situacoesFiscais.add(situacaoDuplicada);
                 ordenaSituacoesFiscais();
             }
@@ -243,13 +256,13 @@ public class OperacaoView extends BasicMBImpl<Operacao, OperacaoBV> implements S
     public void removeSituacao() {
         try {
             if (situacaoFiscalSelecionada != null) {
-                new RemoveDAO<>().remove(situacaoFiscalSelecionada, situacaoFiscalSelecionada.getId());
+                removeSituacaoFiscalDAO.remove(situacaoFiscalSelecionada, situacaoFiscalSelecionada.getId());
                 situacoesFiscais.remove(situacaoFiscalSelecionada);
                 ordenaSituacoesFiscais();
                 for (int i = 0; i < situacoesFiscais.size(); i++) {
                     if (!situacoesFiscais.get(i).getSequencia().equals(i + 1)) {
                         situacoesFiscais.get(i).setSequencia(i + 1);
-                        new AtualizaDAO<>().atualiza(situacoesFiscais.get(i));
+                        atualizaSituacaoFiscalDAO.atualiza(situacoesFiscais.get(i));
                     }
                 }
                 ordenaSituacoesFiscais();

@@ -201,7 +201,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             notaEmitida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaEmitida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaEmitida.setListaDePreco(configuracaoEstoque.getListaDePreco());
-            notaEmitida.setCotacao(cotacao);
+            notaEmitida.setCotacao(cotacao); 
             comandaSelecionada = null;
             creditoBV = new CreditoBV();
             itemEmitido = new ItemDeNotaBV();

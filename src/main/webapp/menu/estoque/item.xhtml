@@ -27,9 +27,9 @@
                     <div class="EmptyBox40"/>
                     <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
 
-                        <p:tabView id="tabsItem" style="margin: none; border-color: none">
+                        <p:tabView widgetVar="detailsTab" id="tabsItem" style="margin: none; border-color: none">
                             <p:ajax event="tabChange" listener="#{itemView.onTabChange}" update="conteudo"/>
-                            <p:tab title="#{l.Detalhes}" >
+                            <p:tab id="tabDetalhes" title="#{l.Detalhes}" >
 
                                 <div class="EmptyBox20"/>
 
@@ -89,6 +89,14 @@
                                         <f:selectItems value="#{itemView.tipoItem}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
                                     </p:selectOneMenu>
 
+                                    <p:outputLabel value="#{l.Detalhamento}"/>
+                                    <p:selectOneMenu value="#{itemView.e.detalhamento}">
+                                        <f:selectItems value="#{itemView.detalhamentoDeItem}" var="detalhamento" itemLabel="#{detalhamento.nome}" itemValue="#{detalhamento}" />
+                                           
+                                     
+                                         <p:ajax event="itemSelect" update=":conteudo" />
+                                    </p:selectOneMenu>
+
                                 </p:panelGrid>
 
                                 <div class="EmptyBox40"/>
@@ -112,6 +120,70 @@
                                 </h:panelGrid>
 
                             </p:tab>
+
+                            <p:tab title="#{l.Lotes}" rendered="#{itemView.e.detalhamento.id eq 2 ? true : false}">
+    <div class="EmptyBox20"/>
+
+                                <p:panelGrid id="painelNumeracoes" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                             columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
+
+                                    <p:outputLabel value="#{l.Ativo}"/>
+                                    <p:selectBooleanCheckbox id="loteStatus" value="#{itemView.loteDeItemBV.ativo}"/>
+                                    <p:spacer class="ui-g"/>
+
+                                    <p:outputLabel value="#{l.Numero_Do_Lote}"/>
+                                    <p:inputNumber value="#{itemView.loteDeItemBV.numeroDoLote}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+                                    <p:spacer class="ui-g"/>
+
+                                    <p:outputLabel value="#{l.Data_De_Fabricacao}"/>
+                                    <p:calendar value="#{itemView.loteDeItemBV.dataDeFabricacao}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
+                                    <p:spacer class="ui-g"/>
+
+                                    <p:outputLabel value="#{l.Data_De_Validade}"/>
+                                    <p:calendar value="#{itemView.loteDeItemBV.dataDeValidade}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
+                                    <p:spacer class="ui-g"/>
+
+                                    <p:outputLabel value="#{l.Observacao}"/>
+                                    <p:inputTextarea autoResize="true" rows="3" cols="26" maxlength="500" value="#{itemView.loteDeItemBV.observacao}"/>
+
+                                    <h:panelGrid columns="3" style="margin-top: -2px">
+                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{itemView.addLoteItem()}" update="conteudo" />
+                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{itemView.updateLoteItem()}" update="conteudo" styleClass="green-btn"/>
+                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{itemView.removeLoteItem()}" update="conteudo" styleClass="orange-btn"/>
+                                    </h:panelGrid>
+
+                                </p:panelGrid>
+        <div class="EmptyBox10"/>
+                                <p:dataTable id="loteItem" var="model" value="#{itemView.listaLoteItem}" rowIndexVar="rowIndex"
+                                             styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" 
+                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
+                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                    <p:ajax event="rowSelect" listener="#{itemView.selecionaLoteItem}" update=":conteudo" />
+
+                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
+                                        #{rowIndex+1}
+                                    </p:column>
+                                    <p:column headerText="#{l.Numero_Do_Lote}">                                
+                                        <h:outputText id="lotedt" value="#{model.object.numeroDoLote}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Data_De_Fabricacao}">
+                                        <h:outputText id="fabdt" value="#{model.object.fabricacaoFormatada}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Data_De_Validade}">
+                                        <h:outputText id="valdt" value="#{model.object.validadeFormatada}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Saldo}">
+                                        <h:outputText id="saldodt" value="#{model.object.saldo}"/>
+                                    </p:column>
+                                    <p:column headerText="#{l.Ativo}">
+                                        <h:outputText id="ativodt" value="#{model.object.ativo eq true ? l.Sim : l.Nao}"/>
+                                    </p:column>
+                                </p:dataTable>
+
+                            </p:tab>
+
                             <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}">
 
                                 <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass="form-elements"
@@ -249,7 +321,7 @@
 
                     <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
                         <div style="padding: 0% 0% 5% 8%">
-                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                             <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                             <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                             <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
