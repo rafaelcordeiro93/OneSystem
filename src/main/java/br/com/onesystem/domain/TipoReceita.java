@@ -7,6 +7,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -86,23 +87,32 @@ public class TipoReceita implements Serializable {
     }
 
     @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
+    public int hashCode() {
+        int hash = 5;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        if (!(objeto instanceof TipoReceita)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        TipoReceita outro = (TipoReceita) objeto;
-        if (this.id == null) {
+        final TipoReceita other = (TipoReceita) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return this.id.equals(outro.id);
+        return true;
     }
 
     @Override
     public String toString() {
-        return "Receita{" + "codigo=" + id + ", nome=" + nome + ", grupoFinanceiro=" + grupoFinanceiro + '}';
+        return "TipoReceita{" + "codigo=" + id + ", nome=" + nome + ", grupoFinanceiro=" + grupoFinanceiro + '}';
     }
 
 }

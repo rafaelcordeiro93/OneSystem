@@ -52,7 +52,7 @@ public abstract class BasicCrudMBImpl<Bean> {
 
                     m.setAccessible(true);
                     mList.setAccessible(true);
-                    
+
                     Object objeto = m.invoke(bean, null);
                     mList.invoke(objeto, null);
                 }
@@ -62,8 +62,7 @@ public abstract class BasicCrudMBImpl<Bean> {
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
         } catch (InvocationTargetException ex) {
-            bean = beans.get(beans.indexOf(bean));
-            inicializaRegistro(bean);
+            System.out.println("BasicCrudMBImpl - LAZY: " + ex.getMessage());
         } catch (NoSuchMethodException ex) {
             throw new RuntimeException("Erro o método não existe.");
         } catch (SecurityException ex) {
