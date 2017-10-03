@@ -61,7 +61,7 @@ public abstract class Nota implements Serializable {
     @ManyToOne
     private Operacao operacao;
     @ManyToOne
-    private FormaDeRecebimento formaDeRecebimento; 
+    private FormaDeRecebimento formaDeRecebimento;
     @ManyToOne
     private ListaDePreco listaDePreco;
     @Temporal(TemporalType.TIMESTAMP)
@@ -101,7 +101,7 @@ public abstract class Nota implements Serializable {
     @ManyToOne(optional = false)
     private Filial filial;
     @Column(nullable = false)
-    private Integer numeroNF;
+    protected Integer numeroNF;
 
     public Nota() {
         emissao = new Date(); // Necesário para construção do estoque.
@@ -139,6 +139,10 @@ public abstract class Nota implements Serializable {
             geraCobrancas();
         }
         ehValido();
+    }
+
+    public void setNumeroNF(Integer numeroNF) {
+        this.numeroNF = numeroNF;
     }
 
     protected abstract void adicionaNotaNoItem() throws DadoInvalidoException;
