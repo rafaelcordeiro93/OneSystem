@@ -15,13 +15,7 @@ import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
  */
 public class Armazem<SelecaoBean extends BasicCrudMBImpl> {
 
-    private final Class selecaoBeanClass;
-
-    public Armazem(Class selecaoBeanClass) {
-        this.selecaoBeanClass = selecaoBeanClass;
-    }
-
-    public void initailize(Object objeto) {
+    public void initailize(Object objeto, Class selecaoBeanClass) {
         SelecaoBean mb = (SelecaoBean) BeanUtil.getBeanNaSessao(selecaoBeanClass);
         mb.inicializaRegistro(objeto);
     }
