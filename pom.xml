@@ -27,6 +27,13 @@
             <version>5.0.0</version>
         </dependency>
         <dependency>
+            <groupId>javax.jnlp</groupId>
+            <artifactId>jnlp-api</artifactId>
+            <version>7.0</version>
+            <scope>system</scope>
+            <systemPath>${java.home}/lib/javaws.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-adhoc</artifactId>
             <version>5.0.0</version>
@@ -156,7 +163,7 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
-           <!--  <scope>provided</scope>    comentar para usar o banco pelo EM -->
+            <scope>provided</scope>  <!--  comentar para usar o banco pelo EM -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>

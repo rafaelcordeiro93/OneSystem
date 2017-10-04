@@ -57,11 +57,12 @@ public final class GerenciadorDeImpressoraDeTexto {
             if (numPagForma >= numeroDePaginas) {
                 numPagForma = constroiFormaDePagamento(classeDeDados, objeto);
             }
+            impressoras.add(impressora);
+            impressora = new ImpressoraDeTexto();
+            
             if (numPagTipo <= numeroDePaginas && numPagForma <= numeroDePaginas) {
                 break;
             }
-            impressoras.add(impressora);
-            impressora = new ImpressoraDeTexto();
             numeroDePaginas++;
         }
     }
@@ -341,8 +342,9 @@ public final class GerenciadorDeImpressoraDeTexto {
 
     public void imprimir() {
         for (ImpressoraDeTexto imp : impressoras) {
-            imp.toPrinterMatricial();
+            imp.toPrinter("EPSON");
         }
+        System.out.println("Imprimiu");
     }
     
     public void paraArquivo() {

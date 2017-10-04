@@ -103,6 +103,14 @@
             "column": "totalNaMoedaPadraoFormatadoEPorExtenso",
             "left": 31,
             "top": 8 
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "razaoSocialRuc",
+            "left": 70,
+            "top": 30,
+            "align": "CENTER",
+            "size": 72
         }
     ],
     "tipoCobranca-properties": [

@@ -24,8 +24,8 @@ public class TesteRauber {
 
     public static void main(String[] args) throws EDadoInvalidoException, DadoInvalidoException, JRException, IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 
-        int i = 18;
-        System.out.println(Math.ceil((double)19 / 9));
+        int i = 33;
+        System.out.println((double) i / 12);
 
     }
 }
