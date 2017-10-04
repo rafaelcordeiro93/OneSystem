@@ -156,7 +156,7 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
-            <scope>provided</scope> <!--    comentar para usar o banco pelo EM -->
+          <scope>provided</scope> <!--      comentar para usar o banco pelo EM -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>

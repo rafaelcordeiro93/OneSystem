@@ -195,17 +195,31 @@ public abstract class Movimento implements Serializable {
     public List<TemplateFormaPagamento> getTemplateFormaPagamento() {
         List<TemplateFormaPagamento> forma = new ArrayList<>();
         int i = 0;
+        BigDecimal emConta = BigDecimal.ZERO;
+        for (TipoDeCobranca tipo : tipoDeCobranca) {
+            if (tipo.getCotacao().getConta().getBanco() != null) {
+                emConta = emConta.add(tipo.getTotalNaMoedaPadrao());
+            }
+        }
+        if (emConta.compareTo(BigDecimal.ZERO) != 0) {
+            forma.add(new TemplateFormaPagamento(i, new BundleUtil().getLabel("Em_Conta"), "", "", "", MoedaFormatter.format(cotacaoPadrao.getConta().getMoeda(), emConta)));
+            i++;
+        }
         if (totalEmDinheiro.compareTo(BigDecimal.ZERO) != 0) {
-            forma.add(new TemplateFormaPagamento(i, cotacaoPadrao.getConta().getNome(), null, getTotalEmDinheiroFormatado(), getTotalEmDinheiroFormatado()));
+            forma.add(new TemplateFormaPagamento(i, cotacaoPadrao.getConta().getNome(), "", "", getTotalEmDinheiroFormatado(), getTotalEmDinheiroFormatado()));
             i++;
         }
         if (formasDeCobranca != null && !formasDeCobranca.isEmpty()) {
             for (FormaDeCobranca f : formasDeCobranca) {
-                forma.add(new TemplateFormaPagamento(i, f.getCobranca().getModalidade().getNome(), f.getCobranca().getVencimentoFormatadoSemHoras(), f.getTotalFormatado(), f.getTotalNaMoedaPadraoFormatado()));
+                forma.add(new TemplateFormaPagamento(i, f.getCobranca().getModalidade().getNome(), f.getCobranca().getDetalhes(), f.getCobranca().getVencimentoFormatadoSemHoras(), f.getTotalFormatado(), f.getTotalNaMoedaPadraoFormatado()));
                 i++;
             }
         }
         return forma;
+    }
+
+    public Pessoa getPessoa() {
+        return getTipoDeCobranca().get(0).getCobranca().getPessoa();
     }
 
     public String getEmissaoFormatadaSemHoras() {
@@ -227,6 +241,10 @@ public abstract class Movimento implements Serializable {
 
     public BigDecimal getTotalNaMoedaPadrao() {
         return tipoDeCobranca.stream().map(TipoDeCobranca::getTotalNaMoedaPadrao).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalNaMoedaPadraoFormatadoEPorExtenso() {
+        return getTotalNaMoedaPadraoFormatado() + " (" + getTotalNaMoedaPadraoPorExtenso() + ")";
     }
 
     public Long getId() {

@@ -1,4 +1,9 @@
 {
+
+    "br.com.onesystem.domain.Cobranca": [
+
+    ],
+
     "br.com.onesystem.domain.CobrancaVariavel": [
         {
             "classeDestino": "br.com.onesystem.domain.Moeda",
@@ -36,18 +41,48 @@
             "caminho": "pessoa"
         }
     ],
-    
-     "br.com.onesystem.domain.CobrancaVariavel": [
+
+    "br.com.onesystem.domain.CobrancaVariavel": [
         {
             "classeDestino": "br.com.onesystem.domain.Pessoa",
             "caminho": "pessoa"
         }
     ],
-    
+
     "br.com.onesystem.domain.Pessoa": [
         {
             "classeDestino": "br.com.onesystem.domain.Cidade",
             "caminho": "cidade"
         }
-    ]
+    ],
+    "br.com.onesystem.domain.TipoDeCobranca": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Cobranca",
+            "caminho": "cobranca"
+        },
+        {
+            "classeDestino": "br.com.onesystem.valueobjects.SituacaoDeCobranca",
+            "caminho": "cobranca.situacaoDeCobranca"
+        }
+    ],
+    "br.com.onesystem.domain.Movimento": [
+        {
+            "classeDestino": "br.com.onesystem.reportTemplate.TemplateFormaPagamento",
+            "caminho": "templateFormaPagamento"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Filial",
+            "caminho": "filial"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        },
+        {
+
+            "classeDestino": "br.com.onesystem.domain.Cep",
+            "caminho": "filial.cep"
+        }
+    ],
+    "br.com.onesystem.reportTemplate.TemplateFormaPagamento": []
 }

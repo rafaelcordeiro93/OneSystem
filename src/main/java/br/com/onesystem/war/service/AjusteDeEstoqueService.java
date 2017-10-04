@@ -1,12 +1,16 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.AjusteDeEstoqueDAO;
+import br.com.onesystem.dao.Armazem;
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.war.view.selecao.SelecaoItemView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,15 @@ public class AjusteDeEstoqueService implements Serializable {
 
     @Inject
     private ArmazemDeRegistros<AjusteDeEstoque> armazem;
+
+    @Inject
+    private ArmazemDeRegistros<SelecaoItemView> armazemitemm;
+
+    @Inject
+    private Armazem<SelecaoItemView> armazemItem;
+
+    @Inject
+    private ItemDAO ItemDAO;
 
     @Inject
     private AjusteDeEstoqueDAO dao;
@@ -45,7 +58,10 @@ public class AjusteDeEstoqueService implements Serializable {
                 }
             }
             if (!encontrou) {
-                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem().comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
+                Item item = ItemDAO.porId(ajuste.getItem().getId()).resultado();
+                       // armazemItem.initailize(ajuste.getItem(), SelecaoItemView.class);
+                //armazemitemm.find(ajuste.getItem().getId());
+                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(item).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
                         .comOperacaoDeEstoque(op).construir());
             }
         }

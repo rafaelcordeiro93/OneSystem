@@ -56,7 +56,7 @@ public class LeitoraDeCaminhoDeClassesJSON implements Serializable {
         } catch (IOException | ParseException ex) {
             throw new RuntimeException("Erro desconhecido: " + ex.getMessage());
         } catch (ClassNotFoundException cnf) {
-            throw new RuntimeException("Classe nao encontrada! " + classeOriginal);
+            throw new RuntimeException("Classe nao encontrada! " + cnf.getMessage());
         }
     }
 

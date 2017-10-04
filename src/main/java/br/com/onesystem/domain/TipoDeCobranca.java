@@ -165,10 +165,6 @@ public class TipoDeCobranca implements Serializable {
         return (v.add(j).add(m)).subtract(d);
     }
 
-    public String getTotalFormatado() {
-        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
-    }
-
     public String getTipoDocumento() {
         if (cobranca != null) {
             if (cobranca instanceof Titulo) {
@@ -197,6 +193,26 @@ public class TipoDeCobranca implements Serializable {
         return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacao.getConta().getMoeda(), getTotal()));
     }
 
+    public String getTotalFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
+    }
+
+    public String getJurosFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getJurosNaMoedaPadrao());
+    }
+
+    public String getDescontoFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDescontoNaMoedaPadrao());
+    }
+
+    public String getMultaFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getMultaNaMoedaPadrao());
+    }
+
+    public String getValorFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValorNaMoedaPadrao());
+    }
+    
     public String getTotalNaMoedaPadraoFormatado() {
         return MoedaFormatter.format(movimento.getCotacaoPadrao().getConta().getMoeda(), getTotalNaMoedaPadrao());
     }

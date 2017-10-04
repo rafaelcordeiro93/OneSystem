@@ -4,8 +4,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -14,11 +12,11 @@ public class ImpressoraDeTexto {
     public String impressora;
     private String page[][];
 
-//    public static void main(String args[]) {
+    public static void main(String args[]) {
 //        ImpressoraDeTexto t = new ImpressoraDeTexto();
 //
 //        //          linha/coluna
-//        t.setTamanhoDaPagina(15, 250);
+//        t.setTamanhoDaPagina(15, 162);
 //        t.insereTextoNaLinhaColuna(2, 1, "NOME.....:");
 //        t.insereTextoNaLinhaColuna(3, 1, "ENDEREÇO.:");
 //        t.insereTextoNaLinhaColuna(4, 1, "CIDADE...:");
@@ -30,8 +28,9 @@ public class ImpressoraDeTexto {
 //        t.insereTextoNaLinhaColuna(2, 1, "TTTT");
 //        t.insereTextoNaLinhaColuna(5, 1, "     ");
 //        t.insereTextoNaLinhaColuna(5, 12, "Coco");
-//        t.imprimeNoConsole();
-//    }
+//        System.out.println(t.toString());
+    }
+
     public ImpressoraDeTexto() {
 //        try {
 //            File f = new File("conf.ini");
@@ -69,26 +68,11 @@ public class ImpressoraDeTexto {
         }
     }
 
-    public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
-        List<GenericLayout> listaLayout = new ArrayList<>();
-        for (Object o : dados) {
-            JSONObject j = (JSONObject) o;
-            String tabela = (String) j.get("tabela");
-            String coluna = (String) j.get("coluna");
-            Integer left = ((Long) j.get("left")).intValue();
-            Integer top = ((Long) j.get("top")).intValue();
-
-            GenericLayout g = new GenericLayout(tabela, coluna, left, top);
-            listaLayout.add(g);
-        }
-        return listaLayout;
-    }
-
     public void setTamanhoDaPagina(int lin, int col) {
         page = new String[lin][col];
     }
 
-    public void imprimeNoConsole() {
+    public void exibeNoConsole() {
         for (int i = 0; i < page.length; i++) {
             for (int b = 0; b < page[i].length;) {
                 String tmp = page[i][b];
@@ -105,6 +89,26 @@ public class ImpressoraDeTexto {
             System.out.println();
         }
 
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sbResult = new StringBuilder();
+        for (int i = 0; i < page.length; i++) {
+            for (int b = 0; b < page[i].length;) {
+                String tmp = page[i][b];
+                if (tmp != null && !tmp.equals("")) {
+                    int size = tmp.length();
+                    b += size;
+                    sbResult.append(tmp);
+                } else {
+                    sbResult.append(" ");
+                    b++;
+                }
+            }
+            sbResult.append("\n");
+        }
+        return sbResult.toString();
     }
 
     public void toFile(String fileName) {
