@@ -1,0 +1,63 @@
+           <!--
+    <div class="ui-g-12 ui-lg-12">
+        <div class="card card-w-title">
+            <h1 class="BoldGray FontRobotoRegular">#{l.Cambio}</h1>
+            <div class="EmptyBox10"></div>
+            <h:panelGrid columns="2" styleClass="Wid20 ">
+                <p:selectBooleanCheckbox value="#{configuracaoCambioView.configuracaoCambioBV.ativo}" style="margin-top: -3px">
+                    <p:ajax update=":conteudo"/>
+                </p:selectBooleanCheckbox>
+                <p:outputLabel value="#{l.Ativar_Divisao_de_Lucro}" styleClass="MarTopPerc50"/>                        
+            </h:panelGrid>
+            <p:outputLabel styleClass="FontRobotoLight BoldGray DispBlock" value="#{l.Deve_Selecionar_Despesa_Divisao_Lucro}"/>
+            <div class="EmptyBox10"/>
+            <h:panelGrid columns="2" style="margin-left: -1%" styleClass="Wid50">
+                <p:inputText disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" id="configuracaoDespesaDivisaoLucroCambio" styleClass="Wid95" readonly="true" placeholder="#{l.Despesa}" style="margin-top: -3%" value="#{configuracaoCambioView.configuracaoCambioBV.despesaDivisaoLucro.nome}"/>
+                <p:commandButton disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" icon="fa fa-search Fs16 White" action="#{selecaoTipoDespesaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{configuracaoCambioView.selecionaDespesaDivisaoLucro}"
+                            process="@this" update="configuracaoDespesaDivisaoLucroCambio" />
+                </p:commandButton>
+            </h:panelGrid>
+            <h:panelGrid columns="2" style="margin-left: -1%" styleClass="Wid50">
+                <p:inputText disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" id="configuracaoPessoaCaixa" styleClass="Wid95" readonly="true" placeholder="#{l.Pessoa_Caixa}" style="margin-top: -3%" value="#{configuracaoCambioView.configuracaoCambioBV.pessoaCaixa.nome}"/>
+                <p:commandButton disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" icon="fa fa-search Fs16 White" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{configuracaoCambioView.selecionaPessoaCaixa}"
+                            process="@this" update="configuracaoPessoaCaixa" />
+                </p:commandButton>
+            </h:panelGrid>
+            <h:panelGrid columns="2" style="margin-left: -1%" styleClass="Wid50">
+                <p:inputText disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" id="configuracaoContaCaixa" styleClass="Wid95" readonly="true" placeholder="#{l.Conta_Caixa}" style="margin-top: -3%" value="#{configuracaoCambioView.configuracaoCambioBV.contaCaixa.nome}"/>
+                <p:commandButton disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" icon="fa fa-search Fs16 White" action="#{selecaoContaView.abrirDialogo()}" process="@this"
+                                 update="@none">
+                    <p:ajax event="dialogReturn" listener="#{configuracaoCambioView.selecionaContaCaixa}"
+                            process="@this" update="configuracaoContaCaixa" />
+                </p:commandButton>
+            </h:panelGrid>
+
+            <div class="Container50 Responsive100" >
+                <div class="ContainerIndent">
+                    <p:outputLabel value="#{l.Pessoas_Divisao_Lucro}" styleClass="Red"/>
+                    <p:dataTable disabledSelection="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" id="confPessoaDivCambio" var="pessoa" value="#{configuracaoCambioView.configuracaoCambioBV.pessoaDivisaoLucro}" selectionMode="single" selection="#{configuracaoCambioView.pessoaDivisaoLucro}" rowKey="#{pessoa.id}"
+                                 emptyMessage="#{l.Nenhum_dado_encontrado}" reflow="true" style="border: none; margin-left: -3%">
+                        <p:column>                                        
+                            <h:outputText value="#{pessoa.id}" />
+                        </p:column>
+                        <p:column>                                        
+                            <h:outputText value="#{pessoa.nome}" />
+                        </p:column>
+                    </p:dataTable>
+                    <p:commandButton icon="fa fa-search Fs16 White" disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" action="#{selecaoPessoaView.abrirDialogo()}" process="@this"
+                                     update="@none">
+                        <p:ajax event="dialogReturn" listener="#{configuracaoCambioView.selecionaPessoa}" update=":conteudo" />
+                    </p:commandButton>
+                    <p:commandButton icon="fa fa-trash-o Fs16 White" disabled="#{!configuracaoCambioView.configuracaoCambioBV.ativo}" action="#{configuracaoCambioView.deletePessoa()}" update=":conteudo" styleClass="RedButton"/>
+                </div>  
+            </div>
+            <div class="EmptyBox5"/>
+            <p:separator/>
+            <p:commandButton value="#{l.Salvar}" action="#{configuracaoCambioView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>
+        </div>
+    </div>
+            -->

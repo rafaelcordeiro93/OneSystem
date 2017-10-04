@@ -80,6 +80,7 @@ import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.NumeracaoDeNotaFiscalBV;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
+import br.com.onesystem.war.service.LoteNotaFiscalService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -175,6 +176,9 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     
     @Inject
     private GeradorDeEstoque geradorDeEstoque;
+    
+    @Inject
+    private LoteNotaFiscalService loteNotaFiscalService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -234,7 +238,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------- Operações para criação da entidade ----------------------   
     public void validaAFaturar() {
         try {
-            buscaProximoNumeroNF(); //busca novamente o numeroNF pois o mesmo pode ter sido alterado ja
             nota = notaEmitida.construir();
             if (!notaEmitida.getOperacao().getOperacaoFinanceira().equals(OperacaoFinanceira.SEM_ALTERACAO)) {
                 // Se valor a faturar maior que zero deve exibir diálogo de confirmação
@@ -350,8 +353,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            adicionaDAO.adiciona(nota);
-            atualizaNumeroNotaFiscal();
+            buscaProximoNumeroNF(nota);
+            adicionaDAO.adiciona(nota);         
+            nota.getLoteNotaFiscal().atualizaNumeracao(nota.getFilial());
+            //atualizaNumeroNotaFiscal();
             InfoMessage.adicionado();
             limparJanela();
             layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
@@ -787,15 +792,16 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 || tipo == TipoOperacao.DEVOLUCAO_CONDICIONAL;
         notaEmitida.setOperacao(operacao);
         notaEmitida.setLoteNotaFiscal(operacao.getLoteNotaFiscal());
-        buscaProximoNumeroNF();
+        //buscaProximoNumeroNF();
         RequestContext.getCurrentInstance().update("conteudo");
     }
     
-    private void buscaProximoNumeroNF() {
+    private void buscaProximoNumeroNF(NotaEmitida nota) {
         try {
-            for (NumeracaoDeNotaFiscal nnf : notaEmitida.getOperacao().getLoteNotaFiscal().getNumeracaoDeNotaFiscal()) {
+            List<NumeracaoDeNotaFiscal> numeracao = loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()).getNumeracaoDeNotaFiscal();
+            for (NumeracaoDeNotaFiscal nnf : numeracao) {
                 if (nnf.getFilial().equals(notaEmitida.getFilial())) {
-                    notaEmitida.setNumeroNF(nnf.getNumeroNF());
+                    nota.setNumeroNF(nnf.getNumeroNF());
                 }
             }
         } catch (NullPointerException npe) {
@@ -805,7 +811,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     
     private void atualizaNumeroNotaFiscal() {
         try {
-            for (NumeracaoDeNotaFiscal nnf : notaEmitida.getOperacao().getLoteNotaFiscal().getNumeracaoDeNotaFiscal()) {
+            List<NumeracaoDeNotaFiscal> numeracao = loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()).getNumeracaoDeNotaFiscal();
+            for (NumeracaoDeNotaFiscal nnf : numeracao) {
                 if (nnf.getFilial().equals(notaEmitida.getFilial())) {
                     NumeracaoDeNotaFiscalBV nnfBV = new NumeracaoDeNotaFiscalBV(nnf);
                     nnfBV.setNumeroNF(nnf.getNumeroNF() + 1); //acrescenta +1 ao proximo numero da nota fiscal.

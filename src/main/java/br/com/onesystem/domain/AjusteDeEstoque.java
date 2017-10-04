@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -77,7 +78,6 @@ public class AjusteDeEstoque implements Serializable {
         this.operacao = operacao;
         this.estoque = estoque;
         this.custo = custo;
-        atualizaEstoque();
         ehValido();
     }
 
@@ -86,33 +86,19 @@ public class AjusteDeEstoque implements Serializable {
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 
-    public void atualizaEstoque() throws DadoInvalidoException {
-        OperacaoDeEstoqueService serv = new OperacaoDeEstoqueService();
-        List<OperacaoDeEstoque> listaOpEstoque = serv.buscarOperacoesDeEstoquePor(operacao);
-        List<Estoque> adicionar = new ArrayList<>();
+    public void adiciona(Estoque n) {
         if (estoque == null) {
             estoque = new ArrayList<>();
+        } else if (estoque.contains(n)) {
+            estoque.set(estoque.indexOf(n), n);
+        } else {
+            n.setAjusteDeEstoque(this);
+            estoque.add(n);
         }
+    }
 
-        for (OperacaoDeEstoque op : listaOpEstoque) {
-            boolean encontrou = false;
-            for (Estoque e : estoque) {
-                if (e.getOperacaoDeEstoque() == op) {
-                    e.atualizaQuantidade(quantidade);
-                    encontrou = true;
-                    break;
-                }
-            }
-            if (!encontrou) {
-                adicionar.add(new EstoqueBuilder().comDeposito(deposito).comItem(item).comEmissao(emissao).comQuantidade(quantidade)
-                        .comOperacaoDeEstoque(op).comAjusteDeEstoque(this).construir());
-            }
-        }
-
-        for (Estoque a : adicionar) {
-            estoque.add(a);
-        }
-
+    public void inicializaEstoque() {
+        estoque = new ArrayList<>();
     }
 
     public Long getId() {
