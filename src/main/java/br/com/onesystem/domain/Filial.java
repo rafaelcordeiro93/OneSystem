@@ -141,6 +141,10 @@ public class Filial implements Serializable {
     public String getSerialKey() {
         return serialKey;
     }
+    
+    public String getRazaoSocialRuc(){
+        return razaoSocial + " - Ruc: " + ruc;
+    }
 
     @MetodoInacessivelRelatorio
     public String getEnderecoNumeroBairroFormatado() {

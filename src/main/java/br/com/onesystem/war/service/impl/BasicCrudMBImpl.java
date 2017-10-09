@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Hibernate;
 
 public abstract class BasicCrudMBImpl<Bean> {
 
@@ -44,9 +45,9 @@ public abstract class BasicCrudMBImpl<Bean> {
 
     public void inicializaRegistro(Bean bean) {
         try {
+            bean = beans.get(beans.indexOf(bean));
             Method[] methods = bean.getClass().getMethods();
             for (Method m : methods) {
-
                 if (m.getReturnType().equals(List.class)) {
                     Method mList = List.class.getMethod("size", null);
 
@@ -54,7 +55,8 @@ public abstract class BasicCrudMBImpl<Bean> {
                     mList.setAccessible(true);
 
                     Object objeto = m.invoke(bean, null);
-                    mList.invoke(objeto, null);
+//                    Object test = mList.invoke(objeto, null);
+                    Hibernate.initialize(objeto);
                 }
             }
         } catch (IllegalAccessException ex) {

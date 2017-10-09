@@ -1,41 +1,43 @@
 {
     "report": [{
-            "width": 160,
+            "width": 94,
             "height": 33
         }
     ],
     "layout": [{
-            "linha1": "================================================================================================================================================================",
-            "linha2": "                                                                                               RUC:                                    Registro No.:            ",
-            "linha3": "                                                                                              Fone:                                    Data........:            ",
-            "linha4": "                                                                                                                                       Total.......:            ",
-            "linha5": "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
-            "linha6": "                                                                                                                                                                ",
-            "linha7": "                        Recebi(emos) de ************************************************************************************************************************",
-            "linha8": "       a importancia supra de **********************************************************************************************************************************",
-            "linha9": "       ***************************************************************************************************************************,                             ",
-            "linha10": "       referente ao pagamento da(s) seguinte(s) conta(s):                                                                                                       ",
-            "linha11": "                                                                                                                                                                ",
-            "linha12": "| Nro. Tit |     NF    |   Emissao  |  Vencimento  |  Situacao  |   Vl.Original   |    Multa    |    Juros    |  Desconto  |    Total Pago   |Total P. M.Padrao|",
-            "linha13": "+----------+-----------+------------+--------------+------------+-----------------+-------------+-------------+------------+-----------------+-----------------+",
-            "linha14": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha15": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha16": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha17": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha18": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha19": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha20": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha21": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha22": "|          |           |            |              |            |                 |             |             |            |                 |                 |",
-            "linha23": "+----------+-----------+------------+--------------+------------+-----------------+-------------+-------------+------------+-----------------+-----------------+",
-            "linha24": "Forma    Vencimento Detalhes                               Valor                                                                                                ",
-            "linha25": "                                                                                                                                                                ",
-            "linha26": "                                                                                                                                                                ",
-            "linha27": "                                                                                                                                                                ",
-            "linha28": "                                                                                                                                                                ",
-            "linha29": "                                                                     ________________________________________________________________________                   ",
-            "linha30": "                                                                                                                                                                ",
-            "linha31": "================================================================================================================================================================"
+            "linha1": "==============================================================================================",
+            "linha2": "                                                RUC.:                Registro No.:            ",
+            "linha3": "                                                Fone:                Data........:            ",
+            "linha4": "                                                                     Total.......:            ",
+            "linha5": "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ",
+            "linha6": "                                                                                              ",
+            "linha7": "            Recebi(emos) de ******************************************************************",
+            "linha8": "  a importancia supra de *********************************************************************",
+            "linha9": "  **************************************************************,                             ",
+            "linha10": "  referente ao pagamento da(s) seguinte(s) conta(s):                                          ",
+            "linha11": "                                                                                              ",
+            "linha12": "|Nro. Tit|  Emissao |Vencimento| Vl.Orig. | Multa | Juros |Desconto| Total Pago | Total M.P. |",
+            "linha13": "+--------+----------+----------+----------+-------+-------+--------+------------+------------+",
+            "linha14": "|        |          |          |          |       |       |        |            |            |",
+            "linha15": "|        |          |          |          |       |       |        |            |            |",
+            "linha16": "|        |          |          |          |       |       |        |            |            |",
+            "linha17": "|        |          |          |          |       |       |        |            |            |",
+            "linha18": "|        |          |          |          |       |       |        |            |            |",
+            "linha19": "|        |          |          |          |       |       |        |            |            |",
+            "linha20": "|        |          |          |          |       |       |        |            |            |",
+            "linha21": "|        |          |          |          |       |       |        |            |            |",
+            "linha22": "|        |          |          |          |       |       |        |            |            |",
+            "linha23": "+--------+----------+----------+----------+-------+-------+--------+------------+------------+",
+            "linha24": "Forma    Vencimento Detalhes                      Valor                                       ",
+            "linha25": "                                                                                              ",
+            "linha26": "                                                                                              ",
+            "linha27": "                                                                                              ",
+            "linha28": "                                                                                              ",
+            "linha29": "                                                                                              ",
+            "linha30": "                                                                                              ",
+            "linha31": "                             ______________________________________________________________   ",
+            "linha32": "                                                                                              ",
+            "linha33": "=============================================================================================="
         }],
     "dados": [
         {
@@ -47,13 +49,13 @@
         {
             "class": "br.com.onesystem.domain.Filial",
             "column": "ruc",
-            "left": 100,
+            "left": 54,
             "top": 2 
         },
         {
             "class": "br.com.onesystem.domain.Movimento",
             "column": "id",
-            "left": 149,
+            "left": 83,
             "top": 2,
             "align": "RIGHT",
             "size": 12
@@ -67,13 +69,13 @@
         {
             "class": "br.com.onesystem.domain.Filial",
             "column": "telefone",
-            "left": 100,
+            "left": 54,
             "top": 3 
         },
         {
             "class": "br.com.onesystem.domain.Movimento",
             "column": "emissaoFormatadaSemHoras",
-            "left": 149,
+            "left": 83,
             "top": 3,
             "align": "RIGHT",
             "size": 12
@@ -87,7 +89,7 @@
         {
             "class": "br.com.onesystem.domain.Movimento",
             "column": "totalNaMoedaPadraoFormatado",
-            "left": 149,
+            "left": 83,
             "top": 4,
             "align": "RIGHT",
             "size": 12
@@ -95,14 +97,22 @@
         {
             "class": "br.com.onesystem.domain.Pessoa",
             "column": "nome",
-            "left": 41,
+            "left": 29,
             "top": 7 
         },
         {
             "class": "br.com.onesystem.domain.Movimento",
             "column": "totalNaMoedaPadraoFormatadoEPorExtenso",
-            "left": 31,
+            "left": 26,
             "top": 8 
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "razaoSocialRuc",
+            "left": 30,
+            "top": 32,
+            "align": "CENTER",
+            "size": 62
         }
     ],
     "tipoCobranca-properties": [
@@ -118,71 +128,59 @@
             "column": "id",
             "left": 2,
             "align": "CENTER",
-            "size": 10
-        },
-        {
-            "class": "br.com.onesystem.domain.Cobranca",
-            "column": "idNota",
-            "left": 13,
-            "align": "CENTER",
-            "size": 11
+            "size": 8
         },
         {
             "class": "br.com.onesystem.domain.Cobranca",
             "column": "emissaoFormatadaSemHoras",
-            "left": 26
+            "left": 11
         },
         {
             "class": "br.com.onesystem.domain.Cobranca",
             "column": "vencimentoFormatadoSemHoras",
-            "left": 40
-        },
-        {
-            "class": "br.com.onesystem.valueobjects.SituacaoDeCobranca",
-            "column": "nome",
-            "left": 56
+            "left": 22
         },
         {
             "class": "br.com.onesystem.domain.Cobranca",
             "column": "valorFormatado",
-            "left": 66,
+            "left": 33,
             "align": "RIGHT",
-            "size": 17
+            "size": 10
         },
         {
             "class": "br.com.onesystem.domain.TipoDeCobranca",
             "column": "multaFormatado",
-            "left": 84,
+            "left": 44,
             "align": "RIGHT",
-            "size": 13
+            "size": 7
         },
         {
             "class": "br.com.onesystem.domain.TipoDeCobranca",
             "column": "jurosFormatado",
-            "left": 98,
+            "left": 52,
             "align": "RIGHT",
-            "size": 13
+            "size": 7
         },
         {
             "class": "br.com.onesystem.domain.TipoDeCobranca",
             "column": "descontoFormatado",
-            "left": 112,
+            "left": 60,
+            "align": "RIGHT",
+            "size": 8
+        },
+        {
+            "class": "br.com.onesystem.domain.TipoDeCobranca",
+            "column": "totalFormatado",
+            "left": 69,
             "align": "RIGHT",
             "size": 12
         },
         {
             "class": "br.com.onesystem.domain.TipoDeCobranca",
-            "column": "totalFormatado",
-            "left": 125,
-            "align": "RIGHT",
-            "size": 17
-        },
-        {
-            "class": "br.com.onesystem.domain.TipoDeCobranca",
             "column": "totalNaMoedaPadraoFormatado",
-            "left": 143,
+            "left": 82,
             "align": "RIGHT",
-            "size": 17
+            "size": 12
         }
     ],
     "formaCobranca-properties": [
@@ -212,7 +210,7 @@
         {
             "class": "br.com.onesystem.reportTemplate.TemplateFormaPagamento",
             "column": "valorConvertido",
-            "left": 60
+            "left": 51
         }
     ]
 }

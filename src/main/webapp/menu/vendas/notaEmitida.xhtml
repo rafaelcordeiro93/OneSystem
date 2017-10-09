@@ -93,22 +93,12 @@
 
                     <div class="ui-fluid">
 
-                        <h:panelGrid columns="1">
-                            <p:outputLabel value="#{l.Emissao}" />
-                            <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3" readonly="true"/>
-                            <!--
-                            <p:outputLabel value="#{l.Numero_Nota_Fiscal}" />
-                            <p:inputNumber value="#{notaEmitidaView.notaEmitida.numeroNF}" minValue="0" thousandSeparator="" decimalPlaces="0" decimalSeparator="" readonly="true"/> -->
-                        </h:panelGrid>
+                            <h:panelGrid columns="1">
+                                <p:outputLabel value="#{l.Emissao}" />
+                                <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3" readonly="true"/>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
-                                     columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
-
-                            <h:panelGrid columns="1" styleClass="Wid100" >
-                                <p:spacer/>
-                                <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoNotaEmitidaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:menuButtonImport" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true">
-                                    <p:ajax event="itemSelect" listener="#{notaEmitidaView.setupView(notaEmitidaView.notaEmitida.operacao)}"/>
-                                </a:inputTextDialog>
+                                <p:outputLabel value="#{l.Numero_Nota_Fiscal}" />
+                                <p:inputNumber value="#{notaEmitidaView.notaEmitida.numeroNF}" minValue="0" thousandSeparator="" decimalPlaces="0" decimalSeparator="" readonly="true"/>
                             </h:panelGrid>
 
                             <h:panelGrid columns="1" styleClass="Wid100" >
@@ -172,11 +162,11 @@
                                     <p:spacer/>
                                     <h:panelGrid columns="3">
                                         <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaEmitidaView.addItemNaLista}" style="width: 25px"
-                                                         update=":conteudo:ne"/>
+                                                         update=":conteudo" process="@this" />
                                         <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaEmitidaView.updateItemNaLista}" style="width: 25px"
-                                                         update=":conteudo:ne" styleClass="green-btn"/>     
+                                                         update=":conteudo" styleClass="green-btn" process="@this"/>     
                                         <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaEmitidaView.deleteItemNaLista}" style="width: 25px"
-                                                         update=":conteudo:ne" styleClass="orange-btn"/>
+                                                         update=":conteudo" styleClass="orange-btn" process="@this"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
                             </p:panelGrid>

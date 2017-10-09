@@ -34,6 +34,7 @@ public class RemoveDAO<T> {
             // persiste o objeto e log do mesmo
             em.remove(em.find(t.getClass(), id));
             em.persist(new Log("Excluído: " + t, TipoTransacao.EXCLUSAO));
+            em.flush();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

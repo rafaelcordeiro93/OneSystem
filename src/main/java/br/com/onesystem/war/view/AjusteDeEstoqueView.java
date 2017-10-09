@@ -93,7 +93,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
             setupItem();
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
-            List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
+            List<OperacaoDeEstoque> operacoesDeEstoque = operacao.getOperacaoDeEstoque();
             if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                 RequestContext rc = RequestContext.getCurrentInstance();
                 rc.execute("PF('operacaoAjusteDialog').show()");

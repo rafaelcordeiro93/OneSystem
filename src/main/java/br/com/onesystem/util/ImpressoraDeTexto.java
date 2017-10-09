@@ -91,8 +91,7 @@ public class ImpressoraDeTexto {
 
     }
 
-    @Override
-    public String toString() {
+    public String getString() {
         StringBuilder sbResult = new StringBuilder();
         for (int i = 0; i < page.length; i++) {
             for (int b = 0; b < page[i].length;) {
@@ -476,4 +475,9 @@ public class ImpressoraDeTexto {
 //
 //        // toImageFile(fileName);
 //    }
+
+    public String[][] getPage() {
+        return page;
+    }
+    
 }

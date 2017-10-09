@@ -34,6 +34,7 @@ public class AtualizaDAO<T> {
             // persiste o objeto e log do mesmo
             em.merge(t);
             em.persist(new Log("Alterado: " + t, TipoTransacao.ALTERACAO));
+            em.flush();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

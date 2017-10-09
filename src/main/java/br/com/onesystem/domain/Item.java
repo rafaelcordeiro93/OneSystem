@@ -228,6 +228,10 @@ public class Item implements Serializable {
         return unidadeDeMedida;
     }
 
+    public List<PrecoDeItem> getPrecos() {
+        return precos;
+    }
+
     public Marca getMarca() {
         return marca;
     }
