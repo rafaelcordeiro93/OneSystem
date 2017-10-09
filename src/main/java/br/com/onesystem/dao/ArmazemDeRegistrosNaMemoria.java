@@ -13,7 +13,7 @@ import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
  *
  * @author Rafael
  */
-public class Armazem<SelecaoBean extends BasicCrudMBImpl> {
+public class ArmazemDeRegistrosNaMemoria<SelecaoBean extends BasicCrudMBImpl> {
 
     public void initialize(Object objeto, Class selecaoBeanClass) {
         SelecaoBean mb = (SelecaoBean) BeanUtil.getBeanNaSessao(selecaoBeanClass);

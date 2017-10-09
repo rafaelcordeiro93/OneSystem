@@ -1,7 +1,7 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.AjusteDeEstoqueDAO;
-import br.com.onesystem.dao.Armazem;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
@@ -27,7 +27,7 @@ public class AjusteDeEstoqueService implements Serializable {
     private ArmazemDeRegistros<SelecaoItemView> armazemitemm;
 
     @Inject
-    private Armazem<SelecaoItemView> armazemItem;
+    private ArmazemDeRegistrosNaMemoria<SelecaoItemView> armazemItem;
 
     @Inject
     private ItemDAO ItemDAO;

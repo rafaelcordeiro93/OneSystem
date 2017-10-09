@@ -1,5 +1,5 @@
 
-import br.com.onesystem.dao.Armazem;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
 import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.util.GerenciadorDeImpressoraDeTexto;
