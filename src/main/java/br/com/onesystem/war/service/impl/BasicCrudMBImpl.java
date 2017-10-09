@@ -44,32 +44,56 @@ public abstract class BasicCrudMBImpl<Bean> {
     }
 
     public void inicializaRegistro(Bean bean) {
-        try {
-            bean = beans.get(beans.indexOf(bean));
-            Method[] methods = bean.getClass().getMethods();
-            for (Method m : methods) {
-                if (m.getReturnType().equals(List.class)) {
-                    Method mList = List.class.getMethod("size", null);
-
-                    m.setAccessible(true);
-                    mList.setAccessible(true);
-
-                    Object objeto = m.invoke(bean, null);
-//                    Object test = mList.invoke(objeto, null);
-                    Hibernate.initialize(objeto);
+        if (bean != null) {
+            try {
+                try {
+                    bean = beans.get(beans.indexOf(bean));
+                } catch (ArrayIndexOutOfBoundsException aie) {
+                    bean = getId(bean);
+                    if (bean == null) {
+                        return;
+                    }
                 }
+                Method[] methods = bean.getClass().getMethods();
+                for (Method m : methods) {
+                    if (m.getReturnType().equals(List.class)) {
+                        Method mList = List.class.getMethod("size", null);
+
+                        m.setAccessible(true);
+                        mList.setAccessible(true);
+
+                        Object objeto = m.invoke(bean, null);
+//                    Object test = mList.invoke(objeto, null);
+                        Hibernate.initialize(objeto);
+                    }
+                }
+            } catch (IllegalAccessException ex) {
+                throw new RuntimeException("Erro de acesso ao método.");
+            } catch (IllegalArgumentException ex) {
+                throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
+            } catch (InvocationTargetException ex) {
+                System.out.println("BasicCrudMBImpl - LAZY: " + ex.getMessage());
+            } catch (NoSuchMethodException ex) {
+                throw new RuntimeException("Erro o método não existe.");
+            } catch (SecurityException ex) {
+                throw new RuntimeException("Erro de segurança ao realizar o acesso.");
             }
-        } catch (IllegalAccessException ex) {
-            throw new RuntimeException("Erro de acesso ao método.");
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
-        } catch (InvocationTargetException ex) {
-            System.out.println("BasicCrudMBImpl - LAZY: " + ex.getMessage());
-        } catch (NoSuchMethodException ex) {
-            throw new RuntimeException("Erro o método não existe.");
-        } catch (SecurityException ex) {
-            throw new RuntimeException("Erro de segurança ao realizar o acesso.");
         }
+    }
+
+    private Bean getId(Bean bean) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Method mId = bean.getClass().getMethod("getId");
+        mId.setAccessible(true);
+        Object id = mId.invoke(bean, null);
+        for (Bean b : beans) {
+            Method m = b.getClass().getMethod("getId");
+            m.setAccessible(true);
+            Object idB = m.invoke(b, null);
+            if (id.equals(idB)) {
+                return b;
+            }
+        }
+        return null;
     }
 
     public Bean getBeanSelecionado() {
