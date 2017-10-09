@@ -32,101 +32,102 @@
 
     <ui:define name="content">
 
-        <h:form id="ne">
-            <div class="ui-g">
-                <div class="ui-g-10" style="margin-left: 8%">
-                    <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
-                        <h2 class="BigTopic">#{l.Nota_Emitida}</h2>
-                        <div class="EmptyBox5"/>
 
-                        <p:spacer height="1px" width="100%"/>
+        <div class="ui-g">
+            <div class="ui-g-10" style="margin-left: 8%">
+                <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
+                    <h2 class="BigTopic">#{l.Nota_Emitida}</h2>
+                    <div class="EmptyBox5"/>
+
+                    <p:spacer height="1px" width="100%"/>
 
 
-                        <p:commandButton id="importaItemNotaEmitida-btn" action="#{selecaoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo:ne:itensEmitidosNota"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaItemNotaEmitida-btn" action="#{selecaoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo:ne:itensEmitidosNota"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="importaOrcamento-btn" action="#{selecaoOrcamentoAprovadoView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaOrcamento-btn" action="#{selecaoOrcamentoAprovadoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="importaNotaEmitida-btn" action="#{selecaoNotaEmitidaVendaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaNotaEmitida-btn" action="#{selecaoNotaEmitidaVendaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="importaVendaEntregaFutura-btn" action="#{selecaoNotaEmitidaVendaEntregaFuturaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaVendaEntregaFutura-btn" action="#{selecaoNotaEmitidaVendaEntregaFuturaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="importaComanda-btn" action="#{selecaoComandaEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaComanda-btn" action="#{selecaoComandaEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="importaCondicional-btn" action="#{selecaoCondicionalEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="importaCondicional-btn" action="#{selecaoCondicionalEmDefinicaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="exibeNotaEmitida-btn" action="#{dialogoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="exibeNotaEmitida-btn" action="#{dialogoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="exibeOrcamento-btn" action="#{dialogoOrcamentoView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo"/>
-                        </p:commandButton>
+                    <p:commandButton id="exibeOrcamento-btn" action="#{dialogoOrcamentoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="exibeComanda-btn" action="#{dialogoComandaView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="exibeComanda-btn" action="#{dialogoComandaView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:commandButton id="exibeCondicional-btn" action="#{dialogoCondicionalView.abrirDialogo}" process="@this" update="@none" style="display: none">
-                            <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
-                        </p:commandButton>
+                    <p:commandButton id="exibeCondicional-btn" action="#{dialogoCondicionalView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
-                        <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid15" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
-                            <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
-                            <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
-                            <p:menuitem value="#{l.Comanda}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa fa-superpowers" onclick="importaComanda()" ajax="false"/>
-                            <p:menuitem value="#{l.Condicional}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 1 ? true : notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 33}" icon="fa fa-compress" onclick="importaCondicional()" ajax="false"/>
-                            <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 3}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
-                            <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaVendaEntregaFutura()" ajax="false"/>
-                        </p:menuButton>
+                    <p:menuButton id="menuButtonImport" value="#{l.Importar}" menuStyleClass="Wid15" disabled="#{notaEmitidaView.notaEmitida.operacao ne null ? 'false' : 'true'}">
+                        <p:menuitem value="#{l.Itens_Nota_Emitida}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-shopping-cart"  onclick="importaItemNotaEmitida()" ajax="false"/>
+                        <p:menuitem value="#{l.Orcamento}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa-random" onclick="importaOrcamento()" ajax="false"/>
+                        <p:menuitem value="#{l.Comanda}" rendered="#{!notaEmitidaView.editarItensEParcelas}" icon="fa fa fa-superpowers" onclick="importaComanda()" ajax="false"/>
+                        <p:menuitem value="#{l.Condicional}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 1 ? true : notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 33}" icon="fa fa-compress" onclick="importaCondicional()" ajax="false"/>
+                        <p:menuitem value="#{l.Nota_Emitida}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 3}" icon="fa fa-random" onclick="importaNotaEmitida()" ajax="false"/>
+                        <p:menuitem value="#{l.Venda_Entrega_Futura}" rendered="#{notaEmitidaView.notaEmitida.operacao.tipoOperacao.id eq 7}" icon="fa fa-random" onclick="importaVendaEntregaFutura()" ajax="false"/>
+                    </p:menuButton>
 
-                        <div class="ui-fluid">
+                    <div class="ui-fluid">
 
-                            <h:panelGrid columns="1">
-                                <p:outputLabel value="#{l.Emissao}" />
-                                <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3" readonly="true"/>
-                                
-                                <p:outputLabel value="#{l.Numero_Nota_Fiscal}" />
-                                <p:inputNumber value="#{notaEmitidaView.notaEmitida.numeroNF}" minValue="0" thousandSeparator="" decimalPlaces="0" decimalSeparator="" readonly="true"/>
+                        <h:panelGrid columns="1">
+                            <p:outputLabel value="#{l.Emissao}" />
+                            <p:calendar pattern="dd/MM/yyyy" value="#{notaEmitidaView.notaEmitida.emissao}" size="9" navigator="true" pages="3" readonly="true"/>
+                            <!--
+                            <p:outputLabel value="#{l.Numero_Nota_Fiscal}" />
+                            <p:inputNumber value="#{notaEmitidaView.notaEmitida.numeroNF}" minValue="0" thousandSeparator="" decimalPlaces="0" decimalSeparator="" readonly="true"/> -->
+                        </h:panelGrid>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                     columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+
+                            <h:panelGrid columns="1" styleClass="Wid100" >
+                                <p:spacer/>
+                                <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoNotaEmitidaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:menuButtonImport" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true">
+                                    <p:ajax event="itemSelect" listener="#{notaEmitidaView.setupView(notaEmitidaView.notaEmitida.operacao)}"/>
+                                </a:inputTextDialog>
                             </h:panelGrid>
 
-                            <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
-                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+                            <h:panelGrid columns="1" styleClass="Wid100" >
+                                <p:spacer/>
+                                
+                                <a:inputTextDialog id="nePessoa" disabledSearch="#{notaEmitidaView.editarItensEParcelas}" readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" > 
+                                </a:inputTextDialog>
+                            </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100" >
-                                    <p:spacer/>
-                                    <a:inputTextDialog id="neOpera" value="#{notaEmitidaView.notaEmitida.operacao}" dialog="#{selecaoOperacaoNotaEmitidaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:menuButtonImport" placeholder="#{l.Operacao}" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true">
-                                        <p:ajax event="itemSelect" listener="#{notaEmitidaView.setupView(notaEmitidaView.notaEmitida.operacao)}"/>
-                                    </a:inputTextDialog>
-                                </h:panelGrid>
+                            <h:panelGrid columns="1" styleClass="Wid100" >
+                                <p:spacer/>
+                                <a:inputTextDialog id="neListaDePreco" disabledSearch="#{notaEmitidaView.editarItensEParcelas}"  readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true">
+                                    <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
+                                </a:inputTextDialog>
+                            </h:panelGrid>
 
-                                <h:panelGrid columns="1" styleClass="Wid100" >
-                                    <p:spacer/>
-                                    <a:inputTextDialog id="nePessoa" disabledSearch="#{notaEmitidaView.editarItensEParcelas}" readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
-                                    </a:inputTextDialog>
-                                </h:panelGrid>
-
-                                <h:panelGrid columns="1" styleClass="Wid100" >
-                                    <p:spacer/>
-                                    <a:inputTextDialog id="neListaDePreco" disabledSearch="#{notaEmitidaView.editarItensEParcelas}"  readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true">
-                                        <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
-                                    </a:inputTextDialog>
-                                </h:panelGrid>
-
-                            </p:panelGrid> 
-                        </div>
-
+                        </p:panelGrid> 
+                    </div>
+                    <h:form id="ne">
                         <p:separator/>
 
                         <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
@@ -171,11 +172,11 @@
                                     <p:spacer/>
                                     <h:panelGrid columns="3">
                                         <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaEmitidaView.addItemNaLista}" style="width: 25px"
-                                                         update=":conteudo"/>
+                                                         update=":conteudo:ne"/>
                                         <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaEmitidaView.updateItemNaLista}" style="width: 25px"
-                                                         update=":conteudo" styleClass="green-btn"/>     
+                                                         update=":conteudo:ne" styleClass="green-btn"/>     
                                         <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaEmitidaView.deleteItemNaLista}" style="width: 25px"
-                                                         update=":conteudo" styleClass="orange-btn"/>
+                                                         update=":conteudo:ne" styleClass="orange-btn"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
                             </p:panelGrid>
@@ -446,11 +447,11 @@
                         <h:commandButton id="imprimir" actionListener="#{notaEmitidaView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.limparJanela()}" update=":conteudo"/>
-
-                    </div>
+                    </h:form>
                 </div>
             </div>
-        </h:form>
+        </div>
+
 
         <p:dialog widgetVar="imprimirTitulosDialog" modal="true" width="400" height="200" visible="false" header="#{l.Imprimir}">
             <p:panelGrid styleClass="ui-panelgrid-blank form-group form-elements" layout="grid" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1, ui-g-10 ui-md-10 ui-lg-10 PaddingTop6Px">

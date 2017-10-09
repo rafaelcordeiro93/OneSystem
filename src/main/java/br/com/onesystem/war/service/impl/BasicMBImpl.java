@@ -66,6 +66,11 @@ public abstract class BasicMBImpl<T, E> {
         limparJanela();
     }
 
+    public void addNoBancoSemLimpar(T objeto) throws DadoInvalidoException {
+        adicionaDAO.adiciona(objeto);
+        InfoMessage.adicionado();
+    }
+
     public void update() {
         try {
             BuilderView b = (BuilderView) e;
@@ -91,6 +96,11 @@ public abstract class BasicMBImpl<T, E> {
         limparJanela();
     }
 
+    public void updateNoBancoSemLimpar(T objeto) throws DadoInvalidoException {
+        atualizaDAO.atualiza(objeto);
+        InfoMessage.atualizado();
+    }
+
     public void delete() {
         try {
             BuilderView b = (BuilderView) e;
@@ -106,6 +116,11 @@ public abstract class BasicMBImpl<T, E> {
         removeDAO.remove(objeto, id);
         InfoMessage.removido();
         limparJanela();
+    }
+
+    public void deleteNoBancoSemLimpar(T objeto, Long id) throws DadoInvalidoException {
+        removeDAO.remove(objeto, id);
+        InfoMessage.removido();
     }
 
     public E getE() {

@@ -68,7 +68,7 @@ public class AjusteDeEstoque implements Serializable {
 
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
             Deposito deposito, Date emissao, Operacao operacao,
-            BigDecimal custo) throws DadoInvalidoException {
+            BigDecimal custo, List<Estoque> estoque) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;

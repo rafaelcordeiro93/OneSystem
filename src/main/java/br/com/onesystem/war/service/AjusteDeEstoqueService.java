@@ -24,15 +24,6 @@ public class AjusteDeEstoqueService implements Serializable {
     private ArmazemDeRegistros<AjusteDeEstoque> armazem;
 
     @Inject
-    private ArmazemDeRegistros<SelecaoItemView> armazemitemm;
-
-    @Inject
-    private Armazem<SelecaoItemView> armazemItem;
-
-    @Inject
-    private ItemDAO ItemDAO;
-
-    @Inject
     private AjusteDeEstoqueDAO dao;
 
     @Inject
@@ -51,17 +42,15 @@ public class AjusteDeEstoqueService implements Serializable {
         for (OperacaoDeEstoque op : listaOpEstoque) {
             boolean encontrou = false;
             for (Estoque e : ajuste.getEstoque()) {
-                if (e.getOperacaoDeEstoque() == op) {
+                System.out.println("1");
+                if (ajuste.getId() != null) {
                     e.atualizaQuantidade(ajuste.getQuantidade());
                     encontrou = true;
                     break;
                 }
             }
             if (!encontrou) {
-                Item item = ItemDAO.porId(ajuste.getItem().getId()).resultado();
-                       // armazemItem.initailize(ajuste.getItem(), SelecaoItemView.class);
-                //armazemitemm.find(ajuste.getItem().getId());
-                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(item).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
+                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
                         .comOperacaoDeEstoque(op).construir());
             }
         }

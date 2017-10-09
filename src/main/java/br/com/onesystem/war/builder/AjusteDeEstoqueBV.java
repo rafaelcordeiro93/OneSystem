@@ -114,13 +114,13 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
-                .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao)
+                .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao).comEstoque(estoque)
                 .construir();
     }
     
     public AjusteDeEstoque construirComID() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comID(id).comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
-                .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao)
+                .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao).comEstoque(estoque)
                 .construir();
     }
 }
