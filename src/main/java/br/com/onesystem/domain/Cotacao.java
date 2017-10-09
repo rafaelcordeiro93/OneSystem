@@ -84,6 +84,30 @@ public class Cotacao implements Serializable {
         return emissao;
     }
 
+    public List<Cobranca> getCobrancas() {
+        return cobrancas;
+    }
+
+    public List<Recepcao> getRecepcoes() {
+        return recepcoes;
+    }
+
+    public List<Orcamento> getOrcamentos() {
+        return orcamentos;
+    }
+
+    public List<ValorPorCotacao> getValores() {
+        return valores;
+    }
+
+    public List<TipoDeCobranca> getTiposDeCobranca() {
+        return tiposDeCobranca;
+    }
+
+    public List<FormaDeCobranca> getFormasDeCobranca() {
+        return formasDeCobranca;
+    }
+
     public String getEmissaoFormatada() {
         LocalDateTime emissaoFormatada = LocalDateTime.ofInstant(emissao.toInstant(), ZoneId.systemDefault());
         DateTimeFormatter formatador = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT).withLocale(new Locale("pt", "br"));

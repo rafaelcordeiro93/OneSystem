@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -96,7 +97,7 @@ public class FormaDeRecebimento implements Serializable {
     private Integer diasPrimeiraParcela;
     @Enumerated(EnumType.STRING)
     private ModalidadeDeCobranca formaPadraoDeParcela;
-    @OneToMany(mappedBy = "formaDeRecebimento") 
+    @OneToMany(mappedBy = "formaDeRecebimento")
     private List<Nota> notas;
     @OneToMany(mappedBy = "formaDeRecebimento")
     private List<Orcamento> orcamentos;
@@ -224,7 +225,15 @@ public class FormaDeRecebimento implements Serializable {
     public Conta getConta() {
         return conta;
     }
-    
+
+    public List<Orcamento> getOrcamentos() {
+        return orcamentos;
+    }
+
+    public List<Pedido> getPedido() {
+        return pedido;
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "ativo", "entrada", "porcentagemDeEntrada", "formaPadraoDeEntrada", "entradaEmCartao", "entradaEmDinheiro",
                 "entradaEmCheque", "entradaEmCredito", "parcelaEmCheque", "parcelaEmCartao", "parcelaEmConta", "minimoDeParcelas", "maximoDeParcelas",
@@ -232,19 +241,36 @@ public class FormaDeRecebimento implements Serializable {
         new ValidadorDeCampos<FormaDeRecebimento>().valida(this, campos);
     }
 
+//    @Override
+//    public boolean equals(Object objeto) {
+//        if (objeto == null) {
+//            return false;
+//        }
+//        if (!(objeto instanceof Conta)) {
+//            return false;
+//        }
+//        FormaDeRecebimento outro = (FormaDeRecebimento) objeto;
+//        if (this.id == null) {
+//            return false;
+//        }
+//        return this.id.equals(outro.id);
+//    }
     @Override
-    public boolean equals(Object objeto) {
-        if (objeto == null) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        if (!(objeto instanceof Conta)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        FormaDeRecebimento outro = (FormaDeRecebimento) objeto;
-        if (this.id == null) {
+        final FormaDeRecebimento other = (FormaDeRecebimento) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return this.id.equals(outro.id);
+        return true;
     }
 
     @Override

@@ -6,7 +6,6 @@
 package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
-import br.com.onesystem.util.BeanUtil;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -50,7 +49,11 @@ public abstract class BasicConverter<Bean, SelecaoBean extends BasicCrudMBImpl> 
                     Long idObject = (Long) m.invoke(bean, null);
 
                     //Inicializa o objeto dentro do managed bean;
-                    new ArmazemDeRegistrosNaMemoria<SelecaoBean>().initialize(bean, selecaoClazz);
+                    if (idObject != null) {
+                        new ArmazemDeRegistrosNaMemoria<SelecaoBean>().initialize(bean, selecaoClazz);
+                    } else {
+                        return "";
+                    }
 
                     //Grava o objeto no componente e devolve o id
                     String id = String.valueOf(idObject);

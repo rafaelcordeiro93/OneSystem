@@ -75,9 +75,11 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     public void remove() {
         try {
+            BigDecimal valor = loteItemService.calculaQuantidade(e.getQuantidade(), BigDecimal.ZERO);
             t = e.construirComID();
-            AjusteDeEstoque es = t;
-            deleteNoBanco(t, t.getId());
+            deleteNoBancoSemLimpar(t, t.getId());
+            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(t.getOperacao()));
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -119,7 +121,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     public void setAjuste() {
         try {
             t = e.construirComID();
-           // setupItem();
+            // setupItem();
         } catch (DadoInvalidoException die) {
             die.print();
         }
