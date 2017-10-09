@@ -96,6 +96,14 @@ public class LoteNotaFiscal implements Serializable {
         numeracaoDeNotaFiscal.remove(n);
     }
 
+    public void atualizaNumeracao(Filial filial) {
+        for (NumeracaoDeNotaFiscal nnf : numeracaoDeNotaFiscal) {
+            if (nnf.getFilial() == filial) {
+                nnf.interarNumeracao();
+            }
+        }
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "dataDeInicio", "observacao", "serie");
         new ValidadorDeCampos<LoteNotaFiscal>().valida(this, campos);

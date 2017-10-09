@@ -2,7 +2,6 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -10,14 +9,10 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,6 +74,10 @@ public class Estoque implements Serializable {
 
     public void atualizaQuantidade(BigDecimal quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public void setAjusteDeEstoque(AjusteDeEstoque ajusteDeEstoque) {
+        this.ajusteDeEstoque = ajusteDeEstoque;
     }
 
     public Long getId() {

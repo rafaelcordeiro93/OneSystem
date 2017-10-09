@@ -32,7 +32,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     private OperacaoDeEstoqueBV operacaoDeEstoque;
     private Model operacaoDeEstoqueSelecionado;
-    
+
     @Inject
     private ModelList<OperacaoDeEstoque> operacaoEstoqueList;
 
@@ -41,9 +41,6 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     @Inject
     private AtualizaDAO atualizaDAO;
-    
-    @Inject
-    private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @PostConstruct
     public void init() {
@@ -107,7 +104,6 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
             limparJanela();
             ContaDeEstoque c = (ContaDeEstoque) obj;
             e = new ContaDeEstoqueBV(c);
-            e.setOperacoesDeEstoque(operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(c));
             selecionaConta();
         } else if (obj instanceof Operacao) {
             this.operacaoDeEstoque.setOperacao((Operacao) obj);

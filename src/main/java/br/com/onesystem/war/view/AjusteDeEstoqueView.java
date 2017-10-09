@@ -3,13 +3,18 @@ package br.com.onesystem.war.view;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
+import br.com.onesystem.domain.builder.EstoqueBuilder;
+import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
+import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -24,19 +29,36 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     @Inject
     private Configuracao configuracao;
 
+    @Inject
+    private OperacaoDeEstoqueService operacaoDeEstoqueService;
+
+    @Inject
+    private AjusteDeEstoqueService ajusteDeEstoqueService;
+
     @PostConstruct
     public void init() {
         limparJanela();
+    }
+
+    public void add() {
+        try {
+            t = e.construir();
+            ajusteDeEstoqueService.atualizaEstoque(t);
+            addNoBanco(t);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof AjusteDeEstoque) {
-            e = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
+            AjusteDeEstoque ajuste = (AjusteDeEstoque) obj;
+            e = new AjusteDeEstoqueBV(ajuste);
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
-            List<OperacaoDeEstoque> operacoesDeEstoque = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(operacao);
+            List<OperacaoDeEstoque> operacoesDeEstoque = operacao.getOperacaoDeEstoque();
             if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                 RequestContext rc = RequestContext.getCurrentInstance();
                 rc.execute("PF('operacaoAjusteDialog').show()");
@@ -52,6 +74,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     public void limparJanela() {
         e = new AjusteDeEstoqueBV();
+        t = null;
     }
 
     public Configuracao getConfiguracao() {

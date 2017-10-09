@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Hibernate;
 
 public abstract class BasicCrudMBImpl<Bean> {
 
@@ -44,6 +45,7 @@ public abstract class BasicCrudMBImpl<Bean> {
 
     public void inicializaRegistro(Bean bean) {
         try {
+            bean = beans.get(beans.indexOf(bean));
             Method[] methods = bean.getClass().getMethods();
             for (Method m : methods) {
                 if (m.getReturnType().equals(List.class)) {
@@ -52,7 +54,9 @@ public abstract class BasicCrudMBImpl<Bean> {
                     m.setAccessible(true);
                     mList.setAccessible(true);
 
-                    mList.invoke(m.invoke(bean, null), null);
+                    Object objeto = m.invoke(bean, null);
+//                    Object test = mList.invoke(objeto, null);
+                    Hibernate.initialize(objeto);
                 }
             }
         } catch (IllegalAccessException ex) {
@@ -60,12 +64,12 @@ public abstract class BasicCrudMBImpl<Bean> {
         } catch (IllegalArgumentException ex) {
             throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
         } catch (InvocationTargetException ex) {
-            throw new RuntimeException("Erro na invocação do método.");
+            System.out.println("BasicCrudMBImpl - LAZY: " + ex.getMessage());
         } catch (NoSuchMethodException ex) {
             throw new RuntimeException("Erro o método não existe.");
         } catch (SecurityException ex) {
             throw new RuntimeException("Erro de segurança ao realizar o acesso.");
-        } 
+        }
     }
 
     public Bean getBeanSelecionado() {

@@ -11,6 +11,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.CaminhoDeClasse;
 import br.com.onesystem.reportTemplate.TemplateFormaPagamento;
 import br.com.onesystem.util.StringAlignUtils.Alignment;
+import br.com.onesystem.valueobjects.FormatPage;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -361,6 +362,13 @@ public final class GerenciadorDeImpressoraDeTexto {
         }
     }
 
+    public void imprime(){
+        for (ImpressoraDeTexto imp : impressoras) {
+            System.out.println("Imp");
+            new MatrixPrinter(imp.getPage());
+        }
+    }
+    
     public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
         List<GenericLayout> listaLayout = new ArrayList<>();
         for (Object o : dados) {

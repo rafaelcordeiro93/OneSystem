@@ -1,8 +1,10 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.ItemDAO;
+import br.com.onesystem.dao.ItemImagemDAO;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.ItemImagem;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.PrecoDeItem;
 import java.io.Serializable;
@@ -19,12 +21,15 @@ public class ItemService implements Serializable {
 
     @Inject
     private EstoqueService estoqueService;
-    
+
     @Inject
     private ConfiguracaoEstoqueService configuracaoEstoqueService;
 
     @Inject
     private PrecoDeItemService precoDeItemService;
+
+    @Inject
+    private ItemImagemDAO itemImageDAO;
 
     public List<Item> buscarItems() {
         return dao.listaDeResultados();
@@ -32,6 +37,10 @@ public class ItemService implements Serializable {
 
     public List<Item> buscarItemsRelatorio(Item item) {
         return dao.porItem(item).listaDeResultados();
+    }
+    
+    public List<ItemImagem> buscarImagemDo(Item item) {
+        return itemImageDAO.porItem(item).listaDeResultados();
     }
 
     public BigDecimal getPrecoTotal(Item item) {

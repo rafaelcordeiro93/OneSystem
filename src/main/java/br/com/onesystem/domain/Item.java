@@ -5,17 +5,12 @@ import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.EstoqueService;
-import br.com.onesystem.war.service.PrecoDeItemService;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +22,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
@@ -90,12 +84,17 @@ public class Item implements Serializable {
     private List<ItemDeComanda> itensDeComanda;
     @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
+    private List<LoteItem> loteItem;
     @ManyToOne
     private Margem margem;
     @ManyToOne
     private Comissao comissao;
     @OneToMany(mappedBy = "item", cascade = CascadeType.REMOVE)
     private List<ItemImagem> imagens;
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "{detalhamento_not_null}")
+    private DetalhamentoDeItem detalhamento;
 
     public Item() {
     }
@@ -107,7 +106,7 @@ public class Item implements Serializable {
     public Item(Long id, String barras, String nome, String idFabricante, TipoItem tipoItem,
             String ncm, String idContabil, boolean ativo, GrupoFiscal grupoFiscal, UnidadeMedidaItem unidadeDeMedida,
             Marca marca, Grupo grupo, BigDecimal estoqueMinimo, BigDecimal estoqueMaximo,
-            Margem margem, Comissao comissao, List<ItemImagem> imagens) throws DadoInvalidoException {
+            Margem margem, Comissao comissao, List<ItemImagem> imagens, DetalhamentoDeItem detalhamento, List<LoteItem> loteItem) throws DadoInvalidoException {
         this.id = id;
         this.barras = barras;
         this.nome = nome;
@@ -125,13 +124,40 @@ public class Item implements Serializable {
         this.margem = margem;
         this.comissao = comissao;
         this.imagens = imagens;
+        this.detalhamento = detalhamento;
+        this.loteItem = loteItem;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("barras", "idFabricante", "nome", "unidadeDeMedida", "tipoItem",
-                "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo");
+                "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo", "detalhamento");
         new ValidadorDeCampos<Item>().valida(this, campos);
+    }
+
+    public void adiciona(LoteItem n) {
+        if (loteItem == null) {
+            loteItem = new ArrayList<>();
+        }
+        n.setItem(this);
+        loteItem.add(n);
+    }
+
+    public void atualiza(LoteItem n) {
+        if (loteItem == null) {
+            loteItem = new ArrayList<>();
+        }
+        if (loteItem.contains(n)) {
+            loteItem.set(loteItem.indexOf(n), n);
+        } else {
+            n.setItem(this);
+            loteItem.add(n);
+        }
+    }
+
+    public void remove(LoteItem n) {
+        System.out.println("loteitem" + n);
+        loteItem.remove(n);
     }
 
     @Override
@@ -201,6 +227,10 @@ public class Item implements Serializable {
         return unidadeDeMedida;
     }
 
+    public List<PrecoDeItem> getPrecos() {
+        return precos;
+    }
+
     public Marca getMarca() {
         return marca;
     }
@@ -219,6 +249,14 @@ public class Item implements Serializable {
 
     public ItemImagem getImagemFavorita() {
         return imagens.stream().filter(ItemImagem::isFavorita).findAny().get();
+    }
+
+    public DetalhamentoDeItem getDetalhamento() {
+        return detalhamento;
+    }
+
+    public List<LoteItem> getLoteItem() {
+        return loteItem;
     }
 
     @Override
