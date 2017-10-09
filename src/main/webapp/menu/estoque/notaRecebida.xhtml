@@ -127,11 +127,11 @@
                                     <p:spacer/>
                                     <h:panelGrid columns="3">
                                         <p:commandButton icon="fa fa-plus Fs14 White" action="#{notaRecebidaView.addItemNaLista}" style="width: 25px"
-                                                         update=":conteudo"/>
+                                                         update=":conteudo" process="@this"/>
                                         <p:commandButton icon="fa fa-refresh Fs14 White" action="#{notaRecebidaView.updateItemNaLista}" style="width: 25px"
-                                                         update=":conteudo" styleClass="green-btn"/>     
+                                                         update=":conteudo" styleClass="green-btn" process="@this"/>     
                                         <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{notaRecebidaView.deleteItemNaLista}" style="width: 25px"
-                                                         update=":conteudo" styleClass="orange-btn"/>
+                                                         update=":conteudo" styleClass="orange-btn" process="@this"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
                             </p:panelGrid>

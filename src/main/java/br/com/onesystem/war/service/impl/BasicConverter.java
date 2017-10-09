@@ -38,6 +38,7 @@ public abstract class BasicConverter<Bean, SelecaoBean extends BasicCrudMBImpl> 
     }
 
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
+        System.out.println("o: " + object);
         try {
             if (object != null) {
                 if (object.getClass().equals(clazz)) {

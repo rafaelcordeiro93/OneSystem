@@ -100,6 +100,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     }
     
     public NotaEmitidaBV() {
+        System.out.println("46");
         itens = new ArrayList<>();
         cobrancas = new ArrayList<>();
         valorPorCotacao = new ArrayList<>();
