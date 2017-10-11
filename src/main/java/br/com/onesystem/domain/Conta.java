@@ -73,6 +73,14 @@ public class Conta implements Serializable {
         return moeda;
     }
 
+    public List<TipoDeCobranca> getTipoDeCobrancas() {
+        return tipoDeCobrancas;
+    }
+
+    public List<Cotacao> getCotacoes() {
+        return cotacoes;
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "moeda");
         new ValidadorDeCampos<Conta>().valida(this, campos);

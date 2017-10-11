@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.valueobjects.OperacaoFisica;
@@ -27,6 +28,7 @@ public class AjusteDeEstoqueBuilder {
     private BigDecimal custo;
     private Operacao operacao;
     private List<Estoque> estoque;
+    private LoteItem loteItem;
 
     public AjusteDeEstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -68,8 +70,18 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
 
+    public AjusteDeEstoqueBuilder comEstoque(List<Estoque> estoque) {
+        this.estoque = estoque;
+        return this;
+    }
+
+    public AjusteDeEstoqueBuilder comLoteItem(LoteItem loteItem) {
+        this.loteItem = loteItem;
+        return this;
+    }
+
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, emissao, operacao, custo);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, emissao, operacao, custo, estoque, loteItem);
     }
 
 }

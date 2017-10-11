@@ -113,7 +113,7 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100" >
                                     <p:spacer/>
-                                    <a:inputTextDialog id="nePessoa" disabledSearch="#{notaEmitidaView.editarItensEParcelas}" readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
+                                    <a:inputTextDialog  id="nePessoa" disabledSearch="#{notaEmitidaView.editarItensEParcelas}" readonly="#{notaEmitidaView.editarItensEParcelas}" value="#{notaEmitidaView.notaEmitida.pessoa}" dialog="#{selecaoPessoaView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:consultaCreditoDialog" placeholder="#{l.Pessoa}" var="pessoa" converter="pessoaConverter" itemLabel="#{pessoa.nome}" itemValue="#{pessoa}" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" editVisible="true" >
                                     </a:inputTextDialog>
                                 </h:panelGrid>
 
@@ -136,7 +136,7 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputTextDialog id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
+                                    <a:inputTextDialog process="@this" id="neItem" value="#{notaEmitidaView.itemEmitido.item}" dialog="#{selecaoItemView}" mbView="#{notaEmitidaView}" update=":conteudo:growl :conteudo:ne:notaEmitidaItemPreco :conteudo:ne:neQuantidade:neQuantidade-txt" placeholder="#{l.Item}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" itemLabelTabVisible="true" itemLabelTab="#{item.nome}" editVisible="true">
                                         <p:ajax event="itemSelect" listener="#{notaEmitidaView.atribuiItemASessao()}"/>
                                         <p:ajax event="change" listener="#{notaEmitidaView.atualizaValorDeItemDeNota}" />
                                     </a:inputTextDialog>
@@ -442,7 +442,7 @@
 
                         <p:separator/>
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.validaAFaturar}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.validaAFaturar}" update=":conteudo" process="@this"/>
                         <h:commandButton id="imprimir" actionListener="#{notaEmitidaView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.limparJanela()}" update=":conteudo"/>

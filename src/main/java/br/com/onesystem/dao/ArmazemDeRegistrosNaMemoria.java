@@ -1,6 +1,5 @@
 package br.com.onesystem.dao;
 
-
 import br.com.onesystem.util.BeanUtil;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 
@@ -16,8 +15,10 @@ import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 public class ArmazemDeRegistrosNaMemoria<SelecaoBean extends BasicCrudMBImpl> {
 
     public void initialize(Object objeto, Class selecaoBeanClass) {
-        SelecaoBean mb = (SelecaoBean) BeanUtil.getBeanNaSessao(selecaoBeanClass);
-        mb.inicializaRegistro(objeto);
+        if (objeto != null && selecaoBeanClass != null) {
+            SelecaoBean mb = (SelecaoBean) BeanUtil.getBeanNaSessao(selecaoBeanClass);
+            mb.inicializaRegistro(objeto);
+        }
     }
 
 }

@@ -24,15 +24,6 @@ public class AjusteDeEstoqueService implements Serializable {
     private ArmazemDeRegistros<AjusteDeEstoque> armazem;
 
     @Inject
-    private ArmazemDeRegistros<SelecaoItemView> armazemitemm;
-
-    @Inject
-    private ArmazemDeRegistrosNaMemoria<SelecaoItemView> armazemItem;
-
-    @Inject
-    private ItemDAO ItemDAO;
-
-    @Inject
     private AjusteDeEstoqueDAO dao;
 
     @Inject
@@ -51,7 +42,8 @@ public class AjusteDeEstoqueService implements Serializable {
         for (OperacaoDeEstoque op : listaOpEstoque) {
             boolean encontrou = false;
             for (Estoque e : ajuste.getEstoque()) {
-                if (e.getOperacaoDeEstoque() == op) {
+                System.out.println("1");
+                if (ajuste.getId() != null) {
                     e.atualizaQuantidade(ajuste.getQuantidade());
                     encontrou = true;
                     break;

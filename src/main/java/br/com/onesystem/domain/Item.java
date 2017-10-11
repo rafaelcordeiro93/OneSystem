@@ -11,11 +11,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -84,8 +86,8 @@ public class Item implements Serializable {
     private List<ItemDeComanda> itensDeComanda;
     @OneToMany(mappedBy = "item")
     private List<PrecoDeItem> precos;
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
-    private List<LoteItem> loteItem;
+    @OneToMany(mappedBy = "item", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    private List<LoteItem> loteItem = new ArrayList<>();
     @ManyToOne
     private Margem margem;
     @ManyToOne
@@ -156,7 +158,6 @@ public class Item implements Serializable {
     }
 
     public void remove(LoteItem n) {
-        System.out.println("loteitem" + n);
         loteItem.remove(n);
     }
 
@@ -261,7 +262,7 @@ public class Item implements Serializable {
 
     @Override
     public String toString() {
-        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + ", precos=" + precos + '}';
+        return "Item{" + "id=" + id + ", barras=" + barras + ", nome=" + nome + ", idFabricante=" + idFabricante + ", tipoItem=" + tipoItem + ", ncm=" + ncm + ", idContabil=" + idContabil + ", ativo=" + ativo + ", grupoFiscal=" + grupoFiscal + ", unidadeDeMedida=" + unidadeDeMedida + ", marca=" + marca + ", grupo=" + grupo + ", estoqueMinimo=" + estoqueMinimo + ", estoqueMaximo=" + estoqueMaximo + '}';
     }
 
 }
