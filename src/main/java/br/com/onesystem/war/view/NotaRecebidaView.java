@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -129,6 +128,17 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     @Inject
     private GeradorDeEstoque geradorDeEstoque;
 
+    @Inject
+    private UsuarioLogadoUtil usuarioLogado;
+
+    @Inject
+    private CotacaoDAO cotacaoDAO;
+    @Inject
+    private OperacaoDeEstoqueService operacaoDeEstoqueService;
+
+    @Inject
+    private AtualizaDAO<PedidoAFornecedores> atualizaPedido;
+
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
     public void init() {
@@ -150,7 +160,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             notaRecebida = new NotaRecebidaBV();
             notaRecebida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaRecebida.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            notaRecebida.setUsuario(new UsuarioLogadoUtil().getUsuario());
+            notaRecebida.setUsuario(usuarioLogado.getUsuario());
             notaRecebida.setCotacao(cotacao);
             creditoBV = new CreditoBV();
             itemRecebido = new ItemDeNotaBV();
@@ -205,7 +215,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             //Constroi boleto de Cartão
             if (boletoDeCartao.getValor() != null && boletoDeCartao.getValor().compareTo(BigDecimal.ZERO) > 0) {
                 if (boletoDeCartao.getCartao() != null) {
-                    boletoDeCartao.setCotacao(new CotacaoDAO().porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
+                    boletoDeCartao.setCotacao(cotacaoDAO.porConta(boletoDeCartao.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
                 }
                 nota.adiciona(boletoDeCartao.construir());
             }
@@ -237,7 +247,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 switch (p.getModalidadeDeCobranca()) {
                     case CARTAO:
                         if (p.getCartao() != null) {
-                            p.setCotacao(new CotacaoDAO().porConta(p.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
+                            p.setCotacao(cotacaoDAO.porConta(p.getCartao().getConta()).naMaiorEmissao(notaRecebida.getEmissao()).resultado());
                         }
                         nota.adiciona(p.construirBoletoDeCartao());
                         break;
@@ -265,10 +275,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            new AdicionaDAO<>().adiciona(nota);
+            addNoBanco(nota);
             efetivaPedidoAFornecedores();
-            InfoMessage.adicionado();
-            limparJanela();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -277,7 +285,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private void efetivaPedidoAFornecedores() throws ConstraintViolationException, DadoInvalidoException {
         if (pedidoAFornecedores != null) {
             pedidoAFornecedores.efetiva();
-            new AtualizaDAO<>().atualiza(pedidoAFornecedores);
+            atualizaPedido.atualiza(pedidoAFornecedores);
         }
     }
 
@@ -549,7 +557,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                List<OperacaoDeEstoque> operacoesDeEstoque = new OperacaoDeEstoqueService().buscarOperacoesDeEstoquePor(operacao);
+                List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
                 if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
@@ -637,7 +645,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
                 cobrancaBV.setEmissao(pedidoAFornecedores.getEmissao());
                 cobrancaBV.setValor(p.getValor());
                 cobrancaBV.setVencimento(p.getVencimento());
-                cobrancaBV.setCotacao(new CotacaoDAO().porMoeda(pedidoAFornecedores.getMoeda()).porCotacaoEmpresa().naUltimaEmissao(new Date()).resultado());
+                cobrancaBV.setCotacao(cotacaoDAO.porMoeda(pedidoAFornecedores.getMoeda()).porCotacaoEmpresa().naUltimaEmissao(new Date()).resultado());
                 cobrancaBV.setModalidadeDeCobranca(ModalidadeDeCobranca.TITULO);
                 cobrancaBV.setTipoLancamento(TipoLancamento.RECEBIDA);
                 cobrancaBV.setSituacaoDeCobranca(SituacaoDeCobranca.ABERTO);

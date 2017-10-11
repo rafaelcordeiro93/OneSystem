@@ -24,19 +24,33 @@
                                      columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="margem" value="#{ajusteDeEstoqueView.e}" dialog="#{selecaoAjusteDeEstoqueView}" mbView="#{ajusteDeEstoqueView}" process="@this" update=":conteudo" var="ajusteDeEstoque" converter="ajusteDeEstoqueBVConverter" itemLabel="#{ajusteDeEstoque.id}" itemValue="#{ajusteDeEstoque}" onlyNumber="true" editVisible="false"/>
-                            
+                            <a:inputTextDialog id="margem" value="#{ajusteDeEstoqueView.e}" dialog="#{selecaoAjusteDeEstoqueView}" mbView="#{ajusteDeEstoqueView}" process="@this" update=":conteudo" var="ajusteDeEstoque" converter="ajusteDeEstoqueBVConverter" itemLabel="#{ajusteDeEstoque.id}" itemValue="#{ajusteDeEstoque}" onlyNumber="true" editVisible="false">
+                                <p:ajax event="blur" listener="#{ajusteDeEstoqueView.setAjuste()}" />
+                            </a:inputTextDialog>
+
                             <p:outputLabel value="#{l.Data}"/>
                             <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.e.emissao}"/> 
-                            
+
                             <p:outputLabel value="#{l.Operacao}"/>
                             <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.e.operacao}" dialog="#{selecaoOperacaoOutrosView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
 
                             <p:outputLabel value="#{l.Item}"/>
-                            <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.e.item}" dialog="#{selecaoItemView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
+                            <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.e.item}" dialog="#{selecaoItemView}" update=":conteudo:growl :conteudo" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
 
                             <p:outputLabel value="#{l.Deposito}"/>
                             <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.e.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+
+                            <p:outputLabel value="Lote" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}"  />
+                            <p:selectOneMenu id="loteItem" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}" value="#{ajusteDeEstoqueView.e.loteItem}" converter="loteItemConverter" var="lo" filter="true" filterMatchMode="startsWith" >
+                                <f:selectItems value="#{ajusteDeEstoqueView.e.item.loteItem}" var="lote" itemLabel="#{lote.numeroDoLote}" itemValue="#{lote}"/>
+                                <p:ajax event="itemSelect"  listener="#{ajusteDeEstoqueView.selecionaLoteItem()}" />
+                                 <p:column style="width:10%">
+                                    <h:outputText value="#{lo.id}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{lo.numeroDoLote}" />
+                                </p:column>
+                            </p:selectOneMenu>
 
                             <p:outputLabel value="#{l.Quantidade}"/>
                             <p:inputNumber id="quantidadeId" symbol="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.e.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.casasDecimais}" />
