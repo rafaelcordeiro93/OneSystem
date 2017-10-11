@@ -6,23 +6,47 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:composite="http://java.sun.com/jsf/composite">
 
-    <composite:interface>
+   <composite:interface>
         <composite:attribute name="id" required="true" shortDescription="ID do InputText. Usado para referencia em outras partes do código." />
         <composite:attribute name="value" required="true" shortDescription="Valor exibido no InputText." />
+        <composite:attribute name="dialog" type="br.com.onesystem.war.service.impl.BasicCrudMBImpl" required="true" shortDescription="Nome do managedBean do Dialog" />
+        <composite:attribute name="mbView" type="br.com.onesystem.war.service.impl.BasicMBImpl" required="true" shortDescription="Nome do managedBean da view" />
+        <composite:attribute name="update" default="" shortDescription="Atualiza o componte por ajax."/>
+        <composite:attribute name="updateButtonSearch" default="" shortDescription="Atualiza o componte ao fazer a seleção via botão de pesquisa."/>
+        <composite:attribute name="process" default="" shortDescription="Processa o componte por ajax."/>
+        <composite:attribute name="onlyNumber" default="false" shortDescription="Define se o campo somente aceitará números." />
+        <composite:attribute name="readonly" default="false" shortDescription="Define se o campo somente será de leitura." />
         <composite:attribute name="placeholder" shortDescription="Nome exibido no campo."/>
         <composite:attribute name="style" shortDescription="Estilo CSS aplicado quando renderizado o componente."/>
+        <composite:attribute name="styleDiv" shortDescription="Estilo CSS aplicado a div renderizado para o componente."/>
+        <composite:attribute name="editVisible" required="false" default="true" shortDescription="Define se a edição será habilitada." />
         <composite:attribute name="styleClass" shortDescription="Estilo CSS aplicado com classes quando renderizado o componente."/>
+        <composite:attribute name="styleClassDiv" shortDescription="Estilo CSS aplicado  com classes a div renderizado para o componente."/>
+        <composite:attribute name="disabledSearch" shortDescription="Desabilita todo componente." default="false"/>
+        <composite:clientBehavior event="change" targets="#{cc.attrs.id}-txt" name="change"/>
+        <composite:clientBehavior event="blur" targets="#{cc.attrs.id}-txt" name="blur"/>
+        <composite:clientBehavior event="itemSelect" targets="#{cc.attrs.id}-txt" name="itemSelect"/>
     </composite:interface>
 
     <composite:implementation>
 
         <f:loadBundle basename="label_messages" var="l"/>
 
-        <div class="submit-line md-inputfield ">
-            <p:inputText id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}" styleClass="#{cc.attrs.styleClass}" style="#{cc.attrs.style}"/>
-            <p:outputLabel value="#{cc.attrs.placeholder}"/>
+        <div class="NoPadding #{cc.attrs.styleClassDiv}" style="#{cc.attrs.styleDiv}">
+            <div class="submit-line md-inputfield ui-fluid NoPadding">
+                <p:inputText id="#{cc.attrs.id}-txt" value="#{cc.attrs.value}"  styleClass="#{cc.attrs.editVisible eq false ? 'PaddingRight22px' : 'PaddingRight42px'} #{cc.attrs.styleClass}"  style="#{cc.attrs.style}" readonly="#{cc.attrs.readonly}" >
+                </p:inputText>
+                <p:outputLabel value="#{cc.attrs.placeholder}"/>
+                <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" disabled="#{cc.attrs.disabledSearch}" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
+                    <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this #{cc.attrs.process}" update="#{cc.attrs.id}-txt #{cc.attrs.update} #{cc.attrs.updateButtonSearch}" />
+                </p:commandButton>
+                <p:button id="#{cc.attrs.id}-edit" rendered="#{cc.attrs.editVisible}" icon="fa fa-pencil-square-o" styleClass="submit-edit"  target="_blank" outcome="#{cc.attrs.dialog.abrirEdicao()}">
+                </p:button>
+            </div>
         </div>
 
-    </composite:implementation>
+        <p:keyFilter rendered="#{cc.attrs.onlyNumber}" for="#{cc.attrs.id}-txt" mask="num" /> 
 
+    </composite:implementation>
+    
 </html>

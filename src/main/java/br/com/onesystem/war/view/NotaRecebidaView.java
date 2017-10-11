@@ -723,6 +723,15 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     // ----------------------------- Fim Selecao ------------------------------
     // ------------------ Outras Operações da Janela --------------------------
+    
+    public void teste(){
+        //Verifica se item possui lote
+        //Fazer Request Context
+        System.out.println("Passou por aqui");
+        InfoMessage.print("Lote selecionado : ASDF321 - VALIDADE: 23/02/2018 - FABRICACAO: 20/04/2017"); // se caso 
+        RequestContext.getCurrentInstance().execute("PF('incluirLoteDeItem').show()");
+    }
+    
     public void addDetalheParcelaCartao() {
         try {
             cobrancaBV.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
