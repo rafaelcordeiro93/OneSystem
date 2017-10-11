@@ -4,6 +4,7 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.builder.AjusteDeEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -24,6 +25,7 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     private Operacao operacao;
     private List<Estoque> estoque;
     private BigDecimal custo;
+    private LoteItem loteItem;
     
     public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
         this.id = ajusteDeEstoqueSelecionada.getId();
@@ -35,6 +37,7 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
         this.operacao = ajusteDeEstoqueSelecionada.getOperacao();
         this.estoque = ajusteDeEstoqueSelecionada.getEstoque();
         this.custo = ajusteDeEstoqueSelecionada.getCusto();
+        this.loteItem  = ajusteDeEstoqueSelecionada.getLoteItem();
     }
     
     public AjusteDeEstoqueBV() {
@@ -111,16 +114,26 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     public void setCusto(BigDecimal custo) {
         this.custo = custo;
     }
+
+    public LoteItem getLoteItem() {
+        return loteItem;
+    }
+
+    public void setLoteItem(LoteItem loteItem) {
+        this.loteItem = loteItem;
+    }
+    
+    
     
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
                 .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao).comEstoque(estoque)
-                .construir();
+                .comLoteItem(loteItem).construir();
     }
     
     public AjusteDeEstoque construirComID() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comID(id).comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
                 .comItem(item).comDeposito(deposito).comEmissao(emissao).comOperacao(operacao).comEstoque(estoque)
-                .construir();
+                .comLoteItem(loteItem).construir();
     }
 }

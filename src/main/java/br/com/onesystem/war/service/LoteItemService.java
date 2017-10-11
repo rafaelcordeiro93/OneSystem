@@ -38,7 +38,7 @@ public class LoteItemService implements Serializable {
             return BigDecimal.ZERO;
         }
     }
-
+    
     public void atualizaSaldoLote(Item item, LoteItemBV lote, BigDecimal quantidade, OperacaoFisica operacao) {
         try {
             if (item.getDetalhamento() != DetalhamentoDeItem.LOTES) {

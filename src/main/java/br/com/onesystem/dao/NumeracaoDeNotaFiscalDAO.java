@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LoteNotaFiscal;
 import br.com.onesystem.domain.NumeracaoDeNotaFiscal;
 
@@ -23,6 +24,13 @@ public class NumeracaoDeNotaFiscalDAO extends GenericDAO<NumeracaoDeNotaFiscal> 
             parametros.put("pLote", lote);
         return this;
     }
+    
+     public NumeracaoDeNotaFiscalDAO porFilial(Filial filial) {
+            where += " and numeracaoDeNotaFiscal.filial = :pFilial ";
+            parametros.put("pFilial", filial);
+        return this;
+    }
+    
     
 }
  

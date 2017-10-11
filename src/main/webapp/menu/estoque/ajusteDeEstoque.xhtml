@@ -26,76 +26,88 @@
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="margem" value="#{ajusteDeEstoqueView.e}" dialog="#{selecaoAjusteDeEstoqueView}" mbView="#{ajusteDeEstoqueView}" process="@this" update=":conteudo" var="ajusteDeEstoque" converter="ajusteDeEstoqueBVConverter" itemLabel="#{ajusteDeEstoque.id}" itemValue="#{ajusteDeEstoque}" onlyNumber="true" editVisible="false">
                                 <p:ajax event="blur" listener="#{ajusteDeEstoqueView.setAjuste()}" />
-                        </a:inputTextDialog>
+                            </a:inputTextDialog>
 
-                        <p:outputLabel value="#{l.Data}"/>
-                        <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.e.emissao}"/> 
+                            <p:outputLabel value="#{l.Data}"/>
+                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.e.emissao}"/> 
 
-                        <p:outputLabel value="#{l.Operacao}"/>
-                        <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.e.operacao}" dialog="#{selecaoOperacaoOutrosView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
+                            <p:outputLabel value="#{l.Operacao}"/>
+                            <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.e.operacao}" dialog="#{selecaoOperacaoOutrosView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
 
-                        <p:outputLabel value="#{l.Item}"/>
-                        <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.e.item}" dialog="#{selecaoItemView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
+                            <p:outputLabel value="#{l.Item}"/>
+                            <a:inputTextDialog id="itemAjuste" value="#{ajusteDeEstoqueView.e.item}" dialog="#{selecaoItemView}" update=":conteudo:growl :conteudo" mbView="#{ajusteDeEstoqueView}" var="item" converter="itemConverter" itemLabel="#{item.nome}" itemValue="#{item}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{item.nome}"/>
 
-                        <p:outputLabel value="#{l.Deposito}"/>
-                        <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.e.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+                            <p:outputLabel value="#{l.Deposito}"/>
+                            <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.e.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
 
-                        <p:outputLabel value="#{l.Quantidade}"/>
-                        <p:inputNumber id="quantidadeId" symbol="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.e.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.casasDecimais}" />
+                            <p:outputLabel value="Lote" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}"  />
+                            <p:selectOneMenu id="loteItem" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}" value="#{ajusteDeEstoqueView.e.loteItem}" converter="loteItemConverter" var="lo" filter="true" filterMatchMode="startsWith" >
+                                <f:selectItems value="#{ajusteDeEstoqueView.e.item.loteItem}" var="lote" itemLabel="#{lote.numeroDoLote}" itemValue="#{lote}"/>
+                                <p:ajax event="itemSelect"  listener="#{ajusteDeEstoqueView.selecionaLoteItem()}" />
+                                 <p:column style="width:10%">
+                                    <h:outputText value="#{lo.id}" />
+                                </p:column>
+                                <p:column>
+                                    <h:outputText value="#{lo.numeroDoLote}" />
+                                </p:column>
+                            </p:selectOneMenu>
 
-                        <p:outputLabel value="#{l.Custo}"/>
-                        <p:inputNumber symbol="#{ajusteDeEstoqueView.configuracao.moedaPadrao.sigla} " value="#{ajusteDeEstoqueView.e.custo}" decimalPlaces="2" />
+                            <p:outputLabel value="#{l.Quantidade}"/>
+                            <p:inputNumber id="quantidadeId" symbol="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.sigla} " value="#{ajusteDeEstoqueView.e.quantidade}" decimalPlaces="#{ajusteDeEstoqueView.e.item.unidadeDeMedida.casasDecimais}" />
 
-                        <p:outputLabel value="#{l.Observacao}"/>
-                        <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{ajusteDeEstoqueView.e.observacao}"/>
+                            <p:outputLabel value="#{l.Custo}"/>
+                            <p:inputNumber symbol="#{ajusteDeEstoqueView.configuracao.moedaPadrao.sigla} " value="#{ajusteDeEstoqueView.e.custo}" decimalPlaces="2" />
 
-                    </p:panelGrid>
-                    <div class="EmptyBox20"/>
-                    <p:separator/>
-                </div>
+                            <p:outputLabel value="#{l.Observacao}"/>
+                            <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{ajusteDeEstoqueView.e.observacao}"/>
 
-                <div class="EmptyBox10"/>
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+                    </div>
+
+                    <div class="EmptyBox10"/>
 
 
-                <div style="padding: 0% 0% 5% 8%">
-                    <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                    <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                    <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                    <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    <div style="padding: 0% 0% 5% 8%">
+                        <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
-              modal="true" closable="false" closeOnEscape="false" visible="false"
-              responsive="true" styleClass="zIndex500">
+        <p:dialog widgetVar="operacaoAjusteDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
 
-        <table>
-            <tr>
-                <td>
-                    <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
-                </td>
-                <td>
-                    <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
-                </td>
-            </tr>
-        </table>
-        <p:separator/>
-        <table>
-            <tr>
-                <td>
-                    <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/menu/estoque/contaDeEstoque"/>
-                </td>
-                <td>
-                    <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('operacaoAjusteDialog').hide()"/>
-                </td>
-            </tr>
-        </table>
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/menu/estoque/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('operacaoAjusteDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
 
-    </p:dialog>
+        </p:dialog>
 
 
-</ui:define>
+    </ui:define>
 
 </ui:composition>

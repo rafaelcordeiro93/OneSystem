@@ -105,13 +105,21 @@ public class LoteItem implements Serializable {
     }
 
     public String getFabricacaoFormatada() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(dataDeFabricacao);
+        if (dataDeFabricacao != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            return sdf.format(dataDeFabricacao);
+        } else {
+            return "";
+        }
     }
 
     public String getValidadeFormatada() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(dataDeValidade);
+        if (dataDeValidade != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            return sdf.format(dataDeValidade);
+        } else {
+            return "";
+        }
     }
 
     @Override

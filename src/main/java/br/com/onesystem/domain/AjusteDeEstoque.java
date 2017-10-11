@@ -62,13 +62,15 @@ public class AjusteDeEstoque implements Serializable {
     @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER,
             mappedBy = "ajusteDeEstoque")
     private List<Estoque> estoque;
+    @ManyToOne
+    private LoteItem loteItem;
 
     public AjusteDeEstoque() {
     }
 
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
             Deposito deposito, Date emissao, Operacao operacao,
-            BigDecimal custo, List<Estoque> estoque) throws DadoInvalidoException {
+            BigDecimal custo, List<Estoque> estoque, LoteItem loteItem) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
@@ -78,6 +80,7 @@ public class AjusteDeEstoque implements Serializable {
         this.operacao = operacao;
         this.estoque = estoque;
         this.custo = custo;
+        this.loteItem = loteItem;
         ehValido();
     }
 
@@ -140,6 +143,10 @@ public class AjusteDeEstoque implements Serializable {
     public String getDataFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
+    }
+
+    public LoteItem getLoteItem() {
+        return loteItem;
     }
 
     @Override

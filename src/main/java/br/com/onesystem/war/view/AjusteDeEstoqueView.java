@@ -54,6 +54,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         try {
             t = e.construir();
             ajusteDeEstoqueService.atualizaEstoque(t);
+            atualizaLote(t);
             addNoBanco(t);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -62,26 +63,45 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     public void update() {
         try {
-            BigDecimal valor = loteItemService.calculaQuantidade(t.getQuantidade(), e.getQuantidade());
+            AjusteDeEstoque ae = t;//pega o ajuste de estoque na hora do selecionar, antes de ser feita as alteracoes
             t = e.construirComID();
             ajusteDeEstoqueService.atualizaEstoque(t);
             updateNoBancoSemLimpar(t);
-            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(t.getOperacao()));
+            atualizaLote(ae);
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void remove() {
+    public void delete() {
         try {
-            BigDecimal valor = loteItemService.calculaQuantidade(e.getQuantidade(), BigDecimal.ZERO);
             t = e.construirComID();
-            deleteNoBancoSemLimpar(t, t.getId());
-            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(t.getOperacao()));
-            limparJanela();
+            removeLote(t);
+            deleteNoBanco(t, t.getId());
         } catch (DadoInvalidoException die) {
             die.print();
+        }
+    }
+
+    public void atualizaLote(AjusteDeEstoque ajuste) {
+        if (e.getLoteItem().equals(null)) {
+            return;
+        } else if (ajuste.getLoteItem().equals(e.getLoteItem()) && ajuste.getId() != null) {//Atualiza o saldo do lote no ajuste de estoque 
+            BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), e.getQuantidade());
+            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
+        } else if (ajuste.getId() != null) {//adiciona o saldo no lote novo e remove o saldo do lote antigo
+            removeLote(ajuste);
+            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
+        } else {//usando quando Adicionado um Ajuste de Estoque novo
+            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
+        }
+    }
+
+    public void removeLote(AjusteDeEstoque ajuste) {
+        if (!ajuste.getLoteItem().equals(null)) {
+            BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), BigDecimal.ZERO);
+            loteItemService.atualizaSaldoLote(ajuste.getItem(), new LoteItemBV(ajuste.getLoteItem()), valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
         }
     }
 
@@ -90,9 +110,9 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         Object obj = event.getObject();
         if (obj instanceof AjusteDeEstoque) {
             e = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
-            setAjuste();
             setItem();
             setupItem();
+            setAjuste();
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
             List<OperacaoDeEstoque> operacoesDeEstoque = operacao.getOperacaoDeEstoque();
@@ -129,13 +149,22 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
 
     public void setupItem() {
         if (e.getItem().getDetalhamento() == DetalhamentoDeItem.LOTES) {
-            if (e.getItem().getLoteItem().size() == 0 || e.getItem().getLoteItem() == null) {//Tera que criar o lote
+            if (e.getItem().getLoteItem().size() == 0 || e.getItem().getLoteItem() == null) {
+                loteItemBV = null;
             } else if (e.getItem().getLoteItem().size() == 1) {//ja seta o lote pois so tem 1                
-                //loteItemBV = new LoteItemBV(loteItemService.buscarLoteItemPorID(e.getItem().getLoteItem().get(0).getId()));
                 loteItemBV = new LoteItemBV(e.getItem().getLoteItem().get(0));
             } else if (e.getItem().getLoteItem().size() > 1) {//Abre dialogo para escolher o lote desejado
+                if (e.getId() != null) {
+                    loteItemBV = new LoteItemBV(e.getLoteItem());//se o ajuste ja existir ele pega o lote do ajuste
+                } else {
+                    loteItemBV = new LoteItemBV(e.getItem().getLoteItem().get(0));//se for um ajuste novo ele seta o primeio lote da lista
+                }
             }
         }
+    }
+
+    public void selecionaLoteItem() {
+        loteItemBV = new LoteItemBV(e.getLoteItem());
     }
 
     public void limparJanela() {
@@ -151,4 +180,5 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
+
 }
