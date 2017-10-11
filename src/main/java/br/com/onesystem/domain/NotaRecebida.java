@@ -38,11 +38,11 @@ public class NotaRecebida extends Nota implements Serializable {
     public NotaRecebida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<CobrancaVariavel> cobrancas,
-            Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao,
+            Cotacao cotacao, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao,
             Caixa caixa, Usuario usuario, FaturaRecebida faturaRecebida, ConhecimentoDeFrete conhecimentoDeFrete, Filial filial, PedidoAFornecedores pedidoAFornecedores, Integer numeroNF) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial, numeroNF);
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, cotacao, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial, numeroNF);
         this.faturaRecebida = faturaRecebida;
         this.conhecimentoDeFrete = conhecimentoDeFrete;
         this.pedidoAFornecedores = pedidoAFornecedores;

@@ -19,6 +19,7 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.LoteNotaFiscal;
@@ -50,7 +51,7 @@ public class NotaEmitidaBuilder {
     private ListaDePreco listaDePreco;
     private FormaDeRecebimento formaDeRecebimento;
     private List<CobrancaVariavel> cobrancas;
-    private Moeda moedaPadrao;
+    private Cotacao cotacao;
     private Orcamento orcamento;
     private List<ValorPorCotacao> valorPorCotacao;
     private BigDecimal totalEmDinheiro;
@@ -127,8 +128,8 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
-    public NotaEmitidaBuilder comMoedaPadrao(Moeda moedaPadrao) {
-        this.moedaPadrao = moedaPadrao;
+    public NotaEmitidaBuilder comCotacao(Cotacao cotacao) {
+        this.cotacao = cotacao;
         return this;
     }
 
@@ -235,7 +236,7 @@ public class NotaEmitidaBuilder {
     }
 
     public NotaEmitida construir() throws DadoInvalidoException {
-        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao,
+        return new NotaEmitida(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, cotacao,
                 orcamento, valorPorCotacao, desconto, acrescimo, despesaCobranca, frete, aFaturar, totalEmDinheiro,
                 notaDeOrigem, comanda, condicional, emissao, caixa, usuario, faturaEmitida, filial, numeroNF, loteNotaFiscal);
     }

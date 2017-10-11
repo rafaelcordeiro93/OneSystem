@@ -85,12 +85,14 @@ public abstract class BasicCrudMBImpl<Bean> {
         Method mId = bean.getClass().getMethod("getId");
         mId.setAccessible(true);
         Object id = mId.invoke(bean, null);
-        for (Bean b : beans) {
-            Method m = b.getClass().getMethod("getId");
-            m.setAccessible(true);
-            Object idB = m.invoke(b, null);
-            if (id.equals(idB)) {
-                return b;
+        if (id != null) {
+            for (Bean b : beans) {
+                Method m = b.getClass().getMethod("getId");
+                m.setAccessible(true);
+                Object idB = m.invoke(b, null);
+                if (id.equals(idB)) {
+                    return b;
+                }
             }
         }
         return null;

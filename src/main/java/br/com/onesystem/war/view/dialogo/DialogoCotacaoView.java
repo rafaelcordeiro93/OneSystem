@@ -65,7 +65,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
         FacesContext context = FacesContext.getCurrentInstance();
         nota = (Nota) SessionUtil.getObject("nota", context);
         if (nota != null) {
-            inicializaObjetoDaSessao(nota.getEmissao(), nota.getMoedaPadrao(), nota.getTotalEmDinheiro());
+            inicializaObjetoDaSessao(nota.getEmissao(), nota.getCotacao().getConta().getMoeda(), nota.getTotalEmDinheiro());
             return;
         }
         // =====================================================================
@@ -136,7 +136,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     public Moeda buscarMoeda() {
         try {
             if (nota != null) {
-                return nota.getMoedaPadrao();
+                return nota.getCotacao().getConta().getMoeda();
             } else if (fatura != null) {
                 return fatura.getMoedaPadrao();
             } else if (conhecimentoDeFrete != null) {

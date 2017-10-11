@@ -247,6 +247,21 @@ public abstract class Movimento implements Serializable {
         return getTotalNaMoedaPadraoFormatado() + " (" + getTotalNaMoedaPadraoPorExtenso() + ")";
     }
 
+    public String getTotalNaMoedaPadraoFormatadoEPorExtensoPrimeiraLinha() {
+        if (getTotalNaMoedaPadraoFormatadoEPorExtenso().length() > 95) {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso().substring(0, 95);
+        } else {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso();
+        }
+    }
+
+    public String getTotalNaMoedaPadraoFormatadoEPorExtensoSegundaLinha() {
+        if (getTotalNaMoedaPadraoFormatadoEPorExtenso().length() > 95) {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso().substring(95);
+        }
+        return "";
+    }
+
     public Long getId() {
         return id;
     }

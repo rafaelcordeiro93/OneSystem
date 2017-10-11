@@ -134,7 +134,7 @@ public class ItemDeNota implements Serializable {
 
     public String getTotalFormatado() {
         if (nota != null) {
-            return MoedaFormatter.format(nota.getMoedaPadrao(), getTotal());
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -142,7 +142,7 @@ public class ItemDeNota implements Serializable {
 
     public String getUnitarioFormatado() {
         if (nota != null) {
-            return MoedaFormatter.format(nota.getMoedaPadrao(), getUnitario());
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

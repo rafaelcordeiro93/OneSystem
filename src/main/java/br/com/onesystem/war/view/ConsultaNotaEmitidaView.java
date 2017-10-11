@@ -72,7 +72,7 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
 
     public String getZero() {
         if (t != null) {
-            return MoedaFormatter.format(t.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(t.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

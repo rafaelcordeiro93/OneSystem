@@ -157,6 +157,11 @@ public abstract class Pessoa implements Serializable {
         return nome;
     }
 
+    @MetodoInacessivelRelatorio
+    public String getNomeRuc() {
+        return nome + " - Ruc: " + ruc == null ? "" : ruc;
+    }
+
     public List<Contato> getContatos() {
         return contatos;
     }
@@ -250,6 +255,16 @@ public abstract class Pessoa implements Serializable {
     }
 
     @MetodoInacessivelRelatorio
+    public String getIdFormatado() {
+        return "(" + id + ")"; 
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getCepCidadeEstadoPaisFormatado() {
+        return this.getCep().getCepCidadeEstadoPaisFormatado();
+    }
+
+    @MetodoInacessivelRelatorio
     public String getEnderecoNumeroBairroFormatado() {
         String str = "";
         if (endereco != null) {
@@ -293,6 +308,21 @@ public abstract class Pessoa implements Serializable {
             str += cep.getCidade().getNome();
         }
         return str;
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getCidade() {
+        return cep.getCidade().getNome();
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getEstado() {
+        return cep.getCidade().getEstado().getNome();
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getNumeroCep() {
+        return cep.getCep();
     }
 
     @MetodoInacessivelRelatorio

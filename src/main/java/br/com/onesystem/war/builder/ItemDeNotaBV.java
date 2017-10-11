@@ -95,7 +95,7 @@ public class ItemDeNotaBV {
 
     public String getValorTotalListaDeQuantidadeFormatado() {
         BigDecimal resultado = getUnitario().multiply(getListaDeQuantidade().stream().map(QuantidadeDeItemPorDeposito::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add));
-        return MoedaFormatter.format(nota.getMoedaPadrao(), resultado);
+        return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), resultado);
     }
 
     public int getComparaQuantidadeDevolucao() {
@@ -117,7 +117,7 @@ public class ItemDeNotaBV {
 
     public String getTotalFormatado() {
         if (nota != null) {
-            return MoedaFormatter.format(nota.getMoedaPadrao(), getTotal());
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
@@ -125,7 +125,7 @@ public class ItemDeNotaBV {
 
     public String getUnitarioFormatado() {
         if (nota != null) {
-            return MoedaFormatter.format(nota.getMoedaPadrao(), getUnitario());
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }

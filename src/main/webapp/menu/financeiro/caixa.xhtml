@@ -33,7 +33,7 @@
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog  id="caixaId" value="#{caixaView.e}" dialog="#{selecaoCaixaView}" 
-                                                mbView="#{caixaView}" var="caixa" converter="caixaBVConverter" itemLabel="#{caixa.id}" itemValue="#{caixa}" onlyNumber="true" editVisible="false" update="conteudo"/>
+                                                mbView="#{caixaView}" var="caixaBV" converter="caixaBVConverter" itemLabel="#{caixaBV.id}" itemValue="#{caixaBV}" onlyNumber="true" editVisible="false" update=":conteudo"/>
 
                             <p:outputLabel value="#{l.Usuario}"/>
                             <p:inputText id="caixaPessoa" readonly="true" value="#{caixaView.e.usuario.pessoa.nome}"/>

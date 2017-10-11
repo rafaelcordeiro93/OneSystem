@@ -72,9 +72,9 @@ public abstract class Nota implements Serializable {
     private List<ValorPorCotacao> valorPorCotacao;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<CobrancaVariavel> cobrancas;
-    @NotNull(message = "{moeda_padrao_not_null}")
+    @NotNull(message = "{cotacao_not_null}")
     @ManyToOne(optional = false)
-    private Moeda moedaPadrao;
+    private Cotacao cotacao;
     @OneToMany(mappedBy = "nota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<ItemDeNota> itens;
     @Min(value = 0, message = "{valorDesconto_min}")
@@ -109,7 +109,7 @@ public abstract class Nota implements Serializable {
 
     public Nota(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
-            List<CobrancaVariavel> cobrancas, Moeda moedaPadrao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
+            List<CobrancaVariavel> cobrancas, Cotacao cotacao, List<ValorPorCotacao> valorPorCotacao, BigDecimal desconto,
             BigDecimal acrescimo, BigDecimal despesaCobranca, BigDecimal frete, BigDecimal aFaturar,
             BigDecimal totalEmDinheiro, Nota notaDeOrigem, Date emissao, Caixa caixa, Usuario usuario, Filial filial, Integer numeroNF) throws DadoInvalidoException {
         this.emissao = emissao == null ? new Date() : emissao; // Necesário para construção do estoque.
@@ -120,7 +120,7 @@ public abstract class Nota implements Serializable {
         this.listaDePreco = listaDePreco;
         this.estado = EstadoDeNota.EM_DEFINICAO;
         this.cobrancas = cobrancas;
-        this.moedaPadrao = moedaPadrao;
+        this.cotacao = cotacao;
         this.valorPorCotacao = valorPorCotacao;
         this.desconto = desconto;
         this.acrescimo = acrescimo;
@@ -268,8 +268,8 @@ public abstract class Nota implements Serializable {
         return estado;
     }
 
-    public Moeda getMoedaPadrao() {
-        return moedaPadrao;
+    public Cotacao getCotacao() {
+        return cotacao;
     }
 
     public List<CobrancaVariavel> getCobrancas() {
@@ -305,31 +305,31 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalItensFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalItens());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
     }
 
     public String getTotalParcelasFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalParcelas());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalParcelas());
     }
 
     public String getAcrescimoFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getAcrescimo());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getAcrescimo());
     }
 
     public String getTotalEmDinheiroFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalEmDinheiro());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalEmDinheiro());
     }
 
     public String getDescontoFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getDesconto());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDesconto());
     }
 
     public String getDespesaCobrancaFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getDespesaCobranca());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDespesaCobranca());
     }
 
     public String getFreteFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getFrete());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getFrete());
     }
 
     public BigDecimal getTotalParcelas() {
@@ -355,7 +355,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalCartaoDeEntradaFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalCartaoDeEntrada());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalCartaoDeEntrada());
     }
 
     public BigDecimal getTotalChequeDeEntrada() {
@@ -363,7 +363,7 @@ public abstract class Nota implements Serializable {
         try {
             for (CobrancaVariavel c : cobrancas) {
                 if (c instanceof Cheque && c.getEntrada() != null && c.getEntrada() == true) {
-                    if (c.getCotacao() != null && c.getCotacao().getConta().getMoeda() != moedaPadrao) {
+                    if (c.getCotacao() != null && c.getCotacao().getConta().getMoeda() != cotacao.getConta().getMoeda()) {
                         total = total.add(c.getValor().divide(c.getCotacao().getValor(), 2, BigDecimal.ROUND_UP));
                     } else {
                         total = total.add(c.getValor());
@@ -377,7 +377,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalChequeDeEntradaFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalChequeDeEntrada());
     }
 
     public void setParcelas(List<CobrancaVariavel> parcelas) {
@@ -385,7 +385,7 @@ public abstract class Nota implements Serializable {
     }
 
     public String getTotalFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalNota());
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalNota());
     }
 
     public BigDecimal getTotalNota() {

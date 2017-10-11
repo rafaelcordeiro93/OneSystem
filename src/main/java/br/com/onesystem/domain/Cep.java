@@ -65,7 +65,7 @@ public class Cep implements Serializable {
     }
 
     @MetodoInacessivelRelatorio
-    public String getEnderecoNumeroBairroCidadeFormatado() {
+    public String getCepCidadeEstadoPaisFormatado() {
         String str = "";
         if (cep != null) {
             str += cep;

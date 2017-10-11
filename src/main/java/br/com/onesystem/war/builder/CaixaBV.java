@@ -88,7 +88,7 @@ public class CaixaBV implements Serializable, BuilderView<Caixa> {
     }
 
     public Caixa construir() throws DadoInvalidoException {
-        return new CaixaBuilder().comSaldo(saldo).comUsuario(usuario).comCotacao(cotacao).comDescricao(descricao).construir();
+        return new CaixaBuilder().comSaldo(saldo).comUsuario(usuario).comDescricao(descricao).construir();
     }
 
     public Caixa construirComID() throws DadoInvalidoException {

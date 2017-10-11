@@ -38,7 +38,6 @@ public class LogPhaseListener implements PhaseListener {
     private UsuarioLogadoUtil usuarioLogado;
 
     @Inject
-    @RequestScoped
     private DadosNecessarios dadosNecessarios;
 
     @Override

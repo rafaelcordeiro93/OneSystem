@@ -38,10 +38,10 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
 
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
-    
+
     @Inject
     private CaixaDAO caixaDAO;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -72,14 +72,14 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     }
 
     private void populaCampos() throws DadoInvalidoException {
-            e = new CaixaBV(caixaDAO.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).porUltimoAberto().resultado());
-            if (e.getId() != null) {
-                alteraEstadoCaixa();
-                return;
-            } else if (e.getId() == null) {
-                buscaUsuarioDaSessao();
-                adicionaCotacaoInicial();
-            }
+        e = new CaixaBV(caixaDAO.porEmailDeUsuario(usuarioLogado.getEmailUsuario()).porUltimoAberto().resultado());
+        if (e.getId() != null) {
+            alteraEstadoCaixa();
+            return;
+        } else if (e.getId() == null) {
+            buscaUsuarioDaSessao();
+            adicionaCotacaoInicial();
+        }
     }
 
     public void add() {
@@ -95,9 +95,12 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
 
     @Override
     public void selecionar(SelectEvent event) {
-        Caixa obj = (Caixa) event.getObject();
+        Object obj = event.getObject();
         if (obj instanceof Caixa) {
-            e = new CaixaBV(obj);
+            e = new CaixaBV((Caixa) obj);
+            alteraEstadoCaixa();
+        } else if (obj instanceof CaixaBV) {
+            e = (CaixaBV) obj;
             alteraEstadoCaixa();
         }
     }

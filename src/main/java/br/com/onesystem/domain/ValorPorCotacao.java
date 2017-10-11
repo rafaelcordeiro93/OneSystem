@@ -165,7 +165,7 @@ public class ValorPorCotacao implements Serializable {
 
     public String getValorNaMoedaPadraoFormatado() {
         if (nota != null) {
-            return MoedaFormatter.format(nota.getMoedaPadrao(), getValorNaMoedaPadrao());
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getValorNaMoedaPadrao());
         } else {
             return "";
         }

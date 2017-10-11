@@ -131,6 +131,7 @@ public class Titulo extends CobrancaVariavel implements RelatorioContaAbertaImpl
         return cambio;
     }
 
+    @MetodoInacessivelRelatorio
     public String getValorFaturaOuNota() throws DadoInvalidoException {
         return fatura == null ? getNota().getTotalFormatado() : fatura.getTotalFormatado();
     }

@@ -231,7 +231,7 @@ public class RetificacaoDeCompraView extends BasicMBImpl<NotaRecebida, NotaReceb
     public String getTotalParcelas() {
         if (list != null) {
             BigDecimal valor = list.getList().stream().map(CobrancaVariavel::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-            return MoedaFormatter.format(nota.getMoedaPadrao(), valor);
+            return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), valor);
         }
         return "";
     }

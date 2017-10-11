@@ -45,7 +45,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private ListaDePreco listaDePreco;
     private Date emissao = new Date();
     private FormaDeRecebimento formaDeRecebimento;
-    private Moeda moedaPadrao;
     private BigDecimal desconto;
     private BigDecimal acrescimo;
     private BigDecimal despesaCobranca;
@@ -74,9 +73,9 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.emissao = nota.getEmissao();
         this.estado = nota.getEstado();
         this.caixa = nota.getCaixa();
-        this.moedaPadrao = nota.getMoedaPadrao();
         this.filial = nota.getFilial();
         this.numeroNF = nota.getNumeroNF();
+        this.cotacao = nota.getCotacao();
     }
     
     public NotaRecebidaBV() {
@@ -187,7 +186,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
     
     public String getTotalChequeDeEntradaFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalChequeDeEntrada());
+        return MoedaFormatter.format(getCotacao().getConta().getMoeda(), getTotalChequeDeEntrada());
     }
     
     public BigDecimal getTotalItens() {
@@ -195,7 +194,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     }
     
     public String getTotalItensFormatado() {
-        return MoedaFormatter.format(moedaPadrao, getTotalItens());
+        return MoedaFormatter.format(getCotacao().getConta().getMoeda(), getTotalItens());
     }
     
     public BigDecimal getTotalNota() {
@@ -240,14 +239,6 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     
     public Operacao getOperacao() {
         return operacao;
-    }
-    
-    public Moeda getMoedaPadrao() {
-        return moedaPadrao;
-    }
-    
-    public void setMoedaPadrao(Moeda moedaPadrao) {
-        this.moedaPadrao = moedaPadrao;
     }
     
     public void setOperacao(Operacao operacao) {
@@ -434,7 +425,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
+                .comCotacao(getCotacao()).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
                 .comUsuairo(usuario).comFilial(filial).comNumeroNF(numeroNF).construir();
     }
@@ -443,7 +434,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         return new NotaRecebidaBuilder().comId(id).comAFaturar(aFaturar).comAcrescimo(acrescimo)
                 .comCobrancas(cobrancas).comDesconto(desconto).comDespesaCobranca(despesaCobranca)
                 .comFormaDeRecebimento(formaDeRecebimento).comFrete(frete).comItens(itens).comListaDePreco(listaDePreco)
-                .comMoedaPadrao(moedaPadrao).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
+                .comCotacao(getCotacao()).comOperacao(operacao).comEmissao(emissao).comCaixa(caixa).comPedidoAFornecedores(pedidoAFornecedores)
                 .comPessoa(pessoa).comTotalEmDinheiro(totalEmDinheiro).comValorPorCotacao(valorPorCotacao)
                 .comUsuairo(usuario).comFilial(filial).comNumeroNF(numeroNF).construir();
     }

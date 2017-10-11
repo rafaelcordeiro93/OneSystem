@@ -157,7 +157,7 @@ public class DialogoNotaEmitidaView extends BasicMBImpl<NotaEmitida, ItemDeNotaB
 
     public String getZero() {
         if (notaEmitida != null) {
-            return MoedaFormatter.format(notaEmitida.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(notaEmitida.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

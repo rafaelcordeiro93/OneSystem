@@ -8,6 +8,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.MoedaFormatter;
+import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
@@ -173,15 +174,6 @@ public abstract class Cobranca implements Serializable {
         return MoedaFormatter.valorConvertidoNaMoedaPadrao(getValor(), getCotacao());
     }
 
-    public String getValorNaMoedaPadraoFormatado() {
-        try {
-            Cotacao cotacao = new CotacaoService().getCotacaoPadrao(emissao);
-            return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValorNaMoedaPadrao());
-        } catch (DadoInvalidoException ex) {
-            return getValorNaMoedaPadrao().toString();
-        }
-    }
-
     public String getEmissaoFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return getEmissao() != null ? emissaoFormatada.format(getEmissao().getTime()) : "";
@@ -259,6 +251,33 @@ public abstract class Cobranca implements Serializable {
 
     public String getHistorico() {
         return historico;
+    }
+
+    public String getTotalNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValor());
+    }
+    
+     public String getTotalNaMoedaPadraoPorExtenso() {
+        return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacao.getConta().getMoeda(), getValor()));
+    }
+
+    public String getTotalNaMoedaPadraoFormatadoEPorExtenso() {
+        return getTotalNaMoedaPadraoFormatado() + " (" + getTotalNaMoedaPadraoPorExtenso() + ")";
+    }
+
+    public String getTotalNaMoedaPadraoFormatadoEPorExtensoPrimeiraLinha() {
+        if (getTotalNaMoedaPadraoFormatadoEPorExtenso().length() > 95) {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso().substring(0, 95);
+        } else {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso();
+        }
+    }
+
+    public String getTotalNaMoedaPadraoFormatadoEPorExtensoSegundaLinha() {
+        if (getTotalNaMoedaPadraoFormatadoEPorExtenso().length() > 95) {
+            return getTotalNaMoedaPadraoFormatadoEPorExtenso().substring(95);
+        }
+        return "";
     }
 
     @Override

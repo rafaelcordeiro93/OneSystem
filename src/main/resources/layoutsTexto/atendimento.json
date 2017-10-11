@@ -1,0 +1,205 @@
+{
+    "report": [{
+            "width": 120,
+            "height": 32
+        }
+    ],
+    "layout": [{
+            "linha1": "========================================================================================================================",
+            "linha2": "                                                                                                 Pagina..:              ",
+            "linha3": "                                                                     Fone:                       Pedido..:              ",
+            "linha4": "                                                                                                 Data....:              ",
+            "linha5": "                                                                                                                        ",
+            "linha6": "========================================================================================================================",
+            "linha7": "Cliente..:                                                                                Fone.....:                    ",
+            "linha8": "Endereco.:                                                                                                              ",
+            "linha9": "Cep......:                                                                                Documento:                    ",
+            "linha10": "  Codigo  | Descricao                                                    | Quantidade | Und |  Unitario  |      Total   ",
+            "linha11": "----------+--------------------------------------------------------------+------------+-----+------------+-------------+",
+            "linha12": "          |                                                              |            |     |            |              ",
+            "linha13": "          |                                                              |            |     |            |              ",
+            "linha14": "          |                                                              |            |     |            |              ",
+            "linha15": "          |                                                              |            |     |            |              ",
+            "linha16": "          |                                                              |            |     |            |              ",
+            "linha17": "          |                                                              |            |     |            |              ",
+            "linha18": "          |                                                              |            |     |            |              ",
+            "linha19": "          |                                                              |            |     |            |              ",
+            "linha20": "          |                                                              |            |     |            |              ",
+            "linha21": "          |                                                              |            |     |            |              ",
+            "linha22": "+---------+--------------------------------------------------------------+------------+-----+------------+-------------+",
+            "linha23": "Formas de Pagamento                                                                          |Desconto...:              ",
+            "linha24": "                                                                                             |Mercadorias:              ",
+            "linha25": "                                                                                             |Servicos...:              ",
+            "linha26": "                                                                                             |Frete......:              ",
+            "linha27": "                                                                                             |Encargos...:              ",
+            "linha28": "                                                                                             |Despesas...:              ",
+            "linha29": "---------------------------------------------------------------------------------------------|------------------------- ",
+            "linha30": "Nao e documento fiscal. Documento nao e valido como garantia da mercadoria.                  |Total......:              ",
+            "linha32": "========================================================================================================================"
+        }],
+
+    "dados": [
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "fantasia",
+            "left": 2,
+            "top": 3,
+            "align": "LEFT",
+            "size": 95
+        },
+        {
+            "class": "br.com.onesystem.domain.NotaEmitida",
+            "column": "id",
+            "left": 107,
+            "top": 3,
+            "align": "RIGHT",
+            "size": 11
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 2,
+            "top": 4,
+            "align": "LEFT",
+            "size": 95
+        },
+        {
+            "class": "br.com.onesystem.domain.NotaEmitida",
+            "column": "emissaoFormatada",
+            "left": 107,
+            "top": 4,
+            "align": "CENTER",
+            "size": 12
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "cepCidadeEstadoPaisFormatado",
+            "left": 2,
+            "top": 5,
+            "align": "LEFT",
+            "size": 95
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "nome/idFormatado",
+            "left": 12,
+            "top": 7,
+            "align": "LEFT",
+            "size": 49
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "telefone",
+            "left": 102,
+            "top": 7,
+            "align": "LEFT",
+            "size": 18
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 12,
+            "top": 8,
+            "align": "LEFT",
+            "size": 108
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "cepCidadeEstadoPaisFormatado",
+            "left": 12,
+            "top": 9,
+            "align": "LEFT",
+            "size": 78
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "documento",
+            "left": 102,
+            "top": 9,
+            "align": "LEFT",
+            "size": 18
+        },
+        {
+            "class": "br.com.onesystem.domain.NotaEmitida",
+            "column": "totalFormatado",
+            "left": 108,
+            "top": 25,
+            "align": "RIGHT",
+            "size": 12
+        }
+    ],
+    "itemDeNota-properties": [
+        {
+            "class": "br.com.onesystem.domain.ItemDeNota",
+            "start": 12,
+            "count": 10,
+            "height": 1
+        }
+    ],
+    "itemDeNota-cursor": [
+        {
+            "class": "br.com.onesystem.domain.Item",
+            "column": "id",
+            "left": 2,
+            "align": "CENTER",
+            "size": 8
+        },
+        {
+            "class": "br.com.onesystem.domain.Item",
+            "column": "nome",
+            "left": 13,
+            "align": "LEFT",
+            "size": 60
+        },
+        {
+            "class": "br.com.onesystem.domain.ItemDeNota",
+            "column": "quantidade",
+            "left": 76,
+            "align": "CENTER",
+            "size": 10
+        },
+        {
+            "class": "br.com.onesystem.domain.UnidadeMedidaItem",
+            "column": "sigla",
+            "left": 89,
+            "align": "CENTER",
+            "size": 2
+        }, 
+        {
+            "class": "br.com.onesystem.domain.ItemDeNota",
+            "column": "unitarioFormatado",
+            "left": 95,
+            "align": "RIGHT",
+            "size": 10
+        }, 
+        {
+            "class": "br.com.onesystem.domain.ItemDeNota",
+            "column": "totalFormatado",
+            "left": 108,
+            "align": "RIGHT",
+            "size": 12
+        }
+    ],
+    "formaCobranca-properties": [
+        {
+            "class": "br.com.onesystem.domain.TemplateFormaPagamento",
+            "start": 24,
+            "count": 5,
+            "height": 1
+        },
+        {
+            "class": "br.com.onesystem.domain.TemplateFormaPagamento",
+            "start": 24,
+            "count": 5,
+            "height": 1,
+            "leftExtra": 30
+        }
+    ],
+    "formaCobranca-cursor": [
+        {
+            "class": "br.com.onesystem.reportTemplate.TemplateFormaPagamento",
+            "column": "abbreviated",
+            "left": 1
+        }
+    ]
+}

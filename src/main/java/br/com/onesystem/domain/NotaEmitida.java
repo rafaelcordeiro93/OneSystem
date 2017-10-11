@@ -6,6 +6,7 @@
 package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -46,12 +47,12 @@ public class NotaEmitida extends Nota implements Serializable {
     public NotaEmitida(Long id, Pessoa pessoa, Operacao operacao, List<ItemDeNota> itens,
             FormaDeRecebimento formaDeRecebimento, ListaDePreco listaDePreco,
             List<CobrancaVariavel> cobrancas,
-            Moeda moedaPadrao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
+            Cotacao cotacao, Orcamento orcamento, List<ValorPorCotacao> valorPorCotacao,
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
             Comanda comanda, Condicional condicional, Date emissao, Caixa caixa,
             Usuario usuario, FaturaEmitida faturaEmitida, Filial filial, Integer numeroNF, LoteNotaFiscal loteNotaFiscal) throws DadoInvalidoException {
-        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, moedaPadrao, valorPorCotacao, desconto, acrescimo, despesaCobranca,
+        super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, cotacao, valorPorCotacao, desconto, acrescimo, despesaCobranca,
                 frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial, numeroNF);
         this.orcamento = orcamento;
         this.comanda = comanda;

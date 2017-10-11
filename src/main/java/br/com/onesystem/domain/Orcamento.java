@@ -256,6 +256,11 @@ public class Orcamento implements Serializable {
     public Date getValidade() {
         return validade;
     }
+    
+       public String getValidadeFormatadaSemHoras() {
+        SimpleDateFormat val = new SimpleDateFormat("dd/MM/yyyy");
+        return getValidade() != null ? val.format(getValidade().getTime()) : "";
+    }
 
     public String getObservacao() {
         return observacao;

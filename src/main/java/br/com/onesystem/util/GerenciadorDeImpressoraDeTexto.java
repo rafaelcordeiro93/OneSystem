@@ -5,6 +5,8 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -47,24 +49,48 @@ public final class GerenciadorDeImpressoraDeTexto {
     private void geradorDeDadosDaPagina(Class classeDeDados, Object objeto) {
         double numPagTipo = 1;
         double numPagForma = 1;
+        double numItemOrcado = 1;
+        double numItemDeNota = 1;
         while (true) {
             instalaPropriedadesDaPagina();
             constroiLayout();
             constroiDados(classeDeDados, objeto);
 
             if (numPagTipo >= numeroDePaginas) {
-                numPagTipo = constroiTiposDeCobranca(classeDeDados, objeto);
+                numPagTipo = new ConstructorCursor<TipoDeCobranca>().construct(TipoDeCobranca.class, classeDeDados, objeto, "tipoCobranca");
             }
             if (numPagForma >= numeroDePaginas) {
-                numPagForma = constroiFormaDePagamento(classeDeDados, objeto);
+                numPagForma = new ConstructorCursor<TipoDeCobranca>().construct(TemplateFormaPagamento.class, classeDeDados, objeto, "formaCobranca");
+            }
+            if (numItemOrcado >= numeroDePaginas) {
+                numItemOrcado = new ConstructorCursor<ItemOrcado>().construct(ItemOrcado.class, classeDeDados, objeto, "itemOrcado");
+            }
+            if (numItemDeNota >= numeroDePaginas) {
+                numItemDeNota = new ConstructorCursor<ItemDeNota>().construct(ItemDeNota.class, classeDeDados, objeto, "itemDeNota");
             }
             impressoras.add(impressora);
             impressora = new ImpressoraDeTexto();
-            
-            if (numPagTipo <= numeroDePaginas && numPagForma <= numeroDePaginas) {
+
+            if (numPagTipo <= numeroDePaginas && numPagForma <= numeroDePaginas && numItemOrcado <= numeroDePaginas && numItemDeNota <= numeroDePaginas) {
                 break;
             }
             numeroDePaginas++;
+        }
+
+        geraNumeroDePagina();
+    }
+
+    private void geraNumeroDePagina() {
+        JSONArray dados = (JSONArray) jsonObject.get("dados");
+        List<GenericLayout> list = criaListaGenericLayout(dados);
+        GenericLayout gen = list.stream().filter(g -> g.getColumn().equals("pageNumber")).findFirst().orElse(null);
+        if (gen != null) {
+            int i = 1;
+            for (ImpressoraDeTexto imp : impressoras) {
+                String str = i + " de " + numeroDePaginas;
+                imp.insereTextoNaLinhaColuna(gen.getTop(), gen.getLeft(), align(gen, str));
+                i++;
+            }
         }
     }
 
@@ -124,78 +150,102 @@ public final class GerenciadorDeImpressoraDeTexto {
     }
 
     private void escreveNoRelatorio(Class classeDeDados, GenericLayout genericLayout, Object objeto) throws RuntimeException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, ClassNotFoundException {
+        try {
+            List<CaminhoDeClasse> clazzes = new LeitoraDeCaminhoDeClassesJSON().getCaminhos(classeDeDados);
+            CaminhoDeClasse caminhoDeClasse = null;
 
-        List<CaminhoDeClasse> clazzes = new LeitoraDeCaminhoDeClassesJSON().getCaminhos(classeDeDados);
-        CaminhoDeClasse caminhoDeClasse = null;
+            Class clazzDado = Class.forName(genericLayout.getClazz());
+            Object obj = null;
+            if (classeDeDados.equals(clazzDado) || classeDeDados.isAssignableFrom(clazzDado)) {
 
-        Class clazzDado = Class.forName(genericLayout.getClazz());
-        Object obj = null;
-        if (classeDeDados.equals(clazzDado) || classeDeDados.isAssignableFrom(clazzDado)) {
-
-            if (genericLayout.getColumn().contains("/")) {
-                String[] col = genericLayout.getColumn().split("/");
-                String str = "";
-                for (String s : col) {
-                    Method method = Class.forName(genericLayout.getClazz()).getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
-                    str += ", " + method.invoke(objeto).toString();
-                }
-                String toString = str.substring(2);
-                impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
-            } else {
-                Method field = Class.forName(genericLayout.getClazz()).getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase()
-                        + genericLayout.getColumn().substring(1), null);
-                obj = field.invoke(objeto);
-                String toString = obj.toString();
-                impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
-            }
-        } else {
-            Class cl = null;
-            for (CaminhoDeClasse c : clazzes) {
-                if (c.getClasseDeDestino() == clazzDado || c.getClasseDeDestino().isAssignableFrom(clazzDado)) {
-                    cl = clazzDado;
-                    caminhoDeClasse = c;
-                    break;
-                }
-            }
-            if (cl == null) {
-                throw new RuntimeException("Configuracao nao definida no arquivo de configuracao Extra Class: " + clazzDado);
-            } else {
-                String[] split = caminhoDeClasse.getCaminho().split("\\.");
-
-                Method method = null;
-                Class clazzIterada = caminhoDeClasse.getClasseDeOrigem();
-                obj = objeto;
-
-                for (String s : split) {
-                    method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
-                    obj = method.invoke(obj);
-                    clazzIterada = obj.getClass();
-                }
-                if (clazzIterada == caminhoDeClasse.getClasseDeDestino() || caminhoDeClasse.getClasseDeDestino().isAssignableFrom(clazzIterada)) {
-                    if (genericLayout.getColumn().contains("/")) {
-                        String[] col = genericLayout.getColumn().split("/");
-                        String str = "";
-                        for (String s : col) {
-                            method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
-                            str += ", " + method.invoke(obj).toString();
+                if (genericLayout.getColumn().contains("/")) {
+                    String[] col = genericLayout.getColumn().split("/");
+                    String str = "";
+                    for (String s : col) {
+                        Method method = Class.forName(genericLayout.getClazz()).getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                        try {
+                            str += ", " + method.invoke(objeto).toString();
+                        } catch (NullPointerException n) {
+                            str += ", ";
                         }
-                        String toString = str.substring(2);
-                        impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
-                    } else {
-                        method = clazzIterada.getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase() + genericLayout.getColumn().substring(1), null);
-
-                        String toString = method.invoke(obj).toString();
-                        impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                     }
+                    String toString = str.substring(2);
+                    impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                 } else {
-                    throw new RuntimeException("Classe " + clazzIterada + " nao encontrada!");
+                    Method field = Class.forName(genericLayout.getClazz()).getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase()
+                            + genericLayout.getColumn().substring(1), null);
+                    obj = field.invoke(objeto);
+                    String toString = "";
+                    try {
+                        toString = obj.toString();
+                    } catch (NullPointerException n) {
+                    }
+                    impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                 }
+            } else if (!clazzDado.equals(Object.class)) {
+                Class cl = null;
+                for (CaminhoDeClasse c : clazzes) {
+                    if (c.getClasseDeDestino() == clazzDado || c.getClasseDeDestino().isAssignableFrom(clazzDado)) {
+                        cl = clazzDado;
+                        caminhoDeClasse = c;
+                        break;
+                    }
+                }
+                if (cl == null) {
+                    throw new RuntimeException("Configuracao nao definida no arquivo de configuracao Extra Class: " + clazzDado);
+                } else {
+                    String[] split = caminhoDeClasse.getCaminho().split("\\.");
+
+                    Method method = null;
+                    Class clazzIterada = caminhoDeClasse.getClasseDeOrigem();
+                    obj = objeto;
+
+                    for (String s : split) {
+                        method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                        obj = method.invoke(obj);
+                        clazzIterada = obj.getClass();
+                    }
+                    if (clazzIterada == caminhoDeClasse.getClasseDeDestino() || caminhoDeClasse.getClasseDeDestino().isAssignableFrom(clazzIterada)) {
+                        if (genericLayout.getColumn().contains("/")) {
+                            String[] col = genericLayout.getColumn().split("/");
+                            String str = "";
+                            for (String s : col) {
+                                method = clazzIterada.getMethod("get" + s.substring(0, 1).toUpperCase() + s.substring(1), null);
+                                try {
+                                    str += ", " + method.invoke(obj).toString();
+                                } catch (NullPointerException n) {
+                                    str += ", ";
+                                }
+                            }
+                            String toString = str.substring(2);
+                            impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                        } else {
+                            method = clazzIterada.getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase() + genericLayout.getColumn().substring(1), null);
+                            String toString = "";
+                            try {
+                                toString = method.invoke(obj).toString();
+                            } catch (NullPointerException n) {
+                            }
+                            impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                        }
+                    } else {
+                        throw new RuntimeException("Classe " + clazzIterada + " nao encontrada!");
+                    }
+                }
+
             }
+        } catch (Exception ex) {
+            throw new RuntimeException("Erro na coluna: " + genericLayout.getColumn() + " da classe: " + genericLayout.getClazz() + "\n"
+                    + ex.getMessage());
+
         }
     }
 
     public String align(GenericLayout genericLayout, String str) {
         if (genericLayout.getAlign() != null && genericLayout.getSize() != null) {
+            if (str.length() > genericLayout.getSize()) {
+                str = str.substring(0, genericLayout.getSize());
+            }
             Alignment alignment = null;
             if ("CENTER".equals(genericLayout.getAlign())) {
                 alignment = Alignment.CENTER;
@@ -210,144 +260,9 @@ public final class GerenciadorDeImpressoraDeTexto {
         } else {
             return str;
         }
+
     }
 
-    public double constroiTiposDeCobranca(Class classeDeDados, Object objeto) {
-        try {
-            JSONArray jsonArray = (JSONArray) jsonObject.get("tipoCobranca-properties");
-            JSONArray jsonCursor = (JSONArray) jsonObject.get("tipoCobranca-cursor");
-            List<GenericLayout> cursor = criaListaGenericLayout(jsonCursor);
-            if (jsonArray == null || jsonCursor == null) {
-                throw new EDadoInvalidoException("");
-            }
-
-            //Busca Propriedades para exibição de tipo de cobrança
-            JSONObject report = (JSONObject) jsonArray.get(0);
-            int start = ((Long) report.get("start")).intValue();
-            int count = ((Long) report.get("count")).intValue();
-            int altura = ((Long) report.get("height")).intValue();
-
-            //Busca nome do método que retorna a lista de tipo de cobranca
-            String nomeMetodo = buscaNomeDeMetodoDeTipoDeCobranca(classeDeDados, objeto);
-            Method m = classeDeDados.getMethod(nomeMetodo, null);
-            List<TipoDeCobranca> list = (List<TipoDeCobranca>) m.invoke(objeto, null);
-
-            //Itera sobre cada Tipo de Cobranca
-            int i = 0;
-            for (TipoDeCobranca tipo : list) {
-                for (GenericLayout generic : cursor) {
-                    generic.setTop(start + i);
-                    escreveNoRelatorio(TipoDeCobranca.class, generic, tipo);
-                }
-                i = i + altura;
-            }
-
-            return Math.ceil((double) list.size() / count);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException nsm) {
-            throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DadoInvalidoException die) {
-        }
-        return 0;
-    }
-
-    public double constroiFormaDePagamento(Class classeDeDados, Object objeto) {
-        try {
-            JSONArray jsonArray = (JSONArray) jsonObject.get("formaCobranca-properties");
-            JSONArray jsonCursor = (JSONArray) jsonObject.get("formaCobranca-cursor");
-            List<GenericLayout> cursor = criaListaGenericLayout(jsonCursor);
-            if (jsonArray == null || jsonCursor == null) {
-                throw new EDadoInvalidoException("");
-            }
-
-            //Busca Propriedades para exibição de tipo de cobrança
-            JSONObject report = (JSONObject) jsonArray.get(0);
-            int start = ((Long) report.get("start")).intValue();
-            int count = ((Long) report.get("count")).intValue();
-            int altura = ((Long) report.get("height")).intValue();
-
-            //Busca nome do método que retorna a lista de tipo de cobranca
-            String nomeMetodo = buscaNomeDeMetodoDeFormaDeCobranca(classeDeDados, objeto);
-            Method m = classeDeDados.getMethod(nomeMetodo, null);
-            List<TemplateFormaPagamento> list = (List<TemplateFormaPagamento>) m.invoke(objeto, null);
-
-            //Itera sobre cada Tipo de Cobranca
-            int i = 0;
-            for (TemplateFormaPagamento tipo : list) {
-                for (GenericLayout generic : cursor) {
-                    generic.setTop(start + i);
-                    escreveNoRelatorio(TemplateFormaPagamento.class, generic, tipo);
-                }
-                i = i + altura;
-            }
-            return Math.ceil((double) list.size() / count);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException nsm) {
-            throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
-        } catch (IllegalAccessException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IllegalArgumentException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (InvocationTargetException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (DadoInvalidoException die) {
-        }
-
-        return 0;
-    }
-
-    private String buscaNomeDeMetodoDeTipoDeCobranca(Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
-        //Busca nome do método que retorna a lista de tipo de cobranca
-        Method[] methods = classeDeDados.getMethods();
-        for (Method m : methods) {
-            if (m.getReturnType().equals(List.class)) {
-                List l = (List) m.invoke(objeto, null);
-                if (l.isEmpty()) {
-                    continue;
-                } else {
-                    if (l.get(0).getClass().equals(TipoDeCobranca.class)) {
-                        return m.getName();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    private String buscaNomeDeMetodoDeFormaDeCobranca(Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
-        //Busca nome do método que retorna a lista de tipo de cobranca
-        Method[] methods = classeDeDados.getMethods();
-        for (Method m : methods) {
-            if (m.getReturnType().equals(List.class)) {
-
-                List l = (List) m.invoke(objeto, null);
-                if (l.isEmpty()) {
-                    continue;
-                } else {
-                    if (l.get(0).getClass().equals(TemplateFormaPagamento.class)) {
-                        return m.getName();
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public void imprimir() {
-        for (ImpressoraDeTexto imp : impressoras) {
-            imp.toPrinter("EPSON");
-        }
-        System.out.println("Imprimiu");
-    }
-    
     public void paraArquivo() {
         int i = 1;
         for (ImpressoraDeTexto imp : impressoras) {
@@ -362,13 +277,12 @@ public final class GerenciadorDeImpressoraDeTexto {
         }
     }
 
-    public void imprime(){
+    public void imprimir(String impressora) {
         for (ImpressoraDeTexto imp : impressoras) {
-            System.out.println("Imp");
-            new MatrixPrinter(imp.getPage());
+            new MatrixPrinter(impressora).imprimir(imp.getArrayEmLinha());
         }
     }
-    
+
     public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
         List<GenericLayout> listaLayout = new ArrayList<>();
         for (Object o : dados) {
@@ -384,6 +298,137 @@ public final class GerenciadorDeImpressoraDeTexto {
             listaLayout.add(g);
         }
         return listaLayout;
+    }
+
+    public class ConstructorCursor<T> {
+
+        public double construct(Class clazz, Class classeDeDados, Object objeto, String name) {
+            try {
+                JSONArray jsonArray = (JSONArray) jsonObject.get(name + "-properties");
+                JSONArray jsonCursor = (JSONArray) jsonObject.get(name + "-cursor");
+                if (jsonArray == null || jsonCursor == null) {
+                    throw new EDadoInvalidoException("");
+                }
+
+                List<PropertiesObject> properties = criaListaProperties(jsonArray);
+                List<GenericLayout> cursor = criaListaGenericLayout(jsonCursor);
+
+                //Busca nome do método que retorna a lista de tipo de cobranca
+                String nomeMetodo = buscaNomeDeMetodo(clazz, classeDeDados, objeto);
+                Method m = classeDeDados.getMethod(nomeMetodo, null);
+                List<T> list = (List<T>) m.invoke(objeto, null);
+
+                // Soma o número de counts, para saber o número de elementos possíveis por página
+                int elementosPorPagina = properties.stream().mapToInt(PropertiesObject::getCount).sum();
+                //Itera sobre cada Tipo de Cobranca
+                int inicio = 0;
+                // Pega numero de registros possíveis para saber se é possível colocar todos elementos da lista.
+                int numRegistros = (numeroDePaginas * elementosPorPagina);
+                // Verifica se o numero de elementos possíveis é menor que o tamanho de elementos da lista
+                // para saber até onde o indice do loop deve passar
+                int indexFim = numRegistros < list.size() ? numRegistros : list.size();
+                // Pega o índice de inicio conforme os registros já informados.
+                int indexInicio = numRegistros - elementosPorPagina;
+                // Inicia o index das propriedades
+                int indexProperties = 0;
+
+                for (int index = indexInicio; index < indexFim; index++) {
+                    int leftExtra = properties.get(indexProperties).getLeftExtra() != 0 ? properties.get(indexProperties).getLeftExtra() + 1 : 0;
+                    int start = properties.get(indexProperties).getStart();
+                    int height = properties.get(indexProperties).getHeight();
+
+                    for (GenericLayout generic : cursor) {
+                        generic.setLeft(generic.getLeft() + leftExtra);
+                        generic.setTop(start + inicio);
+                        escreveNoRelatorio(clazz, generic, list.get(index));
+                    }
+                    
+                    inicio = inicio + height;
+                    if ((properties.get(indexProperties).getCount() - 1) == index) {
+                        indexProperties++;
+                    }
+                }
+
+                return Math.ceil((double) list.size() / elementosPorPagina);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NoSuchMethodException nsm) {
+                throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
+            } catch (IllegalAccessException ex) {
+                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalArgumentException ex) {
+                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InvocationTargetException ex) {
+                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (DadoInvalidoException die) {
+            }
+            return 0;
+        }
+
+        private List<PropertiesObject> criaListaProperties(JSONArray jsonArray) {
+            List<PropertiesObject> properties = new ArrayList<PropertiesObject>();
+            for (Object o : jsonArray) {
+                JSONObject report = (JSONObject) o;
+                int start = ((Long) report.get("start")).intValue();
+                int count = ((Long) report.get("count")).intValue();
+                int height = ((Long) report.get("height")).intValue();
+                int leftExtra = report.get("leftExtra") == null ? 0 : ((Long) report.get("leftExtra")).intValue();
+                properties.add(new PropertiesObject(start, count, height, leftExtra));
+            }
+            return properties;
+        }
+
+        private String buscaNomeDeMetodo(Class clazz, Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
+            //Busca nome do método que retorna a lista de tipo de cobranca
+            System.out.println("C: " + clazz + " - cl" + classeDeDados);
+            Method[] methods = classeDeDados.getMethods();
+            for (Method m : methods) {
+                if (m.getReturnType().equals(List.class)) {
+                    List l = (List) m.invoke(objeto, null);
+                    if (l.isEmpty()) {
+                        continue;
+                    } else {
+                        if (l.get(0).getClass().equals(clazz)) {
+                            return m.getName();
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        public class PropertiesObject {
+
+            private int start;
+            private int count;
+            private int height;
+            private int leftExtra;
+
+            public PropertiesObject(int start, int count, int height, int leftExtra) {
+                this.start = start;
+                this.count = count;
+                this.height = height;
+                this.leftExtra = leftExtra;
+            }
+
+            public int getStart() {
+                return start;
+            }
+
+            public int getCount() {
+                return count;
+            }
+
+            public int getHeight() {
+                return height;
+            }
+
+            public int getLeftExtra() {
+                return leftExtra;
+            }
+
+        }
+
     }
 
 }

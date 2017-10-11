@@ -1,0 +1,233 @@
+{
+    "report": [{
+            "width": 120,
+            "height": 30
+        }
+    ],
+    "layout": [{
+            "linha1": "+======================================================================================================================+",
+            "linha2": "|                                                           |                                                          |",
+            "linha3": "|                                                           |                                                          |",
+            "linha4": "|                                                           |                                                          |",
+            "linha5": "|                                                           | Fone:                                                    |",
+            "linha6": "| Data de emissao:                                          | Ruc.:                                                    |",
+            "linha7": "+------------------------------------+----------------------+------------+------------------------+--------------------+",
+            "linha8": "|             F A T U R A            |          T I T U L O              |        Data  do        |                    |",
+            "linha9": "|       Valor       |     Numero     |        Valor        |    Numero   |       Vencimento       |     Parcela No.    |",
+            "linha10": "+-------------------+----------------+---------------------+-------------+------------------------+--------------------|",
+            "linha11": "|                   |                |                     |             |                        |                    |",
+            "linha12": "+-------------------+----------------+---------------------+-------------+------------------------+--------------------|",
+            "linha13": "|      Sacado...:                                                                 Codigo:                              |",
+            "linha14": "|      Endereco.:                                                                                                      |",
+            "linha15": "|      Municipio:                                           CEP:                  Estado:                              |",
+            "linha16": "|      Telefone.:                                           Praca Pgto:                                                |",
+            "linha17": "|      CI.......:                                           Ruc..:                                                     |",
+            "linha18": "|                                                                                                                      |",
+            "linha19": "|     Valor Extenso:                                                                                                   |",
+            "linha20": "|                                                                                                                      |",
+            "linha21": "|                                                                                                                      |",
+            "linha22": "|     Reconheco(emos) a exatidao desta duplicata de venda mercantil na importancia acima que pagarei(emos) a loja,     |",
+            "linha23": "|     ou a sua ordem na praca e vencimentos acima indicados.                                                           |",
+            "linha24": "|                                                                                                                      |",
+            "linha25": "|                                                                                                                      |",
+            "linha26": "|                                                                                                                      |",
+            "linha27": "|                                                                                                                      |",
+            "linha28": "|   _________________________________________       ____/____/____       _______________________________________       |",
+            "linha29": "|              Assinatura Emitente                 Data do Aceite                 Assinatura Sacado                    |",
+            "linha30": "+======================================================================================================================+"
+        }],
+    "dados": [
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "razaoSocial",
+            "left": 3,
+            "top": 2,
+            "align": "LEFT",
+            "size": 116
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 63,
+            "top": 3,
+            "align": "LEFT",
+            "size": 57
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "fantasia",
+            "left": 3,
+            "top": 4,
+            "align": "LEFT",
+            "size": 57
+        },
+        {
+            "class": "br.com.onesystem.domain.Cep",
+            "column": "cepCidadeEstadoPaisFormatado",
+            "left": 63,
+            "top": 4,
+            "align": "LEFT",
+            "size": 57
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "telefone",
+            "left": 69,
+            "top": 5,
+            "align": "LEFT",
+            "size": 50
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "emissaoFormatadaSemHoras",
+            "left": 20,
+            "top": 6,
+            "align": "LEFT",
+            "size": 40
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "ruc",
+            "left": 69,
+            "top": 6,
+            "align": "LEFT",
+            "size": 50
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "valorFaturaOuNota",
+            "left": 3,
+            "top": 11,
+            "align": "RIGHT",
+            "size": 17
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "idFaturaOuNota",
+            "left": 23,
+            "top": 11,
+            "align": "CENTER",
+            "size": 14
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "valorFormatado",
+            "left": 40,
+            "top": 11,
+            "align": "RIGHT",
+            "size": 19
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "id",
+            "left": 62,
+            "top": 11,
+            "align": "CENTER",
+            "size": 11
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "vencimentoFormatadoSemHoras",
+            "left": 76,
+            "top": 11,
+            "align": "CENTER",
+            "size": 22
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "parcela",
+            "left": 101,
+            "top": 11,
+            "align": "CENTER",
+            "size": 18
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "nome",
+            "left": 19,
+            "top": 13,
+            "align": "LEFT",
+            "size": 63
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "id",
+            "left": 91,
+            "top": 13,
+            "align": "LEFT",
+            "size": 28
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 19,
+            "top": 14,
+            "align": "LEFT",
+            "size": 63
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "cidade",
+            "left": 19,
+            "top": 15,
+            "align": "LEFT",
+            "size": 41
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "numeroCep",
+            "left": 66,
+            "top": 15,
+            "align": "LEFT",
+            "size": 16
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "estado",
+            "left": 91,
+            "top": 15,
+            "align": "LEFT",
+            "size": 28
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "telefone",
+            "left": 19,
+            "top": 16,
+            "align": "LEFT",
+            "size": 41
+        },
+        {
+            "class": "br.com.onesystem.domain.Cidade",
+            "column": "nome",
+            "left": 73,
+            "top": 16,
+            "align": "LEFT",
+            "size": 46
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "documento",
+            "left": 19,
+            "top": 17,
+            "align": "LEFT",
+            "size": 41
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "totalNaMoedaPadraoFormatadoEPorExtensoPrimeiraLinha",
+            "left": 22,
+            "top": 19,
+            "align": "LEFT",
+            "size": 97
+        },
+        {
+            "class": "br.com.onesystem.domain.Titulo",
+            "column": "totalNaMoedaPadraoFormatadoEPorExtensoSegundaLinha",
+            "left": 3,
+            "top": 20,
+            "align": "LEFT",
+            "size": 116
+        }
+    ]
+}

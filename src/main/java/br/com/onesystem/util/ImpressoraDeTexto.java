@@ -110,6 +110,26 @@ public class ImpressoraDeTexto {
         return sbResult.toString();
     }
 
+    public String[] getArrayEmLinha() {
+        String array[] = new String[page.length];
+        for (int i = 0; i < page.length; i++) {
+            StringBuilder sbResult = new StringBuilder();
+            for (int b = 0; b < page[i].length;) {
+                String tmp = page[i][b];
+                if (tmp != null && !tmp.equals("")) {
+                    int size = tmp.length();
+                    b += size;
+                    sbResult.append(tmp);
+                } else {
+                    sbResult.append(" ");
+                    b++;
+                }
+            }
+            array[i] = sbResult.toString();
+        }
+        return array;
+    }
+
     public void toFile(String fileName) {
         try {
             FileOutputStream fo = new FileOutputStream(fileName);
@@ -475,9 +495,8 @@ public class ImpressoraDeTexto {
 //
 //        // toImageFile(fileName);
 //    }
-
     public String[][] getPage() {
         return page;
     }
-    
+
 }

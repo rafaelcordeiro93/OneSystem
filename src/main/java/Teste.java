@@ -2,7 +2,10 @@
 import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
 import br.com.onesystem.domain.Movimento;
+import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.util.GerenciadorDeImpressoraDeTexto;
+import br.com.onesystem.util.MatrixPrinter_OLD;
 import br.com.onesystem.util.StringAlignUtils;
 import br.com.onesystem.util.StringAlignUtils.Alignment;
 import br.com.onesystem.war.view.selecao.SelecaoItemView;
@@ -14,11 +17,13 @@ public class Teste {
 
     public static void main(String[] args) {
 
-        Movimento movimento = new ArmazemDeRegistrosConsole<Movimento>(Movimento.class).find(new Long(24));
-        GerenciadorDeImpressoraDeTexto gerenciador = new GerenciadorDeImpressoraDeTexto("recebimento.json", Movimento.class, movimento);
+        NotaEmitida titulo = new ArmazemDeRegistrosConsole<NotaEmitida>(NotaEmitida.class).find(new Long(2));
+        GerenciadorDeImpressoraDeTexto gerenciador = new GerenciadorDeImpressoraDeTexto("atendimento.json", Nota.class, titulo);
 
-        gerenciador.imprime();
-     
+        gerenciador.exibirNoConsole();
+
+//        gerenciador.imprimir("\\\\localhost\\epson");
         System.exit(0);
+
     }
 }

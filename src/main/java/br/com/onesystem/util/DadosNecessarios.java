@@ -27,6 +27,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +37,7 @@ import javax.inject.Named;
  * @author Rafael Fernando Rauber
  */
 @Named
+@RequestScoped
 public class DadosNecessarios implements Serializable {
 
     private List<DadosNecessariosBV> pendencias = new ArrayList<>();

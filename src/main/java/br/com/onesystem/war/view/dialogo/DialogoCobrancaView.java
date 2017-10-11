@@ -119,7 +119,7 @@ public class DialogoCobrancaView extends BasicMBImpl<CobrancaVariavel, CobrancaB
             e.setOperacaoFinanceira(nota.getOperacao().getOperacaoFinanceira());
             e.setCotacao(new CotacaoService().getCotacaoNaUltimaEmissaoPor(nota.getFormaDeRecebimento().getConta(), nota.getEmissao()));
             e.setTipoLancamento(nota.getOperacao().getTipoNota());
-            e.setMoeda(nota.getMoedaPadrao());
+            e.setMoeda(nota.getCotacao().getConta().getMoeda());
             e.setNota(nota);
             e.setPessoa(nota.getPessoa());
             e.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);

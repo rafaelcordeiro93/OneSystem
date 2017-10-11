@@ -37,18 +37,14 @@
             "caminho": "notaRecebida"
         },
         {
-            "classeDestino": "br.com.onesystem.domain.Pessoa",
-            "caminho": "pessoa"
-        }
-    ],
-
-    "br.com.onesystem.domain.CobrancaVariavel": [
+            "classeDestino": "br.com.onesystem.domain.Filial",
+            "caminho": "filial"
+        },
         {
             "classeDestino": "br.com.onesystem.domain.Pessoa",
             "caminho": "pessoa"
         }
     ],
-
     "br.com.onesystem.domain.Pessoa": [
         {
             "classeDestino": "br.com.onesystem.domain.Cidade",
@@ -84,5 +80,57 @@
             "caminho": "filial.cep"
         }
     ],
-    "br.com.onesystem.reportTemplate.TemplateFormaPagamento": []
+    "br.com.onesystem.reportTemplate.TemplateFormaPagamento": [],
+    "br.com.onesystem.domain.Titulo": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Filial",
+            "caminho": "filial"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Cep",
+            "caminho": "filial.cep"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Estado",
+            "caminho": "filial.cep.cidade.estado"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Cidade",
+            "caminho": "filial.cep.cidade"
+        }
+    ],
+    "br.com.onesystem.domain.Orcamento": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Filial",
+            "caminho": "filial"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        }
+    ],
+    "br.com.onesystem.domain.ItemOrcado": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Item",
+            "caminho": "item"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.UnidadeMedidaItem",
+            "caminho": "item.unidadeDeMedida"
+        }
+    ],
+    "br.com.onesystem.domain.ItemDeNota": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Item",
+            "caminho": "item"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.UnidadeMedidaItem",
+            "caminho": "item.unidadeDeMedida"
+        }
+    ]
 }

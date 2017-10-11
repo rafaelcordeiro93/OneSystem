@@ -151,7 +151,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             notaRecebida.setCaixa((Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()));
             notaRecebida.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
             notaRecebida.setUsuario(new UsuarioLogadoUtil().getUsuario());
-            notaRecebida.setMoedaPadrao(configuracao.getMoedaPadrao());
             notaRecebida.setCotacao(cotacao);
             creditoBV = new CreditoBV();
             itemRecebido = new ItemDeNotaBV();

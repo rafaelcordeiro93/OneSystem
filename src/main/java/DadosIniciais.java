@@ -973,6 +973,7 @@ public class DadosIniciais {
         relatorioDeChequesEmitidosDevolvidos();
         relatorioDeChequesEmitidosCancelados();
 
+        System.exit(0); // Finaliza programa.
     }
 
     private static ModeloDeRelatorio relatorioDeContasAPagar(BundleUtil bundle, AdicionaDAOConsole<ModeloDeRelatorio> modeloDeRelatorioDAO) throws DadoInvalidoException {

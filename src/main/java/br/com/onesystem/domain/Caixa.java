@@ -59,7 +59,7 @@ public class Caixa implements Serializable {
     @ManyToOne
     private Usuario usuario;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Cotacao> cotacao;
 
     public Caixa() {

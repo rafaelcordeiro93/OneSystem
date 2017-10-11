@@ -141,8 +141,8 @@ public class Filial implements Serializable {
     public String getSerialKey() {
         return serialKey;
     }
-    
-    public String getRazaoSocialRuc(){
+
+    public String getRazaoSocialRuc() {
         return razaoSocial + " - Ruc: " + ruc;
     }
 
@@ -164,7 +164,13 @@ public class Filial implements Serializable {
             }
             str += bairro;
         }
+
         return str;
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getCepCidadeEstadoPaisFormatado() {
+        return cep.getCepCidadeEstadoPaisFormatado();
     }
 
     @MetodoInacessivelRelatorio

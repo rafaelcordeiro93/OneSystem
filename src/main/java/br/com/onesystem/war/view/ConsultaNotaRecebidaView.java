@@ -58,7 +58,7 @@ public class ConsultaNotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRece
 
     public String getZero() {
         if (notaRecebida != null) {
-            return MoedaFormatter.format(notaRecebida.getMoedaPadrao(), BigDecimal.ZERO);
+            return MoedaFormatter.format(notaRecebida.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }

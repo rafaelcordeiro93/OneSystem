@@ -7,6 +7,7 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import java.io.Serializable;
@@ -40,7 +41,7 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
 
     @OneToMany(mappedBy = "cobrancaVariavel")
     private List<FormaDeCobranca> formasDeCobranca;
-    
+
     public CobrancaVariavel() {
     }
 
@@ -74,6 +75,10 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
     public void geraPara(Nota nota) {
         this.nota = nota;
         this.emissao = nota.getEmissao();
+    }
+
+    public String getValorNaMoedaPadraoFormatado() {
+        return MoedaFormatter.format(nota.getCotacao().getConta().getMoeda(), getValorNaMoedaPadrao());
     }
 
     public Boolean getEntrada() {

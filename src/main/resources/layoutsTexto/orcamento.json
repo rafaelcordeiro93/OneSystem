@@ -1,0 +1,197 @@
+{
+    "report": [{
+            "width": 120,
+            "height": 29
+        }
+    ],
+    "layout": [{
+            "linha1": "========================================================================================================================",
+            "linha2": "                                                   O R C A M E N T O                                                    ",
+            "linha3": "                                                                                                     Num.:              ",
+            "linha4": "                                                                                                     Data:              ",
+            "linha5": "                                                                                                                        ",
+            "linha6": "========================================================================================================================",
+            "linha7": "Cliente..:                                                      Codigo:                              Fone:              ",
+            "linha8": "Endereco.:                                                                                                              ",
+            "linha9": "Cep......:                                                                                                              ",
+            "linha10": "  Codigo  | Descricao                                                    | Quantidade | Und |  Unitario  |      Total   ",
+            "linha11": "----------+--------------------------------------------------------------+------------+-----+------------+--------------",
+            "linha12": "          |                                                              |            |     |            |              ",
+            "linha13": "          |                                                              |            |     |            |              ",
+            "linha14": "          |                                                              |            |     |            |              ",
+            "linha15": "          |                                                              |            |     |            |              ",
+            "linha16": "          |                                                              |            |     |            |              ",
+            "linha17": "          |                                                              |            |     |            |              ",
+            "linha18": "          |                                                              |            |     |            |              ",
+            "linha19": "          |                                                              |            |     |            |              ",
+            "linha20": "          |                                                              |            |     |            |              ",
+            "linha21": "          |                                                              |            |     |            |              ",
+            "linha22": "          |                                                              |            |     |            |              ",
+            "linha23": "          |                                                              |            |     |            |              ",
+            "linha24": "----------+--------------------------------------------------------------+------------+-----+------------+--------------",
+            "linha25": "Validade...:                                                                                  Total......:              ",
+            "linha26": "Observacoes:                                                                                                            ",
+            "linha27": "========================================================================================================================",
+            "linha28": "  Nao e documento fiscal                                                                                                ",
+            "linha29": "  Documento nao e valido como garantia da mercadoria                                                                    "
+        }],
+
+    "dados": [
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "fantasia",
+            "left": 2,
+            "top": 3,
+            "align": "LEFT",
+            "size": 99
+        },
+        {
+            "class": "br.com.onesystem.domain.Orcamento",
+            "column": "id",
+            "left": 107,
+            "top": 3,
+            "align": "RIGHT",
+            "size": 11
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 2,
+            "top": 4,
+            "align": "LEFT",
+            "size": 99
+        },
+        {
+            "class": "br.com.onesystem.domain.Orcamento",
+            "column": "emissaoFormatada",
+            "left": 107,
+            "top": 4,
+            "align": "CENTER",
+            "size": 12
+        },
+        {
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "cepCidadeEstadoPaisFormatado",
+            "left": 2,
+            "top": 5,
+            "align": "LEFT",
+            "size": 99
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "nome",
+            "left": 12,
+            "top": 7,
+            "align": "LEFT",
+            "size": 49
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "id",
+            "left": 73,
+            "top": 7,
+            "align": "LEFT",
+            "size": 17
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "telefone",
+            "left": 108,
+            "top": 7,
+            "align": "LEFT",
+            "size": 12
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "enderecoNumeroBairroFormatado",
+            "left": 12,
+            "top": 8,
+            "align": "LEFT",
+            "size": 108
+        },
+        {
+            "class": "br.com.onesystem.domain.Pessoa",
+            "column": "cepCidadeEstadoPaisFormatado",
+            "left": 12,
+            "top": 9,
+            "align": "LEFT",
+            "size": 108
+        },
+        {
+            "class": "br.com.onesystem.domain.Orcamento",
+            "column": "validadeFormatadaSemHoras",
+            "left": 14,
+            "top": 25,
+            "align": "LEFT",
+            "size": 80
+        },
+        {
+            "class": "br.com.onesystem.domain.Orcamento",
+            "column": "observacao",
+            "left": 14,
+            "top": 26,
+            "align": "LEFT",
+            "size": 106
+        },
+        {
+            "class": "br.com.onesystem.domain.Orcamento",
+            "column": "totalFormatado",
+            "left": 108,
+            "top": 25,
+            "align": "RIGHT",
+            "size": 12
+        }
+    ],
+    "itemOrcado-properties": [
+        {
+            "class": "br.com.onesystem.domain.ItemOrcado",
+            "start": 12,
+            "count": 12,
+            "height": 1
+        }
+    ],
+    "itemOrcado-cursor": [
+        {
+            "class": "br.com.onesystem.domain.Item",
+            "column": "id",
+            "left": 2,
+            "align": "CENTER",
+            "size": 8
+        },
+        {
+            "class": "br.com.onesystem.domain.Item",
+            "column": "nome",
+            "left": 13,
+            "align": "LEFT",
+            "size": 60
+        },
+        {
+            "class": "br.com.onesystem.domain.ItemOrcado",
+            "column": "quantidade",
+            "left": 76,
+            "align": "CENTER",
+            "size": 10
+        },
+        {
+            "class": "br.com.onesystem.domain.UnidadeMedidaItem",
+            "column": "sigla",
+            "left": 89,
+            "align": "CENTER",
+            "size": 2
+        }, 
+        {
+            "class": "br.com.onesystem.domain.ItemOrcado",
+            "column": "unitarioFormatado",
+            "left": 95,
+            "align": "RIGHT",
+            "size": 10
+        }, 
+        {
+            "class": "br.com.onesystem.domain.ItemOrcado",
+            "column": "totalFormatado",
+            "left": 108,
+            "align": "RIGHT",
+            "size": 12
+        }
+    ]
+}

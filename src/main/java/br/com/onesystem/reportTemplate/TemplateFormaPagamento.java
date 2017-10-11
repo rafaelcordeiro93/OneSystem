@@ -53,6 +53,10 @@ public class TemplateFormaPagamento {
         return detalhes;
     }
     
+    public String getAbbreviated(){
+        return nome.substring(0,2) + " " + vencimento + " " + valorConvertido;
+    }
+    
     @Override
     public String toString() {
         return "TemplateFormaPagamento{" + "id=" + id + ", nome=" + nome + ", vencimento=" + vencimento + ", valorFormatado=" + valorFormatado + ", valorConvertido=" + valorConvertido + '}';
