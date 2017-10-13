@@ -12,6 +12,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeCondicional;
 import br.com.onesystem.valueobjects.EstadoDeNota;
+import br.com.onesystem.valueobjects.TipoItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -144,6 +145,14 @@ public class Condicional implements Serializable {
         }
     }
 
+    public BigDecimal getTotalEmMercadorias() {
+        return itensDeCondicional.stream().filter(i -> i.getItem().getTipoItem() != TipoItem.SERVICO).map(ItemDeCondicional::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalEmMercadoriasFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalEmMercadorias());
+    }
+
     public String getDescontoFormatado() {
         if (cotacao != null) {
             return MoedaFormatter.format(cotacao.getConta().getMoeda(), getDesconto());
@@ -220,6 +229,50 @@ public class Condicional implements Serializable {
 
     public String getTotalFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotal());
+    }
+
+    public String getObservacaoPrimeiraLinha() {
+        if (getObservacao() != null && getObservacao().length() > 79) {
+            return getObservacao().substring(0, 79);
+        } else {
+            return getObservacao() != null ? getObservacao() : "";
+        }
+    }
+
+    public String getObservacaoSegundaLinha() {
+        if (getObservacao() != null && getObservacao().length() > 79 && observacao.length() < 171) {
+            return getObservacao().substring(79);
+        } else if (getObservacao() != null && getObservacao().length() > 79 && observacao.length() > 171) {
+            return getObservacao().substring(79, 171);
+        }
+        return "";
+    }
+
+    public String getObservacaoTerceiraLinha() {
+        if (getObservacao() != null && getObservacao().length() > 171 && observacao.length() < 262) {
+            return getObservacao().substring(171);
+        } else if (getObservacao() != null && getObservacao().length() > 171 && observacao.length() > 262) {
+            return getObservacao().substring(171, 262);
+        }
+        return "";
+    }
+
+    public String getObservacaoQuartaLinha() {
+        if (getObservacao() != null && getObservacao().length() > 262 && observacao.length() < 353) {
+            return getObservacao().substring(262);
+        } else if (getObservacao() != null && getObservacao().length() > 262 && observacao.length() > 353) {
+            return getObservacao().substring(262, 353);
+        }
+        return "";
+    }
+
+    public String getObservacaoQuintaLinha() {
+        if (getObservacao() != null && getObservacao().length() > 353 && observacao.length() < 444) {
+            return getObservacao().substring(353);
+        } else if (getObservacao() != null && getObservacao().length() > 353 && observacao.length() > 444) {
+            return getObservacao().substring(353, 444);
+        }
+        return "";
     }
 
     public BigDecimal getTotal() {

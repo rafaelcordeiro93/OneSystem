@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ItemOrcado;
 import br.com.onesystem.domain.TipoDeCobranca;
@@ -27,6 +28,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import sun.net.www.content.text.Generic;
 
 /**
  *
@@ -51,6 +53,7 @@ public final class GerenciadorDeImpressoraDeTexto {
         double numPagForma = 1;
         double numItemOrcado = 1;
         double numItemDeNota = 1;
+        double numItemDeCondicional = 1;
         while (true) {
             instalaPropriedadesDaPagina();
             constroiLayout();
@@ -67,6 +70,9 @@ public final class GerenciadorDeImpressoraDeTexto {
             }
             if (numItemDeNota >= numeroDePaginas) {
                 numItemDeNota = new ConstructorCursor<ItemDeNota>().construct(ItemDeNota.class, classeDeDados, objeto, "itemDeNota");
+            }
+            if (numItemDeCondicional >= numeroDePaginas) {
+                numItemDeCondicional = new ConstructorCursor<ItemDeCondicional>().construct(ItemDeCondicional.class, classeDeDados, objeto, "itemDeCondicional");
             }
             impressoras.add(impressora);
             impressora = new ImpressoraDeTexto();
@@ -338,14 +344,16 @@ public final class GerenciadorDeImpressoraDeTexto {
                     int height = properties.get(indexProperties).getHeight();
 
                     for (GenericLayout generic : cursor) {
-                        generic.setLeft(generic.getLeft() + leftExtra);
-                        generic.setTop(start + inicio);
-                        escreveNoRelatorio(clazz, generic, list.get(index));
+                        GenericLayout g = new GenericLayout(generic.getClazz(), generic.getColumn(), generic.getLeft(), generic.getTop(), generic.getAlign(), generic.getSize());
+                        g.setLeft(g.getLeft() + leftExtra);
+                        g.setTop(start + inicio);
+                        escreveNoRelatorio(clazz, g, list.get(index));
                     }
-                    
+
                     inicio = inicio + height;
-                    if ((properties.get(indexProperties).getCount() - 1) == index) {
+                    if ((properties.get(indexProperties).getCount()) == inicio) {
                         indexProperties++;
+                        inicio = 0;
                     }
                 }
 
@@ -380,7 +388,6 @@ public final class GerenciadorDeImpressoraDeTexto {
 
         private String buscaNomeDeMetodo(Class clazz, Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
             //Busca nome do método que retorna a lista de tipo de cobranca
-            System.out.println("C: " + clazz + " - cl" + classeDeDados);
             Method[] methods = classeDeDados.getMethods();
             for (Method m : methods) {
                 if (m.getReturnType().equals(List.class)) {

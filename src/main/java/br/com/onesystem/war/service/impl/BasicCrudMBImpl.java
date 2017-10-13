@@ -64,7 +64,9 @@ public abstract class BasicCrudMBImpl<Bean> {
 
                         Object objeto = m.invoke(bean, null);
 //                    Object test = mList.invoke(objeto, null);
-                        Hibernate.initialize(objeto);
+                        if (!Hibernate.isInitialized(objeto)) {
+                            Hibernate.initialize(objeto);
+                        }
                     }
                 }
             } catch (IllegalAccessException ex) {

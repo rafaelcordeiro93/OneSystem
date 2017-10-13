@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -63,6 +64,7 @@ import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
+import br.com.onesystem.war.view.selecao.SelecaoItemView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;

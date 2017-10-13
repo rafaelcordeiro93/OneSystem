@@ -3,7 +3,7 @@ import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
 import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.util.GerenciadorDeImpressoraDeTexto;
 import br.com.onesystem.util.MatrixPrinter_OLD;
 import br.com.onesystem.util.StringAlignUtils;
@@ -17,8 +17,8 @@ public class Teste {
 
     public static void main(String[] args) {
 
-        NotaEmitida titulo = new ArmazemDeRegistrosConsole<NotaEmitida>(NotaEmitida.class).find(new Long(2));
-        GerenciadorDeImpressoraDeTexto gerenciador = new GerenciadorDeImpressoraDeTexto("atendimento.json", Nota.class, titulo);
+        Condicional titulo = new ArmazemDeRegistrosConsole<Condicional>(Condicional.class).find(new Long(1));
+        GerenciadorDeImpressoraDeTexto gerenciador = new GerenciadorDeImpressoraDeTexto("condicional.json", Condicional.class, titulo);
 
         gerenciador.exibirNoConsole();
 

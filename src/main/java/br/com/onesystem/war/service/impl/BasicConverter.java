@@ -65,15 +65,15 @@ public abstract class BasicConverter<Bean, SelecaoBean extends BasicCrudMBImpl> 
                 return "";
             }
         } catch (IllegalAccessException ex) {
-            throw new RuntimeException("Erro de acesso ao método - Converter.");
+            throw new RuntimeException("Erro de acesso ao método - PessoaConverter.");
         } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Erro parametros inválidos ao acessar o método - Converter.");
+            throw new RuntimeException("Erro parametros inválidos ao acessar o método - PessoaConverter.");
         } catch (InvocationTargetException ex) {
-            throw new RuntimeException("Erro na invocação do método - Converter.");
+            throw new RuntimeException("Erro na invocação do método - PessoaConverter.");
         } catch (NoSuchMethodException ex) {
-            throw new RuntimeException("Erro o método não existe - Converter.");
+            throw new RuntimeException("Erro o método não existe - PessoaConverter.");
         } catch (SecurityException ex) {
-            throw new RuntimeException("Erro de segurança ao realizar o acesso - Converter.");
+            throw new RuntimeException("Erro de segurança ao realizar o acesso - PessoaConverter.");
         }
     }
 

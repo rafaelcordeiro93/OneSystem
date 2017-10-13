@@ -27,6 +27,7 @@ import br.com.onesystem.war.builder.CondicionalBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.ItemDeCondicionalService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -68,6 +69,9 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
+    
+    @Inject
+    private ItemDeCondicionalService IDCService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -116,9 +120,12 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
         try {
             preparaInclusaoDeItemDeCondicional();
 
-            //Constroi o orçamento
+            //Constroi a condicional
             Condicional condicional = e.construirComID();
-
+            for(ItemDeCondicional idc : condicional.getItensDeCondicional()){
+                IDCService.geraEstoque(idc);
+            }
+            
             addNoBanco(condicional);
             t = condicional;
             layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);

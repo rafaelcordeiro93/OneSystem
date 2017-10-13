@@ -670,6 +670,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                     setupView(operacao);
                 }
             } else if (obj instanceof Pessoa) {
+                Pessoa p = (Pessoa) obj;
                 notaEmitida.setPessoa((Pessoa) obj);
             } else if (obj instanceof ListaDePreco) {
                 notaEmitida.setListaDePreco((ListaDePreco) obj);

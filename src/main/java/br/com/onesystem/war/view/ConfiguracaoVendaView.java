@@ -39,10 +39,13 @@ public class ConfiguracaoVendaView extends BasicMBImpl<ConfiguracaoVenda, Config
         try {
             if (configuracaoVendaBV.getId() == null) {
                 ConfiguracaoVenda c = configuracaoVendaBV.construir();
+                service.validaConfiguracao(c);
                 addNoBanco(c);
                 configuracaoVendaBV.setId(c.getId());
             } else {
-                updateNoBanco(configuracaoVendaBV.construirComID());
+                ConfiguracaoVenda c = configuracaoVendaBV.construirComID();
+                service.validaConfiguracao(c);
+                updateNoBanco(c);
             }
             InfoMessage.print(new BundleUtil().getLabel("Configuracoes_Gravadas"));
         } catch (DadoInvalidoException die) {
