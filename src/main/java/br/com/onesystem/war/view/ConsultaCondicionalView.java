@@ -7,11 +7,14 @@ package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.TipoLayout;
@@ -38,6 +41,9 @@ public class ConsultaCondicionalView extends BasicMBImpl<Condicional, Condiciona
     @Inject
     private LayoutDeImpressaoService layoutService;
 
+    @Inject
+    private Configuracao configuracao;
+    
     @PostConstruct
     public void construir() {
     }
@@ -58,6 +64,20 @@ public class ConsultaCondicionalView extends BasicMBImpl<Condicional, Condiciona
                 t = null; // libera memoria do objeto impresso.
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getLabel("Selecione_um_registro"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+    
+    public void imprimirTexto() {
+        try {
+            if (t != null) {
+                LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
+                new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Condicional.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                t = null; // libera memoria do objeto impresso.
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
             }
         } catch (DadoInvalidoException die) {
             die.print();

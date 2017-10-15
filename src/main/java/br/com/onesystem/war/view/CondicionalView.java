@@ -18,6 +18,7 @@ import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoImpressao;
@@ -69,7 +70,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
-    
+
     @Inject
     private ItemDeCondicionalService IDCService;
 
@@ -122,15 +123,19 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
             //Constroi a condicional
             Condicional condicional = e.construirComID();
-            for(ItemDeCondicional idc : condicional.getItensDeCondicional()){
+            for (ItemDeCondicional idc : condicional.getItensDeCondicional()) {
                 IDCService.geraEstoque(idc);
             }
-            
+
             addNoBanco(condicional);
             t = condicional;
             layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                if (layout.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                } else {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimirTexto').click()"); // chama a impressao
+                }
             }
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -149,6 +154,15 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
         try {
             new ImpressoraDeLayoutGrafico(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
             t = null; // libera memoria do objeto impresso.
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTexto() {
+        try {
+            new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Condicional.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+            t = null;
         } catch (DadoInvalidoException die) {
             die.print();
         }
