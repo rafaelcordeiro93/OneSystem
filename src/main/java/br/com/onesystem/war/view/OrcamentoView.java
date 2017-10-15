@@ -17,7 +17,8 @@ import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.TipoImpressao;
@@ -103,7 +104,11 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
             t = orcamento; // adiciona o orcamento ao objeto para impressao.
             layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                if (layout.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                } else {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimirTexto').click()"); // chama a impressao
+                }
             }
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -118,10 +123,19 @@ public class OrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> implement
      * Imprime o layout do orçamento.
      *
      */
-    public void imprimir() {
+    public void imprimirGrafico() {
         try {
-            new ImpressoraDeLayout(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
             t = null; // libera memoria do objeto impresso.
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTexto() {
+        try {
+            new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Orcamento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+            t = null;
         } catch (DadoInvalidoException die) {
             die.print();
         }

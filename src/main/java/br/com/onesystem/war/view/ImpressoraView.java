@@ -5,13 +5,17 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.dao.ArmazemDeRegistrosConsole;
+import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.GerenciadorDeImpressoraDeTexto;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.MatrixPrinter;
 import java.io.Serializable;
 import javax.faces.view.ViewScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -22,19 +26,28 @@ import javax.inject.Named;
 @ViewScoped
 public class ImpressoraView implements Serializable {
 
+    private String text;
+
+    @Inject
+    private ArmazemDeRegistros<NotaEmitida> armazem;
+    
     public void imprimir() {
         try {
-            System.out.println("Imprimir - Criando Printable");
 
-            Titulo titulo = new ArmazemDeRegistrosConsole<Titulo>(Titulo.class).find(new Long(4));
-            GerenciadorDeImpressoraDeTexto gerenciador = new GerenciadorDeImpressoraDeTexto("titulo.json", Titulo.class, titulo);
-            gerenciador.imprimir("\\\\localhost\\epson");
-
-            System.out.println("Fim");
+            NotaEmitida titulo = (NotaEmitida) armazem.daClasse(NotaEmitida.class).find(new Long(7));
+            ImpressoraDeLayoutTexto gerenciador = new ImpressoraDeLayoutTexto("atendimento.json", Nota.class, titulo);
+            gerenciador.imprimir("epson");
         } catch (Exception ex) {
             ErrorMessage.print(ex.getMessage());
         }
+    }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
 }

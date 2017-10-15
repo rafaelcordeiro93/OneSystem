@@ -17,7 +17,7 @@ import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoImpressao;
@@ -147,7 +147,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
      */
     public void imprimir() {
         try {
-            new ImpressoraDeLayout(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
             t = null; // libera memoria do objeto impresso.
         } catch (DadoInvalidoException die) {
             die.print();

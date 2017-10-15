@@ -41,7 +41,6 @@ public class GerenciadorDeLayoutView extends BasicMBImpl<LayoutDeImpressao, Layo
                 updateNoBanco(layout);
                 layouts.set(layouts.indexOf(layout), layout);
             } else if (e != null && e.getId() == null && layoutSelecionado != null) {
-                e.setLayoutGraficoEhPadrao(true);
                 e.setTipoLayout(layoutSelecionado);
                 LayoutDeImpressao layout = e.construir();
                 addNoBanco(layout);
@@ -82,7 +81,11 @@ public class GerenciadorDeLayoutView extends BasicMBImpl<LayoutDeImpressao, Layo
     }
 
     public List<TipoImpressao> getTiposImpressao() {
-        return Arrays.asList(TipoImpressao.VISUALIZAR, TipoImpressao.NADA_A_FAZER);
+        if (e.isLayoutGraficoEhPadrao()) {
+            return Arrays.asList(TipoImpressao.VISUALIZAR, TipoImpressao.NADA_A_FAZER);
+        } else {
+            return Arrays.asList(TipoImpressao.IMPRIMIR, TipoImpressao.NADA_A_FAZER);
+        }
     }
 
     public List<LayoutDeImpressao> getLayouts() {

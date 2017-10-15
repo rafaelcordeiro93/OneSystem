@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.util;
 
+import br.com.onesystem.util.builder.TextoBuilder;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ItemOrcado;
@@ -24,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -34,18 +37,96 @@ import sun.net.www.content.text.Generic;
  *
  * @author Rafael
  */
-public final class GerenciadorDeImpressoraDeTexto {
+public final class ImpressoraDeLayoutTexto {
 
-    private String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\";
-    private List<ImpressoraDeTexto> impressoras = new ArrayList<>();
-    private ImpressoraDeTexto impressora = new ImpressoraDeTexto();
+    //Diretório para Console: System.getProperty("user.dir") + "\\src\\main\\resources\\layoutsTexto\\";
+    private String diretorio = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\WEB-INF\\classes\\layoutsTexto\\";
+    private List<TextoBuilder> impressoras = new ArrayList<>();
+    private TextoBuilder builder = new TextoBuilder();
     private JSONObject jsonObject;
     private Integer numeroDePaginas = 1;
+    private Integer altura;
+    private int largura;
+    private List<GenericLayout> genericDadosList;
+    private List<GenericLayout> tipoCobrancaCursor;
+    private List<GenericLayout> itemOrcadoCursor;
+    private List<PropertiesObject> tipoCobrancaProperties;
+    private List<PropertiesObject> formaCobrancaProperties;
+    private List<GenericLayout> formaCobrancaCursor;
+    private List<PropertiesObject> itemOrcadoProperties;
+    private List<PropertiesObject> itemDeCondicionalProperties;
+    private List<GenericLayout> itemDeCondicionalCursor;
+    private List<PropertiesObject> itemDeNotaProperties;
+    private List<GenericLayout> itemDeNotaCursor;
+    private JSONArray layout;
 
-    public GerenciadorDeImpressoraDeTexto(String layoutJson, Class classeDeDados, Object objeto) {
-        this.diretorio += layoutJson;
+    public ImpressoraDeLayoutTexto(String layoutJson, Class classeDeDados, Object objeto) {
+        this.diretorio += layoutJson + ".json";
         buscaJson();
-        geradorDeDadosDaPagina(classeDeDados, objeto);
+        setupPage();
+        if (objeto instanceof List) {
+            for (Object obj : (List) objeto) {
+                geradorDeDadosDaPagina(classeDeDados, obj);
+            }
+        } else {
+            geradorDeDadosDaPagina(classeDeDados, objeto);
+        }
+    }
+
+    private void setupPage() {
+
+        // Area "report" do layout
+        JSONArray reportArray = (JSONArray) jsonObject.get("report");
+        JSONObject report = (JSONObject) reportArray.get(0);
+        largura = ((Long) report.get("width")).intValue();
+        altura = ((Long) report.get("height")).intValue();
+
+        // Area "layout" do layout
+        layout = (JSONArray) jsonObject.get("layout");
+
+        // Area "dados" do layout
+        JSONArray dados = (JSONArray) jsonObject.get("dados");
+        genericDadosList = criaListaGenericLayout(dados);
+
+        // Area "tipoCobranca" do layout
+        JSONArray tipoCobrancaArrayProperties = (JSONArray) jsonObject.get("tipoCobranca-properties");
+        JSONArray tipoCobrancaArrayCursor = (JSONArray) jsonObject.get("tipoCobranca-cursor");
+        if (tipoCobrancaArrayProperties != null && tipoCobrancaArrayCursor != null) {
+            tipoCobrancaProperties = criaListaProperties(tipoCobrancaArrayProperties);
+            tipoCobrancaCursor = criaListaGenericLayout(tipoCobrancaArrayCursor);
+        }
+
+        // Area "formaCobranca" do layout
+        JSONArray formaCobrancaArrayProperties = (JSONArray) jsonObject.get("formaCobranca-properties");
+        JSONArray formaCobrancaArrayCursor = (JSONArray) jsonObject.get("formaCobranca-cursor");
+        if (formaCobrancaArrayProperties != null && formaCobrancaArrayCursor != null) {
+            formaCobrancaProperties = criaListaProperties(formaCobrancaArrayProperties);
+            formaCobrancaCursor = criaListaGenericLayout(formaCobrancaArrayCursor);
+        }
+
+        // Area "itemOrcado" do layout
+        JSONArray itemOrcadoArrayProperties = (JSONArray) jsonObject.get("itemOrcado-properties");
+        JSONArray itemOrcadoArrayCursor = (JSONArray) jsonObject.get("itemOrcado-cursor");
+        if (itemOrcadoArrayProperties != null && itemOrcadoArrayCursor != null) {
+            itemOrcadoProperties = criaListaProperties(itemOrcadoArrayProperties);
+            itemOrcadoCursor = criaListaGenericLayout(itemOrcadoArrayCursor);
+        }
+
+        // Area "itemDeNota" do layout
+        JSONArray itemDeNotaArrayProperties = (JSONArray) jsonObject.get("itemDeNota-properties");
+        JSONArray itemDeNotaArrayCursor = (JSONArray) jsonObject.get("itemDeNota-cursor");
+        if (itemDeNotaArrayProperties != null && itemDeNotaArrayCursor != null) {
+            itemDeNotaProperties = criaListaProperties(itemDeNotaArrayProperties);
+            itemDeNotaCursor = criaListaGenericLayout(itemDeNotaArrayCursor);
+        }
+
+        // Area "itemDeCondicional" do layout
+        JSONArray itemDeCondicionalArrayProperties = (JSONArray) jsonObject.get("itemDeCondicional-properties");
+        JSONArray itemDeCondicionalArrayCursor = (JSONArray) jsonObject.get("itemDeCondicional-cursor");
+        if (itemDeCondicionalArrayProperties != null && itemDeCondicionalArrayCursor != null) {
+            itemDeCondicionalProperties = criaListaProperties(itemDeCondicionalArrayProperties);
+            itemDeCondicionalCursor = criaListaGenericLayout(itemDeCondicionalArrayCursor);
+        }
     }
 
     private void geradorDeDadosDaPagina(Class classeDeDados, Object objeto) {
@@ -59,23 +140,25 @@ public final class GerenciadorDeImpressoraDeTexto {
             constroiLayout();
             constroiDados(classeDeDados, objeto);
 
-            if (numPagTipo >= numeroDePaginas) {
-                numPagTipo = new ConstructorCursor<TipoDeCobranca>().construct(TipoDeCobranca.class, classeDeDados, objeto, "tipoCobranca");
+            //Constroi dados de cursores
+            if (tipoCobrancaProperties != null && tipoCobrancaCursor != null && numPagTipo >= numeroDePaginas) {
+                numPagTipo = new ConstructorCursor<TipoDeCobranca>().construct(TipoDeCobranca.class, classeDeDados, objeto, tipoCobrancaProperties, tipoCobrancaCursor);
             }
-            if (numPagForma >= numeroDePaginas) {
-                numPagForma = new ConstructorCursor<TipoDeCobranca>().construct(TemplateFormaPagamento.class, classeDeDados, objeto, "formaCobranca");
+            if (formaCobrancaProperties != null && formaCobrancaCursor != null && numPagForma >= numeroDePaginas) {
+                numPagForma = new ConstructorCursor<TipoDeCobranca>().construct(TemplateFormaPagamento.class, classeDeDados, objeto, formaCobrancaProperties, formaCobrancaCursor);
             }
-            if (numItemOrcado >= numeroDePaginas) {
-                numItemOrcado = new ConstructorCursor<ItemOrcado>().construct(ItemOrcado.class, classeDeDados, objeto, "itemOrcado");
+            if (itemOrcadoProperties != null && itemOrcadoCursor != null && numItemOrcado >= numeroDePaginas) {
+                numItemOrcado = new ConstructorCursor<ItemOrcado>().construct(ItemOrcado.class, classeDeDados, objeto, itemOrcadoProperties, itemOrcadoCursor);
             }
-            if (numItemDeNota >= numeroDePaginas) {
-                numItemDeNota = new ConstructorCursor<ItemDeNota>().construct(ItemDeNota.class, classeDeDados, objeto, "itemDeNota");
+            if (itemDeNotaProperties != null && itemDeNotaCursor != null && numItemDeNota >= numeroDePaginas) {
+                numItemDeNota = new ConstructorCursor<ItemDeNota>().construct(ItemDeNota.class, classeDeDados, objeto, itemDeNotaProperties, itemDeNotaCursor);
             }
-            if (numItemDeCondicional >= numeroDePaginas) {
-                numItemDeCondicional = new ConstructorCursor<ItemDeCondicional>().construct(ItemDeCondicional.class, classeDeDados, objeto, "itemDeCondicional");
+            if (itemDeCondicionalProperties != null && itemDeCondicionalCursor != null && numItemDeCondicional >= numeroDePaginas) {
+                numItemDeCondicional = new ConstructorCursor<ItemDeCondicional>().construct(ItemDeCondicional.class, classeDeDados, objeto, itemDeCondicionalProperties, itemDeCondicionalCursor);
             }
-            impressoras.add(impressora);
-            impressora = new ImpressoraDeTexto();
+            //Adiciona a pagina da impressora
+            impressoras.add(builder);
+            builder = new TextoBuilder();
 
             if (numPagTipo <= numeroDePaginas && numPagForma <= numeroDePaginas && numItemOrcado <= numeroDePaginas && numItemDeNota <= numeroDePaginas) {
                 break;
@@ -87,12 +170,10 @@ public final class GerenciadorDeImpressoraDeTexto {
     }
 
     private void geraNumeroDePagina() {
-        JSONArray dados = (JSONArray) jsonObject.get("dados");
-        List<GenericLayout> list = criaListaGenericLayout(dados);
-        GenericLayout gen = list.stream().filter(g -> g.getColumn().equals("pageNumber")).findFirst().orElse(null);
+        GenericLayout gen = genericDadosList.stream().filter(g -> g.getColumn().equals("pageNumber")).findFirst().orElse(null);
         if (gen != null) {
             int i = 1;
-            for (ImpressoraDeTexto imp : impressoras) {
+            for (TextoBuilder imp : impressoras) {
                 String str = i + " de " + numeroDePaginas;
                 imp.insereTextoNaLinhaColuna(gen.getTop(), gen.getLeft(), align(gen, str));
                 i++;
@@ -115,17 +196,12 @@ public final class GerenciadorDeImpressoraDeTexto {
     }
 
     private void instalaPropriedadesDaPagina() {
-        JSONArray reportArray = (JSONArray) jsonObject.get("report");
-        JSONObject report = (JSONObject) reportArray.get(0);
-        int largura = ((Long) report.get("width")).intValue();
-        int altura = ((Long) report.get("height")).intValue();
         //lin x col
-        impressora.setTamanhoDaPagina(altura, largura);
+        builder.setTamanhoDaPagina(altura, largura);
     }
 
     private void constroiLayout() {
-        JSONArray layout = (JSONArray) jsonObject.get("layout");
-        impressora.carregaLayout(layout);
+        builder.carregaLayout(layout);
     }
 
     /**
@@ -136,22 +212,20 @@ public final class GerenciadorDeImpressoraDeTexto {
     private void constroiDados(Class classeDeDados, Object objeto) {
         try {
 
-            JSONArray dados = (JSONArray) jsonObject.get("dados");
-
-            for (GenericLayout g : criaListaGenericLayout(dados)) {
+            for (GenericLayout g : genericDadosList) {
                 escreveNoRelatorio(classeDeDados, g, objeto);
             }
 
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NoSuchMethodException nsm) {
             throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
         } catch (IllegalAccessException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalArgumentException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
         } catch (InvocationTargetException ex) {
-            Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -176,7 +250,7 @@ public final class GerenciadorDeImpressoraDeTexto {
                         }
                     }
                     String toString = str.substring(2);
-                    impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                    builder.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                 } else {
                     Method field = Class.forName(genericLayout.getClazz()).getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase()
                             + genericLayout.getColumn().substring(1), null);
@@ -186,7 +260,7 @@ public final class GerenciadorDeImpressoraDeTexto {
                         toString = obj.toString();
                     } catch (NullPointerException n) {
                     }
-                    impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                    builder.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                 }
             } else if (!clazzDado.equals(Object.class)) {
                 Class cl = null;
@@ -224,7 +298,7 @@ public final class GerenciadorDeImpressoraDeTexto {
                                 }
                             }
                             String toString = str.substring(2);
-                            impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                            builder.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                         } else {
                             method = clazzIterada.getMethod("get" + genericLayout.getColumn().substring(0, 1).toUpperCase() + genericLayout.getColumn().substring(1), null);
                             String toString = "";
@@ -232,7 +306,7 @@ public final class GerenciadorDeImpressoraDeTexto {
                                 toString = method.invoke(obj).toString();
                             } catch (NullPointerException n) {
                             }
-                            impressora.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
+                            builder.insereTextoNaLinhaColuna(genericLayout.getTop(), genericLayout.getLeft(), align(genericLayout, toString));
                         }
                     } else {
                         throw new RuntimeException("Classe " + clazzIterada + " nao encontrada!");
@@ -247,7 +321,7 @@ public final class GerenciadorDeImpressoraDeTexto {
         }
     }
 
-    public String align(GenericLayout genericLayout, String str) {
+    private String align(GenericLayout genericLayout, String str) {
         if (genericLayout.getAlign() != null && genericLayout.getSize() != null) {
             if (str.length() > genericLayout.getSize()) {
                 str = str.substring(0, genericLayout.getSize());
@@ -269,27 +343,37 @@ public final class GerenciadorDeImpressoraDeTexto {
 
     }
 
-    public void paraArquivo() {
-        int i = 1;
-        for (ImpressoraDeTexto imp : impressoras) {
-            imp.toFile("imp " + i);
-            i++;
-        }
-    }
-
     public void exibirNoConsole() {
-        for (ImpressoraDeTexto imp : impressoras) {
+        for (TextoBuilder imp : impressoras) {
             imp.exibeNoConsole();
         }
     }
 
-    public void imprimir(String impressora) {
-        for (ImpressoraDeTexto imp : impressoras) {
-            new MatrixPrinter(impressora).imprimir(imp.getArrayEmLinha());
+    public void imprimir(String caminhoImpressora) throws DadoInvalidoException {
+        caminhoImpressora = caminhoImpressora.trim();
+        if (caminhoImpressora != null) {
+            for (TextoBuilder imp : impressoras) {
+                new MatrixPrinter(caminhoImpressora).imprimir(imp.getArrayEmLinha());
+            }
+        } else {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Caminho_Impressora_Texto_Nao_Configurada_Nas_Configuracoes"));
         }
     }
 
-    public List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
+    private List<PropertiesObject> criaListaProperties(JSONArray jsonArray) {
+        List<PropertiesObject> properties = new ArrayList<PropertiesObject>();
+        for (Object o : jsonArray) {
+            JSONObject report = (JSONObject) o;
+            int start = ((Long) report.get("start")).intValue();
+            int count = ((Long) report.get("count")).intValue();
+            int height = ((Long) report.get("height")).intValue();
+            int leftExtra = report.get("leftExtra") == null ? 0 : ((Long) report.get("leftExtra")).intValue();
+            properties.add(new PropertiesObject(start, count, height, leftExtra));
+        }
+        return properties;
+    }
+
+    private List<GenericLayout> criaListaGenericLayout(JSONArray dados) {
         List<GenericLayout> listaLayout = new ArrayList<>();
         for (Object o : dados) {
             JSONObject j = (JSONObject) o;
@@ -308,16 +392,8 @@ public final class GerenciadorDeImpressoraDeTexto {
 
     public class ConstructorCursor<T> {
 
-        public double construct(Class clazz, Class classeDeDados, Object objeto, String name) {
+        public double construct(Class clazz, Class classeDeDados, Object objeto, List<PropertiesObject> properties, List<GenericLayout> cursor) {
             try {
-                JSONArray jsonArray = (JSONArray) jsonObject.get(name + "-properties");
-                JSONArray jsonCursor = (JSONArray) jsonObject.get(name + "-cursor");
-                if (jsonArray == null || jsonCursor == null) {
-                    throw new EDadoInvalidoException("");
-                }
-
-                List<PropertiesObject> properties = criaListaProperties(jsonArray);
-                List<GenericLayout> cursor = criaListaGenericLayout(jsonCursor);
 
                 //Busca nome do método que retorna a lista de tipo de cobranca
                 String nomeMetodo = buscaNomeDeMetodo(clazz, classeDeDados, objeto);
@@ -359,31 +435,17 @@ public final class GerenciadorDeImpressoraDeTexto {
 
                 return Math.ceil((double) list.size() / elementosPorPagina);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
             } catch (NoSuchMethodException nsm) {
                 throw new RuntimeException("Metodo nao encontrado " + nsm.getMessage());
             } catch (IllegalAccessException ex) {
-                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IllegalArgumentException ex) {
-                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InvocationTargetException ex) {
-                Logger.getLogger(GerenciadorDeImpressoraDeTexto.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (DadoInvalidoException die) {
+                Logger.getLogger(ImpressoraDeLayoutTexto.class.getName()).log(Level.SEVERE, null, ex);
             }
             return 0;
-        }
-
-        private List<PropertiesObject> criaListaProperties(JSONArray jsonArray) {
-            List<PropertiesObject> properties = new ArrayList<PropertiesObject>();
-            for (Object o : jsonArray) {
-                JSONObject report = (JSONObject) o;
-                int start = ((Long) report.get("start")).intValue();
-                int count = ((Long) report.get("count")).intValue();
-                int height = ((Long) report.get("height")).intValue();
-                int leftExtra = report.get("leftExtra") == null ? 0 : ((Long) report.get("leftExtra")).intValue();
-                properties.add(new PropertiesObject(start, count, height, leftExtra));
-            }
-            return properties;
         }
 
         private String buscaNomeDeMetodo(Class clazz, Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
@@ -404,36 +466,36 @@ public final class GerenciadorDeImpressoraDeTexto {
             return null;
         }
 
-        public class PropertiesObject {
+    }
 
-            private int start;
-            private int count;
-            private int height;
-            private int leftExtra;
+    public class PropertiesObject {
 
-            public PropertiesObject(int start, int count, int height, int leftExtra) {
-                this.start = start;
-                this.count = count;
-                this.height = height;
-                this.leftExtra = leftExtra;
-            }
+        private int start;
+        private int count;
+        private int height;
+        private int leftExtra;
 
-            public int getStart() {
-                return start;
-            }
+        public PropertiesObject(int start, int count, int height, int leftExtra) {
+            this.start = start;
+            this.count = count;
+            this.height = height;
+            this.leftExtra = leftExtra;
+        }
 
-            public int getCount() {
-                return count;
-            }
+        public int getStart() {
+            return start;
+        }
 
-            public int getHeight() {
-                return height;
-            }
+        public int getCount() {
+            return count;
+        }
 
-            public int getLeftExtra() {
-                return leftExtra;
-            }
+        public int getHeight() {
+            return height;
+        }
 
+        public int getLeftExtra() {
+            return leftExtra;
         }
 
     }

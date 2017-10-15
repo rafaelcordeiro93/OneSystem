@@ -6,12 +6,15 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AtualizaDAO;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeOrcamento;
@@ -43,6 +46,9 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
     @Inject
     private LayoutDeImpressaoService layoutService;
 
+    @Inject
+    private Configuracao configuracao;
+    
     @PostConstruct
     public void construir() {
     }
@@ -55,11 +61,11 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
         }
     }
 
-    public void imprimir() {
+    public void imprimirGrafico() {
         try {
             if (t != null) {
                 LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
-                new ImpressoraDeLayout(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
+                new ImpressoraDeLayoutGrafico(t.getItensOrcados(), layout).addParametro("orcamento", t).visualizarPDF();
                 t = null; // libera memoria do objeto impresso.
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
@@ -68,6 +74,21 @@ public class ConsultaOrcamentoView extends BasicMBImpl<Orcamento, OrcamentoBV> i
             die.print();
         }
     }
+    
+    public void imprimirTexto() {
+        try {
+            if (t != null) {
+                LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.ORCAMENTO);
+                new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Orcamento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                t = null; // libera memoria do objeto impresso.
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
 
     public String getZero() {
         if (t != null) {

@@ -11,7 +11,7 @@ import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.TipoLayout;
@@ -54,7 +54,7 @@ public class ConsultaCondicionalView extends BasicMBImpl<Condicional, Condiciona
         try {
             if (t != null) {
                 layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
-                new ImpressoraDeLayout(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
+                new ImpressoraDeLayoutGrafico(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
                 t = null; // libera memoria do objeto impresso.
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getLabel("Selecione_um_registro"));

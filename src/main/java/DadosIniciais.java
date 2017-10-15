@@ -830,7 +830,7 @@ public class DadosIniciais {
 
         //Configuracao
         // ---------------------------------------------------------------------
-        Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO);
+        Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO, null);
         new AdicionaDAOConsole<>().adiciona(configuracao);
 
         //ConfiguracaoEstoque

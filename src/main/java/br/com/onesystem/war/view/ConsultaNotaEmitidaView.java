@@ -12,11 +12,14 @@ import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.TipoLayout;
@@ -43,7 +46,10 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
 
     @Inject
     private LayoutDeImpressaoService service;
-    
+
+    @Inject
+    private Configuracao configuracao;
+
     @PostConstruct
     public void construir() {
     }
@@ -55,12 +61,26 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
             t = (NotaEmitida) obj;
         }
     }
-    
-    public void imprimir() {
+
+    public void imprimirGrafico() {
         try {
             if (t != null) {
                 LayoutDeImpressao layout = service.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
-                new ImpressoraDeLayout(t.getItens(), layout).addParametro("notaEmitida", t).visualizarPDF();
+                new ImpressoraDeLayoutGrafico(t.getItens(), layout).addParametro("notaEmitida", t).visualizarPDF();
+                t = null; // libera memoria do objeto impresso.
+            } else {
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTexto() {
+        try {
+            if (t != null) {
+                LayoutDeImpressao layout = service.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
+                new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Nota.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
                 t = null; // libera memoria do objeto impresso.
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
@@ -77,8 +97,8 @@ public class ConsultaNotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitid
             return "";
         }
     }
-    
-     public void cancela() {
+
+    public void cancela() {
         try {
             t.cancela();
             new AtualizaDAO<>().atualiza(t);

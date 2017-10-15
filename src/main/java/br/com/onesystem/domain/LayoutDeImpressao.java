@@ -90,7 +90,7 @@ public class LayoutDeImpressao implements Serializable {
     public TipoImpressao getTipoImpressao() {
         return tipoImpressao;
     }
-    
+
     @Override
     public String toString() {
         return "LayoutDeImpressao{" + "id=" + id + ", tipoLayout=" + tipoLayout + ", layoutGrafico=" + layoutGrafico + ", layoutTexto=" + layoutTexto + ", layoutGraficoEhPadrao=" + layoutGraficoEhPadrao + '}';

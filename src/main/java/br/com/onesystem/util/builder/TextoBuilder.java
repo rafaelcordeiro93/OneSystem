@@ -1,4 +1,4 @@
-package br.com.onesystem.util;
+package br.com.onesystem.util.builder;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -7,7 +7,7 @@ import java.net.Socket;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class ImpressoraDeTexto {
+public class TextoBuilder {
 
     public String impressora;
     private String page[][];
@@ -31,7 +31,7 @@ public class ImpressoraDeTexto {
 //        System.out.println(t.toString());
     }
 
-    public ImpressoraDeTexto() {
+    public TextoBuilder() {
 //        try {
 //            File f = new File("conf.ini");
 //            if (f.exists()) {

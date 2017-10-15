@@ -13,8 +13,9 @@
                 <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
                     <h2 class="BigTopic">#{l.Consulta_De_Registro}
                         <p:panelGrid columns="2" style="right: 12%; position: absolute" styleClass="ui-panelgrid-blank" columnClasses="NoPadding, NoPadding">
-                            <p:commandButton title="#{l.Imprimir}" value="#{l.Imprimir}" action="#{consultaOrcamentoView.imprimir}" ajax="false" onclick="this.form.target = '_blank'" icon="fa fa-print" />
-                            <p:commandButton title="#{l.Ajuda}" value="#{l.Ajuda}" disabled="true" ajax="false" icon="fa fa-question" />
+                            <p:commandButton title="#{l.Imprimir} #{l.Grafico}" value="#{l.Imprimir} #{l.Grafico}" action="#{consultaOrcamentoView.imprimirGrafico()}" ajax="false" onclick="this.form.target = '_blank'" icon="fa fa-print" />
+                            <p:commandButton title="#{l.Imprimir} #{l.Texto}" value="#{l.Imprimir} #{l.Texto}" action="#{consultaOrcamentoView.imprimirTexto()}" icon="fa fa-print" update=":conteudo:growl" />
+                              <!--  <p:commandButton title="#{l.Ajuda}" value="#{l.Ajuda}" disabled="true" ajax="false" icon="fa fa-question" /> -->
                         </p:panelGrid>
                     </h2>
                     <div class="EmptyBox20"/>

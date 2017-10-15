@@ -16,13 +16,15 @@ public class ConfiguracaoBV implements Serializable, BuilderView<Configuracao> {
     private TipoDespesa despesaDeComissao;
     private TipoDeFormacaoDePreco tipoDeFormacaoDePreco;
     private TipoDeCalculoDeCusto tipoDeCalculoDeCusto;
+    private String caminhoImpressoraTexto;
     
-    public ConfiguracaoBV(Configuracao configuracaoSelecionada) {
-        this.id = configuracaoSelecionada.getId();
-        this.despesaDeComissao = configuracaoSelecionada.getDespesaDeComissao();
-        this.moedaPadrao = configuracaoSelecionada.getMoedaPadrao();
-        this.tipoDeFormacaoDePreco = configuracaoSelecionada.getTipoDeFormacaoDePreco();
-        this.tipoDeCalculoDeCusto = configuracaoSelecionada.getTipoDeCalculoDeCusto();
+    public ConfiguracaoBV(Configuracao c) {
+        this.id = c.getId();
+        this.despesaDeComissao = c.getDespesaDeComissao();
+        this.moedaPadrao = c.getMoedaPadrao();
+        this.tipoDeFormacaoDePreco = c.getTipoDeFormacaoDePreco();
+        this.tipoDeCalculoDeCusto = c.getTipoDeCalculoDeCusto();
+        this.caminhoImpressoraTexto= c.getCaminhoImpressoraTexto();
     }
     
     public ConfiguracaoBV() {
@@ -67,6 +69,14 @@ public class ConfiguracaoBV implements Serializable, BuilderView<Configuracao> {
     public void setTipoDeCalculoDeCusto(TipoDeCalculoDeCusto tipoDeCalculoDeCusto) {
         this.tipoDeCalculoDeCusto = tipoDeCalculoDeCusto;
     }
+
+    public String getCaminhoImpressoraTexto() {
+        return caminhoImpressoraTexto;
+    }
+
+    public void setCaminhoImpressoraTexto(String caminhoImpressoraTexto) {
+        this.caminhoImpressoraTexto = caminhoImpressoraTexto;
+    }
     
     public Configuracao construir() throws DadoInvalidoException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -74,7 +84,7 @@ public class ConfiguracaoBV implements Serializable, BuilderView<Configuracao> {
 
     @Override
     public Configuracao construirComID() throws DadoInvalidoException {        
-        return new Configuracao(id, despesaDeComissao, moedaPadrao, tipoDeFormacaoDePreco, tipoDeCalculoDeCusto);
+        return new Configuracao(id, despesaDeComissao, moedaPadrao, tipoDeFormacaoDePreco, tipoDeCalculoDeCusto, caminhoImpressoraTexto);
     }
     
 }

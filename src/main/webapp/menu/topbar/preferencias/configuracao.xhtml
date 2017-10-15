@@ -18,7 +18,7 @@
                     <div class="EmptyBox10"/>
 
                     <div class="ui-g ui-fluid">
-                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Moeda_Padrao}"/>
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Moeda_Padrao}"/>
                         <a:inputTextDialog id="moedaPadrao" mbView="#{configuracaoView}" dialog="#{selecaoMoedaView}" value="#{configuracaoView.configuracaoBV.moedaPadrao}" var="moeda" converter="moedaConverter"  itemLabel="#{moeda.nome}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
                     </div>        
 
@@ -26,7 +26,7 @@
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Despesa_Comissao}</div>
 
                     <div class="ui-g ui-fluid">
-                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-1" value="#{l.Despesa_Comissao}"/>
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Despesa_Comissao}"/>
                         <a:inputTextDialog id="despesaDeComissao" mbView="#{configuracaoView}" dialog="#{selecaoTipoDespesaView}" value="#{configuracaoView.configuracaoBV.despesaDeComissao}" var="despesa" converter="tipoDespesaConverter"  itemLabel="#{despesa.nome}" itemValue="#{despesa}" itemLabelTab="#{despesa.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
                     </div>    
 
@@ -35,18 +35,34 @@
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Tipo_Formacao_Preco}</div>
                     <div class="EmptyBox10"/>
 
-                    <p:selectOneRadio value="#{configuracaoView.configuracaoBV.tipoDeFormacaoDePreco}">
-                        <f:selectItems value="#{configuracaoView.tipoFormacaoDePreco}" var="#{l.Tipo_Formacao_Preco}" itemLabel="#{TipoDeFormacaoDePreco}" itemValue="#{TipoDeFormacaoDePreco}" />
-                    </p:selectOneRadio>
+                    <div class="ui-g">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Tipo_Formacao_Preco}"/>
+                        <p:selectOneRadio value="#{configuracaoView.configuracaoBV.tipoDeFormacaoDePreco}">
+                            <f:selectItems value="#{configuracaoView.tipoFormacaoDePreco}" var="#{l.Tipo_Formacao_Preco}" itemLabel="#{TipoDeFormacaoDePreco}" itemValue="#{TipoDeFormacaoDePreco}" />
+                        </p:selectOneRadio>
+                    </div>
 
                     <div class="EmptyBox5"/>
 
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Tipo_Calculo_De_Custo}</div>
                     <div class="EmptyBox10"/>
 
-                    <p:selectOneMenu value="#{configuracaoView.configuracaoBV.tipoDeCalculoDeCusto}" styleClass="Wid20">
-                        <f:selectItems value="#{configuracaoView.tipoDeCalculoDeCusto}" var="tipoDeCalculoDeCusto" itemLabel="#{tipoDeCalculoDeCusto.nome}" itemValue="#{tipoDeCalculoDeCusto}" />
-                    </p:selectOneMenu>
+                    <div class="ui-g">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Tipo_Calculo_Custo}"/>
+                        <p:selectOneMenu value="#{configuracaoView.configuracaoBV.tipoDeCalculoDeCusto}" styleClass="Wid20">
+                            <f:selectItems value="#{configuracaoView.tipoDeCalculoDeCusto}" var="tipoDeCalculoDeCusto" itemLabel="#{tipoDeCalculoDeCusto.nome}" itemValue="#{tipoDeCalculoDeCusto}" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="EmptyBox5"/>
+
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Informar_Impressora_Texto}</div>
+                    <div class="EmptyBox10"/>
+
+                    <div class="ui-g">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Caminho_Impressora_Texto}"/>
+                        <p:inputText value="#{configuracaoView.configuracaoBV.caminhoImpressoraTexto}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                    </div>        
 
                     <div class="EmptyBox5"/>
 
