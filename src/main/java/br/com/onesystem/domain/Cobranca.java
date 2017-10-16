@@ -256,8 +256,8 @@ public abstract class Cobranca implements Serializable {
     public String getTotalNaMoedaPadraoFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValor());
     }
-    
-     public String getTotalNaMoedaPadraoPorExtenso() {
+
+    public String getTotalNaMoedaPadraoPorExtenso() {
         return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacao.getConta().getMoeda(), getValor()));
     }
 

@@ -78,7 +78,7 @@ public class TipoDeCobranca implements Serializable {
     private Conta conta;
 
     @OneToMany(mappedBy = "tipoDeCobranca", cascade = {CascadeType.ALL})
-    private List<Baixa> baixas;
+    private List<Baixa> baixas = new ArrayList<>();
 
     public TipoDeCobranca() {
     }

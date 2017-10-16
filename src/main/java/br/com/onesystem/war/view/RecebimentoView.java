@@ -83,27 +83,30 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             addNoBanco(recebimento);
 
             //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getTipoDeCobranca() != null && recebimento.getTipoDeCobranca().isEmpty()) {
+            if (recebimento.getTipoDeCobranca() != null && !recebimento.getTipoDeCobranca().isEmpty()) {
                 for (TipoDeCobranca tipo : recebimento.getTipoDeCobranca()) {
                     dao.atualiza(tipo.getCobranca());
                 }
             }
 
             //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getFormasDeCobranca() != null && recebimento.getFormasDeCobranca().isEmpty()) {
+            if (recebimento.getFormasDeCobranca() != null && !recebimento.getFormasDeCobranca().isEmpty()) {
                 for (FormaDeCobranca forma : recebimento.getFormasDeCobranca()) {
                     dao.atualiza(forma.getCobranca());
                 }
             }
 
             t = recebimento;
+
             layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
             if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
                 RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao da nota
             }
+
         } catch (DadoInvalidoException die) {
             die.print();
             limparJanela();
+            RequestContext.getCurrentInstance().update("conteudo");
         }
     }
 

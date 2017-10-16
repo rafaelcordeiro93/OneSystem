@@ -712,7 +712,9 @@ body.main-body {
 .layout-wrapper .topbar {
     position: fixed;
     width: 100%;
-    background-color: #545b61;
+    /* Cor Original
+    background-color: #545b61; */
+    background-color: #20272a;
     height: 60px;
     box-sizing: border-box;
     z-index: 100;
