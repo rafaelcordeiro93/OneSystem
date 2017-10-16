@@ -139,7 +139,7 @@ public abstract class Cobranca implements Serializable {
     public final void atualizaSituacao() {
         if (tiposDeCobranca != null) {
             BigDecimal soma = tiposDeCobranca.stream().map(TipoDeCobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-            if (soma.compareTo(this.valor) >= 0) {
+            if (soma.compareTo(this.valor) >= 0 || (tiposDeCobranca.size() > 0 && this instanceof CobrancaFixa)) {
                 situacaoDeCobranca = SituacaoDeCobranca.PAGO;
             } else {
                 situacaoDeCobranca = SituacaoDeCobranca.ABERTO;

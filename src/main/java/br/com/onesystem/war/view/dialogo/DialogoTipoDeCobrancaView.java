@@ -171,7 +171,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             }
         }
 
-        cotacaoLista = cotacaoDAO.naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+        cotacaoLista = cotacaoDAO.naUltimaEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         contaComCotacao = contaDAO.comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         cotacaoPadrao = cotacaoDAO.porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
     }
