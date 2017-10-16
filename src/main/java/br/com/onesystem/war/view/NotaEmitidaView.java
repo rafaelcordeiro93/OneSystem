@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -84,6 +85,7 @@ import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.LoteNotaFiscalService;
 import br.com.onesystem.war.service.NumeracaoDeNotaFiscalService;
+import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -170,9 +172,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
-
-    @Inject
-    private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @Inject
     private ItemService itemService;
@@ -683,9 +682,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             Object obj = event.getObject();
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
-                Operacao operacao = (Operacao) obj;
-                List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
-                if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
+                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
@@ -817,7 +815,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 || tipo == TipoOperacao.DEVOLUCAO_CONDICIONAL;
         notaEmitida.setOperacao(operacao);
         //notaEmitida.setLoteNotaFiscal(loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()));
-        RequestContext.getCurrentInstance().update("conteudo");
     }
 
     private void buscaProximoNumeroNF(NotaEmitida nota) {
@@ -1416,7 +1413,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void setCreditoService(CreditoService creditoService) {
         this.creditoService = creditoService;
     }
-    
+
     public LayoutDeImpressao getLayoutTitulo() {
         return layoutTitulo;
     }

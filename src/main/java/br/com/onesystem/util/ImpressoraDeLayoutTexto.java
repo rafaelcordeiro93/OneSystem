@@ -352,6 +352,7 @@ public final class ImpressoraDeLayoutTexto {
     public void imprimir(String caminhoImpressora) throws DadoInvalidoException {
         caminhoImpressora = caminhoImpressora.trim();
         if (caminhoImpressora != null) {
+            InfoMessage.print(new BundleUtil().getLabel("Imprimindo"));
             for (TextoBuilder imp : impressoras) {
                 new MatrixPrinter(caminhoImpressora).imprimir(imp.getArrayEmLinha());
             }

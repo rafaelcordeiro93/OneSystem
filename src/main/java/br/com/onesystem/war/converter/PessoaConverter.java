@@ -5,21 +5,13 @@
  */
 package br.com.onesystem.war.converter;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.domain.Pessoa;
-import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.PessoaService;
-import br.com.onesystem.war.view.selecao.SelecaoPessoaView;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 
 /**
@@ -51,13 +43,6 @@ public class PessoaConverter implements Converter, Serializable {
                     Method m = bean.getClass().getMethod("getId", null);
                     m.setAccessible(true);
                     Long idObject = (Long) m.invoke(bean, null);
-
-                    //Inicializa o objeto dentro do managed bean;
-                    if (idObject != null) {
-                        new ArmazemDeRegistrosNaMemoria<SelecaoPessoaView>().initialize(bean, SelecaoPessoaView.class);
-                    } else {
-                        return "";
-                    }
 
                     //Grava o objeto no componente e devolve o id
                     String id = String.valueOf(idObject);
