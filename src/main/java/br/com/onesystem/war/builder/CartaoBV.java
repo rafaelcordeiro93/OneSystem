@@ -27,7 +27,6 @@ public class CartaoBV implements Serializable, BuilderView<Cartao> {
         this.despesa = cartaoSelecionada.getDespesa();
         this.juros = cartaoSelecionada.getJuros();
         this.taxaDeAdministracao = cartaoSelecionada.getTaxaDeAdministracao();
-
     }
 
     public CartaoBV() {

@@ -17,9 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "bancoConverter", forClass = Banco.class)
-public class BancoConverter extends BasicConverter<Banco, SelecaoBancoView> implements Converter, Serializable {
+public class BancoConverter extends BasicConverter<Banco> implements Converter, Serializable {
 
     public BancoConverter() {
-        super(Banco.class, SelecaoBancoView.class);
+        super(Banco.class);
     }
 }

@@ -17,10 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "notaRecebidaConverter", forClass = NotaRecebida.class)
-public class NotaRecebidaConverter extends BasicConverter<NotaRecebida, SelecaoNotaRecebidaView> implements Converter, Serializable {
+public class NotaRecebidaConverter extends BasicConverter<NotaRecebida> implements Converter, Serializable {
 
     public NotaRecebidaConverter() {
-        super(NotaRecebida.class, SelecaoNotaRecebidaView.class);
+        super(NotaRecebida.class);
     }
 
 }

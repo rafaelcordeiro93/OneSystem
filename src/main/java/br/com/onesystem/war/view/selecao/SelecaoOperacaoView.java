@@ -41,9 +41,7 @@ public class SelecaoOperacaoView extends BasicCrudMBImpl<Operacao> implements Se
 
     @Override
     public List<Operacao> complete(String query) {
-        query = query.trim();
         buscarDados();
-
         List<Operacao> listaFiltrada = new ArrayList<>();
         for (Operacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {

@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoContaView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "contaConverter", forClass = Conta.class)
-public class ContaConverter extends BasicConverter<Conta, SelecaoContaView> implements Converter, Serializable {
+public class ContaConverter extends BasicConverter<Conta> implements Converter, Serializable {
 
     public ContaConverter() {
-        super(Conta.class, SelecaoContaView.class);
+        super(Conta.class);
     }
 }

@@ -17,9 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "caixaConverter", forClass = Caixa.class)
-public class CaixaConverter extends BasicConverter<Caixa, SelecaoCaixaView> implements Converter, Serializable {
+public class CaixaConverter extends BasicConverter<Caixa> implements Converter, Serializable {
 
     public CaixaConverter() {
-        super(Caixa.class, SelecaoCaixaView.class);
+        super(Caixa.class);
     }
 }

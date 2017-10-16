@@ -5,7 +5,7 @@
 /*html { text-rendering: optimizeLegibility !important; -webkit-font-smoothing: antialiased !important;}*/
 
 body{height:100%; width:100%;}
-
+.GrowTop{top: 300px};
 
 /* CORE LAYOUT STANDART STYLES ********************************************************************************************************** */
 
@@ -760,7 +760,8 @@ body .ui-button.red-btn.ui-state-active {
 }
 
 .content-section-introduction {
-    background-image: linear-gradient(270deg,#2bc0ec,#1b81d7);
+    /*original 2bc0ec*/
+    background-image: linear-gradient(270deg,#93ddf7,#1b81d7);
     color: #fff;
     margin-top: -10px;
     margin-left: -5px;
@@ -782,7 +783,7 @@ body .ui-button.red-btn.ui-state-active {
     -webkit-font-smoothing: antialiased;
     font-size: 1.2em;
     color: #fff;
-    line-height: 1.5em;
+    line-height: 2.5em;
 }
 .Back-Gray{
     background-color: #e1e1e1 !important;

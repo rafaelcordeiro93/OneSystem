@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoGrupoFinanceiroView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "grupoFinanceiroConverter", forClass = GrupoFinanceiro.class)
-public class GrupoFinanceiroConverter extends BasicConverter<GrupoFinanceiro, SelecaoGrupoFinanceiroView> implements Converter, Serializable {
+public class GrupoFinanceiroConverter extends BasicConverter<GrupoFinanceiro> implements Converter, Serializable {
 
     public GrupoFinanceiroConverter() {
-        super(GrupoFinanceiro.class, SelecaoGrupoFinanceiroView.class);
+        super(GrupoFinanceiro.class);
     }
 }

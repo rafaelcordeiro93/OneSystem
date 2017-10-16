@@ -11,19 +11,19 @@ public class BoletoDeCartaoDAO extends GenericDAO<BoletoDeCartao> {
     }
 
     public BoletoDeCartaoDAO porNome(BoletoDeCartao boletoDeCartao) {
-        where += " and banco.nome = :bNome ";
+        where += " and cartao.nome = :bNome ";
         parametros.put("bNome", boletoDeCartao.getCartao().getNome());
         return this;
     }
 
     public BoletoDeCartaoDAO porSituacao(SituacaoDeCartao situacao) {
-        where += "and banco.situacao = :pSituacao";
+        where += "and situacao = :pSituacao";
         parametros.put("pSituacao", situacao);
         return this;
     }
 
     public BoletoDeCartaoDAO porId(Long id) {
-        where += " and banco.id = :bId ";
+        where += " and id = :bId ";
         parametros.put("bId", id);
         return this;
     }

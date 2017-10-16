@@ -17,9 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "moedaConverter", forClass = Moeda.class)
-public class MoedaConverter extends BasicConverter<Moeda, SelecaoMoedaView> implements Converter, Serializable {
+public class MoedaConverter extends BasicConverter<Moeda> implements Converter, Serializable {
 
     public MoedaConverter() {
-        super(Moeda.class, SelecaoMoedaView.class);
+        super(Moeda.class);
     }
 }

@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,10 +16,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "operacaoConverter", forClass = Operacao.class)
-public class OperacaoConverter extends BasicConverter<Operacao, SelecaoOperacaoView> implements Converter, Serializable {
+public class OperacaoConverter extends BasicConverter<Operacao> implements Converter, Serializable {
 
     public OperacaoConverter() {
-        super(Operacao.class, SelecaoOperacaoView.class);
+        super(Operacao.class);
     }
 
 }

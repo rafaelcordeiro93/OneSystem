@@ -544,8 +544,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------------------- Fim Itens -----------------------------------
     // --------------------------- Parcelas -----------------------------------
     /**
-     * Método responsável por abrir o diálogo de detalhamento das cobranca.
-     */
+     * Método responsável por abrir o diálogo de detalhamento das cobranca. 
+     */ 
     public void detalharParcela() {
         cobrancaBV = new CobrancaBV(cobrancaSelecionada);
         RequestContext req = RequestContext.getCurrentInstance();

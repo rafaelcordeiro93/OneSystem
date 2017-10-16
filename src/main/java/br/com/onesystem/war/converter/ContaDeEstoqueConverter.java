@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoContaDeEstoqueView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "contaDeEstoqueConverter", forClass = ContaDeEstoque.class)
-public class ContaDeEstoqueConverter extends BasicConverter<ContaDeEstoque, SelecaoContaDeEstoqueView> implements Converter, Serializable {
+public class ContaDeEstoqueConverter extends BasicConverter<ContaDeEstoque> implements Converter, Serializable {
 
     public ContaDeEstoqueConverter() {
-        super(ContaDeEstoque.class, SelecaoContaDeEstoqueView.class);
+        super(ContaDeEstoque.class);
     }
 }

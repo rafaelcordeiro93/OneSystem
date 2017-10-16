@@ -41,7 +41,6 @@
 
                         <p:spacer height="1px" width="100%"/>
 
-
                         <p:commandButton id="importaItemNotaEmitida-btn" action="#{selecaoNotaEmitidaView.abrirDialogo}" process="@this" update="@none" style="display: none">
                             <p:ajax event="dialogReturn" listener="#{notaEmitidaView.selecionar}" process="@this" update=":conteudo:ne:itensEmitidosNota"/>
                         </p:commandButton>
@@ -660,42 +659,46 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="detalheChequeParcela" width="560" header="#{l.Detalhe_De_Cheque}" resizable="false" 
-                  modal="true" closable="false" closeOnEscape="false" 
+        <p:dialog widgetVar="detalheChequeParcela" width="600" header="#{l.Detalhe_De_Cheque}" resizable="false" 
+                  modal="false" closable="false" closeOnEscape="false" 
                   responsive="true" styleClass="zIndex500">
 
-            <p:panelGrid id="panelDetCheParcela" columns="4" styleClass="ui-panelgrid-blank form-group form-elements"
-                         columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-4, ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-2">
+            <div class="ui-fluid">
+                <p:panelGrid id="panelDetCheParcela" columns="2" styleClass="ui-panelgrid-blank form-group form-elements" style="width: 100% !important"
+                             columnClasses="ui-g-12 ui-md-2 TexAlRight,ui-g-12 ui-md-8 ui-fluid">
 
-                <p:outputLabel value="#{l.Banco}"/>
-                <a:inputTextDialog id="bancoParcelas" style="width: 100% !important"  dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.cobrancaBV.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
+                    <p:outputLabel value="#{l.Banco}"/>
+                    <a:inputTextDialog id="bancoParcelas" style="width: 100% !important"  dialog="#{selecaoBancoView}" mbView="#{notaEmitidaView}" value="#{notaEmitidaView.cobrancaBV.banco}" var="banco" itemLabel="#{banco.nome}" itemValue="#{banco}" converter="bancoConverter" itemLabelTabVisible="true" itemLabelTab="#{banco.nome}"/>
 
-                <p:outputLabel value="#{l.Agencia}"/>
-                <p:inputText value="#{notaEmitidaView.cobrancaBV.agencia}" />        
+                    <p:outputLabel value="#{l.Agencia}"/>
+                    <p:inputText value="#{notaEmitidaView.cobrancaBV.agencia}" />        
 
-                <p:outputLabel value="#{l.Conta}"/>
-                <p:inputText value="#{notaEmitidaView.cobrancaBV.conta}" style="width: 95.5% !important"/>   
+                    <p:outputLabel value="#{l.Conta}"/>
+                    <p:inputText value="#{notaEmitidaView.cobrancaBV.conta}"/>   
 
-                <p:outputLabel value="#{l.Cheque}"/>
-                <p:inputText value="#{notaEmitidaView.cobrancaBV.numeroCheque}" />   
+                    <p:outputLabel value="#{l.Cheque}"/>
+                    <p:inputText value="#{notaEmitidaView.cobrancaBV.numeroCheque}" />   
 
-                <p:outputLabel value="#{l.Emitente}"/>
-                <p:inputText value="#{notaEmitidaView.cobrancaBV.emitente}" style="width: 95.5% !important"/>      
+                    <p:outputLabel value="#{l.Emitente}"/>
+                    <p:inputText value="#{notaEmitidaView.cobrancaBV.emitente}"/>      
 
-                <p:outputLabel value="#{l.Observacao}"/>
-                <p:inputTextarea autoResize="true" rows="2" cols="20" styleClass="PaddingPx4"
-                                 maxlength="200" value="#{notaEmitidaView.cobrancaBV.observacao}">
-                </p:inputTextarea>
+                    <p:outputLabel value="#{l.Observacao}"/>
+                    <p:inputTextarea autoResize="true" rows="2" cols="20" styleClass="PaddingPx4"
+                                     maxlength="200" value="#{notaEmitidaView.cobrancaBV.observacao}">
+                    </p:inputTextarea>
 
-            </p:panelGrid>        
+                </p:panelGrid>        
+            </div>
 
             <p:separator/>
 
-            <p:commandButton value="#{l.Confirmar}" action="#{notaEmitidaView.addDetalheParcelaCheque}" 
-                             update=":conteudo:growl"/>
-            <p:commandButton value="#{l.Limpar}" action="#{notaEmitidaView.limparChequeParcelas}" update="panelDetCheParcela"/>            
-            <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeParcela').hide()"/>           
-
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12 ui-lg-12" >
+                    <p:commandButton value="#{l.Confirmar}" action="#{notaEmitidaView.addDetalheParcelaCheque}" styleClass="green-btn" update=":conteudo:growl" style="float: right; margin: 2.5px"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{notaEmitidaView.limparChequeParcelas}" update="panelDetCheParcela" style="float: right; margin: 2.5px"/>            
+                    <p:commandButton value="#{l.Fechar}" onclick="PF('detalheChequeParcela').hide()" style="float: right; margin: 2.5px"/>           
+                </div>
+            </div>
         </p:dialog>
 
         <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 

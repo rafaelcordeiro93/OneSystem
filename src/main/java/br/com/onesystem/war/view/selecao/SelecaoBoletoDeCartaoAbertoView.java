@@ -1,6 +1,5 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.dao.BoletoDeCartaoDAO;
 import br.com.onesystem.domain.BoletoDeCartao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.SituacaoDeCartao;
@@ -10,11 +9,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@SessionScoped
 public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCartao> implements Serializable {
 
     @Inject
@@ -22,7 +22,11 @@ public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCar
 
     @PostConstruct
     public void init() {
-        beans = new BoletoDeCartaoDAO().porSituacao(SituacaoDeCartao.ABERTO).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = service.buscaBoletosPorSituacao(SituacaoDeCartao.ABERTO);
     }
 
     public void abrirDialogo() {
@@ -34,12 +38,9 @@ public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCar
         return "/menu/financeiro/cadastros/boletoDeCartao";
     }
 
-    public BoletoDeCartaoService getService() {
-        return service;
-    }
-
     @Override
     public List<BoletoDeCartao> complete(String query) {
+        buscarDados();
         List<BoletoDeCartao> boletosFIltrados = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (BoletoDeCartao m : beans) {
@@ -51,7 +52,4 @@ public class SelecaoBoletoDeCartaoAbertoView extends BasicCrudMBImpl<BoletoDeCar
         return boletosFIltrados;
     }
 
-    public void setService(BoletoDeCartaoService service) {
-        this.service = service;
-    }
 }

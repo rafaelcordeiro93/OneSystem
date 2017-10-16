@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoFormaDeRecebimentoView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "formaDeRecebimentoConverter", forClass = FormaDeRecebimento.class)
-public class FormaDeRecebimentoConverter extends BasicConverter<FormaDeRecebimento, SelecaoFormaDeRecebimentoView> implements Converter, Serializable {
+public class FormaDeRecebimentoConverter extends BasicConverter<FormaDeRecebimento> implements Converter, Serializable {
 
     public FormaDeRecebimentoConverter() {
-        super(FormaDeRecebimento.class, SelecaoFormaDeRecebimentoView.class);
+        super(FormaDeRecebimento.class);
     }
 }

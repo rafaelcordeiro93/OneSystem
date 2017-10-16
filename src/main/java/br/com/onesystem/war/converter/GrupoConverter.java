@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoGrupoView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "grupoConverter", forClass = Grupo.class)
-public class GrupoConverter extends BasicConverter<Grupo, SelecaoGrupoView> implements Converter, Serializable {
+public class GrupoConverter extends BasicConverter<Grupo> implements Converter, Serializable {
 
     public GrupoConverter() {
-        super(Grupo.class, SelecaoGrupoView.class);
+        super(Grupo.class);
     }
 }

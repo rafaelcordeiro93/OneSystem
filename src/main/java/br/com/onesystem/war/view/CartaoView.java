@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Configuracao;
@@ -12,7 +13,9 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.builder.CartaoBV;
 import br.com.onesystem.war.builder.TaxaDeAdministracaoBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoCartaoView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +94,8 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
         Object obj = (Object) event.getObject();
         String idComponent = event.getComponent().getId();
         if (obj instanceof Cartao) {
-            Cartao name = (Cartao) obj;
-            e = new CartaoBV((Cartao) obj);
-            name.getTaxaDeAdministracao().forEach(System.out::println);
+            Cartao cartao = (Cartao) new ArmazemDeRegistrosNaMemoria<SelecaoCartaoView>().initialize(obj, SelecaoCartaoView.class, "getTaxaDeAdministracao");
+            e = new CartaoBV(cartao);
         } else if (obj instanceof Conta) {
             e.setConta((Conta) obj);
         } else if (obj instanceof TipoDespesa && "despesasId-search".equals(idComponent)) {
@@ -101,6 +103,11 @@ public class CartaoView extends BasicMBImpl<Cartao, CartaoBV> implements Seriali
         } else if (obj instanceof TipoDespesa && "jurosId-search".equals(idComponent)) {
             e.setJuros((TipoDespesa) obj);
         }
+    }
+
+    public void selecionaCartao() {
+        Cartao cartao = (Cartao) new ArmazemDeRegistrosNaMemoria<SelecaoCartaoView>().initialize(e, SelecaoCartaoView.class, "getTaxaDeAdministracao");
+        e = new CartaoBV(cartao);
     }
 
     public void selecionaTaxa(SelectEvent event) {

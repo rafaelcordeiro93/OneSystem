@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,14 +15,12 @@ import javax.faces.context.FacesContext;
  *
  * @author Rafael
  */
-public abstract class BasicConverter<Bean, SelecaoBean extends BasicCrudMBImpl> implements Serializable {
+public abstract class BasicConverter<Bean> implements Serializable {
 
     private Class clazz;
-    private Class selecaoClazz;
 
-    public BasicConverter(Class clazz, Class selecaoClazz) {
+    public BasicConverter(Class clazz) {
         this.clazz = clazz;
-        this.selecaoClazz = selecaoClazz;
     }
 
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
