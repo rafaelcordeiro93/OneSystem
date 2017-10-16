@@ -29,6 +29,10 @@ public class LoteItemService implements Serializable {
         return dao.porId(id).resultado();
     }
 
+    public List<LoteItem> buscarLoteItemPorItem(Item item) {
+        return dao.porItem(item).porAtivo().listaDeResultados();
+    }
+
     public BigDecimal calculaQuantidade(BigDecimal valorAntigo, BigDecimal valorNovo) {
         if (valorAntigo.compareTo(valorNovo) == 1) {
             return valorAntigo.subtract(valorNovo).negate();
@@ -38,7 +42,7 @@ public class LoteItemService implements Serializable {
             return BigDecimal.ZERO;
         }
     }
-    
+
     public void atualizaSaldoLote(Item item, LoteItemBV lote, BigDecimal quantidade, OperacaoFisica operacao) {
         try {
             if (item.getDetalhamento() != DetalhamentoDeItem.LOTES) {

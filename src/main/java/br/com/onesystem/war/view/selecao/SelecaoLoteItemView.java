@@ -1,9 +1,7 @@
 package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.LoteItem;
-import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
