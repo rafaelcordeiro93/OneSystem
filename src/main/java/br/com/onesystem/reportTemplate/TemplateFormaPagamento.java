@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.reportTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  * @author Rafael
  */
 public class TemplateFormaPagamento {
-    
+
     private int id;
     private String nome;
     private String detalhes;
@@ -20,7 +21,7 @@ public class TemplateFormaPagamento {
     private String valorFormatado;
     private String valorConvertido;
 
-    public TemplateFormaPagamento(int id, String nome, String detalhes,String vencimento, String valorFormatado, String valorConvertido) {
+    public TemplateFormaPagamento(int id, String nome, String detalhes, String vencimento, String valorFormatado, String valorConvertido) {
         this.id = id;
         this.nome = nome;
         this.vencimento = vencimento;
@@ -32,7 +33,7 @@ public class TemplateFormaPagamento {
     public int getId() {
         return id;
     }
-    
+
     public String getNome() {
         return nome;
     }
@@ -52,14 +53,14 @@ public class TemplateFormaPagamento {
     public String getDetalhes() {
         return detalhes;
     }
-    
-    public String getAbbreviated(){
-        return nome.substring(0,2) + " " + vencimento + " " + valorConvertido;
+
+    public String getAbbreviated() {
+        return nome.substring(0, 3) + " " + (vencimento == null ? ".........." : vencimento) + " " + valorConvertido;
     }
-    
+
     @Override
     public String toString() {
         return "TemplateFormaPagamento{" + "id=" + id + ", nome=" + nome + ", vencimento=" + vencimento + ", valorFormatado=" + valorFormatado + ", valorConvertido=" + valorConvertido + '}';
     }
-    
+
 }

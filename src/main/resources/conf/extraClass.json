@@ -45,6 +45,20 @@
             "caminho": "pessoa"
         }
     ],
+    "br.com.onesystem.domain.Condicional": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Operacao",
+            "caminho": "operacao"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Filial",
+            "caminho": "filial"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.Pessoa",
+            "caminho": "pessoa"
+        }
+    ],
     "br.com.onesystem.domain.Pessoa": [
         {
             "classeDestino": "br.com.onesystem.domain.Cidade",
@@ -124,6 +138,16 @@
         }
     ],
     "br.com.onesystem.domain.ItemDeNota": [
+        {
+            "classeDestino": "br.com.onesystem.domain.Item",
+            "caminho": "item"
+        },
+        {
+            "classeDestino": "br.com.onesystem.domain.UnidadeMedidaItem",
+            "caminho": "item.unidadeDeMedida"
+        }
+    ],
+    "br.com.onesystem.domain.ItemDeCondicional": [
         {
             "classeDestino": "br.com.onesystem.domain.Item",
             "caminho": "item"

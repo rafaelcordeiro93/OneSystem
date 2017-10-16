@@ -27,15 +27,14 @@
             "linha20": "          |                                                              |            |     |            |              ",
             "linha21": "          |                                                              |            |     |            |              ",
             "linha22": "+---------+--------------------------------------------------------------+------------+-----+------------+-------------+",
-            "linha23": "Formas de Pagamento                                                                          |Desconto...:             -",
+            "linha23": "Observacoes:                                                                                 |Desconto...:             -",
             "linha24": "                                                                                             |Acrescimos.:             +",
             "linha25": "                                                                                             |Mercadorias:             +",
-            "linha26": "                                                                                             |Servicos...:             +",
-            "linha27": "                                                                                             |Frete......:             +",
-            "linha28": "                                                                                             |Despesas...:             +",
-            "linha29": "---------------------------------------------------------------------------------------------|------------------------- ",
-            "linha30": "Nao e documento fiscal. Documento nao e valido como garantia da mercadoria.                  |Total......:              ",
-            "linha32": "========================================================================================================================"
+            "linha26": "                                                                                             |Frete......:             +",
+            "linha27": "                                                                                             |Despesas...:             +",
+            "linha28": "---------------------------------------------------------------------------------------------|------------------------- ",
+            "linha29": "Nao e documento fiscal. Documento nao e valido como garantia da mercadoria.                  |Total......:              ",
+            "linha30": "========================================================================================================================"
         }],
 
     "dados": [
@@ -48,7 +47,7 @@
             "size": 95
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "id",
             "left": 107,
             "top": 3,
@@ -64,7 +63,7 @@
             "size": 95
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "emissaoFormatada",
             "left": 107,
             "top": 4,
@@ -128,7 +127,15 @@
             "size": 18
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "observacaoPrimeiraLinha",
+            "left": 14,
+            "top": 23,
+            "align": "LEFT",
+            "size": 79
+        },
+        {
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "descontoFormatado",
             "left": 108,
             "top": 23,
@@ -136,7 +143,15 @@
             "size": 12
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "observacaoSegundaLinha",
+            "left": 1,
+            "top": 24,
+            "align": "LEFT",
+            "size": 91
+        },
+        {
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "acrescimoFormatado",
             "left": 108,
             "top": 24,
@@ -144,7 +159,15 @@
             "size": 12
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "observacaoTerceiraLinha",
+            "left": 1,
+            "top": 25,
+            "align": "LEFT",
+            "size": 91
+        },
+        {
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "totalEmMercadoriasFormatado",
             "left": 108,
             "top": 25,
@@ -152,47 +175,55 @@
             "size": 12
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
-            "column": "totalEmServicosFormatado",
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "observacaoQuartaLinha",
+            "left": 1,
+            "top": 26,
+            "align": "LEFT",
+            "size": 91
+        },
+        {
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "freteFormatado",
             "left": 108,
             "top": 26,
             "align": "RIGHT",
             "size": 12
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
-            "column": "freteFormatado",
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "observacaoQuintaLinha",
+            "left": 1,
+            "top": 27,
+            "align": "LEFT",
+            "size": 91
+        },
+        {
+            "class": "br.com.onesystem.domain.Condicional",
+            "column": "despesaCobrancaFormatado",
             "left": 108,
             "top": 27,
             "align": "RIGHT",
             "size": 12
         },
         {
-            "class": "br.com.onesystem.domain.NotaEmitida",
-            "column": "despesaCobrancaFormatado",
-            "left": 108,
-            "top": 28,
-            "align": "RIGHT",
-            "size": 12
-        },
-        {
-            "class": "br.com.onesystem.domain.NotaEmitida",
+            "class": "br.com.onesystem.domain.Condicional",
             "column": "totalFormatado",
             "left": 108,
-            "top": 30,
+            "top": 29,
             "align": "RIGHT",
             "size": 12
         }
     ],
-    "itemDeNota-properties": [
+    "itemDeCondicional-properties": [
         {
-            "class": "br.com.onesystem.domain.ItemDeNota",
+            "class": "br.com.onesystem.domain.ItemDeCondicional",
             "start": 13,
             "count": 9,
             "height": 1
         }
     ],
-    "itemDeNota-cursor": [
+    "itemDeCondicional-cursor": [
         {
             "class": "br.com.onesystem.domain.Item",
             "column": "id",
@@ -208,7 +239,7 @@
             "size": 60
         },
         {
-            "class": "br.com.onesystem.domain.ItemDeNota",
+            "class": "br.com.onesystem.domain.ItemDeCondicional",
             "column": "quantidade",
             "left": 76,
             "align": "CENTER",
@@ -222,47 +253,18 @@
             "size": 2
         }, 
         {
-            "class": "br.com.onesystem.domain.ItemDeNota",
+            "class": "br.com.onesystem.domain.ItemDeCondicional",
             "column": "unitarioFormatado",
             "left": 95,
             "align": "RIGHT",
             "size": 10
         }, 
         {
-            "class": "br.com.onesystem.domain.ItemDeNota",
+            "class": "br.com.onesystem.domain.ItemDeCondicional",
             "column": "totalFormatado",
             "left": 108,
             "align": "RIGHT",
             "size": 12
-        }
-    ],
-    "formaCobranca-properties": [
-        {
-            "class": "br.com.onesystem.domain.TemplateFormaPagamento",
-            "start": 24,
-            "count": 5,
-            "height": 1
-        },
-        {
-            "class": "br.com.onesystem.domain.TemplateFormaPagamento",
-            "start": 24,
-            "count": 5,
-            "height": 1,
-            "leftExtra": 30
-        },
-        {
-            "class": "br.com.onesystem.domain.TemplateFormaPagamento",
-            "start": 24,
-            "count": 5,
-            "height": 1,
-            "leftExtra": 60
-        }
-    ],
-    "formaCobranca-cursor": [
-        {
-            "class": "br.com.onesystem.reportTemplate.TemplateFormaPagamento",
-            "column": "abbreviated",
-            "left": 1
         }
     ]
 }

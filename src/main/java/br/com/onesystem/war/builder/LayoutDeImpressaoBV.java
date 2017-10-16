@@ -23,7 +23,7 @@ public class LayoutDeImpressaoBV implements BuilderView<LayoutDeImpressao>, Seri
     private TipoLayout tipoLayout;
     private String layoutGrafico;
     private String layoutTexto;
-    private boolean layoutGraficoEhPadrao;
+    private boolean layoutGraficoEhPadrao = true;
     private TipoImpressao tipoImpressao;
 
     public LayoutDeImpressaoBV() {

@@ -79,10 +79,6 @@ public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, Selecao
                     m.setAccessible(true);
                     Long idObject = (Long) m.invoke(bean, null);
 
-                    //Inicializa o objeto dentro do managed bean;
-                    new ArmazemDeRegistrosNaMemoria<SelecaoBean>().initialize(bean, selecaoClazz);
-
-                    //Grava o objeto no componente e devolve o id
                     String id = String.valueOf(idObject);
                     uic.getAttributes().put(id, bean);
                     return id;

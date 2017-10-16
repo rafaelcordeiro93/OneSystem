@@ -199,6 +199,8 @@
 
                         <p:commandButton value="#{l.Finalizar}" action="#{condicionalView.finalizar}" update=":conteudo"/>           
                         <h:commandButton id="imprimir" actionListener="#{condicionalView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
+                        <p:commandButton id="imprimirTexto" actionListener="#{orcamentoView.imprimirTexto()}" style="display: none"/>
+
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
 

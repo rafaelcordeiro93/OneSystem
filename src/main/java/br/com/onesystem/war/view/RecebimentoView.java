@@ -16,7 +16,7 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
@@ -128,7 +128,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void imprimir() {
         try {
-            new ImpressoraDeLayout(t.getTipoDeCobranca(), layoutDeImpressao).addParametro("recebimento", t).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(t.getTipoDeCobranca(), layoutDeImpressao).addParametro("recebimento", t).visualizarPDF();
             t = null;
         } catch (DadoInvalidoException die) {
             die.print();

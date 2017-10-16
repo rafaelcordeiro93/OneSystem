@@ -12,7 +12,7 @@ public class OperacaoService implements Serializable {
     private OperacaoDAO dao;
     
     public List<Operacao> buscar(){
-        return dao.listaDeResultados();
+        return dao.orderByID().listaDeResultados();
     }
         
 }

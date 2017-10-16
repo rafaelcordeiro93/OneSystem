@@ -33,5 +33,11 @@ public class OperacaoDAO extends GenericDAO<Operacao> {
         parametros.put("oNome", nome);
         return this;
     }
+    
+    public OperacaoDAO orderByID(){
+        order = "order by operacao.id";
+        return this;
+    }
+            
 
 }

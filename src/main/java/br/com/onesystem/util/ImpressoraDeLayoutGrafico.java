@@ -24,7 +24,7 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-public class ImpressoraDeLayout {
+public class ImpressoraDeLayoutGrafico {
 
     private String diretorio;
     private JasperPrint print;
@@ -32,7 +32,7 @@ public class ImpressoraDeLayout {
     private LayoutDeImpressao layoutDeImpressao;
     private final List<?> lista;
 
-    public ImpressoraDeLayout(List<?> lista, LayoutDeImpressao layoutDeImpressao) {
+    public ImpressoraDeLayoutGrafico(List<?> lista, LayoutDeImpressao layoutDeImpressao) {
         this.layoutDeImpressao = layoutDeImpressao;
         this.lista = lista;
         initDiretorio();
@@ -47,11 +47,11 @@ public class ImpressoraDeLayout {
     private void initDiretorio() {
         String realPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("");
         realPath = realPath.substring(0, realPath.lastIndexOf("\\"));
-        realPath = realPath + "\\classes\\layouts\\";
+        realPath = realPath + "\\WEB-INF\\classes\\layouts\\";
         this.diretorio = realPath;
     }
 
-    public ImpressoraDeLayout addParametro(String key, Object parametro) {
+    public ImpressoraDeLayoutGrafico addParametro(String key, Object parametro) {
         this.parametros.put(key, parametro);
         return this;
     }
@@ -95,7 +95,7 @@ public class ImpressoraDeLayout {
 
             FacesContext.getCurrentInstance().responseComplete();
         } catch (JRException ex) {
-            Logger.getLogger(ImpressoraDeLayout.class.getName()).log(Level.SEVERE, "Erro: " + ex.getMessage(), ex);
+            Logger.getLogger(ImpressoraDeLayoutGrafico.class.getName()).log(Level.SEVERE, "Erro: " + ex.getMessage(), ex);
             throw new ADadoInvalidoException("Error: " + ex.getMessage()); 
         } catch (IOException ex) {
             throw new FDadoInvalidoException(new BundleUtil().getMessage("Erro_Exibir_Relatorio") + ": (ImpressoraDeLayout - ExportarPDF)" + ex.getMessage(), "Error");

@@ -5,6 +5,7 @@ public class MatrixPrinter {
     private String impressora;
 
     public MatrixPrinter(String impressora) {
+        
         this.impressora = impressora;
     }
 

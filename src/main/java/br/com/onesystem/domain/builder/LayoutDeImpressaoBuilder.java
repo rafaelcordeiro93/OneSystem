@@ -48,11 +48,11 @@ public class LayoutDeImpressaoBuilder {
         return this;
     }
 
-    public LayoutDeImpressaoBuilder comTipoImpressao(TipoImpressao tipoImpressao){
+    public LayoutDeImpressaoBuilder comTipoImpressao(TipoImpressao tipoImpressao) {
         this.tipoImpressao = tipoImpressao;
         return this;
     }
-    
+
     public LayoutDeImpressao construir() throws DadoInvalidoException {
         return new LayoutDeImpressao(id, tipoLayout, layoutGrafico, layoutTexto, layoutGraficoEhPadrao, tipoImpressao);
     }

@@ -39,11 +39,10 @@ public abstract class BasicCrudMBImpl<Bean> {
     public abstract String abrirEdicao();
 
     public void selecionar() {
-        inicializaRegistro(beanSelecionado); //Inicializa listas do registro selecionado.
         RequestContext.getCurrentInstance().closeDialog(beanSelecionado);
     }
 
-    public void inicializaRegistro(Bean bean) {
+    public Bean inicializaRegistro(Bean bean, String metodoParaInicializar) {
         if (bean != null) {
             try {
                 try {
@@ -51,22 +50,19 @@ public abstract class BasicCrudMBImpl<Bean> {
                 } catch (ArrayIndexOutOfBoundsException aie) {
                     bean = getId(bean);
                     if (bean == null) {
-                        return;
+                        return bean;
                     }
                 }
-                Method[] methods = bean.getClass().getMethods();
-                for (Method m : methods) {
-                    if (m.getReturnType().equals(List.class)) {
-                        Method mList = List.class.getMethod("size", null);
+                Method method = bean.getClass().getMethod(metodoParaInicializar);
+                Method mList = List.class.getMethod("size", null);
 
-                        m.setAccessible(true);
-                        mList.setAccessible(true);
+                method.setAccessible(true);
+                mList.setAccessible(true);
 
-                        Object objeto = m.invoke(bean, null);
-//                    Object test = mList.invoke(objeto, null);
-                        Hibernate.initialize(objeto);
-                    }
-                }
+                Object objeto = method.invoke(bean, null);
+                Object test = mList.invoke(objeto, null);
+
+                return bean;
             } catch (IllegalAccessException ex) {
                 throw new RuntimeException("Erro de acesso ao método.");
             } catch (IllegalArgumentException ex) {
@@ -79,6 +75,7 @@ public abstract class BasicCrudMBImpl<Bean> {
                 throw new RuntimeException("Erro de segurança ao realizar o acesso.");
             }
         }
+        return bean;
     }
 
     private Bean getId(Bean bean) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {

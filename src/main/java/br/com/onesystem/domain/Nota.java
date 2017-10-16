@@ -11,6 +11,7 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.EstadoDeNota;
+import br.com.onesystem.valueobjects.TipoItem;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -191,7 +192,7 @@ public abstract class Nota implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("pessoa", "operacao", "moedaPadrao", "filial");
+        List<String> campos = Arrays.asList("pessoa", "cotacao", "operacao", "filial");
         new ValidadorDeCampos<>().valida(this, campos);
     }
 
@@ -306,6 +307,22 @@ public abstract class Nota implements Serializable {
 
     public String getTotalItensFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalItens());
+    }
+
+    public BigDecimal getTotalEmMercadorias() {
+        return itens.stream().filter(i -> i.getItem().getTipoItem() != TipoItem.SERVICO).map(ItemDeNota::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalEmMercadoriasFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalEmMercadorias());
+    }
+
+    public BigDecimal getTotalEmServicos() {
+        return itens.stream().filter(i -> i.getItem().getTipoItem() == TipoItem.SERVICO).map(ItemDeNota::getTotal).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public String getTotalEmServicosFormatado() {
+        return MoedaFormatter.format(cotacao.getConta().getMoeda(), getTotalEmServicos());
     }
 
     public String getTotalParcelasFormatado() {

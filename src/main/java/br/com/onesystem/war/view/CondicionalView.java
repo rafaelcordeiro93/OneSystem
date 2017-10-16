@@ -17,7 +17,8 @@ import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.TipoImpressao;
@@ -27,6 +28,7 @@ import br.com.onesystem.war.builder.CondicionalBV;
 import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.ItemDeCondicionalService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -68,6 +70,9 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
     @Inject
     private LayoutDeImpressaoService layoutService;
+
+    @Inject
+    private ItemDeCondicionalService IDCService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -116,14 +121,21 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
         try {
             preparaInclusaoDeItemDeCondicional();
 
-            //Constroi o orçamento
+            //Constroi a condicional
             Condicional condicional = e.construirComID();
+            for (ItemDeCondicional idc : condicional.getItensDeCondicional()) {
+                IDCService.geraEstoque(idc);
+            }
 
             addNoBanco(condicional);
             t = condicional;
             layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.CONDICIONAL);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                if (layout.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao
+                } else {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimirTexto').click()"); // chama a impressao
+                }
             }
         } catch (DadoInvalidoException die) {
             die.printConsole();
@@ -140,8 +152,17 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
      */
     public void imprimir() {
         try {
-            new ImpressoraDeLayout(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(t.getItensDeCondicional(), layout).addParametro("condicional", t).visualizarPDF();
             t = null; // libera memoria do objeto impresso.
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTexto() {
+        try {
+            new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Condicional.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+            t = null;
         } catch (DadoInvalidoException die) {
             die.print();
         }

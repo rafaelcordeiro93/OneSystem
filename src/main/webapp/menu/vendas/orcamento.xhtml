@@ -216,7 +216,8 @@
                         <p:separator/>
 
                         <p:commandButton value="#{l.Finalizar}" actionListener="#{orcamentoView.finalizar()}" update=":conteudo" />
-                        <h:commandButton id="imprimir" actionListener="#{orcamentoView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
+                        <h:commandButton id="imprimir" actionListener="#{orcamentoView.imprimirGrafico()}" onclick="this.form.target = '_blank'" style="display: none"/>
+                        <p:commandButton id="imprimirTexto" actionListener="#{orcamentoView.imprimirTexto()}" style="display: none"/>
                         
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" update=":conteudo" action="#{orcamentoView.limparJanela()}"/>
 

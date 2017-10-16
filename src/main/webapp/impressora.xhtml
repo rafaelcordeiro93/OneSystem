@@ -8,8 +8,10 @@
 
     <ui:define name="content">
 
-        <p:commandButton value="#{l.Imprimir}" action="#{impressoraView.imprimir()}" />
+        <p:commandButton value="#{l.Imprimir}" action="#{impressoraView.imprimir()}" update="conteudo" />
 
+        <p:inputTextarea id="textArea" value="#{impressoraView.text}"  autoResize="true" cols="125"  />
+        
     </ui:define>
 
 </ui:composition>

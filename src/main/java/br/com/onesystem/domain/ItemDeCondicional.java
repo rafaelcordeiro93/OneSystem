@@ -60,7 +60,7 @@ public class ItemDeCondicional implements Serializable {
     @Column(nullable = false)
     private BigDecimal quantidade;
     @OneToMany(mappedBy = "itemDeCondicional", cascade = CascadeType.ALL)
-    private List<Estoque> estoques;
+    private List<Estoque> estoques = new ArrayList();
 
     public ItemDeCondicional() {
     }
@@ -75,6 +75,10 @@ public class ItemDeCondicional implements Serializable {
 
     public Long getId() {
         return id;
+    }
+    
+    public void adicionaEstoque(Estoque estoque){
+        this.estoques.add(estoque);
     }
 
     public Item getItem() {
@@ -93,22 +97,16 @@ public class ItemDeCondicional implements Serializable {
         return quantidade;
     }
 
+    public List<Estoque> getEstoques() {
+        return estoques;
+    }
+    
     public BigDecimal getTotal() {
         return getQuantidade().multiply(unitario);
     }
 
     public void paraCondicional(Condicional condicional) throws DadoInvalidoException {
         this.condicional = condicional;
-        estoques = new ArrayList<>();
-        ConfiguracaoVenda conf = new ConfiguracaoVendaService().buscar();
-        ConfiguracaoEstoque confEstoque = new ConfiguracaoEstoqueService().buscar();
-        List<OperacaoDeEstoque> listaOperacaoEstoque = new OperacaoDeEstoqueDAO().porOperacao(conf.getOperacaoDeCondicional()).listaDeResultados();
-        for (OperacaoDeEstoque operacaoDeEstoque : listaOperacaoEstoque) {
-            Estoque e = new EstoqueBuilder().comDeposito(confEstoque.getDepositoPadrao()).comQuantidade(quantidade)
-                    .comItem(item).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(condicional.getEmissao()).comItemDeCondicional(this).construir();
-            // Adiciona no estoque
-            estoques.add(e);
-        }
     }
 
     public String getTotalFormatado() {

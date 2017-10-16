@@ -32,12 +32,31 @@
                             </p:dataTable>
 
                             <div class="ui-g-12 ui-md-8">
-                                <p:selectOneRadio value="#{gerenciadorDeLayoutView.e.tipoImpressao}" styleClass="ui-g-12 ui-md-12 ui-lg-12">
-                                    <f:selectItems value="#{gerenciadorDeLayoutView.tiposImpressao}" var="tipoImpressao" itemLabel="#{tipoImpressao.nome}" itemValue="#{tipoImpressao}" />
-                                </p:selectOneRadio>
-                                <p:outputLabel value="#{l.Layout_Grafico}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
-                                <div class="ui-g-12 ui-md-6 ui-lg-9">
-                                    <p:inputText id="layoutGrafico" value="#{gerenciadorDeLayoutView.e.layoutGrafico}" />
+
+                                <div class="ui-g">
+                                    <p:outputLabel id="layoutPadrao" value="#{l.Layout_Padrao}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                                    <p:selectOneButton value="#{gerenciadorDeLayoutView.e.layoutGraficoEhPadrao}" styleClass="ui-g-12 ui-md-6 ui-lg-7" style="max-width: 220px" unselectable="false">
+                                        <p:ajax update=":conteudo" />
+                                        <f:selectItem itemLabel="#{l.Grafico}" itemValue="true" />
+                                        <f:selectItem itemLabel="#{l.Texto}" itemValue="false" />
+                                    </p:selectOneButton>
+                                </div>
+
+                                <div class="ui-g">
+                                    <p:outputLabel id="tipoImpressao-txt" value="#{l.Tipo_Impressao}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                                    <p:selectOneMenu id="selectTipoImpressao" value="#{gerenciadorDeLayoutView.e.tipoImpressao}" style="max-width: 210px; margin-left: .5em" >
+                                        <f:selectItems value="#{gerenciadorDeLayoutView.tiposImpressao}" var="tipoImpressao" itemLabel="#{tipoImpressao.nome}" itemValue="#{tipoImpressao}" />
+                                    </p:selectOneMenu>
+                                </div>
+
+                                <p:outputLabel value="#{l.Layout_Texto}" rendered="#{!gerenciadorDeLayoutView.e.layoutGraficoEhPadrao}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                                <div class="ui-g-12 ui-md-6 ui-lg-9" style="display: #{gerenciadorDeLayoutView.e.layoutGraficoEhPadrao eq false ? '' : 'none'}" >
+                                    <p:inputText id="layoutTexto" rendered="#{!gerenciadorDeLayoutView.e.layoutGraficoEhPadrao}" value="#{gerenciadorDeLayoutView.e.layoutTexto}" />
+                                </div>
+
+                                <p:outputLabel rendered="#{gerenciadorDeLayoutView.e.layoutGraficoEhPadrao}" value="#{l.Layout_Grafico}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                                <div class="ui-g-12 ui-md-6 ui-lg-9" style="display: #{gerenciadorDeLayoutView.e.layoutGraficoEhPadrao eq true ? '' : 'none'}" >
+                                    <p:inputText id="layoutGrafico" rendered="#{gerenciadorDeLayoutView.e.layoutGraficoEhPadrao}" value="#{gerenciadorDeLayoutView.e.layoutGrafico}" />
                                 </div>
 
                                 <div class="ui-g-12 ui-md-6 ui-lg-3"></div>

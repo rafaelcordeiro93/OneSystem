@@ -6,6 +6,7 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -34,6 +35,7 @@ import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.TaxaDeAdministracao;
+import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
 import br.com.onesystem.exception.CurrencyMissmatchException;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -44,7 +46,8 @@ import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.DateUtil;
 import br.com.onesystem.util.ErrorMessage;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.Money;
@@ -82,6 +85,7 @@ import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.LoteNotaFiscalService;
 import br.com.onesystem.war.service.NumeracaoDeNotaFiscalService;
+import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -168,9 +172,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
-
-    @Inject
-    private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @Inject
     private ItemService itemService;
@@ -364,10 +365,13 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
             layoutTitulo = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.TITULO);
             if (!layout.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimir').click()"); // chama a impressao da nota
+                if (layout.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimirGrafico').click()"); // chama a impressao da nota Grafico
+                } else {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:ne:imprimirTexto').click()"); // chama a impressao da nota Texto
+                }
             }
             if (nota.getCobrancas() != null && !nota.getCobrancas().isEmpty()) {
-
                 List<CobrancaVariavel> lista = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
                 if (!lista.isEmpty()) {
                     if (!layoutTitulo.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
@@ -380,18 +384,35 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         }
     }
 
-    public void imprimir() {
+    public void imprimirGrafico() {
         try {
-            new ImpressoraDeLayout(nota.getItens(), layout).addParametro("notaEmitida", nota).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(nota.getItens(), layout).addParametro("notaEmitida", nota).visualizarPDF();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
-    public void imprimirTitulos() {
+    public void imprimirTitulosGrafico() {
         try {
             List<CobrancaVariavel> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
-            new ImpressoraDeLayout(titulos, layoutTitulo).visualizarPDF();
+            new ImpressoraDeLayoutGrafico(titulos, layoutTitulo).visualizarPDF();
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTexto() {
+        try {
+            new ImpressoraDeLayoutTexto(layout.getLayoutTexto(), Nota.class, nota).imprimir(configuracao.getCaminhoImpressoraTexto());
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void imprimirTitulosTexto() {
+        try {
+            List<CobrancaVariavel> titulos = nota.getCobrancas().stream().filter(c -> c.getModalidade().equals(ModalidadeDeCobranca.TITULO)).collect(Collectors.toList());
+            new ImpressoraDeLayoutTexto(layoutTitulo.getLayoutTexto(), Titulo.class, titulos).imprimir(configuracao.getCaminhoImpressoraTexto());
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -661,15 +682,15 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             Object obj = event.getObject();
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
-                Operacao operacao = (Operacao) obj;
-                List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
-                if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
+                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
                     setupView(operacao);
                 }
             } else if (obj instanceof Pessoa) {
+                Pessoa p = (Pessoa) obj;
                 notaEmitida.setPessoa((Pessoa) obj);
             } else if (obj instanceof ListaDePreco) {
                 notaEmitida.setListaDePreco((ListaDePreco) obj);
@@ -794,7 +815,6 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
                 || tipo == TipoOperacao.DEVOLUCAO_CONDICIONAL;
         notaEmitida.setOperacao(operacao);
         //notaEmitida.setLoteNotaFiscal(loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()));
-        RequestContext.getCurrentInstance().update("conteudo");
     }
 
     private void buscaProximoNumeroNF(NotaEmitida nota) {
@@ -1392,6 +1412,10 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
 
     public void setCreditoService(CreditoService creditoService) {
         this.creditoService = creditoService;
+    }
+
+    public LayoutDeImpressao getLayoutTitulo() {
+        return layoutTitulo;
     }
 
     //------------------- Fim Getters and Setters -----------------------------

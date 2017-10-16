@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
+import javax.faces.context.FacesContext;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -31,7 +32,8 @@ import org.json.simple.parser.ParseException;
 //@ApplicationScoped
 public class LeitoraDeCaminhoDeClassesJSON implements Serializable {
 
-    private final String diretorio = System.getProperty("user.dir") + "\\src\\main\\resources\\conf\\extraClass.json";
+    //Diretório Console: System.getProperty("user.dir") + "\\src\\main\\resources\\conf\\extraClass.json";
+    private final String diretorio = FacesContext.getCurrentInstance().getExternalContext().getRealPath("") + "\\WEB-INF\\classes\\conf\\extraClass.json";
 
     public List<CaminhoDeClasse> getCaminhos(Class classeOriginal) {
         try {

@@ -443,7 +443,8 @@
                         <p:separator/>
 
                         <p:commandButton value="#{l.Finalizar}" action="#{notaEmitidaView.validaAFaturar}" update=":conteudo" process="@this"/>
-                        <h:commandButton id="imprimir" actionListener="#{notaEmitidaView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
+                        <p:commandButton id="imprimirTexto" actionListener="#{notaEmitidaView.imprimirTexto()}" style="display: none"/>
+                        <h:commandButton id="imprimirGrafico" actionListener="#{notaEmitidaView.imprimirGrafico()}" onclick="this.form.target = '_blank'" style="display: none"/>
 
                         <p:commandButton value="#{l.Limpar}" styleClass="brown-btn" action="#{notaEmitidaView.limparJanela()}" update=":conteudo"/>
 
@@ -452,7 +453,7 @@
             </div>
         </h:form>
 
-        <p:dialog widgetVar="imprimirTitulosDialog" modal="true" width="400" height="200" visible="false" header="#{l.Imprimir}">
+        <p:dialog widgetVar="imprimirTitulosDialog" modal="false" width="400" height="200" visible="false" header="#{l.Imprimir}">
             <p:panelGrid styleClass="ui-panelgrid-blank form-group form-elements" layout="grid" columns="2" columnClasses="ui-g-1 ui-md-1 ui-lg-1, ui-g-10 ui-md-10 ui-lg-10 PaddingTop6Px">
                 <i class="Fs28 fa fa-print "/>
                 <p:outputLabel value="#{l.Imprimir_Titulos}?"/>
@@ -460,7 +461,8 @@
 
             <p:separator/>
 
-            <p:commandButton value="#{l.Sim}" icon="fa fa-check Fs14 White" actionListener="#{notaEmitidaView.imprimirTitulos()}" ajax="false" onclick="this.form.target = '_blank'"/>
+            <p:commandButton value="#{l.Sim}" icon="fa fa-check Fs14 White" actionListener="#{notaEmitidaView.imprimirTitulosGrafico()}" ajax="false" onclick="this.form.target = '_blank'" rendered="#{notaEmitidaView.layoutTitulo.layoutGraficoEhPadrao}"/>
+            <p:commandButton value="#{l.Sim}" icon="fa fa-check Fs14 White" actionListener="#{notaEmitidaView.imprimirTitulosTexto()}" rendered="#{!notaEmitidaView.layoutTitulo.layoutGraficoEhPadrao}" onclick="PF('imprimirTitulosDialog').hide()"/>
             <p:commandButton id="fecharDialog" icon="fa fa-close Fs14 White" value="#{l.Fechar}" onclick="PF('imprimirTitulosDialog').hide()"/>
         </p:dialog>
 

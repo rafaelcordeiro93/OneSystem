@@ -34,17 +34,21 @@ public class Configuracao implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private TipoDeCalculoDeCusto tipoDeCalculoDeCusto;
+    
+    private String caminhoImpressoraTexto;
 
     public Configuracao() {
     }
 
     public Configuracao(Long id, TipoDespesa despesaDeComissao, Moeda moedaPadrao,
-            TipoDeFormacaoDePreco tipoDeFormacaoDePreco, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) {
+            TipoDeFormacaoDePreco tipoDeFormacaoDePreco, TipoDeCalculoDeCusto tipoDeCalculoDeCusto,
+            String caminhoImpressoraTexto) {
         this.id = id;
         this.despesaDeComissao = despesaDeComissao;
         this.moedaPadrao = moedaPadrao;
         this.tipoDeFormacaoDePreco = tipoDeFormacaoDePreco;
         this.tipoDeCalculoDeCusto = tipoDeCalculoDeCusto;
+        this.caminhoImpressoraTexto = caminhoImpressoraTexto;
     }
 
     public Long getId() {
@@ -67,6 +71,10 @@ public class Configuracao implements Serializable {
         return tipoDeCalculoDeCusto;
     }
 
+    public String getCaminhoImpressoraTexto() {
+        return caminhoImpressoraTexto;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

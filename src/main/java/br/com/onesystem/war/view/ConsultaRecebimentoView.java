@@ -12,7 +12,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.ImpressoraDeLayout;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
@@ -132,7 +132,7 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
         try {
             if (t != null) {
                 LayoutDeImpressao layout = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
-                new ImpressoraDeLayout(t.getTipoDeCobranca(), layout).addParametro("recebimento", t).visualizarPDF();
+                new ImpressoraDeLayoutGrafico(t.getTipoDeCobranca(), layout).addParametro("recebimento", t).visualizarPDF();
             } else {
                 throw new EDadoInvalidoException(new BundleUtil().getMessage("Selecione_um_registro"));
             }
