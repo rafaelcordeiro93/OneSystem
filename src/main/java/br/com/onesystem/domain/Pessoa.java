@@ -92,6 +92,8 @@ public abstract class Pessoa implements Serializable {
     private String fiador;
     @ManyToOne
     private Cep cep;
+    @ManyToOne
+    private Cidade cidade;
     @OneToMany(mappedBy = "pessoa")
     private List<Recepcao> recepcoes;
     @OneToMany(mappedBy = "pessoa")
@@ -118,7 +120,7 @@ public abstract class Pessoa implements Serializable {
             String endereco, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
             boolean categoriaVendedor, boolean categoriaTransportador, Double desconto,
             Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email,
-            String contato, String numero) {
+            String contato, String numero, Cidade cidade) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
@@ -136,6 +138,7 @@ public abstract class Pessoa implements Serializable {
         this.observacao = observacao;
         this.fiador = fiador;
         this.cep = cep;
+        this.cidade = cidade;
         this.telefone = telefone;
         this.email = email;
         this.contato = contato;
@@ -256,12 +259,36 @@ public abstract class Pessoa implements Serializable {
 
     @MetodoInacessivelRelatorio
     public String getIdFormatado() {
-        return "(" + id + ")"; 
+        return "(" + id + ")";
     }
 
     @MetodoInacessivelRelatorio
     public String getCepCidadeEstadoPaisFormatado() {
-        return this.getCep().getCepCidadeEstadoPaisFormatado();
+        String str = "";
+        Cidade cidade = null;
+        if (cep != null) {
+            str += cep;
+            cidade = cep.getCidade();
+        } else {
+            cidade = getCidade();
+        }
+        if (cidade != null) {
+            if (cidade.getNome() != null) {
+                str += " - ";
+            }
+            str += cidade.getNome();
+        }
+        if (cidade != null && cidade.getEstado() != null) {
+            if (cidade.getEstado().getSigla() != null) {
+                str += " - ";
+            }
+            str += cidade.getEstado().getSigla();
+        }
+        if (cidade != null && cidade.getEstado() != null && cidade.getEstado().getPais() != null) {
+            str += " - ";
+            str += cidade.getEstado().getPais().getNome();
+        }
+        return str;
     }
 
     @MetodoInacessivelRelatorio
@@ -310,14 +337,30 @@ public abstract class Pessoa implements Serializable {
         return str;
     }
 
-    @MetodoInacessivelRelatorio
-    public String getCidade() {
-        return cep.getCidade().getNome();
+    public Cidade getCidade() {
+        if (cep != null) {
+            return cep.getCidade();
+        } else {
+            return cidade;
+        }
     }
 
     @MetodoInacessivelRelatorio
-    public String getEstado() {
-        return cep.getCidade().getEstado().getNome();
+    public String getNomeCidade() {
+        if (cep != null) {
+            return cep.getCidade().getNome();
+        } else {
+            return cidade.getNome();
+        }
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getNomeEstado() {
+        if (cep != null) {
+            return cep.getCidade().getEstado().getNome();
+        } else {
+            return cidade.getEstado().getNome();
+        }
     }
 
     @MetodoInacessivelRelatorio

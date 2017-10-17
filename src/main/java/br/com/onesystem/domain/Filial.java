@@ -53,6 +53,8 @@ public class Filial implements Serializable {
     @NotNull(message = "{cep_not_null}")
     @ManyToOne
     private Cep cep;
+    @ManyToOne
+    private Cidade cidade;
     @NotNull(message = "{telefone_not_null}")
     @Length(min = 2, max = 60, message = "{telefone_lenght}")
     @Column(length = 60, nullable = false)
@@ -73,7 +75,7 @@ public class Filial implements Serializable {
     public Filial(Long id, String razaoSocial, String fantasia,
             String ruc, String endereco, String bairro, Cep cep,
             String telefone, Date vencimento, String serialKey, String numero,
-            String email, String contato) throws DadoInvalidoException {
+            String email, String contato, Cidade cidade) throws DadoInvalidoException {
         this.id = id;
         this.razaoSocial = razaoSocial;
         this.fantasia = fantasia;
@@ -87,7 +89,37 @@ public class Filial implements Serializable {
         this.vencimento = vencimento;
         this.serialKey = serialKey;
         this.numero = numero;
+        this.cidade = cidade;
         ehValido();
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getCepCidadeEstadoPaisFormatado() {
+        String str = "";
+        Cidade cidade = null;
+        if (cep != null) {
+            str += cep;
+            cidade = cep.getCidade();
+        } else {
+            cidade = getCidade();
+        }
+        if (cidade != null) {
+            if (cidade.getNome() != null) {
+                str += " - ";
+            }
+            str += cidade.getNome();
+        }
+        if (cidade != null && cidade.getEstado() != null) {
+            if (cidade.getEstado().getSigla() != null) {
+                str += " - ";
+            }
+            str += cidade.getEstado().getSigla();
+        }
+        if (cidade != null && cidade.getEstado() != null && cidade.getEstado().getPais() != null) {
+            str += " - ";
+            str += cidade.getEstado().getPais().getNome();
+        }
+        return str;
     }
 
     public Long getId() {
@@ -145,6 +177,28 @@ public class Filial implements Serializable {
     public String getRazaoSocialRuc() {
         return razaoSocial + " - Ruc: " + ruc;
     }
+    
+    @MetodoInacessivelRelatorio
+    public String getNomeEstado() {
+        if (cep != null) {
+            return cep.getCidade().getEstado().getNome();
+        } else {
+            return cidade.getEstado().getNome();
+        }
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getNomeCidade() {
+        if (cep != null) {
+            return cep.getCidade().getNome();
+        } else {
+            return cidade.getNome();
+        }
+    }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
 
     @MetodoInacessivelRelatorio
     public String getEnderecoNumeroBairroFormatado() {
@@ -166,11 +220,6 @@ public class Filial implements Serializable {
         }
 
         return str;
-    }
-
-    @MetodoInacessivelRelatorio
-    public String getCepCidadeEstadoPaisFormatado() {
-        return cep.getCepCidadeEstadoPaisFormatado();
     }
 
     @MetodoInacessivelRelatorio

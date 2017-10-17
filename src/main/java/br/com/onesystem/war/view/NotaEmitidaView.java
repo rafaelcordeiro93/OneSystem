@@ -12,6 +12,7 @@ import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
+import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Comanda;
@@ -23,6 +24,7 @@ import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeRecebimento;
+import br.com.onesystem.domain.GrupoFiscal;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.LayoutDeImpressao;
@@ -31,9 +33,10 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.NumeracaoDeNotaFiscal;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
+import br.com.onesystem.domain.SituacaoFiscal;
+import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
@@ -75,12 +78,11 @@ import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.EstoqueService;
-import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
-import br.com.onesystem.war.builder.NumeracaoDeNotaFiscalBV;
+import br.com.onesystem.valueobjects.TipoPessoa;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.LoteNotaFiscalService;
@@ -94,6 +96,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -507,6 +510,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // ----------------------------- Itens ------------------------------------
     public void addItemNaLista() {
         try {
+            calculaImpostos();
             notaEmitida.adiciona(itemEmitido);
             limparItemDeNota();
 
@@ -514,6 +518,66 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
+    }
+
+    private void calculaImpostos() throws DadoInvalidoException {
+
+        SituacaoFiscal situacaoFiscal = buscaSituacaoFiscal();
+        Long cfop = situacaoFiscal.getCfop().getCfop();
+        BigDecimal iva = situacaoFiscal.getTabelaDeTributacao().getIva();
+        BigDecimal valorTotalIva = itemEmitido.getTotal().multiply(iva);
+
+        itemEmitido.setSituacaoFiscal(situacaoFiscal);
+        itemEmitido.setCfop(cfop);
+        itemEmitido.setIva(iva);
+        itemEmitido.setValorTotalIva(valorTotalIva);
+
+    }
+
+    private SituacaoFiscal buscaSituacaoFiscal() throws DadoInvalidoException {
+        GrupoFiscal grupoFiscalItem = itemEmitido.getItem().getGrupoFiscal();
+        Pessoa pessoa = notaEmitida.getPessoa();
+
+        SituacaoFiscal situacaoFiscalUtilizada = null;
+
+        List<SituacaoFiscal> situacoesFiscais = notaEmitida.getOperacao().getSituacoesFiscais().stream().filter(s -> s.getGrupoFiscal() == grupoFiscalItem).collect(Collectors.toList());
+        situacoesFiscais.sort(Comparator.comparing(SituacaoFiscal::getSequencia));
+        for (SituacaoFiscal sf : situacoesFiscais) {
+            if (sf.getTipoPessoa() == null) {
+                if (sf.getEstado() == null) {
+                    situacaoFiscalUtilizada = sf;
+                    break;
+                } else if (pessoa.getCidade().getEstado().equals(sf.getEstado())) {
+                    situacaoFiscalUtilizada = sf;
+                    break;
+                }
+            } else {
+                if (sf.getTipoPessoa() == TipoPessoa.PESSOA_FISICA) {
+                    if (sf.getEstado() == null) {
+                        situacaoFiscalUtilizada = sf;
+                        break;
+                    } else if (pessoa.getCidade().getEstado().equals(sf.getEstado())) {
+                        situacaoFiscalUtilizada = sf;
+                        break;
+
+                    }
+                } else if (sf.getTipoPessoa() == TipoPessoa.PESSOA_JURIDICA) {
+                    if (sf.getEstado() == null) {
+                        situacaoFiscalUtilizada = sf;
+                        break;
+                    } else if (pessoa.getCidade().getEstado().equals(sf.getEstado())) {
+                        situacaoFiscalUtilizada = sf;
+                        break;
+
+                    }
+                }
+            }
+        }
+        if (situacaoFiscalUtilizada == null) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("Nao_Existe_Situacao_Fiscal_Cadastrada_Para_O_Grupo_Fiscal_E_Operacao"));
+        }
+
+        return situacaoFiscalUtilizada;
     }
 
     public void updateItemNaLista() {
@@ -544,8 +608,8 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     // -------------------------- Fim Itens -----------------------------------
     // --------------------------- Parcelas -----------------------------------
     /**
-     * Método responsável por abrir o diálogo de detalhamento das cobranca. 
-     */ 
+     * Método responsável por abrir o diálogo de detalhamento das cobranca.
+     */
     public void detalharParcela() {
         cobrancaBV = new CobrancaBV(cobrancaSelecionada);
         RequestContext req = RequestContext.getCurrentInstance();
@@ -683,6 +747,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getSituacoesFiscais");
                 if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");

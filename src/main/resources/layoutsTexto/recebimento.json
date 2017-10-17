@@ -82,7 +82,7 @@
             "size": 20
         },
         {
-            "class": "br.com.onesystem.domain.Cep",
+            "class": "br.com.onesystem.domain.Filial",
             "column": "cepCidadeEstadoPaisFormatado",
             "left": 1,
             "top": 4,

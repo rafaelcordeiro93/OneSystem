@@ -66,6 +66,19 @@
 
                     <div class="EmptyBox5"/>
 
+                    <div class="EmptyBox5"/>
+
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Configura_se_a_empresa_trabalhara_mantendo_cep}</div>
+                    <div class="EmptyBox10"/>
+
+                    <div class="ui-g">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Utilizar_Cep}:"/>
+                        <p:inputSwitch value="#{configuracaoView.configuracaoBV.utilizarCep}" onLabel="#{l.Habilitado}" offLabel="#{l.Desabilitado}" styleClass="ui-g-12 ui-md-6 ui-lg-3" />
+                    </div>        
+
+                    <div class="EmptyBox5"/>
+
+
                     <p:separator/>
                     <p:commandButton value="#{l.Salvar}" action="#{configuracaoView.update()}" update=":conteudo" icon="fa fa-save Fs16 White"/>                                    
                 </div>

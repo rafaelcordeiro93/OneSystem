@@ -62,7 +62,7 @@
             "size": 57
         },
         {
-            "class": "br.com.onesystem.domain.Cep",
+            "class": "br.com.onesystem.domain.Filial",
             "column": "cepCidadeEstadoPaisFormatado",
             "left": 63,
             "top": 4,
@@ -167,7 +167,7 @@
         },
         {
             "class": "br.com.onesystem.domain.Pessoa",
-            "column": "cidade",
+            "column": "nomeCidade",
             "left": 19,
             "top": 15,
             "align": "LEFT",
@@ -183,7 +183,7 @@
         },
         {
             "class": "br.com.onesystem.domain.Pessoa",
-            "column": "estado",
+            "column": "nomeEstado",
             "left": 91,
             "top": 15,
             "align": "LEFT",
@@ -198,8 +198,8 @@
             "size": 41
         },
         {
-            "class": "br.com.onesystem.domain.Cidade",
-            "column": "nome",
+            "class": "br.com.onesystem.domain.Filial",
+            "column": "getNomeCidade",
             "left": 73,
             "top": 16,
             "align": "LEFT",

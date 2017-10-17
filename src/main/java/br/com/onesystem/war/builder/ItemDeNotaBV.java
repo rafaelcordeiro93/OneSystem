@@ -5,16 +5,13 @@
  */
 package br.com.onesystem.war.builder;
 
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Nota;
-import br.com.onesystem.domain.NotaEmitida;
+import br.com.onesystem.domain.SituacaoFiscal;
 import br.com.onesystem.domain.builder.ItemDeNotaBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.util.MoedaFormatter;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -32,17 +29,25 @@ public class ItemDeNotaBV {
     private Nota nota;
     private List<QuantidadeDeItemPorDeposito> listaDeQuantidade = new ArrayList<QuantidadeDeItemPorDeposito>();
     private BigDecimal quantidade;
+    private BigDecimal iva;
+    private SituacaoFiscal situacaoFiscal;
+    private Long cfop;
+    private BigDecimal valorTotalIva;
 
     public ItemDeNotaBV() {
     }
 
-    public ItemDeNotaBV(ItemDeNota itemEmitidoSelecionado) {
-        this.id = itemEmitidoSelecionado.getId();
-        this.item = itemEmitidoSelecionado.getItem();
-        this.nota = itemEmitidoSelecionado.getNota();
-        this.unitario = itemEmitidoSelecionado.getUnitario();
-        this.quantidade = itemEmitidoSelecionado.getQuantidade();
-        this.listaDeQuantidade = itemEmitidoSelecionado.getListaDeQuantidade();
+    public ItemDeNotaBV(ItemDeNota i) {
+        this.id = i.getId();
+        this.item = i.getItem();
+        this.nota = i.getNota();
+        this.unitario = i.getUnitario();
+        this.quantidade = i.getQuantidade();
+        this.listaDeQuantidade = i.getListaDeQuantidade();
+        this.iva = i.getIva();
+        this.situacaoFiscal = i.getSituacaoFiscal();
+        this.cfop = i.getCfop();
+        this.valorTotalIva = i.getValorTotalIva();
     }
 
     public Long getId() {
@@ -77,6 +82,38 @@ public class ItemDeNotaBV {
         this.nota = nota;
     }
 
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public void setIva(BigDecimal iva) {
+        this.iva = iva;
+    }
+
+    public SituacaoFiscal getSituacaoFiscal() {
+        return situacaoFiscal;
+    }
+
+    public void setSituacaoFiscal(SituacaoFiscal situacaoFiscal) {
+        this.situacaoFiscal = situacaoFiscal;
+    }
+
+    public Long getCfop() {
+        return cfop;
+    }
+
+    public void setCfop(Long cfop) {
+        this.cfop = cfop;
+    }
+
+    public BigDecimal getValorTotalIva() {
+        return valorTotalIva;
+    }
+
+    public void setValorTotalIva(BigDecimal valorTotalIva) {
+        this.valorTotalIva = valorTotalIva;
+    }
+    
     public List<QuantidadeDeItemPorDeposito> getListaDeQuantidade() {
         return listaDeQuantidade;
     }
@@ -132,11 +169,13 @@ public class ItemDeNotaBV {
     }
 
     public ItemDeNota construir() throws DadoInvalidoException {
-        return new ItemDeNotaBuilder().comItem(item).comNota(nota).comUnitario(unitario).comListaDeQuantidade(listaDeQuantidade).construir();
+        return new ItemDeNotaBuilder().comItem(item).comUnitario(unitario).comListaDeQuantidade(listaDeQuantidade).comIva(iva)
+                .comValorIva(valorTotalIva).comCfop(cfop).comSituacaoFiscal(situacaoFiscal).construir();
     }
 
     public ItemDeNota construirComId() throws DadoInvalidoException {
-        return new ItemDeNotaBuilder().comId(id).comItem(item).comNota(nota).comUnitario(unitario).comListaDeQuantidade(listaDeQuantidade).construir();
+        return new ItemDeNotaBuilder().comId(id).comItem(item).comUnitario(unitario).comListaDeQuantidade(listaDeQuantidade).comIva(iva)
+                .comValorIva(valorTotalIva).comCfop(cfop).comSituacaoFiscal(situacaoFiscal).construir();
     }
 
 }

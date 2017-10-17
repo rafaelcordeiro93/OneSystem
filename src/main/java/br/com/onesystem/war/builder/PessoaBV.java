@@ -1,6 +1,7 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Cep;
+import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.PessoaFisica;
 import br.com.onesystem.domain.PessoaJuridica;
@@ -36,6 +37,7 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
     private String conjuge;
     private String fantasiaCI;
     private String fantasiaCILabel = "C.I.";
+    private Cidade cidade;
     
     public PessoaBV() {
     }
@@ -64,6 +66,7 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.telefone = pessoaSelecionada.getTelefone();
         this.email = pessoaSelecionada.getEmail();
         this.contato = pessoaSelecionada.getContato();
+        this.cidade = cidade;
     }
     
     public Long getId() {
@@ -229,6 +232,14 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
     public Cep getCep() {
         return cep;
     }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
     
     public void setCep(Cep cep) {
         this.cep = cep;
@@ -263,10 +274,10 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero)
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero, cidade)
                 : new PessoaJuridica(fantasiaCI, null, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero, cidade);
     }
     
     public Pessoa construirComID() throws DadoInvalidoException {
@@ -274,10 +285,10 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         return fisicaJuridica == false
                 ? new PessoaFisica(fantasiaCI, nascimento, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero)
+                        conjuge, desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero, cidade)
                 : new PessoaJuridica(fantasiaCI, id, nome, fisicaJuridica == false ? TipoPessoa.PESSOA_FISICA : TipoPessoa.PESSOA_JURIDICA,
                         ruc, ativo, endereco, bairro, categoriaCliente, categoriaFornecedor, categoriaVendedor, categoriaTransportador,
-                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero);
+                        desconto, cadastro, observacao, fiador, cep, telefone, email, contato, numero, cidade);
     }
     
 }

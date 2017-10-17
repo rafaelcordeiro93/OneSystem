@@ -102,8 +102,8 @@ public class DadosIniciais {
         Cep cep = new CepBuilder().comCep("85950-000").comCidade(city).construir();
         new AdicionaDAOConsole<>().adiciona(cep);
 
-        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "rauber@rrminds.com", null, "768");
-        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "cordeiro@rrminds.com", null, "635A");
+        Pessoa rauber = new PessoaFisica(null, null, null, "Rauber", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "rauber@rrminds.com", null, "768", null);
+        Pessoa cordeiro = new PessoaFisica(null, null, null, "Cordeiro", TipoPessoa.PESSOA_FISICA, null, true, null, null, true, true, true, true, null, new Double(0), null, null, null, cep, null, "cordeiro@rrminds.com", null, "635A", null);
         new AdicionaDAOConsole<Pessoa>().adiciona(cordeiro);
         new AdicionaDAOConsole<Pessoa>().adiciona(rauber);
 
@@ -830,7 +830,7 @@ public class DadosIniciais {
 
         //Configuracao
         // ---------------------------------------------------------------------
-        Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO, null);
+        Configuracao configuracao = new Configuracao(null, null, dolar, TipoDeFormacaoDePreco.MARKUP, TipoDeCalculoDeCusto.ULTIMO_CUSTO, null, false);
         new AdicionaDAOConsole<>().adiciona(configuracao);
 
         //ConfiguracaoEstoque

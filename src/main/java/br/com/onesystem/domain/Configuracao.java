@@ -1,8 +1,12 @@
 package br.com.onesystem.domain;
 
+import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.TipoDeCalculoDeCusto;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.enterprise.inject.Any;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -12,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
 
 @Any
 @Entity
@@ -34,23 +39,33 @@ public class Configuracao implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private TipoDeCalculoDeCusto tipoDeCalculoDeCusto;
-    
+
     private String caminhoImpressoraTexto;
+
+    @NotNull(message = "{Utilizar_Cep_Not_Null}")
+    private boolean utilizarCep;
 
     public Configuracao() {
     }
 
     public Configuracao(Long id, TipoDespesa despesaDeComissao, Moeda moedaPadrao,
             TipoDeFormacaoDePreco tipoDeFormacaoDePreco, TipoDeCalculoDeCusto tipoDeCalculoDeCusto,
-            String caminhoImpressoraTexto) {
+            String caminhoImpressoraTexto, boolean utilizarCep) throws DadoInvalidoException {
         this.id = id;
         this.despesaDeComissao = despesaDeComissao;
         this.moedaPadrao = moedaPadrao;
         this.tipoDeFormacaoDePreco = tipoDeFormacaoDePreco;
         this.tipoDeCalculoDeCusto = tipoDeCalculoDeCusto;
         this.caminhoImpressoraTexto = caminhoImpressoraTexto;
+        this.utilizarCep = utilizarCep;
+        ehValido();
     }
 
+    public void ehValido() throws DadoInvalidoException{
+        List<String> campos = Arrays.asList("utilizarCep");
+        new ValidadorDeCampos<Configuracao>().valida(this, campos);
+    }
+    
     public Long getId() {
         return id;
     }
@@ -73,6 +88,10 @@ public class Configuracao implements Serializable {
 
     public String getCaminhoImpressoraTexto() {
         return caminhoImpressoraTexto;
+    }
+
+    public boolean isUtilizarCep() {
+        return utilizarCep;
     }
     
     @Override
