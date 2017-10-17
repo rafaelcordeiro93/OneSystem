@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoCidadeView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "cidadeConverter", forClass = Cidade.class)
-public class CidadeConverter extends BasicConverter<Cidade, SelecaoCidadeView> implements Converter, Serializable {
+public class CidadeConverter extends BasicConverter<Cidade> implements Converter, Serializable {
 
     public CidadeConverter() {
-        super(Cidade.class, SelecaoCidadeView.class);
+        super(Cidade.class);
     }
 }

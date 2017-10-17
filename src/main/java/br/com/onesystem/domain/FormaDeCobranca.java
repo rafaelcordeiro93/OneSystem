@@ -80,7 +80,7 @@ public class FormaDeCobranca implements Serializable {
     private Cotacao cotacao;
 
     @OneToMany(mappedBy = "formaDeCobranca", cascade = {CascadeType.ALL})
-    private List<Baixa> baixas;
+    private List<Baixa> baixas = new ArrayList<>();
 
     @ManyToOne
     private Caixa caixa;
@@ -216,7 +216,7 @@ public class FormaDeCobranca implements Serializable {
     public void setCobrancaVariavel(CobrancaVariavel cobrancaVariavel) {
         this.cobrancaVariavel = cobrancaVariavel;
     }
-    
+
     public void adiciona(Baixa baixa) {
         if (baixas == null) {
             baixas = new ArrayList<>();

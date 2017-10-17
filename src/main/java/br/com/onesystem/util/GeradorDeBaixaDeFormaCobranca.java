@@ -6,6 +6,7 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;

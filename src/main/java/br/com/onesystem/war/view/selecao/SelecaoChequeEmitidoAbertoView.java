@@ -17,24 +17,24 @@ import javax.inject.Named;
 @Named
 @javax.enterprise.context.RequestScoped
 public class SelecaoChequeEmitidoAbertoView extends BasicCrudMBImpl<Cheque> implements Serializable {
-    
+
     @Inject
     private ChequeService service;
-    
+
     @PostConstruct
     public void init() {
-        beans = new ChequeDAO().porEstado(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.EMITIDA).listaDeResultados();
+        beans = service.buscaChequesPor(TipoLancamento.EMITIDA, EstadoDeCheque.ABERTO);
     }
-    
+
     public void abrirDialogo() {
         exibirNaTela("financeiro/selecao/selecaoChequeEmitidoAberto");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/financeiro/cadastros/cheque";
     }
-    
+
     @Override
     public List<Cheque> complete(String query) {
         List<Cheque> listaFIltrada = new ArrayList<>();
@@ -47,11 +47,11 @@ public class SelecaoChequeEmitidoAbertoView extends BasicCrudMBImpl<Cheque> impl
         }
         return listaFIltrada;
     }
-    
+
     public ChequeService getService() {
         return service;
     }
-    
+
     public void setService(ChequeService service) {
         this.service = service;
     }

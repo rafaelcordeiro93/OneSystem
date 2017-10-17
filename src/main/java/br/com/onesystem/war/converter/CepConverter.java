@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Cep;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoCepView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "cepConverter", forClass = Cep.class)
-public class CepConverter extends BasicConverter<Cep, SelecaoCepView> implements Converter, Serializable {
+public class CepConverter extends BasicConverter<Cep> implements Converter, Serializable {
 
     public CepConverter() {
-        super(Cep.class, SelecaoCepView.class);
+        super(Cep.class);
     }
 }

@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoReceitaProvisionadaView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,10 +16,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "receitaProvisionadaConverter", forClass = ReceitaProvisionada.class)
-public class ReceitaProvisionadaConverter extends BasicConverter<ReceitaProvisionada, SelecaoReceitaProvisionadaView> implements Converter, Serializable {
+public class ReceitaProvisionadaConverter extends BasicConverter<ReceitaProvisionada> implements Converter, Serializable {
 
     public ReceitaProvisionadaConverter() {
-        super(ReceitaProvisionada.class, SelecaoReceitaProvisionadaView.class);
+        super(ReceitaProvisionada.class);
     }
 
 }

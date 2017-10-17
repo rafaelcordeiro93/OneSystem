@@ -1,13 +1,18 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Movimento;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -17,6 +22,8 @@ import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
@@ -28,21 +35,30 @@ import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.RecebimentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
+import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
+import br.com.onesystem.war.service.RecebimentoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
+@Stateful
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> implements Serializable {
 
@@ -56,7 +72,10 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private List<ValorPorCotacao> valorPorCotacao;
 
     @Inject
-    private CotacaoService service;
+    private RecebimentoService service;
+
+    @Inject
+    private CotacaoService cotacaoService;
 
     @Inject
     private LayoutDeImpressaoService layoutService;
@@ -65,13 +84,21 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private GeradorDeBaixas geradorDeBaixas;
 
     @Inject
-    private AtualizaDAO<Cobranca> dao;
+    private Configuracao configuracao;
+
+    @PostConstruct
+    public void init() {
+    }
 
     public void validaDinheiro() throws DadoInvalidoException {
         e.setTotalEmDinheiro(getTotalEmDinheiro());
-        if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0) {
+        List<Cotacao> cotacoes = cotacaoService.buscarCotacoesDaEmpresaNaEmissao(e.getEmissao());
+        if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0 && cotacoes.size() > 1) {
             SessionUtil.put(e.construir(), "movimento", FacesContext.getCurrentInstance());
             RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0 && cotacoes.size() == 1) {
+            valorPorCotacao.add(new ValorPorCotacaoBV(cotacoes.get(0), e.getTotalEmDinheiro(), null, null, null).construir());
+            receber();
         } else {
             receber();
         }
@@ -79,31 +106,33 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void receber() {
         try {
+
             Recebimento recebimento = constroiRecebimento();
-            addNoBanco(recebimento);
+            t = service.addRecebimento(recebimento);
 
-            //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getTipoDeCobranca() != null && recebimento.getTipoDeCobranca().isEmpty()) {
-                for (TipoDeCobranca tipo : recebimento.getTipoDeCobranca()) {
-                    dao.atualiza(tipo.getCobranca());
-                }
-            }
+            InfoMessage.adicionado();
+            chamaImpressao();
+            limparJanela();
 
-            //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getFormasDeCobranca() != null && recebimento.getFormasDeCobranca().isEmpty()) {
-                for (FormaDeCobranca forma : recebimento.getFormasDeCobranca()) {
-                    dao.atualiza(forma.getCobranca());
-                }
-            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
 
-            t = recebimento;
+    private void chamaImpressao() {
+        try {
             layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
+
             if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao da nota
+                if (layoutDeImpressao.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao do recebimento
+                } else {
+                    new ImpressoraDeLayoutTexto(layoutDeImpressao.getLayoutTexto(), Movimento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                    t = null;
+                }
             }
         } catch (DadoInvalidoException die) {
             die.print();
-            limparJanela();
         }
     }
 
@@ -141,7 +170,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             removeDaSessao();
             e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
                     (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+            e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
             valorPorCotacao = new ArrayList<>();
@@ -159,7 +188,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+        e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
     }
 
     @Override

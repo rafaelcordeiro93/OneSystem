@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -78,7 +79,7 @@ public abstract class Cobranca implements Serializable {
     @Column(length = 250, nullable = true)
     protected String historico;
 
-    @OneToMany(mappedBy = "cobranca")
+    @OneToMany(mappedBy = "cobranca", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<TipoDeCobranca> tiposDeCobranca;
 
     @Enumerated(EnumType.STRING)
@@ -139,7 +140,7 @@ public abstract class Cobranca implements Serializable {
     public final void atualizaSituacao() {
         if (tiposDeCobranca != null) {
             BigDecimal soma = tiposDeCobranca.stream().map(TipoDeCobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-            if (soma.compareTo(this.valor) >= 0) {
+            if (soma.compareTo(this.valor) >= 0 || (tiposDeCobranca.size() > 0 && this instanceof CobrancaFixa)) {
                 situacaoDeCobranca = SituacaoDeCobranca.PAGO;
             } else {
                 situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
@@ -256,8 +257,8 @@ public abstract class Cobranca implements Serializable {
     public String getTotalNaMoedaPadraoFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValor());
     }
-    
-     public String getTotalNaMoedaPadraoPorExtenso() {
+
+    public String getTotalNaMoedaPadraoPorExtenso() {
         return StringUtils.primeiraLetraMaiusculaAposEspaco(MoedaFormatter.valorPorExtenso(cotacao.getConta().getMoeda(), getValor()));
     }
 

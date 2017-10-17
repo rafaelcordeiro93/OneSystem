@@ -17,10 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael Cordeiro
  */
 @FacesConverter(value = "motivoConverter", forClass = Motivo.class)
-public class MotivoConverter extends BasicConverter<Motivo, SelecaoMotivoView> implements Converter, Serializable {
+public class MotivoConverter extends BasicConverter<Motivo> implements Converter, Serializable {
 
     public MotivoConverter() {
-        super(Motivo.class, SelecaoMotivoView.class);
+        super(Motivo.class);
     }
 
 }

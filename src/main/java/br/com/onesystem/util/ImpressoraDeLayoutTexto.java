@@ -352,7 +352,7 @@ public final class ImpressoraDeLayoutTexto {
     public void imprimir(String caminhoImpressora) throws DadoInvalidoException {
         caminhoImpressora = caminhoImpressora.trim();
         if (caminhoImpressora != null) {
-            InfoMessage.print(new BundleUtil().getLabel("Imprimindo"));
+            WarningMessage.print(new BundleUtil().getLabel("Imprimindo"));
             for (TextoBuilder imp : impressoras) {
                 new MatrixPrinter(caminhoImpressora).imprimir(imp.getArrayEmLinha());
             }
@@ -450,12 +450,11 @@ public final class ImpressoraDeLayoutTexto {
         }
 
         private String buscaNomeDeMetodo(Class clazz, Class classeDeDados, Object objeto) throws IllegalArgumentException, SecurityException, IllegalAccessException, InvocationTargetException {
-            //Busca nome do método que retorna a lista de tipo de cobranca
             Method[] methods = classeDeDados.getMethods();
             for (Method m : methods) {
                 if (m.getReturnType().equals(List.class)) {
                     List l = (List) m.invoke(objeto, null);
-                    if (l.isEmpty()) {
+                    if (l == null || l.isEmpty()) {
                         continue;
                     } else {
                         if (l.get(0).getClass().equals(clazz)) {

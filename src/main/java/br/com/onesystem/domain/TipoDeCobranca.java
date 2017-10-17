@@ -33,7 +33,7 @@ import org.hibernate.validator.constraints.Length;
 
 /**
  *
- * @author Rafael Fernando Rauber  
+ * @author Rafael Fernando Rauber
  */
 @Entity
 @SequenceGenerator(initialValue = 1, allocationSize = 1, name = "SEQ_TIPODECOBRANCA",
@@ -44,7 +44,7 @@ public class TipoDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_TIPODECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.MERGE}) 
+    @ManyToOne
     private Cobranca cobranca;
 
     @ManyToOne
@@ -78,7 +78,7 @@ public class TipoDeCobranca implements Serializable {
     private Conta conta;
 
     @OneToMany(mappedBy = "tipoDeCobranca", cascade = {CascadeType.ALL})
-    private List<Baixa> baixas;
+    private List<Baixa> baixas = new ArrayList<>();
 
     public TipoDeCobranca() {
     }
@@ -107,7 +107,7 @@ public class TipoDeCobranca implements Serializable {
     public void setCobranca(Cobranca cobranca) {
         this.cobranca = cobranca;
     }
-    
+
     public void setMovimento(Movimento movimento) {
         this.movimento = movimento;
     }
@@ -212,7 +212,7 @@ public class TipoDeCobranca implements Serializable {
     public String getValorFormatado() {
         return MoedaFormatter.format(cotacao.getConta().getMoeda(), getValorNaMoedaPadrao());
     }
-    
+
     public String getTotalNaMoedaPadraoFormatado() {
         return MoedaFormatter.format(movimento.getCotacaoPadrao().getConta().getMoeda(), getTotalNaMoedaPadrao());
     }
@@ -260,7 +260,7 @@ public class TipoDeCobranca implements Serializable {
             return null;
         }
     }
-    
+
     public void adiciona(Baixa baixa) {
         if (baixas == null) {
             baixas = new ArrayList<>();

@@ -12,14 +12,15 @@ import br.com.onesystem.util.BundleUtil;
  * @author Rafael
  */
 public enum TipoLayout {
-    
+
     ORCAMENTO(new Long(1), new BundleUtil().getLabel("Orcamento")),
     COMANDA(new Long(2), new BundleUtil().getLabel("Comanda")),
     CONDICIONAL(new Long(3), new BundleUtil().getLabel("Condicional")),
     TITULO(new Long(4), new BundleUtil().getLabel("Titulo")),
-    NOTA_EMITIDA(new Long(5), new BundleUtil().getLabel("Nota_Emitida")), 
-    RECEBIMENTO(new Long(6), new BundleUtil().getLabel("Recebimento"));
-    
+    NOTA_EMITIDA(new Long(5), new BundleUtil().getLabel("Nota_Emitida")),
+    RECEBIMENTO(new Long(6), new BundleUtil().getLabel("Recebimento")),
+    PAGAMENTO(new Long(7), new BundleUtil().getLabel("Pagamento"));
+
     private Long id;
     private String nome;
 
@@ -35,5 +36,5 @@ public enum TipoLayout {
     public String getNome() {
         return nome;
     }
-    
+
 }

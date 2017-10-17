@@ -6,7 +6,6 @@
 
 body{height:100%; width:100%;}
 
-
 /* CORE LAYOUT STANDART STYLES ********************************************************************************************************** */
 
 a, div, span, input, textarea, li, strong, button{ outline:none; text-decoration:none;
@@ -301,6 +300,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:none; opacity:0;}
     .ShowOnDesktop{display:inherit; opacity:1;}
 
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
+
     /*Imagem de Fundo*/
     .imagemFundo{width: 211.45px; height: 225.20px;}
 
@@ -315,13 +316,15 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .Responsive50{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
     .Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
 
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
+
     /* make auto of element width attribute on mobile devices with media queries */
     .WidAutoOnMobile{width:auto !important;}
     .HeiAutoOnMobile{height:auto !important; min-height:50px !important;}
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 211.45px; height: 225.20px;}
-    
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 8%; margin-right: 8%; margin-top: 3%;}
     .template-card-inbox{padding: 0% 8% 0% 8%;}
@@ -333,6 +336,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
 
     /* responsive support */
     .Responsive{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -371,7 +376,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 158.587px; height: 170.141px}
-    
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
     .template-card-inbox{padding: 0% 0% 0% 0% !important;}
@@ -384,6 +389,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:left !important;}
 
     /* responsive support */
     .Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -424,7 +431,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 158.587px; height: 170.141px}
-    
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
     .template-card-inbox{padding: 0% 0% 0% 0% !important;}
@@ -437,6 +444,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:left !important;}
 
     /* responsive support */
     .Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -477,7 +486,7 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 120px; height: 120px}
-    
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
     .template-card-inbox{padding: 0% 0% 0% 0% !important;}
@@ -749,4 +758,51 @@ body .ui-button.red-btn.ui-state-active {
 }
 .dialog-responsive{
     width: 800px;
+}
+
+.content-section {
+    display: block;
+    border-bottom: 1px solid #dde3e6;
+    padding: 30px;
+    overflow: hidden;
+    background-color: #f5f7f8;
+}
+
+.content-section-blue {
+    /*original 2bc0ec*/
+    background-image: linear-gradient(270deg,#93ddf7,#1b81d7);
+    color: #fff;
+    margin-top: -10px;
+    margin-left: -5px;
+    margin-right: -6px;
+}
+.content-section-red {
+    /*original 2bc0ec*/
+    background-image: linear-gradient(270deg,#f79393,#d71b1b);
+    color: #fff;
+    margin-top: -10px;
+    margin-left: -5px;
+    margin-right: -6px;
+}
+.BigTopic-Custom{
+    font-size: 30px;
+    margin-top: 0px !important;
+    margin-bottom: 20px !important;
+    line-height: 1.5em;
+    display: block;
+    font-family: Roboto,Trebuchet MS,Arial,Helvetica,sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+}
+.Topic-Message{
+    font-family: Roboto,Trebuchet MS,Arial,Helvetica,sans-serif;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.2em;
+    color: #fff;
+    line-height: 2.5em;
+}
+.Back-Gray{
+    background-color: #e1e1e1 !important;
+    cursor: not-allowed;
 }

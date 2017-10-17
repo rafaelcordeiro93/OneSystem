@@ -34,37 +34,19 @@ public class PessoaConverter implements Converter, Serializable {
 
     @Override
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
-        try {
-            if (object != null) {
-                if (object instanceof Pessoa) {
-                    Pessoa bean = (Pessoa) object;
+        if (object != null) {
+            if (object instanceof Pessoa) {
+                Pessoa bean = (Pessoa) object;
 
-                    //Pega o id do objeto
-                    Method m = bean.getClass().getMethod("getId", null);
-                    m.setAccessible(true);
-                    Long idObject = (Long) m.invoke(bean, null);
+                String id = bean.getId().toString();
+                uic.getAttributes().put(id, bean);
+                return id;
 
-                    //Grava o objeto no componente e devolve o id
-                    String id = String.valueOf(idObject);
-                    uic.getAttributes().put(id, bean);
-                    return id;
-
-                } else {
-                    return object.toString();
-                }
             } else {
-                return "";
+                return object.toString();
             }
-        } catch (IllegalAccessException ex) {
-            throw new RuntimeException("Erro de acesso ao método - Converter.");
-        } catch (IllegalArgumentException ex) {
-            throw new RuntimeException("Erro parametros inválidos ao acessar o método - Converter.");
-        } catch (InvocationTargetException ex) {
-            throw new RuntimeException("Erro na invocação do método - Converter.");
-        } catch (NoSuchMethodException ex) {
-            throw new RuntimeException("Erro o método não existe - Converter.");
-        } catch (SecurityException ex) {
-            throw new RuntimeException("Erro de segurança ao realizar o acesso - Converter.");
+        } else {
+            return "";
         }
     }
 }

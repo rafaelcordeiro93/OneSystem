@@ -3,9 +3,11 @@ package br.com.onesystem.dao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.ReceitaProvisionada;
 import br.com.onesystem.valueobjects.EstadoDeBaixa;
+import br.com.onesystem.valueobjects.SituacaoDeCobranca;
+import java.io.Serializable;
 import java.util.Date;
 
-public class ReceitaProvisionadaDAO extends GenericDAO<ReceitaProvisionada> {
+public class ReceitaProvisionadaDAO extends GenericDAO<ReceitaProvisionada> implements Serializable {
 
     public ReceitaProvisionadaDAO() {
         super(ReceitaProvisionada.class);
@@ -13,8 +15,8 @@ public class ReceitaProvisionadaDAO extends GenericDAO<ReceitaProvisionada> {
     }
 
     public ReceitaProvisionadaDAO aReceber() {
-        where += "and 0 = (select count(*) from Baixa b where b.cobranca = receitaProvisionada.id and b.estado = :pBNaoCancelada) ";
-        parametros.put("pBNaoCancelada", EstadoDeBaixa.CANCELADO);
+        where += "and receitaProvisionada.situacaoDeCobranca = :pSituacaoDeCobranca ";
+        parametros.put("pSituacaoDeCobranca", SituacaoDeCobranca.ABERTO);
         return this;
     }
 

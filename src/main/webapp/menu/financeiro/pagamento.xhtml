@@ -9,11 +9,20 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <div class="card">
+        <div class="content-section content-section-blue">
 
-                    <h2 class="BigTopic">#{l.Pagar_Valores}</h2>
+            <h2 class="BigTopic-Custom">#{l.Pagar_Valores}</h2>
+            <span class="Topic-Message">Titulos, Cheques, Cartões, Créditos, Receita Eventual e Provisionada podem ser pagos em várias formas de pagamento no Pagamento de Valores</span>
+
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
+                        <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this"/>
+                    </p:commandButton>
 
                     <table>
                         <tr>
@@ -28,9 +37,10 @@
                         </tr>
                     </table>
 
-                    <p:separator/>
+                    <div class="EmptyBox20" />
+                    <h4 style="font-weight: 400">#{l.Tipos_De_Recebimento}</h4>
+                    <div class="EmptyBox10" />
 
-                    <h:outputText value="#{l.Tipos_De_Pagamento}" />
                     <p:dataTable id="pagamentoBaixa" var="m" value="#{pagamentoView.tiposDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
                                  rowKey="#{m.id}" reflow="true" style="border: none" selection="#{pagamentoView.tipoSelecionado}" rowStyleClass="#{m.object.cotacao eq null ? 'Red' : ''}" >
 
@@ -64,8 +74,8 @@
                             </p:row>                                    
                         </p:columnGroup>
                     </p:dataTable>
-                    <p:separator/>
 
+                    <div class="EmptyBox5" />
                     <div class="ui-g">
 
                         <div class="ui-g-12 ui-md-12 ui-lg-10">
@@ -90,19 +100,18 @@
                         </div>
 
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
-                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5 TexAlRight-LeftResponsive PaddingTop6Px Fs16, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
                                 <p:outputLabel value="#{l.Conta}: "/>
-                                <p:inputNumber id="valorEmConta" value="#{pagamentoView.valorEmConta}" symbol="#{pagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                <p:inputNumber id="valorEmConta" value="#{pagamentoView.valorEmConta}" symbol="#{pagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Back-Gray Red Fs16"
                                                thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
                             </p:panelGrid>
                         </div>
                     </div>
 
-                    <div class="EmptyBox15"/>
-                    <p:separator/>
-                    <div class="EmptyBox15"/>
+                    <div class="EmptyBox20"/>
+                    <h4 style="font-weight: 400">#{l.Forma_De_Recebimento}</h4>
+                    <div class="EmptyBox10" />
 
-                    <h:outputText value="#{l.Forma_De_Pagamento}" />
                     <p:dataTable id="formasPagamento" var="m" value="#{pagamentoView.formasDeCobranca}" selectionMode="single" emptyMessage="#{l.Nao_Ha_Registros}"
                                  rowKey="#{m.id}" reflow="true" style="border: none" selection="#{pagamentoView.formaSelecionado}">
 
@@ -138,33 +147,42 @@
                         </p:columnGroup>
                     </p:dataTable>
 
-                    <p:separator/>
+                    <div class="EmptyBox5" />
 
                     <div class="ui-g">
                         <div class="ui-g-12 ui-md-12 ui-lg-10">
-                            <p:commandButton value="#{l.Titulo}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreTitulo}" process="@this" update="@none" >
-                                <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
-                            </p:commandButton>
-                            <p:commandButton value="#{l.Cheque}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreCheque}" process="@this" update="@none" >
-                                <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
-                            </p:commandButton>
-                            <p:commandButton value="#{l.Credito}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreCredito}" process="@this" update="@none" >
-                                <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
-                            </p:commandButton>
-                            <p:commandButton value="#{l.Remover}" update="formasPagamento valorEmDinheiro :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{pagamentoView.removeForma}" styleClass="orange-btn" />
+                            <p:panelGrid columns="7" layout="grid" styleClass="ui-fluid Wid100 ui-panelgrid-blank form-group form-elements" >
+                                <p:commandButton value="#{l.Titulo}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreTitulo}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                                </p:commandButton>
+                                <p:commandButton value="#{l.Cheque}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreCheque}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                                </p:commandButton>
+                                <p:commandButton value="#{l.Credito}"  action="#{dialogoFormaDeCobrancaView.abrirDialogo()}" actionListener="#{pagamentoView.abreCredito}" process="@this" update="@none" >
+                                    <p:ajax event="dialogReturn" listener="#{pagamentoView.selecionar}" process="@this" update="formasPagamento valorEmDinheiro :conteudo:growl"/>
+                                </p:commandButton>
+                                <p:commandButton value="#{l.Remover}" update="formasPagamento valorEmDinheiro :conteudo:growl" icon="fa fa-trash-o Fs16 White" action="#{pagamentoView.removeForma}" styleClass="orange-btn" />
+                            </p:panelGrid>
                         </div>
 
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
-                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5 TexAlRight-LeftResponsive PaddingTop6Px Fs16, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
                                 <p:outputLabel value="#{l.Dinheiro}: "/>
-                                <p:inputNumber id="valorEmDinheiro" value="#{pagamentoView.totalEmDinheiro}" symbol="#{pagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100"
+                                <p:inputNumber id="valorEmDinheiro" value="#{pagamentoView.totalEmDinheiro}" symbol="#{pagamentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Back-Gray Red Fs16"
                                                thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
                             </p:panelGrid>
                         </div>
                     </div>
 
-                    <p:separator/>
-                    <p:commandButton value="#{l.Pagar_Valores}"  update="conteudo" icon="fa fa-dollar Fs16 White"  action="#{pagamentoView.pagar()}" />
+                    <div class="EmptyBox20" />
+
+                    <div class="ui-g">
+                        <div class="ui-g-12 ui-md-12 ui-lg-12">
+                            <p:commandButton value="#{l.Pagar_Valores}" update="conteudo" icon="fa fa-dollar Fs16 White" action="#{pagamentoView.validaDinheiro()}" styleClass="red-btn PaddingPx2 Fs16" />
+                            <h:commandButton id="imprimir" actionListener="#{recebimentoView.imprimir()}" onclick="this.form.target = '_blank'" style="display: none"/>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

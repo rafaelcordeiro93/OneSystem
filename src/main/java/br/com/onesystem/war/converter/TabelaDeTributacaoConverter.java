@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoTabelaDeTributacaoView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "tabelaDeTributacaoConverter", forClass = TabelaDeTributacao.class)
-public class TabelaDeTributacaoConverter extends BasicConverter<TabelaDeTributacao, SelecaoTabelaDeTributacaoView> implements Converter, Serializable {
+public class TabelaDeTributacaoConverter extends BasicConverter<TabelaDeTributacao> implements Converter, Serializable {
 
     public TabelaDeTributacaoConverter() {
-        super(TabelaDeTributacao.class, SelecaoTabelaDeTributacaoView.class);
+        super(TabelaDeTributacao.class);
     }
 }

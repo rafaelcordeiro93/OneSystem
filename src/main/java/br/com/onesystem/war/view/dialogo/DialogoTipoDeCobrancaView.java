@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view.dialogo;
 
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -40,6 +41,7 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -92,7 +94,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
 
     @Inject
     private ContaDAO contaDAO;
-    
+
     @PostConstruct
     public void init() {
         try {
@@ -165,13 +167,13 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
                     modalidadeDeCobrancaFixa = ModalidadeDeCobranca.DESPESA_PROVISIONADA;
                     modalidadeDeCobranca = null;
                 }
+                e.setCotacao(model.getObject().getCobranca().getCotacao());
             }
         }
 
-        cotacaoLista = cotacaoDAO.naEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+        cotacaoLista = cotacaoDAO.naUltimaEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         contaComCotacao = contaDAO.comBanco().ePorMoedas(cotacaoLista.stream().map(c -> c.getConta().getMoeda()).collect(Collectors.toList())).listaDeResultados();
         cotacaoPadrao = cotacaoDAO.porMoeda(serviceConf.buscar().getMoedaPadrao()).naMaiorEmissao(emissao).porCotacaoEmpresa().resultado();
-        e.setCotacao(model.getObject().getCobranca().getCotacao());
     }
 
     public void abrirDialogo() {
@@ -200,6 +202,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         Cobranca c = e.getCobranca();
         if (c instanceof Titulo) {
             titulo = (Titulo) c;
+            e.setValor(titulo.getSaldo());
             selecionaCotacaoBancariaTitulo();
         } else if (c instanceof Cheque) {
             cheque = (Cheque) c;
@@ -219,9 +222,18 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         String id = event.getComponent().getId();
-        if (obj instanceof CobrancaVariavel) {
-            e.setCobranca((CobrancaVariavel) event.getObject());
-            selecionaCobrancaNoObjeto();
+        if (obj instanceof Cobranca) {
+            //Inicializa tipos de cobranca em Cobranca
+            Cobranca c = (Cobranca) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((Cobranca) obj, SelecaoCobrancaView.class, "getTiposDeCobranca");
+            if (obj instanceof CobrancaVariavel) {
+                c = (CobrancaVariavel) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((CobrancaVariavel) c, SelecaoCobrancaView.class, "getFormasDeCobranca");
+                e.setCobranca(c);
+                selecionaCobrancaNoObjeto();
+            } else if (obj instanceof DespesaProvisionada) {
+                despesaProvisionada = (DespesaProvisionada) obj;
+            } else if (obj instanceof ReceitaProvisionada) {
+                receitaProvisionada = (ReceitaProvisionada) obj;
+            }
         } else if (obj instanceof Pessoa && id.equals("inp-Credito-search")) {
             credito.setPessoa((Pessoa) obj);
         } else if (obj instanceof Pessoa && id.equals("inp-despesaPessoa-search")) {
@@ -232,10 +244,6 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             despesaEventualBV.setDespesa((TipoDespesa) obj);
         } else if (obj instanceof TipoReceita) {
             receitaEventualBV.setReceita((TipoReceita) obj);
-        } else if (obj instanceof DespesaProvisionada) {
-            despesaProvisionada = (DespesaProvisionada) obj;
-        } else if (obj instanceof ReceitaProvisionada) {
-            receitaProvisionada = (ReceitaProvisionada) obj;
         }
     }
 
@@ -324,6 +332,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
+        SessionUtil.remove("modelTipo", FacesContext.getCurrentInstance());
     }
 
     public void selecionaCotacaoBancariaTitulo() {

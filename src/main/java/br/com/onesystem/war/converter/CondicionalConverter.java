@@ -7,7 +7,6 @@ package br.com.onesystem.war.converter;
 
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.war.service.impl.BasicConverter;
-import br.com.onesystem.war.view.selecao.SelecaoCondicionalView;
 import java.io.Serializable;
 import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
@@ -17,9 +16,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "condicionalConverter", forClass = Condicional.class)
-public class CondicionalConverter extends BasicConverter<Condicional, SelecaoCondicionalView> implements Converter, Serializable {
+public class CondicionalConverter extends BasicConverter<Condicional> implements Converter, Serializable {
 
     public CondicionalConverter() {
-        super(Condicional.class, SelecaoCondicionalView.class);
+        super(Condicional.class);
     }
 }

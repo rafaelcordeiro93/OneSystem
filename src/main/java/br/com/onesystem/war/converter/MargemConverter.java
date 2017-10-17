@@ -17,9 +17,9 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "margemConverter", forClass = Margem.class)
-public class MargemConverter extends BasicConverter<Margem, SelecaoMargemView> implements Converter, Serializable {
+public class MargemConverter extends BasicConverter<Margem> implements Converter, Serializable {
 
     public MargemConverter() {
-        super(Margem.class, SelecaoMargemView.class);
+        super(Margem.class);
     }
 }

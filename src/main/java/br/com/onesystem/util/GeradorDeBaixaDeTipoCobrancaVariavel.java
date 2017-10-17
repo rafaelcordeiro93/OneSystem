@@ -6,6 +6,7 @@
 package br.com.onesystem.util;
 
 import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.BaixaDAO;
 import br.com.onesystem.domain.Baixa;
@@ -23,6 +24,7 @@ import br.com.onesystem.valueobjects.EstadoDeBaixa;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.war.builder.BaixaBV;
+import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;

@@ -45,7 +45,7 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
 
     @Inject
     private CotacaoDAO cotacaoDAO;
-    
+
     @PostConstruct
     public void init() {
         try {
@@ -90,13 +90,13 @@ public class DialogoCotacaoView extends BasicMBImpl<ValorPorCotacao, ValorPorCot
     }
 
     private void inicializaObjetoDaSessao(Date emissao, Moeda moeda, BigDecimal dinheiro) {
-        inicializaCotacoes(emissao, moeda);
         this.dinheiro = dinheiro;
+        inicializaCotacoes(emissao, moeda);
         calculaCotacoes();
     }
 
     private void inicializaCotacoes(Date emissao, Moeda moedaPadrao) {
-        List<Cotacao> cotacaoLista = cotacaoDAO.naMaiorEmissao(emissao).listaDeResultados();
+        List<Cotacao> cotacaoLista = cotacaoDAO.naMaiorEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
         for (Cotacao c : cotacaoLista) {
             cotacoes.add(new ValorPorCotacaoBV(c, null, null, null, moedaPadrao));
         }

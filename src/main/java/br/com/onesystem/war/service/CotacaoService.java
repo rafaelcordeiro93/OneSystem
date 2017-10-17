@@ -14,10 +14,10 @@ public class CotacaoService implements Serializable {
 
     @Inject
     private CotacaoDAO dao;
-    
+
     @Inject
     private Configuracao configuracao;
-    
+
     public CotacaoService() {
     }
 
@@ -40,4 +40,9 @@ public class CotacaoService implements Serializable {
     public Cotacao getCotacaoNaUltimaEmissaoPor(Conta conta, Date emissao) throws DadoInvalidoException {
         return dao.porConta(conta).porCotacaoBancaria().naUltimaEmissao(emissao).resultado();
     }
+
+    public List<Cotacao> buscarCotacoesDaEmpresaNaEmissao(Date emissao) {
+        return dao.naMaiorEmissao(emissao).porCotacaoEmpresa().listaDeResultados();
+    }
+
 }

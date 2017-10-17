@@ -45,11 +45,4 @@ public class SelecaoReceitaProvisionadaView extends BasicCrudMBImpl<ReceitaProvi
         return listaFIltrada;
     }
 
-    public ReceitaProvisionadaService getService() {
-        return service;
-    }
-
-    public void setService(ReceitaProvisionadaService service) {
-        this.service = service;
-    }
 }

@@ -17,10 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael
  */
 @FacesConverter(value = "orcamentoConverter", forClass = Orcamento.class)
-public class OrcamentoConverter extends BasicConverter<Orcamento, SelecaoOrcamentoView> implements Converter, Serializable {
+public class OrcamentoConverter extends BasicConverter<Orcamento> implements Converter, Serializable {
 
     public OrcamentoConverter() {
-        super(Orcamento.class, SelecaoOrcamentoView.class);
+        super(Orcamento.class);
     }
 
 }

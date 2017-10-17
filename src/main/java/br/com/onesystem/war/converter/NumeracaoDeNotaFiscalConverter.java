@@ -17,10 +17,10 @@ import javax.faces.convert.FacesConverter;
  * @author Rafael Cordeiro
  */
 @FacesConverter(value = "numeracaoDeNotaFiscalConverter", forClass = NumeracaoDeNotaFiscal.class)
-public class NumeracaoDeNotaFiscalConverter extends BasicConverter<NumeracaoDeNotaFiscal, SelecaoNumeracaoDeNotaFiscalView> implements Converter, Serializable {
+public class NumeracaoDeNotaFiscalConverter extends BasicConverter<NumeracaoDeNotaFiscal> implements Converter, Serializable {
 
     public NumeracaoDeNotaFiscalConverter() {
-        super(NumeracaoDeNotaFiscal.class, SelecaoNumeracaoDeNotaFiscalView.class);
+        super(NumeracaoDeNotaFiscal.class);
     }
 
 }
