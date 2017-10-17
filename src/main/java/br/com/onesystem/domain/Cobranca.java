@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
@@ -78,7 +79,7 @@ public abstract class Cobranca implements Serializable {
     @Column(length = 250, nullable = true)
     protected String historico;
 
-    @OneToMany(mappedBy = "cobranca")
+    @OneToMany(mappedBy = "cobranca", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<TipoDeCobranca> tiposDeCobranca;
 
     @Enumerated(EnumType.STRING)

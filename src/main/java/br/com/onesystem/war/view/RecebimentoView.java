@@ -1,14 +1,18 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.AdicionaDAO;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Movimento;
+import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -18,6 +22,8 @@ import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
@@ -33,18 +39,25 @@ import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateful;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
+@Stateful
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> implements Serializable {
 
@@ -67,7 +80,20 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private GeradorDeBaixas geradorDeBaixas;
 
     @Inject
-    private AtualizaDAO<Cobranca> dao;
+    private AdicionaDAO<Cobranca> daoAdiciona;
+
+    @Inject
+    private AtualizaDAO<Cobranca> daoAtualiza;
+
+    @Inject
+    private Configuracao configuracao;
+
+    @Inject
+    private SelecaoCobrancaView selecao;
+
+    @PostConstruct
+    public void init() {
+    }
 
     public void validaDinheiro() throws DadoInvalidoException {
         e.setTotalEmDinheiro(getTotalEmDinheiro());
@@ -85,34 +111,54 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void receber() {
         try {
-            Recebimento recebimento = constroiRecebimento();
-            addNoBanco(recebimento);
 
+            Recebimento recebimento = constroiRecebimento();
             //O cascade não está atualizando a cobrança, realizado atualização manual.
             if (recebimento.getTipoDeCobranca() != null && !recebimento.getTipoDeCobranca().isEmpty()) {
                 for (TipoDeCobranca tipo : recebimento.getTipoDeCobranca()) {
-                    dao.atualiza(tipo.getCobranca());
+                    if (tipo.getCobranca().getId() != null) {
+                        daoAtualiza.atualiza(tipo.getCobranca());
+                    } else {
+                        daoAdiciona.adiciona(tipo.getCobranca());
+                    }
                 }
             }
 
             //O cascade não está atualizando a cobrança, realizado atualização manual.
             if (recebimento.getFormasDeCobranca() != null && !recebimento.getFormasDeCobranca().isEmpty()) {
                 for (FormaDeCobranca forma : recebimento.getFormasDeCobranca()) {
-                    dao.atualiza(forma.getCobranca());
+                    if (forma.getCobranca().getId() != null) {
+                        daoAtualiza.atualiza(forma.getCobranca());
+                    } else {
+                        daoAdiciona.adiciona(forma.getCobranca());
+                    }
                 }
             }
 
+            getAdicionaDAO().adiciona(recebimento);
+
             t = recebimento;
-
-            layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
-            if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
-                RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao da nota
-            }
-
+            InfoMessage.adicionado();
+            chamaImpressao();
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
-            limparJanela();
-            RequestContext.getCurrentInstance().update("conteudo");
+        }
+    }
+
+    private void chamaImpressao() {
+        try {
+            layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.RECEBIMENTO);
+
+            if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                if (layoutDeImpressao.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao do recebimento
+                } else {
+                    new ImpressoraDeLayoutTexto(layoutDeImpressao.getLayoutTexto(), Movimento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                }
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 

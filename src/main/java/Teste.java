@@ -18,8 +18,8 @@ public class Teste {
 
     public static void main(String[] args) {
 
-        Condicional titulo = new ArmazemDeRegistrosConsole<Condicional>(Condicional.class).find(new Long(1));
-        ImpressoraDeLayoutTexto gerenciador = new ImpressoraDeLayoutTexto("condicional.json", Condicional.class, titulo);
+        Movimento titulo = new ArmazemDeRegistrosConsole<Movimento>(Movimento.class).find(new Long(45));
+        ImpressoraDeLayoutTexto gerenciador = new ImpressoraDeLayoutTexto("recebimento", Movimento.class, titulo);
 
         gerenciador.exibirNoConsole();
 

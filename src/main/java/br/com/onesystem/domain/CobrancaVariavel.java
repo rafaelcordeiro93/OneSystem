@@ -21,6 +21,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import br.com.onesystem.valueobjects.SituacaoDeCobranca;
+import javax.persistence.CascadeType;
 import javax.persistence.OneToMany;
 
 /**
@@ -39,7 +40,7 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
 
     private Integer parcela;
 
-    @OneToMany(mappedBy = "cobrancaVariavel")
+    @OneToMany(mappedBy = "cobrancaVariavel", cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<FormaDeCobranca> formasDeCobranca;
 
     public CobrancaVariavel() {
@@ -70,6 +71,10 @@ public abstract class CobrancaVariavel extends Cobranca implements Serializable 
 
     public Nota getNota() {
         return nota;
+    }
+
+    public List<FormaDeCobranca> getFormasDeCobranca() {
+        return formasDeCobranca;
     }
 
     public void geraPara(Nota nota) {

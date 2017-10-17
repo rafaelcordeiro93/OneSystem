@@ -41,10 +41,6 @@ public abstract class BasicMBImpl<T, E> {
         limparJanela();
     }
 
-    @Deprecated
-    public void buscaPorId() {
-    }
-
     public void add() {
         try {
             BuilderView b = (BuilderView) e;
@@ -140,6 +136,10 @@ public abstract class BasicMBImpl<T, E> {
 
     public void setT(T t) {
         this.t = t;
+    }
+
+    public AdicionaDAO<T> getAdicionaDAO() {
+        return adicionaDAO;
     }
 
 }

@@ -226,6 +226,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
             //Inicializa tipos de cobranca em Cobranca
             Cobranca c = (Cobranca) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((Cobranca) obj, SelecaoCobrancaView.class, "getTiposDeCobranca");
             if (obj instanceof CobrancaVariavel) {
+                c = (CobrancaVariavel) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((CobrancaVariavel) c, SelecaoCobrancaView.class, "getFormasDeCobranca");
                 e.setCobranca(c);
                 selecionaCobrancaNoObjeto();
             } else if (obj instanceof DespesaProvisionada) {
