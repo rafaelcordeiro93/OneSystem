@@ -660,7 +660,7 @@
             <table>
                 <tr>
                     <td>
-                        <p:button value="#{l.Sim}" icon="fa fa-check" onclick="PF('criaNovoLoteItem').show()"/>
+                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" onclick="PF('incluirLoteDeItemDialog').hide(); PF('criaNovoLoteItem').show();"/>
                     </td>
                     <td>
                         <p:commandButton value="#{l.Escolher_Outro_Lote}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('incluirLoteDeItemDialog').hide()"/>
@@ -678,11 +678,11 @@
                          columnClasses="ui-g-12 ui-md-2 ,ui-g-12 ui-md-4">
 
                 <p:outputLabel value="#{l.Data_De_Fabricacao}" />
-                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeFabricacao}" size="9" navigator="true" pages="3" />
+                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeFabricacao}" navigator="flase" />
 
 
                 <p:outputLabel value="#{l.Data_De_Validade}" />
-                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeValidade}" size="9" navigator="true" pages="3" />
+                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeValidade}" navigator="false"  />
 
 
             </p:panelGrid>        

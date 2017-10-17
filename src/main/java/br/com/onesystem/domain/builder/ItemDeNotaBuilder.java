@@ -7,6 +7,7 @@ package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
@@ -24,6 +25,7 @@ public class ItemDeNotaBuilder {
     private BigDecimal unitario = BigDecimal.ZERO;
     private Nota nota;
     private List<QuantidadeDeItemPorDeposito> listaDeQuantidade;
+    private LoteItem loteItem;
 
     public ItemDeNotaBuilder comId(Long id) {
         this.id = id;
@@ -49,9 +51,14 @@ public class ItemDeNotaBuilder {
         this.listaDeQuantidade = listaDeQuantidade;
         return this;
     }
+    
+    public ItemDeNotaBuilder comLoteItem(LoteItem loteItem) {
+        this.loteItem = loteItem;
+        return this;
+    }
 
     public ItemDeNota construir() throws DadoInvalidoException {
-        return new ItemDeNota(id, item, unitario, listaDeQuantidade);
+        return new ItemDeNota(id, item, unitario, listaDeQuantidade, loteItem);
     }
 
 }

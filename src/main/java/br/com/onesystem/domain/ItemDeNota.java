@@ -63,16 +63,19 @@ public class ItemDeNota implements Serializable {
     private BigDecimal quantidade;
     @Transient
     List<QuantidadeDeItemPorDeposito> listaDeQuantidade;
+    @ManyToOne
+    private LoteItem loteItem;
 
     public ItemDeNota() {
     }
 
-    public ItemDeNota(Long id, Item item, BigDecimal valorUnitario, List<QuantidadeDeItemPorDeposito> listaDeQuantidade) throws DadoInvalidoException {
+    public ItemDeNota(Long id, Item item, BigDecimal valorUnitario, List<QuantidadeDeItemPorDeposito> listaDeQuantidade, LoteItem loteItem) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.unitario = valorUnitario;
         adicionaQuantidade(listaDeQuantidade);
         this.listaDeQuantidade = listaDeQuantidade;
+        this.loteItem = loteItem;
         ehValido();
     }
 
@@ -86,10 +89,10 @@ public class ItemDeNota implements Serializable {
     /**
      * @author Rafael Fernando Rauber
      * @date 25/09/2017
-     * 
-     * Para gerar o estoque, deve ser utilizado a classe
-     * GeradorDeEstoque, utilizando o metodo geraEstoqueDe
-     * 
+     *
+     * Para gerar o estoque, deve ser utilizado a classe GeradorDeEstoque,
+     * utilizando o metodo geraEstoqueDe
+     *
      * @see GeradorDeEstoque
      * @param estoque ja gerado no gerador de estoque.
      */
@@ -181,6 +184,10 @@ public class ItemDeNota implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    public LoteItem getLoteItem() {
+        return loteItem;
     }
 
     @Override

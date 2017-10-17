@@ -139,7 +139,7 @@ public class LoteItem implements Serializable {
 
     @Override
     public String toString() {
-        return "LoteItem{" + "id=" + id + ", dataDeValidade=" + dataDeValidade + ", dataDeFabricacao=" + dataDeFabricacao + ", numeroDoLote=" + numeroDoLote + ", observacao=" + observacao + '}';
+        return "LoteItem{" + "id=" + id + ", dataDeValidade=" + dataDeValidade + ", dataDeFabricacao=" + dataDeFabricacao + ", numeroDoLote=" + numeroDoLote + ", ativo=" + ativo + ", observacao=" + observacao + ", saldo=" + saldo + ", item=" + item + '}';
     }
 
 }
