@@ -9,7 +9,7 @@
 
     <ui:define name="content">
 
-        <div class="content-section content-section-introduction">
+        <div class="content-section content-section-blue">
 
             <h2 class="BigTopic-Custom">#{l.Receber_Valores}</h2>
             <span class="Topic-Message">Titulos, Cheques, Cartões, Créditos, Receita Eventual e Provisionada podem ser recebidos em várias formas de pagamento no Recebimentos de Valores</span>
@@ -19,7 +19,6 @@
         <div class="ui-g" style="margin-left: -5px;">
             <div class="ui-g-12 NoPadding">
                 <div class="card" style="padding: 35px;">
-
 
                     <p:commandButton id="abreDialogoCotacao-btn" action="#{dialogoCotacaoView.abrirDialogo}" process="@this" update="@none" style="display: none">
                         <p:ajax event="dialogReturn" listener="#{recebimentoView.selecionar}" process="@this"/>
@@ -39,7 +38,6 @@
                     </table>
 
                     <div class="EmptyBox20" />
-
                     <h4 style="font-weight: 400">#{l.Tipos_De_Recebimento}</h4>
                     <div class="EmptyBox10" />
 
@@ -107,9 +105,9 @@
                         </div>
 
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
-                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4 TexAlRight, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-1 ui-lg-4 TexAlRight-LeftResponsive Fs16 PaddingTop6Px, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
                                 <p:outputLabel value="#{l.Conta}:" style="padding-right: 5px"/>
-                                <p:inputNumber id="valorEmConta" value="#{recebimentoView.valorEmConta}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Back-Gray"
+                                <p:inputNumber id="valorEmConta" value="#{recebimentoView.valorEmConta}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Blue Back-Gray Fs16"
                                                thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
                             </p:panelGrid>
                         </div>
@@ -180,9 +178,9 @@
                         </div>
 
                         <div class="ui-g-12 ui-md-12 ui-lg-2">
-                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5 TexAlRight, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
-                                <p:outputLabel value="#{l.Dinheiro}:" style="padding-right: 5px"/>
-                                <p:inputNumber id="valorEmDinheiro" value="#{recebimentoView.totalEmDinheiro}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Back-Gray"
+                            <p:panelGrid columns="2" layout="grid" styleClass="Wid100 ui-panelgrid-blank form-group form-elements" columnClasses="ui-g-12 ui-md-2 ui-lg-5 TexAlRight-LeftResponsive PaddingTop6Px Fs16, ui-g-12 ui-md-10 ui-lg-1 Wid100" >
+                                <p:outputLabel value="#{l.Dinheiro}:" style="padding-right: 5px;"/>
+                                <p:inputNumber id="valorEmDinheiro" value="#{recebimentoView.totalEmDinheiro}" symbol="#{recebimentoView.e.cotacaoPadrao.conta.moeda.sigla} " readonly="true" inputStyleClass="Wid100 Back-Gray Blue Fs16"
                                                thousandSeparator="." decimalSeparator="," decimalPlaces="2" />
                             </p:panelGrid>
                         </div>

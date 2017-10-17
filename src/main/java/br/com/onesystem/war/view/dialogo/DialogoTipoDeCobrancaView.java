@@ -332,6 +332,7 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         SessionUtil.remove("modalidadeDeCobranca", FacesContext.getCurrentInstance());
         SessionUtil.remove("modalidadeDeCobrancaFixa", FacesContext.getCurrentInstance());
         SessionUtil.remove("naturezaFinanceira", FacesContext.getCurrentInstance());
+        SessionUtil.remove("modelTipo", FacesContext.getCurrentInstance());
     }
 
     public void selecionaCotacaoBancariaTitulo() {

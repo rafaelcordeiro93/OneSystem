@@ -1,36 +1,50 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
+import br.com.onesystem.domain.LayoutDeImpressao;
+import br.com.onesystem.domain.Movimento;
 import br.com.onesystem.domain.Pagamento;
 import br.com.onesystem.domain.TipoDeCobranca;
+import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.services.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
+import br.com.onesystem.util.ImpressoraDeLayoutTexto;
+import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.valueobjects.ModalidadeDeCobranca;
 import br.com.onesystem.valueobjects.NaturezaFinanceira;
+import br.com.onesystem.valueobjects.TipoImpressao;
+import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.FormaDeCobrancaBV;
 import br.com.onesystem.war.builder.PagamentoBV;
 import br.com.onesystem.war.builder.TipoDeCobrancaBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
+import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.war.service.CotacaoService;
+import br.com.onesystem.war.service.LayoutDeImpressaoService;
+import br.com.onesystem.war.service.PagamentoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
@@ -43,26 +57,94 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     private ModelList<FormaDeCobranca> formasDeCobranca;
     private TipoDeCobrancaBV tipoDeCobrancaBV;
     private FormaDeCobrancaBV formaDeCobrancaBV;
+    private List<ValorPorCotacao> valorPorCotacao;
+    private LayoutDeImpressao layoutDeImpressao;
 
     @Inject
-    private CotacaoService service;
-    
+    private CotacaoService cotacaoService;
+
+    @Inject
+    private LayoutDeImpressaoService layoutService;
+
     @Inject
     private GeradorDeBaixas geradorDeBaixas;
 
+    @Inject
+    private PagamentoService service;
+
+    @Inject
+    private Configuracao configuracao;
+
+    public void validaDinheiro() throws DadoInvalidoException {
+        e.setTotalEmDinheiro(getTotalEmDinheiro());
+        List<Cotacao> cotacoes = cotacaoService.buscarCotacoesDaEmpresaNaEmissao(e.getEmissao());
+        if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0 && cotacoes.size() > 1) {
+            SessionUtil.put(e.construir(), "movimento", FacesContext.getCurrentInstance());
+            RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
+        } else if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0 && cotacoes.size() == 1) {
+            valorPorCotacao.add(new ValorPorCotacaoBV(cotacoes.get(0), e.getTotalEmDinheiro(), null, null, null).construir());
+            pagar();
+        } else {
+            pagar();
+        }
+    }
+
     public void pagar() {
         try {
-            e.setTotalEmDinheiro(getTotalEmDinheiro());
-            Pagamento pagamento = e.construirComID();
-            tiposDeCobranca.getList().forEach(tp -> pagamento.adiciona(tp));
-            formasDeCobranca.getList().forEach(f -> pagamento.adiciona(f));
-            
-            geradorDeBaixas.geraBaixasDe(pagamento);
-            pagamento.ehRegistroValido();
-            addNoBanco(pagamento);
+
+            Pagamento pagamento = constroiPagamento();
+            t = service.addPagamento(pagamento);
+
+            InfoMessage.adicionado();
+            chamaImpressao();
+            limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
-            limparJanela();
+        }
+    }
+
+    private void chamaImpressao() {
+        try {
+            layoutDeImpressao = layoutService.getLayoutPorTipoDeLayout(TipoLayout.PAGAMENTO);
+
+            if (!layoutDeImpressao.getTipoImpressao().equals(TipoImpressao.NADA_A_FAZER)) {
+                if (layoutDeImpressao.isLayoutGraficoEhPadrao()) {
+                    RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao do pagamento
+                } else {
+                    new ImpressoraDeLayoutTexto(layoutDeImpressao.getLayoutTexto(), Movimento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                    t = null;
+                }
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    /**
+     * Constroi Pagamento adicionando tipos,formas e valor por cotação. Após
+     * contrução gera as baixas e valida o objeto.
+     *
+     * @return retorna o pagamento, construído e validado.
+     */
+    private Pagamento constroiPagamento() throws DadoInvalidoException {
+        Pagamento pagamento = e.construirComID(); // Constroi Pagamento **throws DadoInvalidoException
+        tiposDeCobranca.getList().forEach(tp -> pagamento.adiciona(tp)); // Adiciona Tipos
+        formasDeCobranca.getList().forEach(f -> pagamento.adiciona(f)); // Adiciona Forma
+        for (ValorPorCotacao v : valorPorCotacao) { //Adiciona Valor por cotação **throws DadoInvalidoException
+            pagamento.adiciona(v);
+        }
+
+        geradorDeBaixas.geraBaixasDe(pagamento); //Gera as baixas de pagamento
+        pagamento.ehRegistroValido();// Valida **throws DadoInvalidoException
+        return pagamento;
+    }
+
+    public void imprimir() {
+        try {
+            new ImpressoraDeLayoutGrafico(t.getTipoDeCobranca(), layoutDeImpressao).addParametro("pagamento", t).visualizarPDF();
+            t = null;
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
@@ -71,10 +153,11 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
         try {
             removeDaSessao();
             e = new PagamentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
-                     (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+                    (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
+            valorPorCotacao = new ArrayList<>();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -89,13 +172,14 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+        e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
     }
 
     @Override
     public void selecionar(SelectEvent event) {
         try {
             Object obj = event.getObject();
+            String componentId = event.getComponent().getId();
             if (obj instanceof TipoDeCobranca) {
                 TipoDeCobranca tipo = (TipoDeCobranca) obj;
                 boolean possuiCobranca = false;
@@ -124,6 +208,9 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
                 } else {
                     formasDeCobranca.set(model);
                 }
+            } else if (obj instanceof List<?> && "abreDialogoCotacao-btn".equals(componentId)) {
+                valorPorCotacao = (List<ValorPorCotacao>) obj;
+                pagar();
             }
             tipoSelecionado = null;
             formaSelecionado = null;

@@ -38,6 +38,7 @@ import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
+import br.com.onesystem.war.service.RecebimentoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
@@ -71,7 +72,10 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private List<ValorPorCotacao> valorPorCotacao;
 
     @Inject
-    private CotacaoService service;
+    private RecebimentoService service;
+
+    @Inject
+    private CotacaoService cotacaoService;
 
     @Inject
     private LayoutDeImpressaoService layoutService;
@@ -80,16 +84,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private GeradorDeBaixas geradorDeBaixas;
 
     @Inject
-    private AdicionaDAO<Cobranca> daoAdiciona;
-
-    @Inject
-    private AtualizaDAO<Cobranca> daoAtualiza;
-
-    @Inject
     private Configuracao configuracao;
-
-    @Inject
-    private SelecaoCobrancaView selecao;
 
     @PostConstruct
     public void init() {
@@ -97,7 +92,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
 
     public void validaDinheiro() throws DadoInvalidoException {
         e.setTotalEmDinheiro(getTotalEmDinheiro());
-        List<Cotacao> cotacoes = service.buscarCotacoesDaEmpresaNaEmissao(e.getEmissao());
+        List<Cotacao> cotacoes = cotacaoService.buscarCotacoesDaEmpresaNaEmissao(e.getEmissao());
         if (e.getTotalEmDinheiro() != null && e.getTotalEmDinheiro().compareTo(BigDecimal.ZERO) != 0 && cotacoes.size() > 1) {
             SessionUtil.put(e.construir(), "movimento", FacesContext.getCurrentInstance());
             RequestContext.getCurrentInstance().execute("document.getElementById(\"conteudo:abreDialogoCotacao-btn\").click();");
@@ -113,34 +108,12 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
         try {
 
             Recebimento recebimento = constroiRecebimento();
-            //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getTipoDeCobranca() != null && !recebimento.getTipoDeCobranca().isEmpty()) {
-                for (TipoDeCobranca tipo : recebimento.getTipoDeCobranca()) {
-                    if (tipo.getCobranca().getId() != null) {
-                        daoAtualiza.atualiza(tipo.getCobranca());
-                    } else {
-                        daoAdiciona.adiciona(tipo.getCobranca());
-                    }
-                }
-            }
+            t = service.addRecebimento(recebimento);
 
-            //O cascade não está atualizando a cobrança, realizado atualização manual.
-            if (recebimento.getFormasDeCobranca() != null && !recebimento.getFormasDeCobranca().isEmpty()) {
-                for (FormaDeCobranca forma : recebimento.getFormasDeCobranca()) {
-                    if (forma.getCobranca().getId() != null) {
-                        daoAtualiza.atualiza(forma.getCobranca());
-                    } else {
-                        daoAdiciona.adiciona(forma.getCobranca());
-                    }
-                }
-            }
-
-            getAdicionaDAO().adiciona(recebimento);
-
-            t = recebimento;
             InfoMessage.adicionado();
             chamaImpressao();
             limparJanela();
+
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -155,6 +128,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
                     RequestContext.getCurrentInstance().execute("document.getElementById('conteudo:imprimir').click()"); // chama a impressao do recebimento
                 } else {
                     new ImpressoraDeLayoutTexto(layoutDeImpressao.getLayoutTexto(), Movimento.class, t).imprimir(configuracao.getCaminhoImpressoraTexto());
+                    t = null;
                 }
             }
         } catch (DadoInvalidoException die) {
@@ -196,7 +170,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
             removeDaSessao();
             e = new RecebimentoBV(new Date(), (Caixa) SessionUtil.getObject("caixa", FacesContext.getCurrentInstance()),
                     (Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
-            e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+            e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
             tiposDeCobranca = new ModelList<>();
             formasDeCobranca = new ModelList<>();
             valorPorCotacao = new ArrayList<>();
@@ -214,7 +188,7 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     }
 
     public void atualizaEmissao() throws DadoInvalidoException {
-        e.setCotacaoPadrao(service.getCotacaoPadrao(e.getEmissao()));
+        e.setCotacaoPadrao(cotacaoService.getCotacaoPadrao(e.getEmissao()));
     }
 
     @Override

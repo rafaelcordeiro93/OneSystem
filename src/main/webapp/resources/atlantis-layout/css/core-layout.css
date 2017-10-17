@@ -300,6 +300,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:none; opacity:0;}
     .ShowOnDesktop{display:inherit; opacity:1;}
 
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
+
     /*Imagem de Fundo*/
     .imagemFundo{width: 211.45px; height: 225.20px;}
 
@@ -313,6 +315,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .Responsive{width:33.3%; float:left; margin-left:0px !important; margin-right:0px !important;}
     .Responsive50{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
     .Responsive100{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
 
     /* make auto of element width attribute on mobile devices with media queries */
     .WidAutoOnMobile{width:auto !important;}
@@ -332,6 +336,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:right !important;}
 
     /* responsive support */
     .Responsive{width:50%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -383,6 +389,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:left !important;}
 
     /* responsive support */
     .Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -436,6 +444,8 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     .ShowOnMobile{display:inherit; opacity:1;}
     .ShowOnDesktop{display:none; opacity:0;}
     .FloatNoneOnMobile{float:none !important;}
+
+    .TexAlRight-LeftResponsive{ text-align:left !important;}
 
     /* responsive support */
     .Responsive{width:100%; float:left; margin-left:0px !important; margin-right:0px !important;}
@@ -758,9 +768,17 @@ body .ui-button.red-btn.ui-state-active {
     background-color: #f5f7f8;
 }
 
-.content-section-introduction {
+.content-section-blue {
     /*original 2bc0ec*/
     background-image: linear-gradient(270deg,#93ddf7,#1b81d7);
+    color: #fff;
+    margin-top: -10px;
+    margin-left: -5px;
+    margin-right: -6px;
+}
+.content-section-red {
+    /*original 2bc0ec*/
+    background-image: linear-gradient(270deg,#f79393,#d71b1b);
     color: #fff;
     margin-top: -10px;
     margin-left: -5px;
