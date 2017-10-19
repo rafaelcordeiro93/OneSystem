@@ -19,13 +19,20 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-11" style="margin-left: 5%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Item}</h3>
+        <div class="content-section content-section-blue">
+
+            <h2 class="BigTopic-Custom"><i class="fa fa-fw fa-arrows White Fs40" style="color: #848484"/> #{l.Item}</h2>
+            <span class="Topic-Message">#{l.Item_Texto}</span>
+
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
                     <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                    <div class="ui-fluid">
 
                         <p:tabView widgetVar="detailsTab" id="tabsItem" style="margin: none; border-color: none">
                             <p:ajax event="tabChange" listener="#{itemView.onTabChange}" update="conteudo"/>
@@ -86,15 +93,15 @@
 
                                     <p:outputLabel value="#{l.Tipo_Item}"/>
                                     <p:selectOneMenu value="#{itemView.e.tipoItem}" >
-                                        <f:selectItems value="#{itemView.tipoItem}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
+                                        <f:selectItems value="#{itemView.tipoItem}" var="tipoItem" itemLabel="#{tipoItem.nome}" itemValue="#{tipoItem}" />
                                     </p:selectOneMenu>
 
                                     <p:outputLabel value="#{l.Detalhamento}"/>
                                     <p:selectOneMenu value="#{itemView.e.detalhamento}">
                                         <f:selectItems value="#{itemView.detalhamentoDeItem}" var="detalhamento" itemLabel="#{detalhamento.nome}" itemValue="#{detalhamento}" />
-                                           
-                                     
-                                         <p:ajax event="itemSelect" update=":conteudo" />
+
+
+                                        <p:ajax event="itemSelect" update=":conteudo" />
                                     </p:selectOneMenu>
 
                                 </p:panelGrid>
@@ -105,14 +112,30 @@
 
                             <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
 
-                                <h2 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h2>
+                                <div class="ui-g-12">
+                                    <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
+                                    <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
+                                </div>
                                 <h:panelGrid>
 
-                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 60%">
-                                        <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                 columnClasses="ui-g-12 ui-md-3 ui-lg-1,ui-g-12 ui-md-9 ui-lg-3">
+
+                                        <p:outputLabel value="#{l.Deposito}"/>
+                                        <a:inputTextDialog id="depositoAjuste" value="#{itemView.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{itemView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                 columnClasses="ui-g-12 ui-md-3 ui-lg-1,ui-g-12 ui-md-4 ui-lg-1">
+                                        <p:spacer/>
+                                        <p:commandButton value="Adicionar Depósito" icon="fa fa-plus" style="min-width: 156px" actionListener="#{itemView.adicionaDepositoParaItem()}" update="conteudo" />
+                                    </p:panelGrid>
+
+                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-5">
+                                        <p:column headerText="#{l.Deposito}" >
                                             <h:outputText value="#{estoque.deposito.nome}" />
                                         </p:column>
-                                        <p:column headerText="#{l.Saldo}" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="#{l.Saldo}" >
+                                        <p:column headerText="#{l.Saldo}" >
                                             <h:outputText value="#{estoque.saldo}" />
                                         </p:column>
                                     </p:dataTable>
@@ -122,7 +145,7 @@
                             </p:tab>
 
                             <p:tab title="#{l.Lotes}" rendered="#{itemView.e.detalhamento.id eq 2 ? true : false}">
-    <div class="EmptyBox20"/>
+                                <div class="EmptyBox20"/>
 
                                 <p:panelGrid id="painelNumeracoes" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                              columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
@@ -153,7 +176,7 @@
                                     </h:panelGrid>
 
                                 </p:panelGrid>
-        <div class="EmptyBox10"/>
+                                <div class="EmptyBox10"/>
                                 <p:dataTable id="loteItem" var="model" value="#{itemView.listaLoteItem}" rowIndexVar="rowIndex"
                                              styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" 
                                              paginatorAlwaysVisible="false" rows="12" paginator="true"
@@ -190,7 +213,7 @@
                                              columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
                                     <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">   
                                         <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
-                                            <p:ajax update="itemPreco"/>
+                                            <p:ajax update="itemPreco :conteudo:growl" listener="#{itemView.validaMargemView()}"/>
                                             <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="true" />
                                             <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="false" />
                                         </p:selectOneRadio>
@@ -199,7 +222,7 @@
                                         <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
                                             <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
                                         </a:inputTextDialog>
-                                        <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
+                                        <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{!itemView.precoPorMargem}" 
                                                        symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
                                             <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
                                         </p:inputNumber> 
@@ -271,7 +294,7 @@
 
                             </p:tab>
 
-                            <p:tab title="#{l.Imagens}" rendered="#{!itemView.tab}">
+                            <p:tab title="#{l.Imagens}" rendered="false">
 
                                 <p:panel styleClass="Wid100" style="border:none">
                                     <p:panelGrid>

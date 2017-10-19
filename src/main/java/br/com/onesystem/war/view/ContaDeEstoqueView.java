@@ -1,5 +1,6 @@
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.ContaDeEstoque;
@@ -16,6 +17,7 @@ import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoContaDeEstoqueView;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -99,18 +101,27 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof ContaDeEstoque) {
-            limparJanela();
-            ContaDeEstoque c = (ContaDeEstoque) obj;
-            e = new ContaDeEstoqueBV(c);
-            selecionaConta();
-        } else if (obj instanceof Operacao) {
-            this.operacaoDeEstoque.setOperacao((Operacao) obj);
+        try {
+            Object obj = event.getObject();
+            if (obj instanceof ContaDeEstoque) {
+                limparJanela();
+                e = new ContaDeEstoqueBV((ContaDeEstoque) obj);
+                selecionaConta();
+            } else if (obj instanceof Operacao) {
+                this.operacaoDeEstoque.setOperacao((Operacao) obj);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
-    public void selecionaConta() {
+    public void inicializaOperacoesDeEstoque() throws DadoInvalidoException {
+        t = (ContaDeEstoque) new ArmazemDeRegistrosNaMemoria<SelecaoContaDeEstoqueView>().initialize(e.construirComID(), SelecaoContaDeEstoqueView.class, "getOperacaoDeEstoque");
+        e = new ContaDeEstoqueBV(t);
+    }
+
+    public void selecionaConta() throws DadoInvalidoException {
+        inicializaOperacoesDeEstoque();
         if (e == null && (e.getOperacoesDeEstoque() == null || e.getOperacoesDeEstoque().isEmpty())) {
             operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
         } else {

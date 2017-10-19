@@ -20,7 +20,10 @@
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Comanda}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cComanda" value="#{consultaComandaView.comanda}" update=":conteudo" dialog="#{selecaoComandaView}" mbView="#{consultaComandaView}" var="comanda" converter="comandaConverter" itemLabel="#{comanda.id}" itemValue="#{comanda}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cComanda" value="#{consultaComandaView.t}" update=":conteudo" dialog="#{selecaoComandaView}" mbView="#{consultaComandaView}" var="comanda" converter="comandaConverter" itemLabel="#{comanda.id}" itemValue="#{comanda}" editVisible="false" onlyNumber="true">
+                                <p:ajax event="itemSelect" listener="#{consultaComandaView.inicializaItensDeComanda()}" />
+                            </a:inputTextDialog>
+
                             <p:commandButton value="#{l.Cancelar}" actionListener="#{consultaComandaView.cancela}" icon="fa fa-ban"
                                              styleClass="orange-btn" style="width: auto !important" update=":conteudo"
                                              rendered="#{consultaComandaView.comanda.estado ne null ? (consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.comanda.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>

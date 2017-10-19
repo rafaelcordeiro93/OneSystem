@@ -22,13 +22,43 @@
                                      columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
-                            <a:inputTextDialog id="depositoId" value="#{depositoView.e}" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" update=":conteudo" var="deposito" converter="depositoBVConverter" itemLabel="#{deposito.id}" itemValue="#{deposito}" editVisible="false" onlyNumber="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
+                            <a:inputTextDialog id="depositoId" value="#{depositoView.e}" dialog="#{selecaoDepositoView}" mbView="#{depositoView}" update=":conteudo" var="deposito" converter="depositoBVConverter" itemLabel="#{deposito.id}" itemValue="#{deposito}" editVisible="false" onlyNumber="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}">
+                                <p:ajax event="itemSelect" listener="#{depositoView.inicializaFiliais()}" /> 
+                            </a:inputTextDialog>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{depositoView.e.nome}" maxlength="60"/>
                         </p:panelGrid>
 
                         <div class="EmptyBox15"/>
+
+                        <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
+                            <p:outputLabel value="#{l.Filial}"/>
+                            <a:inputTextDialog id="filialDeposito" value="#{depositoView.filial}" dialog="#{selecaoFilialView}" mbView="#{depositoView}" update=":conteudo:growl" var="filial" converter="filialConverter" itemLabel="#{filial.fantasia}" itemValue="#{filial}" itemLabelTabVisible="true" itemLabelTab="#{filial.fantasia}" editVisible="true"/>
+
+                            <p:spacer/>
+
+                            <h:panelGrid columns="3" style="margin-top: -2px">
+                                <p:commandButton icon="fa fa-plus Fs14 White" action="#{depositoView.addFilial()}"  update=":conteudo"/>
+                                <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{depositoView.removeFilial()}" update=":conteudo" styleClass="orange-btn" />
+                            </h:panelGrid>
+
+                        </p:panelGrid>
+                        <div class="EmptyBox20"/>
+                        <p:separator/>
+
+                        <p:dataTable id="listDepositoFilial" var="model" value="#{depositoView.filiais}" rowKey="#{model.id}" emptyMessage="#{l.Nao_Ha_Registros}"  
+                                     reflow="true" selectionMode="single" selection="#{depositoView.modelFilial}" >
+                            <p:ajax event="rowSelect" process="@this" listener="#{depositoView.selecionaFilial}" update=":conteudo"/>
+                            <p:column style="width: 10%; text-align: center" headerText="#{l.Id}" sortBy="#{model.object.id}" colspan="1">
+                                <h:outputText value="#{model.object.id}" />
+                            </p:column>
+                            <p:column headerText="#{l.Fantasia}" sortBy="#{model.object.fantasia}" colspan="2">
+                                <h:outputText value="#{model.object.fantasia}" />
+                            </p:column>
+                        </p:dataTable>
+
 
                         <p:separator/>
                     </div>

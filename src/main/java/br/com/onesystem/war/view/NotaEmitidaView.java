@@ -899,7 +899,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             itemEmitido.setItem(ie.getItem());
             itemEmitido.setUnitario(ie.getUnitario());
             itemEmitido.setQuantidade(ie.getQuantidade());
-            List<SaldoDeEstoque> saldos = new EstoqueService().buscaListaDeSaldoDeEstoque(ie.getItem(), new Date());
+            List<SaldoDeEstoque> saldos = serviceEstoque.buscaListaDeSaldoDeEstoque(ie.getItem(), new Date());
             for (Estoque e : ie.getEstoques()) {
                 for (SaldoDeEstoque s : saldos) {
                     if (e.getDeposito().equals(s.getDeposito())) {

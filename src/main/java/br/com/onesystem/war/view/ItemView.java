@@ -1,10 +1,13 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
-import br.com.onesystem.dao.ItemImagemDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.GrupoFiscal;
@@ -15,7 +18,8 @@ import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.LoteItem;
-import br.com.onesystem.domain.LoteItem;
+import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ItemBV;
@@ -32,16 +36,17 @@ import br.com.onesystem.util.WarningMessage;
 import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.war.builder.LoteItemBV;
-import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoItemView;
+import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
@@ -58,7 +63,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     private PrecoDeItemBV precoDeItemBV;
     private boolean precoPorMargem = false;
-    private Configuracao configuracao;
     private List<SaldoDeEstoque> estoqueLista;
     private BigDecimal estoqueTotal;
     private List<PrecoDeItem> precoAtual;
@@ -70,9 +74,13 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private LoteItemBV loteDeItemBV;
     private Model<LoteItem> loteItemSelecionado;
     private ModelList<LoteItem> listaLoteItem;
+    private Deposito deposito;
 
     @Inject
-    private ConfiguracaoService serviceConfigurcao;
+    private Configuracao configuracao;
+
+    @Inject
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     @Inject
     private EstoqueService serviceEstoque;
@@ -85,6 +93,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     @Inject
     private AdicionaDAO<PrecoDeItem> adicionaPrecoDAO;
+
+    @Inject
+    private AdicionaDAO<Estoque> adicionaEstoqueDAO;
 
     @Inject
     private AdicionaDAO<ItemImagem> adicionaImagemDAO;
@@ -101,6 +112,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     @Inject
     private BundleUtil bundle;
 
+    @Inject
+    private CalculadoraDePreco calculadoraDePreco;
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -109,7 +123,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     private void inicializarConfiguracoes() {
         try {
-            configuracao = serviceConfigurcao.buscar();
             if (configuracao.getMoedaPadrao() == null) {
                 throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
             }
@@ -162,9 +175,11 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void limparJanela() {
         e = new ItemBV();
+        t = null;
         estoqueLista = new ArrayList<SaldoDeEstoque>();
         imagens = new ArrayList<>();
         limparJanelaPreco();
+        deposito = null;
         tab = true;
         renderBotoes = true;
         listaLoteItem = new ModelList<>();
@@ -176,8 +191,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         try {
             Object obj = (Object) event.getObject();
             if (obj instanceof Item) {
-                t = (Item) obj;
-                e = new ItemBV(t);
+                e = new ItemBV((Item) obj);
                 selecionaItem();
                 limparLoteItem();
             } else if (obj instanceof GrupoFiscal) {
@@ -190,9 +204,14 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 e.setMargem((Margem) obj);
             } else if (obj instanceof UnidadeMedidaItem) {
                 e.setUnidadeDeMedida((UnidadeMedidaItem) obj);
+            } else if (obj instanceof Deposito) {
+                deposito = (Deposito) obj;
             } else if (obj instanceof ListaDePreco) {
-                calculaPreco();
+                if (precoDeItemBV == null) {
+                    limparJanelaPreco();
+                }
                 precoDeItemBV.setListaDePreco((ListaDePreco) obj);
+                calculaPreco();
             }
         } catch (DadoInvalidoException die) {
             die.print();
@@ -200,7 +219,13 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
+    public void inicializaLoteDeItem() throws DadoInvalidoException {
+        t = (Item) new ArmazemDeRegistrosNaMemoria<SelecaoItemView>().initialize(e.construirComID(), SelecaoItemView.class, "getLoteItem");
+        e = new ItemBV(t);
+    }
+
     public void selecionaItem() throws DadoInvalidoException {
+        inicializaLoteDeItem();
         if (e.getId() != null) {
             t = e.construirComID();
             inicializaDados();
@@ -212,9 +237,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void calculaPreco() throws DadoInvalidoException {
         if (!precoPorMargem && e.getMargem() != null) {
             if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
-                CalculadoraDePreco calculadora = new CalculadoraDePreco(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
+                calculadoraDePreco.calcula(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
                 precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
-                        ? calculadora.getPrecoMarkup() : calculadora.getPrecoMargemContribuicao());
+                        ? calculadoraDePreco.getPrecoMarkup() : calculadoraDePreco.getPrecoMargemContribuicao());
             } else {
                 throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
             }
@@ -223,15 +248,45 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
-    private void validaMargem() throws EDadoInvalidoException {
+    public void validaMargemView() {
+        try {
+            validaMargem();
+            // Só calcula o preço se a lista de preço já estiver informada.
+            if (precoDeItemBV.getListaDePreco() != null) {
+                calculaPreco();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
+    private void validaMargem() throws DadoInvalidoException {
         if (!precoPorMargem && e.getMargem() == null) {
-            throw new EDadoInvalidoException(bundle.getMessage("margem_not_null"));
+            throw new ADadoInvalidoException(bundle.getMessage("Defina_Margem_Para_Calcular_Preco"));
         }
     }
 
     private void inicializaDados() throws DadoInvalidoException {
         inicializaEstoque();
         inicializaPrecos();
+    }
+
+    public void adicionaDepositoParaItem() {
+        try {
+            // Adiciona um estoque com saldo zero para que o depósito seja relacionado ao item.
+            SaldoDeEstoque saldo = estoqueLista.stream().filter(s -> s.getDeposito().equals(deposito)).findAny().orElse(null);
+            if (saldo == null) {
+                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize(configuracaoEstoque.getAjusteDeEstoquePadrao(), SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                Estoque estoque = new EstoqueBuilder().comQuantidade(BigDecimal.ZERO).comDeposito(deposito).
+                        comEmissao(new Date()).comOperacaoDeEstoque(operacao.getOperacaoDeEstoque().get(0))
+                        .comItem(t).construir();
+                adicionaEstoqueDAO.adiciona(estoque);
+                inicializaEstoque();
+                InfoMessage.adicionado();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     private void inicializaImagens() {
@@ -258,7 +313,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     }
 
     private void inicializaEstoque() throws DadoInvalidoException {
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoque(e.construirComID(), null);
+        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoqueEmTodosDepositos(e.construirComID(), new Date());
     }
 
     public void favoritarImagem(ItemImagem itemImagem) {
@@ -286,7 +341,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 favorita = true;
             }
             ItemImagem itemImagem = new ItemImagem(null, fileName, contentType, contents, e.construirComID(), favorita);
-            adicionaImagemDAO.adiciona(itemImagem);
+            adicionaImagemDAO.saveImage(itemImagem);
             imagens.add(itemImagem);
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -425,14 +480,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         this.configuracao = configuracao;
     }
 
-    public ConfiguracaoService getServiceConfigurcao() {
-        return serviceConfigurcao;
-    }
-
-    public void setServiceConfigurcao(ConfiguracaoService serviceConfigurcao) {
-        this.serviceConfigurcao = serviceConfigurcao;
-    }
-
     public List<PrecoDeItem> getPrecoAtual() {
         return precoAtual;
     }
@@ -503,6 +550,14 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void setListaLoteItem(ModelList<LoteItem> listaLoteItem) {
         this.listaLoteItem = listaLoteItem;
+    }
+
+    public Deposito getDeposito() {
+        return deposito;
+    }
+
+    public void setDeposito(Deposito deposito) {
+        this.deposito = deposito;
     }
 
 }

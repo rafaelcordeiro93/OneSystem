@@ -28,6 +28,9 @@ import org.primefaces.model.StreamedContent;
 @ApplicationScoped
 public class ImageStreamedView implements Serializable {
 
+    @Inject
+    private ItemImagemDAO dao;
+
     public StreamedContent getImage() throws IOException {
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -37,7 +40,7 @@ public class ImageStreamedView implements Serializable {
         } else {
             // So, browser is requesting the image. Return a real StreamedContent with the image bytes.
             String id = context.getExternalContext().getRequestParameterMap().get("id");
-            ItemImagem img = new ItemImagemDAO().porId(new Long(id)).resultado();
+            ItemImagem img = dao.porId(new Long(id)).resultado();
             return new DefaultStreamedContent(new ByteArrayInputStream(img.getImagem()));
         }
     }

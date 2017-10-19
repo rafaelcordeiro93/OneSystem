@@ -29,7 +29,7 @@ import javax.persistence.NoResultException;
  * @param <T>
  */
 @Named
-public abstract class GenericDAO<T> implements Serializable{
+public abstract class GenericDAO<T> implements Serializable {
 
     private T t;
     private Class clazz;

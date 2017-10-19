@@ -4,14 +4,17 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -68,6 +71,8 @@ public class Filial implements Serializable {
     private String email;
     @Column(nullable = true, length = 60)
     private String contato;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private List<Deposito> depositos;
 
     public Filial() {
     }
@@ -122,6 +127,25 @@ public class Filial implements Serializable {
         return str;
     }
 
+    public void adiciona(Deposito deposito) {
+        if (depositos == null) {
+            this.depositos = new ArrayList<Deposito>();
+        }
+        if (deposito != null && depositos.indexOf(deposito) == -1) {
+            this.depositos.add(deposito);
+        }
+    }
+
+    public void remove(Deposito deposito) {
+        if (depositos != null && depositos.indexOf(deposito) != -1) {
+            this.depositos.remove(depositos.indexOf(deposito));
+        }
+    }
+
+    public List<Deposito> getDepositos() {
+        return depositos;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -177,7 +201,7 @@ public class Filial implements Serializable {
     public String getRazaoSocialRuc() {
         return razaoSocial + " - Ruc: " + ruc;
     }
-    
+
     @MetodoInacessivelRelatorio
     public String getNomeEstado() {
         if (cep != null) {

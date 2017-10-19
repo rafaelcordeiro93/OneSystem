@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.transaction.Transactional;
 
 @Stateful
 public class ArmazemDeRegistros<T> implements Serializable {
@@ -64,7 +65,7 @@ public class ArmazemDeRegistros<T> implements Serializable {
         }
         return null;
     }
-
+    
     public BigDecimal resultadoOperacaoMatematica(String consulta, Map<String, Object> parametros) throws NoResultException {
         TypedQuery<BigDecimal> query = em.createQuery(consulta, BigDecimal.class);
         adicionarParametrosNaConsulta(query, parametros);

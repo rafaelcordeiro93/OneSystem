@@ -11,9 +11,9 @@ public class DepositoBV implements Serializable, BuilderView<Deposito> {
     private Long id;
     private String nome;  
 
-    public DepositoBV(Deposito depositoSelecionada) {
-        this.id = depositoSelecionada.getId();
-        this.nome = depositoSelecionada.getNome();
+    public DepositoBV(Deposito d) {
+        this.id = d.getId();
+        this.nome = d.getNome();
     }
 
     public DepositoBV() {

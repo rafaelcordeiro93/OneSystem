@@ -15,10 +15,17 @@ public class ArmazemDeRegistrosConsole<T> implements Serializable {
 
     private EntityManager em = JPAUtil.getEntityManager();
 
-    private final Class<T> classe;
+    private Class<T> classe;
 
-    public ArmazemDeRegistrosConsole(Class<T> classe) {
+    public ArmazemDeRegistrosConsole daClasse(Class<T> classe) {
         this.classe = classe;
+        return this;
+    }
+
+    public ArmazemDeRegistrosConsole daClasse(Class<T> classe, EntityManager em) {
+        this.em = em;
+        this.classe = classe;
+        return this;
     }
 
     public List<T> listaTodosOsRegistros() {

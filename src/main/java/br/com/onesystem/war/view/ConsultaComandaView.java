@@ -5,11 +5,13 @@
  */
 package br.com.onesystem.war.view;
 
+import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.war.builder.ComandaBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
+import br.com.onesystem.war.view.selecao.SelecaoComandaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.annotation.PostConstruct;
@@ -36,8 +38,15 @@ public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> impleme
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof Comanda) {
-            comanda = (Comanda) obj;
+            t = (Comanda) obj;
+            inicializaItensDeComanda();
+            comanda = t;
         }
+    }
+
+    public void inicializaItensDeComanda() {
+        t = (Comanda) new ArmazemDeRegistrosNaMemoria<SelecaoComandaView>().initialize(t, SelecaoComandaView.class, "getItensDeComanda");
+        comanda = t;
     }
 
     public Comanda getComanda() {

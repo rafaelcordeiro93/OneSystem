@@ -9,31 +9,38 @@
 
     <ui:define name="content">
 
-        <h:form id="ne">
-            <div class="ui-g">
-                <div class="ui-g-10" style="margin-left: 8%">
-                    <div class="card" style="border: solid 1px; border-color: #C9D3DD">  
-                        <h2 class="BigTopic">#{l.Comanda}</h2>
-                        <div class="EmptyBox5"/>
+        <div class="content-section content-section-blue">
 
-                        <p:outputLabel>#{l.Situacao}: </p:outputLabel>
-                        <p:outputLabel class="label label-default">#{l.EM_DEFINICAO}</p:outputLabel>
+            <h2 class="BigTopic-Custom">#{l.Comanda}</h2>
+            <span class="Topic-Message">#{l.Comanda_Texto}</span>
+
+        </div>
+
+        <h:form id="ne">
+            <div class="ui-g" style="margin-left: -5px;">
+                <div class="ui-g-12 NoPadding">
+                    <div class="card" style="padding: 35px;">
 
                         <div class="ui-fluid">
-                            <p:panelGrid columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
-                                         columnClasses="ui-g-12 ui-md-3,ui-g-12 ui-md-3, ui-g-12 ui-md-3">
+                            <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                         columnClasses="ui-g-12 ui-md-3">
 
-                                <h:panelGrid columns="1" styleClass="Wid100" >
-                                    <p:spacer/>
-                                    <a:inputTextDialog id="neListaDePreco" value="#{comandaView.e.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{comandaView}" update=":conteudo" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true">
-                                        <p:ajax event="change" listener="#{comandaView.atualizaValorDeItemDeComanda}" />
-                                    </a:inputTextDialog>
-                                </h:panelGrid>
+
+                                <p:panelGrid columns="2">
+                                    <p:outputLabel styleClass="Fs14" >#{l.Situacao}: </p:outputLabel>
+                                    <p:outputLabel class="label label-default Fs11">#{l.EM_DEFINICAO}</p:outputLabel>
+                                </p:panelGrid>
+
+                                <p:spacer/>
+
+                                <a:inputTextDialog id="neListaDePreco" value="#{comandaView.e.listaDePreco}" dialog="#{selecaoListaDePrecoView}" mbView="#{comandaView}" update=":conteudo" placeholder="#{l.Lista_De_Preco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}" editVisible="true">
+                                    <p:ajax event="change" listener="#{comandaView.atualizaValorDeItemDeComanda}" />
+                                </a:inputTextDialog>
 
                             </p:panelGrid> 
                         </div>
 
-                        <p:separator/>
+                        <div class="EmptyBox20" />
 
                         <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Item}</div>
                         <div class="ui-fluid">
@@ -126,7 +133,8 @@
 
                         </p:dataTable>
 
-                        <p:separator styleClass="Wid100"/>
+                        <div class="EmptyBox20" />
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Totais}</div>
 
                         <div class="ui-fluid" >
                             <p:panelGrid columnClasses="ui-g-12 ui-md-4, ui-g-12 ui-md-6"
@@ -178,11 +186,14 @@
                                 </p:panelGrid>
 
                                 <p:panelGrid columns="2" styleClass="ui-panelgrid-blank form-group form-elements Wid100" 
-                                             columnClasses="ui-g-12 ui-md-3 TexAlRight,ui-g-12 ui-md-8">
+                                             columnClasses="ui-g-12 ui-md-3 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-8">
 
-                                    <p:outputLabel value="#{l.Total_Comanda}"/>
-                                    <p:inputNumber id="totalComanda" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
-                                                   value="#{comandaView.totalComanda}" symbol="#{comandaView.configuracao.moedaPadrao.sigla} " styleClass="ui-g-12 ui-md-6 NoPadding"/>
+
+                                    <p:outputLabel value="#{l.Total_Comanda}" styleClass="Fs16" />
+                                    <p:panelGrid columns="1" columnClasses="ui-g-12 ui-md-5" styleClass="Wid100">
+                                        <p:inputNumber id="totalComanda" maxValue="999999999999.99" readonly="true" minValue="0.00" decimalSeparator="," thousandSeparator="." 
+                                                       value="#{comandaView.totalComanda}" symbol="#{comandaView.configuracao.moedaPadrao.sigla} " inputStyleClass="Fs16 Back-Gray"/>
+                                    </p:panelGrid>
 
                                     <p:outputLabel value="#{l.Observacao}"/>
                                     <p:inputTextarea rows="3" maxlength="1000" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{comandaView.e.historico}"/>
@@ -193,11 +204,11 @@
                             </p:panelGrid>
                         </div>
 
-                        <p:separator/>
+                        <div class="EmptyBox60" />
 
-                        <p:commandButton value="#{l.Finalizar}" action="#{comandaView.informaNumeroComanda}" update=":conteudo"/>
+                        <p:commandButton value="#{l.Finalizar}" action="#{comandaView.informaNumeroComanda}" icon="fa fa-check" update=":conteudo" styleClass="green-btn"/>
 
-                        <p:commandButton value="#{l.Limpar}" styleClass="brown-btn"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{comandaView.limparJanela()}" update=":conteudo" style="margin-left: 2px" styleClass="brown-btn" icon="fa fa-eraser"/>
 
                     </div>
                 </div>

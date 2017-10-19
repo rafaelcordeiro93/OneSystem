@@ -9,6 +9,7 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 
 /**
@@ -21,6 +22,7 @@ public class ConfiguracaoEstoqueBuilder {
     private ContaDeEstoque contaDeEstoque;
     private ListaDePreco listaDePreco;
     private Deposito depositoPadrao;
+    private Operacao operacaoDeAjusteDeEstoque;
 
     public ConfiguracaoEstoqueBuilder comId(Long id) {
         this.id = id;
@@ -42,8 +44,13 @@ public class ConfiguracaoEstoqueBuilder {
         return this;
     }
 
+    public ConfiguracaoEstoqueBuilder comOperacaoDeAjusteDeEstoque(Operacao operacaoDeAjusteDeEstoque) {
+        this.operacaoDeAjusteDeEstoque = operacaoDeAjusteDeEstoque;
+        return this;
+    }
+
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
-        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco, depositoPadrao);
+        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco, depositoPadrao, operacaoDeAjusteDeEstoque);
     }
 
 }

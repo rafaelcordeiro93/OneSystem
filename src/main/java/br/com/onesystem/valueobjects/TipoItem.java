@@ -4,25 +4,27 @@
  */
 package br.com.onesystem.valueobjects;
 
+import br.com.onesystem.util.BundleUtil;
+
 /**
  *
  * @author Rauber
  */
 public enum TipoItem {
 
-    MERCADORIA("Mercaderia"),
-    PRODUTO("Producto"),
-    MATERIA_PRIMA("Materia Prima"),
-    SERVICO("Servicio"),
-    IMOBILIZADO("Propriedad");
-    
-    private String tipoItem;
+    MERCADORIA(new BundleUtil().getLabel("Mercadoria")),
+    PRODUTO(new BundleUtil().getLabel("Produto")),
+    MATERIA_PRIMA(new BundleUtil().getLabel("Materia_Prima")),
+    SERVICO(new BundleUtil().getLabel("Servico")),
+    IMOBILIZADO(new BundleUtil().getLabel("Imobilizado"));
 
-    private TipoItem(String tipoItem) {
-        this.tipoItem = tipoItem;
+    private String nome;
+
+    private TipoItem(String nome) {
+        this.nome = nome;
     }
 
-    public String getTipoItem() {
-        return tipoItem;
+    public String getNome() {
+        return nome;
     }
 }

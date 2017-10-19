@@ -111,11 +111,10 @@ public class EstoqueDAO extends GenericDAO<Estoque> {
         return this;
     }
 
-    public EstoqueDAO porEmissao(Date emissao) {
+    public EstoqueDAO ateEmissao(Date emissao) {
         if (emissao != null) {
-            Calendar dataAtual = getDataComHoraFimdoDia(emissao);
             where += " and estoque.emissao <= :pEmissao ";
-            parametros.put("pEmissao", dataAtual.getTime());
+            parametros.put("pEmissao", emissao);
         }
         return this;
     }

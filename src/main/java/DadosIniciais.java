@@ -835,7 +835,7 @@ public class DadosIniciais {
 
         //ConfiguracaoEstoque
         // ---------------------------------------------------------------------
-        ConfiguracaoEstoque configuracaoEstoque = new ConfiguracaoEstoque(null, contaDaEmpresa, null, deposito);
+        ConfiguracaoEstoque configuracaoEstoque = new ConfiguracaoEstoque(null, contaDaEmpresa, null, deposito, null);
         new AdicionaDAOConsole<>().adiciona(configuracaoEstoque);
 
         //ConfiguracaoContabil

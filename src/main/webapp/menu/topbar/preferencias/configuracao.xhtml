@@ -193,13 +193,23 @@
                         <a:inputTextDialog id="contaDeEstoqueEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoContaDeEstoqueView}" value="#{configuracaoEstoqueView.configuracaoBV.contaDeEstoqueEmpresa}" var="contaDeEstoque" converter="contaDeEstoqueConverter"  itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3"/>
                     </div>                
 
-                    <div class="EmptyBox5"/>
+                    <div class="EmptyBox10"/>
                     <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Lista_De_Preco_Padrao_Empresa}</div>
 
                     <div class="ui-g ui-fluid">
                         <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Lista_Preco_Padrao_Empresa}"/>
                         <a:inputTextDialog id="listaPrecoEmpresa" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoListaDePrecoView}" value="#{configuracaoEstoqueView.configuracaoBV.listaDePreco}" var="listaDePreco" converter="listaDePrecoConverter" itemLabel="#{listaDePreco.nome}" itemValue="#{listaDePreco}" itemLabelTabVisible="true" itemLabelTab="#{listaDePreco.nome}"  editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 0px !important"/>
                     </div>
+
+                    <div class="EmptyBox10"/>
+                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Deve_Selecionar_Operacao_Ajuste_De_Estoque_Padrao}</div>
+
+                    <div class="ui-g ui-fluid">
+                        <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-2" value="#{l.Operacao_Ajuste_Estoque_Padrao}"/>
+                        <a:inputTextDialog id="operacaoAjusteDeEstoque" mbView="#{configuracaoEstoqueView}" dialog="#{selecaoOperacaoOutrosView}" value="#{configuracaoEstoqueView.configuracaoBV.operacaoDeAjusteDeEstoque}" var="operacao" converter="operacaoConverter"  itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTab="#{operacao.nome}" itemLabelTabVisible="true" editVisible="true" styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" update=":conteudo">
+                            <p:ajax event="itemSelect" listener="#{configuracaoEstoqueView.inicializaOperacoesDeEstoque()}" update=":conteudo" />
+                        </a:inputTextDialog>
+                    </div> 
 
                     <div class="EmptyBox5"/>
                     <p:separator/>
@@ -231,6 +241,34 @@
             </div>
 
         </div>
+
+        <p:dialog widgetVar="operacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
+                  modal="true" closable="false" closeOnEscape="false" visible="false"
+                  responsive="true" styleClass="zIndex500">
+
+            <table>
+                <tr>
+                    <td>
+                        <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
+                    </td>
+                    <td>
+                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                    </td>
+                </tr>
+            </table>
+            <p:separator/>
+            <table>
+                <tr>
+                    <td>
+                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/menu/estoque/contaDeEstoque"/>
+                    </td>
+                    <td>
+                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('notaOperacaoNaoRelacionadaDialog').hide()"/>
+                    </td>
+                </tr>
+            </table>
+
+        </p:dialog>
 
     </ui:define>
 

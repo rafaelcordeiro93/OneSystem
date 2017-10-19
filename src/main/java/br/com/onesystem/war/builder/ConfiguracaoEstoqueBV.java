@@ -4,6 +4,7 @@ import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.builder.ConfiguracaoEstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
@@ -15,12 +16,14 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
     private ContaDeEstoque contaDeEstoqueEmpresa;
     private ListaDePreco listaDePreco;
     private Deposito depositoPadrao;
+    private Operacao operacaoDeAjusteDeEstoque;
 
-    public ConfiguracaoEstoqueBV(ConfiguracaoEstoque configuracaoSelecionada) {
-        this.id = configuracaoSelecionada.getId();
-        this.contaDeEstoqueEmpresa = configuracaoSelecionada.getContaDeEstoqueEmpresa();
-        this.listaDePreco = configuracaoSelecionada.getListaDePreco();
-        this.depositoPadrao = configuracaoSelecionada.getDepositoPadrao();
+    public ConfiguracaoEstoqueBV(ConfiguracaoEstoque c) {
+        this.id = c.getId();
+        this.contaDeEstoqueEmpresa = c.getContaDeEstoqueEmpresa();
+        this.listaDePreco = c.getListaDePreco();
+        this.depositoPadrao = c.getDepositoPadrao();
+        this.operacaoDeAjusteDeEstoque = c.getAjusteDeEstoquePadrao();
     }
 
     public ConfiguracaoEstoqueBV() {
@@ -58,15 +61,23 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
         this.depositoPadrao = depositoPadrao;
     }
 
+    public Operacao getOperacaoDeAjusteDeEstoque() {
+        return operacaoDeAjusteDeEstoque;
+    }
+
+    public void setOperacaoDeAjusteDeEstoque(Operacao operacaoDeAjusteDeEstoque) {
+        this.operacaoDeAjusteDeEstoque = operacaoDeAjusteDeEstoque;
+    }
+    
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comContaDeEstoque(contaDeEstoqueEmpresa)
-                .comListaDePreco(listaDePreco).construir();
+                .comListaDePreco(listaDePreco).comOperacaoDeAjusteDeEstoque(operacaoDeAjusteDeEstoque).construir();
     }
 
     @Override
     public ConfiguracaoEstoque construirComID() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa).comDepositoPadrao(depositoPadrao)
-                .comListaDePreco(listaDePreco).construir();
+                .comListaDePreco(listaDePreco).comOperacaoDeAjusteDeEstoque(operacaoDeAjusteDeEstoque).construir();
     }
 
 }

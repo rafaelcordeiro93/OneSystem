@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
@@ -47,7 +48,29 @@ public class AdicionaDAO<T> {
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             throw new FDadoInvalidoException("Verifique Lista do toString()");
-        } 
+        }
+    }
+
+    @Transactional
+    public void saveImage(T t) throws ConstraintViolationException, DadoInvalidoException {
+
+        try {
+
+            // persiste o objeto e log do mesmo
+            em.persist(t);
+            em.flush();
+
+        } catch (PersistenceException pe) {
+            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+                throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
+            }
+            throw new FDadoInvalidoException(pe.getCause().toString());
+        } catch (Exception ex) {
+            throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
+        } catch (StackOverflowError soe) {
+            throw new FDadoInvalidoException("Verifique Lista do toString()");
+        }
     }
 
     private String getMessage(ConstraintViolationException cve) {
