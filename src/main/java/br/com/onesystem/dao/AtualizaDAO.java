@@ -5,26 +5,22 @@
 package br.com.onesystem.dao;
 
 import br.com.onesystem.domain.Log;
-import br.com.onesystem.util.JPAUtil;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.ejb.Stateless;
+import java.io.Serializable;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author Rafael-Pc
  */
-@Stateless
-public class AtualizaDAO<T> {
+public class AtualizaDAO<T> implements Serializable {
 
-    @PersistenceContext(unitName = "alkatar")
+    @Inject
     private EntityManager em;
 
     public void atualiza(T t) throws ConstraintViolationException, DadoInvalidoException {
@@ -34,7 +30,6 @@ public class AtualizaDAO<T> {
             // persiste o objeto e log do mesmo
             em.merge(t);
             em.persist(new Log("Alterado: " + t, TipoTransacao.ALTERACAO));
-            em.flush();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

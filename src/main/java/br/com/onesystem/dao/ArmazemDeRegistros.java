@@ -1,29 +1,22 @@
 package br.com.onesystem.dao;
 
 import java.io.Serializable;
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.Stateful;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.transaction.Transactional;
 
-@Stateful
 public class ArmazemDeRegistros<T> implements Serializable {
 
     private Class<T> classe;
 
-    @PersistenceContext(unitName = "alkatar", type = PersistenceContextType.EXTENDED)
+    @Inject
     private EntityManager em;
 
     public ArmazemDeRegistros() {
@@ -65,7 +58,7 @@ public class ArmazemDeRegistros<T> implements Serializable {
         }
         return null;
     }
-    
+
     public BigDecimal resultadoOperacaoMatematica(String consulta, Map<String, Object> parametros) throws NoResultException {
         TypedQuery<BigDecimal> query = em.createQuery(consulta, BigDecimal.class);
         adicionarParametrosNaConsulta(query, parametros);

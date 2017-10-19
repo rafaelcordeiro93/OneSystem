@@ -224,10 +224,10 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         String id = event.getComponent().getId();
         if (obj instanceof Cobranca) {
             //Inicializa tipos de cobranca em Cobranca
-            Cobranca c = (Cobranca) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((Cobranca) obj, SelecaoCobrancaView.class, "getTiposDeCobranca");
+//            Cobranca c = (Cobranca) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((Cobranca) obj, SelecaoCobrancaView.class, "getTiposDeCobranca");
             if (obj instanceof CobrancaVariavel) {
-                c = (CobrancaVariavel) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((CobrancaVariavel) c, SelecaoCobrancaView.class, "getFormasDeCobranca");
-                e.setCobranca(c);
+//                c = (CobrancaVariavel) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((CobrancaVariavel) c, SelecaoCobrancaView.class, "getFormasDeCobranca");
+                e.setCobranca((Cobranca) obj);
                 selecionaCobrancaNoObjeto();
             } else if (obj instanceof DespesaProvisionada) {
                 despesaProvisionada = (DespesaProvisionada) obj;

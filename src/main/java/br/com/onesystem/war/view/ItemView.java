@@ -341,7 +341,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 favorita = true;
             }
             ItemImagem itemImagem = new ItemImagem(null, fileName, contentType, contents, e.construirComID(), favorita);
-            adicionaImagemDAO.saveImage(itemImagem);
+            adicionaImagemDAO.adiciona(itemImagem);
             imagens.add(itemImagem);
         } catch (DadoInvalidoException ex) {
             ex.print();

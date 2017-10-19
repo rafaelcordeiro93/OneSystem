@@ -21,6 +21,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 /**
@@ -70,6 +71,12 @@ public abstract class GenericDAO<T> implements Serializable {
 
     public List<T> listaDeResultados() {
         List<T> resultado = armazem.daClasse((Class<T>) clazz).listaRegistrosDaConsulta(getConsulta(), parametros);
+        limpar();
+        return resultado;
+    }
+
+    public List<T> listaDeResultados(EntityManager manager) {
+        List<T> resultado = armazem.daClasse((Class<T>) clazz, manager).listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return resultado;
     }

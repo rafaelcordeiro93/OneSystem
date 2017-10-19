@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="alkatar-console">
+    <persistence-unit name="alkatar" transaction-type="RESOURCE_LOCAL">
         <description>
             Persistence unit para Alkatar
         </description>
@@ -111,6 +111,11 @@
         <class>br.com.onesystem.domain.FormaDeRecebimento</class>
         <class>br.com.onesystem.domain.PedidoAFornecedores</class>
         <class>br.com.onesystem.domain.ItemDePedidoCancelado</class>
+        <class>br.com.onesystem.domain.LoteNotaFiscal</class>
+        <class>br.com.onesystem.domain.LoteItem</class>
+        <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
+        <class>br.com.onesystem.domain.Motivo</class>
+        
         <properties>
             <!--  Propriedades JDBC  -->
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>

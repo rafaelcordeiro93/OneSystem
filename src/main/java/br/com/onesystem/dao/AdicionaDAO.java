@@ -8,22 +8,19 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.ejb.Stateful;
-import javax.ejb.Stateless;
+import java.io.Serializable;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
  *
  * @author Rafael-Pc
  */
-@Stateful
-public class AdicionaDAO<T> {
+public class AdicionaDAO<T> implements Serializable {
 
-    @PersistenceContext(unitName = "alkatar")
+    @Inject
     private EntityManager em;
 
     public AdicionaDAO() {
@@ -33,32 +30,11 @@ public class AdicionaDAO<T> {
 
         try {
 
+            System.out.println("Em: " + em);
+
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
-            em.flush();
-
-        } catch (PersistenceException pe) {
-            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
-                throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
-            }
-            throw new FDadoInvalidoException(pe.getCause().toString());
-        } catch (Exception ex) {
-            throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
-        } catch (StackOverflowError soe) {
-            throw new FDadoInvalidoException("Verifique Lista do toString()");
-        }
-    }
-
-    @Transactional
-    public void saveImage(T t) throws ConstraintViolationException, DadoInvalidoException {
-
-        try {
-
-            // persiste o objeto e log do mesmo
-            em.persist(t);
-            em.flush();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

@@ -44,7 +44,7 @@ public class TipoDeCobranca implements Serializable {
     @GeneratedValue(generator = "SEQ_TIPODECOBRANCA", strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Cobranca cobranca;
 
     @ManyToOne
