@@ -5,9 +5,7 @@
  */
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.services.BuilderView;
-import br.com.onesystem.util.BeanUtil;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

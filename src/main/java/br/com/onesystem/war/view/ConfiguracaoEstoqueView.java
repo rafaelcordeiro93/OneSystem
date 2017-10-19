@@ -1,6 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
@@ -12,7 +11,6 @@ import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -23,13 +21,13 @@ import org.primefaces.event.SelectEvent;
 @Named
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, ConfiguracaoEstoqueBV> implements Serializable {
-    
+
     private ConfiguracaoEstoqueBV conf;
     private ConfiguracaoEstoque configuracao;
-    
+
     @Inject
     private ConfiguracaoEstoqueService service;
-    
+
     @PostConstruct
     public void init() {
         configuracao = service.buscar();
@@ -39,7 +37,7 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
             conf = new ConfiguracaoEstoqueBV(configuracao);
         }
     }
-    
+
     public void update() {
         try {
             if (conf.getId() == null) {
@@ -54,7 +52,7 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
             die.print();
         }
     }
-    
+
     @Override
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
@@ -71,43 +69,41 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
             inicializaOperacoesDeEstoque();
         }
     }
-    
+
     public void inicializaOperacoesDeEstoque() {
-        //Inicializa Operacoes de Estoque
-        conf.setOperacaoDeAjusteDeEstoque((Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize(conf.getOperacaoDeAjusteDeEstoque(), SelecaoOperacaoView.class, "getOperacaoDeEstoque"));
         if (conf.getOperacaoDeAjusteDeEstoque().getOperacaoDeEstoque() == null || conf.getOperacaoDeAjusteDeEstoque().getOperacaoDeEstoque().isEmpty()) {
             conf.setOperacaoDeAjusteDeEstoque(null);
             RequestContext rc = RequestContext.getCurrentInstance();
             rc.execute("PF('operacaoNaoRelacionadaDialog').show()");
         }
     }
-    
+
     public ConfiguracaoEstoqueBV getConfiguracaoBV() {
         return conf;
     }
-    
+
     public void setConfiguracaoBV(ConfiguracaoEstoqueBV configuracaoBV) {
         this.conf = configuracaoBV;
     }
-    
+
     public ConfiguracaoEstoque getConfiguracao() {
         return configuracao;
     }
-    
+
     public void setConfiguracao(ConfiguracaoEstoque configuracao) {
         this.configuracao = configuracao;
     }
-    
+
     public ConfiguracaoEstoqueService getService() {
         return service;
     }
-    
+
     public void setService(ConfiguracaoEstoqueService service) {
         this.service = service;
     }
-    
+
     @Override
     public void limparJanela() {
     }
-    
+
 }

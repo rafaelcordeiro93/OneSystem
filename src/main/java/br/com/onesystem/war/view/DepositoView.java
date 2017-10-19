@@ -1,7 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.DepositoDAO;
 import br.com.onesystem.domain.Deposito;
@@ -14,10 +12,7 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.war.builder.DepositoBV;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoDepositoView;
-import br.com.onesystem.war.view.selecao.SelecaoFilialView;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -35,7 +30,7 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
 
     @Inject
     private AtualizaDAO<Filial> filialDAO;
-    
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -57,17 +52,16 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
             filiais.getRemovidos().forEach(f -> depositoExistente.remove((Filial) f.getObject()));
             filiais.getList().forEach(f -> depositoExistente.adiciona(f));
 
-            for(Model f : filiais.getRemovidos()){
-                Filial fil = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(((Filial) f.getObject()), SelecaoFilialView.class, "getDepositos");
-                fil.remove(depositoExistente);
-            }
-            
-            for(Filial f : filiais.getList()){
-                f = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(f, SelecaoFilialView.class, "getDepositos");
-                f.adiciona(depositoExistente);
-                filialDAO.atualiza(f);
-            }
-
+//            for(Model f : filiais.getRemovidos()){
+//                Filial fil = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(((Filial) f.getObject()), SelecaoFilialView.class, "getDepositos");
+//                fil.remove(depositoExistente);
+//            }
+//            
+//            for(Filial f : filiais.getList()){
+//                f = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(f, SelecaoFilialView.class, "getDepositos");
+//                f.adiciona(depositoExistente);
+//                filialDAO.atualiza(f);
+//            }
             if (depositoExistente.getId() != null) {
                 updateNoBanco(depositoExistente);
             } else {
@@ -83,15 +77,14 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
         Object obj = event.getObject();
         if (obj instanceof Deposito) {
             e = new DepositoBV((Deposito) obj);
+            inicializaFiliais();
         } else if (obj instanceof Filial) {
             filial = (Filial) obj;
         }
     }
 
-    public void inicializaFiliais() throws DadoInvalidoException {
-        t = (Deposito) new ArmazemDeRegistrosNaMemoria<SelecaoDepositoView>().initialize(e.construirComID(), SelecaoDepositoView.class, "getFiliais");
-        e = new DepositoBV(t);
-        filiais = new ModelList<>(t.getFiliais());
+    public void inicializaFiliais() {
+        filiais = new ModelList<>(e.getFiliais());
     }
 
     public void limparJanela() {

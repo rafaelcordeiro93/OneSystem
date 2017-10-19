@@ -1,6 +1,5 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.ContaDeEstoque;
@@ -15,9 +14,7 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
-import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoContaDeEstoqueView;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -115,13 +112,7 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
         }
     }
 
-    public void inicializaOperacoesDeEstoque() throws DadoInvalidoException {
-        t = (ContaDeEstoque) new ArmazemDeRegistrosNaMemoria<SelecaoContaDeEstoqueView>().initialize(e.construirComID(), SelecaoContaDeEstoqueView.class, "getOperacaoDeEstoque");
-        e = new ContaDeEstoqueBV(t);
-    }
-
     public void selecionaConta() throws DadoInvalidoException {
-        inicializaOperacoesDeEstoque();
         if (e == null && (e.getOperacoesDeEstoque() == null || e.getOperacoesDeEstoque().isEmpty())) {
             operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
         } else {

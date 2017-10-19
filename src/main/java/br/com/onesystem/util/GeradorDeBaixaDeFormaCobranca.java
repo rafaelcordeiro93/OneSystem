@@ -5,12 +5,8 @@
  */
 package br.com.onesystem.util;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.domain.Cheque;
-import br.com.onesystem.domain.Cobranca;
-import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.ConfiguracaoContabil;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.Pagamento;

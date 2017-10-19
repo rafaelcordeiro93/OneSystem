@@ -6,13 +6,11 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Caixa;
 import br.com.onesystem.domain.Cartao;
-import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Comanda;
@@ -36,7 +34,6 @@ import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.domain.SituacaoFiscal;
-import br.com.onesystem.domain.TabelaDeTributacao;
 import br.com.onesystem.domain.TaxaDeAdministracao;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.domain.builder.CobrancaBuilder;
@@ -87,7 +84,6 @@ import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.LoteNotaFiscalService;
 import br.com.onesystem.war.service.NumeracaoDeNotaFiscalService;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -746,8 +742,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
             Object obj = event.getObject();
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
-                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getOperacaoDeEstoque");
-                operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getSituacoesFiscais");
+                Operacao operacao = (Operacao) obj;
                 if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");

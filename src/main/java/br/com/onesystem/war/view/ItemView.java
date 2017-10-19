@@ -1,7 +1,6 @@
 package br.com.onesystem.war.view;
 
 import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
@@ -18,7 +17,7 @@ import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.LoteItem;
-import br.com.onesystem.domain.Operacao;
+import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
@@ -40,8 +39,6 @@ import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoItemView;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -219,13 +216,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
-    public void inicializaLoteDeItem() throws DadoInvalidoException {
-        t = (Item) new ArmazemDeRegistrosNaMemoria<SelecaoItemView>().initialize(e.construirComID(), SelecaoItemView.class, "getLoteItem");
-        e = new ItemBV(t);
-    }
-
     public void selecionaItem() throws DadoInvalidoException {
-        inicializaLoteDeItem();
         if (e.getId() != null) {
             t = e.construirComID();
             inicializaDados();
@@ -276,9 +267,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             // Adiciona um estoque com saldo zero para que o depósito seja relacionado ao item.
             SaldoDeEstoque saldo = estoqueLista.stream().filter(s -> s.getDeposito().equals(deposito)).findAny().orElse(null);
             if (saldo == null) {
-                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize(configuracaoEstoque.getAjusteDeEstoquePadrao(), SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                OperacaoDeEstoque operacaoDeEstoque = configuracaoEstoque.getAjusteDeEstoquePadrao().getOperacaoDeEstoque().get(0);
                 Estoque estoque = new EstoqueBuilder().comQuantidade(BigDecimal.ZERO).comDeposito(deposito).
-                        comEmissao(new Date()).comOperacaoDeEstoque(operacao.getOperacaoDeEstoque().get(0))
+                        comEmissao(new Date()).comOperacaoDeEstoque(operacaoDeEstoque)
                         .comItem(t).construir();
                 adicionaEstoqueDAO.adiciona(estoque);
                 inicializaEstoque();

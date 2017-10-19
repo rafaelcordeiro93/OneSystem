@@ -45,7 +45,6 @@
 
                                     <p:outputLabel value="#{l.Id}"/>
                                     <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
-                                        <p:ajax event="itemSelect" listener="#{itemView.selecionaItem}" update=":conteudo"/>                                  
                                     </a:inputTextDialog>
 
                                     <p:outputLabel value="#{l.Ativo}"/>
