@@ -4,14 +4,17 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.services.impl.MetodoInacessivelRelatorio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Temporal;
@@ -53,6 +56,8 @@ public class Filial implements Serializable {
     @NotNull(message = "{cep_not_null}")
     @ManyToOne
     private Cep cep;
+    @ManyToOne
+    private Cidade cidade;
     @NotNull(message = "{telefone_not_null}")
     @Length(min = 2, max = 60, message = "{telefone_lenght}")
     @Column(length = 60, nullable = false)
@@ -66,6 +71,8 @@ public class Filial implements Serializable {
     private String email;
     @Column(nullable = true, length = 60)
     private String contato;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private List<Deposito> depositos;
 
     public Filial() {
     }
@@ -73,7 +80,7 @@ public class Filial implements Serializable {
     public Filial(Long id, String razaoSocial, String fantasia,
             String ruc, String endereco, String bairro, Cep cep,
             String telefone, Date vencimento, String serialKey, String numero,
-            String email, String contato) throws DadoInvalidoException {
+            String email, String contato, Cidade cidade) throws DadoInvalidoException {
         this.id = id;
         this.razaoSocial = razaoSocial;
         this.fantasia = fantasia;
@@ -87,9 +94,58 @@ public class Filial implements Serializable {
         this.vencimento = vencimento;
         this.serialKey = serialKey;
         this.numero = numero;
+        this.cidade = cidade;
         ehValido();
     }
 
+    @MetodoInacessivelRelatorio
+    public String getCepCidadeEstadoPaisFormatado() {
+        String str = "";
+        Cidade cidade = null;
+        if (cep != null) {
+            str += cep;
+            cidade = cep.getCidade();
+        } else {
+            cidade = getCidade();
+        }
+        if (cidade != null) {
+            if (cidade.getNome() != null) {
+                str += " - ";
+            }
+            str += cidade.getNome();
+        }
+        if (cidade != null && cidade.getEstado() != null) {
+            if (cidade.getEstado().getSigla() != null) {
+                str += " - ";
+            }
+            str += cidade.getEstado().getSigla();
+        }
+        if (cidade != null && cidade.getEstado() != null && cidade.getEstado().getPais() != null) {
+            str += " - ";
+            str += cidade.getEstado().getPais().getNome();
+        }
+        return str;
+    }
+
+    public void adiciona(Deposito deposito) {
+        if (depositos == null) {
+            this.depositos = new ArrayList<Deposito>();
+        }
+        if (deposito != null && depositos.indexOf(deposito) == -1) {
+            this.depositos.add(deposito);
+        }
+    }
+
+    public void remove(Deposito deposito) {
+        if (depositos != null && depositos.indexOf(deposito) != -1) {
+            this.depositos.remove(depositos.indexOf(deposito));
+        }
+    }
+
+    public List<Deposito> getDepositos() {
+        return depositos;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -147,6 +203,28 @@ public class Filial implements Serializable {
     }
 
     @MetodoInacessivelRelatorio
+    public String getNomeEstado() {
+        if (cep != null) {
+            return cep.getCidade().getEstado().getNome();
+        } else {
+            return cidade.getEstado().getNome();
+        }
+    }
+
+    @MetodoInacessivelRelatorio
+    public String getNomeCidade() {
+        if (cep != null) {
+            return cep.getCidade().getNome();
+        } else {
+            return cidade.getNome();
+        }
+    }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    @MetodoInacessivelRelatorio
     public String getEnderecoNumeroBairroFormatado() {
         String str = "";
         if (endereco != null) {
@@ -166,11 +244,6 @@ public class Filial implements Serializable {
         }
 
         return str;
-    }
-
-    @MetodoInacessivelRelatorio
-    public String getCepCidadeEstadoPaisFormatado() {
-        return cep.getCepCidadeEstadoPaisFormatado();
     }
 
     @MetodoInacessivelRelatorio

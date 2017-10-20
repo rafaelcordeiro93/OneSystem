@@ -1,11 +1,8 @@
 package br.com.onesystem.war.view.dialogo;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ContaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
-import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.BoletoDeCartao;
-import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaVariavel;
@@ -41,7 +38,6 @@ import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.CreditoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -223,11 +219,8 @@ public class DialogoTipoDeCobrancaView extends BasicMBImpl<TipoDeCobranca, TipoD
         Object obj = event.getObject();
         String id = event.getComponent().getId();
         if (obj instanceof Cobranca) {
-            //Inicializa tipos de cobranca em Cobranca
-            Cobranca c = (Cobranca) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((Cobranca) obj, SelecaoCobrancaView.class, "getTiposDeCobranca");
             if (obj instanceof CobrancaVariavel) {
-                c = (CobrancaVariavel) new ArmazemDeRegistrosNaMemoria<SelecaoCobrancaView>().initialize((CobrancaVariavel) c, SelecaoCobrancaView.class, "getFormasDeCobranca");
-                e.setCobranca(c);
+                e.setCobranca((Cobranca) obj);
                 selecionaCobrancaNoObjeto();
             } else if (obj instanceof DespesaProvisionada) {
                 despesaProvisionada = (DespesaProvisionada) obj;

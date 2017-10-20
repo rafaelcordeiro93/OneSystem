@@ -20,35 +20,37 @@
                             <p:outputLabel class="ui-g-12 ui-md-6 ui-lg-10"  value="#{l.Comanda}:"/>
                         </div>
                         <div class="ui-g">
-                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cComanda" value="#{consultaComandaView.comanda}" update=":conteudo" dialog="#{selecaoComandaView}" mbView="#{consultaComandaView}" var="comanda" converter="comandaConverter" itemLabel="#{comanda.id}" itemValue="#{comanda}" editVisible="false" onlyNumber="true"/>
+                            <a:inputTextDialog styleClassDiv="ui-g-12 ui-md-6 ui-lg-3" styleDiv="padding: 2px !important" id="cComanda" value="#{consultaComandaView.t}" update=":conteudo" dialog="#{selecaoComandaView}" mbView="#{consultaComandaView}" var="comanda" converter="comandaConverter" itemLabel="#{comanda.id}" itemValue="#{comanda}" editVisible="false" onlyNumber="true">
+                            </a:inputTextDialog>
+
                             <p:commandButton value="#{l.Cancelar}" actionListener="#{consultaComandaView.cancela}" icon="fa fa-ban"
                                              styleClass="orange-btn" style="width: auto !important" update=":conteudo"
-                                             rendered="#{consultaComandaView.comanda.estado ne null ? (consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.comanda.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
+                                             rendered="#{consultaComandaView.t.estado ne null ? (consultaComandaView.t.estado eq 'EFETIVADO' ? 'false' : (consultaComandaView.t.estado eq 'CANCELADO' ? 'false' : 'true')) : 'false'}"/>
                         </div>
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  value="#{l.Estado}: "/>
-                            <p:outputLabel class="#{consultaComandaView.comanda.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
-                                                    consultaComandaView.comanda.estado eq 'EFETIVADO' ? 'label label-success' :
-                                                    consultaComandaView.comanda.estado eq 'CANCELADO' ? 'label label-warning' :
-                                                    ''}"> #{consultaComandaView.comanda.estado.nome}</p:outputLabel>
+                            <p:outputLabel class="#{consultaComandaView.t.estado eq 'EM_DEFINICAO' ? 'label label-default' : 
+                                                    consultaComandaView.t.estado eq 'EFETIVADO' ? 'label label-success' :
+                                                    consultaComandaView.t.estado eq 'CANCELADO' ? 'label label-warning' :
+                                                    ''}"> #{consultaComandaView.t.estado.nome}</p:outputLabel>
                         </div>
                         <p:separator/>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Numero_Comanda}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.comanda.numeroComanda}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{dialogoComandaView.t.numeroComanda}"/>
                         </div>
 
                         <div class="ui-g">
                             <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-1" value="#{l.Lista_Preco}:"/> 
-                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaComandaView.comanda.listaDePreco.id} #{consultaComandaView.comanda.listaDePreco ne null ? '-' : ''}  #{consultaComandaView.comanda.listaDePreco.nome}"/>
+                            <p:outputLabel class="ui-g-12 ui-md-9 ui-lg-11" value="#{consultaComandaView.t.listaDePreco.id} #{consultaComandaView.t.listaDePreco ne null ? '-' : ''}  #{consultaComandaView.t.listaDePreco.nome}"/>
                         </div>
 
                         <p:tabView style="border: 1px solid #d8d8d8;">
 
                             <p:tab id="item" title="#{l.Itens}">
 
-                                <p:dataTable id="itensDeComandaComanda" var="itemDeComanda" value="#{consultaComandaView.comanda.itensDeComanda}" rowKey="#{itemDeComanda.id}" 
+                                <p:dataTable id="itensDeComandaComanda" var="itemDeComanda" value="#{consultaComandaView.t.itensDeComanda}" rowKey="#{itemDeComanda.id}" 
                                              emptyMessage="#{l.Nao_Ha_Registros}" reflow="true">
 
                                     <f:facet name="header">
@@ -79,10 +81,10 @@
 
                                     <p:columnGroup type="footer">
                                         <p:row>
-                                            <p:column colspan="1" footerText="#{consultaComandaView.comanda.itensDeComanda.size() eq 0 ? '' : consultaComandaView.comanda.itensDeComanda.size()}" />
+                                            <p:column colspan="1" footerText="#{consultaComandaView.t.itensDeComanda.size() eq 0 ? '' : consultaComandaView.t.itensDeComanda.size()}" />
                                             <p:column colspan="6"/>
                                             <p:column colspan="1" footerText="#{l.Total}:" style="margin-right: 0px !important; font-weight: bold"/>
-                                            <p:column colspan="2" footerText="#{consultaComandaView.comanda.totalItensFormatado}"/>
+                                            <p:column colspan="2" footerText="#{consultaComandaView.t.totalItensFormatado}"/>
                                         </p:row>
                                     </p:columnGroup> 
 
@@ -94,25 +96,25 @@
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Acrescimo}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.comanda.acrescimoFormatado}" />                             
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.t.acrescimoFormatado}" />                             
 
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Total_Comanda}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.comanda.totalComandaFormatado}" />    
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.t.totalComandaFormatado}" />    
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Descontos}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.comanda.descontoFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.t.descontoFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Despesa_Cobranca}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.comanda.despesaCobrancaFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.t.despesaCobrancaFormatado}" />
                                 </div>
 
                                 <div class="ui-g">
                                     <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2 " value="#{l.Frete}:"/> 
-                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.comanda.freteFormatado}" />
+                                    <p:outputLabel class="ui-g-12 ui-md-3 ui-lg-2" value="#{consultaComandaView.t.freteFormatado}" />
                                 </div>                           
 
                                 <p:spacer width="1px"/>

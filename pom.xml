@@ -76,15 +76,11 @@
             <version>1.2</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.primefaces.extensions</groupId>
-            <artifactId>primefaces-extensions</artifactId>
-            <version>6.1.1</version>
-        </dependency>
+        
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>6.1.4</version>
+            <version>6.1.6</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -163,7 +159,7 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1</version>
-            <scope>provided</scope>  <!-- comentar para usar o banco pelo EM -->
+            <scope>provided</scope> <!--   comentar para usar o banco pelo EM -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>
@@ -401,5 +397,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

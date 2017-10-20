@@ -116,6 +116,10 @@
         <class>br.com.onesystem.domain.FormaDeRecebimento</class>
         <class>br.com.onesystem.domain.PedidoAFornecedores</class>
         <class>br.com.onesystem.domain.ItemDePedidoCancelado</class>
+        <class>br.com.onesystem.domain.LoteNotaFiscal</class>
+        <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
+        <class>br.com.onesystem.domain.LoteItem</class>
+        <class>br.com.onesystem.domain.Motivo</class>
         
         <properties>
             <!--  Propriedades JDBC POSTGRE -->

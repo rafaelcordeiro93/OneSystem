@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoPessoaFornecedorView extends BasicCrudMBImpl<Pessoa> implements Serializable {
 
     @Inject
@@ -20,6 +21,11 @@ public class SelecaoPessoaFornecedorView extends BasicCrudMBImpl<Pessoa> impleme
 
     @PostConstruct
     public void init() {
+        buscarDados();
+        beans = service.buscarFornecedores();
+    }
+
+    private void buscarDados() {
         beans = service.buscarFornecedores();
     }
 
@@ -27,14 +33,15 @@ public class SelecaoPessoaFornecedorView extends BasicCrudMBImpl<Pessoa> impleme
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoPessoaFornecedor");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/pessoa";
     }
-    
+
     @Override
     public List<Pessoa> complete(String query) {
+        buscarDados();
         List<Pessoa> listaFIltrada = new ArrayList<>();
         for (Pessoa b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -57,6 +64,10 @@ public class SelecaoPessoaFornecedorView extends BasicCrudMBImpl<Pessoa> impleme
 
     public void setService(PessoaService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-user-o";
     }
 
 }

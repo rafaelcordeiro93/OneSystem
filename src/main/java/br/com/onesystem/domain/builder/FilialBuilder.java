@@ -1,6 +1,7 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Cep;
+import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.exception.DadoInvalidoException;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class FilialBuilder {
     private String serialKey;
     private String email;
     private String contato;
+    private Cidade cidade;
 
     public FilialBuilder comID(Long ID) {
         this.id = ID;
@@ -90,8 +92,13 @@ public class FilialBuilder {
         return this;
     }
 
+    public FilialBuilder comCidade(Cidade cidade) {
+        this.cidade = cidade;
+        return this;
+    }
+
     public Filial construir() throws DadoInvalidoException {
-        return new Filial(id, razaoSocial, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey, numero, email, contato);
+        return new Filial(id, razaoSocial, fantasia, ruc, endereco, bairro, cep, telefone, vencimento, serialKey, numero, email, contato, cidade);
     }
 
 }

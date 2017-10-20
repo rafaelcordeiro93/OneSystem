@@ -61,6 +61,6 @@ public class PaisBV implements Serializable, BuilderView<Pais> {
     }
 
     public Pais construirComID() throws DadoInvalidoException {
-        return new PaisBuilder().comNome(nome).comCodigoPais(codigoPais).comCodigoReceita(codigoReceita).construir();
+        return new PaisBuilder().comId(id).comNome(nome).comCodigoPais(codigoPais).comCodigoReceita(codigoReceita).construir();
     }
 }

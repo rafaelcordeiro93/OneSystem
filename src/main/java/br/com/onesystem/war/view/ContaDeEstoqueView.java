@@ -14,7 +14,6 @@ import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.war.builder.OperacaoDeEstoqueBV;
-import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -99,18 +98,21 @@ public class ContaDeEstoqueView extends BasicMBImpl<ContaDeEstoque, ContaDeEstoq
 
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof ContaDeEstoque) {
-            limparJanela();
-            ContaDeEstoque c = (ContaDeEstoque) obj;
-            e = new ContaDeEstoqueBV(c);
-            selecionaConta();
-        } else if (obj instanceof Operacao) {
-            this.operacaoDeEstoque.setOperacao((Operacao) obj);
+        try {
+            Object obj = event.getObject();
+            if (obj instanceof ContaDeEstoque) {
+                limparJanela();
+                e = new ContaDeEstoqueBV((ContaDeEstoque) obj);
+                selecionaConta();
+            } else if (obj instanceof Operacao) {
+                this.operacaoDeEstoque.setOperacao((Operacao) obj);
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
-    public void selecionaConta() {
+    public void selecionaConta() throws DadoInvalidoException {
         if (e == null && (e.getOperacoesDeEstoque() == null || e.getOperacoesDeEstoque().isEmpty())) {
             operacaoEstoqueList = new ModelList<OperacaoDeEstoque>();
         } else {

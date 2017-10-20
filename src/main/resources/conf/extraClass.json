@@ -87,11 +87,6 @@
         {
             "classeDestino": "br.com.onesystem.domain.Pessoa",
             "caminho": "pessoa"
-        },
-        {
-
-            "classeDestino": "br.com.onesystem.domain.Cep",
-            "caminho": "filial.cep"
         }
     ],
     "br.com.onesystem.reportTemplate.TemplateFormaPagamento": [],
@@ -101,20 +96,8 @@
             "caminho": "filial"
         },
         {
-            "classeDestino": "br.com.onesystem.domain.Cep",
-            "caminho": "filial.cep"
-        },
-        {
-            "classeDestino": "br.com.onesystem.domain.Estado",
-            "caminho": "filial.cep.cidade.estado"
-        },
-        {
             "classeDestino": "br.com.onesystem.domain.Pessoa",
             "caminho": "pessoa"
-        },
-        {
-            "classeDestino": "br.com.onesystem.domain.Cidade",
-            "caminho": "filial.cep.cidade"
         }
     ],
     "br.com.onesystem.domain.Orcamento": [

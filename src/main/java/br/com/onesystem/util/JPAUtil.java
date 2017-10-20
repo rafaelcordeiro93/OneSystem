@@ -17,6 +17,7 @@ public class JPAUtil {
     private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("alkatar-console");
     private static EntityManager manager;
 
+    
     public static EntityManager getEntityManager() {
         if (manager == null || !manager.isOpen()) {
             manager = entityManager.createEntityManager();

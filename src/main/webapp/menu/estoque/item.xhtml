@@ -14,18 +14,40 @@
             .aImageExcluir:hover{
                 color: #a7a7a7;
             }
+            .ui-datatable tbody td {
+                border-color: #c7c7c7 !important;
+            }
+            body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
+                background-color: #f7f7f7;
+            }
+            body .ui-widget-content {
+                border: none;
+            }
+            .TabNoBorder.ui-tabs.ui-tabs-top .ui-tabs-panel, body .ui-tabs.ui-tabs-bottom .ui-tabs-panel, body .ui-tabs.ui-tabs-left .ui-tabs-panel, body .ui-tabs.ui-tabs-right .ui-tabs-panel {
+                border-bottom: none !important;
+            }
+            .DataTableNoWrap.ui-datatable .ui-datatable-data tr td {
+                white-space: nowrap;
+            }
         </style>
     </ui:define>
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-11" style="margin-left: 5%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Item}</h3>
+        <div class="content-section content-section-blue">
+
+            <h2 class="BigTopic-Custom"><i class="fa fa-archive White Fs40" style="color: #848484"/> #{l.Item}</h2>
+            <span class="Topic-Message">#{l.Item_Texto}</span>
+
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
                     <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+
+                    <div class="ui-fluid">
 
                         <p:tabView widgetVar="detailsTab" id="tabsItem" style="margin: none; border-color: none">
                             <p:ajax event="tabChange" listener="#{itemView.onTabChange}" update="conteudo"/>
@@ -34,11 +56,11 @@
                                 <div class="EmptyBox20"/>
 
                                 <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                             columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-grc-2 ui-g-12 ui-md-1,ui-g-12 ui-md-4">
+                                             columnClasses="ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-5,ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-5">
 
                                     <p:outputLabel value="#{l.Id}"/>
                                     <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
-                                        <p:ajax event="itemSelect" listener="#{itemView.selecionaItem}" update=":conteudo"/>                                  
+                                        <p:ajax event="itemSelect" listener="#{itemView.selecionaItem()}" />
                                     </a:inputTextDialog>
 
                                     <p:outputLabel value="#{l.Ativo}"/>
@@ -86,15 +108,15 @@
 
                                     <p:outputLabel value="#{l.Tipo_Item}"/>
                                     <p:selectOneMenu value="#{itemView.e.tipoItem}" >
-                                        <f:selectItems value="#{itemView.tipoItem}" itemLabel="#{TipoItem.tipoItem}" itemValue="#{TipoItem}" />
+                                        <f:selectItems value="#{itemView.tipoItem}" var="tipoItem" itemLabel="#{tipoItem.nome}" itemValue="#{tipoItem}" />
                                     </p:selectOneMenu>
 
                                     <p:outputLabel value="#{l.Detalhamento}"/>
                                     <p:selectOneMenu value="#{itemView.e.detalhamento}">
                                         <f:selectItems value="#{itemView.detalhamentoDeItem}" var="detalhamento" itemLabel="#{detalhamento.nome}" itemValue="#{detalhamento}" />
-                                           
-                                     
-                                         <p:ajax event="itemSelect" update=":conteudo" />
+
+
+                                        <p:ajax event="itemSelect" update=":conteudo" />
                                     </p:selectOneMenu>
 
                                 </p:panelGrid>
@@ -105,14 +127,17 @@
 
                             <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
 
-                                <h2 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h2>
+                                <div class="ui-g-12">
+                                    <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
+                                    <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
+                                </div>
                                 <h:panelGrid>
 
-                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" style="width: 60%">
-                                        <p:column headerText="#{l.Deposito}" sortBy="#{estoque.deposito.nome}" filterBy="#{estoque.deposito.nome}" footerText="#{l.Deposito}" >                                        
+                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-5" reflow="true">
+                                        <p:column headerText="#{l.Deposito}" >
                                             <h:outputText value="#{estoque.deposito.nome}" />
                                         </p:column>
-                                        <p:column headerText="#{l.Saldo}" sortBy="#{estoque.saldo}" filterBy="#{estoque.saldo}" footerText="#{l.Saldo}" >
+                                        <p:column headerText="#{l.Saldo}" >
                                             <h:outputText value="#{estoque.saldo}" />
                                         </p:column>
                                     </p:dataTable>
@@ -122,7 +147,7 @@
                             </p:tab>
 
                             <p:tab title="#{l.Lotes}" rendered="#{itemView.e.detalhamento.id eq 2 ? true : false}">
-    <div class="EmptyBox20"/>
+                                <div class="EmptyBox20"/>
 
                                 <p:panelGrid id="painelNumeracoes" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                              columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
@@ -153,7 +178,7 @@
                                     </h:panelGrid>
 
                                 </p:panelGrid>
-        <div class="EmptyBox10"/>
+                                <div class="EmptyBox10"/>
                                 <p:dataTable id="loteItem" var="model" value="#{itemView.listaLoteItem}" rowIndexVar="rowIndex"
                                              styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" 
                                              paginatorAlwaysVisible="false" rows="12" paginator="true"
@@ -184,37 +209,17 @@
 
                             </p:tab>
 
-                            <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}">
+                            <p:tab id="tabPreco" title="#{l.Preco}" >
 
-                                <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass="form-elements"
-                                             columnClasses="ui-panelgrid-cell ui-grid-col-4,ui-panelgrid-cell ui-grid-col-8">
-                                    <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements">   
-                                        <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
-                                            <p:ajax update="itemPreco"/>
-                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="true" />
-                                            <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="false" />
-                                        </p:selectOneRadio>
+                                <p:panelGrid id="itemPanelPreco" columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
+                                             columnClasses="ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6,ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6">
 
-                                        <div class="EmptyBox10"/>
-                                        <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
-                                            <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
-                                        </a:inputTextDialog>
-                                        <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." disabled="#{itemView.precoPorMargem}" 
-                                                       symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
-                                            <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
-                                        </p:inputNumber> 
+                                    <h:panelGrid columns="1" style="right: 0px;" 
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-9" >
+                                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Preco_Atual}</div>
 
-                                        <p:calendar value="#{itemView.precoDeItemBV.dataDeExpiracao}" navigator="true" pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99" yearRange="c-0:c+100" placeholder="#{l.Data_Expiracao}" 
-                                                    locale="pt" showWeek="true"/>
-
-                                        <p:commandButton value="#{l.Adicionar}" action="#{itemView.addPreco()}" update="itemPanelPreco precos :conteudo:growl" icon="fa fa-plus Fs16 White"/>
-
-                                    </p:panelGrid>   
-
-                                    <h:panelGrid columns="1" style="width: 100%; right: 0px;">
-                                        <h:outputText value="#{l.Preco_Atual}"/> 
-                                        <p:dataTable id="precoAtual" var="precoDeItem" value="#{itemView.precoAtual}"
-                                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+                                        <p:dataTable id="precoAtual" var="precoDeItem" value="#{itemView.precoAtual}" styleClass="DataTableNoWrap"
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;" reflow="true" >
 
                                             <p:column headerText="#{l.Lista_De_Preco}">                                        
                                                 <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
@@ -229,7 +234,62 @@
                                                     <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
                                                 </h:outputText>
                                             </p:column>
-                                            <p:column headerText="#{l.Data_Expiracao}">
+                                            <p:column headerText="#{l.Expiracao}">
+                                                <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
+                                            </p:column>
+                                        </p:dataTable>
+
+                                        <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                     columnClasses="ui-g-12 ui-md-12 ui-lg-9">   
+                                            <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Calcular_Preco}</div>
+
+                                            <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
+                                                <p:ajax update="itemPreco :conteudo:growl" listener="#{itemView.validaMargemView()}"/>
+                                                <f:selectItem itemLabel="#{l.Definir_Preco_Por_Valor}" itemValue="true" />
+                                                <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="false" />
+                                            </p:selectOneRadio>
+
+                                            <div class="EmptyBox10"/>
+                                            <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
+                                                <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
+                                            </a:inputTextDialog>
+                                            <p:inputNumber id="itemPreco" maxValue="9999999.99" minValue="0.00" decimalSeparator="," thousandSeparator="." readonly="#{!itemView.precoPorMargem}" 
+                                                           symbol="#{itemView.configuracao.moedaPadrao.sigla } " decimalPlaces="2" value="#{itemView.precoDeItemBV.valor}">
+                                                <f:passThroughAttribute name="placeholder" value="#{l.Valor}"/>
+                                            </p:inputNumber> 
+
+                                            <p:calendar value="#{itemView.precoDeItemBV.dataDeExpiracao}" navigator="true" pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99" yearRange="c-0:c+100" placeholder="#{l.Data_Expiracao}" 
+                                                        locale="pt" showWeek="true"/>
+
+                                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.addPreco()}" update=":conteudo :conteudo:growl" style="width: auto !important" icon="fa fa-plus Fs16 White"/>
+
+                                        </p:panelGrid>   
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="1" style="right: 0px;" 
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-12" >
+                                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Historico}</div>
+
+                                        <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" rowsPerPageTemplate="15,30,50,100"  paginatorPosition="top" paginatorAlwaysVisible="false" reflow="true"
+                                                     rows="15" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                     emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                            <p:column headerText="#{l.Lista_De_Preco}" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
+                                                <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Valor}" sortBy="#{precoDeItem.valor}">
+                                                <h:outputText value="#{precoDeItem.valor}" >
+                                                    <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{l.Emissao}" sortBy="#{precoDeItem.emissao}">
+                                                <h:outputText value="#{precoDeItem.emissao}" >
+                                                    <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
+                                                </h:outputText>
+                                            </p:column>
+                                            <p:column headerText="#{l.Data_Expiracao}" sortBy="#{precoDeItem.dataDeExpiracao}">
                                                 <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
                                                     <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
                                                 </h:outputText>
@@ -237,41 +297,13 @@
                                         </p:dataTable>
 
                                     </h:panelGrid>
+
                                 </p:panelGrid>
 
-                                <p:separator/>
-
-                                <h:panelGrid columns="1" styleClass="ui-panelgrid-blank form-group form-elements">
-                                    <h:outputText value="#{l.Historico}"/>
-                                    <p:dataTable id="precos" var="precoDeItem" value="#{itemView.precos}" rowsPerPageTemplate="15,30,50,100"
-                                                 rows="15" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
-
-                                        <p:column headerText="#{l.Lista_De_Preco}" filterBy="#{precoDeItem.listaDePreco.nome}" filterMatchMode="contains" sortBy="#{precoDeItem.listaDePreco.nome}">                                        
-                                            <h:outputText value="#{precoDeItem.listaDePreco.nome}" />
-                                        </p:column>
-                                        <p:column headerText="#{l.Valor}" filterBy="#{precoDeItem.valor}" filterMatchMode="contains"  sortBy="#{precoDeItem.valor}">
-                                            <h:outputText value="#{precoDeItem.valor}" >
-                                                <f:convertNumber currencySymbol="#{configuracaoView.configuracao.moedaPadrao.sigla}" type="currency" /> 
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="#{l.Emissao}" filterBy="#{precoDeItem.emissao}" filterMatchMode="contains"  sortBy="#{precoDeItem.emissao}">
-                                            <h:outputText value="#{precoDeItem.emissao}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
-                                            </h:outputText>
-                                        </p:column>
-                                        <p:column headerText="#{l.Data_Expiracao}" filterBy="#{precoDeItem.dataDeExpiracao}" filterMatchMode="contains"  sortBy="#{precoDeItem.dataDeExpiracao}">
-                                            <h:outputText value="#{precoDeItem.dataDeExpiracao}" >
-                                                <f:convertDateTime pattern="dd/MM/yyyy hh:mm:ss" />
-                                            </h:outputText>
-                                        </p:column>
-                                    </p:dataTable>
-
-                                </h:panelGrid>
 
                             </p:tab>
 
-                            <p:tab title="#{l.Imagens}" rendered="#{!itemView.tab}">
+                            <p:tab title="#{l.Imagens}" rendered="false">
 
                                 <p:panel styleClass="Wid100" style="border:none">
                                     <p:panelGrid>

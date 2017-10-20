@@ -8,10 +8,12 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import javax.ejb.Stateful;
+import br.com.onesystem.util.StatelessTransaction;
+import java.io.Serializable;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -19,10 +21,11 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
-@Stateful
-public class AdicionaDAO<T> {
+@Stateless
+public class AdicionaDAO<T> implements Serializable {
 
-    @PersistenceContext(unitName = "alkatar")
+    @Inject
+    @StatelessTransaction
     private EntityManager em;
 
     public AdicionaDAO() {
@@ -32,9 +35,12 @@ public class AdicionaDAO<T> {
 
         try {
 
+            System.out.println("Em: " + em);
+
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
+            em.setFlushMode(FlushModeType.COMMIT);
             em.flush();
 
         } catch (PersistenceException pe) {
@@ -47,7 +53,7 @@ public class AdicionaDAO<T> {
             throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             throw new FDadoInvalidoException("Verifique Lista do toString()");
-        } 
+        }
     }
 
     private String getMessage(ConstraintViolationException cve) {

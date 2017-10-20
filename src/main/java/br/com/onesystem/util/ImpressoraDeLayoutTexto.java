@@ -15,7 +15,6 @@ import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.reportTemplate.CaminhoDeClasse;
 import br.com.onesystem.reportTemplate.TemplateFormaPagamento;
 import br.com.onesystem.util.StringAlignUtils.Alignment;
-import br.com.onesystem.valueobjects.FormatPage;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -26,12 +25,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
-import static net.sf.dynamicreports.report.builder.DynamicReports.report;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import sun.net.www.content.text.Generic;
 
 /**
  *

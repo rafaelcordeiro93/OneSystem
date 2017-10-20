@@ -181,6 +181,10 @@ public class Operacao implements Serializable {
         return loteNotaFiscal;
     }
 
+    public List<SituacaoFiscal> getSituacoesFiscais() {
+        return situacoesFiscais;
+    }
+
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("nome", "operacaoFinanceira", "tipoNota", "tipoOperacao", "vendaAVista", "vendaAPrazo",
                 "servicoAVista", "servicoAPrazo", "receitaFrete", "despesaCMV", "contabilizarCMV", "compraAVista", "compraAPrazo");

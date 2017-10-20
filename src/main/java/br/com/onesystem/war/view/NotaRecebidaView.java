@@ -5,7 +5,6 @@
  */
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Banco;
@@ -58,7 +57,6 @@ import br.com.onesystem.war.builder.ItemDeNotaBV;
 import br.com.onesystem.war.builder.NotaRecebidaBV;
 import br.com.onesystem.war.builder.CobrancaBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
-import br.com.onesystem.war.service.ConfiguracaoService;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
@@ -68,8 +66,6 @@ import br.com.onesystem.war.builder.ItemDePedidoBV;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.NotaRecebidaService;
-import br.com.onesystem.war.view.selecao.SelecaoItemView;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -591,7 +587,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             Object obj = event.getObject();
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
-                Operacao operacao = (Operacao) new ArmazemDeRegistrosNaMemoria<SelecaoOperacaoView>().initialize((Operacao) obj, SelecaoOperacaoView.class, "getOperacaoDeEstoque");
+                Operacao operacao = (Operacao) obj;
                 if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
@@ -603,8 +599,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             } else if (obj instanceof ListaDePreco) {
                 notaRecebida.setListaDePreco((ListaDePreco) obj);
             } else if (obj instanceof Item) {
-                Item item = (Item) new ArmazemDeRegistrosNaMemoria<SelecaoItemView>().initialize((Item) obj, SelecaoItemView.class, "getLoteItem");
-                itemRecebido.setItem(item);
+                               itemRecebido.setItem((Item) obj);
                 atribuiItemASessao();
                 loteItemBV = new LoteItemBV();
             } else if (obj instanceof FormaDeRecebimento) {

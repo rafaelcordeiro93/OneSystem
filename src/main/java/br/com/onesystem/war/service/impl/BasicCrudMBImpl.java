@@ -1,21 +1,16 @@
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.domain.Nota;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import org.primefaces.context.RequestContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.hibernate.Hibernate;
 
 public abstract class BasicCrudMBImpl<Bean> {
 
     protected Bean beanSelecionado;
     protected List<Bean> beans;
     protected List<Bean> beansFiltrados;
+    
 
     public void exibirNaTela(String selecao) {
         Map<String, Object> opcoes = new HashMap<>();
@@ -31,6 +26,10 @@ public abstract class BasicCrudMBImpl<Bean> {
 
         RequestContext.getCurrentInstance().openDialog("/menu/" + selecao, opcoes, null);
     }
+    
+    public String getIcon(){
+        return "";
+    }
 
     public abstract void abrirDialogo();
 
@@ -40,59 +39,6 @@ public abstract class BasicCrudMBImpl<Bean> {
 
     public void selecionar() {
         RequestContext.getCurrentInstance().closeDialog(beanSelecionado);
-    }
-
-    public Bean inicializaRegistro(Bean bean, String metodoParaInicializar) {
-        if (bean != null) {
-            try {
-                try {
-                    bean = beans.get(beans.indexOf(bean));
-                } catch (ArrayIndexOutOfBoundsException aie) {
-                    bean = getId(bean);
-                    if (bean == null) {
-                        return bean;
-                    }
-                }
-                Method method = bean.getClass().getMethod(metodoParaInicializar);
-                Method mList = List.class.getMethod("size", null);
-
-                method.setAccessible(true);
-                mList.setAccessible(true);
-
-                Object objeto = method.invoke(bean, null);
-                Object test = mList.invoke(objeto, null);
-
-                return bean;
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException("Erro de acesso ao método.");
-            } catch (IllegalArgumentException ex) {
-                throw new RuntimeException("Erro parametros inválidos ao acessar o método.");
-            } catch (InvocationTargetException ex) {
-                System.out.println("BasicCrudMBImpl - LAZY: " + ex.getMessage());
-            } catch (NoSuchMethodException ex) {
-                throw new RuntimeException("Erro o método não existe.");
-            } catch (SecurityException ex) {
-                throw new RuntimeException("Erro de segurança ao realizar o acesso.");
-            }
-        }
-        return bean;
-    }
-
-    private Bean getId(Bean bean) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Method mId = bean.getClass().getMethod("getId");
-        mId.setAccessible(true);
-        Object id = mId.invoke(bean, null);
-        if (id != null) {
-            for (Bean b : beans) {
-                Method m = b.getClass().getMethod("getId");
-                m.setAccessible(true);
-                Object idB = m.invoke(b, null);
-                if (id.equals(idB)) {
-                    return b;
-                }
-            }
-        }
-        return null;
     }
 
     public Bean getBeanSelecionado() {

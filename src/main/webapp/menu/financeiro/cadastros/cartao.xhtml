@@ -26,7 +26,7 @@
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="cartaoid" value="#{cartaoView.e}" update=":conteudo" dialog="#{selecaoCartaoView}" mbView="#{cartaoView}" var="cartao" converter="cartaoBVConverter" process="@this" itemLabel="#{cartao.id}" itemValue="#{cartao}" editVisible="false" itemLabelTab="#{cartao.nome}" itemLabelTabVisible="true" onlyNumber="true">
-                                <p:ajax event="itemSelect" listener="#{cartaoView.selecionaCartao()}" />
+                                
                             </a:inputTextDialog>
 
                             <p:outputLabel value="#{l.Nome}"/>

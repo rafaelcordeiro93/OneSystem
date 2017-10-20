@@ -1,17 +1,16 @@
 package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AdicionaDAOExtended;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import org.hibernate.exception.ConstraintViolationException;
 import org.primefaces.event.SelectEvent;
 
 /**
@@ -24,6 +23,9 @@ public abstract class BasicMBImpl<T, E> {
 
     protected T t; //Objeto da persistência
     protected E e; //BuilderView da View
+
+    @Inject
+    protected AdicionaDAOExtended<T> adicionaDAOExtended;
 
     @Inject
     protected AdicionaDAO<T> adicionaDAO;
@@ -60,6 +62,27 @@ public abstract class BasicMBImpl<T, E> {
 
     public void addNoBanco() throws DadoInvalidoException {
         adicionaDAO.adiciona(t);
+        InfoMessage.adicionado();
+        limparJanela();
+    }
+
+    public void addExtended() {
+        try {
+            BuilderView b = (BuilderView) e;
+            addNoBancoExtended((T) b.construir());
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void addNoBancoExtended(T objeto) throws DadoInvalidoException {
+        adicionaDAOExtended.adiciona(objeto);
+        InfoMessage.adicionado();
+        limparJanela();
+    }
+
+    public void addNoBancoExtended() throws DadoInvalidoException {
+        adicionaDAOExtended.adiciona(t);
         InfoMessage.adicionado();
         limparJanela();
     }

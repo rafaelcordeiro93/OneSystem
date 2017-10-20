@@ -1,7 +1,9 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.exception.DadoInvalidoException;
+import java.util.List;
 
 /**
  *
@@ -22,9 +24,7 @@ public class DepositoBuilder {
         return this;
     }
 
-  
     public Deposito construir() throws DadoInvalidoException {
         return new Deposito(ID, nome);
     }
-
 }

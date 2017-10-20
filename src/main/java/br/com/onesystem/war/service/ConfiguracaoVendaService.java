@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ConfiguracaoVendaDAO;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ConfiguracaoVenda;
@@ -12,7 +11,6 @@ import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.valueobjects.OperacaoFinanceira;
 import br.com.onesystem.valueobjects.OperacaoFisica;
-import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;

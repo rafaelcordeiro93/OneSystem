@@ -32,15 +32,18 @@ public class ConfiguracaoEstoque implements Serializable {
     private ListaDePreco listaDePreco;
     @OneToOne
     private Deposito depositoPadrao;
+    @OneToOne
+    private Operacao ajusteDeEstoquePadrao;
 
     public ConfiguracaoEstoque() {
     }
 
-    public ConfiguracaoEstoque(Long id, ContaDeEstoque contaDeEstoque, ListaDePreco listaDePreco, Deposito depositoPadrao) throws DadoInvalidoException {
+    public ConfiguracaoEstoque(Long id, ContaDeEstoque contaDeEstoque, ListaDePreco listaDePreco, Deposito depositoPadrao, Operacao ajusteDeEstoquePadrao) throws DadoInvalidoException {
         this.id = id;
         this.contaDeEstoqueEmpresa = contaDeEstoque;
         this.listaDePreco = listaDePreco;
         this.depositoPadrao = depositoPadrao;
+        this.ajusteDeEstoquePadrao = ajusteDeEstoquePadrao;
         ehValido();
     }
     
@@ -65,6 +68,10 @@ public class ConfiguracaoEstoque implements Serializable {
         return depositoPadrao;
     }
 
+    public Operacao getAjusteDeEstoquePadrao() {
+        return ajusteDeEstoquePadrao;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

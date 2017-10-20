@@ -1,16 +1,12 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.AjusteDeEstoqueDAO;
-import br.com.onesystem.dao.ArmazemDeRegistrosNaMemoria;
 import br.com.onesystem.dao.ArmazemDeRegistros;
-import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Estoque;
-import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.war.view.selecao.SelecaoItemView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

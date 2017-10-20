@@ -10,7 +10,7 @@ public class PessoaService implements Serializable {
 
     @Inject
     private PessoaDAO dao;
-    
+
     public List<Pessoa> buscarPessoas() {
         return dao.listaDeResultados();
     }

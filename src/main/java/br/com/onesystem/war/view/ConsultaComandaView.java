@@ -13,7 +13,6 @@ import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.event.SelectEvent;
 
@@ -25,9 +24,6 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> implements Serializable {
 
-    @Inject
-    private Comanda comanda;
-
     @PostConstruct
     public void construir() {
     }
@@ -36,21 +32,13 @@ public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> impleme
     public void selecionar(SelectEvent event) {
         Object obj = event.getObject();
         if (obj instanceof Comanda) {
-            comanda = (Comanda) obj;
+            t = (Comanda) obj;
         }
     }
 
-    public Comanda getComanda() {
-        return comanda;
-    }
-
-    public void setComanda(Comanda comanda) {
-        this.comanda = comanda;
-    }
-
     public String getZero() {
-        if (comanda != null) {
-            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
+        if (t != null) {
+            return MoedaFormatter.format(t.getCotacao().getConta().getMoeda(), BigDecimal.ZERO);
         } else {
             return "";
         }
@@ -58,8 +46,8 @@ public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> impleme
 
     public void cancela() {
         try {
-            comanda.cancela();
-            updateNoBanco(comanda);
+            t.cancela();
+            updateNoBanco(t);
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
@@ -67,7 +55,7 @@ public class ConsultaComandaView extends BasicMBImpl<Comanda, ComandaBV> impleme
 
     @Override
     public void limparJanela() {
-        comanda = null;
+        t = null;
     }
 
 }

@@ -1,9 +1,6 @@
 package br.com.onesystem.war.view;
 
-import br.com.onesystem.dao.AdicionaDAO;
-import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.domain.Caixa;
-import br.com.onesystem.domain.Cobranca;
 import br.com.onesystem.domain.CobrancaFixa;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.Configuracao;
@@ -12,7 +9,6 @@ import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.FormaDeCobranca;
 import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Movimento;
-import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.domain.TipoDeCobranca;
 import br.com.onesystem.domain.ValorPorCotacao;
@@ -38,27 +34,21 @@ import br.com.onesystem.war.builder.TipoDeCobrancaBV;
 import br.com.onesystem.war.builder.ValorPorCotacaoBV;
 import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
-import br.com.onesystem.war.service.RecebimentoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
-import br.com.onesystem.war.view.selecao.SelecaoCobrancaView;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateful;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.SelectEvent;
 
 @Named
-@Stateful
+//@Stateful
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> implements Serializable {
 
@@ -70,9 +60,6 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     private FormaDeCobrancaBV formaDeCobrancaBV;
     private LayoutDeImpressao layoutDeImpressao;
     private List<ValorPorCotacao> valorPorCotacao;
-
-    @Inject
-    private RecebimentoService service;
 
     @Inject
     private CotacaoService cotacaoService;
@@ -107,8 +94,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void receber() {
         try {
 
-            Recebimento recebimento = constroiRecebimento();
-            t = service.addRecebimento(recebimento);
+            t = constroiRecebimento();
+            addNoBancoExtended();
 
             InfoMessage.adicionado();
             chamaImpressao();

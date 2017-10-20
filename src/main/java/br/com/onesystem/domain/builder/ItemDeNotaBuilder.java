@@ -8,7 +8,7 @@ package br.com.onesystem.domain.builder;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.LoteItem;
-import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.SituacaoFiscal;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import java.math.BigDecimal;
@@ -23,8 +23,11 @@ public class ItemDeNotaBuilder {
     private Long id;
     private Item item;
     private BigDecimal unitario = BigDecimal.ZERO;
-    private Nota nota;
     private List<QuantidadeDeItemPorDeposito> listaDeQuantidade;
+    private BigDecimal iva;
+    private SituacaoFiscal situacaoFiscal;
+    private Long cfop;
+    private BigDecimal valorTotalIva;
     private LoteItem loteItem;
 
     public ItemDeNotaBuilder comId(Long id) {
@@ -42,8 +45,23 @@ public class ItemDeNotaBuilder {
         return this;
     }
 
-    public ItemDeNotaBuilder comNota(Nota nota) {
-        this.nota = nota;
+    public ItemDeNotaBuilder comIva(BigDecimal iva) {
+        this.iva = iva;
+        return this;
+    }
+
+    public ItemDeNotaBuilder comValorIva(BigDecimal valorTotalIva) {
+        this.valorTotalIva = valorTotalIva;
+        return this;
+    }
+
+    public ItemDeNotaBuilder comCfop(Long cfop) {
+        this.cfop = cfop;
+        return this;
+    }
+
+    public ItemDeNotaBuilder comSituacaoFiscal(SituacaoFiscal situacaoFiscal) {
+        this.situacaoFiscal = situacaoFiscal;
         return this;
     }
 
@@ -51,14 +69,14 @@ public class ItemDeNotaBuilder {
         this.listaDeQuantidade = listaDeQuantidade;
         return this;
     }
-    
+
     public ItemDeNotaBuilder comLoteItem(LoteItem loteItem) {
         this.loteItem = loteItem;
         return this;
     }
 
     public ItemDeNota construir() throws DadoInvalidoException {
-        return new ItemDeNota(id, item, unitario, listaDeQuantidade, loteItem);
+        return new ItemDeNota(id, item, unitario, listaDeQuantidade, cfop, iva, valorTotalIva, situacaoFiscal, loteItem);
     }
 
 }

@@ -70,9 +70,6 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     private GeradorDeBaixas geradorDeBaixas;
 
     @Inject
-    private PagamentoService service;
-
-    @Inject
     private Configuracao configuracao;
 
     public void validaDinheiro() throws DadoInvalidoException {
@@ -92,8 +89,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void pagar() {
         try {
 
-            Pagamento pagamento = constroiPagamento();
-            t = service.addPagamento(pagamento);
+            t = constroiPagamento();
+            addNoBancoExtended();
 
             InfoMessage.adicionado();
             chamaImpressao();

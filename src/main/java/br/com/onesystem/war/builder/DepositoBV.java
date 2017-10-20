@@ -1,19 +1,23 @@
 package br.com.onesystem.war.builder;
 
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.builder.DepositoBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
+import java.util.List;
 
 public class DepositoBV implements Serializable, BuilderView<Deposito> {
 
     private Long id;
     private String nome;  
+    private List<Filial> filiais;
 
-    public DepositoBV(Deposito depositoSelecionada) {
-        this.id = depositoSelecionada.getId();
-        this.nome = depositoSelecionada.getNome();
+    public DepositoBV(Deposito d) {
+        this.id = d.getId();
+        this.nome = d.getNome();
+        this.filiais = d.getFiliais();
     }
 
     public DepositoBV() {
@@ -35,6 +39,14 @@ public class DepositoBV implements Serializable, BuilderView<Deposito> {
         this.nome = nome;
     }
 
+    public List<Filial> getFiliais() {
+        return filiais;
+    }
+
+    public void setFiliais(List<Filial> filiais) {
+        this.filiais = filiais;
+    }
+    
     public Deposito construir() throws DadoInvalidoException {
         return new DepositoBuilder().comNome(nome).construir();
     }

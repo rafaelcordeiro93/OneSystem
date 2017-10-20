@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serializable {
 
     @Inject
@@ -20,6 +21,10 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
 
     @PostConstruct
     public void init() {
+        buscarDados();
+    }
+
+    public void buscarDados() {
         beans = service.buscarPessoas();
     }
 
@@ -27,14 +32,15 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoPessoa");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/pessoa";
     }
-    
+
     @Override
     public List<Pessoa> complete(String query) {
+        buscarDados();
         List<Pessoa> listaFIltrada = new ArrayList<>();
         for (Pessoa b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -57,6 +63,10 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
 
     public void setService(PessoaService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-user-o";
     }
 
 }

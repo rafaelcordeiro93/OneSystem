@@ -64,31 +64,6 @@ public class Cep implements Serializable {
         return cidade;
     }
 
-    @MetodoInacessivelRelatorio
-    public String getCepCidadeEstadoPaisFormatado() {
-        String str = "";
-        if (cep != null) {
-            str += cep;
-        }
-        if (cidade != null) {
-            if (cidade.getNome() != null) {
-                str += " - ";
-            }
-            str += cidade.getNome();
-        }
-        if (cidade != null && cidade.getEstado() != null) {
-            if (cidade.getEstado().getSigla() != null) {
-                str += " - ";
-            }
-            str += cidade.getEstado().getSigla();
-        }
-        if (cidade != null && cidade.getEstado() != null &&  cidade.getEstado().getPais() != null) {
-            str += " - ";
-            str += cidade.getEstado().getPais().getNome();
-        }
-        return str;
-    }
-
     private void ehValido() throws DadoInvalidoException {
         List<String> campos = Arrays.asList("cep", "cidade");
         new ValidadorDeCampos<Cep>().valida(this, campos);

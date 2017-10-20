@@ -3,13 +3,16 @@ package br.com.onesystem.domain;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
@@ -29,11 +32,12 @@ public class Deposito implements Serializable {
     private String nome;
     @OneToMany(mappedBy = "deposito")
     private List<AjusteDeEstoque> listadeAjuste;
-
+    @ManyToMany(cascade = {CascadeType.MERGE}, mappedBy = "depositos")
+    private List<Filial> filiais;
 
     public Deposito() {
     }
-    
+
     public Deposito(Long id, String deposito) throws DadoInvalidoException {
         this.id = id;
         this.nome = deposito;
@@ -45,12 +49,29 @@ public class Deposito implements Serializable {
         new ValidadorDeCampos<Deposito>().valida(this, campos);
     }
 
+    public void adiciona(Filial filial) {
+        if (filiais == null) {
+            this.filiais = new ArrayList<Filial>();
+        }
+        if (filial != null && filiais.indexOf(filial) == -1) {
+            this.filiais.add(filial);
+        }
+    }
+
+    public void remove(Filial filial) {
+        this.filiais.remove(filiais.indexOf(filial));
+    }
+
     public Long getId() {
         return id;
     }
 
     public String getNome() {
         return nome;
+    }
+
+    public List<Filial> getFiliais() {
+        return filiais;
     }
 
     @Override

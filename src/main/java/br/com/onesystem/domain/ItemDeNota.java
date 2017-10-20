@@ -5,23 +5,19 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.GeradorDeEstoque;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
-import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -60,22 +56,41 @@ public class ItemDeNota implements Serializable {
     private Nota nota;
     @OneToMany(mappedBy = "itemDeNota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Estoque> estoques;
-    private BigDecimal quantidade;
-    @Transient
-    List<QuantidadeDeItemPorDeposito> listaDeQuantidade;
+
     @ManyToOne
     private LoteItem loteItem;
+    
+    private BigDecimal quantidade;
+
+    @Transient
+    List<QuantidadeDeItemPorDeposito> listaDeQuantidade;
+
+    private Long cfop;
+
+    @Max(value = 100, message = "{IVA_max}")
+    @Min(value = 0, message = "{IVA_min}")
+    private BigDecimal iva;
+
+    private BigDecimal valorTotalIva;
+
+    @ManyToOne
+    private SituacaoFiscal situacaoFiscal;
 
     public ItemDeNota() {
     }
 
-    public ItemDeNota(Long id, Item item, BigDecimal valorUnitario, List<QuantidadeDeItemPorDeposito> listaDeQuantidade, LoteItem loteItem) throws DadoInvalidoException {
+    public ItemDeNota(Long id, Item item, BigDecimal valorUnitario, List<QuantidadeDeItemPorDeposito> listaDeQuantidade,
+            Long cfop, BigDecimal iva, BigDecimal valorTotalIva, SituacaoFiscal situacaoFiscal, LoteItem loteItem) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.unitario = valorUnitario;
         adicionaQuantidade(listaDeQuantidade);
-        this.listaDeQuantidade = listaDeQuantidade;
         this.loteItem = loteItem;
+        this.listaDeQuantidade = listaDeQuantidade;
+        this.cfop = cfop;
+        this.iva = iva;
+        this.valorTotalIva = valorTotalIva;
+        this.situacaoFiscal = situacaoFiscal;
         ehValido();
     }
 
@@ -149,6 +164,22 @@ public class ItemDeNota implements Serializable {
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }
+    }
+
+    public Long getCfop() {
+        return cfop;
+    }
+
+    public BigDecimal getIva() {
+        return iva;
+    }
+
+    public BigDecimal getValorTotalIva() {
+        return valorTotalIva;
+    }
+
+    public SituacaoFiscal getSituacaoFiscal() {
+        return situacaoFiscal;
     }
 
     public List<Estoque> getEstoques() {
