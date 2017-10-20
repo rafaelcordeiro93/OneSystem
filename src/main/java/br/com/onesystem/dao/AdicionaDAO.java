@@ -8,9 +8,12 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.StatelessTransaction;
 import java.io.Serializable;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceException;
 import org.hibernate.exception.ConstraintViolationException;
 
@@ -18,9 +21,11 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
+@Stateless
 public class AdicionaDAO<T> implements Serializable {
 
     @Inject
+    @StatelessTransaction
     private EntityManager em;
 
     public AdicionaDAO() {
@@ -35,6 +40,8 @@ public class AdicionaDAO<T> implements Serializable {
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
+            em.setFlushMode(FlushModeType.COMMIT);
+            em.flush();
 
         } catch (PersistenceException pe) {
             if (pe.getCause().getCause() instanceof ConstraintViolationException) {

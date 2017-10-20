@@ -8,19 +8,24 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4%" ><i class="fa fa-building-o Fs40" style="color: #848484"/> #{l.Cidade}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-building-o Fs40 Fs40 White"/> #{l.Cidade}</h2>
+            <span class="Topic-Message">#{l.Cidade_Texto}</span>
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
-                        <p:separator/>
+                        <p:separator />
+                        <div class="EmptyBox20" />
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4,
+                                     ui-g-12 ui-md-1 ui-grc-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="cidadeId" update=":conteudo" process="@this"  dialog="#{selecaoCidadeView}" mbView="#{cidadeView}" value="#{cidadeView.e}" var="cidade" itemLabel="#{cidade.id}" itemValue="#{cidade}" converter="cidadeBVConverter" itemLabelTabVisible="true" itemLabelTab="#{cidade.nome}" editVisible="false" onlyNumber="true"/>
@@ -32,19 +37,15 @@
                             <a:inputTextDialog id="estadoCidade" value="#{cidadeView.e.estado}" dialog="#{selecaoEstadoView}" mbView="#{cidadeView}" var="estado" converter="estadoConverter" itemLabel="#{estado.nome}" itemValue="#{estado}" itemLabelTabVisible="true" itemLabelTab="#{estado.nome}" editVisible="true" />
 
                         </p:panelGrid>
-
-                        <div class="EmptyBox15"/>
-
-                        <p:separator/>
                     </div>
 
+                    <div class="EmptyBox20" />
                     <div class="EmptyBox15"/>
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value=" #{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{cidadeView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value=" #{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{cidadeView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value=" #{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{cidadeView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value=" #{l.Limpar}" action="#{cidadeView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    </div>
+
+                    <p:commandButton value=" #{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{cidadeView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value=" #{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{cidadeView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value=" #{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{cidadeView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value=" #{l.Limpar}" action="#{cidadeView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                 </div>
             </div>
         </div>

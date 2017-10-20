@@ -68,7 +68,7 @@ public class LogPhaseListener implements PhaseListener {
             return;
         } else if (janela.equals("/access.xhtml")) {
 
-        } else if (!login.equals("Anonymous") && !janela.equals("/OneSystem-war/configuracaoNecessaria.xhtml") && !janela.equals("/OneSystem-war/impressora.xhtml")) { //Verifica a permissao nas janelas que forem abertas
+        } else if (!login.equals("Anonymous") && !janela.equals("/OneSystem-war/configuracaoNecessaria.xhtml")) { //Verifica a permissao nas janelas que forem abertas
             Usuario usuario = dao.porEmailString(login).resultado();
             boolean consulta = usuarioLogado.buscaPermissoesNoBanco(new BundleUtil().getLabel("Consultar"), janela, usuario);
 

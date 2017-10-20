@@ -26,13 +26,13 @@ public class SelecaoEstadoView extends BasicCrudMBImpl<Estado> implements Serial
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoEstado");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/estado";
     }
-    
-     @Override
+
+    @Override
     public List<Estado> complete(String query) {
         List<Estado> listaFIltrada = new ArrayList<>();
         for (Estado b : beans) {
@@ -45,7 +45,7 @@ public class SelecaoEstadoView extends BasicCrudMBImpl<Estado> implements Serial
                 if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
                     listaFIltrada.add(m);
                 }
-            }
+            }  
         }
         return listaFIltrada;
     }
@@ -56,5 +56,9 @@ public class SelecaoEstadoView extends BasicCrudMBImpl<Estado> implements Serial
 
     public void setService(EstadoService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-flag-checkered";
     }
 }

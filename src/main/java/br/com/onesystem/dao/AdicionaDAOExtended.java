@@ -8,7 +8,6 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.StatelessTransaction;
 import java.io.Serializable;
 import javax.ejb.Stateless;
@@ -22,42 +21,49 @@ import org.hibernate.exception.ConstraintViolationException;
  *
  * @author Rafael-Pc
  */
-@Stateless
-public class RemoveDAO<T> implements Serializable {
+public class AdicionaDAOExtended<T> implements Serializable {
 
     @Inject
-    @StatelessTransaction
     private EntityManager em;
 
-    public void remove(T t, Long id) throws DadoInvalidoException {
+    public AdicionaDAOExtended() {
+    }
+
+    public void adiciona(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {
 
-            em.remove(em.find(t.getClass(), id));
-            em.persist(new Log("Excluído: " + t, TipoTransacao.EXCLUSAO));
+            System.out.println("Em: " + em);
 
-            // Pede para o EJB antecipar para este método a realização de atualização (commit) no BD
+            // persiste o objeto e log do mesmo
+            em.persist(t);
+            em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
             em.setFlushMode(FlushModeType.COMMIT);
             em.flush();
 
         } catch (PersistenceException pe) {
-            if (pe.getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause();
+            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
                 throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
             }
-            throw new FDadoInvalidoException("ERROR:" + pe.getMessage() + " - Cause: " + pe.getCause());
+            throw new FDadoInvalidoException(pe.getCause().toString());
         } catch (Exception ex) {
-            throw new FDadoInvalidoException("<RemoveDAO> Erro de Remoção: " + ex.getMessage());
+            throw new FDadoInvalidoException("<AdicionaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {
             throw new FDadoInvalidoException("Verifique Lista do toString()");
         }
     }
 
     private String getMessage(ConstraintViolationException cve) {
-        String msg = String.valueOf(cve.getCause());
-        msg = msg.substring(msg.lastIndexOf("on table") + 8, msg.lastIndexOf("Detalhe:"));
-
-        return new BundleUtil().getMessage("registro_referenciado_na_tabela") + msg;
+        String mensagemFormatada = String.valueOf(cve.getCause())
+                .replaceFirst("\\(", "")
+                .replaceFirst("\\)", "")
+                .replaceAll("\\(", "\\'")
+                .replaceAll("\\)", "\\'")
+                .replaceAll("\\=", " com valor ")
+                .replaceAll("Chave", "Campo");
+        mensagemFormatada = mensagemFormatada.substring(mensagemFormatada.indexOf("Detalhe:") + 9, mensagemFormatada.length());
+        return mensagemFormatada;
     }
 
     private String getConstraint(ConstraintViolationException cve) {

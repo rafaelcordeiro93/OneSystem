@@ -17,22 +17,22 @@ import javax.faces.context.FacesContext;
  * @author Rafael
  */
 public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, SelecaoBean extends BasicCrudMBImpl> implements Serializable {
-
+    
     private Class clazz;
     private Class clazzBV;
     private Class selecaoClazz;
-
+    
     public BasicBVConverter(Class clazz, Class clazzBV, Class selecaoClazz) {
         this.clazz = clazz;
         this.clazzBV = clazzBV;
         this.selecaoClazz = selecaoClazz;
     }
-
+    
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         try {
             if (value != null && !value.isEmpty()) {
                 Object object = uic.getAttributes().get(value);
-                if (object.getClass().equals(clazz)) {
+                if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
                     return clazzBV.getConstructor(clazz).newInstance((Bean) object);
                 } else if (object.getClass().equals(clazzBV)) {
                     return (BeanBV) object;
@@ -53,7 +53,7 @@ public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, Selecao
             throw new RuntimeException("Erro de invocação - ConverterBV.");
         }
     }
-
+    
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         try {
             if (object != null) {
@@ -69,14 +69,15 @@ public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, Selecao
                     String id = String.valueOf(idObject);
                     uic.getAttributes().put(id, (BeanBV) object);
                     return id;
-                } else if (object.getClass().equals(clazz)) {
+                }
+                if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
                     Bean bean = (Bean) object;
 
                     //Pega o id do objeto
                     Method m = bean.getClass().getMethod("getId", null);
                     m.setAccessible(true);
                     Long idObject = (Long) m.invoke(bean, null);
-
+                    
                     String id = String.valueOf(idObject);
                     uic.getAttributes().put(id, bean);
                     return id;
@@ -98,5 +99,5 @@ public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, Selecao
             throw new RuntimeException("Erro de segurança ao realizar o acesso - ConverterBV STRING.");
         }
     }
-
+    
 }

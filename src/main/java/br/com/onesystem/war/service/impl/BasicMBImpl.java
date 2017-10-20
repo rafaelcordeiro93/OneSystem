@@ -1,6 +1,7 @@
 package br.com.onesystem.war.service.impl;
 
 import br.com.onesystem.dao.AdicionaDAO;
+import br.com.onesystem.dao.AdicionaDAOExtended;
 import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.exception.DadoInvalidoException;
@@ -22,6 +23,9 @@ public abstract class BasicMBImpl<T, E> {
 
     protected T t; //Objeto da persistência
     protected E e; //BuilderView da View
+
+    @Inject
+    protected AdicionaDAOExtended<T> adicionaDAOExtended;
 
     @Inject
     protected AdicionaDAO<T> adicionaDAO;
@@ -58,6 +62,27 @@ public abstract class BasicMBImpl<T, E> {
 
     public void addNoBanco() throws DadoInvalidoException {
         adicionaDAO.adiciona(t);
+        InfoMessage.adicionado();
+        limparJanela();
+    }
+
+    public void addExtended() {
+        try {
+            BuilderView b = (BuilderView) e;
+            addNoBancoExtended((T) b.construir());
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
+    public void addNoBancoExtended(T objeto) throws DadoInvalidoException {
+        adicionaDAOExtended.adiciona(objeto);
+        InfoMessage.adicionado();
+        limparJanela();
+    }
+
+    public void addNoBancoExtended() throws DadoInvalidoException {
+        adicionaDAOExtended.adiciona(t);
         InfoMessage.adicionado();
         limparJanela();
     }

@@ -89,8 +89,8 @@ public class PagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> implement
     public void pagar() {
         try {
 
-            Pagamento pagamento = constroiPagamento();
-            addNoBanco(pagamento);
+            t = constroiPagamento();
+            addNoBancoExtended();
 
             InfoMessage.adicionado();
             chamaImpressao();

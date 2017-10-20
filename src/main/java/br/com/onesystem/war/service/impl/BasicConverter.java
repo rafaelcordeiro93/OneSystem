@@ -26,7 +26,7 @@ public abstract class BasicConverter<Bean> implements Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && !value.isEmpty()) {
             Object object = uic.getAttributes().get(value);
-            if (object != null && object.getClass().equals(clazz)) {
+            if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
                 return (Bean) object;
             }
         }
@@ -36,7 +36,7 @@ public abstract class BasicConverter<Bean> implements Serializable {
     public String getAsString(FacesContext fc, UIComponent uic, Object object) {
         try {
             if (object != null) {
-                if (object.getClass().equals(clazz)) {
+                if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
                     Bean bean = (Bean) object;
 
                     //Pega o id do objeto

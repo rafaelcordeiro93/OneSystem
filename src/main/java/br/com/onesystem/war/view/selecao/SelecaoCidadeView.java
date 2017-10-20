@@ -8,11 +8,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serializable {
 
     @Inject
@@ -20,20 +21,25 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
 
     @PostConstruct
     public void init() {
+        buscarDados();
+    }
+
+    public void buscarDados() {
         beans = service.buscarCidades();
     }
 
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoCidade");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/cidade";
     }
-    
-     @Override
+
+    @Override
     public List<Cidade> complete(String query) {
+        buscarDados();
         List<Cidade> listaFIltrada = new ArrayList<>();
         for (Cidade b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -56,5 +62,9 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
 
     public void setService(CidadeService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-building-o";
     }
 }

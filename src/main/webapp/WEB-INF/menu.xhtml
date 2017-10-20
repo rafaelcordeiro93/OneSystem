@@ -12,13 +12,14 @@
 
             <pa:tab icon="fa fa-book" title="#{l.Arquivo}">
                 <pa:menu widgetVar="mat">
-                    <p:menuitem value="#{l.Dashboard}" icon="fa fa-fw fa-home" outcome="/dashboard" />
-                    <p:menuitem value="#{l.Motivo}" icon="fa fa-user-o" outcome="/menu/arquivo/motivo" />   
-                    <p:menuitem value="#{l.País}"  icon="fa fa-flag-o" outcome="/menu/arquivo/pais" />
-                    <p:menuitem value="#{l.Estado}"  icon="fa fa-flag-checkered" outcome="/menu/arquivo/estado" />
+                    <p:menuitem value="#{l.Dashboard}" icon="fa fa-fw fa-home" outcome="/dashboard" styleClass="separator-menu-item" />
+                    <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/menu/arquivo/pessoa" />   
+                    <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/menu/arquivo/importarPessoa" styleClass="separator-menu-item" />    
+                    <p:menuitem value="#{l.Cep}"  icon="fa fa-cube" outcome="/menu/arquivo/cep" />
                     <p:menuitem value="#{l.Cidade}"  icon="fa fa-building-o" outcome="/menu/arquivo/cidade" />
-                    <p:menuitem value="#{l.Pessoa}" icon="fa fa-user-o" outcome="/menu/arquivo/pessoa" styleClass="separator-menu-item" />   
-                    <p:menuitem value="#{l.Importar_Pessoas}" icon="fa fa-user" outcome="/menu/arquivo/importarPessoa" />    
+                    <p:menuitem value="#{l.Estado}"  icon="fa fa-flag-checkered" outcome="/menu/arquivo/estado" />
+                    <p:menuitem value="#{l.País}"  icon="fa fa-flag-o" outcome="/menu/arquivo/pais" styleClass="separator-menu-item" />
+                    <p:menuitem value="#{l.Motivo}" icon="fa fa-user-o" outcome="/menu/arquivo/motivo" styleClass="separator-menu-item" />   
                     <p:submenu label="#{l.Listar}" icon="fa fa-balance-scale">
                         <p:menuitem value="#{l.Pessoa}" icon="fa fa-minus" outcome="/menu/arquivo/listar/relatorioDePessoas" />
                     </p:submenu>
@@ -135,7 +136,7 @@
                     <p:menuitem value="#{l.Operacoes}" icon="fa fa-fw fa-arrows" outcome="/menu/contabil/operacoes" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Grupo_Fiscal}" icon="fa fa-object-ungroup" outcome="/menu/contabil/grupoFiscal" />  
                     <p:menuitem value="#{l.Cfop}" icon="fa fa-bandcamp" outcome="/menu/contabil/cfop" />  
-                     <p:menuitem value="#{l.Lote_Nota_Fiscal}" icon="fa fa-file-archive-o" outcome="/menu/contabil/loteNotaFiscal" />  
+                    <p:menuitem value="#{l.Lote_Nota_Fiscal}" icon="fa fa-file-archive-o" outcome="/menu/contabil/loteNotaFiscal" />  
                     <p:menuitem value="#{l.Tabela_de_Tributacao}" icon="fa fa-strikethrough" outcome="/menu/contabil/tabelaDeTributacao" styleClass="separator-menu-item" />
                     <p:menuitem value="#{l.Grupo_Financeiro}" icon="fa fa-share-alt-square" outcome="/menu/contabil/grupoFinanceiro" />
                     <p:menuitem value="#{l.Tipo_Receita}" icon="fa fa-level-up" outcome="/menu/contabil/tipoReceita" />

@@ -94,9 +94,8 @@ public class RecebimentoView extends BasicMBImpl<Recebimento, RecebimentoBV> imp
     public void receber() {
         try {
 
-            Recebimento recebimento = constroiRecebimento();
-            addNoBanco(recebimento);
-//            t = service.addRecebimento(recebimento);
+            t = constroiRecebimento();
+            addNoBancoExtended();
 
             InfoMessage.adicionado();
             chamaImpressao();

@@ -8,19 +8,25 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4%" ><i class="fa fa-building-o Fs40" style="color: #848484"/> #{l.Motivo}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
 
-                        <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
-                        <p:separator/>
-                        <div class="EmptyBox20"/>
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-4">
+            <h2 class="BigTopic-Custom">#{l.Motivo}</h2>
+            <span class="Topic-Message">#{l.Motivo_Texto}</span>
+
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >
+
+                        <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Detalhes}</div>
+                        <p:separator />
+                        <div class="EmptyBox20" />
+
+                        <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements" 
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="idmotivo" update=":conteudo" process="@this"  dialog="#{selecaoMotivoView}" mbView="#{motivoView}" value="#{motivoView.e}" var="motivo" itemLabel="#{motivo.id}" itemValue="#{motivo}" converter="motivoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{motivo.nome}" editVisible="false" onlyNumber="true"/>
@@ -30,19 +36,15 @@
 
                         </p:panelGrid>
 
+                        <div class="EmptyBox30"/>
                         <div class="EmptyBox15"/>
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
-                        <div class="EmptyBox10"/>
                     </div>
 
                     <div class="EmptyBox15"/>
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value=" #{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{motivoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value=" #{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{motivoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value=" #{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{motivoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value=" #{l.Limpar}" action="#{motivoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    </div>
+                    <p:commandButton value=" #{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{motivoView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value=" #{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{motivoView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value=" #{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{motivoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value=" #{l.Limpar}" action="#{motivoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                 </div>
             </div>
         </div>

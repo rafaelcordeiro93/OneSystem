@@ -1,21 +1,16 @@
 package br.com.onesystem.war.service.impl;
 
-import br.com.onesystem.domain.Nota;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import org.primefaces.context.RequestContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.hibernate.Hibernate;
 
 public abstract class BasicCrudMBImpl<Bean> {
 
     protected Bean beanSelecionado;
     protected List<Bean> beans;
     protected List<Bean> beansFiltrados;
+    
 
     public void exibirNaTela(String selecao) {
         Map<String, Object> opcoes = new HashMap<>();
@@ -30,6 +25,10 @@ public abstract class BasicCrudMBImpl<Bean> {
         opcoes.put("headerElement", "customheader");
 
         RequestContext.getCurrentInstance().openDialog("/menu/" + selecao, opcoes, null);
+    }
+    
+    public String getIcon(){
+        return "";
     }
 
     public abstract void abrirDialogo();

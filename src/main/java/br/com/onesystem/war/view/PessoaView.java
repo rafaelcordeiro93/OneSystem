@@ -5,6 +5,7 @@ import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.war.builder.PessoaBV;
+import br.com.onesystem.war.service.PessoaService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +23,9 @@ public class PessoaView extends BasicMBImpl<Pessoa, PessoaBV> implements Seriali
     @Inject
     private Configuracao configuracao;
 
+    @Inject
+    private PessoaService service;
+    
     @PostConstruct
     public void init() {
         limparJanela();

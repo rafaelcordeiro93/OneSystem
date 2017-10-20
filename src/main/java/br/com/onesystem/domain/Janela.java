@@ -29,15 +29,17 @@ public class Janela implements Serializable {
     private String endereco;
     @ManyToOne
     private Modulo modulo;
+    private String idJanela;
 
     public Janela() {
     }
 
-    public Janela(Long id, String nome, String endereco, Modulo modulo) {
+    public Janela(Long id, String nome, String endereco, Modulo modulo, String idJanela) {
         this.id = id;
         this.nome = nome;
         this.endereco = endereco;
         this.modulo = modulo;
+        this.idJanela = idJanela;
     }
 
     public Long getId() {
@@ -54,6 +56,10 @@ public class Janela implements Serializable {
 
     public Modulo getModulo() {
         return modulo;
+    }
+
+    public String getIdJanela() {
+        return idJanela;
     }
 
     @Override

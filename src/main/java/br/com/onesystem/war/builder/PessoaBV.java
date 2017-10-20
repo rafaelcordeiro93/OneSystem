@@ -66,7 +66,7 @@ public class PessoaBV implements Serializable, BuilderView<Pessoa> {
         this.telefone = pessoaSelecionada.getTelefone();
         this.email = pessoaSelecionada.getEmail();
         this.contato = pessoaSelecionada.getContato();
-        this.cidade = cidade;
+        this.cidade = pessoaSelecionada.getCidade();
     }
     
     public Long getId() {

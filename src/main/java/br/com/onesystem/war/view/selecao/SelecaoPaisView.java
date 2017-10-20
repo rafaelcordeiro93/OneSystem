@@ -26,13 +26,13 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoPais");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/pais";
     }
-    
-     @Override
+
+    @Override
     public List<Pais> complete(String query) {
         List<Pais> listaFIltrada = new ArrayList<>();
         for (Pais b : beans) {
@@ -56,5 +56,9 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
 
     public void setService(PaisService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-flag-o";
     }
 }

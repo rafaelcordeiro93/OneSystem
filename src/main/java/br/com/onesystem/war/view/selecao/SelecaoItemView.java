@@ -27,12 +27,12 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
     public void abrirDialogo() {
         exibirNaTela("estoque/selecao/selecaoItem");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/estoque/item";
     }
-    
+
     @Override
     public List<Item> complete(String query) {
         List<Item> listaFIltrada = new ArrayList<>();
@@ -57,5 +57,9 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
 
     public void setService(ItemService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-archive";
     }
 }

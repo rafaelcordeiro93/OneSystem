@@ -26,13 +26,13 @@ public class SelecaoCepView extends BasicCrudMBImpl<Cep> implements Serializable
     public void abrirDialogo() {
         exibirNaTela("arquivo/selecao/selecaoCep");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/arquivo/cep";
     }
-    
-     @Override
+
+    @Override
     public List<Cep> complete(String query) {
         List<Cep> listaFIltrada = new ArrayList<>();
         for (Cep b : beans) {
@@ -56,5 +56,9 @@ public class SelecaoCepView extends BasicCrudMBImpl<Cep> implements Serializable
 
     public void setService(CepService service) {
         this.service = service;
+    }
+
+    public String getIcon() {
+        return "fa-cube";
     }
 }

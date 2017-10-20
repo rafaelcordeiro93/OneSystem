@@ -8,20 +8,23 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-user-o Fs40 White"/> #{l.Pessoa}</h2>
+            <span class="Topic-Message">#{l.Pessoa_Texto}</span>
+        </div>
 
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD"> 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 4%" ><i class="fa fa-user-o Fs40" style="color: #848484"/> #{l.Pessoa}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid" style="padding: 0% 8% 0% 8%">
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >                        
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
+                        <div class="EmptyBox20"/>
 
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements Wid100"
-                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
+                                     columnClasses="ui-g-12 ui-md-1 ui-lg-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Id}"/>                            
                             <a:inputTextDialog id="pessoaId" dialog="#{selecaoPessoaView}"  mbView="#{pessoaView}" value="#{pessoaView.e}" var="pessoa" itemLabel="#{pessoa.id}" itemValue="#{pessoa}" converter="pessoaBVConverter" itemLabelTabVisible="true" itemLabelTab="#{pessoa.nome}" process="@this" update=":conteudo" editVisible="false" onlyNumber="false"/>
@@ -86,13 +89,14 @@
 
                         <h4 style="font-size: 15px" >#{l.Contato}</h4>
                         <p:separator/>
+                        <div class="EmptyBox20"/>
 
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-2">
 
                             <p:outputLabel value="#{l.Telefone}"/>
                             <p:inputMask id="telefone" mask="(999) 999-9999?99" value="#{pessoaView.e.telefone}" />
-                            
+
                         </p:panelGrid>
 
                         <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
@@ -109,6 +113,8 @@
                         <div class="EmptyBox30"/>
                         <h4 style="font-size: 15px">#{l.Endereco}</h4>
                         <p:separator/>
+                        <div class="EmptyBox20"/>
+
 
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                      columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5, ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
@@ -142,18 +148,14 @@
 
                         </p:panelGrid>
 
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
                     </div>
-                    <div class="EmptyBox20"/>
+                    <div class="EmptyBox20" />
+                    <div class="EmptyBox15"/>
 
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{pessoaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{pessoaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{pessoaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-
-                    </div>
+                    <p:commandButton value="#{l.Adicionar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Adicionar)}" action="#{pessoaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Atualizar)}" action="#{pessoaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" rendered="#{usuarioLogadoUtil.getPrivilegio(l.Remover)}" action="#{pessoaView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{pessoaView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
 
                 </div>
             </div>
