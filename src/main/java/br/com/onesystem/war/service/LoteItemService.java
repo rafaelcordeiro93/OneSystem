@@ -19,7 +19,7 @@ public class LoteItemService implements Serializable {
     private LoteItemDAO dao;
 
     @Inject
-    private AtualizaDAO<LoteItem> atualiza;
+    private AtualizaDAO<LoteItem> atualizaDAO;
 
     public List<LoteItem> buscarLoteItem() {
         return dao.listaDeResultados();
@@ -53,7 +53,7 @@ public class LoteItemService implements Serializable {
             } else if (operacao == OperacaoFisica.SAIDA) {
                 lote.setSaldo((lote.getSaldo() == null ? BigDecimal.ZERO : lote.getSaldo()).subtract(quantidade));
             }
-            atualiza.atualiza(lote.construirComID());
+            atualizaDAO.atualiza(lote.construirComID());
         } catch (DadoInvalidoException die) {
             die.print();
         }

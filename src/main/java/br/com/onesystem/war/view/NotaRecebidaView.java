@@ -67,6 +67,7 @@ import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.service.LoteItemService;
+import br.com.onesystem.war.service.NotaRecebidaService;
 import br.com.onesystem.war.view.selecao.SelecaoItemView;
 import br.com.onesystem.war.view.selecao.SelecaoOperacaoView;
 import java.io.Serializable;
@@ -149,6 +150,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     @Inject
     private AtualizaDAO<PedidoAFornecedores> atualizaPedido;
+
+    @Inject
+    private NotaRecebidaService notaRecebidaService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -287,7 +291,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            addNoBanco(nota);
+            notaRecebidaService.addNotaRecebida(nota);
             atualizaLote(t);
             efetivaPedidoAFornecedores();
         } catch (DadoInvalidoException ex) {
@@ -391,7 +395,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             constroiLoteItem();
             notaRecebida.adiciona(itemRecebido);
-            System.out.println("add " +itemRecebido.getLoteItem());
+            System.out.println("add " + itemRecebido.getLoteItem());
             limparItemDeNota();
             recalculaValores();
         } catch (DadoInvalidoException ex) {
@@ -438,7 +442,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void limparItemDeNota() {
         itemRecebido = new ItemDeNotaBV();
         itemRecebidoSelecionado = null;
-        loteItemBV = null;
+        loteItemBV = new LoteItemBV();
     }
 
     // -------------------------- Fim Itens -----------------------------------
@@ -741,7 +745,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void selecionaItemDeNota(SelectEvent event) {
         this.itemRecebidoSelecionado = (ItemDeNota) event.getObject();
         this.itemRecebido = new ItemDeNotaBV(itemRecebidoSelecionado);
-       loteItemBV = new LoteItemBV(itemRecebidoSelecionado.getLoteItem());
+        loteItemBV = new LoteItemBV(itemRecebidoSelecionado.getLoteItem());
     }
 
     public void selecionarBanco(SelectEvent event) {
@@ -758,7 +762,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     // ------------------ Outras Operações da Janela --------------------------
     public void validaLoteItem() {
         //Verifica se item possui lote
-        for (LoteItem lote : loteItemService.buscarLoteItemPorItem(itemRecebido.getItem())) {
+        for (LoteItem lote : itemRecebido.getItem().getLoteItem()) {
             if (lote.getNumeroDoLote().equals(loteItemBV.getNumeroDoLote())) {
                 loteItemBV = new LoteItemBV(lote);
                 InfoMessage.print(new BundleUtil().getLabel("Lote_Selecionado") + " : " + lote.getNumeroDoLote() + " - "
