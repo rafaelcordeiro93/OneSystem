@@ -62,6 +62,7 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.service.LoteItemService;
@@ -287,11 +288,20 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            notaRecebidaService.addNotaRecebida(nota);
-            atualizaLote(t);
+            atualizaLoteDentroDoItem();
+            adicionaDAOExtended(nota);
+            atualizaLote(nota);
             efetivaPedidoAFornecedores();
         } catch (DadoInvalidoException ex) {
             ex.print();
+        }
+    }
+
+    private void atualizaLoteDentroDoItem() {
+        for (ItemDeNota item : nota.getItens()) {
+            if (item.getItem().getDetalhamento().equals(DetalhamentoDeItem.LOTES)) {
+                item.getItem().atualiza(item.getLoteItem());
+            }
         }
     }
 
@@ -391,7 +401,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             constroiLoteItem();
             notaRecebida.adiciona(itemRecebido);
-            System.out.println("add " + itemRecebido.getLoteItem());
             limparItemDeNota();
             recalculaValores();
         } catch (DadoInvalidoException ex) {
@@ -401,9 +410,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     private void constroiLoteItem() {
         try {
-            LoteItem lote = loteItemBV.construir();
+            LoteItem lote = loteItemBV.construirComID();
             itemRecebido.setLoteItem(lote);
-            itemRecebido.getItem().atualiza(lote);
+            // itemRecebido.getItem().atualiza(lote);//dando pau aqui, foi criado um metodo antes do add para resolver
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -599,7 +608,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             } else if (obj instanceof ListaDePreco) {
                 notaRecebida.setListaDePreco((ListaDePreco) obj);
             } else if (obj instanceof Item) {
-                               itemRecebido.setItem((Item) obj);
+                itemRecebido.setItem((Item) obj);
                 atribuiItemASessao();
                 loteItemBV = new LoteItemBV();
             } else if (obj instanceof FormaDeRecebimento) {
@@ -772,7 +781,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     public void atualizaLote(NotaRecebida nota) {
         for (ItemDeNota item : nota.getItens()) {
-            if (item.getItem().getLoteItem().equals(null)) {
+            if (item.getLoteItem().equals(null)) {
                 return;
             } else {//usando quando Adicionado uma Nota Nova
                 loteItemService.atualizaSaldoLote(item.getItem(), new LoteItemBV(item.getLoteItem()), item.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(nota.getOperacao()));
