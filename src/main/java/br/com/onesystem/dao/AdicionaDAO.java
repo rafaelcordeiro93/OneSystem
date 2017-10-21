@@ -35,8 +35,6 @@ public class AdicionaDAO<T> implements Serializable {
 
         try {
 
-            System.out.println("Em: " + em);
-
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));

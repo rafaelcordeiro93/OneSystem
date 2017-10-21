@@ -32,12 +32,15 @@ public class Cep implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_CEP")
     private Long id;
+    
     @NotNull(message = "{cep_not_null}")
     @Length(min = 8, max = 9, message = "{cep_lenght}")
     @Column(nullable = false, length = 20, unique = true)
     private String cep;
+    
     @OneToMany(mappedBy = "cep", fetch = FetchType.LAZY)
     private List<Pessoa> listadePessoas;
+    
     @NotNull(message = "{cidade_not_null}")
     @ManyToOne(optional = false)
     private Cidade cidade;
