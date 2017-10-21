@@ -138,16 +138,20 @@ public abstract class Cobranca implements Serializable {
      * @see GeradorDeBaixaDeTipoCobranca
      */
     public final void atualizaSituacao() {
-        if (tiposDeCobranca != null) {
-            BigDecimal soma = tiposDeCobranca.stream().map(TipoDeCobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
-            if (soma.compareTo(this.valor) >= 0 || (tiposDeCobranca.size() > 0 && this instanceof CobrancaFixa)) {
-                situacaoDeCobranca = SituacaoDeCobranca.PAGO;
-            } else {
-                situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
-            }
-        } else {
-            situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
-        }
+//        if (tiposDeCobranca != null) {
+//            BigDecimal soma = tiposDeCobranca.stream().map(TipoDeCobranca::getValor).reduce(BigDecimal.ZERO, BigDecimal::add);
+//            System.out.println("Soma " + soma);
+//            if (soma.compareTo(this.valor) >= 0 || (tiposDeCobranca.size() > 0 && this instanceof CobrancaFixa)) {
+        System.out.println("Pago");
+        situacaoDeCobranca = SituacaoDeCobranca.PAGO;
+//            } else {
+//                System.out.println("Aberto 1");
+//                situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+//            }
+//        } else {
+//            System.out.println("Aberto 2");
+//            situacaoDeCobranca = SituacaoDeCobranca.ABERTO;
+//        }
     }
 
     public OperacaoFinanceira getOperacaoFinanceira() {

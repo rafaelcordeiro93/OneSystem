@@ -33,17 +33,13 @@ public class AdicionaDAOExtended<T> implements Serializable {
 
         try {
 
-            System.out.println("Em: " + em);
-
             // persiste o objeto e log do mesmo
             em.persist(t);
             em.persist(new Log("Adicionado: " + t, TipoTransacao.INCLUSAO));
-            em.setFlushMode(FlushModeType.COMMIT);
-            em.flush();
 
         } catch (PersistenceException pe) {
-            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+            if (pe.getCause() instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause();
                 throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
             }
             throw new FDadoInvalidoException(pe.getCause().toString());

@@ -45,6 +45,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -220,6 +222,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         if (e.getId() != null) {
             t = e.construirComID();
             inicializaDados();
+
             listaLoteItem = new ModelList<LoteItem>(e.getLoteItem());
             tab = false;
         }
