@@ -101,6 +101,7 @@ public abstract class Nota implements Serializable {
     @NotNull(message = "{filial_not_null}")
     @ManyToOne(optional = false)
     private Filial filial;
+    @NotNull(message = "{numero_nf_not_null}")
     @Column(nullable = false)
     protected Integer numeroNF;
 

@@ -21,5 +21,4 @@ public class LoteItemConverter extends BasicConverter<LoteItem> implements Conve
     public LoteItemConverter() {
         super(LoteItem.class);
     }
-
 }

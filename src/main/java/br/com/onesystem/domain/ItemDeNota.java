@@ -57,6 +57,9 @@ public class ItemDeNota implements Serializable {
     @OneToMany(mappedBy = "itemDeNota", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private List<Estoque> estoques;
 
+    @ManyToOne
+    private LoteItem loteItem;
+    
     private BigDecimal quantidade;
 
     @Transient
@@ -77,11 +80,12 @@ public class ItemDeNota implements Serializable {
     }
 
     public ItemDeNota(Long id, Item item, BigDecimal valorUnitario, List<QuantidadeDeItemPorDeposito> listaDeQuantidade,
-            Long cfop, BigDecimal iva, BigDecimal valorTotalIva, SituacaoFiscal situacaoFiscal) throws DadoInvalidoException {
+            Long cfop, BigDecimal iva, BigDecimal valorTotalIva, SituacaoFiscal situacaoFiscal, LoteItem loteItem) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.unitario = valorUnitario;
         adicionaQuantidade(listaDeQuantidade);
+        this.loteItem = loteItem;
         this.listaDeQuantidade = listaDeQuantidade;
         this.cfop = cfop;
         this.iva = iva;
@@ -211,6 +215,10 @@ public class ItemDeNota implements Serializable {
             return false;
         }
         return this.id.equals(outro.id);
+    }
+
+    public LoteItem getLoteItem() {
+        return loteItem;
     }
 
     @Override

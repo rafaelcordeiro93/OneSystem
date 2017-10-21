@@ -12,8 +12,8 @@ import java.util.Date;
 public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
 
     private Long id;
-    private Date dataDeValidade;
-    private Date dataDeFabricacao;
+    private Date dataDeValidade = new Date();
+    private Date dataDeFabricacao = new Date();
     private Long numeroDoLote;
     private boolean ativo = true;
     private String observacao;
@@ -21,6 +21,7 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
     private BigDecimal saldo;
 
     public LoteItemBV(LoteItem n) {
+        System.out.println(n);
         this.id = n.getId();
         this.dataDeValidade = n.getDataDeValidade();
         this.dataDeFabricacao = n.getDataDeFabricacao();

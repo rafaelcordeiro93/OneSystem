@@ -19,7 +19,7 @@ public class LoteItemService implements Serializable {
     private LoteItemDAO dao;
 
     @Inject
-    private AtualizaDAO<LoteItem> atualiza;
+    private AtualizaDAO<LoteItem> atualizaDAO;
 
     public List<LoteItem> buscarLoteItem() {
         return dao.listaDeResultados();
@@ -27,6 +27,10 @@ public class LoteItemService implements Serializable {
 
     public LoteItem buscarLoteItemPorID(Long id) {
         return dao.porId(id).resultado();
+    }
+
+    public List<LoteItem> buscarLoteItemPorItem(Item item) {
+        return dao.porItem(item).porAtivo().listaDeResultados();
     }
 
     public BigDecimal calculaQuantidade(BigDecimal valorAntigo, BigDecimal valorNovo) {
@@ -38,7 +42,7 @@ public class LoteItemService implements Serializable {
             return BigDecimal.ZERO;
         }
     }
-    
+
     public void atualizaSaldoLote(Item item, LoteItemBV lote, BigDecimal quantidade, OperacaoFisica operacao) {
         try {
             if (item.getDetalhamento() != DetalhamentoDeItem.LOTES) {
@@ -49,7 +53,7 @@ public class LoteItemService implements Serializable {
             } else if (operacao == OperacaoFisica.SAIDA) {
                 lote.setSaldo((lote.getSaldo() == null ? BigDecimal.ZERO : lote.getSaldo()).subtract(quantidade));
             }
-            atualiza.atualiza(lote.construirComID());
+            atualizaDAO.atualiza(lote.construirComID());
         } catch (DadoInvalidoException die) {
             die.print();
         }

@@ -107,8 +107,8 @@
 
                                 <h:panelGrid columns="1" styleClass="Wid100">
                                     <p:spacer/>
-                                    <a:inputText id="neLote" value="" dialog="#{selecaoItemView}" mbView="#{notaRecebidaView}" update=":conteudo:growl" placeholder="#{l.Lote}" editVisible="true">
-                                        <p:ajax event="blur" listener="#{notaRecebidaView.teste}" process="@this" update=":conteudo" />
+                                    <a:inputText id="neLote" value="#{notaRecebidaView.loteItemBV.numeroDoLote}" dialog="#{selecaoLoteItemView}" mbView="#{notaRecebidaView}" update=":conteudo:growl" placeholder="#{l.Lote}"  editVisible="false">
+                                        <p:ajax event="blur" listener="#{notaRecebidaView.validaLoteItem}" process="@this" update=":conteudo" />
                                     </a:inputText>
                                 </h:panelGrid>
 
@@ -642,7 +642,7 @@
 
         </p:dialog>
 
-        <p:dialog widgetVar="incluirLoteDeItem" width="500" header="#{l.Inclusao_de_Lote}" resizable="false" 
+        <p:dialog widgetVar="incluirLoteDeItemDialog" width="500" header="#{l.Lote_Nao_Encontrado}" resizable="false" 
                   modal="true" closable="false" closeOnEscape="false" visible="false"
                   responsive="true" styleClass="zIndex500">
 
@@ -652,7 +652,7 @@
                         <span class="fa fa-warning Yellow Fs28 MarTop5 PadWithBorder5" />
                     </td>
                     <td>
-                        <p:outputLabel value="#{l.Operacao_nao_relacionada_conta_estoque}" />
+                        <p:outputLabel value="#{l.Incluir_Novo_Lote_Item}" />
                     </td>
                 </tr>
             </table>
@@ -660,16 +660,39 @@
             <table>
                 <tr>
                     <td>
-                        <p:button value="#{l.Sim}" icon="fa fa-check" outcome="/menu/estoque/contaDeEstoque"/>
+                        <p:commandButton value="#{l.Sim}" icon="fa fa-check" onclick="PF('incluirLoteDeItemDialog').hide(); PF('criaNovoLoteItem').show();"/>
                     </td>
                     <td>
-                        <p:commandButton value="#{l.Escolher_Outra_Operacao}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('notaOperacaoNaoRelacionadaDialog').hide()"/>
+                        <p:commandButton value="#{l.Escolher_Outro_Lote}" styleClass="orange-btn" icon="fa fa-repeat" onclick="PF('incluirLoteDeItemDialog').hide()"/>
                     </td>
                 </tr>
             </table>
 
         </p:dialog>
-        
+
+        <p:dialog widgetVar="criaNovoLoteItem" width="560" header="#{l.Lote_Item}" resizable="false" 
+                  modal="true" closable="true" closeOnEscape="false" 
+                  responsive="true" styleClass="zIndex500">
+
+            <p:panelGrid id="panelcreateLot" columns="2" styleClass="ui-panelgrid-blank form-group form-elements"
+                         columnClasses="ui-g-12 ui-md-2 ,ui-g-12 ui-md-4">
+
+                <p:outputLabel value="#{l.Data_De_Fabricacao}" />
+                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeFabricacao}" navigator="flase" />
+
+
+                <p:outputLabel value="#{l.Data_De_Validade}" />
+                <p:calendar pattern="dd/MM/yyyy" value="#{notaRecebidaView.loteItemBV.dataDeValidade}" navigator="false"  />
+
+
+            </p:panelGrid>        
+
+            <p:separator/>
+
+            <p:commandButton value="#{l.Confirmar}" onclick="PF('criaNovoLoteItem').hide()"/>           
+
+        </p:dialog>
+
         <p:dialog widgetVar="notaOperacaoNaoRelacionadaDialog" width="500" header="#{l.Dados_Nao_Vinculados}" resizable="false" 
                   modal="true" closable="false" closeOnEscape="false" visible="false"
                   responsive="true" styleClass="zIndex500">

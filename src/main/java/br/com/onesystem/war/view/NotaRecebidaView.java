@@ -20,6 +20,7 @@ import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.ListaDePreco;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
@@ -62,6 +63,9 @@ import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import br.com.onesystem.util.UsuarioLogadoUtil;
 import br.com.onesystem.war.builder.ItemDePedidoBV;
+import br.com.onesystem.war.builder.LoteItemBV;
+import br.com.onesystem.war.service.LoteItemService;
+import br.com.onesystem.war.service.NotaRecebidaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -111,6 +115,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     private PedidoAFornecedores pedidoAFornecedores;
     private boolean buscouDeposito = false;
     private Cotacao cotacaoDeTitulo;
+    private LoteItemBV loteItemBV;
 
     @Inject
     private Configuracao configuracao;
@@ -132,11 +137,18 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     @Inject
     private CotacaoDAO cotacaoDAO;
+
+    @Inject
+    private LoteItemService loteItemService;
+
     @Inject
     private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @Inject
     private AtualizaDAO<PedidoAFornecedores> atualizaPedido;
+
+    @Inject
+    private NotaRecebidaService notaRecebidaService;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -170,6 +182,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             inicializaCotacoes();
             limparChequeEntrada();
             cobrancaBV = new CobrancaBV();
+            loteItemBV = new LoteItemBV();
             cobrancaBV.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
         } catch (DadoInvalidoException die) {
             die.print();
@@ -274,7 +287,8 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            addNoBanco(nota);
+            notaRecebidaService.addNotaRecebida(nota);
+            atualizaLote(t);
             efetivaPedidoAFornecedores();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -375,18 +389,30 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     // ----------------------------- Itens ------------------------------------
     public void addItemNaLista() {
         try {
+            constroiLoteItem();
             notaRecebida.adiciona(itemRecebido);
+            System.out.println("add " + itemRecebido.getLoteItem());
             limparItemDeNota();
-
             recalculaValores();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }
     }
 
+    private void constroiLoteItem() {
+        try {
+            LoteItem lote = loteItemBV.construir();
+            itemRecebido.setLoteItem(lote);
+            itemRecebido.getItem().atualiza(lote);
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
+    }
+
     public void updateItemNaLista() {
         try {
             if (itemRecebidoSelecionado != null) {
+                constroiLoteItem();
                 notaRecebida.atualiza(itemRecebidoSelecionado, itemRecebido.construirComId());
                 limparItemDeNota();
                 recalculaValores();
@@ -397,16 +423,22 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     }
 
     public void deleteItemNaLista() {
-        if (itemRecebidoSelecionado != null) {
-            notaRecebida.remove(itemRecebidoSelecionado);
-            limparItemDeNota();
-            recalculaValores();
+        try {
+            if (itemRecebidoSelecionado != null) {
+                notaRecebida.remove(itemRecebidoSelecionado);
+                itemRecebido.getItem().remove(loteItemBV.construir());
+                limparItemDeNota();
+                recalculaValores();
+            }
+        } catch (DadoInvalidoException ex) {
+            ex.print();
         }
     }
 
     public void limparItemDeNota() {
         itemRecebido = new ItemDeNotaBV();
         itemRecebidoSelecionado = null;
+        loteItemBV = new LoteItemBV();
     }
 
     // -------------------------- Fim Itens -----------------------------------
@@ -556,8 +588,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             String idComponent = event.getComponent().getId();
             if (obj instanceof Operacao) {
                 Operacao operacao = (Operacao) obj;
-                List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
-                if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
+                if (operacao.getOperacaoDeEstoque() == null || operacao.getOperacaoDeEstoque().isEmpty()) {
                     RequestContext rc = RequestContext.getCurrentInstance();
                     rc.execute("PF('notaOperacaoNaoRelacionadaDialog').show()");
                 } else {
@@ -568,8 +599,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             } else if (obj instanceof ListaDePreco) {
                 notaRecebida.setListaDePreco((ListaDePreco) obj);
             } else if (obj instanceof Item) {
-                itemRecebido.setItem((Item) obj);
+                               itemRecebido.setItem((Item) obj);
                 atribuiItemASessao();
+                loteItemBV = new LoteItemBV();
             } else if (obj instanceof FormaDeRecebimento) {
                 FormaDeRecebimento formaDeRecebimento = (FormaDeRecebimento) obj;
                 notaRecebida.setFormaDeRecebimento(formaDeRecebimento);
@@ -708,6 +740,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void selecionaItemDeNota(SelectEvent event) {
         this.itemRecebidoSelecionado = (ItemDeNota) event.getObject();
         this.itemRecebido = new ItemDeNotaBV(itemRecebidoSelecionado);
+        loteItemBV = new LoteItemBV(itemRecebidoSelecionado.getLoteItem());
     }
 
     public void selecionarBanco(SelectEvent event) {
@@ -722,15 +755,31 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     // ----------------------------- Fim Selecao ------------------------------
     // ------------------ Outras Operações da Janela --------------------------
-    
-    public void teste(){
+    public void validaLoteItem() {
         //Verifica se item possui lote
-        //Fazer Request Context
-        System.out.println("Passou por aqui");
-        InfoMessage.print("Lote selecionado : ASDF321 - VALIDADE: 23/02/2018 - FABRICACAO: 20/04/2017"); // se caso 
-        RequestContext.getCurrentInstance().execute("PF('incluirLoteDeItem').show()");
+        for (LoteItem lote : itemRecebido.getItem().getLoteItem()) {
+            if (lote.getNumeroDoLote().equals(loteItemBV.getNumeroDoLote())) {
+                loteItemBV = new LoteItemBV(lote);
+                InfoMessage.print(new BundleUtil().getLabel("Lote_Selecionado") + " : " + lote.getNumeroDoLote() + " - "
+                        + new BundleUtil().getLabel("Data_De_Fabricacao") + ": " + lote.getFabricacaoFormatada() + " - "
+                        + new BundleUtil().getLabel("Data_De_Validade") + ": " + lote.getValidadeFormatada());
+                return;
+            }
+        }
+        //Se o lote nao estiver cadastrado abre o dialogo pedindo se quer cadastrar
+        RequestContext.getCurrentInstance().execute("PF('incluirLoteDeItemDialog').show()");
     }
-    
+
+    public void atualizaLote(NotaRecebida nota) {
+        for (ItemDeNota item : nota.getItens()) {
+            if (item.getItem().getLoteItem().equals(null)) {
+                return;
+            } else {//usando quando Adicionado uma Nota Nova
+                loteItemService.atualizaSaldoLote(item.getItem(), new LoteItemBV(item.getLoteItem()), item.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(nota.getOperacao()));
+            }
+        }
+    }
+
     public void addDetalheParcelaCartao() {
         try {
             cobrancaBV.setSituacaoDeCartao(SituacaoDeCartao.ABERTO);
@@ -1156,6 +1205,14 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     public EstadoDeOrcamento getEstadoDeOrcamento() {
         return EstadoDeOrcamento.EFETIVADO;
+    }
+
+    public LoteItemBV getLoteItemBV() {
+        return loteItemBV;
+    }
+
+    public void setLoteItemBV(LoteItemBV loteItemBV) {
+        this.loteItemBV = loteItemBV;
     }
 
     //------------------- Fim Getters and Setters -----------------------------
