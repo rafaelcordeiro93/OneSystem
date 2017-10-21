@@ -289,7 +289,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
             atualizaLoteDentroDoItem();
-            adicionaDAOExtended(nota);
+            addNoBancoExtended(nota);
             atualizaLote(nota);
             efetivaPedidoAFornecedores();
         } catch (DadoInvalidoException ex) {
@@ -299,7 +299,7 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
 
     private void atualizaLoteDentroDoItem() {
         for (ItemDeNota item : nota.getItens()) {
-            if (item.getItem().getDetalhamento().equals(DetalhamentoDeItem.LOTES)) {
+            if (item.getItem().getDetalhamento().equals(DetalhamentoDeItem.LOTES) && !item.getItem().getLoteItem().contains(item.getLoteItem())) {
                 item.getItem().atualiza(item.getLoteItem());
             }
         }
