@@ -1629,6 +1629,11 @@ body .ui-chkbox .ui-chkbox-box .ui-chkbox-icon {
     position: relative;
     top: 0px;
     left: -1px; }
+body .ui-chips .ui-chips-container {
+    width: 170px;
+    padding: 0px; }
+body .ui-fluid .ui-chips, body .ui-fluid .ui-chips-container {
+    width: 100%; }
 body .ui-radiobutton {
     display: inline-block;
     vertical-align: middle;
@@ -1811,6 +1816,14 @@ body .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger .ui-icon-triangle-1-s
     text-align: center; }
 body .ui-selectcheckboxmenu .ui-selectcheckboxmenu-trigger .ui-icon-triangle-1-s:before {
     content: ""; }
+body .ui-selectcheckboxmenu.ui-selectcheckboxmenu-multiple {
+    padding-top: 1px;
+    padding-bottom: 1px; }
+body .ui-selectcheckboxmenu.ui-selectcheckboxmenu-multiple .ui-selectcheckboxmenu-multiple-container.ui-inputfield {
+    border: 0 none;
+    padding-right: 32px; }
+body .ui-selectcheckboxmenu.ui-selectcheckboxmenu-multiple .ui-selectcheckboxmenu-trigger .ui-icon {
+    top: auto; }
 body .ui-selectcheckboxmenu.ui-state-hover {
     border: 1px solid #b3b3b3; }
 body .ui-selectcheckboxmenu.ui-state-focus {
@@ -2115,13 +2128,13 @@ body .ui-splitbutton.ui-buttonset .ui-button .ui-icon-triangle-1-s:before {
     content: ""; }
 body .ui-splitbutton.ui-buttonset .ui-button.ui-state-hover {
     background-color: #8b49d6;
-    color:   #ffffff; }
+    color: ┬á #ffffff; }
 body .ui-splitbutton.ui-buttonset .ui-button.ui-state-focus {
     background-color: #8b49d6;
-    color:   #ffffff; }
+    color: ┬á #ffffff; }
 body .ui-splitbutton.ui-buttonset .ui-button.ui-state-active {
     background-color: #7d34d2;
-    color:   #ffffff; }
+    color: ┬á #ffffff; }
 body .ui-datepicker {
     padding: 0;
     width: 260px; }
@@ -2651,6 +2664,12 @@ body .ui-datatable .ui-datatable-data tr td.ui-editable-column input {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0; }
+body .ui-datatable .ui-datatable-data tr td a.ui-rowgroup-toggler {
+    padding-right: 2em; }
+body .ui-datatable .ui-datatable-data tr td a.ui-rowgroup-toggler .ui-rowgroup-toggler-icon {
+    color: #2d353c;
+    font-size: 15px;
+    top: 2px; }
 body .ui-datatable > .ui-icon-arrowthick-1-s {
     color: #985edb;
     font-size: 16px;
@@ -3034,6 +3053,8 @@ body .ui-treetable .ui-treetable-scrollable-footer .ui-treetable-scrollable-head
     color: #2d353c; }
 body .ui-treetable .ui-treetable-scrollable-body::-webkit-scrollbar {
     background-color: #f0f3f5; }
+body .ui-treetable .ui-paginator-bottom {
+    border-top: 1px solid #c7c7c7; }
 body .ui-tree {
     padding: 6px 12px;
     box-sizing: border-box; }

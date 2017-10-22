@@ -10,6 +10,7 @@ PrimeFaces.widget.Atlantis = PrimeFaces.widget.BaseWidget.extend({
         this.tabMenu = this.jq;
         this.tabMenuNav = this.tabMenu.children('.layout-tabmenu-nav');
         this.tabMenuNavLinks = this.tabMenuNav.find('a');
+        this.tabMenuContents = this.tabMenu.find('.layout-tabmenu-content');
         this.topbar = this.wrapper.children('.topbar');
         this.topbarMenu = this.topbar.children('.topbar-menu');
         this.topbarItems = this.topbarMenu.children('li');
@@ -21,6 +22,7 @@ PrimeFaces.widget.Atlantis = PrimeFaces.widget.BaseWidget.extend({
         this.topbarMenuClick = false;
 
         this._bindEvents();
+        this._restoreMenuState();
     },
     
     _bindEvents: function() {
@@ -33,6 +35,17 @@ PrimeFaces.widget.Atlantis = PrimeFaces.widget.BaseWidget.extend({
                 $(window).trigger('resize');
             }
             
+            e.preventDefault();
+        });
+        
+        this.tabMenu.find('.menu-pin-button').on('click', function(e) {
+            var icon = $(this).children('i');
+            if(icon.hasClass('fa-rotate-90'))
+                $this._saveMenuState($(this).closest('.layout-tabmenu-content').index());
+            else
+                $this.clearMenuState();
+                
+            $this.tabMenuContents.find('.menu-pin-button').children('i').toggleClass('fa-rotate-90');
             e.preventDefault();
         });
         
@@ -157,6 +170,26 @@ PrimeFaces.widget.Atlantis = PrimeFaces.widget.BaseWidget.extend({
     
     isIOS: function(e) {
         return ((navigator.userAgent.match(/iPhone/i)) || (navigator.userAgent.match(/iPod/i)) || (navigator.userAgent.match(/iPad/i)));
+    },
+    
+    _saveMenuState: function(index) {
+        $.cookie('atlantis_tabmenu_index', index.toString(), {path: '/'});
+    },
+    
+    _restoreMenuState: function() {
+        var activeTabMenu = $.cookie('atlantis_tabmenu_index');
+        if(activeTabMenu) {
+            var tabContents = this.tabMenu.find('.layout-tabmenu-content');
+            tabContents.find('.menu-pin-button').children('i').removeClass('fa-rotate-90');
+            var index = parseInt(activeTabMenu);
+            this.wrapper.addClass('layout-wrapper-menu-active');
+            this.tabMenuNavLinks.eq(index).parent('li').addClass('active-item');
+            tabContents.eq(index).addClass('layout-tabmenu-content-active');
+        }
+    },
+    
+    clearMenuState: function() {
+        $.removeCookie('atlantis_tabmenu_index', {path: '/'});
     }
     
 });
@@ -274,6 +307,14 @@ PrimeFaces.widget.AtlantisMenu = PrimeFaces.widget.BaseWidget.extend({
             }
         }
     },
+    
+    clearActiveItems: function() {
+        var activeItems = this.jq.find('li.active-menuitem'),
+        subContainers = activeItems.children('ul');
+
+        activeItems.removeClass('active-menuitem');
+        subContainers.hide();
+    },
             
     removeMenuitem: function (id) {
         this.expandedMenuitems = $.grep(this.expandedMenuitems, function (value) {
@@ -322,146 +363,6 @@ PrimeFaces.widget.AtlantisMenu = PrimeFaces.widget.BaseWidget.extend({
     }
     
 });
-
-PrimeFaces.skinInput = function(input) {
-    setTimeout(function() {
-        if(input.val() != '') {
-            var parent = input.parent();
-            input.addClass('ui-state-filled');
-            
-            if(parent.is("span:not('.md-inputfield')")) {
-                parent.addClass('md-inputwrapper-filled');
-            }
-        }
-    }, 1);
-    
-    input.on('mouseenter', function() {
-        $(this).addClass('ui-state-hover');
-    })
-    .on('mouseleave', function() {
-        $(this).removeClass('ui-state-hover');
-    })
-    .on('focus', function() {
-        var parent = input.parent();
-        $(this).addClass('ui-state-focus');
-        
-        if(parent.is("span:not('.md-inputfield')")) {
-            parent.addClass('md-inputwrapper-focus');
-        }
-    })
-    .on('blur', function() {
-        $(this).removeClass('ui-state-focus');
-
-        if(input.hasClass('hasDatepicker')) {
-            setTimeout(function() {
-                PrimeFaces.onInputBlur(input);
-            },150);
-        }
-        else {
-            PrimeFaces.onInputBlur(input);
-        }
-    });
-
-    //aria
-    input.attr('role', 'textbox')
-            .attr('aria-disabled', input.is(':disabled'))
-            .attr('aria-readonly', input.prop('readonly'));
-
-    if(input.is('textarea')) {
-        input.attr('aria-multiline', true);
-    }
-
-    return this;
-};
-
-PrimeFaces.onInputBlur = function(input) {
-    var parent = input.parent(),
-    hasInputFieldClass = parent.is("span:not('.md-inputfield')");
-    
-    if(parent.hasClass('md-inputwrapper-focus')) {
-        parent.removeClass('md-inputwrapper-focus');
-    }
-    
-    if(input.val() != '') {
-        input.addClass('ui-state-filled');
-        if(hasInputFieldClass) {
-            parent.addClass('md-inputwrapper-filled');
-        }
-    }
-    else {
-        input.removeClass('ui-state-filled');
-        parent.removeClass('md-inputwrapper-filled');
-    }    
-};
-
-if(PrimeFaces.widget.AutoComplete) {
-    PrimeFaces.widget.AutoComplete.prototype.setupMultipleMode = function() {
-        var $this = this;
-        this.multiItemContainer = this.jq.children('ul');
-        this.inputContainer = this.multiItemContainer.children('.ui-autocomplete-input-token');
-
-        this.multiItemContainer.hover(function() {
-                $(this).addClass('ui-state-hover');
-            },
-            function() {
-                $(this).removeClass('ui-state-hover');
-            }
-        ).click(function() {
-            $this.input.focus();
-        });
-
-        //delegate events to container
-        this.input.focus(function() {
-            $this.multiItemContainer.addClass('ui-state-focus');
-            $this.jq.addClass('md-inputwrapper-focus');
-        }).blur(function(e) {
-            $this.multiItemContainer.removeClass('ui-state-focus');
-            $this.jq.removeClass('md-inputwrapper-focus').addClass('md-inputwrapper-filled');
-            
-            setTimeout(function() {
-                if($this.hinput.children().length == 0 && !$this.multiItemContainer.hasClass('ui-state-focus')) {
-                    $this.jq.removeClass('md-inputwrapper-filled');
-                }
-            }, 150); 
-        });
-
-        var closeSelector = '> li.ui-autocomplete-token > .ui-autocomplete-token-icon';
-        this.multiItemContainer.off('click', closeSelector).on('click', closeSelector, null, function(event) {
-            if($this.multiItemContainer.children('li.ui-autocomplete-token').length === $this.cfg.selectLimit) {
-                if(PrimeFaces.isIE(8)) {
-                    $this.input.val('');
-                }
-                $this.input.css('display', 'inline');
-                $this.enableDropdown();
-            }
-            $this.removeItem(event, $(this).parent());
-        });
-    };
-};
-
-if(PrimeFaces.widget.Calendar) {
-    PrimeFaces.widget.Calendar.prototype.bindDateSelectListener = function() {
-        var _self = this;
-
-        this.cfg.onSelect = function() {
-            if(_self.cfg.popup) {
-                _self.fireDateSelectEvent();
-            }
-            else {
-                var newDate = $.datepicker.formatDate(_self.cfg.dateFormat, _self.getDate());
-
-                _self.input.val(newDate);
-                _self.fireDateSelectEvent();
-            }
-            
-            if(_self.input.val() != '') {
-               var parent = _self.input.parent();
-               parent.addClass('md-inputwrapper-filled');
-               _self.input.addClass('ui-state-filled');
-           }
-        };
-    };
-}
 
 $(document).ready(function() {
     $('.nano').nanoScroller({flash:true});
