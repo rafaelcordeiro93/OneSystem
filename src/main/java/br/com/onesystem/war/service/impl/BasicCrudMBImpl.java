@@ -15,10 +15,10 @@ public abstract class BasicCrudMBImpl<Bean> {
     public void exibirNaTela(String selecao) {
         Map<String, Object> opcoes = new HashMap<>();
         opcoes.put("modal", true);
-        opcoes.put("resizable", false);
+        opcoes.put("resizable", true);
         opcoes.put("responsive", true);
         opcoes.put("width", 950);
-        opcoes.put("draggable", false);
+        opcoes.put("draggable", true);
         opcoes.put("height", 471);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
