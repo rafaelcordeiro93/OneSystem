@@ -306,6 +306,11 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     /*Imagem de Fundo*/
     .imagemFundo{width: 211.45px; height: 225.20px;}
 
+    /* ui-Dialog */
+    body .ui-dialog {
+        width: 950px !important;
+    }
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 8%; margin-right: 8%; margin-top: 3%;}
     .template-card-inbox{padding: 0% 8% 0% 8%;}
@@ -325,6 +330,11 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 211.45px; height: 225.20px;}
+
+    /* ui-Dialog */
+    body .ui-dialog {
+        width: 950px !important;
+    }
 
     /* Margens e Paddind de Template */
     .template-card{margin-left: 8%; margin-right: 8%; margin-top: 3%;}
@@ -377,6 +387,11 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
 
     /*Imagem de Fundo*/
     .imagemFundo{width: 158.587px; height: 170.141px}
+
+    /* ui-Dialog */
+    body .ui-dialog {
+        width: 557px !important;
+    }
 
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
@@ -433,6 +448,11 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     /*Imagem de Fundo*/
     .imagemFundo{width: 158.587px; height: 170.141px}
 
+    /* ui-Dialog */
+    body .ui-dialog {
+        width: 360px !important;
+    }
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
     .template-card-inbox{padding: 0% 0% 0% 0% !important;}
@@ -488,9 +508,38 @@ input[type="text"], input[type="password"], textarea{ -webkit-appearance: none; 
     /*Imagem de Fundo*/
     .imagemFundo{width: 120px; height: 120px}
 
+    /* ui-Dialog */
+    body .ui-dialog {
+        width: 260px !important;
+    }
+
     /* Margens e Paddind de Template */
     .template-card{margin-left: 0% !important; margin-right: 0% !important; margin-top: 3% !important;}
     .template-card-inbox{padding: 0% 0% 0% 0% !important;}
+}
+
+/* Landscape phones */
+@media (max-height: 640px) {
+    /* ui-Dialog */
+    body .ui-dialog {
+        height: 540px !important;
+    }
+}
+
+/* Landscape phones */
+@media (max-height: 480px) {
+    /* ui-Dialog */
+    body .ui-dialog {
+        height: 380px !important;
+    }
+}
+
+/* Landscape phones and down */
+@media (max-height:320px) {
+    /* ui-Dialog */
+    body .ui-dialog {
+        height: 220px !important;
+    }
 }
 
 /* clearfix for Container */

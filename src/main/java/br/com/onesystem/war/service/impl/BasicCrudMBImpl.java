@@ -17,9 +17,9 @@ public abstract class BasicCrudMBImpl<Bean> {
         opcoes.put("modal", true);
         opcoes.put("resizable", true);
         opcoes.put("responsive", true);
-        opcoes.put("width", 950);
+//        opcoes.put("width", 950);
         opcoes.put("draggable", true);
-        opcoes.put("height", 471);
+        opcoes.put("height", 550);
         opcoes.put("contentWidth", "100%");
         opcoes.put("contentHeight", "100%");
         opcoes.put("headerElement", "customheader");
