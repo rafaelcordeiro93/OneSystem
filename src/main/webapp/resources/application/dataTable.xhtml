@@ -14,9 +14,16 @@
 
     <composite:implementation>
         <h:form>
-            <p:dataTable id="#{cc.attrs.id}" var="bean" value="#{cc.attrs.managedBeanName.beans}" selectionMode="single" selection="#{cc.attrs.managedBeanName.beanSelecionado}" rowKey="#{bean.id}"
+            <p:dataTable id="#{cc.attrs.id}" widgetVar="#{cc.attrs.id}-table" var="bean" value="#{cc.attrs.managedBeanName.beans}" selectionMode="single" selection="#{cc.attrs.managedBeanName.beanSelecionado}" rowKey="#{bean.id}"
                          rows="10" rowsPerPageTemplate="1,3,5,10,15,20,50,100" paginator="true" paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" rowStyleClass="#{cc.attrs.rowStyleClass}"
                          reflow="true" filteredValue="#{cc.attrs.managedBeanName.beansFiltrados}" emptyMessage="#{l.Nao_Ha_Registros}">
+
+                <f:facet name="header" >
+                    <div align="left">
+                        <p:outputLabel value="#{l.Pesquisar_Todos_Campos}: " />
+                        <p:inputText id="globalFilter" onkeyup="PF('#{cc.attrs.id}-table').filter()" style="margin-left: 5px; min-width: 200px" placeholder="#{l.Digite_Palavra_Chave}"/>
+                    </div>
+                </f:facet>
 
                 <p:ajax event="rowSelect" process="@this" listener="#{cc.attrs.managedBeanName.selecionar()}" />
 

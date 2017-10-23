@@ -54,7 +54,7 @@
                             <h:outputText value="#{cc.attrs.itemLabelTab}" /> 
                         </p:column>
                     </p:autoComplete>
-                    <p:outputLabel style="margin-left: 2.1em" value="#{cc.attrs.placeholder}"/>
+                    <p:outputLabel value="#{cc.attrs.placeholder}"/>
                     <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" disabled="#{cc.attrs.disabledSearch}" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
                         <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update} #{cc.attrs.updateButtonSearch}" />
                     </p:commandButton>

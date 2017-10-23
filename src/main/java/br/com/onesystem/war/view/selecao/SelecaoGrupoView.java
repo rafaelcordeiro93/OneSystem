@@ -57,4 +57,9 @@ public class SelecaoGrupoView extends BasicCrudMBImpl<Grupo> implements Serializ
     public void setService(GrupoService service) {
         this.service = service;
     }
+    
+    @Override
+    public String getIcon(){
+        return "fa-object-group";
+    }
 }

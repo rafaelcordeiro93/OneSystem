@@ -55,8 +55,8 @@ public class UnidadeMedidaItem implements Serializable {
 
     public UnidadeMedidaItem(Long id, String nome, String sigla, Integer casasDecimais) throws DadoInvalidoException {
         this.id = id;
-        this.nome = FormatFisrtCaracterUpperCase.format(nome);        
-        this.sigla = sigla.toUpperCase();
+        this.nome = nome;
+        this.sigla = sigla;
         this.casasDecimais = casasDecimais;
         ehValido();
     }
@@ -76,7 +76,7 @@ public class UnidadeMedidaItem implements Serializable {
     public Integer getCasasDecimais() {
         return casasDecimais;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

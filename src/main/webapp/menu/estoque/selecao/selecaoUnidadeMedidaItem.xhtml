@@ -20,7 +20,9 @@
                 <p:column headerText="#{l.Sigla}" sortBy="#{bean.sigla}" filterBy="#{bean.sigla}" footerText="#{l.Sigla}" filterMatchMode="contains">
                     <h:outputText value="#{bean.sigla}" />
                 </p:column>
-                
+                <p:column headerText="#{l.Casas_Decimais}" sortBy="#{bean.casasDecimais}" filterBy="#{bean.casasDecimais}" footerText="#{l.Casas_Decimais}" filterMatchMode="contains">
+                    <h:outputText value="#{bean.casasDecimais}" />
+                </p:column>
       </a:dataTable>
 
     </ui:define>

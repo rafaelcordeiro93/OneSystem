@@ -251,7 +251,7 @@
                                                 <f:selectItem itemLabel="#{l.Definir_Preco_Por_Margem}" itemValue="false" />
                                             </p:selectOneRadio>
 
-                                            <div class="EmptyBox10"/>
+                                            <div class="EmptyBox20"/>
                                             <a:inputTextDialog id="itemListaPreco" update=":conteudo:tabsItem:itemPreco :conteudo:growl" dialog="#{selecaoListaDePrecoView}" placeholder="#{l.Lista_De_Preco}" mbView="#{itemView}" value="#{itemView.precoDeItemBV.listaDePreco}" var="preco" itemLabel="#{preco.nome}" itemValue="#{preco}" converter="listaDePrecoConverter" itemLabelTabVisible="true" itemLabelTab="#{preco.nome}">
                                                 <p:ajax event="itemSelect" listener="#{itemView.calculaPreco}" update=":conteudo"/>  
                                             </a:inputTextDialog>

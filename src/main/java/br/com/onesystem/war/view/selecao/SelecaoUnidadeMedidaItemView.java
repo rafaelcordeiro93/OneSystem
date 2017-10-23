@@ -28,11 +28,11 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
     }
 
     @Override
-    public String abrirEdicao(){
+    public String abrirEdicao() {
         return "/menu/estoque/cadastros/unidadeMedidaItem";
     }
-    
-     @Override
+
+    @Override
     public List<UnidadeMedidaItem> complete(String query) {
         List<UnidadeMedidaItem> unidadeFIltrada = new ArrayList<>();
         for (UnidadeMedidaItem u : beans) {
@@ -49,12 +49,17 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
         }
         return unidadeFIltrada;
     }
-    
+
     public UnidadeMedidaItemService getService() {
         return service;
     }
 
     public void setService(UnidadeMedidaItemService service) {
         this.service = service;
+    }
+
+    @Override
+    public String getIcon() {
+        return "fa-braille";
     }
 }
