@@ -41,6 +41,10 @@ public abstract class BasicMBImpl<T, E> {
     public abstract void limparJanela();
 
     @PostConstruct
+    public void setup() {
+        init();
+    }
+
     public void init() {
         limparJanela();
     }

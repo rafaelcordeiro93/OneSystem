@@ -37,6 +37,7 @@ public class Estado implements Serializable {
     @Length(max = 100, min = 4, message = "{nome_lenght}")
     private String nome;
     private String sigla;
+    @NotNull(message = "{pais_not_null}")
     @ManyToOne
     private Pais pais;
     @OneToMany(mappedBy = "estado")
@@ -56,7 +57,7 @@ public class Estado implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome");
+        List<String> campos = Arrays.asList("nome", "pais");
         new ValidadorDeCampos<Estado>().valida(this, campos);
     }
 

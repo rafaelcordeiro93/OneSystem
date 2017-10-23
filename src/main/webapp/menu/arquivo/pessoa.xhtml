@@ -39,6 +39,7 @@
 
                             <p:outputLabel value="#{l.Tipo}"/>
                             <p:selectOneRadio id="pessoaTipo" value="#{pessoaView.e.fisicaJuridica}">
+                                <p:ajax update="pessoaConjuge pessoaCI" />
                                 <f:selectItem itemLabel="#{l.Fisica}" itemValue="false" />
                                 <f:selectItem itemLabel="#{l.Juridica}" itemValue="true" />
                             </p:selectOneRadio>
@@ -55,10 +56,10 @@
                             <p:inputText value="#{pessoaView.e.ruc}"/>
 
                             <p:outputLabel value="#{l.Conjuge}"/>
-                            <p:inputText id="pessoaConjuge" disabled="#{pessoaView.e.fisicaJuridica}" value="#{pessoaView.e.conjuge}" />
+                            <p:inputText id="pessoaConjuge" disabled="#{pessoaView.e.fisicaJuridica}" value="#{pessoaView.e.conjuge}" maxlength="80" />
 
                             <p:outputLabel  value="#{l.Nascimento}"/>
-                            <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" disabled="#{pessoaView.e.fisicaJuridica}" pattern="dd/MM/yyyy" value="#{pessoaView.e.nascimento}" maxdate="#{pessoaView.dataMaximaDeNascimento}" inputStyle="width:auto" size="8"/> 
+                            <p:calendar navigator="true" yearRange="c-125:c+0" id="pessoaNascimento" pattern="dd/MM/yyyy" value="#{pessoaView.e.nascimento}" maxdate="#{pessoaView.dataMaximaDeNascimento}" inputStyle="width:auto" size="8"/> 
 
                         </p:panelGrid>
 
@@ -103,7 +104,7 @@
                                      columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Contato}"/>
-                            <p:inputText value="#{pessoaView.e.contato}" />
+                            <p:inputText value="#{pessoaView.e.contato}" maxlength="60" />
 
                             <p:outputLabel value="#{l.Email}"/>
                             <p:inputText  value="#{pessoaView.e.email}"/>                      
@@ -120,19 +121,21 @@
                                      columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5, ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
 
                             <p:outputLabel value="#{l.Endereco}"/>
-                            <p:inputText value="#{pessoaView.e.endereco}"/>
+                            <p:inputText value="#{pessoaView.e.endereco}" maxlength="120"/>
 
                             <p:outputLabel value="#{l.Numero}"/>
                             <p:inputText value="#{pessoaView.e.numero}" maxlength="40"/>
 
                             <p:outputLabel value="#{l.Bairro}"/>
-                            <p:inputText  value="#{pessoaView.e.bairro}"/>
+                            <p:inputText  value="#{pessoaView.e.bairro}" maxlength="60"/>
 
                             <p:outputLabel value="#{l.Cep}" rendered="#{pessoaView.configuracao.utilizarCep}" />
                             <a:inputTextDialog id="cepId" mbView="#{pessoaView}" dialog="#{selecaoCepView}" value="#{pessoaView.e.cep}" process="@this" update=":conteudo" converter="cepConverter" var="cep" itemLabel="#{cep.cep}" itemValue="#{cep}" editVisible="true" itemLabelTab="#{cep.cep}" itemLabelTabVisible="true" rendered="#{pessoaView.configuracao.utilizarCep}" />
 
                             <p:outputLabel value="#{l.Cidade}" rendered="#{!pessoaView.configuracao.utilizarCep}"/>
-                            <a:inputTextDialog id="cidadeId" mbView="#{pessoaView}" dialog="#{selecaoCidadeView}" value="#{pessoaView.e.cidade}" process="@this" update=":conteudo:pessoaUf :conteudo:pessoaPais" converter="cidadeConverter" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" editVisible="true" itemLabelTab="#{cidade.nome}" itemLabelTabVisible="true" rendered="#{!pessoaView.configuracao.utilizarCep}" /> 
+                            <a:inputTextDialog id="cidadeId" mbView="#{pessoaView}" dialog="#{selecaoCidadeView}" value="#{pessoaView.e.cidade}" process="@this" update=":conteudo:pessoaUf :conteudo:pessoaPais" converter="cidadeConverter" var="cidade" itemLabel="#{cidade.nome}" itemValue="#{cidade}" editVisible="true" itemLabelTab="#{cidade.nome}" itemLabelTabVisible="true" rendered="#{!pessoaView.configuracao.utilizarCep}" >
+                                <p:ajax event="blur" update=":conteudo:pessoaUf :conteudo:pessoaPais" />
+                            </a:inputTextDialog> 
 
                             <p:outputLabel value="#{l.Cidade}" rendered="#{pessoaView.configuracao.utilizarCep}" />
                             <p:inputText id="pessoaCidade" value="#{pessoaView.e.cep.cidade.nome}" readonly="true" rendered="#{pessoaView.configuracao.utilizarCep}" />
@@ -146,6 +149,21 @@
                             <p:spacer rendered="#{pessoaView.configuracao.utilizarCep}" />
                             <p:spacer rendered="#{pessoaView.configuracao.utilizarCep}" />
 
+                        </p:panelGrid>
+
+                        <div class="EmptyBox30"/>
+                        <h4 style="font-size: 15px">#{l.Observacoes}</h4>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
+
+                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5, ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-5">
+                            <p:outputLabel value="#{l.Observacao}:"/>
+                            <p:inputTextarea rows="3" maxlength="255" counter="display" counterTemplate="{0} caracteres restantes." autoResize="true" value="#{pessoaView.e.observacao}"/>
+                            <p:spacer/>
+                            <p:spacer/>
+                            <p:spacer/>
+                            <p:outputLabel id="display"/>
                         </p:panelGrid>
 
                     </div>

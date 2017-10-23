@@ -10,7 +10,7 @@
 
         <div class="content-section content-section-blue">
 
-            <h2 class="BigTopic-Custom">#{l.Motivo}</h2>
+            <h2 class="BigTopic-Custom"><i class="fa fa-certificate Fs40 White"/> #{l.Motivo}</h2>
             <span class="Topic-Message">#{l.Motivo_Texto}</span>
 
         </div>
@@ -32,7 +32,7 @@
                             <a:inputTextDialog id="idmotivo" update=":conteudo" process="@this"  dialog="#{selecaoMotivoView}" mbView="#{motivoView}" value="#{motivoView.e}" var="motivo" itemLabel="#{motivo.id}" itemValue="#{motivo}" converter="motivoBVConverter" itemLabelTabVisible="true" itemLabelTab="#{motivo.nome}" editVisible="false" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Motivo}"/>
-                            <p:inputText value="#{motivoView.e.nome}"/>
+                            <p:inputText value="#{motivoView.e.nome}" maxlength="80" />
 
                         </p:panelGrid>
 

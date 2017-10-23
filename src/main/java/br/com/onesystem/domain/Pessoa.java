@@ -50,28 +50,30 @@ public abstract class Pessoa implements Serializable {
     private TipoPessoa tipo;
     @Column(nullable = true)
     private String ruc;
-//    @Length(min = 12, max = 13, message = "{telefono_length}")
+    @Length(min = 10, max = 16, message = "{telefono_length}")
     @Column(nullable = true, length = 20)
     private String telefone;
     @org.hibernate.validator.constraints.Email(message = "{email_invalido}")
     @Column(nullable = true, length = 100)
     private String email;
     @CharacterType(value = CaseType.LETTER_SPACE, message = "{contacto_type_letter_space}")
-//    @Length(min = 4, max = 60, message = "{contacto_lenght}")
+    @Length(min = 4, max = 60, message = "{contacto_lenght}")
     @Column(nullable = true, length = 60)
     private String contato;
     @Column(nullable = false)
     private boolean ativo;
-//    @Length(min = 4, max = 120, message = "{direcao_lenght}")
+    @Length(min = 4, max = 120, message = "{direcao_lenght}")
     @Column(nullable = true, length = 120)
     private String endereco;
     @Length(min = 0, max = 40, message = "{numero_lenght}")
     @Column(length = 40, nullable = true)
     private String numero;
-//    @Length(min = 4, max = 60, message = "{bairro_lenght}")
+    @Length(min = 4, max = 60, message = "{bairro_lenght}")
     @Column(nullable = true, length = 80)
     private String bairro;
     @Column(nullable = false)
+    @Temporal(TemporalType.DATE)
+    private Date nascimento;
     private boolean categoriaCliente;
     @Column(nullable = false)
     private boolean categoriaFornecedor;
@@ -83,7 +85,7 @@ public abstract class Pessoa implements Serializable {
     private Double desconto;
     @Temporal(TemporalType.DATE)
     private Date cadastro;
-    @Length(min = 4, max = 120, message = "{observacao_lenght}")
+    @Length(min = 4, max = 255, message = "{observacao_lenght}")
     @Column(nullable = true, length = 255)
     private String observacao;
     @CharacterType(value = CaseType.LETTER_SPACE, message = "{fiador_type_letter_space}")
@@ -120,7 +122,7 @@ public abstract class Pessoa implements Serializable {
             String endereco, String bairro, boolean categoriaCliente, boolean categoriaFornecedor,
             boolean categoriaVendedor, boolean categoriaTransportador, Double desconto,
             Date cadastro, String observacao, String fiador, Cep cep, String telefone, String email,
-            String contato, String numero, Cidade cidade) {
+            String contato, String numero, Cidade cidade, Date nascimento) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
@@ -142,6 +144,7 @@ public abstract class Pessoa implements Serializable {
         this.telefone = telefone;
         this.email = email;
         this.contato = contato;
+        this.nascimento = nascimento;
     }
 
     public Long getId() {
@@ -213,6 +216,10 @@ public abstract class Pessoa implements Serializable {
         return email;
     }
 
+    public Date getNascimento() {
+        return nascimento;
+    }
+
     public String getContato() {
         return contato;
     }
@@ -247,14 +254,6 @@ public abstract class Pessoa implements Serializable {
 
     public void setConfiguracaoCambio(ConfiguracaoCambio configuracaoCambio) {
         this.configuracaoCambio = configuracaoCambio;
-    }
-
-    public Date getNascimento() {
-        return null;
-    }
-
-    public String getConjuge() {
-        return null;
     }
 
     @MetodoInacessivelRelatorio

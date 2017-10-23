@@ -38,6 +38,7 @@ public class Cidade implements Serializable {
     private String nome;
     @OneToMany(mappedBy = "cidade", fetch = FetchType.LAZY)
     private List<Cep> listadeCeps;
+    @NotNull(message = "{estado_not_null}")
     @ManyToOne
     private Estado estado;
 
@@ -72,7 +73,7 @@ public class Cidade implements Serializable {
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("nome");
+        List<String> campos = Arrays.asList("nome", "estado");
         new ValidadorDeCampos<Cidade>().valida(this, campos);
     }
 

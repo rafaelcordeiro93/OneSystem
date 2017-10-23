@@ -39,8 +39,8 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
 
     @Override
     public List<Cidade> complete(String query) {
-        buscarDados();
         List<Cidade> listaFIltrada = new ArrayList<>();
+        buscarDados();
         for (Cidade b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);

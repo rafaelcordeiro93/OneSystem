@@ -58,4 +58,8 @@ public class SelecaoMotivoView extends BasicCrudMBImpl<Motivo> implements Serial
     public void setService(MotivoService service) {
         this.service = service;
     }
+    
+    public String getIcon(){
+        return "fa-certificate";
+    }
 }
