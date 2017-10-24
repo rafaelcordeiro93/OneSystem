@@ -85,16 +85,16 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     }
 
     public void atualizaLote(AjusteDeEstoque ajuste) {
-        if (e.getLoteItem().equals(null)) {
-            return;
-        } else if (ajuste.getLoteItem().equals(e.getLoteItem()) && ajuste.getId() != null) {//Atualiza o saldo do lote no ajuste de estoque 
-            BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), e.getQuantidade());
-            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
-        } else if (ajuste.getId() != null) {//adiciona o saldo no lote novo e remove o saldo do lote antigo
-            removeLote(ajuste);
-            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
-        } else {//usando quando Adicionado um Ajuste de Estoque novo
-            loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
+        if (e.getLoteItem() != null) {
+            if (ajuste.getLoteItem().equals(e.getLoteItem()) && ajuste.getId() != null) {//Atualiza o saldo do lote no ajuste de estoque 
+                BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), e.getQuantidade());
+                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
+            } else if (ajuste.getId() != null) {//adiciona o saldo no lote novo e remove o saldo do lote antigo
+                removeLote(ajuste);
+                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
+            } else {//usando quando Adicionado um Ajuste de Estoque novo
+                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
+            }
         }
     }
 

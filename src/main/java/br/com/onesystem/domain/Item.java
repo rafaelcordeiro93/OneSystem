@@ -3,6 +3,7 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.DetalhamentoDeItem;
@@ -11,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -84,9 +84,9 @@ public class Item implements Serializable {
     private List<ItemOrcado> itensOrcados;
     @OneToMany(mappedBy = "item")
     private List<ItemDeComanda> itensDeComanda;
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = {CascadeType.PERSIST})
     private List<PrecoDeItem> precos;
-    @OneToMany(mappedBy = "item", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "item", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<LoteItem> loteItem = new ArrayList<>();
     @ManyToOne
     private Margem margem;
@@ -97,7 +97,9 @@ public class Item implements Serializable {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "{detalhamento_not_null}")
     private DetalhamentoDeItem detalhamento;
-
+    @Column(insertable = false, updatable = false)
+    private BigDecimal saldo;
+    
     public Item() {
     }
 
@@ -135,6 +137,13 @@ public class Item implements Serializable {
         List<String> campos = Arrays.asList("barras", "idFabricante", "nome", "unidadeDeMedida", "tipoItem",
                 "marca", "ncm", "idContabil", "grupo", "ativo", "grupoFiscal", "estoqueMinimo", "estoqueMaximo", "detalhamento");
         new ValidadorDeCampos<Item>().valida(this, campos);
+    }
+
+    public void adiciona(PrecoDeItem preco) {
+        if (precos == null) {
+            precos = new ArrayList<>();
+        }
+        precos.add(preco);
     }
 
     public void adiciona(LoteItem n) {
@@ -234,6 +243,10 @@ public class Item implements Serializable {
 
     public Marca getMarca() {
         return marca;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
     }
 
     public Grupo getGrupo() {

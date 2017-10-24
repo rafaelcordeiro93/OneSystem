@@ -97,14 +97,8 @@
                                     <p:outputLabel value="#{l.Marca}"/>
                                     <a:inputTextDialog id="itemMarca" dialog="#{selecaoMarcaView}" mbView="#{itemView}" value="#{itemView.e.marca}" var="marca" itemLabel="#{marca.nome}" itemValue="#{marca}" converter="marcaConverter" itemLabelTabVisible="true" itemLabelTab="#{marca.nome}"/>
 
-
                                     <p:outputLabel value="#{l.Unidade_Medida}"/>
                                     <a:inputTextDialog id="itemUN" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{itemView}" value="#{itemView.e.unidadeDeMedida}" var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}" itemValue="#{unidadeDeMedida}" converter="unidadeMedidaItemConverter" itemLabelTabVisible="true" itemLabelTab="#{unidadeDeMedida.nome}"/>
-
-
-                                    <p:outputLabel value="#{l.Margem}"/>
-                                    <a:inputTextDialog id="itemMargem" dialog="#{selecaoMargemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="margem" itemLabel="#{margem.nome}" itemValue="#{margem}" converter="margemConverter" itemLabelTabVisible="true" itemLabelTab="#{margem.nome}"/>
-
 
                                     <p:outputLabel value="#{l.Tipo_Item}"/>
                                     <p:selectOneMenu value="#{itemView.e.tipoItem}" >
@@ -114,10 +108,11 @@
                                     <p:outputLabel value="#{l.Detalhamento}"/>
                                     <p:selectOneMenu value="#{itemView.e.detalhamento}">
                                         <f:selectItems value="#{itemView.detalhamentoDeItem}" var="detalhamento" itemLabel="#{detalhamento.nome}" itemValue="#{detalhamento}" />
-
-
                                         <p:ajax event="itemSelect" update=":conteudo" />
                                     </p:selectOneMenu>
+
+                                    <p:spacer/>
+                                    <p:spacer/>
 
                                 </p:panelGrid>
 
@@ -244,6 +239,15 @@
                                         <p:panelGrid columns="1" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
                                                      columnClasses="ui-g-12 ui-md-12 ui-lg-9">   
                                             <div class="Container100 Fs22 BoldGray FontRobotoRegular">#{l.Calcular_Preco}</div>
+
+
+                                            <p:panelGrid columns="2" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                                         columnClasses="ui-g-12 ui-md-12 ui-lg-3,ui-g-12 ui-md-12 ui-lg-9">   
+                                                <p:outputLabel value="#{l.Margem} :" />
+                                                <a:inputTextDialog id="itemMargem" dialog="#{selecaoMargemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="margem" itemLabel="#{margem.nome}" itemValue="#{margem}" converter="margemConverter" itemLabelTabVisible="true" itemLabelTab="#{margem.nome}"/>
+                                                <p:outputLabel value="#{l.Ultimo_Custo} :" />
+                                                <p:inputText styleClass="Back-Gray" />
+                                            </p:panelGrid>
 
                                             <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
                                                 <p:ajax update="itemPreco :conteudo:growl" listener="#{itemView.validaMargemView()}"/>

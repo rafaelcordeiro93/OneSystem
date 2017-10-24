@@ -48,13 +48,16 @@ public class Estoque implements Serializable {
     private AjusteDeEstoque ajusteDeEstoque;
     @ManyToOne
     private ItemDeCondicional itemDeCondicional;
-
+    @NotNull(message = "{cancelado_not_null}")
+    @Column(nullable = false)
+    private boolean cancelado = false;
+    
     public Estoque() {
     }
 
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemDeNota itemDeNota, AjusteDeEstoque ajusteDeEstoque,
-            OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional) throws DadoInvalidoException {
+            OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional, boolean cancelado) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.quantidade = quantidade;
@@ -64,6 +67,7 @@ public class Estoque implements Serializable {
         this.itemDeNota = itemDeNota;
         this.ajusteDeEstoque = ajusteDeEstoque;
         this.itemDeCondicional = itemDeCondicional;
+        this.cancelado = cancelado;
         ehValido();
     }
 
@@ -124,6 +128,10 @@ public class Estoque implements Serializable {
         }
     }
 
+    public boolean isCancelado() {
+        return cancelado;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

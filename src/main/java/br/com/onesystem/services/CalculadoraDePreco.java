@@ -39,14 +39,7 @@ public class CalculadoraDePreco implements Serializable {
     public CalculadoraDePreco() {
     }
 
-    public void calcula(Item item, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) throws DadoInvalidoException {
-        this.item = item;
-        this.tipoDeCalculoDeCusto = tipoDeCalculoDeCusto;
-        calculaMarkup();
-        calculaMargemContribuicao();
-    }
-
-    private void calculaMarkup() throws DadoInvalidoException {
+    public BigDecimal calculaMarkup(Item item, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) throws DadoInvalidoException {
         BigDecimal cem = new BigDecimal(100);
         BigDecimal soma = item.getMargem().getCustoFixo().add(item.getMargem().getEmbalagem()).
                 add(item.getMargem().getFrete()).add(item.getMargem().getOutrosCustos()).
@@ -76,9 +69,10 @@ public class CalculadoraDePreco implements Serializable {
                 this.precoMarkup = ultimoCusto;
             }
         }
+        return precoMarkup.multiply(markup);
     }
 
-    private void calculaMargemContribuicao() throws DadoInvalidoException {
+    public BigDecimal calculaMargemBruta(Item item, TipoDeCalculoDeCusto tipoDeCalculoDeCusto) throws DadoInvalidoException {
         BigDecimal custo = BigDecimal.ZERO;
         if (TipoDeCalculoDeCusto.CUSTO_MEDIO == tipoDeCalculoDeCusto) {
             BigDecimal custoMedio = service.buscaCustoMedioDeItem(item, new Date());
@@ -101,21 +95,7 @@ public class CalculadoraDePreco implements Serializable {
         BigDecimal mc = margemContribuicao.divide(new BigDecimal(100), BigDecimal.ROUND_UP);
         BigDecimal mcValor = mc.multiply(custo);
         this.precoMargemContribuicao = mcValor.add(custo);
-    }
 
-    public BigDecimal getMarkup() {
-        return markup;
-    }
-
-    public BigDecimal getPrecoMarkup() {
-        return precoMarkup;
-    }
-
-    public BigDecimal getMargemContribuicao() {
-        return margemContribuicao;
-    }
-
-    public BigDecimal getPrecoMargemContribuicao() {
         return precoMargemContribuicao;
     }
 

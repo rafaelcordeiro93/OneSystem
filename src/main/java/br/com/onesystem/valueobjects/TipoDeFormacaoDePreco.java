@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package br.com.onesystem.valueobjects;
+
+import br.com.onesystem.util.BundleUtil;
 
 /**
  *
@@ -12,7 +13,23 @@ package br.com.onesystem.valueobjects;
  */
 public enum TipoDeFormacaoDePreco {
 
-    MARKUP,
-    MARGEM_DE_CONTRIBUICAO
-    
+    MARKUP(new Long(1), new BundleUtil().getLabel("Markup")),
+    MARGEM_BRUTA(new Long(2), new BundleUtil().getLabel("Margem_Bruta"));
+
+    private Long id;
+    private String nome;
+
+    private TipoDeFormacaoDePreco(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
 }

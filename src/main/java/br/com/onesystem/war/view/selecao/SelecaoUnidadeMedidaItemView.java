@@ -60,6 +60,6 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
 
     @Override
     public String getIcon() {
-        return "fa-braille";
+        return "fa-arrows-v";
     }
 }

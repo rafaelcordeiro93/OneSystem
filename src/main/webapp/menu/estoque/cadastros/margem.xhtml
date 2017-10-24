@@ -8,62 +8,60 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Margem}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-gg Fs40 White"/> #{l.Margem}</h2>
+            <span class="Topic-Message">#{l.Margem_Texto}</span>
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <div class="EmptyBox20"/>
-
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-4,ui-g-12 ui-md-1 ui-grc-1,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4,
+                                     ui-g-12 ui-md-1 ui-grc-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="margem" value="#{grupoDeMargemView.e}" dialog="#{selecaoMargemView}" mbView="#{grupoDeMargemView}" update=":conteudo" process="@this" var="margem" converter="margemBVConverter" itemLabel="#{margem.id}" itemValue="#{margem}" itemLabelTab="#{margem.nome}" itemLabelTabVisible="true" onlyNumber="true" editVisible="false"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
-                            <p:inputText value="#{grupoDeMargemView.e.nome}" />
+                            <p:inputText value="#{grupoDeMargemView.e.nome}" maxlength="60" />
 
                             <p:outputLabel value="#{l.Margem}"/>
-                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.margem}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.margem}"  decimalPlaces="0" symbolPosition="right" minValue="0"/>
 
                             <p:outputLabel value="#{l.Custo_Fixo}"/>
-                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.custoFixo}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.custoFixo}"  decimalPlaces="0" symbolPosition="right" minValue="0"/>
 
                             <p:outputLabel value="#{l.Frete}"/>
-                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.frete}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.frete}"  decimalPlaces="0" symbolPosition="right" minValue="0"/>
 
                             <p:outputLabel value="#{l.Embalagem}"/>
-                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.embalagem}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.embalagem}"  decimalPlaces="0" symbolPosition="right" minValue="0"/>
 
                             <p:outputLabel value="#{l.Outros_Custos}"/>
-                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.outrosCustos}"  decimalPlaces="0" symbolPosition="right" maxValue="100" minValue="0"/>
+                            <p:inputNumber symbol=" %" value="#{grupoDeMargemView.e.outrosCustos}"  decimalPlaces="0" symbolPosition="right" minValue="0"/>
 
                             <p:spacer/>
                             <p:spacer/>
 
 
                         </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
                     </div>
 
-                    <div class="EmptyBox10"/>
+                    <div class="EmptyBox20"/>
+                    <div class="EmptyBox15"/>
 
-
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" action="#{grupoDeMargemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{grupoDeMargemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{grupoDeMargemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{grupoDeMargemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    </div>
+                    <p:commandButton value="#{l.Adicionar}" action="#{grupoDeMargemView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{grupoDeMargemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{grupoDeMargemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{grupoDeMargemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                 </div>
             </div>
         </div>

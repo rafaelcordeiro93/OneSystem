@@ -27,13 +27,13 @@ public class SelecaoMargemView extends BasicCrudMBImpl<Margem> implements Serial
     public void abrirDialogo() {
         exibirNaTela("estoque/selecao/selecaoMargem");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/estoque/cadastros/margem";
     }
-    
-     @Override
+
+    @Override
     public List<Margem> complete(String query) {
         List<Margem> listaFIltrada = new ArrayList<>();
         for (Margem b : beans) {
@@ -57,5 +57,10 @@ public class SelecaoMargemView extends BasicCrudMBImpl<Margem> implements Serial
 
     public void setService(MargemService service) {
         this.service = service;
+    }
+
+    @Override
+    public String getIcon() {
+        return "fa-gg";
     }
 }

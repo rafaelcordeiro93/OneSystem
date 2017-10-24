@@ -115,6 +115,7 @@
         <class>br.com.onesystem.domain.LoteItem</class>
         <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
         <class>br.com.onesystem.domain.Motivo</class>
+        <class>br.com.onesystem.domain.SaldoDeEstoquePorDeposito</class>
         
         <properties>
             <!--  Propriedades JDBC  -->

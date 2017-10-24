@@ -120,6 +120,7 @@
         <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
         <class>br.com.onesystem.domain.LoteItem</class>
         <class>br.com.onesystem.domain.Motivo</class>
+        <class>br.com.onesystem.domain.SaldoDeEstoquePorDeposito</class>
         
         <properties>
             <!--  Propriedades JDBC POSTGRE -->
@@ -144,6 +145,7 @@
             <property name="hibernate.hbm2ddl.auto" value="update" />
             <property name="hibernate.show_sql" value="false" />
             <property name="hibernate.format_sql" value="false"/> 
+            <!-- <property name="javax.persistence.sql-load-script-source" value="insert.sql"/> -->
             
             <!-- Outros Auxiliares -->
             <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->

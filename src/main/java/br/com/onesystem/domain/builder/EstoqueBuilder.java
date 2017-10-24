@@ -26,6 +26,7 @@ public class EstoqueBuilder {
     private ItemDeNota itemDeNota;
     private AjusteDeEstoque ajusteDeEstoque;
     private ItemDeCondicional itemDeCondicional;
+    private boolean cancelado;
 
     public EstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -72,8 +73,13 @@ public class EstoqueBuilder {
         return this;
     }
 
+    public EstoqueBuilder comCancelado(boolean cancelado) {
+        this.cancelado = cancelado;
+        return this;
+    }
+
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeCondicional);
+        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeCondicional, cancelado);
     }
 
 }

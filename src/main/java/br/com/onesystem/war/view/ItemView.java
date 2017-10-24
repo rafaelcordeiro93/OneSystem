@@ -95,7 +95,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     @Inject
     private AdicionaDAO<Estoque> adicionaEstoqueDAO;
-
+ 
     @Inject
     private AdicionaDAO<ItemImagem> adicionaImagemDAO;
 
@@ -231,9 +231,11 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void calculaPreco() throws DadoInvalidoException {
         if (!precoPorMargem && e.getMargem() != null) {
             if (configuracao.getTipoDeFormacaoDePreco() != null && configuracao.getTipoDeCalculoDeCusto() != null) {
-                calculadoraDePreco.calcula(e.construirComID(), configuracao.getTipoDeCalculoDeCusto());
-                precoDeItemBV.setValor(configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP
-                        ? calculadoraDePreco.getPrecoMarkup() : calculadoraDePreco.getPrecoMargemContribuicao());
+                if (configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARKUP) {
+                    precoDeItemBV.setValor(calculadoraDePreco.calculaMarkup(e.construirComID(), configuracao.getTipoDeCalculoDeCusto()));
+                } else if (configuracao.getTipoDeFormacaoDePreco() == TipoDeFormacaoDePreco.MARGEM_BRUTA) {
+                    precoDeItemBV.setValor(calculadoraDePreco.calculaMargemBruta(e.construirComID(), configuracao.getTipoDeCalculoDeCusto()));
+                }
             } else {
                 throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
             }

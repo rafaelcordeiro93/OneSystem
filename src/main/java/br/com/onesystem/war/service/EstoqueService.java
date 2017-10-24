@@ -11,6 +11,7 @@ import br.com.onesystem.domain.ItemDeComanda;
 import br.com.onesystem.domain.ItemDePedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.domain.Nota;
+import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
 import br.com.onesystem.valueobjects.OperacaoFisica;
@@ -91,7 +92,6 @@ public class EstoqueService implements Serializable {
             if (!estoqueSaidas.isEmpty()) {
                 saidas = estoqueSaidas.stream().map(Estoque::getQuantidade).reduce(BigDecimal.ZERO, BigDecimal::add);
             }
-
 
             // Realiza a operação de entradas menos saidas
             BigDecimal resultado = entradas.subtract(saidas);
@@ -181,7 +181,12 @@ public class EstoqueService implements Serializable {
                 .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
 
         if (!estoque.isEmpty()) {
-            return estoque.stream().max(Comparator.comparing(Estoque::getEmissao)).get().getValor();
+            Estoque est = estoque.stream().filter(e -> (e.getItemDeNota() != null && e.getItemDeNota().getNota() instanceof NotaRecebida)
+                    || e.getAjusteDeEstoque() != null).max(Comparator.comparing(Estoque::getEmissao)).orElse(null);
+            if (est == null) {
+                return BigDecimal.ZERO;
+            }
+            return est.getValor();
         } else {
             return BigDecimal.ZERO;
         }
