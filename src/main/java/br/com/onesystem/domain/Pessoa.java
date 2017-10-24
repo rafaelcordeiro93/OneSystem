@@ -71,7 +71,7 @@ public abstract class Pessoa implements Serializable {
     @Length(min = 4, max = 60, message = "{bairro_lenght}")
     @Column(nullable = true, length = 80)
     private String bairro;
-    @Column(nullable = false)
+    @Column(nullable = true)
     @Temporal(TemporalType.DATE)
     private Date nascimento;
     private boolean categoriaCliente;

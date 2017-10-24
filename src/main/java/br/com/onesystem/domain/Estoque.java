@@ -51,13 +51,19 @@ public class Estoque implements Serializable {
     @NotNull(message = "{cancelado_not_null}")
     @Column(nullable = false)
     private boolean cancelado = false;
+    @ManyToOne
+    private LoteItem loteItem;
+    @NotNull(message = "{conta_de_estoque_not_null}")
+    @ManyToOne(optional = false)
+    private ContaDeEstoque contaDeEstoque;
     
     public Estoque() {
     }
 
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemDeNota itemDeNota, AjusteDeEstoque ajusteDeEstoque,
-            OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional, boolean cancelado) throws DadoInvalidoException {
+            OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional, 
+            boolean cancelado, LoteItem loteItem, ContaDeEstoque contaDeEstoque) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.quantidade = quantidade;
@@ -68,11 +74,13 @@ public class Estoque implements Serializable {
         this.ajusteDeEstoque = ajusteDeEstoque;
         this.itemDeCondicional = itemDeCondicional;
         this.cancelado = cancelado;
+        this.loteItem = loteItem;
+        this.contaDeEstoque = contaDeEstoque;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "emissao", "operacaoDeEstoque");
+        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "emissao", "operacaoDeEstoque", "cancelado", "contaDeEstoque");
         new ValidadorDeCampos<Estoque>().valida(this, campos);
     }
 
@@ -88,6 +96,10 @@ public class Estoque implements Serializable {
         return id;
     }
 
+    public ContaDeEstoque getContaDeEstoque() {
+        return contaDeEstoque;
+    }
+    
     public Item getItem() {
         return item;
     }
@@ -120,6 +132,10 @@ public class Estoque implements Serializable {
         return itemDeCondicional;
     }
 
+    public LoteItem getLoteItem() {
+        return loteItem;
+    }
+
     public BigDecimal getValor() {
         if (ajusteDeEstoque != null) {
             return ajusteDeEstoque.getCusto();
@@ -131,7 +147,7 @@ public class Estoque implements Serializable {
     public boolean isCancelado() {
         return cancelado;
     }
-    
+
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

@@ -74,8 +74,8 @@ public class GeradorDeEstoque implements Serializable {
             for (QuantidadeDeItemPorDeposito q : in.getListaDeQuantidade()) {
 
                 for (OperacaoDeEstoque operacaoDeEstoque : listaDeOperacoes) {
-                    Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade())
-                            .comItem(in.getItem()).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(in).construir();
+                    Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade()).comContaDeEstoque(operacaoDeEstoque.getContaDeEstoque())
+                            .comItem(in.getItem()).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(in).comLoteItem(in.getLoteItem()).construir();
                     // Adiciona no estoque
                     in.adicionaNoEstoque(e);
                 }
