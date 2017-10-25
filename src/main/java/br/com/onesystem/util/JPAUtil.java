@@ -14,7 +14,7 @@ import javax.persistence.Persistence;
  */
 public class JPAUtil {
 
-    private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("alkatar-console");
+    private static EntityManagerFactory entityManager = Persistence.createEntityManagerFactory("alkatar");
     private static EntityManager manager;
 
     

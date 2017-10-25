@@ -134,6 +134,7 @@ public class DadosIniciais {
         daoModulo.adiciona(acesso);
         daoModulo.adiciona(estoque);
         daoModulo.adiciona(vendas);
+        daoModulo.adiciona(gestaoInteligente);
 
         // -- Adiciona Módulos
         AdicionaDAOConsole<Janela> daoJanela = new AdicionaDAOConsole<>();
@@ -379,8 +380,8 @@ public class DadosIniciais {
         daoJanela.adiciona(jlogin);
 
         Janela dashboardGestao = new Janela(null, "Dashbord de Gestao", "/dashboardGestao.xhtml", gestaoInteligente, "AMGE0001");
-        daoModulo.adiciona(gestaoInteligente);
-
+        daoJanela.adiciona(dashboardGestao);
+        
         // -- Adiciona Privilégios
         AdicionaDAOConsole<Privilegio> daoPrivilegio = new AdicionaDAOConsole<>();
         List<Privilegio> listaPrivilegios = Arrays.asList(
