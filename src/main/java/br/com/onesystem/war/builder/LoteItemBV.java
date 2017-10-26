@@ -74,7 +74,7 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
-
+ 
     public String getObservacao() {
         return observacao;
     }

@@ -15,23 +15,32 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Immutable;
 
 /**
  *
  * @author Rafael
  */
 @Entity
-@SequenceGenerator(name = "SEQ_SALDODEESTOQUEPORDEPOSITO", initialValue = 1,
-        allocationSize = 1, sequenceName = "SEQ_SALDODEESTOQUEPORDEPOSITO")
-public class SaldoDeEstoquePorDeposito implements Serializable {
+@SequenceGenerator(name = "SEQ_SALDODEESTOQUE", initialValue = 1,
+        allocationSize = 1, sequenceName = "SEQ_SALDODEESTOQUE")
+@Immutable
+public class SaldoDeEstoque implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "SEQ_SALDODEESTOQUEPORDEPOSITO", strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(generator = "SEQ_SALDODEESTOQUE", strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull(message = "{deposito_not_null}")
     @ManyToOne
     private Deposito deposito;
+
+    @NotNull(message = "{conta_de_estoque_not_null}")
+    @ManyToOne
+    private ContaDeEstoque contaDeEstoque;
+
+    @ManyToOne(optional = true)
+    private LoteItem loteItem;
 
     @NotNull(message = "{item_not_null}")
     @ManyToOne
@@ -40,7 +49,7 @@ public class SaldoDeEstoquePorDeposito implements Serializable {
     @Column(insertable = false, updatable = false)
     private BigDecimal saldo;
 
-    public SaldoDeEstoquePorDeposito() {
+    public SaldoDeEstoque() {
     }
 
     public Long getId() {
@@ -59,9 +68,16 @@ public class SaldoDeEstoquePorDeposito implements Serializable {
         return saldo;
     }
 
-    @Override
-    public String toString() {
-        return "SaldoDeEstoquePorDeposito{" + "id=" + id + ", deposito=" + deposito + ", item=" + item + ", saldo=" + saldo + '}';
+    public ContaDeEstoque getContaDeEstoque() {
+        return contaDeEstoque;
     }
 
+    public LoteItem getLoteItem() {
+        return loteItem;
+    }
+
+    @Override
+    public String toString() {
+        return "SaldoDeEstoquePorDeposito{" + "id=" + id + ", deposito=" + deposito + ", contaDeEstoque=" + contaDeEstoque + ", item=" + item + ", saldo=" + saldo + '}';
+    }
 }

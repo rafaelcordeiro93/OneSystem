@@ -5,6 +5,7 @@ import br.com.onesystem.dao.AtualizaDAO;
 import br.com.onesystem.dao.RemoveDAO;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
@@ -18,6 +19,7 @@ import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.OperacaoDeEstoque;
+import br.com.onesystem.domain.SaldoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
@@ -26,7 +28,9 @@ import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.reportTemplate.SaldoEmContaTemplate;
+import br.com.onesystem.reportTemplate.SaldoEmDepositoTemplate;
+import br.com.onesystem.reportTemplate.SaldoEmLoteTemplate;
 import br.com.onesystem.services.CalculadoraDePreco;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.Model;
@@ -38,6 +42,7 @@ import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
+import br.com.onesystem.war.service.SaldoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -45,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -62,7 +68,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     private PrecoDeItemBV precoDeItemBV;
     private boolean precoPorMargem = false;
-    private List<SaldoDeEstoque> estoqueLista;
+    private List<SaldoEmDepositoTemplate> saldoEmDeposito;
+    private List<SaldoEmContaTemplate> saldoEmConta;
+    private List<SaldoEmLoteTemplate> saldoEmLote;
     private BigDecimal estoqueTotal;
     private List<PrecoDeItem> precoAtual;
     private List<PrecoDeItem> precos;
@@ -73,7 +81,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private LoteItemBV loteDeItemBV;
     private Model<LoteItem> loteItemSelecionado;
     private ModelList<LoteItem> listaLoteItem;
-    private Deposito deposito;
+    private ContaDeEstoque contaDeEstoque;
 
     @Inject
     private Configuracao configuracao;
@@ -82,7 +90,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private ConfiguracaoEstoque configuracaoEstoque;
 
     @Inject
-    private EstoqueService serviceEstoque;
+    private SaldoDeEstoqueService saldoDeEstoqueService;
 
     @Inject
     private PrecoDeItemService servicePrecoDeItem;
@@ -93,9 +101,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     @Inject
     private AdicionaDAO<PrecoDeItem> adicionaPrecoDAO;
 
-    @Inject
-    private AdicionaDAO<Estoque> adicionaEstoqueDAO;
- 
     @Inject
     private AdicionaDAO<ItemImagem> adicionaImagemDAO;
 
@@ -117,17 +122,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     @PostConstruct
     public void init() {
         limparJanela();
-        inicializarConfiguracoes();
-    }
-
-    private void inicializarConfiguracoes() {
-        try {
-            if (configuracao.getMoedaPadrao() == null) {
-                throw new EDadoInvalidoException(bundle.getMessage("Configuracao_nao_definida"));
-            }
-        } catch (EDadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     public void add() {
@@ -175,10 +169,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void limparJanela() {
         e = new ItemBV();
         t = null;
-        estoqueLista = new ArrayList<SaldoDeEstoque>();
+        saldoEmDeposito = new ArrayList<SaldoEmDepositoTemplate>();
+        saldoEmConta = new ArrayList<SaldoEmContaTemplate>();
+        saldoEmLote = new ArrayList<SaldoEmLoteTemplate>();
         imagens = new ArrayList<>();
+        contaDeEstoque = null;
         limparJanelaPreco();
-        deposito = null;
         tab = true;
         renderBotoes = true;
         listaLoteItem = new ModelList<>();
@@ -203,8 +199,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                 e.setMargem((Margem) obj);
             } else if (obj instanceof UnidadeMedidaItem) {
                 e.setUnidadeDeMedida((UnidadeMedidaItem) obj);
-            } else if (obj instanceof Deposito) {
-                deposito = (Deposito) obj;
+            } else if (obj instanceof ContaDeEstoque) {
+                contaDeEstoque = (ContaDeEstoque) obj;
+                inicializaEstoque();
             } else if (obj instanceof ListaDePreco) {
                 if (precoDeItemBV == null) {
                     limparJanelaPreco();
@@ -267,24 +264,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         inicializaPrecos();
     }
 
-    public void adicionaDepositoParaItem() {
-        try {
-            // Adiciona um estoque com saldo zero para que o depósito seja relacionado ao item.
-            SaldoDeEstoque saldo = estoqueLista.stream().filter(s -> s.getDeposito().equals(deposito)).findAny().orElse(null);
-            if (saldo == null) {
-                OperacaoDeEstoque operacaoDeEstoque = configuracaoEstoque.getAjusteDeEstoquePadrao().getOperacaoDeEstoque().get(0);
-                Estoque estoque = new EstoqueBuilder().comQuantidade(BigDecimal.ZERO).comDeposito(deposito).
-                        comEmissao(new Date()).comOperacaoDeEstoque(operacaoDeEstoque)
-                        .comItem(t).construir();
-                adicionaEstoqueDAO.adiciona(estoque);
-                inicializaEstoque();
-                InfoMessage.adicionado();
-            }
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
-    }
-
     private void inicializaImagens() {
         imagens = new ArrayList(itemService.buscarImagemDo(t));
     }
@@ -308,8 +287,42 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         }
     }
 
-    private void inicializaEstoque() throws DadoInvalidoException {
-        estoqueLista = serviceEstoque.buscaListaDeSaldoDeEstoqueEmTodosDepositos(e.construirComID(), new Date());
+    public void inicializaEstoque() throws DadoInvalidoException {
+        saldoEmDeposito = new ArrayList<SaldoEmDepositoTemplate>();
+        saldoEmConta = new ArrayList<SaldoEmContaTemplate>();
+        saldoEmLote = new ArrayList<SaldoEmLoteTemplate>();
+
+        Item item = e.construirComID();
+
+        List<SaldoDeEstoque> saldoDeEstoque = saldoDeEstoqueService.buscaSaldoDeEstoquePorItem(item);
+
+        contaDeEstoque = contaDeEstoque == null ? configuracaoEstoque.getContaDeEstoqueEmpresa() : contaDeEstoque;
+        
+        List<SaldoDeEstoque> saldosPorContaPadrao = saldoDeEstoque.stream().filter(s -> s.getContaDeEstoque().equals(contaDeEstoque)).collect(Collectors.toList());
+
+        // Agrupa depositos e soma saldo.
+        Map<Deposito, BigDecimal> agrupaDepositosESomaSaldo = saldosPorContaPadrao.stream().collect(Collectors.groupingBy(SaldoDeEstoque::getDeposito, Collectors.mapping(SaldoDeEstoque::getSaldo, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+        agrupaDepositosESomaSaldo.forEach((k, v) -> saldoEmDeposito.add(new SaldoEmDepositoTemplate(k, item, v)));
+
+        // Agrupa contas e soma saldo.
+        Map<ContaDeEstoque, BigDecimal> agrupaContasESomaSaldo = saldoDeEstoque.stream().collect(Collectors.groupingBy(SaldoDeEstoque::getContaDeEstoque, Collectors.mapping(SaldoDeEstoque::getSaldo, Collectors.reducing(BigDecimal.ZERO, BigDecimal::add))));
+        agrupaContasESomaSaldo.forEach((k, v) -> saldoEmConta.add(new SaldoEmContaTemplate(k, item, v)));
+
+        // Agrupa lotes e soma saldo - quando o lote é null, cria um lote para trazer o saldo.
+        if (!saldosPorContaPadrao.isEmpty()) {
+            LoteItem loteVazio = new LoteItem(new Long(0), new Date(), new Date(), new Long(0), tab, "", item, BigDecimal.ZERO);
+            saldoEmLote.add(0, new SaldoEmLoteTemplate(loteVazio, item, BigDecimal.ZERO));
+
+            for (SaldoDeEstoque s : saldosPorContaPadrao) {
+                if (s.getLoteItem() == null) {
+                    SaldoEmLoteTemplate saldo = saldoEmLote.get(0);
+                    saldo.setSaldo(saldo.getSaldo().add(s.getSaldo()));
+                    saldoEmLote.set(0, saldo);
+                } else {
+                    saldoEmLote.add(new SaldoEmLoteTemplate(s.getLoteItem(), item, s.getSaldo()));
+                }
+            }
+        }
     }
 
     public void favoritarImagem(ItemImagem itemImagem) {
@@ -428,12 +441,28 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         this.precoDeItemBV = precoDeItemBV;
     }
 
-    public List<SaldoDeEstoque> getEstoqueLista() {
-        return estoqueLista;
+    public List<SaldoEmDepositoTemplate> getSaldoEmDeposito() {
+        return saldoEmDeposito;
     }
 
-    public void setEstoqueLista(List<SaldoDeEstoque> estoqueLista) {
-        this.estoqueLista = estoqueLista;
+    public void setSaldoEmDeposito(List<SaldoEmDepositoTemplate> saldoEmDeposito) {
+        this.saldoEmDeposito = saldoEmDeposito;
+    }
+
+    public List<SaldoEmContaTemplate> getSaldoEmConta() {
+        return saldoEmConta;
+    }
+
+    public void setSaldoEmConta(List<SaldoEmContaTemplate> saldoEmConta) {
+        this.saldoEmConta = saldoEmConta;
+    }
+
+    public List<SaldoEmLoteTemplate> getSaldoEmLote() {
+        return saldoEmLote;
+    }
+
+    public void setSaldoEmLote(List<SaldoEmLoteTemplate> saldoEmLote) {
+        this.saldoEmLote = saldoEmLote;
     }
 
     public BigDecimal getEstoqueTotal() {
@@ -452,20 +481,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         this.imagens = imagens;
     }
 
-    public EstoqueService getServiceEstoque() {
-        return serviceEstoque;
-    }
-
     public boolean isPrecoPorMargem() {
         return precoPorMargem;
     }
 
     public void setPrecoPorMargem(boolean precoPorMargem) {
         this.precoPorMargem = precoPorMargem;
-    }
-
-    public void setServiceEstoque(EstoqueService serviceEstoque) {
-        this.serviceEstoque = serviceEstoque;
     }
 
     public Configuracao getConfiguracao() {
@@ -548,12 +569,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         this.listaLoteItem = listaLoteItem;
     }
 
-    public Deposito getDeposito() {
-        return deposito;
+    public ContaDeEstoque getContaDeEstoque() {
+        return contaDeEstoque;
     }
 
-    public void setDeposito(Deposito deposito) {
-        this.deposito = deposito;
+    public void setContaDeEstoque(ContaDeEstoque contaDeEstoque) {
+        this.contaDeEstoque = contaDeEstoque;
     }
 
 }

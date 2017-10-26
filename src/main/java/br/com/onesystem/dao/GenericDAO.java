@@ -43,7 +43,7 @@ public abstract class GenericDAO<T> implements Serializable {
     protected Map<String, Object> parametros;
 
     @Inject
-    private ArmazemDeRegistros armazem;
+    protected ArmazemDeRegistros armazem;
 
     public GenericDAO(Class clazz) {
         this.clazz = clazz;

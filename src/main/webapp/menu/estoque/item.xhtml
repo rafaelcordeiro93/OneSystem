@@ -20,8 +20,14 @@
             body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
                 background-color: #f7f7f7;
             }
+            .ui-autocomplete-panel .ui-autocomplete-table th, .ui-autocomplete-panel .ui-autocomplete-table td {
+                border-color: #c7c7c7;
+            }
             body .ui-widget-content {
                 border: none;
+            }
+            .panelGrupo.ui-panel .ui-panel-titlebar  {
+                background:none;
             }
             .TabNoBorder.ui-tabs.ui-tabs-top .ui-tabs-panel, body .ui-tabs.ui-tabs-bottom .ui-tabs-panel, body .ui-tabs.ui-tabs-left .ui-tabs-panel, body .ui-tabs.ui-tabs-right .ui-tabs-panel {
                 border-bottom: none !important;
@@ -122,22 +128,81 @@
 
                             <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
 
-                                <div class="ui-g-12">
-                                    <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
-                                    <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
-                                </div>
-                                <h:panelGrid>
+                                <p:panelGrid columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
+                                             columnClasses="ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6,ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6">
 
-                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-5" reflow="true">
-                                        <p:column headerText="#{l.Deposito}" >
-                                            <h:outputText value="#{estoque.deposito.nome}" />
-                                        </p:column>
-                                        <p:column headerText="#{l.Saldo}" >
-                                            <h:outputText value="#{estoque.saldo}" />
-                                        </p:column>
-                                    </p:dataTable>
+                                    <p:panelGrid columns="1"
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-9" >
 
-                                </h:panelGrid>
+                                        <div class="FontRobotoLight BoldGray DispBlock">O saldo é exibido por contas de estoque, selecione a conta de estoque para saber o saldo da conta.</div>
+
+                                        <p:outputLabel value="#{l.Conta_de_Estoque}" />
+                                        <a:inputTextDialog id="contaId" value="#{itemView.contaDeEstoque}" update="conteudo" dialog="#{selecaoContaDeEstoqueView}" mbView="#{itemView}" var="contaDeEstoque" converter="contaDeEstoqueConverter" process="@this" itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" editVisible="true" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" >
+                                            <p:ajax listener="#{itemView.inicializaEstoque()}" event="itemSelect" update="conteudo"/>
+                                        </a:inputTextDialog>
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDT" var="s" value="#{itemView.saldoEmDeposito}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true">
+                                            <p:column headerText="#{l.Deposito}" >
+                                                <h:outputText value="#{s.deposito.id}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{s.deposito.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Lote}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada lote</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDTLote" var="s" value="#{itemView.saldoEmLote}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
+                                            <p:column headerText="#{l.Lote}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Lote_Definido : s.loteItem.numeroDoLote}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Fabricacao}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Dados : s.loteItem.fabricacaoFormatada}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Validade}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Dados : s.loteItem.validadeFormatada}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="1" 
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-12" >
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Conta}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada conta de estoque</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDTConta" var="s" value="#{itemView.saldoEmConta}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
+                                            <p:column headerText="#{l.Conta_de_Estoque}" >
+                                                <h:outputText value="#{s.contaDeEstoque.id}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{s.contaDeEstoque.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:panelGrid>
+                                </p:panelGrid>
+
 
                             </p:tab>
 

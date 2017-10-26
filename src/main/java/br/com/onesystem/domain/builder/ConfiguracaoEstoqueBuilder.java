@@ -22,7 +22,6 @@ public class ConfiguracaoEstoqueBuilder {
     private ContaDeEstoque contaDeEstoque;
     private ListaDePreco listaDePreco;
     private Deposito depositoPadrao;
-    private Operacao operacaoDeAjusteDeEstoque;
 
     public ConfiguracaoEstoqueBuilder comId(Long id) {
         this.id = id;
@@ -44,13 +43,8 @@ public class ConfiguracaoEstoqueBuilder {
         return this;
     }
 
-    public ConfiguracaoEstoqueBuilder comOperacaoDeAjusteDeEstoque(Operacao operacaoDeAjusteDeEstoque) {
-        this.operacaoDeAjusteDeEstoque = operacaoDeAjusteDeEstoque;
-        return this;
-    }
-
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
-        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco, depositoPadrao, operacaoDeAjusteDeEstoque);
+        return new ConfiguracaoEstoque(id, contaDeEstoque, listaDePreco, depositoPadrao);
     }
 
 }

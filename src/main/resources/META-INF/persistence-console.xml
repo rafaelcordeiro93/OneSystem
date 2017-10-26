@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence              http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="alkatar" transaction-type="JTA" >
+    <persistence-unit name="alkatar" transaction-type="RESOURCE_LOCAL">
         <description>
             Persistence unit para Alkatar
         </description>
-        <!--Glassfish -->
-        <!--<provider>oracle.toplink.essentials.PersistenceProvider</provider> -->
-        <!--<jta-data-source>jdbc/AlkatarPostgres</jta-data-source> -->
-        <!--WildFly -->
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider> 
-        <jta-data-source>java:/AlkatarPostgresDS</jta-data-source> 
-        
+        <!--<provider>org.hibernate.ejb.HibernatePersistence</provider>-->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <!--  Aqui são listadas todas as entidades  -->
         <class>br.com.onesystem.domain.Cidade</class>
         <class>br.com.onesystem.domain.Cep</class>
@@ -117,41 +112,26 @@
         <class>br.com.onesystem.domain.PedidoAFornecedores</class>
         <class>br.com.onesystem.domain.ItemDePedidoCancelado</class>
         <class>br.com.onesystem.domain.LoteNotaFiscal</class>
-        <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
         <class>br.com.onesystem.domain.LoteItem</class>
+        <class>br.com.onesystem.domain.NumeracaoDeNotaFiscal</class>
         <class>br.com.onesystem.domain.Motivo</class>
-        <class>br.com.onesystem.domain.SaldoDeEstoquePorDeposito</class>
-        <class>br.com.onesystem.domain.SaldoDeLotePorDeposito</class>
-        <class>br.com.onesystem.domain.SaldoDeEstoquePorConta</class>
+        <class>br.com.onesystem.domain.SaldoDeEstoque</class>
         
         <properties>
-            <!--  Propriedades JDBC POSTGRE -->
-            <!--   <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/minds"/> -->
-            
-            <!--  Propriedades JDBC MYSQL -->
-            <!-- <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/alkatar" /> -->
-
-            <!--  Propriedades JDBC usuário -->
-            <!-- <property name="javax.persistence.jdbc.user" value="postgres"/>
-            <property name="javax.persistence.jdbc.password" value="root"/> -->
-            
-            <!--  Configurações específicas do POSTGRESQL  -->
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>           
-            
-            <!-- Configuracoes especificas do MYSQL -->
-            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />-->  
-            
-            <!--  Configurações específicas do Hibernate -->
-            <property name="hibernate.hbm2ddl.auto" value="update" />
-            <property name="hibernate.show_sql" value="false" />
-            <property name="hibernate.format_sql" value="false"/> 
-            <!-- <property name="javax.persistence.sql-load-script-source" value="insert.sql"/> -->
-            
+            <!--  Propriedades JDBC  -->
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/alkatar"/>
+            <property name="javax.persistence.jdbc.user" value="postgres"/>
+            <property name="javax.persistence.jdbc.password" value="root"/>
+            <!--  Configurações específicas do Hibernate  -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.format_sql" value="false"/>
+            <property name="javax.persistence.sql-load-script-source" value="META-INF/sql/triggerFunctions.sql"/>
             <!-- Outros Auxiliares -->
             <!-- <property name="hibernate.cache.use_query_cache" value="true" /> -->
         </properties>
     </persistence-unit>
-     
 </persistence>
+

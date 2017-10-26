@@ -19,7 +19,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 /**
  *
@@ -33,20 +36,26 @@ public class LoteItem implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SEQ_LOTEITEM")
     private Long id;
+    @NotNull(message = "{validade_not_null}")
     @Column(nullable = false)
     private Date dataDeValidade;
+    @NotNull(message = "{fabricacao_not_null}")
     @Column(nullable = false)
     private Date dataDeFabricacao;
+    @NotNull(message = "{numero_lote_not_null}")
     @Column(nullable = false)
     private Long numeroDoLote;
     @Column(nullable = false)
     private boolean ativo;
+    @Length(max = 255, min = 0, message = "{observacao_length}")
     @Column(nullable = true)
     private String observacao;
     @Column(nullable = true)
     private BigDecimal saldo;
     @ManyToOne
     private Item item;
+    @OneToMany(mappedBy = "loteItem")
+    private List<SaldoDeEstoque> saldoDeEstoque;
 
     public LoteItem() {
     }

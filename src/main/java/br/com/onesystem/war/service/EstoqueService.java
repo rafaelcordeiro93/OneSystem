@@ -1,6 +1,5 @@
 package br.com.onesystem.war.service;
 
-import br.com.onesystem.dao.DepositoDAO;
 import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.domain.Comanda;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
@@ -24,7 +23,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 
 /**
