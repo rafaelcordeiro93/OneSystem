@@ -36,7 +36,7 @@ public class SelecaoLoteItemView extends BasicCrudMBImpl<LoteItem> implements Se
     public List<LoteItem> complete(String query) {
         List<LoteItem> moedasFIltradas = new ArrayList<>();
         for (LoteItem m : beans) {
-            if (StringUtils.startsWithIgnoreCase(m.getNumeroDoLote().toString(), query)) {
+            if (StringUtils.startsWithIgnoreCase(m.getLote().toString(), query)) {
                 moedasFIltradas.add(m);
             }
         }

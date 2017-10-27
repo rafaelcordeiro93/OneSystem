@@ -14,22 +14,20 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
     private Long id;
     private Date dataDeValidade = new Date();
     private Date dataDeFabricacao = new Date();
-    private Long numeroDoLote;
+    private String lote;
     private boolean ativo = true;
     private String observacao;
     private Item item;
-    private BigDecimal saldo;
 
     public LoteItemBV(LoteItem n) {
         System.out.println(n);
         this.id = n.getId();
         this.dataDeValidade = n.getDataDeValidade();
         this.dataDeFabricacao = n.getDataDeFabricacao();
-        this.numeroDoLote = n.getNumeroDoLote();
+        this.lote = n.getLote();
         this.ativo = n.isAtivo();
         this.observacao = n.getObservacao();
         this.item = n.getItem();
-        this.saldo = n.getSaldo();
     }
 
     public LoteItemBV() {
@@ -59,14 +57,6 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
         this.dataDeFabricacao = dataDeFabricacao;
     }
 
-    public Long getNumeroDoLote() {
-        return numeroDoLote;
-    }
-
-    public void setNumeroDoLote(Long numeroDoLote) {
-        this.numeroDoLote = numeroDoLote;
-    }
-
     public boolean isAtivo() {
         return ativo;
     }
@@ -74,7 +64,7 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
     public void setAtivo(boolean ativo) {
         this.ativo = ativo;
     }
- 
+
     public String getObservacao() {
         return observacao;
     }
@@ -91,21 +81,24 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
         this.item = item;
     }
 
-    public BigDecimal getSaldo() {
-        return saldo;
+    public String getLote() {
+        return lote;
     }
 
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
+    public void setLote(String lote) {
+        if (lote != null) {
+            lote = lote.trim();
+        }
+        this.lote = lote;
     }
 
     public LoteItem construir() throws DadoInvalidoException {
         return new LoteItemBuilder().comDataDeValidade(dataDeValidade).comDataDeFabricacao(dataDeFabricacao).comAtivo(ativo)
-                .comNumeroDoLote(numeroDoLote).comObservacao(observacao).comItem(item).comSaldo(saldo).construir();
+                .comLote(lote).comObservacao(observacao).comItem(item).construir();
     }
 
     public LoteItem construirComID() throws DadoInvalidoException {
         return new LoteItemBuilder().comId(id).comDataDeValidade(dataDeValidade).comDataDeFabricacao(dataDeFabricacao).comAtivo(ativo)
-                .comNumeroDoLote(numeroDoLote).comObservacao(observacao).comItem(item).comSaldo(saldo).construir();
+                .comLote(lote).comObservacao(observacao).comItem(item).construir();
     }
 }

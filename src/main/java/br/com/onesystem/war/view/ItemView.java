@@ -7,7 +7,6 @@ import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
-import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Grupo;
 import br.com.onesystem.domain.Margem;
 import br.com.onesystem.domain.GrupoFiscal;
@@ -18,13 +17,10 @@ import br.com.onesystem.domain.Marca;
 import br.com.onesystem.domain.PrecoDeItem;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.domain.LoteItem;
-import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.SaldoDeEstoque;
-import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.util.InfoMessage;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.war.builder.ItemBV;
-import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.ADadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
@@ -41,6 +37,7 @@ import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
 import br.com.onesystem.war.service.ItemService;
+import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
 import br.com.onesystem.war.service.SaldoDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
@@ -97,18 +94,27 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     @Inject
     private ItemService itemService;
+    
+    @Inject
+    private LoteItemService serviceLoteItem;
 
     @Inject
     private AdicionaDAO<PrecoDeItem> adicionaPrecoDAO;
+
+    @Inject
+    private AdicionaDAO<LoteItem> adicionaLoteDAO;
+
+    @Inject
+    private RemoveDAO<LoteItem> removeLoteItemDAO;
+
+    @Inject
+    private AtualizaDAO<LoteItem> atualizaLoteDAO;
 
     @Inject
     private AdicionaDAO<ItemImagem> adicionaImagemDAO;
 
     @Inject
     private RemoveDAO<ItemImagem> removeImagemDAO;
-
-    @Inject
-    private RemoveDAO<LoteItem> removeLoteItemDAO;
 
     @Inject
     private AtualizaDAO<ItemImagem> atualizaImagemDAO;
@@ -127,9 +133,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void add() {
         try {
             Item f = e.construir();
-            listaLoteItem.getList().forEach((n) -> {
-                f.adiciona(n);
-            });
             addNoBanco(f);
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -141,13 +144,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             Item f = e.construirComID();
             List<LoteItem> removidos = listaLoteItem.getRemovidos().stream().filter(m -> ((LoteItem) m.getObject()).getId() != null).map(m -> (LoteItem) m.getObject()).collect(Collectors.toList());
             removidos.forEach(c -> f.remove(c));
-            listaLoteItem.getList().forEach((n) -> {
-                f.atualiza(n);
-            });
             updateNoBanco(f);
-            for (LoteItem c : removidos) {
-                removeLoteItemDAO.remove(c, c.getId());
-            }
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -174,11 +171,11 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         saldoEmLote = new ArrayList<SaldoEmLoteTemplate>();
         imagens = new ArrayList<>();
         contaDeEstoque = null;
-        limparJanelaPreco();
         tab = true;
         renderBotoes = true;
         listaLoteItem = new ModelList<>();
-
+        limparJanelaPreco();
+        limparLoteItem();
     }
 
     @Override
@@ -188,7 +185,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             if (obj instanceof Item) {
                 e = new ItemBV((Item) obj);
                 selecionaItem();
-                limparLoteItem();
             } else if (obj instanceof GrupoFiscal) {
                 e.setGrupoFiscal((GrupoFiscal) obj);
             } else if (obj instanceof Grupo) {
@@ -219,8 +215,6 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         if (e.getId() != null) {
             t = e.construirComID();
             inicializaDados();
-
-            listaLoteItem = new ModelList<LoteItem>(e.getLoteItem());
             tab = false;
         }
     }
@@ -262,6 +256,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private void inicializaDados() throws DadoInvalidoException {
         inicializaEstoque();
         inicializaPrecos();
+        inicializaLotes();
     }
 
     private void inicializaImagens() {
@@ -275,9 +270,17 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         precos = servicePrecoDeItem.buscaTodosPrecos(i);
     }
 
+    private void inicializaLotes() {
+        try {
+            listaLoteItem = new ModelList<>(serviceLoteItem.buscarLotesPorItem(e.construirComID()));
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
+    }
+
     public void onTabChange(TabChangeEvent event) {
         String str = event.getTab().getTitle();
-        if (str == bundle.getLabel("Preco") || str == bundle.getLabel("Estoque") || str == bundle.getLabel("Imagens")) {
+        if (str != bundle.getLabel("Detalhes")) {
             renderBotoes = false;
             if (str == bundle.getLabel("Imagens")) {
                 inicializaImagens();
@@ -297,7 +300,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         List<SaldoDeEstoque> saldoDeEstoque = saldoDeEstoqueService.buscaSaldoDeEstoquePorItem(item);
 
         contaDeEstoque = contaDeEstoque == null ? configuracaoEstoque.getContaDeEstoqueEmpresa() : contaDeEstoque;
-        
+
         List<SaldoDeEstoque> saldosPorContaPadrao = saldoDeEstoque.stream().filter(s -> s.getContaDeEstoque().equals(contaDeEstoque)).collect(Collectors.toList());
 
         // Agrupa depositos e soma saldo.
@@ -310,7 +313,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
         // Agrupa lotes e soma saldo - quando o lote é null, cria um lote para trazer o saldo.
         if (!saldosPorContaPadrao.isEmpty()) {
-            LoteItem loteVazio = new LoteItem(new Long(0), new Date(), new Date(), new Long(0), tab, "", item, BigDecimal.ZERO);
+            LoteItem loteVazio = new LoteItem(new Long(0), new Date(), new Date(), "", tab, "", item);
             saldoEmLote.add(0, new SaldoEmLoteTemplate(loteVazio, item, BigDecimal.ZERO));
 
             for (SaldoDeEstoque s : saldosPorContaPadrao) {
@@ -374,8 +377,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void addLoteItem() {
         try {
-            listaLoteItem.add(loteDeItemBV.construir());
+            loteDeItemBV.setItem(e.construirComID());
+            LoteItem novoRegistro = loteDeItemBV.construir();
+            adicionaLoteDAO.adiciona(novoRegistro);
+            listaLoteItem.add(novoRegistro);
             limparLoteItem();
+            InfoMessage.adicionado();
         } catch (DadoInvalidoException die) {
             die.print();
         }
@@ -384,25 +391,35 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     public void updateLoteItem() {
         try {
             if (loteDeItemBV.getId() == null) {
-                loteItemSelecionado.setObject(loteDeItemBV.construir());
-            } else {
-                loteItemSelecionado.setObject(loteDeItemBV.construirComID());
+                throw new EDadoInvalidoException(new BundleUtil().getMessage("registro_nao_encontrado"));
             }
+            LoteItem lote = loteDeItemBV.construirComID();
+            atualizaLoteDAO.atualiza(lote);
+            loteItemSelecionado.setObject(lote);
             listaLoteItem.set(loteItemSelecionado);
             limparLoteItem();
+            InfoMessage.atualizado();
         } catch (DadoInvalidoException die) {
             die.print();
         }
     }
 
     public void removeLoteItem() {
-        listaLoteItem.remove(loteItemSelecionado);
-        limparLoteItem();
+        try {
+            LoteItem lote = (LoteItem) loteItemSelecionado.getObject();
+            if (lote.getId() != null) {
+                removeLoteItemDAO.remove(lote, lote.getId());
+                listaLoteItem.remove(loteItemSelecionado);
+                limparLoteItem();
+                InfoMessage.removido();
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
+        }
     }
 
     public void selecionaLoteItem(SelectEvent event) {
-        loteItemSelecionado = (Model<LoteItem>) event.getObject();
-        loteDeItemBV = new LoteItemBV(loteItemSelecionado.getObject());;
+        loteDeItemBV = new LoteItemBV(loteItemSelecionado.getObject());
     }
 
     public void limparLoteItem() {

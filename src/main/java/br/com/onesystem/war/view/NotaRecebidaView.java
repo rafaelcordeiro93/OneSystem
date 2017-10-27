@@ -23,7 +23,6 @@ import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.domain.Operacao;
-import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.Orcamento;
 import br.com.onesystem.domain.ParcelaDePedido;
 import br.com.onesystem.domain.PedidoAFornecedores;
@@ -290,7 +289,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
             geradorDeEstoque.geraEstoqueDe(nota);
             atualizaLoteDentroDoItem();
             addNoBancoExtended(nota);
-            atualizaLote(nota);
             efetivaPedidoAFornecedores();
         } catch (DadoInvalidoException ex) {
             ex.print();
@@ -767,9 +765,9 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
     public void validaLoteItem() {
         //Verifica se item possui lote
         for (LoteItem lote : itemRecebido.getItem().getLoteItem()) {
-            if (lote.getNumeroDoLote().equals(loteItemBV.getNumeroDoLote())) {
+            if (lote.getLote().equals(loteItemBV.getLote())) {
                 loteItemBV = new LoteItemBV(lote);
-                InfoMessage.print(new BundleUtil().getLabel("Lote_Selecionado") + " : " + lote.getNumeroDoLote() + " - "
+                InfoMessage.print(new BundleUtil().getLabel("Lote_Selecionado") + " : " + lote.getLote() + " - "
                         + new BundleUtil().getLabel("Data_De_Fabricacao") + ": " + lote.getFabricacaoFormatada() + " - "
                         + new BundleUtil().getLabel("Data_De_Validade") + ": " + lote.getValidadeFormatada());
                 return;
@@ -777,16 +775,6 @@ public class NotaRecebidaView extends BasicMBImpl<NotaRecebida, NotaRecebidaBV> 
         }
         //Se o lote nao estiver cadastrado abre o dialogo pedindo se quer cadastrar
         RequestContext.getCurrentInstance().execute("PF('incluirLoteDeItemDialog').show()");
-    }
-
-    public void atualizaLote(NotaRecebida nota) {
-        for (ItemDeNota item : nota.getItens()) {
-            if (item.getLoteItem().equals(null)) {
-                return;
-            } else {//usando quando Adicionado uma Nota Nova
-                loteItemService.atualizaSaldoLote(item.getItem(), new LoteItemBV(item.getLoteItem()), item.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(nota.getOperacao()));
-            }
-        }
     }
 
     public void addDetalheParcelaCartao() {

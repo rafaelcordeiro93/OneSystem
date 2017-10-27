@@ -42,16 +42,13 @@ public class LoteItem implements Serializable {
     @NotNull(message = "{fabricacao_not_null}")
     @Column(nullable = false)
     private Date dataDeFabricacao;
-    @NotNull(message = "{numero_lote_not_null}")
-    @Column(nullable = false)
-    private Long numeroDoLote;
+    @NotNull(message = "{lote_not_null}")
+    private String lote;
     @Column(nullable = false)
     private boolean ativo;
     @Length(max = 255, min = 0, message = "{observacao_length}")
     @Column(nullable = true)
     private String observacao;
-    @Column(nullable = true)
-    private BigDecimal saldo;
     @ManyToOne
     private Item item;
     @OneToMany(mappedBy = "loteItem")
@@ -61,19 +58,19 @@ public class LoteItem implements Serializable {
     }
 
     public LoteItem(Long id, Date dataDeValidade, Date dataDeFabricacao,
-            Long numeroDoLote, boolean ativo, String observacao, Item item, BigDecimal saldo) throws DadoInvalidoException {
+            String lote, boolean ativo, String observacao, Item item) throws DadoInvalidoException {
         this.id = id;
-        this.numeroDoLote = numeroDoLote;
+        this.lote = lote;
         this.ativo = ativo;
         this.dataDeFabricacao = dataDeFabricacao;
         this.dataDeValidade = dataDeValidade;
         this.observacao = observacao;
         this.item = item;
-        this.saldo = saldo;
+        ehValido();
     }
 
     private void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("dataDeValidade", "dataDeFabricacao", "numeroDoLote", "observacao");
+        List<String> campos = Arrays.asList("lote", "dataDeFabricacao", "dataDeValidade", "observacao");
         new ValidadorDeCampos<LoteItem>().valida(this, campos);
     }
 
@@ -93,8 +90,8 @@ public class LoteItem implements Serializable {
         return dataDeFabricacao;
     }
 
-    public Long getNumeroDoLote() {
-        return numeroDoLote;
+    public String getLote() {
+        return lote;
     }
 
     public boolean isAtivo() {
@@ -107,10 +104,6 @@ public class LoteItem implements Serializable {
 
     public Item getItem() {
         return item;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
     }
 
     public String getFabricacaoFormatada() {
@@ -148,7 +141,7 @@ public class LoteItem implements Serializable {
 
     @Override
     public String toString() {
-        return "LoteItem{" + "id=" + id + ", dataDeValidade=" + dataDeValidade + ", dataDeFabricacao=" + dataDeFabricacao + ", numeroDoLote=" + numeroDoLote + ", ativo=" + ativo + ", observacao=" + observacao + ", saldo=" + saldo + ", item=" + item + '}';
+        return "LoteItem{" + "id=" + id + ", dataDeValidade=" + dataDeValidade + ", dataDeFabricacao=" + dataDeFabricacao + ", lote=" + lote + ", ativo=" + ativo + ", observacao=" + observacao + ", item=" + item + '}';
     }
 
 }

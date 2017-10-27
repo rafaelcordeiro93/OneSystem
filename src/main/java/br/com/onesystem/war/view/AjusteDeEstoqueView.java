@@ -13,10 +13,8 @@ import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import br.com.onesystem.war.service.AjusteDeEstoqueService;
-import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -40,9 +38,6 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     private AjusteDeEstoqueService ajusteDeEstoqueService;
 
     @Inject
-    private LoteItemService loteItemService;
-
-    @Inject
     private ItemDAO ItemDAO;
 
     @PostConstruct
@@ -54,7 +49,6 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         try {
             t = e.construir();
             ajusteDeEstoqueService.atualizaEstoque(t);
-            atualizaLote(t);
             addNoBanco(t);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -67,7 +61,6 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
             t = e.construirComID();
             ajusteDeEstoqueService.atualizaEstoque(t);
             updateNoBancoSemLimpar(t);
-            atualizaLote(ae);
             limparJanela();
         } catch (DadoInvalidoException die) {
             die.print();
@@ -77,31 +70,9 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     public void delete() {
         try {
             t = e.construirComID();
-            removeLote(t);
             deleteNoBanco(t, t.getId());
         } catch (DadoInvalidoException die) {
             die.print();
-        }
-    }
-
-    public void atualizaLote(AjusteDeEstoque ajuste) {
-        if (e.getLoteItem() != null) {
-            if (ajuste.getLoteItem().equals(e.getLoteItem()) && ajuste.getId() != null) {//Atualiza o saldo do lote no ajuste de estoque 
-                BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), e.getQuantidade());
-                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
-            } else if (ajuste.getId() != null) {//adiciona o saldo no lote novo e remove o saldo do lote antigo
-                removeLote(ajuste);
-                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
-            } else {//usando quando Adicionado um Ajuste de Estoque novo
-                loteItemService.atualizaSaldoLote(e.getItem(), loteItemBV, e.getQuantidade(), operacaoDeEstoqueService.buscarOperacaoFisicaPor(e.getOperacao()));
-            }
-        }
-    }
-
-    public void removeLote(AjusteDeEstoque ajuste) {
-        if (!ajuste.getLoteItem().equals(null)) {
-            BigDecimal valor = loteItemService.calculaQuantidade(ajuste.getQuantidade(), BigDecimal.ZERO);
-            loteItemService.atualizaSaldoLote(ajuste.getItem(), new LoteItemBV(ajuste.getLoteItem()), valor, operacaoDeEstoqueService.buscarOperacaoFisicaPor(ajuste.getOperacao()));
         }
     }
 

@@ -20,11 +20,10 @@ public class LoteItemBuilder {
     private Long id;
     private Date dataDeValidade;
     private Date dataDeFabricacao;
-    private Long numeroDoLote;
+    private String lote;
     private boolean ativo;
     private String observacao;
     private Item item;
-    private BigDecimal saldo;
 
     public LoteItemBuilder comId(Long id) {
         this.id = id;
@@ -41,8 +40,8 @@ public class LoteItemBuilder {
         return this;
     }
 
-    public LoteItemBuilder comNumeroDoLote(Long numeroDoLote) {
-        this.numeroDoLote = numeroDoLote;
+    public LoteItemBuilder comLote(String lote) {
+        this.lote = lote;
         return this;
     }
 
@@ -61,13 +60,8 @@ public class LoteItemBuilder {
         return this;
     }
     
-     public LoteItemBuilder comSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-        return this;
-    }
-
     public LoteItem construir() throws DadoInvalidoException {
-        return new LoteItem(id, dataDeValidade, dataDeFabricacao, numeroDoLote, ativo, observacao, item, saldo);
+        return new LoteItem(id, dataDeValidade, dataDeFabricacao, lote, ativo, observacao, item);
     }
 
 }
