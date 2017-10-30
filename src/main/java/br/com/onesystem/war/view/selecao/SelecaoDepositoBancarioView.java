@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.DepositoBancarioDAO;
 import br.com.onesystem.domain.DepositoBancario;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.DepositoBancarioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoDepositoBancarioView extends BasicCrudMBImpl<DepositoBancario> implements Serializable {
 
     @Inject
-    private DepositoBancarioService service;
+    private EntityManager manager;
+    
+    @Inject
+    private DepositoBancarioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarDepositoBancarios();
+        buscarDados();
+    }
+    
+    public void buscarDados(){
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoDepositoBancarioView extends BasicCrudMBImpl<DepositoBancari
 
     @Override
     public List<DepositoBancario> complete(String query) {
+        buscarDados();
         List<DepositoBancario> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoDepositoBancarioView extends BasicCrudMBImpl<DepositoBancari
         return contasFIltradas;
     }
 
-    public DepositoBancarioService getService() {
-        return service;
-    }
-
-    public void setService(DepositoBancarioService service) {
-        this.service = service;
-    }
 }

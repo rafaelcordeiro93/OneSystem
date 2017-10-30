@@ -11,17 +11,17 @@ public class CriarBanco {
 
     public static void main(String[] args) {
 //
-        try {
-
-            List<SaldoEmDepositoTemplate> listaDeResultadosSoma = new SaldoDeEstoqueDAO().buscaSaldoDeCadaDeposito().groupByDepositoItem().listaDeDepositosSoma();
-            listaDeResultadosSoma.forEach(System.out::println);
-
-            System.out.println("Fim");
-
-            System.exit(0);
-        } catch (Exception die) {
-            System.out.println(die.getMessage());
-        }
+//        try {
+//
+//            List<SaldoEmDepositoTemplate> listaDeResultadosSoma = new SaldoDeEstoqueDAO().buscaSaldoDeCadaDeposito().groupByDepositoItem().listaDeDepositosSoma();
+//            listaDeResultadosSoma.forEach(System.out::println);
+//
+//            System.out.println("Fim");
+//
+//            System.exit(0);
+//        } catch (Exception die) {
+//            System.out.println(die.getMessage());
+//        }
     }
 
 }

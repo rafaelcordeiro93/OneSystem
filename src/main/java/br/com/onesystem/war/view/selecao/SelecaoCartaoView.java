@@ -1,26 +1,34 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CartaoDAO;
 import br.com.onesystem.domain.Cartao;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CartaoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serializable {
 
     @Inject
-    private CartaoService service;
+    private EntityManager manager;
+
+    @Inject
+    private CartaoDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCartoes();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -31,9 +39,10 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
     public String abrirEdicao() {
         return "/menu/financeiro/cadastros/cartao";
     }
-    
-     @Override
+
+    @Override
     public List<Cartao> complete(String query) {
+        buscarDados();
         List<Cartao> listaFIltrada = new ArrayList<>();
         for (Cartao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -49,12 +58,5 @@ public class SelecaoCartaoView extends BasicCrudMBImpl<Cartao> implements Serial
         }
         return listaFIltrada;
     }
-    
-    public CartaoService getService() {
-        return service;
-    }
 
-    public void setService(CartaoService service) {
-        this.service = service;
-    }
 }

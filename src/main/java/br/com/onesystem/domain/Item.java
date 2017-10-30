@@ -3,8 +3,6 @@ package br.com.onesystem.domain;
 import br.com.onesystem.valueobjects.CaseType;
 import br.com.onesystem.valueobjects.TipoItem;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.reportTemplate.SaldoDeEstoque;
-import br.com.onesystem.reportTemplate.SaldoEmDepositoTemplate;
 import br.com.onesystem.services.CharacterType;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.valueobjects.DetalhamentoDeItem;
@@ -25,7 +23,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Formula;
@@ -101,6 +98,7 @@ public class Item implements Serializable {
     @NotNull(message = "{detalhamento_not_null}")
     private DetalhamentoDeItem detalhamento;
     @Formula("(select sum(s.saldo) from SaldoDeEstoque s where s.item_id = id and s.contadeestoque_id = (select ce.contadeestoqueempresa_id from configuracaoestoque ce where ce.id = 1))")
+    @Column(insertable = false, updatable = false)
     private BigDecimal saldo;
 
     public Item() {

@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CotacaoDAO;
 import br.com.onesystem.domain.Cotacao;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CotacaoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCotacaoView extends BasicCrudMBImpl<Cotacao> implements Serializable {
 
     @Inject
-    private CotacaoService service;
+    private EntityManager manager;
+
+    @Inject
+    private CotacaoDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCotacoes();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -31,9 +40,10 @@ public class SelecaoCotacaoView extends BasicCrudMBImpl<Cotacao> implements Seri
     public String abrirEdicao() {
         return "/menu/financeiro/cotacao";
     }
-    
+
     @Override
     public List<Cotacao> complete(String query) {
+        buscarDados();
         List<Cotacao> listaFIltrada = new ArrayList<>();
         for (Cotacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getConta().getMoeda().getNome(), query) || StringUtils.startsWithIgnoreCase(b.getConta().getNome(), query)) {
@@ -49,12 +59,5 @@ public class SelecaoCotacaoView extends BasicCrudMBImpl<Cotacao> implements Seri
         }
         return listaFIltrada;
     }
-    
-    public CotacaoService getService() {
-        return service;
-    }
 
-    public void setService(CotacaoService service) {
-        this.service = service;
-    }
 }

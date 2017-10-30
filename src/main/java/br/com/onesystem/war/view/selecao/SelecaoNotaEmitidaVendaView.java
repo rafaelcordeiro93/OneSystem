@@ -4,25 +4,33 @@ import br.com.onesystem.dao.NotaEmitidaDAO;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.TipoOperacao;
-import br.com.onesystem.war.service.NotaEmitidaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaEmitidaVendaView extends BasicCrudMBImpl<NotaEmitida> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private NotaEmitidaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = dao.porTipoOperacao(TipoOperacao.VENDA).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porTipoOperacao(TipoOperacao.VENDA).listaDeResultados(manager);
     }
 
     @Override
@@ -37,6 +45,7 @@ public class SelecaoNotaEmitidaVendaView extends BasicCrudMBImpl<NotaEmitida> im
 
     @Override
     public List<NotaEmitida> complete(String query) {
+        buscarDados();
         List<NotaEmitida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,14 +56,6 @@ public class SelecaoNotaEmitidaVendaView extends BasicCrudMBImpl<NotaEmitida> im
             }
         }
         return contasFIltradas;
-    }
-
-    public NotaEmitidaDAO getDao() {
-        return dao;
-    }
-
-    public void setDao(NotaEmitidaDAO dao) {
-        this.dao = dao;
     }
 
 }

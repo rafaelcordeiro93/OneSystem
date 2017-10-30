@@ -1,26 +1,34 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CfopDAO;
 import br.com.onesystem.domain.Cfop;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CfopService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCfopView extends BasicCrudMBImpl<Cfop> implements Serializable {
 
     @Inject
-    private CfopService service;
+    private EntityManager manager;
+
+    @Inject
+    private CfopDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCfops();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +42,7 @@ public class SelecaoCfopView extends BasicCrudMBImpl<Cfop> implements Serializab
 
     @Override
     public List<Cfop> complete(String query) {
+        buscarDados();
         List<Cfop> listaFIltrada = new ArrayList<>();
         for (Cfop b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -50,11 +59,4 @@ public class SelecaoCfopView extends BasicCrudMBImpl<Cfop> implements Serializab
         return listaFIltrada;
     }
 
-    public CfopService getService() {
-        return service;
-    }
-
-    public void setService(CfopService service) {
-        this.service = service;
-    }
 }

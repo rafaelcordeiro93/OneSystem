@@ -8,13 +8,13 @@ import br.com.onesystem.domain.Log;
 import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import br.com.onesystem.util.StatelessTransaction;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
@@ -25,12 +25,12 @@ import org.hibernate.exception.ConstraintViolationException;
 public class AdicionaDAO<T> implements Serializable {
 
     @Inject
-    @StatelessTransaction
     private EntityManager em;
 
     public AdicionaDAO() {
     }
 
+    @Transactional
     public void adiciona(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {

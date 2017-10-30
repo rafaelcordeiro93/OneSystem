@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.util.ExtendedTransaction;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,6 +18,7 @@ public class ArmazemDeRegistros<T> implements Serializable {
     private Class<T> classe;
 
     @Inject
+    @ExtendedTransaction
     private EntityManager em;
 
     public ArmazemDeRegistros() {

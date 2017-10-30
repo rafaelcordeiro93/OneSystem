@@ -9,19 +9,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoOperacaoDevolucaoCondicionalView extends BasicCrudMBImpl<Operacao> implements Serializable {
 
     @Inject
+    private EntityManager manager;
+
+    @Inject
     private OperacaoDAO operacaoDAO;
-    
+
     @PostConstruct
     public void init() {
-        beans = operacaoDAO.porTipoDeOperacao(TipoOperacao.DEVOLUCAO_CONDICIONAL).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = operacaoDAO.porTipoDeOperacao(TipoOperacao.DEVOLUCAO_CONDICIONAL).listaDeResultados(manager);
     }
 
     @Override
@@ -36,6 +45,7 @@ public class SelecaoOperacaoDevolucaoCondicionalView extends BasicCrudMBImpl<Ope
 
     @Override
     public List<Operacao> complete(String query) {
+        buscarDados();
         List<Operacao> listaFIltrada = new ArrayList<>();
         for (Operacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {

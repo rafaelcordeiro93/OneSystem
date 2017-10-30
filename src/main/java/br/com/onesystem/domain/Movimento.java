@@ -150,19 +150,19 @@ public abstract class Movimento implements Serializable {
         formasDeCobranca.set(formasDeCobranca.indexOf(forma), forma);
     }
 
-    public void atualizaBaixas(FormaDeCobranca forma) {
-        List<Baixa> bx = new BaixaDAO().ePorFormaDeCobranca(forma).listaDeResultados();
-        bx.forEach((b) -> {
-            b.atualizaValor(forma.getValor());
-        });
-    }
-
-    public void atualizaBaixas(TipoDeCobranca tipo) {
-        List<Baixa> bx = new BaixaDAO().ePorTipoDeCobranca(tipo).listaDeResultados();
-        bx.forEach((b) -> {
-            b.atualizaValor(tipo.getValor());
-        });
-    }
+//    public void atualizaBaixas(FormaDeCobranca forma) {
+//        List<Baixa> bx = new BaixaDAO().ePorFormaDeCobranca(forma).listaDeResultados();
+//        bx.forEach((b) -> {
+//            b.atualizaValor(forma.getValor());
+//        });
+//    }
+//
+//    public void atualizaBaixas(TipoDeCobranca tipo) {
+//        List<Baixa> bx = new BaixaDAO().ePorTipoDeCobranca(tipo).listaDeResultados();
+//        bx.forEach((b) -> {
+//            b.atualizaValor(tipo.getValor());
+//        });
+//    }
 
     public void remove(FormaDeCobranca forma) {
         formasDeCobranca.remove(forma);

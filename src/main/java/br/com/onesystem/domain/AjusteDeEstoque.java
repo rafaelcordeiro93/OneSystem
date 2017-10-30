@@ -37,9 +37,8 @@ public class AjusteDeEstoque implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_AJUSTEDEESTOQUE", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @NotNull(message = "{observacao_not_null}")
-    @Length(min = 2, max = 60, message = "{observacao_lenght}")
-    @Column(length = 60, nullable = false)
+    @Length(min = 2, max = 255, message = "{observacao_lenght}")
+    @Column(length = 255, nullable = false)
     private String observacao;
     @NotNull(message = "{item_not_null}")
     @ManyToOne
@@ -85,7 +84,7 @@ public class AjusteDeEstoque implements Serializable {
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "emissao", "quantidade", "deposito", "observacao", "custo", "operacao");
+        List<String> campos = Arrays.asList("emissao", "operacao", "item", "deposito", "quantidade", "custo", "observacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
     }
 
@@ -123,7 +122,7 @@ public class AjusteDeEstoque implements Serializable {
     public Deposito getDeposito() {
         return deposito;
     }
-
+ 
     public Date getEmissao() {
         return emissao;
     }

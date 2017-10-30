@@ -32,7 +32,7 @@
             <version>7.0</version>
             <scope>system</scope>
             <systemPath>${java.home}/lib/javaws.jar</systemPath>
-        </dependency>
+        </dependency> 
         <dependency>
             <groupId>net.sourceforge.dynamicreports</groupId>
             <artifactId>dynamicreports-adhoc</artifactId>
@@ -163,8 +163,8 @@
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
-            <scope>provided</scope> <!--  comentar para usar o banco pelo EM -->
+            <version>1.6.1</version> 
+            <scope>provided</scope> <!-- comentar para usar o banco pelo EM -->
         </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>

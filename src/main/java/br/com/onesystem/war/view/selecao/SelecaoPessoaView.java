@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.PessoaDAO;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.PessoaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,13 +11,17 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
 @ViewScoped
 public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serializable {
 
     @Inject
-    private PessoaService service;
+    private EntityManager manager;
+    
+    @Inject
+    private PessoaDAO dao;
 
     @PostConstruct
     public void init() {
@@ -25,7 +29,7 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
     }
 
     public void buscarDados() {
-        beans = service.buscarPessoas();
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -55,14 +59,6 @@ public class SelecaoPessoaView extends BasicCrudMBImpl<Pessoa> implements Serial
             }
         }
         return listaFIltrada;
-    }
-
-    public PessoaService getService() {
-        return service;
-    }
-
-    public void setService(PessoaService service) {
-        this.service = service;
     }
 
     public String getIcon() {

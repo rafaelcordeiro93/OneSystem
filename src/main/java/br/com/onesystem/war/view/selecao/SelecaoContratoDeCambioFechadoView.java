@@ -1,26 +1,36 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ContratoDeCambioDAO;
 import br.com.onesystem.domain.ContratoDeCambio;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ContratoDeCambioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoContratoDeCambioFechadoView extends BasicCrudMBImpl<ContratoDeCambio> implements Serializable {
 
     @Inject
-    private ContratoDeCambioService service;
+    private EntityManager manager;
+
+    @Inject
+    private ContratoDeCambioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarContratosFechadosParaCambio();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        //passar manager
+        beans = dao.buscarContratosFechadosParaCambio();
     }
 
     public void abrirDialogo() {
@@ -34,6 +44,7 @@ public class SelecaoContratoDeCambioFechadoView extends BasicCrudMBImpl<Contrato
 
     @Override
     public List<ContratoDeCambio> complete(String query) {
+        buscarDados();
         List<ContratoDeCambio> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (ContratoDeCambio m : beans) {
@@ -45,11 +56,4 @@ public class SelecaoContratoDeCambioFechadoView extends BasicCrudMBImpl<Contrato
         return listaFIltrada;
     }
 
-    public ContratoDeCambioService getService() {
-        return service;
-    }
-
-    public void setService(ContratoDeCambioService service) {
-        this.service = service;
-    }
 }

@@ -4,25 +4,33 @@ import br.com.onesystem.dao.OperacaoDAO;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.TipoLancamento;
-import br.com.onesystem.valueobjects.TipoOperacao;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoOperacaoNotaEmitidaView extends BasicCrudMBImpl<Operacao> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private OperacaoDAO operacaoDAO;
 
     @PostConstruct
     public void init() {
-        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.EMITIDA).listaDeResultados(manager);
     }
 
     @Override
@@ -37,6 +45,7 @@ public class SelecaoOperacaoNotaEmitidaView extends BasicCrudMBImpl<Operacao> im
 
     @Override
     public List<Operacao> complete(String query) {
+        buscarDados();
         List<Operacao> listaFIltrada = new ArrayList<>();
         for (Operacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {

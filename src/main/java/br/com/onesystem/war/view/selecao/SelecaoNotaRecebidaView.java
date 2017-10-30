@@ -1,26 +1,36 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.NotaRecebidaDAO;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.NotaRecebidaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaRecebidaView extends BasicCrudMBImpl<NotaRecebida> implements Serializable {
 
     @Inject
-    private NotaRecebidaService service;
+    private EntityManager manager;
+
+    @Inject
+    private NotaRecebidaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarNotasRecebidas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
+
     }
 
     @Override
@@ -35,6 +45,7 @@ public class SelecaoNotaRecebidaView extends BasicCrudMBImpl<NotaRecebida> imple
 
     @Override
     public List<NotaRecebida> complete(String query) {
+        buscarDados();
         List<NotaRecebida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -45,13 +56,5 @@ public class SelecaoNotaRecebidaView extends BasicCrudMBImpl<NotaRecebida> imple
             }
         }
         return contasFIltradas;
-    }
-
-    public NotaRecebidaService getService() {
-        return service;
-    }
-
-    public void setService(NotaRecebidaService service) {
-        this.service = service;
     }
 }

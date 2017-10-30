@@ -427,12 +427,10 @@
                     <div class="EmptyBox20"/> 
 
                     <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
-                        <div style="padding: 0% 0% 5% 8%">
                             <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                             <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                             <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                             <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        </div> 
                     </p:panelGrid>
                 </div>
             </div>

@@ -1,39 +1,49 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.GrupoFinanceiroDAO;
 import br.com.onesystem.domain.GrupoFinanceiro;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.GrupoFinanceiroService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoGrupoFinanceiroReceitaView extends BasicCrudMBImpl<GrupoFinanceiro> implements Serializable {
 
     @Inject
-    private GrupoFinanceiroService service;
+    private EntityManager manager;
+    
+    @Inject
+    private GrupoFinanceiroDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarGruposFInanceirosDoTipoReceitas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porReceitas().listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
         exibirNaTela("contabil/selecao/selecaoGrupoFinanceiroReceita");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/contabil/grupoFinanceiro";
     }
-    
-       @Override
+
+    @Override
     public List<GrupoFinanceiro> complete(String query) {
+        buscarDados();
         List<GrupoFinanceiro> listaFIltrada = new ArrayList<>();
         for (GrupoFinanceiro b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -50,11 +60,4 @@ public class SelecaoGrupoFinanceiroReceitaView extends BasicCrudMBImpl<GrupoFina
         return listaFIltrada;
     }
 
-    public GrupoFinanceiroService getService() {
-        return service;
-    }
-
-    public void setService(GrupoFinanceiroService service) {
-        this.service = service;
-    }
 }

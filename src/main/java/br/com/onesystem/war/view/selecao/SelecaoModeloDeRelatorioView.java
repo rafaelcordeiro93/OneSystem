@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ModeloDeRelatorioDAO;
 import br.com.onesystem.domain.ModeloDeRelatorio;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ModeloDeRelatorioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoModeloDeRelatorioView extends BasicCrudMBImpl<ModeloDeRelatorio> implements Serializable {
 
     @Inject
-    private ModeloDeRelatorioService service;
+    private EntityManager manager;
+    
+    @Inject
+    private ModeloDeRelatorioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarModeloDeRelatorio();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoModeloDeRelatorioView extends BasicCrudMBImpl<ModeloDeRelato
     
     @Override
     public List<ModeloDeRelatorio> complete(String query) {
+        buscarDados();
         List<ModeloDeRelatorio> listaFIltrada = new ArrayList<>();
         for (ModeloDeRelatorio b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -50,11 +60,4 @@ public class SelecaoModeloDeRelatorioView extends BasicCrudMBImpl<ModeloDeRelato
         return listaFIltrada;
     }
 
-    public ModeloDeRelatorioService getService() {
-        return service;
-    }
-
-    public void setService(ModeloDeRelatorioService service) {
-        this.service = service;
-    }
 }

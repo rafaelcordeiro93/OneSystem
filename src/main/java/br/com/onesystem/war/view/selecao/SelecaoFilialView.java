@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.FilialDAO;
 import br.com.onesystem.domain.Filial;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.FilialService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serializable {
 
     @Inject
-    private FilialService service;
-
+    private EntityManager manager;
+    
+    @Inject
+    private FilialDAO dao;
+    
     @PostConstruct
     public void init() {
-        beans = service.buscarFiliais();
+        buscarDados();
+    }
+    
+    public void buscarDados(){
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serial
     
     @Override
     public List<Filial> complete(String query) {
+        buscarDados();
         List<Filial> listaFIltrada = new ArrayList<>();
         for (Filial b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getFantasia(), query)) {
@@ -50,11 +60,4 @@ public class SelecaoFilialView extends BasicCrudMBImpl<Filial> implements Serial
         return listaFIltrada;
     }
 
-    public FilialService getService() {
-        return service;
-    }
-
-    public void setService(FilialService service) {
-        this.service = service;
-    }
 }

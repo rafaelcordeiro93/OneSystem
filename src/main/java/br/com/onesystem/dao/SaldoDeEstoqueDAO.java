@@ -12,6 +12,7 @@ import br.com.onesystem.reportTemplate.SaldoEmContaTemplate;
 import br.com.onesystem.reportTemplate.SaldoEmDepositoTemplate;
 import br.com.onesystem.reportTemplate.SaldoEmLoteTemplate;
 import java.util.List;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -29,14 +30,14 @@ public class SaldoDeEstoqueDAO extends GenericDAO<SaldoDeEstoque> {
                 + "from SaldoDeEstoque saldoDeEstoque ";
         return this;
     }
-    
+
     public SaldoDeEstoqueDAO buscaSaldoDeCadaConta() {
         query = "select new br.com.onesystem.reportTemplate.SaldoEmContaTemplate"
                 + "(saldoDeEstoque.contaDeEstoque, saldoDeEstoque.item, sum(saldoDeEstoque.saldo)) "
                 + "from SaldoDeEstoque saldoDeEstoque ";
         return this;
     }
-    
+
     public SaldoDeEstoqueDAO buscaSaldoDeCadaLote() {
         query = "select new br.com.onesystem.reportTemplate.SaldoEmLoteTemplate"
                 + "(saldoDeEstoque.loteItem, saldoDeEstoque.item, sum(saldoDeEstoque.saldo)) "
@@ -60,33 +61,33 @@ public class SaldoDeEstoqueDAO extends GenericDAO<SaldoDeEstoque> {
         group = " group by saldoDeEstoque.deposito,saldoDeEstoque.item ";
         return this;
     }
-    
+
     public SaldoDeEstoqueDAO groupByContaDeEstoqueItem() {
         group = " group by saldoDeEstoque.contaDeEstoque,saldoDeEstoque.item ";
         return this;
     }
-    
+
     public SaldoDeEstoqueDAO groupByLoteDeEstoqueItem() {
         group = " group by saldoDeEstoque.loteItem,saldoDeEstoque.item ";
         return this;
     }
 
-    public List<SaldoEmDepositoTemplate> listaDeDepositosSoma() {
-        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmDepositoTemplate>) SaldoEmDepositoTemplate.class).listaRegistrosDaConsulta(getConsulta(), parametros);
+    public List<SaldoEmDepositoTemplate> listaDeDepositosSoma(EntityManager manager) {
+        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmDepositoTemplate>) SaldoEmDepositoTemplate.class, manager).listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return listaRegistrosDaConsulta;
     }
 
-    public List<SaldoEmContaTemplate> listaDeContaSoma() {
-        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmContaTemplate>) SaldoEmContaTemplate.class).listaRegistrosDaConsulta(getConsulta(), parametros);
+    public List<SaldoEmContaTemplate> listaDeContaSoma(EntityManager manager) {
+        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmContaTemplate>) SaldoEmContaTemplate.class, manager).listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return listaRegistrosDaConsulta;
     }
-    
-    public List<SaldoEmLoteTemplate> listaDeLoteSoma() {
-        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmLoteTemplate>) SaldoEmLoteTemplate.class).listaRegistrosDaConsulta(getConsulta(), parametros);
+
+    public List<SaldoEmLoteTemplate> listaDeLoteSoma(EntityManager manager) {
+        List listaRegistrosDaConsulta = armazem.daClasse((Class<SaldoEmLoteTemplate>) SaldoEmLoteTemplate.class, manager).listaRegistrosDaConsulta(getConsulta(), parametros);
         limpar();
         return listaRegistrosDaConsulta;
     }
-    
+
 }

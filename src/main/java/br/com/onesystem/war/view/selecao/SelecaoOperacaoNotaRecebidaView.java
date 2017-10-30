@@ -9,19 +9,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoOperacaoNotaRecebidaView extends BasicCrudMBImpl<Operacao> implements Serializable {
 
     @Inject
-    private OperacaoDAO operacaoDAO;
+    private EntityManager manager;
     
+    @Inject
+    private OperacaoDAO operacaoDAO;
+
     @PostConstruct
     public void init() {
-        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = operacaoDAO.porTipoDeLancamento(TipoLancamento.RECEBIDA).listaDeResultados(manager);
     }
 
     @Override
@@ -36,6 +45,7 @@ public class SelecaoOperacaoNotaRecebidaView extends BasicCrudMBImpl<Operacao> i
 
     @Override
     public List<Operacao> complete(String query) {
+        buscarDados();
         List<Operacao> listaFIltrada = new ArrayList<>();
         for (Operacao b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {

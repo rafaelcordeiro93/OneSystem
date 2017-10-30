@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.FormaDeRecebimentoDAO;
 import br.com.onesystem.domain.FormaDeRecebimento;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.FormaDeRecebimentoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoFormaDeRecebimentoView extends BasicCrudMBImpl<FormaDeRecebimento> implements Serializable {
 
     @Inject
-    private FormaDeRecebimentoService service;
+    private EntityManager manager;
+    
+    @Inject
+    private FormaDeRecebimentoDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarFormasDeRecebimento();
+        buscarDados();
+    }
+    
+    public void buscarDados(){
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoFormaDeRecebimentoView extends BasicCrudMBImpl<FormaDeRecebi
     
     @Override
     public List<FormaDeRecebimento> complete(String query) {
+        buscarDados();
         List<FormaDeRecebimento> listaFIltrada = new ArrayList<>();
         for (FormaDeRecebimento b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -50,11 +60,4 @@ public class SelecaoFormaDeRecebimentoView extends BasicCrudMBImpl<FormaDeRecebi
         return listaFIltrada;
     }
 
-    public FormaDeRecebimentoService getService() {
-        return service;
-    }
-
-    public void setService(FormaDeRecebimentoService service) {
-        this.service = service;
-    }
 }

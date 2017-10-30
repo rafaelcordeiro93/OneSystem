@@ -1,26 +1,36 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.PedidoAFornecedoresDAO;
 import br.com.onesystem.domain.PedidoAFornecedores;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.PedidoAFornecedoresService;
+import br.com.onesystem.valueobjects.EstadoDePedido;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoPedidoAFornecedoresEmDefinicaoView extends BasicCrudMBImpl<PedidoAFornecedores> implements Serializable {
 
     @Inject
-    private PedidoAFornecedoresService service;
+    private EntityManager manager;
+
+    @Inject
+    private PedidoAFornecedoresDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarPedidosAFornecedoresEmDefinicao();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porEstado(EstadoDePedido.EM_DEFINICAO).listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +45,7 @@ public class SelecaoPedidoAFornecedoresEmDefinicaoView extends BasicCrudMBImpl<P
 
     @Override
     public List<PedidoAFornecedores> complete(String query) {
+        buscarDados();
         List<PedidoAFornecedores> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +58,4 @@ public class SelecaoPedidoAFornecedoresEmDefinicaoView extends BasicCrudMBImpl<P
         return contasFIltradas;
     }
 
-    public PedidoAFornecedoresService getService() {
-        return service;
-    }
-
-    public void setService(PedidoAFornecedoresService service) {
-        this.service = service;
-    }
 }

@@ -2,25 +2,34 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.LancamentoBancario;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.LancamentoBancarioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import br.com.onesystem.dao.LancamentoBancarioDAO;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoLancamentoBancarioView extends BasicCrudMBImpl<LancamentoBancario> implements Serializable {
 
     @Inject
-    private LancamentoBancarioService service;
+    private EntityManager manager;
+
+    @Inject
+    private LancamentoBancarioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarLancamentoBancarios();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoLancamentoBancarioView extends BasicCrudMBImpl<LancamentoBan
 
     @Override
     public List<LancamentoBancario> complete(String query) {
+        buscarDados();
         List<LancamentoBancario> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoLancamentoBancarioView extends BasicCrudMBImpl<LancamentoBan
         return contasFIltradas;
     }
 
-    public LancamentoBancarioService getService() {
-        return service;
-    }
-
-    public void setService(LancamentoBancarioService service) {
-        this.service = service;
-    }
 }

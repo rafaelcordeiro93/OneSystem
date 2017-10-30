@@ -1,30 +1,39 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CondicionalDAO;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CondicionalService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCondicionalView extends BasicCrudMBImpl<Condicional> implements Serializable {
 
     @Inject
-    private CondicionalService service;
+    private EntityManager manager;
+
+    @Inject
+    private CondicionalDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCondicionals();
-    }    
-    
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
+    }
+
     @Override
-    public void abrirDialogo() {  
+    public void abrirDialogo() {
         exibirNaTela("vendas/selecao/selecaoCondicional");
     }
 
@@ -35,6 +44,7 @@ public class SelecaoCondicionalView extends BasicCrudMBImpl<Condicional> impleme
 
     @Override
     public List<Condicional> complete(String query) {
+        buscarDados();
         List<Condicional> comandasFiltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoCondicionalView extends BasicCrudMBImpl<Condicional> impleme
         return comandasFiltradas;
     }
 
-    public CondicionalService getService() {
-        return service;
-    }
-
-    public void setService(CondicionalService service) {
-        this.service = service;
-    }
 }

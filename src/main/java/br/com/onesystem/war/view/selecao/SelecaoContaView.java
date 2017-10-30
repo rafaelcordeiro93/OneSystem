@@ -2,7 +2,6 @@ package br.com.onesystem.war.view.selecao;
 
 import br.com.onesystem.domain.Conta;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ContaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,17 +9,27 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import br.com.onesystem.dao.ContaDAO;
+import javax.faces.view.ViewScoped;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoContaView extends BasicCrudMBImpl<Conta> implements Serializable {
 
     @Inject
-    private ContaService service;
+    private EntityManager manager;
+
+    @Inject
+    private ContaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarContas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoContaView extends BasicCrudMBImpl<Conta> implements Serializ
 
     @Override
     public List<Conta> complete(String query) {
+        buscarDados();
         List<Conta> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -52,11 +62,4 @@ public class SelecaoContaView extends BasicCrudMBImpl<Conta> implements Serializ
         return contasFIltradas;
     }
 
-    public ContaService getService() {
-        return service;
-    }
-
-    public void setService(ContaService service) {
-        this.service = service;
-    }
 }

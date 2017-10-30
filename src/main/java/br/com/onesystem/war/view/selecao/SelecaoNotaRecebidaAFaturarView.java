@@ -12,12 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaRecebidaAFaturarView extends BasicCrudMBImpl<NotaRecebida> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private NotaRecebidaDAO dao;
@@ -25,7 +30,11 @@ public class SelecaoNotaRecebidaAFaturarView extends BasicCrudMBImpl<NotaRecebid
     @PostConstruct
     public void init() {
         buscaPessoa();
-        beans = dao.porAFaturarMaiorZero().porSemFaturaRecebida().porPessoa(buscaPessoa()).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porAFaturarMaiorZero().porSemFaturaRecebida().porPessoa(buscaPessoa()).listaDeResultados(manager);
     }
 
     public Pessoa buscaPessoa() {
@@ -49,6 +58,7 @@ public class SelecaoNotaRecebidaAFaturarView extends BasicCrudMBImpl<NotaRecebid
 
     @Override
     public List<NotaRecebida> complete(String query) {
+        buscarDados();
         List<NotaRecebida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {

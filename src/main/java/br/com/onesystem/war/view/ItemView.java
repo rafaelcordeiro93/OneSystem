@@ -155,9 +155,14 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             validaMargem();
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
             adicionaPrecoDAO.adiciona(novoRegistro);
+            
+            //atualiza margem no BD.
+            ItemBV ibv = new ItemBV(t);
+            ibv.setMargem(e.getMargem());
+            updateNoBancoSemLimpar(ibv.construirComID());
+            
             limparJanelaPreco();
             inicializaPrecos();
-            InfoMessage.adicionado();
         } catch (DadoInvalidoException die) {
             die.print();
         }

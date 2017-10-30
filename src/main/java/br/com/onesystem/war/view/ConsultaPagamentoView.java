@@ -61,8 +61,8 @@ public class ConsultaPagamentoView extends BasicMBImpl<Pagamento, PagamentoBV> i
             tiposDeCobranca.getList().forEach(tp -> pagamento.atualiza(tp));
             formasDeCobranca.getList().forEach(f -> pagamento.atualiza(f));
 
-            tiposDeCobranca.getList().forEach(tp -> pagamento.atualizaBaixas(tp));
-            formasDeCobranca.getList().forEach(f -> pagamento.atualizaBaixas(f));
+//            tiposDeCobranca.getList().forEach(tp -> pagamento.atualizaBaixas(tp));
+//            formasDeCobranca.getList().forEach(f -> pagamento.atualizaBaixas(f));
 
             pagamento.ehRegistroValido();
             tiposDeCobrancaDeletados.getList().forEach(tp -> pagamento.remove(tp));

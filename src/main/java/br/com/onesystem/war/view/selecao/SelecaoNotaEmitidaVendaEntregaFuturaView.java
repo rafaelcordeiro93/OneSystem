@@ -9,19 +9,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaEmitidaVendaEntregaFuturaView extends BasicCrudMBImpl<NotaEmitida> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private NotaEmitidaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = dao.porTipoOperacao(TipoOperacao.VENDA_ENTREGA_FUTURA).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porTipoOperacao(TipoOperacao.VENDA_ENTREGA_FUTURA).listaDeResultados(manager);
     }
 
     @Override
@@ -36,6 +45,7 @@ public class SelecaoNotaEmitidaVendaEntregaFuturaView extends BasicCrudMBImpl<No
 
     @Override
     public List<NotaEmitida> complete(String query) {
+        buscarDados();
         List<NotaEmitida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -46,14 +56,6 @@ public class SelecaoNotaEmitidaVendaEntregaFuturaView extends BasicCrudMBImpl<No
             }
         }
         return contasFIltradas;
-    }
-
-    public NotaEmitidaDAO getDao() {
-        return dao;
-    }
-
-    public void setDao(NotaEmitidaDAO dao) {
-        this.dao = dao;
     }
 
 }

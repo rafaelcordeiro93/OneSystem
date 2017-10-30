@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ListaDePrecoDAO;
 import br.com.onesystem.domain.ListaDePreco;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ListaDePrecoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoListaDePrecoView extends BasicCrudMBImpl<ListaDePreco> implements Serializable {
 
     @Inject
-    private ListaDePrecoService service;
+    private EntityManager manager;
+
+    @Inject
+    private ListaDePrecoDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarListaPrecos();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -31,9 +40,10 @@ public class SelecaoListaDePrecoView extends BasicCrudMBImpl<ListaDePreco> imple
     public String abrirEdicao() {
         return "/menu/estoque/cadastros/listaDePreco";
     }
-    
+
     @Override
     public List<ListaDePreco> complete(String query) {
+        buscarDados();
         List<ListaDePreco> listaFIltrada = new ArrayList<>();
         for (ListaDePreco b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -49,12 +59,8 @@ public class SelecaoListaDePrecoView extends BasicCrudMBImpl<ListaDePreco> imple
         }
         return listaFIltrada;
     }
-    
-    public ListaDePrecoService getService() {
-        return service;
-    }
 
-    public void setService(ListaDePrecoService service) {
-        this.service = service;
+    public String getIcon() {
+        return "fa-list";
     }
 }

@@ -1,26 +1,34 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CepDAO;
 import br.com.onesystem.domain.Cep;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CepService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCepView extends BasicCrudMBImpl<Cep> implements Serializable {
 
     @Inject
-    private CepService service;
+    private EntityManager manager;
+
+    @Inject
+    private CepDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCeps();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +42,7 @@ public class SelecaoCepView extends BasicCrudMBImpl<Cep> implements Serializable
 
     @Override
     public List<Cep> complete(String query) {
+        buscarDados();
         List<Cep> listaFIltrada = new ArrayList<>();
         for (Cep b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getCep(), query)) {
@@ -48,14 +57,6 @@ public class SelecaoCepView extends BasicCrudMBImpl<Cep> implements Serializable
             }
         }
         return listaFIltrada;
-    }
-
-    public CepService getService() {
-        return service;
-    }
-
-    public void setService(CepService service) {
-        this.service = service;
     }
 
     public String getIcon() {

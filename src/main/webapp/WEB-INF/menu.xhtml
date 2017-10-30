@@ -62,7 +62,7 @@
                     <p:menuitem value="#{l.Conta_De_Estoque}" icon="fa fa-hdd-o" outcome="/menu/estoque/contaDeEstoque" styleClass="separator-menu-item"/>
                     <p:menuitem value="#{l.Retificacao_De_Compra}" icon="fa fa-american-sign-language-interpreting" outcome="/menu/estoque/retificacaoDeCompra" />
                     <p:submenu label="#{l.Cadastros}" icon="fa fa-plus-square-o">
-                        <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/menu/estoque/cadastros/comissao" />
+                        <p:menuitem value="#{l.Comissao}" icon="fa fa-usd" outcome="/menu/estoque/cadastros/comissao" rendered="false" />
                         <p:menuitem value="#{l.Deposito}" icon="fa fa-cubes" outcome="/menu/estoque/cadastros/deposito" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Lista_Preco}" icon="fa fa-th-list" outcome="/menu/estoque/cadastros/listaDePreco" styleClass="separator-menu-item" />
                         <p:menuitem value="#{l.Grupo}" icon="fa fa-object-group" outcome="/menu/estoque/cadastros/grupo" />
@@ -107,7 +107,6 @@
                         <p:menuitem value="#{l.Forma_Recebimento}" icon="fa fa-download" outcome="/menu/financeiro/cadastros/formaDeRecebimento" />
                         <p:menuitem value="#{l.Moeda}" icon="fa fa-btc" outcome="/menu/financeiro/cadastros/moeda" /> 
                         <p:menuitem value="#{l.Receita_Provisionada}" icon="fa fa-sign-in" outcome="/menu/financeiro/cadastros/receitaProvisionada" />
-                        <p:menuitem value="#{l.Transferencia_De_Lucro} *" icon="fa  fa-random" outcome="/menu/financeiro/cadastros/transferenciaDespesaProvisionada" />
                     </p:submenu>
                     <p:submenu label="#{l.Consultar}" icon="fa fa-search-plus">   
                         <p:menuitem value="#{l.Cobranca}" icon="fa fa-shield fa-rotate-270" outcome="/menu/financeiro/consultar/consultaCobranca" />

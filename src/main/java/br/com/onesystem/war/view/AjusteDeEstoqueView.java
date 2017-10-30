@@ -8,11 +8,11 @@ import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.services.GeradorDeEstoque;
 import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
-import br.com.onesystem.war.service.AjusteDeEstoqueService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +26,7 @@ import org.primefaces.event.SelectEvent;
 @javax.faces.view.ViewScoped //javax.faces.view.ViewScoped;
 public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEstoqueBV> implements Serializable {
 
-    private LoteItemBV loteItemBV;
+    private LoteItemBV loteItemBV; 
 
     @Inject
     private Configuracao configuracao;
@@ -35,7 +35,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     private OperacaoDeEstoqueService operacaoDeEstoqueService;
 
     @Inject
-    private AjusteDeEstoqueService ajusteDeEstoqueService;
+    private GeradorDeEstoque geradorDeEstoque;
 
     @Inject
     private ItemDAO ItemDAO;
@@ -48,7 +48,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     public void add() {
         try {
             t = e.construir();
-            ajusteDeEstoqueService.atualizaEstoque(t);
+            geradorDeEstoque.geraEstoque(t);
             addNoBanco(t);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -59,7 +59,7 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         try {
             AjusteDeEstoque ae = t;//pega o ajuste de estoque na hora do selecionar, antes de ser feita as alteracoes
             t = e.construirComID();
-            ajusteDeEstoqueService.atualizaEstoque(t);
+            geradorDeEstoque.geraEstoque(t);
             updateNoBancoSemLimpar(t);
             limparJanela();
         } catch (DadoInvalidoException die) {
@@ -81,12 +81,12 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
         Object obj = event.getObject();
         if (obj instanceof AjusteDeEstoque) {
             e = new AjusteDeEstoqueBV((AjusteDeEstoque) obj);
-            setItem();
+            e.setItem(ItemDAO.porId(e.getItem().getId()).resultado());
             setupItem();
             setAjuste();
         } else if (obj instanceof Operacao) {
             Operacao operacao = (Operacao) obj;
-            List<OperacaoDeEstoque> operacoesDeEstoque = operacao.getOperacaoDeEstoque();
+            List<OperacaoDeEstoque> operacoesDeEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(operacao);
             if (operacoesDeEstoque == null || operacoesDeEstoque.isEmpty()) {
                 RequestContext rc = RequestContext.getCurrentInstance();
                 rc.execute("PF('operacaoAjusteDialog').show()");
@@ -97,16 +97,9 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
             e.setDeposito((Deposito) obj);
         } else if (obj instanceof Item) {
             e.setItem((Item) obj);
-            setItem();
+            e.setItem(ItemDAO.porId(e.getItem().getId()).resultado());
             setupItem();
         }
-    }
-
-    /**
-     * Este método está aqui devido a um Lazy Loading
-     */
-    public void setItem() {
-        e.setItem(ItemDAO.porId(e.getItem().getId()).resultado());
     }
 
     public void setAjuste() {

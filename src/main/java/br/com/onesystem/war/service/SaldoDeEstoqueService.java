@@ -14,13 +14,19 @@ import br.com.onesystem.reportTemplate.SaldoEmDepositoTemplate;
 import br.com.onesystem.reportTemplate.SaldoEmLoteTemplate;
 import java.io.Serializable;
 import java.util.List;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  *
  * @author Rafael
  */
+@Stateless
 public class SaldoDeEstoqueService implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private SaldoDeEstoqueDAO saldoDAO;
@@ -30,15 +36,15 @@ public class SaldoDeEstoqueService implements Serializable {
     }
 
     public List<SaldoEmDepositoTemplate> buscaListaDeSaldoDeEstoqueEmTodosDepositos(ContaDeEstoque contaDeEstoque, Item item) {
-        return saldoDAO.buscaSaldoDeCadaDeposito().porItem(item).porContaDeEstoque(contaDeEstoque).groupByDepositoItem().listaDeDepositosSoma();
+        return saldoDAO.buscaSaldoDeCadaDeposito().porItem(item).porContaDeEstoque(contaDeEstoque).groupByDepositoItem().listaDeDepositosSoma(manager);
     }
 
     public List<SaldoEmContaTemplate> buscaListaDeSaldoDeEstoqueEmTodasContas(Item item) {
-        return saldoDAO.buscaSaldoDeCadaConta().porItem(item).groupByContaDeEstoqueItem().listaDeContaSoma();
+        return saldoDAO.buscaSaldoDeCadaConta().porItem(item).groupByContaDeEstoqueItem().listaDeContaSoma(manager);
     }
 
     public List<SaldoEmLoteTemplate> buscaListaDeSaldoDeEstoqueEmTodosLotes(ContaDeEstoque contaDeEstoque, Item item) {
-        return saldoDAO.buscaSaldoDeCadaLote().porItem(item).porContaDeEstoque(contaDeEstoque).groupByLoteDeEstoqueItem().listaDeLoteSoma();
+        return saldoDAO.buscaSaldoDeCadaLote().porItem(item).porContaDeEstoque(contaDeEstoque).groupByLoteDeEstoqueItem().listaDeLoteSoma(manager);
     }
 
 }

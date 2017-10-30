@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ConhecimentoDeFreteDAO;
 import br.com.onesystem.domain.ConhecimentoDeFrete;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ConhecimentoDeFreteService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoConhecimentoDeFreteView extends BasicCrudMBImpl<ConhecimentoDeFrete> implements Serializable {
 
     @Inject
-    private ConhecimentoDeFreteService service;
+    private EntityManager manager;
+
+    @Inject
+    private ConhecimentoDeFreteDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarConhecimentoDeFrete();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoConhecimentoDeFreteView extends BasicCrudMBImpl<Conhecimento
 
     @Override
     public List<ConhecimentoDeFrete> complete(String query) {
+        buscarDados();
         List<ConhecimentoDeFrete> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (ConhecimentoDeFrete m : beans) {
@@ -45,11 +55,4 @@ public class SelecaoConhecimentoDeFreteView extends BasicCrudMBImpl<Conhecimento
         return listaFIltrada;
     }
 
-    public ConhecimentoDeFreteService getService() {
-        return service;
-    }
-
-    public void setService(ConhecimentoDeFreteService service) {
-        this.service = service;
-    }
 }

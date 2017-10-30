@@ -6,7 +6,6 @@ import br.com.onesystem.domain.builder.LoteItemBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.BuilderView;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
@@ -20,7 +19,6 @@ public class LoteItemBV implements Serializable, BuilderView<LoteItem> {
     private Item item;
 
     public LoteItemBV(LoteItem n) {
-        System.out.println(n);
         this.id = n.getId();
         this.dataDeValidade = n.getDataDeValidade();
         this.dataDeFabricacao = n.getDataDeFabricacao();

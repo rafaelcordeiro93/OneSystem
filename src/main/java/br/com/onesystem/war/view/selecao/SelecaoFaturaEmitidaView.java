@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.FaturaEmitidaDAO;
 import br.com.onesystem.domain.FaturaEmitida;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.FaturaEmitidaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoFaturaEmitidaView extends BasicCrudMBImpl<FaturaEmitida> implements Serializable {
 
     @Inject
-    private FaturaEmitidaService service;
+    private EntityManager manager;
+
+    @Inject
+    private FaturaEmitidaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarFaturasEmitidas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoFaturaEmitidaView extends BasicCrudMBImpl<FaturaEmitida> imp
 
     @Override
     public List<FaturaEmitida> complete(String query) {
+        buscarDados();
         List<FaturaEmitida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoFaturaEmitidaView extends BasicCrudMBImpl<FaturaEmitida> imp
         return contasFIltradas;
     }
 
-    public FaturaEmitidaService getService() {
-        return service;
-    }
-
-    public void setService(FaturaEmitidaService service) {
-        this.service = service;
-    }
 }

@@ -11,6 +11,7 @@ import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.InfoMessage;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 import org.primefaces.event.SelectEvent;
 
 /**

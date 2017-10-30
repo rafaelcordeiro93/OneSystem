@@ -1,9 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.dao.ItemDAO;
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,15 +11,17 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
 @ViewScoped
 public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializable {
 
-//    @Inject
-//    private ItemDAO dao;
     @Inject
-    private ItemService service;
+    private EntityManager manager;
+
+    @Inject
+    private ArmazemDeRegistros<Item> armazem;
 
     @PostConstruct
     public void init() {
@@ -28,7 +29,7 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
     }
 
     public void buscarItens() {
-        beans = service.buscarItems();
+        beans = armazem.daClasse(Item.class, manager).listaTodosOsRegistros();
     }
 
     @Override
@@ -44,28 +45,20 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
     @Override
     public List<Item> complete(String query) {
         buscarItens();
-        List<Item> listaFIltrada = new ArrayList<>();
+        List<Item> listaFiltrada = new ArrayList<>();
         for (Item b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
-                listaFIltrada.add(b);
+                listaFiltrada.add(b);
             }
         }
         if (!StringUtils.containsLetter(query)) {
             for (Item m : beans) {
                 if (StringUtils.startsWithIgnoreCase(m.getId().toString(), query)) {
-                    listaFIltrada.add(m);
+                    listaFiltrada.add(m);
                 }
             }
         }
-        return listaFIltrada;
-    }
-
-    public ItemService getService() {
-        return service;
-    }
-
-    public void setService(ItemService service) {
-        this.service = service;
+        return listaFiltrada;
     }
 
     public String getIcon() {

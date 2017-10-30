@@ -10,19 +10,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private ChequeDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = dao.porEstado(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.porEstado(EstadoDeCheque.ABERTO).porTipoLancamento(TipoLancamento.RECEBIDA).listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -36,6 +45,7 @@ public class SelecaoChequeRecebidoAbertoView extends BasicCrudMBImpl<Cheque> imp
 
     @Override
     public List<Cheque> complete(String query) {
+        buscarDados();
         List<Cheque> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (Cheque m : beans) {

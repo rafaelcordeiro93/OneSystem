@@ -176,7 +176,7 @@ public class EstoqueService implements Serializable {
 
     public BigDecimal buscaUltimoCustoItem(Item item, Date data) {
         List<Estoque> estoque = dao.porItem(item).ateEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
+                .porEstoqueAlterado().porNaoCancelado().porNaoSerItemCondicional().listaDeResultados();
 
         if (!estoque.isEmpty()) {
             Estoque est = estoque.stream().filter(e -> (e.getItemDeNota() != null && e.getItemDeNota().getNota() instanceof NotaRecebida)

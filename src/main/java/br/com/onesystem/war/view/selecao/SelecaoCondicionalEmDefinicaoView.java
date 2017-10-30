@@ -1,27 +1,36 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CondicionalDAO;
 import br.com.onesystem.domain.Condicional;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.valueobjects.EstadoDeCondicional;
-import br.com.onesystem.war.service.CondicionalService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoCondicionalEmDefinicaoView extends BasicCrudMBImpl<Condicional> implements Serializable {
 
     @Inject
-    private CondicionalService service;
+    private EntityManager manager;
+    
+    @Inject
+    private CondicionalDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCondicionaisNo(EstadoDeCondicional.EM_DEFINICAO);
+        buscarDados();
+    }
+
+    public void buscarDados(){
+        beans = dao.porEstado(EstadoDeCondicional.EM_DEFINICAO).listaDeResultados();
     }
 
     @Override
@@ -36,6 +45,7 @@ public class SelecaoCondicionalEmDefinicaoView extends BasicCrudMBImpl<Condicion
 
     @Override
     public List<Condicional> complete(String query) {
+        buscarDados();
         List<Condicional> comandasFiltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -48,11 +58,4 @@ public class SelecaoCondicionalEmDefinicaoView extends BasicCrudMBImpl<Condicion
         return comandasFiltradas;
     }
 
-    public CondicionalService getService() {
-        return service;
-    }
-
-    public void setService(CondicionalService service) {
-        this.service = service;
-    }
 }

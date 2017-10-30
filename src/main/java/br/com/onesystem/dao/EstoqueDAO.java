@@ -14,6 +14,7 @@ import br.com.onesystem.valueobjects.EstadoDeNota;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoLancamento;
 import br.com.onesystem.valueobjects.TipoOperacao;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,9 +46,15 @@ public class EstoqueDAO extends GenericDAO<Estoque> {
     public EstoqueDAO porNaoCancelado() {
         join += " left join estoque.itemDeNota.nota as nt left join estoque.itemDeCondicional.condicional as cd ";
         where += " and ((estoque.itemDeNota is not null and nt.estado <> :pEstado) or (estoque.itemDeCondicional is not null and cd.estado <> :pEstadoCondicional)"
-                + " or (estoque.ajusteDeEstoque is not null))";
+                + " or (estoque.ajusteDeEstoque is not null and estoque.ajusteDeEstoque.custo <> :pZero)) ";
         parametros.put("pEstado", EstadoDeNota.CANCELADO);
+        parametros.put("pZero", BigDecimal.ZERO);
         parametros.put("pEstadoCondicional", EstadoDeCondicional.CANCELADO);
+        return this;
+    }
+    
+    public EstoqueDAO porNaoSerItemCondicional(){
+        where += " and estoque.itemDeCondicional is null ";
         return this;
     }
 

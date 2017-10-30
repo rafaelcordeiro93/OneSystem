@@ -1,39 +1,49 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ChequeDAO;
 import br.com.onesystem.domain.Cheque;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.ChequeService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoChequeView extends BasicCrudMBImpl<Cheque> implements Serializable {
 
     @Inject
-    private ChequeService service;
+    private EntityManager manager;
+
+    @Inject
+    private ChequeDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCheques();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
         exibirNaTela("financeiro/selecao/selecaoCheque");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/financeiro/cadastros/cheque";
     }
-    
-     @Override
+
+    @Override
     public List<Cheque> complete(String query) {
+        buscarDados();
         List<Cheque> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (Cheque m : beans) {
@@ -45,11 +55,4 @@ public class SelecaoChequeView extends BasicCrudMBImpl<Cheque> implements Serial
         return listaFIltrada;
     }
 
-    public ChequeService getService() {
-        return service;
-    }
-
-    public void setService(ChequeService service) {
-        this.service = service;
-    }
 }
