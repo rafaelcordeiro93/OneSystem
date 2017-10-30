@@ -8,28 +8,32 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-briefcase Fs40" style="color: #848484"/> #{l.Caixa}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-briefcase Fs40 White"/> #{l.Caixa}</h2>
+            <span class="Topic-Message">#{l.Caixa_Texto}</span>
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >                        
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
-                        <p:separator/>
 
-                        <div class="EmptyBox10"/>
+                        <p:separator/>
+                        <div class="EmptyBox20"/>
 
                         <div style="padding-bottom: 2px">
                             <p:outputLabel  rendered="#{caixaView.estado eq null? false : true}" value="#{l.Estado}: "/>
                             <p:outputLabel rendered="#{caixaView.estado eq null? false : true}" class="#{caixaView.estado eq l.Fechado ?  'label label-warning' : 'label label-success'}" value="#{caixaView.estado}"/> 
                         </div>
-
                         <div class="EmptyBox10"/>
 
+
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-2,ui-g-12 ui-md-4,ui-g-12 ui-md-2 ui-grc-2,ui-g-12 ui-md-4">
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4,
+                                     ui-g-12 ui-md-1 ui-grc-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog  id="caixaId" value="#{caixaView.e}" dialog="#{selecaoCaixaView}" 
@@ -51,10 +55,10 @@
                             <p:calendar  pattern="dd/MM/yyyy" readonly="true" pages="0" value="#{caixaView.e.fechamento}"  inputStyle="width:auto"  size="8"/>   
                         </p:panelGrid>
                         <div class="EmptyBox10"/>
-                        <p:separator/>
+                       
                     </div>
 
-                    <div class="EmptyBox10"/>
+                    <div class="EmptyBox20"/>
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" rendered="true" action="#{caixaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>     
                         <p:commandButton value="#{l.Atualizar}" rendered="#{caixaView.e.fechamento eq null ? true : false}" action="#{caixaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     

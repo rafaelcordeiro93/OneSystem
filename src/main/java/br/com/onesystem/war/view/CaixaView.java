@@ -45,17 +45,17 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
     @PostConstruct
     public void init() {
         limparJanela();
-        try {
-            populaCampos();//TEM QUE ESTAR LOGADO COM USUARIO VALIDO PARA FUNCIONAR
-        } catch (DadoInvalidoException ex) {
-            ex.print();
-        }
     }
 
     @Override
     public void limparJanela() {
         e = new CaixaBV();
         estado = null;
+        try {
+            populaCampos();//TEM QUE ESTAR LOGADO COM USUARIO VALIDO PARA FUNCIONAR
+        } catch (DadoInvalidoException ex) {
+            ex.print();
+        }
     }
 
     private void inicializaCotacoes() {
@@ -87,7 +87,6 @@ public class CaixaView extends BasicMBImpl<Caixa, CaixaBV> implements Serializab
             buscaUsuarioDaSessao();
             adicionaCotacaoInicial();
             addNoBanco(e.construir());
-            populaCampos();
         } catch (DadoInvalidoException ex) {
             ex.print();
         }

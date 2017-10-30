@@ -53,7 +53,6 @@ public class Filial implements Serializable {
     @Length(min = 2, max = 60, message = "{bairro_lenght}")
     @Column(length = 60, nullable = false)
     private String bairro;
-    @NotNull(message = "{cep_not_null}")
     @ManyToOne
     private Cep cep;
     @ManyToOne
@@ -145,7 +144,7 @@ public class Filial implements Serializable {
     public List<Deposito> getDepositos() {
         return depositos;
     }
-    
+
     public Long getId() {
         return id;
     }

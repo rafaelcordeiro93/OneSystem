@@ -2,28 +2,31 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui"                
+                xmlns:p="http://primefaces.org/ui"
                 xmlns:a="http://java.sun.com/jsf/composite/application"
                 template="/WEB-INF/template.xhtml">
 
     <ui:define name="content">
 
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-bank Fs40 White"/> #{l.Banco}</h2>
+            <span class="Topic-Message">#{l.Banco_Texto}</span>
+        </div>
 
-        <div class="ui-g">
-            <div class="ui-g-8" style="margin-left: 15%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 2.5%" ><i class="fa fa-bank Fs40" style="color: #848484"/> #{l.Banco}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >                        
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
-                        <p:separator/>
-                        <div class="EmptyBox20"/> 
 
+                        <p:separator/>
                         <div class="EmptyBox20"/>
+
                         <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-5">
+                                     columnClasses="ui-g-12 ui-md-1 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4,
+                                     ui-g-12 ui-md-1 ui-grc-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="bancoId" value="#{bancoView.e}" dialog="#{selecaoBancoView}" mbView="#{bancoView}" update="conteudo" process="@this" var="banco" converter="bancoBVConverter" itemLabelTab="#{banco.nome}" itemLabelTabVisible="true" itemLabel="#{banco.id}" itemValue="#{banco}" onlyNumber="true" editVisible="false"/>
@@ -39,8 +42,6 @@
                         </p:panelGrid>
 
                         <div class="EmptyBox20"/>
-
-                        <p:separator/>
                     </div>
 
                     <div class="EmptyBox10"/>
@@ -50,6 +51,7 @@
                         <p:commandButton value="#{l.Remover}" action="#{bancoView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                         <p:commandButton value="#{l.Limpar}" action="#{bancoView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </div>
+                    
                 </div>
             </div>
         </div>

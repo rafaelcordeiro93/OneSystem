@@ -8,26 +8,40 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-usd Fs40" style="color: #848484"/> #{l.Moeda}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-usd Fs40 White"/> #{l.Moeda}</h2>
+            <span class="Topic-Message">#{l.Moeda_Texto}</span>
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid" >                        
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
+
                         <p:separator/>
                         <div class="EmptyBox20"/>
 
-                        <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                     columnClasses="ui-g-12 ui-md-1,ui-g-12 ui-md-5,ui-g-12 ui-md-1 ui-grc-2,ui-g-12 ui-md-5">
+                          <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
+                                     columnClasses="ui-g-12 ui-md-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4,
+                                     ui-g-12 ui-md-1 ui-grc-2 TexAlRight-LeftResponsive PaddingPx6,ui-g-12 ui-md-4">
 
                             <p:outputLabel value="#{l.Id}"/>
                             <a:inputTextDialog id="moeda" dialog="#{selecaoMoedaView}" mbView="#{moedaView}" value="#{moedaView.e}" update=":conteudo" process="@this" var="moeda" itemLabel="#{moeda.id}" itemValue="#{moeda}" itemLabelTab="#{moeda.nome}" converter="moedaBVConverter" itemLabelTabVisible="true" editVisible="false" onlyNumber="true"/>
 
                             <p:outputLabel value="#{l.Nome}"/>
                             <p:inputText value="#{moedaView.e.nome}"/>
+
+                            <p:outputLabel value="#{l.Nome_No_Plural}"/>
+                            <p:inputText value="#{moedaView.e.nomePlural}"/>
+
+                            <p:outputLabel value="#{l.Nome_Casas_Decimais}"/>
+                            <p:inputText value="#{moedaView.e.nomeCasasDecimais}"/>
+
+                            <p:outputLabel value="#{l.Nome_Casas_Decimais_No_Plural}"/>
+                            <p:inputText value="#{moedaView.e.nomeCasasDecimaisPlural}"/>
 
                             <p:outputLabel value="#{l.Sigla}"/>
                             <p:inputText value="#{moedaView.e.sigla}"/>
@@ -45,11 +59,11 @@
                             </p:selectOneMenu>
 
                         </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
-                    </div>
 
-                    <div class="EmptyBox10"/>
+                    </div>
+                    <div class="EmptyBox20" />
+                    <div class="EmptyBox15"/>
+
                     <div style="padding: 0% 0% 5% 8%">
                         <p:commandButton value="#{l.Adicionar}" action="#{moedaView.add()}" styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                         <p:commandButton value="#{l.Atualizar}" action="#{moedaView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
