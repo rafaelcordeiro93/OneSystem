@@ -30,6 +30,12 @@ public class EstoqueDAO extends GenericDAO<Estoque> {
         parametros.put("pItem", item);
         return this;
     }
+    
+    public EstoqueDAO porIdItem(Long id) {
+        where += " and estoque.item.id = :pIdItem";
+        parametros.put("pIdItem", id);
+        return this;
+    }
 
     public EstoqueDAO porContaDeEstoque(ContaDeEstoque contaDeEstoque) {
         where += " and estoque.operacaoDeEstoque.contaDeEstoque = :pContaDeEstoque";
@@ -123,6 +129,11 @@ public class EstoqueDAO extends GenericDAO<Estoque> {
             where += " and estoque.emissao <= :pEmissao ";
             parametros.put("pEmissao", emissao);
         }
+        return this;
+    }
+    
+    public EstoqueDAO orderByDescEmissao(){
+        order = " order by estoque.emissao desc";
         return this;
     }
 

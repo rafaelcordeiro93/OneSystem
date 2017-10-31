@@ -28,7 +28,7 @@ public class SelecaoPessoaFornecedorView extends BasicCrudMBImpl<Pessoa> impleme
         buscarDados();
     }
 
-    private void buscarDados() {
+    public void buscarDados() {
         beans = dao.porFornecedor().listaDeResultados(manager);
     }
 

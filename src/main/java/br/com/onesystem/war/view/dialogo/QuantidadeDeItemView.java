@@ -82,6 +82,9 @@ public class QuantidadeDeItemView extends BasicCrudMBImpl<QuantidadeDeItemPorDep
         return "/menu/estoque/item";
     }
 
+    public void buscarDados() {
+    }
+
     public void criaLista() {
         lista = new ArrayList<QuantidadeDeItemPorDeposito>();
         for (SaldoDeEstoque saldo : listaDeEstoque) {

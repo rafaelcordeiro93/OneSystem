@@ -8,8 +8,7 @@
 CREATE OR REPLACE FUNCTION somaSaldoDeEstoque(id_item bigint, id_deposito bigint, id_contadeestoque bigint, id_lote bigint, tipoDetalhamento varchar, quantidade numeric) RETURNS VOID AS $BODY$
     BEGIN
 
-            IF(tipoDetalhamento = 'LOTES' AND id_lote <> null) THEN 
-
+            IF(tipoDetalhamento = 'LOTES' AND id_lote is not null) THEN 
                 -- Se não existir SaldoDeEstoque para o item, deposito, contadeestoque e lote deve ser criado um novo, caso existir deve ser atualizado o saldo.
                 IF(0 = (SELECT COUNT(*) FROM saldodeestoque as saldo WHERE saldo.item_id = id_item AND saldo.deposito_id = id_deposito AND saldo.contadeestoque_id = id_contadeestoque AND saldo.loteitem_id = id_lote)) THEN
                     -- Faz o insert na tabela saldodeestoque
@@ -32,6 +31,7 @@ CREATE OR REPLACE FUNCTION somaSaldoDeEstoque(id_item bigint, id_deposito bigint
                 INSERT INTO saldodeestoque 
                      VALUES ((select nextval('seq_saldodeestoque')), quantidade, id_contadeestoque, id_deposito, id_item, null);
            ELSE 
+
                 -- Faz o update na tabela SaldoDeEstoque
                 UPDATE saldodeestoque 
                    SET saldo = saldo + quantidade
@@ -46,8 +46,7 @@ $BODY$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION subtraiSaldoDeEstoque(id_item bigint, id_deposito bigint, id_contadeestoque bigint, id_lote bigint, tipoDetalhamento varchar, quantidade numeric) RETURNS VOID AS $BODY$
     BEGIN
 
-            IF(tipoDetalhamento = 'LOTES' AND id_lote <> null) THEN 
-
+            IF(tipoDetalhamento = 'LOTES' AND id_lote is not null) THEN 
                 -- Se não existir SaldoDeEstoque para o item, deposito, contadeestoque e lote deve ser criado um novo, caso existir deve ser atualizado o saldo.
                 IF(0 = (SELECT COUNT(*) FROM saldodeestoque as saldo WHERE saldo.item_id = id_item AND saldo.deposito_id = id_deposito AND saldo.contadeestoque_id = id_contadeestoque AND saldo.loteitem_id = id_lote)) THEN
                     -- Faz o insert na tabela saldodeestoque
@@ -127,12 +126,13 @@ CREATE OR REPLACE FUNCTION atualizaEstoque() RETURNS TRIGGER AS $BODY$
                 IF ('SEM_ALTERACAO' = tipoOperacao) THEN
                     RETURN NULL;
                 ELSIF ('ENTRADA' = tipoOperacao) THEN
-                    -- chama procedure para subtrair de estoque
-                    PERFORM subtraiSaldoDeEstoque(NEW.item_id, NEW.deposito_id, NEW.contadeestoque_id, NEW.loteitem_id, tipoDetalhamento, NEW.quantidade);
+
+                    -- chama procedure para desfazer o saldo cancelado
+                    PERFORM subtraiSaldoDeEstoque(OLD.item_id, OLD.deposito_id, OLD.contadeestoque_id, OLD.loteitem_id, tipoDetalhamento, OLD.quantidade);
                     
                     RETURN NEW;
                 ELSIF ('SAIDA' = tipoOperacao) THEN
-                    -- chama procedure para somar saldo de estoque
+                    -- chama procedure para fazer o saldo descancelado
                     PERFORM somaSaldoDeEstoque(NEW.item_id, NEW.deposito_id, NEW.contadeestoque_id, NEW.loteitem_id, tipoDetalhamento, NEW.quantidade);
 
                     RETURN NEW;
@@ -142,11 +142,19 @@ CREATE OR REPLACE FUNCTION atualizaEstoque() RETURNS TRIGGER AS $BODY$
                 IF ('SEM_ALTERACAO' = tipoOperacao) THEN
                     RETURN NULL;
                 ELSIF ('ENTRADA' = tipoOperacao) THEN
-                    -- chama procedure para somar saldo de estoque
+
+                    -- chama procedure para desfazer o saldo antigo
+                    PERFORM subtraiSaldoDeEstoque(OLD.item_id, OLD.deposito_id, OLD.contadeestoque_id, OLD.loteitem_id, tipoDetalhamento, OLD.quantidade);
+ 
+                   -- chama procedure para somar saldo de estoque
                     PERFORM somaSaldoDeEstoque(NEW.item_id, NEW.deposito_id, NEW.contadeestoque_id, NEW.loteitem_id, tipoDetalhamento, NEW.quantidade);
 
                     RETURN NEW;
                 ELSIF ('SAIDA' = tipoOperacao) THEN
+
+                    -- chama procedure para desfazer o saldo antigo
+                    PERFORM somaSaldoDeEstoque(OLD.item_id, OLD.deposito_id, OLD.contadeestoque_id, OLD.loteitem_id, tipoDetalhamento, OLD.quantidade);
+
                     -- chama procedure para subtrair de estoque
                     PERFORM subtraiSaldoDeEstoque(NEW.item_id, NEW.deposito_id, NEW.contadeestoque_id, NEW.loteitem_id, tipoDetalhamento, NEW.quantidade);
 

@@ -32,7 +32,7 @@
                             </a:inputTextDialog>
 
                             <p:outputLabel value="#{l.Data}"/>
-                            <p:calendar pattern="dd/MM/yyyy HH:mm:ss" mask="99/99/9999 99:99:99 " value="#{ajusteDeEstoqueView.e.emissao}"/> 
+                            <p:calendar pattern="dd/MM/yyyy" mask="99/99/9999" value="#{ajusteDeEstoqueView.e.data}" maxdate="#{ajusteDeEstoqueView.maxDate}"/> 
 
                             <p:outputLabel value="#{l.Operacao}"/>
                             <a:inputTextDialog id="operacaoAjuste" value="#{ajusteDeEstoqueView.e.operacao}" dialog="#{selecaoOperacaoOutrosView}" mbView="#{ajusteDeEstoqueView}" update=":conteudo:growl" var="operacao" converter="operacaoConverter" itemLabel="#{operacao.nome}" itemValue="#{operacao}" itemLabelTabVisible="true" itemLabelTab="#{operacao.nome}" editVisible="true"/>
@@ -42,10 +42,10 @@
 
                             <p:outputLabel value="#{l.Deposito}"/>
                             <a:inputTextDialog id="depositoAjuste" value="#{ajusteDeEstoqueView.e.deposito}" dialog="#{selecaoDepositoView}" update=":conteudo:growl" mbView="#{ajusteDeEstoqueView}" var="deposito" converter="depositoConverter" itemLabel="#{deposito.nome}" itemValue="#{deposito}" editVisible="true" itemLabelTabVisible="true" itemLabelTab="#{deposito.nome}"/>
-
+                            
                             <p:outputLabel value="Lote" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}"  />
                             <p:selectOneMenu id="loteItem" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}" value="#{ajusteDeEstoqueView.e.loteItem}" converter="loteItemConverter" var="lo" filter="true" filterMatchMode="startsWith" >
-                                <f:selectItems value="#{ajusteDeEstoqueView.e.item.loteItem}" var="lote" itemLabel="#{lote.lote}" itemValue="#{lote}"/>
+                                <f:selectItems value="#{ajusteDeEstoqueView.getLoteDoItem(ajusteDeEstoqueView.e.item)}" var="lote" itemLabel="#{lote.lote}" itemValue="#{lote}"/>
                                 <p:ajax event="itemSelect"  listener="#{ajusteDeEstoqueView.selecionaLoteItem()}" />
                                 <p:column style="width:10%">
                                     <h:outputText value="#{lo.id}" />

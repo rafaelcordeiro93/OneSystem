@@ -65,7 +65,7 @@
                                              columnClasses="ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-4,ui-g-12 ui-md-3 ui-lg-2 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-4">
 
                                     <p:outputLabel value="#{l.Id}"/>
-                                    <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
+                                    <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="false">
                                         <p:ajax event="itemSelect" listener="#{itemView.selecionaItem()}" />
                                     </a:inputTextDialog>
 
@@ -126,7 +126,7 @@
 
                             </p:tab>
 
-                            <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
+                            <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}" >
 
                                 <p:panelGrid columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
                                              columnClasses="ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6,ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6">
@@ -134,7 +134,7 @@
                                     <p:panelGrid columns="1"
                                                  columnClasses="ui-g-12 ui-md-12 ui-lg-9" >
 
-                                        <div class="FontRobotoLight BoldGray DispBlock">O saldo é exibido por contas de estoque, selecione a conta de estoque para saber o saldo da conta.</div>
+                                        <div class="FontRobotoLight BoldGray DispBlock">#{l.Saldo_Exibido_Por_Conta}</div>
 
                                         <p:outputLabel value="#{l.Conta_de_Estoque}" />
                                         <a:inputTextDialog id="contaId" value="#{itemView.contaDeEstoque}" update="conteudo" dialog="#{selecaoContaDeEstoqueView}" mbView="#{itemView}" var="contaDeEstoque" converter="contaDeEstoqueConverter" process="@this" itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" editVisible="true" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" >
@@ -143,7 +143,7 @@
 
                                         <div class="ui-g-12">
                                             <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
-                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
+                                            <div class="FontRobotoLight BoldGray DispBlock">#{l.Vizualize_Saldo_Cada_Deposito}</div>
                                         </div>
 
                                         <p:dataTable id="estoqueDT" var="s" value="#{itemView.saldoEmDeposito}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true">
@@ -160,7 +160,7 @@
 
                                         <div class="ui-g-12">
                                             <h4 class="BigTopic">#{l.Saldo_Estoque_Lote}</h4>
-                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada lote</div>
+                                            <div class="FontRobotoLight BoldGray DispBlock">#{l.Visualize_Saldo_Cada_Lote}</div>
                                         </div>
 
                                         <p:dataTable id="estoqueDTLote" var="s" value="#{itemView.saldoEmLote}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
@@ -185,7 +185,7 @@
 
                                         <div class="ui-g-12">
                                             <h4 class="BigTopic">#{l.Saldo_Estoque_Conta}</h4>
-                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada conta de estoque</div>
+                                            <div class="FontRobotoLight BoldGray DispBlock">#{l.Visualize_Saldo_Cada_Conta}</div>
                                         </div>
 
                                         <p:dataTable id="estoqueDTConta" var="s" value="#{itemView.saldoEmConta}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
@@ -206,11 +206,11 @@
 
                             </p:tab>
 
-                            <p:tab title="#{l.Lotes}" rendered="#{itemView.t.detalhamento.id eq 2 ? !itemView.tab : false}">
+                            <p:tab title="#{l.Lotes}" rendered="#{itemView.tabLote}">
 
                                 <div class="ui-g-12">
                                     <h4 class="BigTopic">Lotes</h4>
-                                    <div class="FontRobotoLight BoldGray DispBlock">Cadastre o lote e verifique a evolução através do saldo.</div>
+                                    <div class="FontRobotoLight BoldGray DispBlock">#{l.Cadastre_Verifique_Evolução_Lote}</div>
                                 </div>
 
                                 <p:panelGrid columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
@@ -271,8 +271,6 @@
 
                                 </p:panelGrid>
 
-
-
                             </p:tab>
 
                             <p:tab id="tabPreco" title="#{l.Preco}" rendered="#{!itemView.tab}" >
@@ -317,7 +315,7 @@
                                                 <p:outputLabel value="#{l.Margem} :" />
                                                 <a:inputTextDialog id="itemMargem" dialog="#{selecaoMargemView}" mbView="#{itemView}" value="#{itemView.e.margem}" var="margem" itemLabel="#{margem.nome}" itemValue="#{margem}" converter="margemConverter" itemLabelTabVisible="true" itemLabelTab="#{margem.nome}"/>
                                                 <p:outputLabel value="#{l.Ultimo_Custo} :" />
-                                                <p:inputText styleClass="Back-Gray" />
+                                                <p:inputText styleClass="Back-Gray" value="#{itemView.estoqueService.buscaUltimoCustoItem(itemView.e.id)}" readonly="true" />
                                             </p:panelGrid>
 
                                             <p:selectOneRadio id="console" value="#{itemView.precoPorMargem}" layout="pageDirection">
@@ -427,10 +425,10 @@
                     <div class="EmptyBox20"/> 
 
                     <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
-                            <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                            <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                            <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                            <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
+                        <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                        <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                        <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                        <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                     </p:panelGrid>
                 </div>
             </div>

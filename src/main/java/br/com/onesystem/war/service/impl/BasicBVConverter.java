@@ -32,9 +32,9 @@ public abstract class BasicBVConverter<Bean, BeanBV extends BuilderView, Selecao
         try {
             if (value != null && !value.isEmpty()) {
                 Object object = uic.getAttributes().get(value);
-                if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
+                if (object != null && (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz))) {
                     return clazzBV.getConstructor(clazz).newInstance((Bean) object);
-                } else if (object.getClass().equals(clazzBV)) {
+                } else if (object != null && object.getClass().equals(clazzBV)) {
                     return (BeanBV) object;
                 }
             }

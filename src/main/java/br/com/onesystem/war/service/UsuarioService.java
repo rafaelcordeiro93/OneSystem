@@ -6,6 +6,7 @@ import br.com.onesystem.util.UsuarioLogadoUtil;
 import java.io.Serializable;
 import java.util.List;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 public class UsuarioService implements Serializable {
 
@@ -15,8 +16,11 @@ public class UsuarioService implements Serializable {
     @Inject
     private UsuarioLogadoUtil usuarioLogado;
 
+    @Inject
+    private EntityManager manager;
+
     public List<Usuario> buscarUsuarios() {
-        return dao.listaDeResultados();
+        return dao.listaDeResultados(manager);
     }
 
     public Usuario buscarUsuarioPerfil() {

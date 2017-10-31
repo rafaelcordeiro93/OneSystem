@@ -29,6 +29,8 @@ public abstract class BasicCrudMBImpl<Bean> {
     public String getIcon() {
         return "";
     }
+    
+    public abstract void buscarDados();
 
     public abstract void abrirDialogo();
 

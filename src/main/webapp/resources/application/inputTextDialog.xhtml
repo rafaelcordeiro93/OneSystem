@@ -55,7 +55,7 @@
                         </p:column>
                     </p:autoComplete>
                     <p:outputLabel value="#{cc.attrs.placeholder}"/>
-                    <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" disabled="#{cc.attrs.disabledSearch}" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
+                    <p:commandButton id="#{cc.attrs.id}-search" icon="fa fa-search" disabled="#{cc.attrs.disabledSearch}" styleClass="#{cc.attrs.editVisible eq false ? 'submit-edit' : 'submit-search'}" action="#{cc.attrs.dialog.buscarDados()}" actionListener="#{cc.attrs.dialog.abrirDialogo()}" process="@this" update="@none">
                         <p:ajax event="dialogReturn" listener="#{cc.attrs.mbView.selecionar}" process="@this" update="#{cc.attrs.id}-txt #{cc.attrs.update} #{cc.attrs.updateButtonSearch}" />
                     </p:commandButton>
                     <p:button id="#{cc.attrs.id}-edit" rendered="#{cc.attrs.editVisible}" icon="fa fa-pencil-square-o" styleClass="submit-edit"  target="_blank" outcome="#{cc.attrs.dialog.abrirEdicao()}" />

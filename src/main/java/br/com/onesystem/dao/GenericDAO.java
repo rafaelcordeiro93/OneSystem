@@ -80,10 +80,30 @@ public abstract class GenericDAO<T> implements Serializable {
         limpar();
         return resultado;
     }
+    
+    public List<T> listaDeResultados(EntityManager manager, int maxResults) {
+        List<T> resultado = armazem.daClasse((Class<T>) clazz, manager).listaRegistrosDaConsulta(getConsulta(), parametros, maxResults);
+        limpar();
+        return resultado;
+    }
 
     public T resultado() {
         try {
             Object resultado = armazem.daClasse((Class<T>) clazz).resultadoUnicoDaConsulta(getConsulta(), parametros);
+            if (resultado != null) {
+                limpar();
+                return (T) resultado;
+            } else {
+                return null;
+            }
+        } catch (NoResultException nre) {
+            return null;
+        }
+    }
+    
+    public T resultado(EntityManager manager) {
+        try {
+            Object resultado = armazem.daClasse((Class<T>) clazz, manager).resultadoUnicoDaConsulta(getConsulta(), parametros);
             if (resultado != null) {
                 limpar();
                 return (T) resultado;

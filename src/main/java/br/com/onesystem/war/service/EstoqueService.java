@@ -2,6 +2,7 @@ package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.EstoqueDAO;
 import br.com.onesystem.domain.Comanda;
+import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.ConfiguracaoEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
@@ -13,6 +14,7 @@ import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaRecebida;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.reportTemplate.SaldoDeEstoque;
+import br.com.onesystem.util.MoedaFormatter;
 import br.com.onesystem.valueobjects.OperacaoFisica;
 import br.com.onesystem.valueobjects.TipoOperacao;
 import java.io.Serializable;
@@ -24,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  * @author Rafael Fernando Rauber
@@ -40,8 +43,14 @@ public class EstoqueService implements Serializable {
     @Inject
     private ConfiguracaoEstoque configuracaoEstoque;
 
+    @Inject
+    private Configuracao configuracao;
+
+    @Inject
+    private EntityManager manager;
+
     public List<Estoque> buscarEstoques() {
-        return dao.listaDeResultados();
+        return dao.listaDeResultados(manager);
     }
 
     public BigDecimal buscaSaldoTotalDeEstoque(Item item, Date data) {
@@ -71,7 +80,7 @@ public class EstoqueService implements Serializable {
 
         //Busca as movimentações de estoque do item.
         List<Estoque> estoque = dao.porItem(item).ateEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
+                .porEstoqueAlterado().porNaoCancelado().listaDeResultados(manager);
 
         //Cria a lista de saldo de estoque
         List<SaldoDeEstoque> saldos = new ArrayList<>();
@@ -115,7 +124,7 @@ public class EstoqueService implements Serializable {
 
         //Busca as movimentações de estoque do item.
         List<Estoque> estoque = dao.porItem(item).ateEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
+                .porEstoqueAlterado().porNaoCancelado().listaDeResultados(manager);
 
         List<SaldoDeEstoque> saldos = new ArrayList<>();
 
@@ -174,9 +183,19 @@ public class EstoqueService implements Serializable {
         return saldos;
     }
 
+    public String buscaUltimoCustoItem(Long idItem) {
+        List<Estoque> estoque = dao.porIdItem(idItem).ateEmissao(new Date()).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
+                .porEstoqueAlterado().porNaoCancelado().porNaoSerItemCondicional().orderByDescEmissao().listaDeResultados(manager, 1);
+        if (estoque.isEmpty()) {
+            return MoedaFormatter.format(configuracao.getMoedaPadrao(), BigDecimal.ZERO);
+        } else {
+            return MoedaFormatter.format(configuracao.getMoedaPadrao(), estoque.get(0).getValor());
+        }
+    }
+
     public BigDecimal buscaUltimoCustoItem(Item item, Date data) {
         List<Estoque> estoque = dao.porItem(item).ateEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().porNaoCancelado().porNaoSerItemCondicional().listaDeResultados();
+                .porEstoqueAlterado().porNaoCancelado().porNaoSerItemCondicional().listaDeResultados(manager);
 
         if (!estoque.isEmpty()) {
             Estoque est = estoque.stream().filter(e -> (e.getItemDeNota() != null && e.getItemDeNota().getNota() instanceof NotaRecebida)
@@ -192,7 +211,7 @@ public class EstoqueService implements Serializable {
 
     public BigDecimal buscaCustoMedioDeItem(Item item, Date data) {
         List<Estoque> estoque = dao.porItem(item).ateEmissao(data).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                .porEstoqueAlterado().porNaoCancelado().listaDeResultados();
+                .porEstoqueAlterado().porNaoCancelado().listaDeResultados(manager);
         if (!estoque.isEmpty()) {
             List<Estoque> collect = estoque.stream().filter((e) -> e.getValor().compareTo(BigDecimal.ZERO) > 0).collect(Collectors.toList());
             if (!collect.isEmpty()) {
@@ -213,9 +232,9 @@ public class EstoqueService implements Serializable {
     public List<SaldoDeEstoque> buscaListaDeSaldoDe(Item item, Nota notaDeOrigem, TipoOperacao operacaoDesejada) {
         List<SaldoDeEstoque> saldoDeEstoque = new ArrayList<SaldoDeEstoque>();
         List<Estoque> estoque = dao.porItem(item).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa()).
-                porNota(notaDeOrigem).listaDeResultados();
+                porNota(notaDeOrigem).listaDeResultados(manager);
         List<Estoque> estoqueDaOperacao = dao.porItem(item).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa()).
-                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(operacaoDesejada).listaDeResultados();
+                porNotaDeOrigem(notaDeOrigem).porTipoDeOperacaoDeNota(operacaoDesejada).listaDeResultados(manager);
 
         for (Estoque e : estoque) {
             saldoDeEstoque.add(new SaldoDeEstoque((new Long(saldoDeEstoque.size() + 1)), e.getDeposito(), e.getQuantidade()));
@@ -256,7 +275,7 @@ public class EstoqueService implements Serializable {
 
         if (comanda.getNotasEmitidas() != null && !comanda.getNotasEmitidas().isEmpty()) {
             List<Estoque> estoqueDaOperacao = dao.porItem(item.getItem()).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa()).
-                    porNotasEmitidas(comanda.getNotasEmitidas()).porNaoCancelado().listaDeResultados();
+                    porNotasEmitidas(comanda.getNotasEmitidas()).porNaoCancelado().listaDeResultados(manager);
             geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
         }
 
@@ -269,7 +288,7 @@ public class EstoqueService implements Serializable {
 
         if (pedido.getNotasrecebidas() != null && !pedido.getNotasrecebidas().isEmpty()) {
             List<Estoque> estoqueDaOperacao = dao.porItem(item.getItem()).porContaDeEstoque(configuracaoEstoque.getContaDeEstoqueEmpresa())
-                    .porNotasRecebidas(pedido.getNotasrecebidas()).porNaoCancelado().listaDeResultados();
+                    .porNotasRecebidas(pedido.getNotasrecebidas()).porNaoCancelado().listaDeResultados(manager);
             geraSaldoDeEstoque(estoqueDaOperacao, saldoDeEstoque, operacaoDesejada);
         }
 

@@ -2,7 +2,10 @@ package br.com.onesystem.domain;
 
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
+import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -49,9 +52,11 @@ public class AjusteDeEstoque implements Serializable {
     @NotNull(message = "{deposito_not_null}")
     @ManyToOne
     private Deposito deposito;
-    @NotNull(message = "{emissao_not_null}")
+    @NotNull(message = "{data_not_null}")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date emissao = new Date();
+    private Date data = new Date();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date emissao;
     @NotNull(message = "{operacao_not_null}")
     @ManyToOne(optional = false)
     private Operacao operacao;
@@ -68,24 +73,29 @@ public class AjusteDeEstoque implements Serializable {
     }
 
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
-            Deposito deposito, Date emissao, Operacao operacao,
-            BigDecimal custo, List<Estoque> estoque, LoteItem loteItem) throws DadoInvalidoException {
+            Deposito deposito, Date data, Operacao operacao,
+            BigDecimal custo, List<Estoque> estoque, LoteItem loteItem,
+            Date emissao) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
         this.quantidade = quantidade;
         this.deposito = deposito;
-        this.emissao = emissao;
+        this.data = data;
         this.operacao = operacao;
         this.estoque = estoque;
         this.custo = custo;
         this.loteItem = loteItem;
+        this.emissao = emissao == null ? new Date() : emissao;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("emissao", "operacao", "item", "deposito", "quantidade", "custo", "observacao");
+        List<String> campos = Arrays.asList("data", "operacao", "item", "deposito", "quantidade", "custo", "observacao");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
+        if (item.getDetalhamento().equals(DetalhamentoDeItem.LOTES) && loteItem == null) {
+            throw new EDadoInvalidoException(new BundleUtil().getMessage("lote_not_null"));
+        }
     }
 
     public void adiciona(Estoque n) {
@@ -122,7 +132,7 @@ public class AjusteDeEstoque implements Serializable {
     public Deposito getDeposito() {
         return deposito;
     }
- 
+
     public Date getEmissao() {
         return emissao;
     }
@@ -139,7 +149,16 @@ public class AjusteDeEstoque implements Serializable {
         return custo;
     }
 
+    public Date getData() {
+        return data;
+    }
+
     public String getDataFormatada() {
+        SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
+        return dataFormatada.format(getData().getTime());
+    }
+    
+    public String getEmissaoFormatada() {
         SimpleDateFormat emissaoFormatada = new SimpleDateFormat("dd/MM/yyyy");
         return emissaoFormatada.format(getEmissao().getTime());
     }

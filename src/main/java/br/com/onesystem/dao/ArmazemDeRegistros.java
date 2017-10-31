@@ -18,7 +18,6 @@ public class ArmazemDeRegistros<T> implements Serializable {
     private Class<T> classe;
 
     @Inject
-    @ExtendedTransaction
     private EntityManager em;
 
     public ArmazemDeRegistros() {
@@ -46,6 +45,13 @@ public class ArmazemDeRegistros<T> implements Serializable {
 
     public List<T> listaRegistrosDaConsulta(String consulta, Map<String, Object> parametros) {
         TypedQuery<T> query = em.createQuery(consulta, classe);
+        adicionarParametrosNaConsulta(query, parametros);
+        return query.getResultList();
+    }
+    
+    public List<T> listaRegistrosDaConsulta(String consulta, Map<String, Object> parametros, int maxResults) {
+        TypedQuery<T> query = em.createQuery(consulta, classe);
+        query.setMaxResults(maxResults);
         adicionarParametrosNaConsulta(query, parametros);
         return query.getResultList();
     }

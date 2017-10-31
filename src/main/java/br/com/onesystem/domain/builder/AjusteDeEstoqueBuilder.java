@@ -1,14 +1,12 @@
 package br.com.onesystem.domain.builder;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
-import br.com.onesystem.domain.Banco;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.valueobjects.OperacaoFisica;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +21,7 @@ public class AjusteDeEstoqueBuilder {
     private String observacao;
     private Deposito deposito;
     private Item item;
+    private Date data;
     private Date emissao;
     private BigDecimal quantidade;
     private BigDecimal custo;
@@ -60,6 +59,11 @@ public class AjusteDeEstoqueBuilder {
         return this;
     }
 
+    public AjusteDeEstoqueBuilder comData(Date data) {
+        this.data = data;
+        return this;
+    }
+
     public AjusteDeEstoqueBuilder comEmissao(Date emissao) {
         this.emissao = emissao;
         return this;
@@ -81,7 +85,7 @@ public class AjusteDeEstoqueBuilder {
     }
 
     public AjusteDeEstoque construir() throws DadoInvalidoException {
-        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, emissao, operacao, custo, estoque, loteItem);
+        return new AjusteDeEstoque(id, observacao, item, quantidade, deposito, data, operacao, custo, estoque, loteItem, emissao);
     }
 
 }

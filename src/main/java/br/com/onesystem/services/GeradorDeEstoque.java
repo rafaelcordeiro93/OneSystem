@@ -13,9 +13,11 @@ import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
+import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -95,7 +97,9 @@ public class GeradorDeEstoque implements Serializable {
             boolean encontrou = false;
             for (Estoque e : ajuste.getEstoque()) {
                 if (ajuste.getId() != null) {
-                    e.atualizaQuantidade(ajuste.getQuantidade());
+                    Estoque estoque = new EstoqueBuilder().comAjusteDeEstoque(e.getAjusteDeEstoque()).comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
+                        .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).comID(e.getId()).construir();
+                    ajuste.getEstoque().set(ajuste.getEstoque().indexOf(e), estoque);
                     encontrou = true;
                     break;
                 }
