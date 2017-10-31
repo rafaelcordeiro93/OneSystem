@@ -4,13 +4,16 @@ import br.com.onesystem.dao.ItemDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Configuracao;
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Operacao;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.services.GeradorDeEstoque;
+import br.com.onesystem.exception.impl.FDadoInvalidoException;
+import br.com.onesystem.util.GeradorDeEstoque;
 import br.com.onesystem.util.BundleUtil;
+import br.com.onesystem.util.SessionUtil;
 import br.com.onesystem.util.WarningMessage;
 import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.war.builder.AjusteDeEstoqueBV;
@@ -22,7 +25,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.primefaces.context.RequestContext;
@@ -143,9 +149,14 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     }
 
     public void limparJanela() {
-        e = new AjusteDeEstoqueBV();
-        t = null;
-        loteItemBV = new LoteItemBV();
+        try {
+            e = new AjusteDeEstoqueBV();
+            e.setFilial((Filial) SessionUtil.getObject("filial", FacesContext.getCurrentInstance()));
+            t = null;
+            loteItemBV = new LoteItemBV();
+        } catch (FDadoInvalidoException ex) {
+            Logger.getLogger(AjusteDeEstoqueView.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public List<LoteItem> getLoteDoItem(Item item) {
@@ -166,8 +177,8 @@ public class AjusteDeEstoqueView extends BasicMBImpl<AjusteDeEstoque, AjusteDeEs
     public void setConfiguracao(Configuracao configuracao) {
         this.configuracao = configuracao;
     }
-    
-    public Date getMaxDate(){
+
+    public Date getMaxDate() {
         return new Date();
     }
 

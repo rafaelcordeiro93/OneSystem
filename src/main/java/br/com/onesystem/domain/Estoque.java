@@ -56,6 +56,9 @@ public class Estoque implements Serializable {
     @NotNull(message = "{conta_de_estoque_not_null}")
     @ManyToOne(optional = false)
     private ContaDeEstoque contaDeEstoque;
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
     
     public Estoque() {
     }
@@ -63,7 +66,8 @@ public class Estoque implements Serializable {
     public Estoque(Long id, Item item, BigDecimal quantidade, Deposito deposito,
             Date emissao, ItemDeNota itemDeNota, AjusteDeEstoque ajusteDeEstoque,
             OperacaoDeEstoque operacaoDeEstoque, ItemDeCondicional itemDeCondicional, 
-            boolean cancelado, LoteItem loteItem, ContaDeEstoque contaDeEstoque) throws DadoInvalidoException {
+            boolean cancelado, LoteItem loteItem, ContaDeEstoque contaDeEstoque,
+            Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.quantidade = quantidade;
@@ -76,11 +80,12 @@ public class Estoque implements Serializable {
         this.cancelado = cancelado;
         this.loteItem = loteItem;
         this.contaDeEstoque = contaDeEstoque;
+        this.filial = filial;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "emissao", "operacaoDeEstoque", "cancelado", "contaDeEstoque");
+        List<String> campos = Arrays.asList("item", "quantidade", "deposito", "emissao", "operacaoDeEstoque", "cancelado", "contaDeEstoque", "filial");
         new ValidadorDeCampos<Estoque>().valida(this, campos);
     }
 

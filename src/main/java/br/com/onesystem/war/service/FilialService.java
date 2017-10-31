@@ -1,6 +1,7 @@
 package br.com.onesystem.war.service;
 
 import br.com.onesystem.dao.FilialDAO;
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Filial;
 import java.io.Serializable;
 import java.util.List;
@@ -18,4 +19,5 @@ public class FilialService implements Serializable {
     public List<Filial> buscarFiliais() {
         return dao.listaDeResultados(manager);
     }
+    
 }

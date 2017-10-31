@@ -4,6 +4,7 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
@@ -31,6 +32,7 @@ public class EstoqueBuilder {
     private boolean cancelado;
     private LoteItem loteItem;
     private ContaDeEstoque contaDeEstoque;
+    private Filial filial;
 
     public EstoqueBuilder comID(Long ID) {
         this.id = ID;
@@ -86,14 +88,19 @@ public class EstoqueBuilder {
         this.loteItem = loteItem;
         return this;
     }
-    
+
     public EstoqueBuilder comContaDeEstoque(ContaDeEstoque contaDeEstoque) {
         this.contaDeEstoque = contaDeEstoque;
         return this;
     }
 
+    public EstoqueBuilder comFilial(Filial filial) {
+        this.filial = filial;
+        return this;
+    }
+
     public Estoque construir() throws DadoInvalidoException {
-        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeCondicional, cancelado, loteItem, contaDeEstoque);
+        return new Estoque(id, item, saldo, deposito, emissao, itemDeNota, ajusteDeEstoque, operacaoDeEstoque, itemDeCondicional, cancelado, loteItem, contaDeEstoque, filial);
     }
 
 }

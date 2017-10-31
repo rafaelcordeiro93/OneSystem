@@ -68,6 +68,10 @@ public class AjusteDeEstoque implements Serializable {
     private List<Estoque> estoque;
     @ManyToOne
     private LoteItem loteItem;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne(optional = false)
+    private Filial filial;
 
     public AjusteDeEstoque() {
     }
@@ -75,7 +79,7 @@ public class AjusteDeEstoque implements Serializable {
     public AjusteDeEstoque(Long id, String observacao, Item item, BigDecimal quantidade,
             Deposito deposito, Date data, Operacao operacao,
             BigDecimal custo, List<Estoque> estoque, LoteItem loteItem,
-            Date emissao) throws DadoInvalidoException {
+            Date emissao, Filial filial) throws DadoInvalidoException {
         this.id = id;
         this.observacao = observacao;
         this.item = item;
@@ -87,11 +91,12 @@ public class AjusteDeEstoque implements Serializable {
         this.custo = custo;
         this.loteItem = loteItem;
         this.emissao = emissao == null ? new Date() : emissao;
+        this.filial = filial;
         ehValido();
     }
 
     public final void ehValido() throws DadoInvalidoException {
-        List<String> campos = Arrays.asList("data", "operacao", "item", "deposito", "quantidade", "custo", "observacao");
+        List<String> campos = Arrays.asList("data", "operacao", "item", "deposito", "quantidade", "custo", "observacao", "filial");
         new ValidadorDeCampos<AjusteDeEstoque>().valida(this, campos);
         if (item.getDetalhamento().equals(DetalhamentoDeItem.LOTES) && loteItem == null) {
             throw new EDadoInvalidoException(new BundleUtil().getMessage("lote_not_null"));
@@ -167,6 +172,10 @@ public class AjusteDeEstoque implements Serializable {
         return loteItem;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.onesystem.services;
+package br.com.onesystem.util;
 
 import br.com.onesystem.domain.AjusteDeEstoque;
+import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.ConfiguracaoEstoque;
+import br.com.onesystem.domain.ConfiguracaoVenda;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Nota;
 import br.com.onesystem.domain.NotaEmitida;
 import br.com.onesystem.domain.OperacaoDeEstoque;
 import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
-import br.com.onesystem.war.builder.EstoqueBV;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -32,9 +34,15 @@ import javax.inject.Inject;
  * @author Rafael
  */
 public class GeradorDeEstoque implements Serializable {
-
+    
     @Inject
     private OperacaoDeEstoqueService operacaoDeEstoqueService;
+    
+    @Inject
+    private ConfiguracaoVenda configuracaoVenda;
+    
+    @Inject
+    private ConfiguracaoEstoque configuracaoEstoque;
 
     /**
      * Gera o estoque dos itens da nota. Realiza as condições:
@@ -69,25 +77,38 @@ public class GeradorDeEstoque implements Serializable {
             //Caso de uso 3: Se for Nota Recebida deve gerar o estoque
             geraEstoqueDeNota(nota);
         }
-
+        
     }
-
+    
     private void geraEstoqueDeNota(Nota nota) throws DadoInvalidoException {
         List<OperacaoDeEstoque> listaDeOperacoes = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(nota.getOperacao());
         for (ItemDeNota in : nota.getItens()) {
             for (QuantidadeDeItemPorDeposito q : in.getListaDeQuantidade()) {
-
+                
                 for (OperacaoDeEstoque operacaoDeEstoque : listaDeOperacoes) {
                     Estoque e = new EstoqueBuilder().comDeposito(q.getSaldoDeEstoque().getDeposito()).comQuantidade(q.getQuantidade()).comContaDeEstoque(operacaoDeEstoque.getContaDeEstoque())
-                            .comItem(in.getItem()).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(in).comLoteItem(in.getLoteItem()).construir();
+                            .comItem(in.getItem()).comOperacaoDeEstoque(operacaoDeEstoque).comEmissao(nota.getEmissao()).comItemDeNota(in).comLoteItem(in.getLoteItem()).comFilial(nota.getFilial()).construir();
                     // Adiciona no estoque
                     in.adicionaNoEstoque(e);
                 }
             }
         }
     }
-
-     public void geraEstoque(AjusteDeEstoque ajuste) throws DadoInvalidoException {
+    
+    public void geraEstoque(Condicional condicional) throws DadoInvalidoException {
+        for (ItemDeCondicional itemDeCondicional : condicional.getItensDeCondicional()) {
+            List<OperacaoDeEstoque> listaOperacaoEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(configuracaoVenda.getOperacaoDeCondicional());
+            for (OperacaoDeEstoque operacaoDeEstoque : listaOperacaoEstoque) {
+                Estoque e = new EstoqueBuilder().comDeposito(configuracaoEstoque.getDepositoPadrao()).comQuantidade(itemDeCondicional.getQuantidade()).comFilial(condicional.getFilial())
+                        .comContaDeEstoque(operacaoDeEstoque.getContaDeEstoque()).comItem(itemDeCondicional.getItem()).comOperacaoDeEstoque(operacaoDeEstoque)
+                        .comEmissao(itemDeCondicional.getCondicional().getEmissao()).comItemDeCondicional(itemDeCondicional).comLoteItem(itemDeCondicional.getLoteItem()).construir();
+                // Adiciona no estoque
+                itemDeCondicional.adicionaEstoque(e);
+            }
+        }
+    }
+    
+    public void geraEstoque(AjusteDeEstoque ajuste) throws DadoInvalidoException {
         List<OperacaoDeEstoque> listaOpEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(ajuste.getOperacao());
         List<Estoque> adicionar = new ArrayList<>();
         if (ajuste.getEstoque() == null) {
@@ -97,16 +118,16 @@ public class GeradorDeEstoque implements Serializable {
             boolean encontrou = false;
             for (Estoque e : ajuste.getEstoque()) {
                 if (ajuste.getId() != null) {
-                    Estoque estoque = new EstoqueBuilder().comAjusteDeEstoque(e.getAjusteDeEstoque()).comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
-                        .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).comID(e.getId()).construir();
+                    Estoque estoque = new EstoqueBuilder().comAjusteDeEstoque(e.getAjusteDeEstoque()).comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getData()).comQuantidade(ajuste.getQuantidade())
+                            .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).comID(e.getId()).comFilial(ajuste.getFilial()).construir();
                     ajuste.getEstoque().set(ajuste.getEstoque().indexOf(e), estoque);
                     encontrou = true;
                     break;
                 }
             }
             if (!encontrou) {
-                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
-                        .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).construir());
+                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getData()).comQuantidade(ajuste.getQuantidade())
+                        .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).comFilial(ajuste.getFilial()).construir());
             }
         }
         for (Estoque a : adicionar) {

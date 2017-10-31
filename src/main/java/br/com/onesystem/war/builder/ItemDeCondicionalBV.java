@@ -8,6 +8,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.Condicional;
+import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.builder.ItemDeCondicionalBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.MoedaFormatter;
@@ -24,9 +25,10 @@ public class ItemDeCondicionalBV {
     private Item item;
     private BigDecimal unitario;
     private BigDecimal quantidade;
-    private Condicional comanda;
+    private Condicional condicional;
     private BigDecimal aFaturar = BigDecimal.ZERO;
     private BigDecimal saldo;
+    private LoteItem loteItem;
 
     public ItemDeCondicionalBV() {
     }
@@ -36,7 +38,8 @@ public class ItemDeCondicionalBV {
         this.item = item.getItem();
         this.unitario = item.getUnitario();
         this.quantidade = item.getQuantidade();
-        this.comanda = item.getCondicional();
+        this.condicional = item.getCondicional();
+        this.loteItem = item.getLoteItem();
     }
 
     public Long getId() {
@@ -93,31 +96,39 @@ public class ItemDeCondicionalBV {
     }
 
     public String getTotalAFaturarFormatado() {
-        return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario().multiply(aFaturar));
+        return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), getUnitario().multiply(aFaturar));
     }
 
     public String getTotalFormatado() {
-        if (comanda != null) {
-            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getTotal());
+        if (condicional != null) {
+            return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), getTotal());
         } else {
             return NumberFormat.getNumberInstance().format(getTotal());
         }
     }
 
     public String getUnitarioFormatado() {
-        if (comanda != null) {
-            return MoedaFormatter.format(comanda.getCotacao().getConta().getMoeda(), getUnitario());
+        if (condicional != null) {
+            return MoedaFormatter.format(condicional.getCotacao().getConta().getMoeda(), getUnitario());
         } else {
             return NumberFormat.getNumberInstance().format(getUnitario());
         }
     }
 
     public Condicional getCondicional() {
-        return comanda;
+        return condicional;
     }
 
     public void setCondicional(Condicional comanda) {
-        this.comanda = comanda;
+        this.condicional = comanda;
+    }
+
+    public LoteItem getLoteItem() {
+        return loteItem;
+    }
+
+    public void setLoteItem(LoteItem loteItem) {
+        this.loteItem = loteItem;
     }
 
     public BigDecimal getTotal() {
@@ -125,11 +136,11 @@ public class ItemDeCondicionalBV {
     }
 
     public ItemDeCondicional construir() throws DadoInvalidoException {
-        return new ItemDeCondicionalBuilder().comItem(item).comUnitario(unitario).comQuantidade(quantidade).construir();
+        return new ItemDeCondicionalBuilder().comItem(item).comUnitario(unitario).comQuantidade(quantidade).comLote(loteItem).construir();
     }
 
     public ItemDeCondicional construirComId() throws DadoInvalidoException {
-        return new ItemDeCondicionalBuilder().comId(id).comItem(item).comUnitario(unitario).comQuantidade(quantidade).construir();
+        return new ItemDeCondicionalBuilder().comId(id).comItem(item).comUnitario(unitario).comQuantidade(quantidade).comLote(loteItem).construir();
     }
 
 }

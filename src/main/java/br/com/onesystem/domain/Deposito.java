@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -32,7 +34,9 @@ public class Deposito implements Serializable {
     private String nome;
     @OneToMany(mappedBy = "deposito")
     private List<AjusteDeEstoque> listadeAjuste;
-    @ManyToMany(cascade = {CascadeType.MERGE}, mappedBy = "depositos")
+    @ManyToMany
+    @JoinTable(name = "deposito_filial", joinColumns = @JoinColumn(name = "deposito_id"),
+            inverseJoinColumns = @JoinColumn(name = "filial_id"))
     private List<Filial> filiais;
 
     public Deposito() {
@@ -74,6 +78,10 @@ public class Deposito implements Serializable {
         return filiais;
     }
 
+    public void setFiliais(List<Filial> filiais) {
+        this.filiais = filiais;
+    }
+    
     @Override
     public boolean equals(Object objeto) {
         if (objeto == null) {

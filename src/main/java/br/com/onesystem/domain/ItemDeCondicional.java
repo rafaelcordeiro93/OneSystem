@@ -5,20 +5,14 @@
  */
 package br.com.onesystem.domain;
 
-import br.com.onesystem.dao.OperacaoDeEstoqueDAO;
-import br.com.onesystem.domain.builder.EstoqueBuilder;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.services.ValidadorDeCampos;
 import br.com.onesystem.util.MoedaFormatter;
-import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
-import br.com.onesystem.war.service.ConfiguracaoEstoqueService;
-import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -61,18 +55,25 @@ public class ItemDeCondicional implements Serializable {
     private BigDecimal quantidade;
     @OneToMany(mappedBy = "itemDeCondicional", cascade = CascadeType.ALL)
     private List<Estoque> estoques = new ArrayList();
+    @ManyToOne
+    private LoteItem loteItem;
 
     public ItemDeCondicional() {
     }
 
-    public ItemDeCondicional(Long id, Item item, BigDecimal valorUnitario, BigDecimal quantidade) throws DadoInvalidoException {
+    public ItemDeCondicional(Long id, Item item, BigDecimal valorUnitario, BigDecimal quantidade, LoteItem loteItem) throws DadoInvalidoException {
         this.id = id;
         this.item = item;
         this.unitario = valorUnitario;
         this.quantidade = quantidade;
+        this.loteItem = loteItem;
         ehValido();
     }
 
+    public LoteItem getLoteItem() {
+        return loteItem;
+    }
+    
     public Long getId() {
         return id;
     }

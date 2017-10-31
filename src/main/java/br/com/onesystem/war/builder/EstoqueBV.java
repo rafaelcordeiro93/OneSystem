@@ -4,6 +4,7 @@ import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.ContaDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.Deposito;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.ItemDeCondicional;
 import br.com.onesystem.domain.ItemDeNota;
@@ -29,6 +30,7 @@ public class EstoqueBV implements Serializable {
     private ItemDeCondicional itemCondicional;
     private ContaDeEstoque contaDeEstoque;
     private boolean cancelado;
+    private Filial filial;
 
     public EstoqueBV(Estoque e) {
         this.id = e.getId();
@@ -43,11 +45,13 @@ public class EstoqueBV implements Serializable {
         this.itemCondicional = e.getItemDeCondicional();
         this.contaDeEstoque = e.getContaDeEstoque();
         this.cancelado = e.isCancelado();
+        this.filial = filial;
     }
 
     public EstoqueBV(Long id, Deposito deposito, BigDecimal quantidade, Item item, OperacaoDeEstoque operacaoDeEstoque,
             ItemDeNota itemEmitido, Date emissao, AjusteDeEstoque ajusteDeEstoque, LoteItem lote,
-            ItemDeCondicional itemCondicional, ContaDeEstoque contaDeEstoque, boolean cancelado) {
+            ItemDeCondicional itemCondicional, ContaDeEstoque contaDeEstoque, boolean cancelado,
+            Filial filial) {
         this.deposito = deposito;
         this.quantidade = quantidade;
         this.item = item;
@@ -60,6 +64,7 @@ public class EstoqueBV implements Serializable {
         this.itemCondicional = itemCondicional;
         this.contaDeEstoque = contaDeEstoque;
         this.cancelado = cancelado;
+        this.filial = filial;
     }
 
     public EstoqueBV() {
@@ -161,17 +166,25 @@ public class EstoqueBV implements Serializable {
         this.cancelado = cancelado;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
+    
     public Estoque construir() throws DadoInvalidoException {
         return new EstoqueBuilder().comQuantidade(quantidade).comItemDeNota(itemEmitido)
                 .comAjusteDeEstoque(ajusteDeEstoque).comEmissao(emissao).comLoteItem(lote)
                 .comItemDeCondicional(itemCondicional).comCancelado(cancelado).comContaDeEstoque(contaDeEstoque)
-                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).comFilial(filial).construir();
     }
 
     public Estoque construirComID() throws DadoInvalidoException {
         return new EstoqueBuilder().comID(id).comQuantidade(quantidade).comItemDeNota(itemEmitido)
                 .comAjusteDeEstoque(ajusteDeEstoque).comEmissao(emissao).comLoteItem(lote)
                 .comItemDeCondicional(itemCondicional).comCancelado(cancelado).comContaDeEstoque(contaDeEstoque)
-                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).construir();
+                .comItem(item).comDeposito(deposito).comOperacaoDeEstoque(operacaoDeEstoque).comFilial(filial).construir();
     }
 }

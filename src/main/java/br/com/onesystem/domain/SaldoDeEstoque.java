@@ -45,6 +45,10 @@ public class SaldoDeEstoque implements Serializable {
     @NotNull(message = "{item_not_null}")
     @ManyToOne
     private Item item;
+    
+    @NotNull(message = "{filial_not_null}")
+    @ManyToOne
+    private Filial filial;
 
     @Column(insertable = false, updatable = false)
     private BigDecimal saldo;
@@ -76,6 +80,10 @@ public class SaldoDeEstoque implements Serializable {
         return loteItem;
     }
 
+    public Filial getFilial() {
+        return filial;
+    }
+    
     @Override
     public String toString() {
         return "SaldoDeEstoquePorDeposito{" + "id=" + id + ", deposito=" + deposito + ", contaDeEstoque=" + contaDeEstoque + ", item=" + item + ", saldo=" + saldo + '}';

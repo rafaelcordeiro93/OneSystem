@@ -3,6 +3,7 @@ package br.com.onesystem.war.builder;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Estoque;
+import br.com.onesystem.domain.Filial;
 import br.com.onesystem.domain.Item;
 import br.com.onesystem.domain.LoteItem;
 import br.com.onesystem.domain.Operacao;
@@ -27,19 +28,21 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     private List<Estoque> estoque;
     private BigDecimal custo;
     private LoteItem loteItem;
+    private Filial filial;
 
-    public AjusteDeEstoqueBV(AjusteDeEstoque ajusteDeEstoqueSelecionada) {
-        this.id = ajusteDeEstoqueSelecionada.getId();
-        this.observacao = ajusteDeEstoqueSelecionada.getObservacao();
-        this.deposito = ajusteDeEstoqueSelecionada.getDeposito();
-        this.item = ajusteDeEstoqueSelecionada.getItem();
-        this.quantidade = ajusteDeEstoqueSelecionada.getQuantidade();
-        this.data = ajusteDeEstoqueSelecionada.getData();
-        this.emissao = ajusteDeEstoqueSelecionada.getEmissao();
-        this.operacao = ajusteDeEstoqueSelecionada.getOperacao();
-        this.estoque = ajusteDeEstoqueSelecionada.getEstoque();
-        this.custo = ajusteDeEstoqueSelecionada.getCusto();
-        this.loteItem = ajusteDeEstoqueSelecionada.getLoteItem();
+    public AjusteDeEstoqueBV(AjusteDeEstoque a) {
+        this.id = a.getId();
+        this.observacao = a.getObservacao();
+        this.deposito = a.getDeposito();
+        this.item = a.getItem();
+        this.quantidade = a.getQuantidade();
+        this.data = a.getData();
+        this.emissao = a.getEmissao();
+        this.operacao = a.getOperacao();
+        this.estoque = a.getEstoque();
+        this.custo = a.getCusto();
+        this.loteItem = a.getLoteItem();
+        this.filial = a.getFilial();
     }
 
     public AjusteDeEstoqueBV() {
@@ -132,16 +135,24 @@ public class AjusteDeEstoqueBV implements Serializable, BuilderView<AjusteDeEsto
     public void setData(Date data) {
         this.data = data;
     }
+
+    public Filial getFilial() {
+        return filial;
+    }
+
+    public void setFilial(Filial filial) {
+        this.filial = filial;
+    }
     
     public AjusteDeEstoque construir() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
                 .comItem(item).comDeposito(deposito).comData(data).comOperacao(operacao).comEstoque(estoque)
-                .comLoteItem(loteItem).comEmissao(emissao).construir();
+                .comLoteItem(loteItem).comEmissao(emissao).comFilial(filial).construir();
     }
 
     public AjusteDeEstoque construirComID() throws DadoInvalidoException {
         return new AjusteDeEstoqueBuilder().comID(id).comObservacao(observacao).comQuantidade(quantidade).comCusto(custo)
                 .comItem(item).comDeposito(deposito).comData(data).comOperacao(operacao).comEstoque(estoque)
-                .comLoteItem(loteItem).comEmissao(emissao).construir();
+                .comLoteItem(loteItem).comEmissao(emissao).comFilial(filial).construir();
     }
 }

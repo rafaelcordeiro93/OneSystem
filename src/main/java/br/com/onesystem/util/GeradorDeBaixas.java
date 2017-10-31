@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.com.onesystem.services;
+package br.com.onesystem.util;
 
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.domain.FormaDeCobranca;
