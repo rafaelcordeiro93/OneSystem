@@ -1,40 +1,49 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.MarcaDAO;
 import br.com.onesystem.domain.Marca;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.MarcaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class SelecaoMarcaView extends BasicCrudMBImpl<Marca> implements Serializable {
 
     @Inject
-    private MarcaService service;
+    private EntityManager manager;
+
+    @Inject
+    private MarcaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarMarcas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
         exibirNaTela("estoque/selecao/selecaoMarca");
     }
-    
+
     @Override
     public String abrirEdicao() {
         return "/menu/estoque/cadastros/marca";
     }
-    
-     @Override
+
+    @Override
     public List<Marca> complete(String query) {
+        buscarDados();
         List<Marca> listaFIltrada = new ArrayList<>();
         for (Marca b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -51,11 +60,4 @@ public class SelecaoMarcaView extends BasicCrudMBImpl<Marca> implements Serializ
         return listaFIltrada;
     }
 
-    public MarcaService getService() {
-        return service;
-    }
-
-    public void setService(MarcaService service) {
-        this.service = service;
-    }
 }

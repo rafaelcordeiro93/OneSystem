@@ -8,23 +8,31 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaRecebidaConhecimentoDeFreteView extends BasicCrudMBImpl<NotaRecebida> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private NotaRecebidaDAO dao;
 
     @PostConstruct
     public void init() {
-       
-        beans = dao.porConhecimentoDeFreteNaoInformado().listaDeResultados();
+        buscarDados();
     }
 
-     @Override
+    public void buscarDados() {
+        beans = dao.porConhecimentoDeFreteNaoInformado().listaDeResultados(manager);
+    }
+
+    @Override
     public void abrirDialogo() {
         exibirNaTela("estoque/selecao/selecaoNotaRecebidaConhecimentoDeFrete");
     }
@@ -36,6 +44,7 @@ public class SelecaoNotaRecebidaConhecimentoDeFreteView extends BasicCrudMBImpl<
 
     @Override
     public List<NotaRecebida> complete(String query) {
+        buscarDados();
         List<NotaRecebida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -48,11 +57,4 @@ public class SelecaoNotaRecebidaConhecimentoDeFreteView extends BasicCrudMBImpl<
         return contasFIltradas;
     }
 
-    public NotaRecebidaDAO getDao() {
-        return dao;
-    }
-
-    public void setDao(NotaRecebidaDAO dao) {
-        this.dao = dao;
-    }
 }

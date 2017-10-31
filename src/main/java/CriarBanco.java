@@ -1,6 +1,9 @@
 
-
+import br.com.onesystem.dao.SaldoDeEstoqueDAO;
+import br.com.onesystem.domain.SaldoDeEstoque;
+import br.com.onesystem.reportTemplate.SaldoEmDepositoTemplate;
 import br.com.onesystem.util.JPAUtil;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -10,15 +13,12 @@ public class CriarBanco {
 //
 //        try {
 //
-//            EntityManager manager = JPAUtil.getEntityManager();
+//            List<SaldoEmDepositoTemplate> listaDeResultadosSoma = new SaldoDeEstoqueDAO().buscaSaldoDeCadaDeposito().groupByDepositoItem().listaDeDepositosSoma();
+//            listaDeResultadosSoma.forEach(System.out::println);
 //
-//            String consulta = "select r from Pessoa r";
+//            System.out.println("Fim");
 //
-//            Query query = manager.createQuery(consulta);
-//
-//            query.getResultList();
-//            
-//            System.out.println("Banco criado com sucesso");
+//            System.exit(0);
 //        } catch (Exception die) {
 //            System.out.println(die.getMessage());
 //        }

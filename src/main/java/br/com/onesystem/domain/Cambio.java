@@ -112,32 +112,32 @@ public class Cambio implements Serializable {
     }
 
     public void baixarContasAPagar() throws DadoInvalidoException {
-        List<Titulo> contasAPagar = new TituloDAO().aPagar().eAbertas().ePorPessoa(contrato.getPessoa()).listaDeResultados();
-        BigDecimal resto = contrato.getValorCalculado();
-
-        for (Titulo tituloAPagar : contasAPagar) {
-            if (resto.compareTo(BigDecimal.ZERO) == 0) {
-                break;
-            }
-            if (tituloAPagar.getRecepcao() != null) {
-                if (tituloAPagar.getSaldo().compareTo(resto) >= 0) {
-                    tituloAPagar.atualizaSaldo(resto);
-                    verificaNecessidadeBaixa();
-                    titulos.add(tituloAPagar);
-                    return;
-                } else {
-                    resto = resto.subtract(tituloAPagar.getSaldo());
-                    tituloAPagar.atualizaSaldo(tituloAPagar.getSaldo());
-                    verificaNecessidadeBaixa();
-                    titulos.add(tituloAPagar);
-                }
-            }
-        }
-        if (resto.compareTo(BigDecimal.ZERO) == 1 && valorLiquido.compareTo(BigDecimal.ZERO) == 1) {
-            gerarNovoTitulo(resto);
-        } else if (valorLiquido.compareTo(BigDecimal.ZERO) == -1) {
-            pagarBaixa();
-        }
+//        List<Titulo> contasAPagar = new TituloDAO().aPagar().eAbertas().ePorPessoa(contrato.getPessoa()).listaDeResultados();
+//        BigDecimal resto = contrato.getValorCalculado();
+//
+//        for (Titulo tituloAPagar : contasAPagar) {
+//            if (resto.compareTo(BigDecimal.ZERO) == 0) {
+//                break;
+//            }
+//            if (tituloAPagar.getRecepcao() != null) {
+//                if (tituloAPagar.getSaldo().compareTo(resto) >= 0) {
+//                    tituloAPagar.atualizaSaldo(resto);
+//                    verificaNecessidadeBaixa();
+//                    titulos.add(tituloAPagar);
+//                    return;
+//                } else {
+//                    resto = resto.subtract(tituloAPagar.getSaldo());
+//                    tituloAPagar.atualizaSaldo(tituloAPagar.getSaldo());
+//                    verificaNecessidadeBaixa();
+//                    titulos.add(tituloAPagar);
+//                }
+//            }
+//        }
+//        if (resto.compareTo(BigDecimal.ZERO) == 1 && valorLiquido.compareTo(BigDecimal.ZERO) == 1) {
+//            gerarNovoTitulo(resto);
+//        } else if (valorLiquido.compareTo(BigDecimal.ZERO) == -1) {
+//            pagarBaixa();
+//        }
 
     }
 

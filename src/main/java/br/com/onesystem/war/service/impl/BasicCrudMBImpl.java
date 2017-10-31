@@ -10,7 +10,6 @@ public abstract class BasicCrudMBImpl<Bean> {
     protected Bean beanSelecionado;
     protected List<Bean> beans;
     protected List<Bean> beansFiltrados;
-    
 
     public void exibirNaTela(String selecao) {
         Map<String, Object> opcoes = new HashMap<>();
@@ -26,8 +25,8 @@ public abstract class BasicCrudMBImpl<Bean> {
 
         RequestContext.getCurrentInstance().openDialog("/menu/" + selecao, opcoes, null);
     }
-    
-    public String getIcon(){
+
+    public String getIcon() {
         return "";
     }
 

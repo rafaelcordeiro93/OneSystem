@@ -69,7 +69,7 @@ public class NotaEmitidaBuilder {
     private FaturaEmitida faturaEmitida;
     private Filial filial;
     private LoteNotaFiscal loteNotaFiscal;
-    private Integer numeroNF;
+    private Long numeroNF;
 
     public NotaEmitidaBuilder comId(Long id) {
         this.id = id;
@@ -225,7 +225,7 @@ public class NotaEmitidaBuilder {
         return this;
     }
 
-    public NotaEmitidaBuilder comNumeroNF(Integer numeroNF) {
+    public NotaEmitidaBuilder comNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
         return this;
     }

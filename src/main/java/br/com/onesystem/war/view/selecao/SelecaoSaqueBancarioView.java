@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.SaqueBancarioDAO;
 import br.com.onesystem.domain.SaqueBancario;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.SaqueBancarioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoSaqueBancarioView extends BasicCrudMBImpl<SaqueBancario> implements Serializable {
 
     @Inject
-    private SaqueBancarioService service;
+    private EntityManager manager;
+
+    @Inject
+    private SaqueBancarioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarSaqueBancarios();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoSaqueBancarioView extends BasicCrudMBImpl<SaqueBancario> imp
 
     @Override
     public List<SaqueBancario> complete(String query) {
+        buscarDados();
         List<SaqueBancario> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoSaqueBancarioView extends BasicCrudMBImpl<SaqueBancario> imp
         return contasFIltradas;
     }
 
-    public SaqueBancarioService getService() {
-        return service;
-    }
-
-    public void setService(SaqueBancarioService service) {
-        this.service = service;
-    }
 }

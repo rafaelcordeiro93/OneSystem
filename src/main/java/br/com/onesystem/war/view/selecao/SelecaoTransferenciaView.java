@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.TransferenciaDAO;
 import br.com.onesystem.domain.Transferencia;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TransferenciaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoTransferenciaView extends BasicCrudMBImpl<Transferencia> implements Serializable {
 
     @Inject
-    private TransferenciaService service;
+    private EntityManager manager;
+
+    @Inject
+    private TransferenciaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarTransferencias();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoTransferenciaView extends BasicCrudMBImpl<Transferencia> imp
 
     @Override
     public List<Transferencia> complete(String query) {
+        buscarDados();
         List<Transferencia> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoTransferenciaView extends BasicCrudMBImpl<Transferencia> imp
         return contasFIltradas;
     }
 
-    public TransferenciaService getService() {
-        return service;
-    }
-
-    public void setService(TransferenciaService service) {
-        this.service = service;
-    }
 }

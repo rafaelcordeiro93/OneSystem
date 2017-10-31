@@ -5,6 +5,7 @@
  */
 package br.com.onesystem.services;
 
+import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.domain.Estoque;
 import br.com.onesystem.domain.ItemDeNota;
 import br.com.onesystem.domain.Nota;
@@ -15,6 +16,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.war.builder.QuantidadeDeItemPorDeposito;
 import br.com.onesystem.war.service.OperacaoDeEstoqueService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -83,4 +85,29 @@ public class GeradorDeEstoque implements Serializable {
         }
     }
 
+     public void geraEstoque(AjusteDeEstoque ajuste) throws DadoInvalidoException {
+        List<OperacaoDeEstoque> listaOpEstoque = operacaoDeEstoqueService.buscarOperacoesDeEstoquePor(ajuste.getOperacao());
+        List<Estoque> adicionar = new ArrayList<>();
+        if (ajuste.getEstoque() == null) {
+            ajuste.inicializaEstoque();
+        }
+        for (OperacaoDeEstoque op : listaOpEstoque) {
+            boolean encontrou = false;
+            for (Estoque e : ajuste.getEstoque()) {
+                if (ajuste.getId() != null) {
+                    e.atualizaQuantidade(ajuste.getQuantidade());
+                    encontrou = true;
+                    break;
+                }
+            }
+            if (!encontrou) {
+                adicionar.add(new EstoqueBuilder().comDeposito(ajuste.getDeposito()).comItem(ajuste.getItem()).comEmissao(ajuste.getEmissao()).comQuantidade(ajuste.getQuantidade())
+                        .comContaDeEstoque(op.getContaDeEstoque()).comOperacaoDeEstoque(op).comLoteItem(ajuste.getLoteItem()).construir());
+            }
+        }
+        for (Estoque a : adicionar) {
+            ajuste.adiciona(a);
+        }
+    }
+    
 }

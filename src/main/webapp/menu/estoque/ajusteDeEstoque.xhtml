@@ -8,13 +8,16 @@
 
     <ui:define name="content">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 5%" ><i class="fa fa-fw fa-arrows Fs40" style="color: #848484"/> #{l.Ajuste_De_Estoque}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+        <div class="content-section content-section-blue">
+            <h2 class="BigTopic-Custom"><i class="fa fa-archive White Fs40"/> #{l.Ajuste_De_Estoque}</h2>
+            <span class="Topic-Message">#{l.Item_Texto}</span>
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
@@ -42,13 +45,13 @@
 
                             <p:outputLabel value="Lote" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}"  />
                             <p:selectOneMenu id="loteItem" rendered="#{ajusteDeEstoqueView.e.item.detalhamento.id eq 2 ? true : false}" value="#{ajusteDeEstoqueView.e.loteItem}" converter="loteItemConverter" var="lo" filter="true" filterMatchMode="startsWith" >
-                                <f:selectItems value="#{ajusteDeEstoqueView.e.item.loteItem}" var="lote" itemLabel="#{lote.numeroDoLote}" itemValue="#{lote}"/>
+                                <f:selectItems value="#{ajusteDeEstoqueView.e.item.loteItem}" var="lote" itemLabel="#{lote.lote}" itemValue="#{lote}"/>
                                 <p:ajax event="itemSelect"  listener="#{ajusteDeEstoqueView.selecionaLoteItem()}" />
-                                 <p:column style="width:10%">
+                                <p:column style="width:10%">
                                     <h:outputText value="#{lo.id}" />
                                 </p:column>
                                 <p:column>
-                                    <h:outputText value="#{lo.numeroDoLote}" />
+                                    <h:outputText value="#{lo.lote}" />
                                 </p:column>
                             </p:selectOneMenu>
 
@@ -62,19 +65,15 @@
                             <p:inputTextarea autoResize="true" rows="2" cols="26" maxlength="200" value="#{ajusteDeEstoqueView.e.observacao}"/>
 
                         </p:panelGrid>
-                        <div class="EmptyBox20"/>
-                        <p:separator/>
                     </div>
 
-                    <div class="EmptyBox10"/>
+                    <div class="EmptyBox20"/>
+                    <div class="EmptyBox15"/>
 
-
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    </div>
+                    <p:commandButton value="#{l.Adicionar}" action="#{ajusteDeEstoqueView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{ajusteDeEstoqueView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{ajusteDeEstoqueView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{ajusteDeEstoqueView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                 </div>
             </div>
         </div>

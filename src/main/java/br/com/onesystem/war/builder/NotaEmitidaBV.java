@@ -67,7 +67,7 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
     private Caixa caixa;
     private Usuario usuario;
     private Filial filial;
-    private Integer numeroNF;
+    private Long numeroNF;
     private LoteNotaFiscal loteNotaFiscal;
 
     public NotaEmitidaBV(NotaEmitida nota) {
@@ -521,11 +521,11 @@ public class NotaEmitidaBV implements Serializable, BuilderView<NotaEmitida> {
         this.filial = filial;
     }
 
-    public Integer getNumeroNF() {
+    public Long getNumeroNF() {
         return numeroNF;
     }
 
-    public void setNumeroNF(Integer numeroNF) {
+    public void setNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
     }
 

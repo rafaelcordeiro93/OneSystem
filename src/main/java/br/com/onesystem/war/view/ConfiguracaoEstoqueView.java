@@ -64,18 +64,7 @@ public class ConfiguracaoEstoqueView extends BasicMBImpl<ConfiguracaoEstoque, Co
             conf.setListaDePreco(lp);
         } else if (obj instanceof Deposito) {
             conf.setDepositoPadrao((Deposito) obj);
-        } else if (obj instanceof Operacao) {
-            conf.setOperacaoDeAjusteDeEstoque((Operacao) obj);
-            inicializaOperacoesDeEstoque();
-        }
-    }
-
-    public void inicializaOperacoesDeEstoque() {
-        if (conf.getOperacaoDeAjusteDeEstoque().getOperacaoDeEstoque() == null || conf.getOperacaoDeAjusteDeEstoque().getOperacaoDeEstoque().isEmpty()) {
-            conf.setOperacaoDeAjusteDeEstoque(null);
-            RequestContext rc = RequestContext.getCurrentInstance();
-            rc.execute("PF('operacaoNaoRelacionadaDialog').show()");
-        }
+        } 
     }
 
     public ConfiguracaoEstoqueBV getConfiguracaoBV() {

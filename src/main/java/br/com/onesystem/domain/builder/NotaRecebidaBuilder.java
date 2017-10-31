@@ -64,7 +64,7 @@ public class NotaRecebidaBuilder {
     private ConhecimentoDeFrete conhecimentoDeFrete;
     private Filial filial;
     private PedidoAFornecedores pedidoAFornecedores;
-    private Integer numeroNF;
+    private Long numeroNF;
 
     public NotaRecebidaBuilder comId(Long id) {
         this.id = id;
@@ -215,7 +215,7 @@ public class NotaRecebidaBuilder {
         return this;
     }
 
-    public NotaRecebidaBuilder comNumeroNF(Integer numeroNF) {
+    public NotaRecebidaBuilder comNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
         return this;
     }

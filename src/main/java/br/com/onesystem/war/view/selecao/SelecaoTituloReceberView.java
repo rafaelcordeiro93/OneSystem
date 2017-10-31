@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.TituloDAO;
 import br.com.onesystem.domain.Titulo;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.TituloService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoTituloReceberView extends BasicCrudMBImpl<Titulo> implements Serializable {
 
     @Inject
-    private TituloService service;
+    private EntityManager manager;
+
+    @Inject
+    private TituloDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarTitulosAReceber();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.aReceber().eAbertas().listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -31,9 +40,10 @@ public class SelecaoTituloReceberView extends BasicCrudMBImpl<Titulo> implements
     public String abrirEdicao() {
         return "/menu/financeiro/consultar/consultaCobranca";
     }
- 
+
     @Override
     public List<Titulo> complete(String query) {
+        buscarDados();
         List<Titulo> titulosFiltrados = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (Titulo t : beans) {
@@ -45,11 +55,4 @@ public class SelecaoTituloReceberView extends BasicCrudMBImpl<Titulo> implements
         return titulosFiltrados;
     }
 
-    public TituloService getService() {
-        return service;
-    }
-
-    public void setService(TituloService service) {
-        this.service = service;
-    }
 }

@@ -356,9 +356,7 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
     public void add() {
         try {
             geradorDeEstoque.geraEstoqueDe(nota);
-            buscaProximoNumeroNF(nota);
             adicionaDAO.adiciona(nota);
-            nnfService.atualizaNumeracao(nota.getOperacao(), nota.getFilial());
             InfoMessage.adicionado();
             limparJanela();
             layout = serviceLayout.getLayoutPorTipoDeLayout(TipoLayout.NOTA_EMITIDA);
@@ -874,21 +872,19 @@ public class NotaEmitidaView extends BasicMBImpl<NotaEmitida, NotaEmitidaBV> imp
         editarItensEParcelas = tipo == TipoOperacao.DEVOLUCAO_CLIENTE || tipo == TipoOperacao.ENTREGA_MERCADORIA_VENDIDA
                 || tipo == TipoOperacao.DEVOLUCAO_CONDICIONAL;
         notaEmitida.setOperacao(operacao);
-        //notaEmitida.setLoteNotaFiscal(loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()));
     }
 
-    private void buscaProximoNumeroNF(NotaEmitida nota) {
-        try {
-            for (NumeracaoDeNotaFiscal nnf : loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()).getNumeracaoDeNotaFiscal()) {
-                if (nnf.getFilial().equals(notaEmitida.getFilial())) {
-                    nota.setNumeroNF(nnf.getNumeroNF());
-                }
-            }
-        } catch (NullPointerException npe) {
-            npe.getMessage();
-        }
-    }
-
+//    private void buscaProximoNumeroNF(NotaEmitida nota) {NAO USA MAIS, A PARTIR DE 30;10;2017 FOI ALTERADO PARA SQL
+//        try {
+//            for (NumeracaoDeNotaFiscal nnf : loteNotaFiscalService.buscaLoteNotaFiscalDa(notaEmitida.getOperacao()).getNumeracaoDeNotaFiscal()) {
+//                if (nnf.getFilial().equals(notaEmitida.getFilial())) {
+//                    nota.setNumeroNF(nnf.getNumeroNF());
+//                }
+//            }
+//        } catch (NullPointerException npe) {
+//            npe.getMessage();
+//        }
+//    }
     private void importaItensDe(NotaEmitida nota) throws DadoInvalidoException {
         for (ItemDeNota ie : nota.getItens()) {
             itemEmitido.setItem(ie.getItem());

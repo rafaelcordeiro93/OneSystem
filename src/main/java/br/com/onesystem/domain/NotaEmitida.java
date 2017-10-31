@@ -51,7 +51,7 @@ public class NotaEmitida extends Nota implements Serializable {
             BigDecimal desconto, BigDecimal acrescimo, BigDecimal despesaCobranca,
             BigDecimal frete, BigDecimal aFaturar, BigDecimal totalEmDinheiro, Nota notaDeOrigem,
             Comanda comanda, Condicional condicional, Date emissao, Caixa caixa,
-            Usuario usuario, FaturaEmitida faturaEmitida, Filial filial, Integer numeroNF, LoteNotaFiscal loteNotaFiscal) throws DadoInvalidoException {
+            Usuario usuario, FaturaEmitida faturaEmitida, Filial filial, Long numeroNF, LoteNotaFiscal loteNotaFiscal) throws DadoInvalidoException {
         super(id, pessoa, operacao, itens, formaDeRecebimento, listaDePreco, cobrancas, cotacao, valorPorCotacao, desconto, acrescimo, despesaCobranca,
                 frete, aFaturar, totalEmDinheiro, notaDeOrigem, emissao, caixa, usuario, filial, numeroNF);
         this.orcamento = orcamento;

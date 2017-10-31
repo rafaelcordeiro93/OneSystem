@@ -7,8 +7,7 @@ package br.com.onesystem.util;
 
 import java.io.Serializable;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,8 +15,8 @@ import javax.persistence.PersistenceContext;
 /**
  *
  * @author Rafael
+ * TransactionType deve ser Padrão. (Required)
  */
-@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 @Stateless
 public class EntityManagerProducer implements Serializable {
 
@@ -27,7 +26,7 @@ public class EntityManagerProducer implements Serializable {
     private EntityManager manager;
 
     @Produces
-    @StatelessTransaction
+    @Default
     public EntityManager getEntityManager() {
         return manager;
     }

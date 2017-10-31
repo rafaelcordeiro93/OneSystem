@@ -18,5 +18,5 @@ import javax.inject.Qualifier;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Qualifier
-public @interface StatelessTransaction {
+public @interface ExtendedTransaction {
 }

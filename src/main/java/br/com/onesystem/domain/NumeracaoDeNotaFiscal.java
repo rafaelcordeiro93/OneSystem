@@ -25,8 +25,8 @@ public class NumeracaoDeNotaFiscal implements Serializable {
     @Id
     @GeneratedValue(generator = "SEQ_NUMERACAODENOTAFISCAL", strategy = GenerationType.SEQUENCE)
     private Long id;
-    @Column(nullable = false)
-    private Integer numeroNF;
+    @Column(nullable = true)
+    private Long numeroNF;
     @ManyToOne
     private LoteNotaFiscal loteNotaFiscal;
     @ManyToOne
@@ -35,14 +35,14 @@ public class NumeracaoDeNotaFiscal implements Serializable {
     public NumeracaoDeNotaFiscal() {
     }
 
-    public NumeracaoDeNotaFiscal(Long id, Integer numeroNF, LoteNotaFiscal loteNotaFiscal, Filial filial) {
+    public NumeracaoDeNotaFiscal(Long id, Long numeroNF, LoteNotaFiscal loteNotaFiscal, Filial filial) {
         this.id = id;
         this.numeroNF = numeroNF;
         this.loteNotaFiscal = loteNotaFiscal;
         this.filial = filial;
     }
-    
-    public void interarNumeracao(){
+
+    public void interarNumeracao() {
         this.numeroNF++;
     }
 
@@ -54,7 +54,7 @@ public class NumeracaoDeNotaFiscal implements Serializable {
         return id;
     }
 
-    public Integer getNumeroNF() {
+    public Long getNumeroNF() {
         return numeroNF;
     }
 

@@ -8,14 +8,18 @@
 
     <ui:define name="content">
 
+        <div class="content-section content-section-blue">
 
-        <div class="ui-g">
-            <div class="ui-g-9" style="margin-left: 12%;margin-top: 3%">
-                <span class="tab" />
-                <div class="card" style="border: solid 1px; border-color: #C9D3DD">                                 
-                    <h3 class="BigTopic" style="padding: 5% 0% 0% 3%" ><i class="fa fa-list Fs40" style="color: #848484"/> #{l.Lista_Preco}</h3>
-                    <div class="EmptyBox40"/>
-                    <div class="ui-fluid"  style="padding: 0% 8% 0% 8%">
+            <h2 class="BigTopic-Custom"><i class="fa fa-list Fs40 White"/> #{l.Lista_Preco}</h2>
+            <span class="Topic-Message">#{l.Lista_Preco_Texto}</span>
+
+        </div>
+
+        <div class="ui-g" style="margin-left: -5px;">
+            <div class="ui-g-12 NoPadding">
+                <div class="card" style="padding: 35px;">
+
+                    <div class="ui-fluid">
 
                         <h4 style="font-size: 15px" >#{l.Detalhes}</h4>
                         <p:separator/>
@@ -30,18 +34,14 @@
                             <p:inputText value="#{listaDePrecoView.e.nome}"/>
 
                         </p:panelGrid>
-
-                        <div class="EmptyBox20"/>
-
-                        <p:separator/>
                     </div>
-                    <div class="EmptyBox10"/>
-                    <div style="padding: 0% 0% 5% 8%">
-                        <p:commandButton value="#{l.Adicionar}" action="#{listaDePrecoView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
-                        <p:commandButton value="#{l.Atualizar}" action="#{listaDePrecoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
-                        <p:commandButton value="#{l.Remover}" action="#{listaDePrecoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
-                        <p:commandButton value="#{l.Limpar}" action="#{listaDePrecoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                    </div>
+
+                    <div class="EmptyBox20"/>
+                    <div class="EmptyBox15"/>
+                    <p:commandButton value="#{l.Adicionar}" action="#{listaDePrecoView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
+                    <p:commandButton value="#{l.Atualizar}" action="#{listaDePrecoView.update()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
+                    <p:commandButton value="#{l.Remover}" action="#{listaDePrecoView.delete()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
+                    <p:commandButton value="#{l.Limpar}" action="#{listaDePrecoView.limparJanela()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
                 </div>
             </div>
         </div>

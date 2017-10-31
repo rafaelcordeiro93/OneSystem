@@ -1,8 +1,8 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.CidadeDAO;
 import br.com.onesystem.domain.Cidade;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CidadeService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,13 +11,17 @@ import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
 @ViewScoped
 public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serializable {
 
     @Inject
-    private CidadeService service;
+    private EntityManager manager;
+    
+    @Inject
+    private CidadeDAO dao;
 
     @PostConstruct
     public void init() {
@@ -25,7 +29,7 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
     }
 
     public void buscarDados() {
-        beans = service.buscarCidades();
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -39,8 +43,8 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
 
     @Override
     public List<Cidade> complete(String query) {
-        List<Cidade> listaFIltrada = new ArrayList<>();
         buscarDados();
+        List<Cidade> listaFIltrada = new ArrayList<>();
         for (Cidade b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
                 listaFIltrada.add(b);
@@ -54,14 +58,6 @@ public class SelecaoCidadeView extends BasicCrudMBImpl<Cidade> implements Serial
             }
         }
         return listaFIltrada;
-    }
-
-    public CidadeService getService() {
-        return service;
-    }
-
-    public void setService(CidadeService service) {
-        this.service = service;
     }
 
     public String getIcon() {

@@ -17,7 +17,7 @@ import br.com.onesystem.exception.DadoInvalidoException;
 public class NumeracaoDeNotaFiscalBuilder {
 
     private Long id;
-    private Integer numeroNF;
+    private Long numeroNF;
     private LoteNotaFiscal loteNotaFiscal;
     private Filial filial;
 
@@ -26,7 +26,7 @@ public class NumeracaoDeNotaFiscalBuilder {
         return this;
     }
 
-    public NumeracaoDeNotaFiscalBuilder comNumeroNF(Integer numeroNF) {
+    public NumeracaoDeNotaFiscalBuilder comNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
         return this;
     }

@@ -8,7 +8,6 @@ package br.com.onesystem.util;
 import java.io.Serializable;
 import javax.ejb.Stateful;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,7 +27,7 @@ public class EntityManagerProducerExtended implements Serializable {
     private EntityManager manager;
 
     @Produces
-    @Default
+    @ExtendedTransaction
     public EntityManager getEntityManager() {
         return manager;
     }

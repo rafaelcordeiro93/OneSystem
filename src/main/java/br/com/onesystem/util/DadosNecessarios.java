@@ -182,12 +182,10 @@ public class DadosNecessarios implements Serializable {
                 getMoedaPadrao();
                 getOperacoes();
                 getContaDeEstoque();
-                getOperacaoDeAjusteDeEstoque();
                 break;
             }
             case "/menu/estoque/item.xhtml": {
                 getContaDeEstoque();
-                getOperacaoDeAjusteDeEstoque();
                 break;
             }
             case "/menu/financeiro/cadastros/despesaProvisionada.xhtml": {
@@ -240,20 +238,6 @@ public class DadosNecessarios implements Serializable {
             return configuracaoEstoque.getContaDeEstoqueEmpresa();
         } catch (NullPointerException npe) {
             bv.getLista().add(b.getMessage("conta_de_estoque_empresa_not_null"));
-            pendencias.add(bv);
-            return null;
-        }
-    }
-
-    private Operacao getOperacaoDeAjusteDeEstoque() {
-        DadosNecessariosBV bv = new DadosNecessariosBV(b.getLabel("Configuracoes"), "/menu/topbar/preferencias/configuracao.xhtml");
-        try {
-            if (configuracaoEstoque.getAjusteDeEstoquePadrao() == null) {
-                throw new NullPointerException();
-            }
-            return configuracaoEstoque.getAjusteDeEstoquePadrao();
-        } catch (NullPointerException npe) {
-            bv.getLista().add(b.getMessage("operacao_de_ajuste_de_estoque_padrao_not_null"));
             pendencias.add(bv);
             return null;
         }

@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.UnidadeMedidaItemDAO;
 import br.com.onesystem.domain.UnidadeMedidaItem;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.UnidadeMedidaItemService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaItem> implements Serializable {
 
     @Inject
-    private UnidadeMedidaItemService service;
+    private EntityManager manager;
+
+    @Inject
+    private UnidadeMedidaItemDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarUnidadeMedidaItens();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
 
     @Override
     public List<UnidadeMedidaItem> complete(String query) {
+        buscarDados();
         List<UnidadeMedidaItem> unidadeFIltrada = new ArrayList<>();
         for (UnidadeMedidaItem u : beans) {
             if (StringUtils.startsWithIgnoreCase(u.getNome(), query)) {
@@ -48,14 +58,6 @@ public class SelecaoUnidadeMedidaItemView extends BasicCrudMBImpl<UnidadeMedidaI
             }
         }
         return unidadeFIltrada;
-    }
-
-    public UnidadeMedidaItemService getService() {
-        return service;
-    }
-
-    public void setService(UnidadeMedidaItemService service) {
-        this.service = service;
     }
 
     @Override

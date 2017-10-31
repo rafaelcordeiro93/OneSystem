@@ -16,14 +16,12 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
     private ContaDeEstoque contaDeEstoqueEmpresa;
     private ListaDePreco listaDePreco;
     private Deposito depositoPadrao;
-    private Operacao operacaoDeAjusteDeEstoque;
 
     public ConfiguracaoEstoqueBV(ConfiguracaoEstoque c) {
         this.id = c.getId();
         this.contaDeEstoqueEmpresa = c.getContaDeEstoqueEmpresa();
         this.listaDePreco = c.getListaDePreco();
         this.depositoPadrao = c.getDepositoPadrao();
-        this.operacaoDeAjusteDeEstoque = c.getAjusteDeEstoquePadrao();
     }
 
     public ConfiguracaoEstoqueBV() {
@@ -61,23 +59,15 @@ public class ConfiguracaoEstoqueBV implements Serializable, BuilderView<Configur
         this.depositoPadrao = depositoPadrao;
     }
 
-    public Operacao getOperacaoDeAjusteDeEstoque() {
-        return operacaoDeAjusteDeEstoque;
-    }
-
-    public void setOperacaoDeAjusteDeEstoque(Operacao operacaoDeAjusteDeEstoque) {
-        this.operacaoDeAjusteDeEstoque = operacaoDeAjusteDeEstoque;
-    }
-    
     public ConfiguracaoEstoque construir() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comContaDeEstoque(contaDeEstoqueEmpresa)
-                .comListaDePreco(listaDePreco).comOperacaoDeAjusteDeEstoque(operacaoDeAjusteDeEstoque).construir();
+                .comListaDePreco(listaDePreco).construir();
     }
 
     @Override
     public ConfiguracaoEstoque construirComID() throws DadoInvalidoException {
         return new ConfiguracaoEstoqueBuilder().comId(id).comContaDeEstoque(contaDeEstoqueEmpresa).comDepositoPadrao(depositoPadrao)
-                .comListaDePreco(listaDePreco).comOperacaoDeAjusteDeEstoque(operacaoDeAjusteDeEstoque).construir();
+                .comListaDePreco(listaDePreco).construir();
     }
 
 }

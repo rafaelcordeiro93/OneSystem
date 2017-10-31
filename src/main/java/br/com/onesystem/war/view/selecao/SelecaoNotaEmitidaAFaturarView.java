@@ -12,12 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoNotaEmitidaAFaturarView extends BasicCrudMBImpl<NotaEmitida> implements Serializable {
+
+    @Inject
+    private EntityManager manager;
 
     @Inject
     private NotaEmitidaDAO dao;
@@ -26,10 +31,14 @@ public class SelecaoNotaEmitidaAFaturarView extends BasicCrudMBImpl<NotaEmitida>
     @PostConstruct
     public void init() {
         buscaPessoa();
-        beans = dao.porAFaturarMaiorZero().porSemFaturaEmitida().porPessoa(pessoa).listaDeResultados();
+        buscarDados();
     }
 
-    public void buscaPessoa(){
+    public void buscarDados() {
+        beans = dao.porAFaturarMaiorZero().porSemFaturaEmitida().porPessoa(pessoa).listaDeResultados(manager);
+    }
+
+    public void buscaPessoa() {
         try {
             pessoa = (Pessoa) SessionUtil.getObject("pessoaFaturaEmitida", FacesContext.getCurrentInstance());
         } catch (DadoInvalidoException die) {
@@ -49,6 +58,7 @@ public class SelecaoNotaEmitidaAFaturarView extends BasicCrudMBImpl<NotaEmitida>
 
     @Override
     public List<NotaEmitida> complete(String query) {
+        buscarDados();
         List<NotaEmitida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {

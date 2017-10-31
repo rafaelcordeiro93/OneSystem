@@ -1,30 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.CobrancaVariavel;
+import br.com.onesystem.dao.CobrancaDAO;
 import br.com.onesystem.domain.CobrancaVariavel;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.CobrancaService;
-import br.com.onesystem.war.service.CobrancaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class SelecaoCobrancaView extends BasicCrudMBImpl<CobrancaVariavel> implements Serializable {
 
     @Inject
-    private CobrancaService service;
+    private EntityManager manager;
+
+    @Inject
+    private CobrancaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarCobrancas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -39,6 +44,7 @@ public class SelecaoCobrancaView extends BasicCrudMBImpl<CobrancaVariavel> imple
 
     @Override
     public List<CobrancaVariavel> complete(String query) {
+        buscarDados();
         List<CobrancaVariavel> cobrancasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -51,11 +57,4 @@ public class SelecaoCobrancaView extends BasicCrudMBImpl<CobrancaVariavel> imple
         return cobrancasFIltradas;
     }
 
-    public CobrancaService getService() {
-        return service;
-    }
-
-    public void setService(CobrancaService service) {
-        this.service = service;
-    }
 }

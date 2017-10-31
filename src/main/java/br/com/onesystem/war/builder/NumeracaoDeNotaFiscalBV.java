@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class NumeracaoDeNotaFiscalBV implements Serializable, BuilderView<NumeracaoDeNotaFiscal> {
 
     private Long id;
-    private Integer numeroNF;
+    private Long numeroNF;
     private LoteNotaFiscal loteNotaFiscal;
     private Filial filial;
 
@@ -33,11 +33,11 @@ public class NumeracaoDeNotaFiscalBV implements Serializable, BuilderView<Numera
         this.id = id;
     }
 
-    public Integer getNumeroNF() {
+    public Long getNumeroNF() {
         return numeroNF;
     }
 
-    public void setNumeroNF(Integer numeroNF) {
+    public void setNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
     }
 

@@ -20,8 +20,14 @@
             body .ui-datatable .ui-datatable-data tr.ui-datatable-even {
                 background-color: #f7f7f7;
             }
+            .ui-autocomplete-panel .ui-autocomplete-table th, .ui-autocomplete-panel .ui-autocomplete-table td {
+                border-color: #c7c7c7;
+            }
             body .ui-widget-content {
                 border: none;
+            }
+            .panelGrupo.ui-panel .ui-panel-titlebar  {
+                background:none;
             }
             .TabNoBorder.ui-tabs.ui-tabs-top .ui-tabs-panel, body .ui-tabs.ui-tabs-bottom .ui-tabs-panel, body .ui-tabs.ui-tabs-left .ui-tabs-panel, body .ui-tabs.ui-tabs-right .ui-tabs-panel {
                 border-bottom: none !important;
@@ -56,7 +62,7 @@
                                 <div class="EmptyBox20"/>
 
                                 <p:panelGrid columns="4" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                             columnClasses="ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-5,ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-5">
+                                             columnClasses="ui-g-12 ui-md-3 ui-lg-1 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-4,ui-g-12 ui-md-3 ui-lg-2 TexAlRight-LeftResponsive,ui-g-12 ui-md-9 ui-lg-4">
 
                                     <p:outputLabel value="#{l.Id}"/>
                                     <a:inputTextDialog id="itemID" value="#{itemView.e}" update="conteudo" dialog="#{selecaoItemView}" mbView="#{itemView}" var="itemBV" converter="itemBVConverter" process="@this" itemLabel="#{itemBV.id}" itemValue="#{itemBV}" editVisible="false" itemLabelTab="#{itemBV.nome}" itemLabelTabVisible="true" onlyNumber="true">
@@ -72,38 +78,38 @@
                                     <p:outputLabel value="#{l.Id_Fabricante}"/>
                                     <p:inputText value="#{itemView.e.idFabricante}" />
 
-                                    <p:outputLabel value="#{l.Id_Contabil}"/>
-                                    <p:inputText value="#{itemView.e.idContabil}" />
+                                    <p:outputLabel value="#{l.Marca}"/>
+                                    <a:inputTextDialog id="itemMarca" dialog="#{selecaoMarcaView}" mbView="#{itemView}" value="#{itemView.e.marca}" var="marca" itemLabel="#{marca.nome}" itemValue="#{marca}" converter="marcaConverter" itemLabelTabVisible="true" itemLabelTab="#{marca.nome}"/>
 
                                     <p:outputLabel value="#{l.Codigo_De_Barras}"/>
                                     <p:inputNumber value="#{itemView.e.ncm}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
 
-                                    <p:outputLabel value="#{l.Ncm}"/>
-                                    <p:inputNumber value="#{itemView.e.ncm}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
-
-                                    <p:outputLabel value="#{l.Estoque_Minimo}"/>
-                                    <p:inputNumber value="#{itemView.e.estoqueMinimo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
-
-                                    <p:outputLabel value="#{l.Estoque_Maximo}"/>
-                                    <p:inputNumber value="#{itemView.e.estoqueMaximo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
+                                    <p:outputLabel value="#{l.Grupo}"/>
+                                    <a:inputTextDialog id="itemGrupo" dialog="#{selecaoGrupoView}" mbView="#{itemView}" value="#{itemView.e.grupo}" var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}" converter="grupoConverter" itemLabelTabVisible="true" itemLabelTab="#{grupo.nome}"/>
 
                                     <p:outputLabel value="#{l.Grupo_Fiscal}"/>
                                     <a:inputTextDialog id="itemGrupoFiscal" dialog="#{selecaoGrupoFiscalView}" mbView="#{itemView}" value="#{itemView.e.grupoFiscal}" var="grupoFiscal" itemLabel="#{grupoFiscal.nome}" itemValue="#{grupoFiscal}" converter="grupoFiscalConverter" itemLabelTabVisible="true" itemLabelTab="#{grupoFiscal.nome}"/>
 
-                                    <p:outputLabel value="#{l.Grupo}"/>
-                                    <a:inputTextDialog id="itemGrupo" dialog="#{selecaoGrupoView}" mbView="#{itemView}" value="#{itemView.e.grupo}" var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}" converter="grupoConverter" itemLabelTabVisible="true" itemLabelTab="#{grupo.nome}"/>
+                                    <p:outputLabel value="#{l.Ncm}"/>
+                                    <p:inputNumber value="#{itemView.e.ncm}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
 
 
-                                    <p:outputLabel value="#{l.Marca}"/>
-                                    <a:inputTextDialog id="itemMarca" dialog="#{selecaoMarcaView}" mbView="#{itemView}" value="#{itemView.e.marca}" var="marca" itemLabel="#{marca.nome}" itemValue="#{marca}" converter="marcaConverter" itemLabelTabVisible="true" itemLabelTab="#{marca.nome}"/>
+                                    <p:outputLabel value="#{l.Estoque_Minimo}"/>
+                                    <p:inputNumber value="#{itemView.e.estoqueMinimo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
 
-                                    <p:outputLabel value="#{l.Unidade_Medida}"/>
-                                    <a:inputTextDialog id="itemUN" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{itemView}" value="#{itemView.e.unidadeDeMedida}" var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}" itemValue="#{unidadeDeMedida}" converter="unidadeMedidaItemConverter" itemLabelTabVisible="true" itemLabelTab="#{unidadeDeMedida.nome}"/>
+                                    <p:outputLabel value="#{l.Id_Contabil}"/>
+                                    <p:inputText value="#{itemView.e.idContabil}" />
+
+                                    <p:outputLabel value="#{l.Estoque_Maximo}"/>
+                                    <p:inputNumber value="#{itemView.e.estoqueMaximo}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
 
                                     <p:outputLabel value="#{l.Tipo_Item}"/>
                                     <p:selectOneMenu value="#{itemView.e.tipoItem}" >
                                         <f:selectItems value="#{itemView.tipoItem}" var="tipoItem" itemLabel="#{tipoItem.nome}" itemValue="#{tipoItem}" />
                                     </p:selectOneMenu>
+
+                                    <p:outputLabel value="#{l.Unidade_Medida}"/>
+                                    <a:inputTextDialog id="itemUN" dialog="#{selecaoUnidadeMedidaItemView}" mbView="#{itemView}" value="#{itemView.e.unidadeDeMedida}" var="unidadeDeMedida" itemLabel="#{unidadeDeMedida.nome}" itemValue="#{unidadeDeMedida}" converter="unidadeMedidaItemConverter" itemLabelTabVisible="true" itemLabelTab="#{unidadeDeMedida.nome}"/>
 
                                     <p:outputLabel value="#{l.Detalhamento}"/>
                                     <p:selectOneMenu value="#{itemView.e.detalhamento}">
@@ -122,85 +128,150 @@
 
                             <p:tab title="#{l.Estoque}" rendered="#{!itemView.tab}">
 
-                                <div class="ui-g-12">
-                                    <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
-                                    <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
-                                </div>
-                                <h:panelGrid>
+                                <p:panelGrid columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
+                                             columnClasses="ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6,ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6">
 
-                                    <p:dataTable id="estoqueDT" var="estoque" value="#{itemView.estoqueLista}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-5" reflow="true">
-                                        <p:column headerText="#{l.Deposito}" >
-                                            <h:outputText value="#{estoque.deposito.nome}" />
-                                        </p:column>
-                                        <p:column headerText="#{l.Saldo}" >
-                                            <h:outputText value="#{estoque.saldo}" />
-                                        </p:column>
-                                    </p:dataTable>
+                                    <p:panelGrid columns="1"
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-9" >
 
-                                </h:panelGrid>
+                                        <div class="FontRobotoLight BoldGray DispBlock">O saldo é exibido por contas de estoque, selecione a conta de estoque para saber o saldo da conta.</div>
+
+                                        <p:outputLabel value="#{l.Conta_de_Estoque}" />
+                                        <a:inputTextDialog id="contaId" value="#{itemView.contaDeEstoque}" update="conteudo" dialog="#{selecaoContaDeEstoqueView}" mbView="#{itemView}" var="contaDeEstoque" converter="contaDeEstoqueConverter" process="@this" itemLabel="#{contaDeEstoque.nome}" itemValue="#{contaDeEstoque}" editVisible="true" itemLabelTab="#{contaDeEstoque.nome}" itemLabelTabVisible="true" >
+                                            <p:ajax listener="#{itemView.inicializaEstoque()}" event="itemSelect" update="conteudo"/>
+                                        </a:inputTextDialog>
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Deposito}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada depósito</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDT" var="s" value="#{itemView.saldoEmDeposito}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true">
+                                            <p:column headerText="#{l.Deposito}" >
+                                                <h:outputText value="#{s.deposito.id}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{s.deposito.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Lote}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada lote</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDTLote" var="s" value="#{itemView.saldoEmLote}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
+                                            <p:column headerText="#{l.Lote}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Lote_Definido : s.loteItem.lote}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Fabricacao}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Dados : s.loteItem.fabricacaoFormatada}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Validade}" >
+                                                <h:outputText value="#{s.loteItem.id eq 0 ? l.Sem_Dados : s.loteItem.validadeFormatada}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:panelGrid>
+
+                                    <p:panelGrid columns="1" 
+                                                 columnClasses="ui-g-12 ui-md-12 ui-lg-12" >
+
+                                        <div class="ui-g-12">
+                                            <h4 class="BigTopic">#{l.Saldo_Estoque_Conta}</h4>
+                                            <div class="FontRobotoLight BoldGray DispBlock">Visualize o saldo do estoque do item em cada conta de estoque</div>
+                                        </div>
+
+                                        <p:dataTable id="estoqueDTConta" var="s" value="#{itemView.saldoEmConta}" emptyMessage="#{l.Nao_Ha_Registros}" styleClass="ui-g-12 ui-md-12 ui-lg-12" reflow="true" >
+                                            <p:column headerText="#{l.Conta_de_Estoque}" >
+                                                <h:outputText value="#{s.contaDeEstoque.id}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Nome}" >
+                                                <h:outputText value="#{s.contaDeEstoque.nome}" />
+                                            </p:column>
+                                            <p:column headerText="#{l.Saldo}" >
+                                                <h:outputText value="#{s.saldo}" />
+                                            </p:column>
+                                        </p:dataTable>
+
+                                    </p:panelGrid>
+                                </p:panelGrid>
+
 
                             </p:tab>
 
-                            <p:tab title="#{l.Lotes}" rendered="#{itemView.e.detalhamento.id eq 2 ? true : false}">
-                                <div class="EmptyBox20"/>
+                            <p:tab title="#{l.Lotes}" rendered="#{itemView.t.detalhamento.id eq 2 ? !itemView.tab : false}">
 
-                                <p:panelGrid id="painelNumeracoes" columns="3" layout="grid" styleClass="ui-panelgrid-blank form-group form-elements"
-                                             columnClasses="ui-g-12 ui-md-6 ui-lg-2,ui-g-12 ui-md-6 ui-lg-4 ui-fluid,ui-g-12 ui-md-6 ui-lg-2">
+                                <div class="ui-g-12">
+                                    <h4 class="BigTopic">Lotes</h4>
+                                    <div class="FontRobotoLight BoldGray DispBlock">Cadastre o lote e verifique a evolução através do saldo.</div>
+                                </div>
 
-                                    <p:outputLabel value="#{l.Ativo}"/>
-                                    <p:selectBooleanCheckbox id="loteStatus" value="#{itemView.loteDeItemBV.ativo}"/>
-                                    <p:spacer class="ui-g"/>
+                                <p:panelGrid columns="2" layout="grid" styleClass=" form-group form-elements" class="TabNoBorder"
+                                             columnClasses="ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6,ui-panelgrid-cell ui-g-12 ui-md-12 ui-lg-6">
 
-                                    <p:outputLabel value="#{l.Numero_Do_Lote}"/>
-                                    <p:inputNumber value="#{itemView.loteDeItemBV.numeroDoLote}" thousandSeparator="" decimalSeparator="" decimalPlaces="0"/>
-                                    <p:spacer class="ui-g"/>
+                                    <p:panelGrid columns="2" styleClass="ui-g-12 ui-md-12 ui-lg-9" columnClasses="ui-g-12 ui-md-3 ui-lg-3,ui-g-12 ui-md-9 ui-lg-9" >
 
-                                    <p:outputLabel value="#{l.Data_De_Fabricacao}"/>
-                                    <p:calendar value="#{itemView.loteDeItemBV.dataDeFabricacao}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
-                                    <p:spacer class="ui-g"/>
+                                        <p:outputLabel value="#{l.Ativo}"/>
+                                        <p:selectBooleanCheckbox id="loteStatus" value="#{itemView.loteDeItemBV.ativo}"/>
 
-                                    <p:outputLabel value="#{l.Data_De_Validade}"/>
-                                    <p:calendar value="#{itemView.loteDeItemBV.dataDeValidade}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
-                                    <p:spacer class="ui-g"/>
+                                        <p:outputLabel value="#{l.Lote}"/>
+                                        <p:inputText value="#{itemView.loteDeItemBV.lote}" />
 
-                                    <p:outputLabel value="#{l.Observacao}"/>
-                                    <p:inputTextarea autoResize="true" rows="3" cols="26" maxlength="500" value="#{itemView.loteDeItemBV.observacao}"/>
+                                        <p:outputLabel value="#{l.Fabricacao}"/>
+                                        <p:calendar value="#{itemView.loteDeItemBV.dataDeFabricacao}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
 
-                                    <h:panelGrid columns="3" style="margin-top: -2px">
-                                        <p:commandButton icon="fa fa-plus Fs14 White" action="#{itemView.addLoteItem()}" update="conteudo" />
-                                        <p:commandButton icon="fa fa-refresh Fs14 White" action="#{itemView.updateLoteItem()}" update="conteudo" styleClass="green-btn"/>
-                                        <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{itemView.removeLoteItem()}" update="conteudo" styleClass="orange-btn"/>
-                                    </h:panelGrid>
+                                        <p:outputLabel value="#{l.Validade}"/>
+                                        <p:calendar value="#{itemView.loteDeItemBV.dataDeValidade}" navigator="true" pattern="dd/MM/yyyy" mask="99/99/9999"  locale="pt" showWeek="true"/>
+
+                                        <p:outputLabel value="#{l.Observacao}"/>
+                                        <p:inputTextarea autoResize="true" rows="3" cols="26" maxlength="255" counter="display" counterTemplate="{0} #{l.caracteres_restantes}." value="#{itemView.loteDeItemBV.observacao}"/>
+                                        <p:spacer/>
+                                        <p:outputLabel id="display"/>
+
+                                        <p:spacer/>
+                                        <h:panelGrid columns="3" style="margin-top: -2px">
+                                            <p:commandButton icon="fa fa-plus Fs14 White" action="#{itemView.addLoteItem()}" update="conteudo" style="max-width: 30px" />
+                                            <p:commandButton icon="fa fa-refresh Fs14 White" action="#{itemView.updateLoteItem()}" update="conteudo" styleClass="green-btn" style="max-width: 30px"/>
+                                            <p:commandButton icon="fa fa-trash-o Fs14 White" action="#{itemView.removeLoteItem()}" update="conteudo" styleClass="orange-btn" style="max-width: 30px"/>
+                                        </h:panelGrid>
+
+                                    </p:panelGrid>
+
+                                    <p:dataTable id="loteItem" var="model" value="#{itemView.listaLoteItem}" rowIndexVar="rowIndex"
+                                                 styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" selection="#{itemView.loteItemSelecionado}"
+                                                 paginatorAlwaysVisible="false" rows="12" paginator="true" reflow="true"
+                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                 emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
+
+                                        <p:ajax event="rowSelect" listener="#{itemView.selecionaLoteItem}" update=":conteudo" />
+
+                                        <p:column headerText="..." width="5%" styleClass="TexAlCenter">                                        
+                                            #{rowIndex+1}
+                                        </p:column>
+                                        <p:column headerText="#{l.Lote}">                                
+                                            <h:outputText id="lotedt" value="#{model.object.lote}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Fabricacao}">
+                                            <h:outputText id="fabdt" value="#{model.object.fabricacaoFormatada}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Validade}">
+                                            <h:outputText id="valdt" value="#{model.object.validadeFormatada}"/>
+                                        </p:column>
+                                        <p:column headerText="#{l.Ativo}" width="7%" styleClass="TexAlCenter">
+                                            <h:outputText id="ativodt" value="#{model.object.ativo eq true ? l.Sim : l.Nao}"/>
+                                        </p:column>
+                                    </p:dataTable>
 
                                 </p:panelGrid>
-                                <div class="EmptyBox10"/>
-                                <p:dataTable id="loteItem" var="model" value="#{itemView.listaLoteItem}" rowIndexVar="rowIndex"
-                                             styleClass="ui-g-2" selectionMode="single" rowKey="#{model.id}" 
-                                             paginatorAlwaysVisible="false" rows="12" paginator="true"
-                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                             emptyMessage="#{l.Nao_Ha_Registros}" style="width: 100%; border: none;">
 
-                                    <p:ajax event="rowSelect" listener="#{itemView.selecionaLoteItem}" update=":conteudo" />
 
-                                    <p:column headerText="..." width="4%" styleClass="TexAlCenter">                                        
-                                        #{rowIndex+1}
-                                    </p:column>
-                                    <p:column headerText="#{l.Numero_Do_Lote}">                                
-                                        <h:outputText id="lotedt" value="#{model.object.numeroDoLote}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Data_De_Fabricacao}">
-                                        <h:outputText id="fabdt" value="#{model.object.fabricacaoFormatada}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Data_De_Validade}">
-                                        <h:outputText id="valdt" value="#{model.object.validadeFormatada}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Saldo}">
-                                        <h:outputText id="saldodt" value="#{model.object.saldo}"/>
-                                    </p:column>
-                                    <p:column headerText="#{l.Ativo}">
-                                        <h:outputText id="ativodt" value="#{model.object.ativo eq true ? l.Sim : l.Nao}"/>
-                                    </p:column>
-                                </p:dataTable>
 
                             </p:tab>
 
@@ -356,12 +427,10 @@
                     <div class="EmptyBox20"/> 
 
                     <p:panelGrid  id="botoes" rendered="#{itemView.renderBotoes}">
-                        <div style="padding: 0% 0% 5% 8%">
                             <p:commandButton value="#{l.Adicionar}" action="#{itemView.add()}"  styleClass="Mar2" update=":conteudo" icon="fa fa-plus Fs16 White"/>
                             <p:commandButton value="#{l.Atualizar}" action="#{itemView.update()}" styleClass="Mar2" update=":conteudo" icon="fa fa-refresh Fs16 White"/>     
                             <p:commandButton value="#{l.Remover}" action="#{itemView.delete()}" styleClass="Mar2" update=":conteudo" icon="fa fa-trash-o Fs16 White"/>
                             <p:commandButton value="#{l.Limpar}" action="#{itemView.limparJanela()}" styleClass="Mar2" update=":conteudo" icon="fa fa-eraser Fs16 White"/>
-                        </div> 
                     </p:panelGrid>
                 </div>
             </div>

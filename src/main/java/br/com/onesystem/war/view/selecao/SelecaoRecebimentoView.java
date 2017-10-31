@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.RecebimentoDAO;
 import br.com.onesystem.domain.Recebimento;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.RecebimentoService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoRecebimentoView extends BasicCrudMBImpl<Recebimento> implements Serializable {
 
     @Inject
-    private RecebimentoService service;
+    private EntityManager manager;
+    
+    @Inject
+    private RecebimentoDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarRecebimentos();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoRecebimentoView extends BasicCrudMBImpl<Recebimento> impleme
     
     @Override
     public List<Recebimento> complete(String query) {
+        buscarDados();
         List<Recebimento> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (Recebimento m : beans) {
@@ -45,11 +55,4 @@ public class SelecaoRecebimentoView extends BasicCrudMBImpl<Recebimento> impleme
         return listaFIltrada;
     }
 
-    public RecebimentoService getService() {
-        return service;
-    }
-
-    public void setService(RecebimentoService service) {
-        this.service = service;
-    }
 }

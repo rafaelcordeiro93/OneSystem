@@ -1,28 +1,36 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.domain.NumeracaoDeNotaFiscal;
+import br.com.onesystem.dao.NumeracaoDeNotaFiscalDAO;
 import br.com.onesystem.domain.NumeracaoDeNotaFiscal;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.NumeracaoDeNotaFiscalService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@RequestScoped
+@ViewScoped
 public class SelecaoNumeracaoDeNotaFiscalView extends BasicCrudMBImpl<NumeracaoDeNotaFiscal> implements Serializable {
 
     @Inject
-    private NumeracaoDeNotaFiscalService service;
+    private EntityManager manager;
+    
+    @Inject
+    private NumeracaoDeNotaFiscalDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarNumeracaoDeNotasFiscais();
+        buscarDados();
+    }
+    
+    public void buscarDados(){
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -36,6 +44,7 @@ public class SelecaoNumeracaoDeNotaFiscalView extends BasicCrudMBImpl<NumeracaoD
     
      @Override
     public List<NumeracaoDeNotaFiscal> complete(String query) {
+        buscarDados();
         List<NumeracaoDeNotaFiscal> listaFIltrada = new ArrayList<>();
         if (!StringUtils.containsLetter(query)) {
             for (NumeracaoDeNotaFiscal m : beans) {
@@ -47,11 +56,4 @@ public class SelecaoNumeracaoDeNotaFiscalView extends BasicCrudMBImpl<NumeracaoD
         return listaFIltrada;
     }
 
-    public NumeracaoDeNotaFiscalService getService() {
-        return service;
-    }
-
-    public void setService(NumeracaoDeNotaFiscalService service) {
-        this.service = service;
-    }
 }

@@ -9,13 +9,13 @@ import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import br.com.onesystem.util.BundleUtil;
-import br.com.onesystem.util.StatelessTransaction;
 import java.io.Serializable;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.FlushModeType;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
@@ -26,9 +26,9 @@ import org.hibernate.exception.ConstraintViolationException;
 public class RemoveDAO<T> implements Serializable {
 
     @Inject
-    @StatelessTransaction
     private EntityManager em;
 
+    @Transactional
     public void remove(T t, Long id) throws DadoInvalidoException {
 
         try {

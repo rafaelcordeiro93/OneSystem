@@ -68,8 +68,8 @@ public class ConsultaRecebimentoView extends BasicMBImpl<Recebimento, Recebiment
             tiposDeCobranca.getList().forEach(tp -> recebimento.atualiza(tp));
             formasDeCobranca.getList().forEach(f -> recebimento.atualiza(f));
 
-            tiposDeCobranca.getList().forEach(tp -> recebimento.atualizaBaixas(tp));
-            formasDeCobranca.getList().forEach(f -> recebimento.atualizaBaixas(f));
+//            tiposDeCobranca.getList().forEach(tp -> recebimento.atualizaBaixas(tp));
+//            formasDeCobranca.getList().forEach(f -> recebimento.atualizaBaixas(f));
 
             recebimento.ehRegistroValido();
             tiposDeCobrancaDeletados.getList().forEach(tp -> recebimento.remove(tp));

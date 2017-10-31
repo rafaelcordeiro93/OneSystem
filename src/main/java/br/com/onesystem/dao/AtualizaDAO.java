@@ -9,9 +9,11 @@ import br.com.onesystem.valueobjects.TipoTransacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
 import java.io.Serializable;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import org.hibernate.exception.ConstraintViolationException;
 
 /**
@@ -23,20 +25,20 @@ public class AtualizaDAO<T> implements Serializable {
     @Inject
     private EntityManager em;
 
+    @Transactional
     public void atualiza(T t) throws ConstraintViolationException, DadoInvalidoException {
 
         try {
-
             // persiste o objeto e log do mesmo
             em.merge(t);
             em.persist(new Log("Alterado: " + t, TipoTransacao.ALTERACAO));
 
         } catch (PersistenceException pe) {
-            if (pe.getCause().getCause() instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause().getCause();
+            if (pe.getCause() instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) pe.getCause();
                 throw new FDadoInvalidoException(getMessage(cve) + " - Constraint: " + getConstraint(cve));
             }
-            throw new FDadoInvalidoException(pe.getCause().toString());
+            throw new FDadoInvalidoException(pe.toString());
         } catch (Exception ex) {
             throw new FDadoInvalidoException("<AtualizaDAO> Erro de Gravação: " + ex.getMessage());
         } catch (StackOverflowError soe) {

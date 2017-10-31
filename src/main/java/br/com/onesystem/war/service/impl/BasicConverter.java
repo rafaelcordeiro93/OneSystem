@@ -26,7 +26,7 @@ public abstract class BasicConverter<Bean> implements Serializable {
     public Object getAsObject(FacesContext fc, UIComponent uic, String value) {
         if (value != null && !value.isEmpty()) {
             Object object = uic.getAttributes().get(value);
-            if (object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
+            if (object != null && object.getClass().equals(clazz) || object.getClass().getSuperclass().equals(clazz)) {
                 return (Bean) object;
             }
         }

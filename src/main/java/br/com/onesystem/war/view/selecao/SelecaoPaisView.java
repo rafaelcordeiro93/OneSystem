@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.PaisDAO;
 import br.com.onesystem.domain.Pais;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.PaisService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializable {
 
     @Inject
-    private PaisService service;
+    private EntityManager manager;
+
+    @Inject
+    private PaisDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarPais();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -34,6 +43,7 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
 
     @Override
     public List<Pais> complete(String query) {
+        buscarDados();
         List<Pais> listaFIltrada = new ArrayList<>();
         for (Pais b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -48,14 +58,6 @@ public class SelecaoPaisView extends BasicCrudMBImpl<Pais> implements Serializab
             }
         }
         return listaFIltrada;
-    }
-
-    public PaisService getService() {
-        return service;
-    }
-
-    public void setService(PaisService service) {
-        this.service = service;
     }
 
     public String getIcon() {

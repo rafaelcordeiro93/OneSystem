@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.ArmazemDeRegistros;
 import br.com.onesystem.domain.Baixa;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.BaixaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoBaixaView extends BasicCrudMBImpl<Baixa> implements Serializable {
 
     @Inject
-    private BaixaService service;
+    private EntityManager manager;
+
+    @Inject
+    private ArmazemDeRegistros<Baixa> armazem;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarBaixas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = armazem.daClasse(Baixa.class, manager).listaTodosOsRegistros();
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoBaixaView extends BasicCrudMBImpl<Baixa> implements Serializ
 
     @Override
     public List<Baixa> complete(String query) {
+        buscarDados();
         List<Baixa> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoBaixaView extends BasicCrudMBImpl<Baixa> implements Serializ
         return contasFIltradas;
     }
 
-    public BaixaService getService() {
-        return service;
-    }
-
-    public void setService(BaixaService service) {
-        this.service = service;
-    }
 }

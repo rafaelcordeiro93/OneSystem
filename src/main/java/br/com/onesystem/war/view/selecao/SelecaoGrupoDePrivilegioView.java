@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.GrupoDePrivilegioDAO;
 import br.com.onesystem.domain.GrupoDePrivilegio;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.GrupoPrivilegioService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoGrupoDePrivilegioView extends BasicCrudMBImpl<GrupoDePrivilegio> implements Serializable {
 
     @Inject
-    private GrupoPrivilegioService service;
+    private EntityManager manager;
+
+    @Inject
+    private GrupoDePrivilegioDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarGrupoDePrivilegio();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
@@ -31,9 +40,10 @@ public class SelecaoGrupoDePrivilegioView extends BasicCrudMBImpl<GrupoDePrivile
     public String abrirEdicao() {
         return "/menu/topbar/preferencias/grupoPrivilegio";
     }
-    
+
     @Override
     public List<GrupoDePrivilegio> complete(String query) {
+        buscarDados();
         List<GrupoDePrivilegio> listaFIltrada = new ArrayList<>();
         for (GrupoDePrivilegio b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {
@@ -49,12 +59,5 @@ public class SelecaoGrupoDePrivilegioView extends BasicCrudMBImpl<GrupoDePrivile
         }
         return listaFIltrada;
     }
-    
-    public GrupoPrivilegioService getService() {
-        return service;
-    }
 
-    public void setService(GrupoPrivilegioService service) {
-        this.service = service;
-    }
 }

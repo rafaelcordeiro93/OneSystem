@@ -1,26 +1,35 @@
 package br.com.onesystem.war.view.selecao;
 
+import br.com.onesystem.dao.FaturaRecebidaDAO;
 import br.com.onesystem.domain.FaturaRecebida;
 import br.com.onesystem.util.StringUtils;
-import br.com.onesystem.war.service.FaturaRecebidaService;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
 
 @Named
-@javax.enterprise.context.RequestScoped
+@ViewScoped
 public class SelecaoFaturaRecebidaView extends BasicCrudMBImpl<FaturaRecebida> implements Serializable {
 
     @Inject
-    private FaturaRecebidaService service;
+    private EntityManager manager;
+
+    @Inject
+    private FaturaRecebidaDAO dao;
 
     @PostConstruct
     public void init() {
-        beans = service.buscarFaturasEmitidas();
+        buscarDados();
+    }
+
+    public void buscarDados() {
+        beans = dao.listaDeResultados(manager);
     }
 
     @Override
@@ -35,6 +44,7 @@ public class SelecaoFaturaRecebidaView extends BasicCrudMBImpl<FaturaRecebida> i
 
     @Override
     public List<FaturaRecebida> complete(String query) {
+        buscarDados();
         List<FaturaRecebida> contasFIltradas = new ArrayList<>();
 
         if (!StringUtils.containsLetter(query)) {
@@ -47,11 +57,4 @@ public class SelecaoFaturaRecebidaView extends BasicCrudMBImpl<FaturaRecebida> i
         return contasFIltradas;
     }
 
-    public FaturaRecebidaService getService() {
-        return service;
-    }
-
-    public void setService(FaturaRecebidaService service) {
-        this.service = service;
-    }
 }

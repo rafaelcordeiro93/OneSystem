@@ -60,7 +60,7 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
     private Usuario usuario;
     private PedidoAFornecedores pedidoAFornecedores;
     private Filial filial;
-    private Integer numeroNF;
+    private Long numeroNF;
     
     public NotaRecebidaBV(NotaRecebida nota) {
         this.id = nota.getId();
@@ -413,11 +413,11 @@ public class NotaRecebidaBV implements Serializable, BuilderView<NotaRecebida> {
         this.filial = filial;
     }
     
-    public Integer getNumeroNF() {
+    public Long getNumeroNF() {
         return numeroNF;
     }
     
-    public void setNumeroNF(Integer numeroNF) {
+    public void setNumeroNF(Long numeroNF) {
         this.numeroNF = numeroNF;
     }
     
