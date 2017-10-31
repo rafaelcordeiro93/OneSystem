@@ -36,6 +36,7 @@ import br.com.onesystem.valueobjects.DetalhamentoDeItem;
 import br.com.onesystem.valueobjects.TipoDeFormacaoDePreco;
 import br.com.onesystem.war.builder.LoteItemBV;
 import br.com.onesystem.war.builder.PrecoDeItemBV;
+import br.com.onesystem.war.service.EstoqueService;
 import br.com.onesystem.war.service.ItemService;
 import br.com.onesystem.war.service.LoteItemService;
 import br.com.onesystem.war.service.PrecoDeItemService;
@@ -74,6 +75,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
     private List<ItemImagem> imagens;
     private boolean tab = true;
     private boolean renderBotoes = true;
+    private boolean tabLote = false;
     private ItemImagem itemImagem;
     private LoteItemBV loteDeItemBV;
     private Model<LoteItem> loteItemSelecionado;
@@ -94,6 +96,9 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     @Inject
     private ItemService itemService;
+
+    @Inject
+    private EstoqueService estoqueService;
     
     @Inject
     private LoteItemService serviceLoteItem;
@@ -155,12 +160,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
             validaMargem();
             PrecoDeItem novoRegistro = precoDeItemBV.construir();
             adicionaPrecoDAO.adiciona(novoRegistro);
-            
+
             //atualiza margem no BD.
             ItemBV ibv = new ItemBV(t);
             ibv.setMargem(e.getMargem());
             updateNoBancoSemLimpar(ibv.construirComID());
-            
+
             limparJanelaPreco();
             inicializaPrecos();
         } catch (DadoInvalidoException die) {
@@ -180,6 +185,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         renderBotoes = true;
         listaLoteItem = new ModelList<>();
         limparJanelaPreco();
+        tabLote = false;
         limparLoteItem();
     }
 
@@ -218,7 +224,7 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
 
     public void selecionaItem() throws DadoInvalidoException {
         if (e.getId() != null) {
-            t = e.construirComID();
+            tabLote = e.getDetalhamento().equals(DetalhamentoDeItem.LOTES);
             inicializaDados();
             tab = false;
         }
@@ -327,7 +333,18 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
                     saldo.setSaldo(saldo.getSaldo().add(s.getSaldo()));
                     saldoEmLote.set(0, saldo);
                 } else {
-                    saldoEmLote.add(new SaldoEmLoteTemplate(s.getLoteItem(), item, s.getSaldo()));
+                    boolean encontrou = false;
+                    for (SaldoEmLoteTemplate sel : saldoEmLote) {
+                        if (sel.getLoteItem().getId().equals(s.getLoteItem().getId())) {
+                            sel.setSaldo(sel.getSaldo().add(s.getSaldo()));
+                            saldoEmLote.set(saldoEmLote.indexOf(sel), sel);
+                            encontrou = true;
+                            break;
+                        }
+                    }
+                    if (!encontrou) {
+                        saldoEmLote.add(new SaldoEmLoteTemplate(s.getLoteItem(), item, s.getSaldo()));
+                    }
                 }
             }
         }
@@ -599,4 +616,12 @@ public class ItemView extends BasicMBImpl<Item, ItemBV> implements Serializable 
         this.contaDeEstoque = contaDeEstoque;
     }
 
+    public boolean isTabLote() {
+        return tabLote;
+    }
+
+    public EstoqueService getEstoqueService() {
+        return estoqueService;
+    }
+    
 }

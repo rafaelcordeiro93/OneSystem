@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 public class CaixaService implements Serializable {
 
@@ -17,13 +18,16 @@ public class CaixaService implements Serializable {
 
     @Inject
     private ConfiguracaoService cfgService;
+    
+    @Inject
+    private EntityManager manager;
 
     public List<Caixa> buscarCaixas() {
-        return dao.listaDeResultados();
+        return dao.listaDeResultados(manager);
     }
 
     public Caixa getCaixaAbertoDo(Usuario usuario) {
-        List<Caixa> lista = dao.porUsuario(usuario).emAberto().listaDeResultados();
+        List<Caixa> lista = dao.porUsuario(usuario).emAberto().listaDeResultados(manager);
         if (lista.size() == 1) {
             return lista.get(0);
         } else {
@@ -32,7 +36,7 @@ public class CaixaService implements Serializable {
     }
 
     public List<Caixa> getListaDeCaixaAbertoDo(Usuario usuario) {
-        List<Caixa> lista = dao.porUsuario(usuario).emAberto().listaDeResultados();
+        List<Caixa> lista = dao.porUsuario(usuario).emAberto().listaDeResultados(manager);
         if (lista.size() > 0) {
             return lista;
         } else {

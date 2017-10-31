@@ -11,6 +11,8 @@ import br.com.onesystem.util.ErrorMessage;
 import br.com.onesystem.util.Model;
 import br.com.onesystem.util.ModelList;
 import br.com.onesystem.war.builder.DepositoBV;
+import br.com.onesystem.war.service.DepositoService;
+import br.com.onesystem.war.service.FilialService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
@@ -31,6 +33,9 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
     @Inject
     private AtualizaDAO<Filial> filialDAO;
 
+    @Inject
+    private DepositoService depositoService;
+
     @PostConstruct
     public void init() {
         limparJanela();
@@ -39,7 +44,7 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
     public void add() {
         try {
             Deposito novoRegistro = e.construir();
-            filiais.getList().forEach(f -> novoRegistro.adiciona(f));
+            novoRegistro.setFiliais(filiais.getList());
             addNoBanco(novoRegistro);
         } catch (DadoInvalidoException die) {
             die.print();
@@ -49,19 +54,7 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
     public void update() {
         try {
             Deposito depositoExistente = e.construirComID();
-            filiais.getRemovidos().forEach(f -> depositoExistente.remove((Filial) f.getObject()));
-            filiais.getList().forEach(f -> depositoExistente.adiciona(f));
-
-//            for(Model f : filiais.getRemovidos()){
-//                Filial fil = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(((Filial) f.getObject()), SelecaoFilialView.class, "getDepositos");
-//                fil.remove(depositoExistente);
-//            }
-//            
-//            for(Filial f : filiais.getList()){
-//                f = (Filial) new ArmazemDeRegistrosNaMemoria<SelecaoFilialView>().initialize(f, SelecaoFilialView.class, "getDepositos");
-//                f.adiciona(depositoExistente);
-//                filialDAO.atualiza(f);
-//            }
+            depositoExistente.setFiliais(filiais.getList());
             if (depositoExistente.getId() != null) {
                 updateNoBanco(depositoExistente);
             } else {
@@ -74,17 +67,24 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
 
     @Override
     public void selecionar(SelectEvent event) {
-        Object obj = event.getObject();
-        if (obj instanceof Deposito) {
-            e = new DepositoBV((Deposito) obj);
-            inicializaFiliais();
-        } else if (obj instanceof Filial) {
-            filial = (Filial) obj;
+        try {
+            Object obj = event.getObject();
+            if (obj instanceof Deposito) {
+                e = new DepositoBV((Deposito) obj);
+                inicializaFiliais();
+            } else if (obj instanceof Filial) {
+                filial = (Filial) obj;
+            }
+        } catch (DadoInvalidoException die) {
+            die.print();
         }
     }
 
-    public void inicializaFiliais() {
-        filiais = new ModelList<>(e.getFiliais());
+    public void inicializaFiliais() throws DadoInvalidoException {
+            Deposito deposito = depositoService.getDeposito(e.getId());
+            e = new DepositoBV(deposito);
+            e.setFiliais(deposito.getFiliais());
+            filiais = new ModelList<>(deposito.getFiliais());
     }
 
     public void limparJanela() {
@@ -107,8 +107,13 @@ public class DepositoView extends BasicMBImpl<Deposito, DepositoBV> implements S
 
     public void addFilial() {
         if (filial != null) {
-            filiais.add(filial);
-            limpaFilial();
+            boolean present = filiais.getList().stream().filter(f -> f.getId().equals(filial.getId())).findAny().isPresent();
+            if (!present) {
+                filiais.add(filial);
+                limpaFilial();
+            } else {
+                ErrorMessage.print(new BundleUtil().getLabel("Filial_ja_selecionada_para_deposito"));
+            }
         } else {
             ErrorMessage.print(new BundleUtil().getLabel("Filial_deve_ser_selecionada"));
         }

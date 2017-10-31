@@ -32,7 +32,7 @@ public class SaldoDeEstoqueService implements Serializable {
     private SaldoDeEstoqueDAO saldoDAO;
 
     public List<SaldoDeEstoque> buscaSaldoDeEstoquePorItem(Item item) {
-        return saldoDAO.porItem(item).listaDeResultados();
+        return saldoDAO.porItem(item).listaDeResultados(manager);
     }
 
     public List<SaldoEmDepositoTemplate> buscaListaDeSaldoDeEstoqueEmTodosDepositos(ContaDeEstoque contaDeEstoque, Item item) {

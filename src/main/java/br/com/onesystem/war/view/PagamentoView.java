@@ -15,7 +15,7 @@ import br.com.onesystem.domain.ValorPorCotacao;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.exception.impl.EDadoInvalidoException;
 import br.com.onesystem.exception.impl.FDadoInvalidoException;
-import br.com.onesystem.services.GeradorDeBaixas;
+import br.com.onesystem.util.GeradorDeBaixas;
 import br.com.onesystem.util.BundleUtil;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.ImpressoraDeLayoutTexto;

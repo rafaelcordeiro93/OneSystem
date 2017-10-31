@@ -25,10 +25,10 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
 
     @PostConstruct
     public void init() {
-        buscarItens();
+        buscarDados();
     }
 
-    public void buscarItens() {
+    public void buscarDados() {
         beans = armazem.daClasse(Item.class, manager).listaTodosOsRegistros();
     }
 
@@ -44,7 +44,7 @@ public class SelecaoItemView extends BasicCrudMBImpl<Item> implements Serializab
 
     @Override
     public List<Item> complete(String query) {
-        buscarItens();
+        buscarDados();
         List<Item> listaFiltrada = new ArrayList<>();
         for (Item b : beans) {
             if (StringUtils.startsWithIgnoreCase(b.getNome(), query)) {

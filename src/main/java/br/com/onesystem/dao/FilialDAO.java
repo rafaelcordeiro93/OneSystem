@@ -1,5 +1,6 @@
 package br.com.onesystem.dao;
 
+import br.com.onesystem.domain.Deposito;
 import br.com.onesystem.domain.Filial;
 import java.io.Serializable;
 

@@ -70,7 +70,7 @@ public class Filial implements Serializable {
     private String email;
     @Column(nullable = true, length = 60)
     private String contato;
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "filiais")
     private List<Deposito> depositos;
 
     public Filial() {
@@ -139,6 +139,10 @@ public class Filial implements Serializable {
         if (depositos != null && depositos.indexOf(deposito) != -1) {
             this.depositos.remove(depositos.indexOf(deposito));
         }
+    }
+
+    public void setDepositos(List<Deposito> depositos) {
+        this.depositos = depositos;
     }
 
     public List<Deposito> getDepositos() {

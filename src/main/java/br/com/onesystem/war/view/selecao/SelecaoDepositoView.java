@@ -59,5 +59,9 @@ public class SelecaoDepositoView extends BasicCrudMBImpl<Deposito> implements Se
         }
         return listaFIltrada;
     }
+    
+    public String getIcon(){
+        return "fa-cubes";
+    }
 
 }

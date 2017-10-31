@@ -179,6 +179,7 @@ public class DadosNecessarios implements Serializable {
                 break;
             }
             case "/menu/estoque/ajusteDeEstoque.xhtml": {
+                getFilial();
                 getMoedaPadrao();
                 getOperacoes();
                 getContaDeEstoque();

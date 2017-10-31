@@ -17,6 +17,7 @@ import br.com.onesystem.domain.LayoutDeImpressao;
 import br.com.onesystem.domain.Pessoa;
 import br.com.onesystem.exception.DadoInvalidoException;
 import br.com.onesystem.util.ErrorMessage;
+import br.com.onesystem.util.GeradorDeEstoque;
 import br.com.onesystem.util.ImpressoraDeLayoutGrafico;
 import br.com.onesystem.util.ImpressoraDeLayoutTexto;
 import br.com.onesystem.util.MoedaFormatter;
@@ -25,10 +26,7 @@ import br.com.onesystem.valueobjects.TipoImpressao;
 import br.com.onesystem.valueobjects.TipoLayout;
 import br.com.onesystem.war.builder.ItemDeCondicionalBV;
 import br.com.onesystem.war.builder.CondicionalBV;
-import br.com.onesystem.war.service.ConfiguracaoService;
-import br.com.onesystem.war.service.ConfiguracaoVendaService;
 import br.com.onesystem.war.service.CotacaoService;
-import br.com.onesystem.war.service.ItemDeCondicionalService;
 import br.com.onesystem.war.service.LayoutDeImpressaoService;
 import br.com.onesystem.war.service.impl.BasicMBImpl;
 import java.io.Serializable;
@@ -72,7 +70,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
     private LayoutDeImpressaoService layoutService;
 
     @Inject
-    private ItemDeCondicionalService IDCService;
+    private GeradorDeEstoque geradorDeEstoque;
 
     // ---------------------- Inicializa Janela -------------------------------
     @PostConstruct
@@ -123,9 +121,7 @@ public class CondicionalView extends BasicMBImpl<Condicional, CondicionalBV> imp
 
             //Constroi a condicional
             Condicional condicional = e.construirComID();
-            for (ItemDeCondicional idc : condicional.getItensDeCondicional()) {
-                IDCService.geraEstoque(idc);
-            }
+            geradorDeEstoque.geraEstoque(condicional);
 
             addNoBanco(condicional);
             t = condicional;

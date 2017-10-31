@@ -1,6 +1,6 @@
 package br.com.onesystem.war.view.selecao;
 
-import br.com.onesystem.dao.ArmazemDeRegistros;
+import br.com.onesystem.dao.AjusteDeEstoqueDAO;
 import br.com.onesystem.domain.AjusteDeEstoque;
 import br.com.onesystem.util.StringUtils;
 import br.com.onesystem.war.service.impl.BasicCrudMBImpl;
@@ -21,15 +21,15 @@ public class SelecaoAjusteDeEstoqueView extends BasicCrudMBImpl<AjusteDeEstoque>
     private EntityManager manager;
 
     @Inject
-    private ArmazemDeRegistros<AjusteDeEstoque> armazem;
+    private AjusteDeEstoqueDAO dao;
 
     @PostConstruct
     public void init() {
         buscarDados();
     }
-    
+
     public void buscarDados() {
-        beans = armazem.daClasse(AjusteDeEstoque.class, manager).listaTodosOsRegistros();
+        beans = dao.listaDeResultados(manager);
     }
 
     public void abrirDialogo() {
