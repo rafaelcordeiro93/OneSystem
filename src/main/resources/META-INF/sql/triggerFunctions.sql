@@ -92,14 +92,17 @@ $BODY$ LANGUAGE plpgsql;
 
 
 CREATE OR REPLACE FUNCTION alteraNumeroNotaFiscal(id_notaemitida bigint, id_lotenotafiscal bigint, id_filial bigint) RETURNS VOID AS $BODY$
-BEGIN
+    BEGIN
             UPDATE notaemitida 
-               SET numeronf = (select nextval('seq_numeronotafiscal'))
-             WHERE id = id_notaemitida
-               AND lotenotafiscal_id = id_lotenotafiscal
-               AND filial_id = id_filial;
+               SET numeronf = (select numeronf from numeracaodenotafiscal where filial_id = id_filial and lotenotafiscal_id = id_lotenotafiscal)
+             WHERE id = id_notaemitida;
+            
+            UPDATE numeracaodenotafiscal 
+               SET numeronf = numeronf + 1
+             WHERE filial_id = id_filial 
+               AND lotenotafiscal_id = id_lotenotafiscal;
           
-END;
+    END;
 $BODY$ LANGUAGE plpgsql;
 
 
